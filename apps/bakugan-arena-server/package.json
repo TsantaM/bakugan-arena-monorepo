@@ -1,0 +1,24 @@
+{
+  "name": "bakugan-arena-server",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "dev": "nodemon src/index.ts --watch src --exec ts-node"
+  },
+  "dependencies": {
+    "@bakugan-arena/game-data": "workspace:*",
+    "@bakugan-arena/prisma": "workspace:*",
+    "@prisma/client": "^6.14.0",
+    "@types/socket.io": "^3.0.1",
+    "express": "^5.1.0",
+    "socket.io": "^4.8.1",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.2",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}

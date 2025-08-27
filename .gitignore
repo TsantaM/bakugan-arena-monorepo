@@ -1,0 +1,9 @@
+# Ignore tous les node_modules
+**/node_modules
+
+# Ignore le lock file si tu veux
+pnpm-lock.yaml
+
+# Autres dossiers temporaires
+dist
+.next

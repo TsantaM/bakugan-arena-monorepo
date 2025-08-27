@@ -1,0 +1,43 @@
+import { abilityCardsType } from "../../type/game-data-types";
+
+export const RapideHaos: abilityCardsType = {
+    key: 'rapide-haos',
+    name: 'Rapide Haos',
+    attribut: 'Haos',
+    description: `Permet à l'utilisateur d'ajouter un bakugan en plus sur le terrain s'il y a déjà un bakugan Haos sur la carte`,
+    maxInDeck: 1
+}
+
+export const EclatSoudain: abilityCardsType = {
+    key: 'eclat-soudain',
+    name: 'Eclat Soudain',
+    attribut: 'Haos',
+    maxInDeck: 1,
+    description: `Permet d'ajouter un Bakugan Haos en plus dans un combat, mais le bakugan ajouté se retire si Eclat Soudain est annulée`
+}
+
+export const LumiereDivine: abilityCardsType = {
+    key: 'lumiere-divine',
+    name: 'Lumière Divine',
+    maxInDeck: 1,
+    attribut: 'Haos',
+    description: `Permet de redonner vie à un Bakugan qui a été vaincu au combat`
+}
+
+
+export const ContreMaitrise: abilityCardsType = {
+    key: 'contre-maîtrise',
+    attribut: 'Haos',
+    name: 'Contre Maîtrise',
+    description: `Annule toute carte maitrise utilisé par l'adversaire`,
+    maxInDeck: 3
+}
+
+
+export const HaosImmobilisation: abilityCardsType = {
+    key: 'haos-immobilisation',
+    name: 'Haos Immobilisation',
+    attribut: 'Haos',
+    maxInDeck: 1,
+    description: `Ajoute 100 G de puissance à l'utilisateur et permet d'utiliser une carte maîtrise en plus`
+}
