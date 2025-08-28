@@ -1,42 +1,34 @@
+import PlayerCards from "@/components/elements/battlefield/players-cards"
+import { RoomDataAction } from "@/src/actions/battlefield/get-players-data"
+import { getUser } from "@/src/actions/getUserSession"
+import { unauthorized } from "next/navigation"
+
 
 export default async function BattleField({ searchParams }: { searchParams: { id: string } }) {
+    const user = await getUser()
     const roomId = searchParams.id
 
-    return <>
+    const RoomData = await RoomDataAction(roomId)
 
-        <h1>{roomId}</h1>
+    if (!user) {
+        unauthorized()
+    }
 
-        <div className="w-full h-[75vh] flex justify-between">
-            <div className="w-[25vw] md:w-[20vw] lg:w-[15vw] flex flex-col gap-2">
-                <div className="w-full aspect-[4/3] bg-amber-400 p-1 rounded-lg">
-                    <div className="w-full h-full bg-foreground rounded-sm">
+    if (RoomData) {
 
-                    </div>
-                </div>
+        console.log(RoomData)
+        const player = RoomData.find((d) => d.player.id === user.id)
+        console.log(player)
+        const opponent = RoomData.find((d) => d.player.id != user.id)
+        console.log(opponent)
 
-                <div className="w-full aspect-[3/4] bg-amber-400 p-1 rounded-lg">
-                    <div className="w-full h-full bg-foreground rounded-sm">
+        return <>
 
-                    </div>
-                </div>
-            </div>
+            <h1 className='text-center'> <span>{player?.player.displayUsername}</span> VS <span>{opponent?.player.displayUsername}</span></h1>
+            <PlayerCards player={player} opponent={opponent} roomId={roomId} userId={user.id}/>
 
-            <div className="w-[25vw] md:w-[20vw] lg:w-[15vw] self-end md:self-start flex flex-col gap-2">
-                <div className="w-full aspect-[4/3] bg-amber-400 p-1 rounded-lg">
-                    <div className="w-full h-full bg-foreground rounded-sm">
+        </>
+    }
 
-                    </div>
-                </div>
-
-                <div className="w-full aspect-[3/4] bg-amber-400 p-1 rounded-lg">
-                    <div className="w-full h-full bg-foreground rounded-sm">
-
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-    </>
 
 }

@@ -1,5 +1,6 @@
 import { Server } from "socket.io";
 import { removeToWaitingList, setupSearchOpponentSocket } from "./sockets/search-opponent";
+import { socketGetRoomState } from "./sockets/get-room-data";
 
 
 
@@ -17,6 +18,7 @@ io.on('connection', (socket) => {
 
     console.log('A user connected:', 'socketId : ', socket.id, 'userId : ', userId );
     setupSearchOpponentSocket(io, socket)
+    socketGetRoomState(io, socket)
 
     socket.on('disconnect', (reason) => {
         console.log('A user disconnected:', 'socketId : ', socket.id, 'userId : ', userId, reason);

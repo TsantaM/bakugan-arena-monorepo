@@ -1,0 +1,81 @@
+'use client'
+
+import { useSocket } from "@/src/providers/socket-provider"
+import useGetRoomState, { stateType } from "@/src/sockets/get-room-state"
+import Image from "next/image"
+import { useEffect } from "react"
+
+type player = {
+    player: {
+        id: string;
+        image: string | null;
+        displayUsername: string | null;
+    };
+    deck: {
+        bakugans: string[];
+        ability: string[];
+        exclusiveAbilities: string[];
+        gateCards: string[];
+    };
+}
+
+export default function PlayerCards({ player, opponent, roomId, userId }: { player: player | undefined, opponent: player | undefined, roomId: string, userId: string }) {
+    const socket = useSocket()
+    const { roomState } = useGetRoomState({roomId})
+
+    const userData = roomState?.decksState.find((d) => d.userId === userId)
+
+    return <>
+
+        <div className="w-full h-[75vh] flex justify-between">
+            <div className="w-[25vw] md:w-[20vw] lg:w-[15vw] flex flex-col gap-2">
+                <div className="w-full aspect-[4/3] bg-amber-400 p-1 rounded-lg">
+                    <div className="relative w-full h-full bg-foreground rounded-sm overflow-hidden">
+                        {
+                            player?.player.image && player!.player.displayUsername ? <Image src={player.player.image} alt={player.player.displayUsername} fill /> : <Image src={'/images/default-profil-picture.png'} alt={''} fill />
+                        }
+                    </div>
+                </div>
+                <div className="w-full aspect-[3/4] bg-amber-400 p-1 rounded-lg">
+                    <div className="w-full h-full bg-foreground rounded-sm">
+
+                    </div>
+                </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+                {
+                   userData?.bakugans.map((b, index) =>
+                        <Image
+                            key={index}
+                            src={`/images/bakugans/sphere/${b?.bakuganData.image}/${b?.bakuganData.attribut.toUpperCase()}.png`}
+                            alt={b?.bakuganData.name && b?.bakuganData.attribut ? `${b?.bakuganData.name} ${b?.bakuganData.attribut}` : ''}
+                            width={50}
+                            height={50}
+                        />)
+                }
+            </div>
+
+            <div className="w-[25vw] md:w-[20vw] lg:w-[15vw] self-end md:self-start flex flex-col gap-2">
+                <div className="w-full aspect-[4/3] bg-amber-400 p-1 rounded-lg">
+                    <div className="relative w-full h-full bg-foreground rounded-sm overflow-hidden">
+                        {
+                            opponent?.player.image && opponent!.player.displayUsername ? <Image src={opponent.player.image} alt={opponent.player.displayUsername} fill /> : <Image src={'/images/default-profil-picture.png'} alt={''} fill />
+                        }
+                    </div>
+                </div>
+
+                <div className="w-full aspect-[3/4] bg-amber-400 p-1 rounded-lg">
+                    <div className="w-full h-full bg-foreground rounded-sm">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </>
+
+
+}

@@ -1,4 +1,5 @@
-import { exclusiveAbilitiesType } from "../../type/game-data-types";
+
+import { exclusiveAbilitiesType } from "../type/game-data-types";
 import { AileEnflamee, AntiMuse, CapeDeFeu, ChambreDeGravite, DimmensionQuatre, DivisionHolographique, DragonoidPlus, EffecteurdOmbre, GaucheGigantesque, ImpactMajeur, JavelotAquos, LanceDeFeu, LanceEclair, MachettesJumelles, MaitreDesProfondeurs, Marionnette, MassueGigantesque, OmbreBleue, PlexusSolaire, RayonGamma, RegainSubit, RobotallionExecution, SabreDeLaMort, TempeteDePlume, TrappeDeSable, Tsunami, VentViolentDeNobelesseVerte, VisageDeLaFureur, VisageDuChagrin } from "./exclusive-abilities/exclusive-abilities";
 
 export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {

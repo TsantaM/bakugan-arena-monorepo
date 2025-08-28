@@ -1,5 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { CreateRoom } from "../functions/create-room";
+import { createGameState } from "../functions/create-game-state";
+import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 
 export type waitingListElements = {
     socketId: string,
@@ -52,10 +54,17 @@ const matchmaking = async ({ io, socket, socketId, userId }: { io: Server, socke
 
                 // Requete Prisma qui va inserer la nouvelle room dans la BDD
                 const players = [player1, player2]
-                const room = await CreateRoom({ player1ID: player1.userId, P1Deck: player1.deckId, Player2ID: player2.userId, P2Deck: player1.deckId })
+                const room = await CreateRoom({ player1ID: player1.userId, P1Deck: player1.deckId, Player2ID: player2.userId, P2Deck: player2.deckId })
 
                 removeToWaitingList({ userId: player1.userId })
                 removeToWaitingList({ userId: player2.userId })
+
+                const newRoomState = await createGameState({roomId: room.id})
+                if(newRoomState) {
+                    Battle_Brawlers_Game_State.push(newRoomState)
+                    console.log(Battle_Brawlers_Game_State)
+                }
+
 
             } else {
                 console.log(`No suitable opponent found for ${player1.userId}`)
@@ -68,12 +77,16 @@ const matchmaking = async ({ io, socket, socketId, userId }: { io: Server, socke
                 console.log(`Match found between ${player1.userId} and ${player2.userId}`)
 
                 const players = [player1, player2]
-                const room = await CreateRoom({ player1ID: player1.userId, P1Deck: player1.deckId, Player2ID: player2.userId, P2Deck: player1.deckId })
+                const room = await CreateRoom({ player1ID: player1.userId, P1Deck: player1.deckId, Player2ID: player2.userId, P2Deck: player2.deckId })
 
                 players.forEach((p) => io.to(p.socketId).emit('match-found', room.id))
                 players.forEach((p) => removeToWaitingList({ userId: p.userId }))
 
-
+                const newRoomState = await createGameState({roomId: room.id})
+                if(newRoomState) {
+                    Battle_Brawlers_Game_State.push(newRoomState)
+                    console.log(Battle_Brawlers_Game_State)
+                }
             }
         }
     }
