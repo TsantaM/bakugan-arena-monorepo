@@ -1,11 +1,11 @@
 'use client'
 
-import { useSocket } from "@/src/providers/socket-provider"
 import useGetRoomState, { stateType } from "@/src/sockets/get-room-state"
 import Image from "next/image"
 import { useEffect } from "react"
+import TurnInterface from "./turn-interface"
 
-type player = {
+export type player = {
     player: {
         id: string;
         image: string | null;
@@ -19,10 +19,9 @@ type player = {
     };
 }
 
-export default function PlayerCards({ player, opponent, roomId, userId }: { player: player | undefined, opponent: player | undefined, roomId: string, userId: string }) {
-    const socket = useSocket()
-    const { roomState } = useGetRoomState({roomId})
+export default function PlayerCards({ player, opponent, roomId, userId, turn, set_gate, set_bakugan, use_ability }: { player: player | undefined, opponent: player | undefined, roomId: string, userId: string, turn: boolean, set_gate: boolean, set_bakugan: boolean, use_ability: boolean }) {
 
+    const { roomState } = useGetRoomState({roomId})
     const userData = roomState?.decksState.find((d) => d.userId === userId)
 
     return <>
@@ -41,6 +40,7 @@ export default function PlayerCards({ player, opponent, roomId, userId }: { play
 
                     </div>
                 </div>
+                <TurnInterface turn={turn} set_bakugan={set_bakugan} set_gate={set_gate} use_ability={use_ability} roomId={roomId} userId={userId}/>
             </div>
 
             <div className="flex items-center gap-3">

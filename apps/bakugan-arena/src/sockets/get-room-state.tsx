@@ -8,6 +8,7 @@ type slots_id = "slot-1" | "slot-2" | "slot-3" | "slot-4" | "slot-5" | "slot-6"
 
 type portalSlotsType = {
     id: slots_id,
+    can_set: boolean,
     portalCard: {
         key: string,
         userId: string
@@ -27,6 +28,13 @@ type portalSlotsType = {
 
 export type stateType = {
     roomId: string;
+    turnState: {
+        turn: string;
+        turnCount: number;
+        set_new_gate: boolean;
+        set_new_bakugan: boolean;
+        use_ability_card: boolean;
+    }
     decksState: {
         deckId: string;
         userId: string;
@@ -74,10 +82,10 @@ export type stateType = {
 } | undefined
 
 
-export default function useGetRoomState({roomId}: {roomId: string}) {
+export default function useGetRoomState({ roomId }: { roomId: string }) {
     const socket = useSocket()
     const [roomState, setRoomState] = useState<stateType | undefined>()
-
+    const [slots, setSlots] = useState<portalSlotsType>()
 
     useEffect(() => {
         if (socket) {
@@ -85,11 +93,13 @@ export default function useGetRoomState({roomId}: {roomId: string}) {
             socket.on('room-state', (state: stateType) => {
                 console.log(state)
                 setRoomState(state)
+                setSlots(state?.protalSlots)
             })
         }
     }, [socket, roomId])
 
     return {
         roomState,
+        slots
     }
 }

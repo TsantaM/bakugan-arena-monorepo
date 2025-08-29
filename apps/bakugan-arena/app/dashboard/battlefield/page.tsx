@@ -1,3 +1,4 @@
+import BattleFieldPage from "@/components/elements/battlefield/battlefield-page"
 import PlayerCards from "@/components/elements/battlefield/players-cards"
 import { RoomDataAction } from "@/src/actions/battlefield/get-players-data"
 import { getUser } from "@/src/actions/getUserSession"
@@ -24,8 +25,7 @@ export default async function BattleField({ searchParams }: { searchParams: { id
 
         return <>
 
-            <h1 className='text-center'> <span>{player?.player.displayUsername}</span> VS <span>{opponent?.player.displayUsername}</span></h1>
-            <PlayerCards player={player} opponent={opponent} roomId={roomId} userId={user.id}/>
+            <BattleFieldPage player={player} opponent={opponent} roomId={roomId} userId={user.id}/>
 
         </>
     }

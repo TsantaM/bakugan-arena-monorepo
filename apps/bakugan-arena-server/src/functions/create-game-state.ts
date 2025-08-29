@@ -5,6 +5,7 @@ type slots_id = "slot-1" | "slot-2" | "slot-3" | "slot-4" | "slot-5" | "slot-6"
 
 type portalSlotsType = {
     id: slots_id,
+    can_set: boolean,
     portalCard: {
         key: string,
         userId: string
@@ -31,7 +32,10 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             const bakugans = deck.bakugans.map((b) => {
 
                 const bakugan = BakuganList.find((baku) => baku.key === b)
-                const exclusiveAbilityCard = ExclusiveAbilitiesList.filter((c) => deck.exclusiveAbilities.includes(c.key))
+                const exclusiveAbilityCard = deck.exclusiveAbilities
+                    .map((key) => ExclusiveAbilitiesList.find((c) => c.key === key))
+                    .filter((c) => c !== undefined)
+                    
                 const bakuganAbilities = exclusiveAbilityCard.filter((e) => bakugan?.exclusiveAbilities.includes(e.key))
 
                 if (!b && !bakugan) return null
@@ -65,7 +69,10 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
                 }
             })
 
-            const cardsInDeck = AbilityCardsList.filter((c) => deck.ability.includes(c.key))
+            const cardsInDeck = deck.ability
+                    .map((key) => AbilityCardsList.find((c) => c.key === key))
+                    .filter((c) => c !== undefined)
+            
 
             const abilities = cardsInDeck.map((c) => ({
                 key: c.key,
@@ -77,17 +84,20 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
                 dead: false
             }))
 
-            const gateInDeck = GateCardsList.filter((c) => deck.gateCards.includes(c.key))
 
-            const gates = gateInDeck.map((c) => ({
+            const gateInDeck = deck.gateCards
+            .map((key) => GateCardsList.find((c) => c.key === key))
+            .filter((c) => c !== undefined)
+
+            const gates = [... new Set(gateInDeck.map((c) => ({
                 key: c.key,
                 name: c.name,
                 attribut: c.attribut,
                 description: c.description,
                 set: false,
-                usable: false,
+                usable: true,
                 dead: false
-            }))
+            })))]
 
             return {
                 deckId: deck.id,
@@ -106,6 +116,7 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
         const protalSlots: portalSlotsType = [
             {
                 id: "slot-1",
+                can_set: false,
                 portalCard: null,
                 bakugans: [],
                 state: {
@@ -115,6 +126,7 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             },
             {
                 id: "slot-2",
+                can_set: true,
                 portalCard: null,
                 bakugans: [],
                 state: {
@@ -124,6 +136,7 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             },
             {
                 id: "slot-3",
+                can_set: false,
                 portalCard: null,
                 bakugans: [],
                 state: {
@@ -133,6 +146,7 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             },
             {
                 id: "slot-4",
+                can_set: false,
                 portalCard: null,
                 bakugans: [],
                 state: {
@@ -142,6 +156,7 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             },
             {
                 id: "slot-5",
+                can_set: false,
                 portalCard: null,
                 bakugans: [],
                 state: {
@@ -151,6 +166,7 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             },
             {
                 id: "slot-6",
+                can_set: false,
                 portalCard: null,
                 bakugans: [],
                 state: {
@@ -160,8 +176,17 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             },
         ];
 
+        const turnState = {
+            turn: players.player1.player1?.id ? players.player1.player1?.id : '',
+            turnCount: 1,
+            set_new_gate: true,
+            set_new_bakugan: false,
+            use_ability_card: false
+        }
+
         return {
             roomId: roomId,
+            turnState,
             decksState,
             protalSlots
         }
