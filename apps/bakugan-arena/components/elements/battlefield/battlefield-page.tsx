@@ -25,7 +25,6 @@ export default function BattleFieldPage({ player, opponent, roomId, userId }: Ba
                 roomState && <PlayerCards player={player} opponent={opponent} roomId={roomId} userId={userId} turn={turn} set_gate={roomState?.turnState.set_new_gate} set_bakugan={roomState?.turnState.set_new_bakugan} use_ability={roomState?.turnState.use_ability_card} />
             }
 
-
         </>
     )
 }

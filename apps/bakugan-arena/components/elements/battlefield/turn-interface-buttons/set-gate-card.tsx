@@ -30,7 +30,7 @@ export default function SetGateCard({ set_gate, set_bakugan, use_ability, roomId
     const { slots, roomState } = useGetRoomState({ roomId })
 
     const usableSlots = slots?.filter((s) => s.can_set)
-    const usableGates = [ ... new Set(roomState?.decksState.find((d) => d.userId === userId)?.gates.filter((g) => g.usable && !g.dead && !g.set))]
+    const usableGates = roomState?.decksState.find((d) => d.userId === userId)?.gates.filter((g) => g.usable && !g.dead && !g.set)
 
     const [gate, setGate] = useState<string>("")
     const [slot, setSlot] = useState<string>("")
