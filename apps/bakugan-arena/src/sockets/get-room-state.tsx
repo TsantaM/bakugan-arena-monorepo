@@ -6,6 +6,27 @@ import { attribut } from "@bakugan-arena/game-data";
 
 type slots_id = "slot-1" | "slot-2" | "slot-3" | "slot-4" | "slot-5" | "slot-6"
 
+export type portalSlotsTypeElement = {
+    id: slots_id,
+    can_set: boolean,
+    portalCard: {
+        key: string,
+        userId: string
+    } | null,
+    bakugans: {
+        key: string,
+        userId: string,
+        powerLevel: number,
+        currentPower: number,
+        attribut: attribut,
+        image: string
+    }[],
+    state: {
+        open: boolean,
+        canceled: boolean
+    }
+}
+
 type portalSlotsType = {
     id: slots_id,
     can_set: boolean,
@@ -18,7 +39,8 @@ type portalSlotsType = {
         userId: string,
         powerLevel: number,
         currentPower: number,
-        attribut: attribut
+        attribut: attribut,
+        image: string
     }[],
     state: {
         open: boolean,

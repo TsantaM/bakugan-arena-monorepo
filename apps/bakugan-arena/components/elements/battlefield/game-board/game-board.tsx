@@ -2,8 +2,9 @@
 
 import useGetRoomState from "@/src/sockets/get-room-state"
 import { useRef, useState } from "react"
+import GateCardOnBoard from "./gate-cards"
 
-export default function MapScrollable({ roomId }: { roomId: string }) {
+export default function MapScrollable({ roomId, userId }: { roomId: string, userId: string }) {
 
   const { slots } = useGetRoomState({ roomId })
 
@@ -36,19 +37,14 @@ export default function MapScrollable({ roomId }: { roomId: string }) {
       >
         <div
           ref={mapRef}
-          className={`absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[100vw] lg:w-[70vw] lg:h-[75vh]`}
+          className={`perspective-[1000px] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[100vw] lg:w-[70vw] lg:h-[75vh]`}
           style={{ transform: `translate(${offset.x}px, ${offset.y}px)` }}
           onMouseDown={handleMouseDown}
         >
           {/* Ici tu peux mettre ta grille de cartes */}
-          <div className="grid grid-cols-3 grid-rows-2 items-center justify-center">
+          <div className="rotate-x-45 grid grid-cols-3 grid-rows-2 items-center justify-center">
             {slots.map((s, index) => (
-              <div
-                key={index}
-                className="aspect-[2/3] border border-slate-50 flex items-center justify-center text-white text-xs"
-              >
-                {s.portalCard ? s.portalCard.key : s.id}
-              </div>
+              <GateCardOnBoard slot={s} key={index} userId={userId}/>
             ))}
           </div>
         </div>

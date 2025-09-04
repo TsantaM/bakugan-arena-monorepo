@@ -45,7 +45,7 @@ export default function PlayerCards({ player, opponent, roomId, userId, turn, se
                 <TurnInterface turn={turn} set_bakugan={set_bakugan} set_gate={set_gate} use_ability={use_ability} roomId={roomId} userId={userId} />
             </div>
 
-            <GameBoard />
+            <GameBoard roomId={roomId} userId={userId}/>
 
 
             <div className="relative z-20 w-[25vw] md:w-[20vw] lg:w-[15vw] self-end md:self-start flex flex-col gap-2">

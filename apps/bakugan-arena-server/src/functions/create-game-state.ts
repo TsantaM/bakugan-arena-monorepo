@@ -15,7 +15,8 @@ type portalSlotsType = {
         userId: string,
         powerLevel: number,
         currentPower: number,
-        attribut: attribut
+        attribut: attribut,
+        image: string
     }[],
     state: {
         open: boolean,
