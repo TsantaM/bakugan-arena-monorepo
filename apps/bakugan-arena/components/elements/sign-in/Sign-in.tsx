@@ -44,7 +44,7 @@ export default function SignIn({className} : {className?: string}) {
 
             const { } = await authClient.signIn.username(
                 {
-                    username: username,
+                    username: username.toLowerCase(),
                     password: password
                 },
                 {

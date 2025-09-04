@@ -50,7 +50,6 @@ const matchmaking = async ({ io, socket, socketId, userId }: { io: Server, socke
             const player2Candidates = waitingList.filter(w => w.userId !== userId)
             if (player2Candidates.length > 0) {
                 const player2 = player2Candidates[Math.floor(Math.random() * player2Candidates.length)]
-                console.log(`Match found between ${player1.userId} and ${player2.userId}`)
 
                 // Requete Prisma qui va inserer la nouvelle room dans la BDD
                 const players = [player1, player2]
@@ -62,7 +61,6 @@ const matchmaking = async ({ io, socket, socketId, userId }: { io: Server, socke
                 const newRoomState = await createGameState({roomId: room.id})
                 if(newRoomState) {
                     Battle_Brawlers_Game_State.push(newRoomState)
-                    console.log(Battle_Brawlers_Game_State)
                 }
 
 
@@ -85,7 +83,6 @@ const matchmaking = async ({ io, socket, socketId, userId }: { io: Server, socke
                 const newRoomState = await createGameState({roomId: room.id})
                 if(newRoomState) {
                     Battle_Brawlers_Game_State.push(newRoomState)
-                    console.log(Battle_Brawlers_Game_State)
                 }
             }
         }

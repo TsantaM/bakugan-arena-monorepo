@@ -25,14 +25,12 @@ import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-s
 
 const roomState = ({roomId} : {roomId: string}) => {
     const roomData = Battle_Brawlers_Game_State.find((room) => room.roomId === roomId)
-    console.log(roomData)
     return roomData
 }
 
 export const socketGetRoomState = (io: Server, socket: Socket) => {
     socket.on('get-room-state', ({roomId}: {roomId: string}) => {
         const state = roomState({roomId})
-        console.log
         socket.join(roomId)
         io.to(roomId).emit('room-state', state)
     })

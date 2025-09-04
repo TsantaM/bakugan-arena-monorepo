@@ -87,6 +87,17 @@ export default function useGetRoomState({ roomId }: { roomId: string }) {
     const [roomState, setRoomState] = useState<stateType | undefined>()
     const [slots, setSlots] = useState<portalSlotsType>()
 
+    const getRoomData = () => {
+        if (socket) {
+            socket.emit('get-room-state', ({ roomId }))
+            socket.on('room-state', (state: stateType) => {
+                console.log(state)
+                setRoomState(state)
+                setSlots(state?.protalSlots)
+            })
+        }
+    }
+
     useEffect(() => {
         if (socket) {
             socket.emit('get-room-state', ({ roomId }))
@@ -100,6 +111,9 @@ export default function useGetRoomState({ roomId }: { roomId: string }) {
 
     return {
         roomState,
-        slots
+        setRoomState,
+        slots,
+        setSlots,
+        getRoomData
     }
 }

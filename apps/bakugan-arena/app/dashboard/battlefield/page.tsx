@@ -15,12 +15,11 @@ export default async function BattleField({ searchParams }: { searchParams: { id
         unauthorized()
     }
 
-    if (RoomData) {
 
         console.log(RoomData)
-        const player = RoomData.find((d) => d.player.id === user.id)
+        const player = RoomData?.find((d) => d.player.id === user.id)
         console.log(player)
-        const opponent = RoomData.find((d) => d.player.id != user.id)
+        const opponent = RoomData?.find((d) => d.player.id != user.id)
         console.log(opponent)
 
         return <>
@@ -30,5 +29,3 @@ export default async function BattleField({ searchParams }: { searchParams: { id
         </>
     }
 
-
-}
