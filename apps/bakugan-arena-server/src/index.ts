@@ -3,6 +3,7 @@ import { removeToWaitingList, setupSearchOpponentSocket } from "./sockets/search
 import { socketGetRoomState } from "./sockets/get-room-data";
 import { socketTurn } from "./sockets/turn-action";
 import { socketUpdateGateState } from "./sockets/update-gate-state";
+import { socketUpdateBakuganState } from "./sockets/update-bakugans-state";
 
 
 
@@ -22,6 +23,7 @@ io.on('connection', (socket) => {
     setupSearchOpponentSocket(io, socket)
     socketGetRoomState(io, socket)
     socketUpdateGateState(io, socket)
+    socketUpdateBakuganState(io, socket)
     socketTurn(io, socket)
 
     socket.on('disconnect', (reason) => {

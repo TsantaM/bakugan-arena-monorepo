@@ -34,6 +34,12 @@ export const socketTurn = (io: Server, socket: Socket) => {
                 })
             }
 
+            if(Battle_Brawlers_Game_State[roomIndex].turnState.turnCount > 2) {
+                Battle_Brawlers_Game_State[roomIndex].turnState.set_new_bakugan = true
+                Battle_Brawlers_Game_State[roomIndex].turnState.use_ability_card = true
+            }
+
+
             const state = Battle_Brawlers_Game_State[roomIndex]
             console.log('bonsoir depuis le server 2')
 

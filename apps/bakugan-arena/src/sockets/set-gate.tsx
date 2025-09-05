@@ -19,6 +19,7 @@ export default function useSetGate({ roomId, userId }: { roomId: string, userId:
                  toast.error('You cannot set gate card')
             }
         }
+        
     }
 
     useEffect(() => {
