@@ -1,12 +1,11 @@
 'use client'
 
 import { portalSlotsTypeElement } from "@/src/sockets/get-room-state"
-import { BakuganList } from "@bakugan-arena/game-data"
 import Image from "next/image"
 
 
 export default function GateCardOnBoard({ userId, slot }: { userId: string, slot: portalSlotsTypeElement }) {
-
+    
     const playerBakugans = slot.bakugans.filter((b) => b.userId === userId)
     const oponentsBakugans = slot.bakugans.filter((b) => b.userId !== userId)
 
