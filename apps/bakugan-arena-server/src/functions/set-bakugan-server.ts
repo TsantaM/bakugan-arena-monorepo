@@ -7,17 +7,22 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: { roomId:
 
     const usable_slot = roomData?.protalSlots.find((s) => s.id === slot)?.portalCard != null
     const can_set_bakugan = roomData?.turnState.set_new_bakugan
+    const usable_bakugan = roomData?.decksState.find((d) => d.userId === userId)?.bakugans.filter((b) => b?.bakuganData.onDomain === false && b?.bakuganData.elimined === false).length ?? 3
     const usersBakuganOnGate = roomData?.protalSlots.find((s) => s.id === slot)?.bakugans.filter((b) => b.userId === userId).length ?? 0;
-    
+
     if (usable_slot && can_set_bakugan && roomData.turnState.previous_turn != userId && usersBakuganOnGate < 1) {
+
         const slotToUpdate = roomData.protalSlots.find((s) => s.id === slot)
         const deckToUpdate = roomData.decksState.find((s) => s.userId === userId)
         const bakuganFromDeck = deckToUpdate?.bakugans.find((b) => b?.bakuganData.key === bakuganKey)?.bakuganData
 
+        const bakuganOpponent = slotToUpdate?.bakugans.some((b) => b.userId != userId)
+        const bakuganUser = slotToUpdate?.bakugans.some((b) => b.userId === userId)
         const bakuganToAdd = BakuganList.find((b) => b.key === bakuganKey)
         const powerLevel = bakuganFromDeck?.currentPowerLevel
 
         if (slotToUpdate && bakuganToAdd && powerLevel && bakuganFromDeck.onDomain === false && bakuganFromDeck.elimined === false) {
+
             const newBakugan = {
                 key: bakuganToAdd.key,
                 userId: userId,
@@ -27,40 +32,82 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: { roomId:
                 image: bakuganToAdd.image
             }
 
-            if (!slotToUpdate?.bakugans.includes(newBakugan)) {
-                const newDeckState: typeof bakuganFromDeck = {
-                    ...bakuganFromDeck,
-                    onDomain: true,
+            if (usable_bakugan === 1) {
+                if (bakuganOpponent && !bakuganUser) {
+                    if (!slotToUpdate?.bakugans.includes(newBakugan)) {
+                        const newDeckState: typeof bakuganFromDeck = {
+                            ...bakuganFromDeck,
+                            onDomain: true,
+                        }
+
+                        console.log(newDeckState)
+
+                        const state: typeof roomData = {
+                            ...roomData,
+                            protalSlots: roomData.protalSlots.map((s) => s.id === slotToUpdate.id ? {
+                                ...s,
+                                bakugans: [...s.bakugans, newBakugan],
+                            } : s),
+
+                            decksState: roomData.decksState.map((d) => d.userId === userId ? {
+                                ...d,
+                                bakugans: d.bakugans.map((b) => b?.bakuganData.key === bakuganKey ? {
+                                    ...b,
+                                    bakuganData: {
+                                        ...b.bakuganData,
+                                        onDomain: true
+                                    }
+                                } : b)
+                            } : d)
+                        }
+
+                        console.log(state)
+
+                        if (roomIndex != -1) {
+                            Battle_Brawlers_Game_State[roomIndex] = state
+
+                        }
+
+                    }
+                } else {
+                    return
                 }
+            } else {
+                if (!slotToUpdate?.bakugans.includes(newBakugan)) {
+                    const newDeckState: typeof bakuganFromDeck = {
+                        ...bakuganFromDeck,
+                        onDomain: true,
+                    }
 
-                console.log(newDeckState)
+                    console.log(newDeckState)
 
-                const state: typeof roomData = {
-                    ...roomData,
-                    protalSlots: roomData.protalSlots.map((s) => s.id === slotToUpdate.id ? {
-                        ...s,
-                        bakugans: [...s.bakugans, newBakugan],
-                    } : s),
+                    const state: typeof roomData = {
+                        ...roomData,
+                        protalSlots: roomData.protalSlots.map((s) => s.id === slotToUpdate.id ? {
+                            ...s,
+                            bakugans: [...s.bakugans, newBakugan],
+                        } : s),
 
-                    decksState: roomData.decksState.map((d) => d.userId === userId ? {
-                        ...d,
-                        bakugans: d.bakugans.map((b) => b?.bakuganData.key === bakuganKey ? {
-                            ...b,
-                            bakuganData: {
-                                ...b.bakuganData,
-                                onDomain: true
-                            }
-                        } : b)
-                    } : d)
+                        decksState: roomData.decksState.map((d) => d.userId === userId ? {
+                            ...d,
+                            bakugans: d.bakugans.map((b) => b?.bakuganData.key === bakuganKey ? {
+                                ...b,
+                                bakuganData: {
+                                    ...b.bakuganData,
+                                    onDomain: true
+                                }
+                            } : b)
+                        } : d)
+                    }
+
+                    console.log(state)
+
+                    if (roomIndex != -1) {
+                        Battle_Brawlers_Game_State[roomIndex] = state
+
+                    }
+
                 }
-
-                console.log(state)
-
-                if (roomIndex != -1) {
-                    Battle_Brawlers_Game_State[roomIndex] = state
-
-                }
-
             }
 
         }

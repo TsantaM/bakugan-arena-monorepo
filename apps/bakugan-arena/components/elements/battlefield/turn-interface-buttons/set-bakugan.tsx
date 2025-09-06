@@ -25,9 +25,18 @@ export default function SetBakuganComponent({ set_bakugan, slot, gate, roomId, u
 
     const playersBakugans = roomState?.decksState.find((d) => d.userId === userId)?.bakugans
     const usableBakugans = playersBakugans?.filter((b) => b?.bakuganData.onDomain === false && b.bakuganData.elimined === false).map((b) => b?.bakuganData)
-    const usableSlots = slots?.filter((s) => s.portalCard !== null && s.can_set === false).filter((s) => !s.bakugans?.some((b) => b.userId === userId))
-    const selectedSlot = slots?.find((s) => s.id === slot)
-    
+
+    const usableBakugansCount = usableBakugans?.length ?? 3
+    const usableSlots = usableBakugansCount > 1 ? slots?.
+        filter((s) => s.portalCard !== null && s.can_set === false).
+        filter((s) => !s.bakugans?.some((b) => b.userId === userId))
+
+        : slots?.
+            filter((s) => s.bakugans.some((b) => b.userId != userId)).
+            filter((s) => s.bakugans.every((b) => b.userId != userId))
+
+    const selectedSlot = usableBakugansCount > 1 && slots?.find((s) => s.id === slot)
+
 
     return (
         <>
@@ -61,7 +70,7 @@ export default function SetBakuganComponent({ set_bakugan, slot, gate, roomId, u
                                 usableSlots?.map((s, index) => <SelectItem key={index} value={s.id}>{s.id} {s.portalCard?.userId === userId && `(${s.portalCard.key})`}</SelectItem>)
                             }
                             {
-                                selectedSlot && <SelectItem value={selectedSlot.id}>{selectedSlot.id} {`(${gate})`}</SelectItem>
+                                selectedSlot && slot != '' && gate != '' && <SelectItem value={selectedSlot.id}>{selectedSlot.id} {`(${gate})`}</SelectItem>
                             }
                         </SelectGroup>
                     </SelectContent>
