@@ -24,7 +24,7 @@ import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-s
 
 
 const roomState = ({roomId} : {roomId: string}) => {
-    const roomData = Battle_Brawlers_Game_State.find((room) => room.roomId === roomId)
+    const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
     return roomData
 }
 

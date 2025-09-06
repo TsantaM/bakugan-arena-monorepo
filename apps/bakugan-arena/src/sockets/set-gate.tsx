@@ -2,8 +2,9 @@
 
 import { toast } from "sonner"
 import { useSocket } from "../providers/socket-provider"
-import useGetRoomState, { stateType } from "./get-room-state"
+import useGetRoomState from "./get-room-state"
 import { useEffect } from "react"
+import { stateType } from "@bakugan-arena/game-data"
 
 export default function useSetGate({ roomId, userId }: { roomId: string, userId: string }) {
     const socket = useSocket()

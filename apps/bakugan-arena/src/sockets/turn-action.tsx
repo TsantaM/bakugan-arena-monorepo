@@ -2,15 +2,16 @@
 
 import { useEffect } from "react"
 import { useSocket } from "../providers/socket-provider"
-import useGetRoomState, { stateType } from "./get-room-state"
+import useGetRoomState from "./get-room-state"
+import { stateType } from "@bakugan-arena/game-data"
 
-export default function useTurnAction({ roomId }: { roomId: string }) {
+export default function useTurnAction({ roomId, userId }: { roomId: string, userId: string }) {
     const socket = useSocket()
     const { setRoomState, getRoomData } = useGetRoomState({ roomId })
 
     const turnAction = () => {
         if (socket) {
-            socket.emit('turn-action', ({roomId}))
+            socket.emit('turn-action', ({roomId, userId}))
             console.log('turn action')
         }
     }

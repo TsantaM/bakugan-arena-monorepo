@@ -12,7 +12,6 @@ export default async function EditAccountPage() {
         unauthorized()
     }
 
-
     return (
         <Section className="flex flex-col gap-3 md:grid md:grid-cols-2">
             <EditAccount username={user?.username ? user?.username : ''} displayUsername={user?.displayUsername ? user?.displayUsername : ''} imgUrl={user?.image} />

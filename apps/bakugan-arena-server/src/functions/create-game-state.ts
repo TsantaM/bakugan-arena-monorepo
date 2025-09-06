@@ -1,34 +1,11 @@
-import { AbilityCardsList, attribut, BakuganList, ExclusiveAbilitiesList, GateCardsList } from "@bakugan-arena/game-data"
+import { AbilityCardsList, attribut, BakuganList, ExclusiveAbilitiesList, GateCardsList, portalSlotsType, stateType } from "@bakugan-arena/game-data"
 import { getDecksDataPrisma, getRoomPlayers } from "./get-room-data"
-
-type slots_id = "slot-1" | "slot-2" | "slot-3" | "slot-4" | "slot-5" | "slot-6"
-
-type portalSlotsType = {
-    id: slots_id,
-    can_set: boolean,
-    portalCard: {
-        key: string,
-        userId: string
-    } | null,
-    bakugans: {
-        key: string,
-        userId: string,
-        powerLevel: number,
-        currentPower: number,
-        attribut: attribut,
-        image: string
-    }[],
-    state: {
-        open: boolean,
-        canceled: boolean
-    }
-}[]
 
 export const createGameState = async ({ roomId }: { roomId: string }) => {
     const decksData = await getDecksDataPrisma({ roomId })
     const players = await getRoomPlayers({ roomId })
 
-    if (decksData && players) {
+    if (decksData && players && players.player1.player1 && players.player2.player2) {
         const decksState = decksData.map((deck) => {
             const bakugans = deck.bakugans.map((b) => {
 
@@ -36,7 +13,7 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
                 const exclusiveAbilityCard = deck.exclusiveAbilities
                     .map((key) => ExclusiveAbilitiesList.find((c) => c.key === key))
                     .filter((c) => c !== undefined)
-                    
+
                 const bakuganAbilities = exclusiveAbilityCard.filter((e) => bakugan?.exclusiveAbilities.includes(e.key))
 
                 if (!b && !bakugan) return null
@@ -71,9 +48,9 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             })
 
             const cardsInDeck = deck.ability
-                    .map((key) => AbilityCardsList.find((c) => c.key === key))
-                    .filter((c) => c !== undefined)
-            
+                .map((key) => AbilityCardsList.find((c) => c.key === key))
+                .filter((c) => c !== undefined)
+
 
             const abilities = cardsInDeck.map((c) => ({
                 key: c.key,
@@ -87,8 +64,8 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
 
 
             const gateInDeck = deck.gateCards
-            .map((key) => GateCardsList.find((c) => c.key === key))
-            .filter((c) => c !== undefined)
+                .map((key) => GateCardsList.find((c) => c.key === key))
+                .filter((c) => c !== undefined)
 
             const gates = [... new Set(gateInDeck.map((c) => ({
                 key: c.key,
@@ -108,11 +85,6 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
                 gates
             }
         })
-
-        const gameState = {
-            turn: players["player1"].player1?.id,
-            turnCount: 1
-        }
 
         const protalSlots: portalSlotsType = [
             {
@@ -177,16 +149,42 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             },
         ];
 
+        const playersState = [
+            {
+                userId: players.player1.player1.id,
+                usable_gates: 3,
+                usable_abilitys: 3
+            },
+            {
+                userId: players.player2.player2.id,
+                usable_gates: 3,
+                usable_abilitys: 3
+            }
+        ]
+
         const turnState = {
             turn: players.player1.player1?.id ? players.player1.player1?.id : '',
+            previous_turn: undefined,
             turnCount: 1,
             set_new_gate: true,
             set_new_bakugan: false,
             use_ability_card: false
         }
 
+
+        // Just for checking state type this const state will never be used
+
+        const state: stateType = {
+            roomId: roomId,
+            players: playersState,
+            turnState,
+            decksState,
+            protalSlots
+        }
+
         return {
             roomId: roomId,
+            players: playersState,
             turnState,
             decksState,
             protalSlots

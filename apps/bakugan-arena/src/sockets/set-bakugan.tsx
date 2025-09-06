@@ -2,7 +2,8 @@
 
 import { useEffect } from "react"
 import { useSocket } from "../providers/socket-provider"
-import useGetRoomState, { stateType } from "./get-room-state"
+import useGetRoomState from "./get-room-state"
+import { stateType } from "@bakugan-arena/game-data"
 
 export default function useSetBakugan({ roomId, userId }: { roomId: string, userId: string }) {
 

@@ -1,13 +1,13 @@
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
 export const UpdateGate = ({ roomId, gateId, slot, userId }: { roomId: string, gateId: string, slot: string, userId: string }) => {
-    const roomData = Battle_Brawlers_Game_State.find((room) => room.roomId === roomId)
-    const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room.roomId === roomId)
+    const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
+    const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
 
     const usable_slot = roomData?.protalSlots.find((s) => s.id === slot)?.can_set
     const can_set_gate = roomData?.turnState.set_new_gate
 
-    if (usable_slot && can_set_gate) {
+    if (usable_slot && can_set_gate && roomData.turnState.previous_turn != userId) {
         const slotToUpdate = roomData.protalSlots.find((s) => s.id === slot)
         const deckToUpdate = roomData.decksState.find((s) => s.userId === userId)
 
@@ -42,8 +42,16 @@ export const UpdateGate = ({ roomId, gateId, slot, userId }: { roomId: string, g
 
             console.log(newSlotState)
 
+            const newPlayerState = roomData.players.find((p) => p.userId === userId)
+
+
             const state: typeof roomData = {
                 ...roomData,
+                players: roomData.players.map((p) => p.userId === newPlayerState?.userId ? {
+                    ...p,
+                    usable_gates: p.usable_gates - 1
+                } : p),
+                
                 protalSlots: roomData.protalSlots.map((s) => s.id === slotToUpdate.id ? {
                     ...s,
                     bakugans: newSlotState.bakugans,

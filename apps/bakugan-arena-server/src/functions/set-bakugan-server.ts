@@ -2,14 +2,14 @@ import { BakuganList } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
 export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: { roomId: string, bakuganKey: string, slot: string, userId: string }) => {
-    const roomData = Battle_Brawlers_Game_State.find((room) => room.roomId === roomId)
-    const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room.roomId === roomId)
+    const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
+    const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
 
     const usable_slot = roomData?.protalSlots.find((s) => s.id === slot)?.portalCard != null
     const can_set_bakugan = roomData?.turnState.set_new_bakugan
-
-
-    if (usable_slot && can_set_bakugan) {
+    const usersBakuganOnGate = roomData?.protalSlots.find((s) => s.id === slot)?.bakugans.filter((b) => b.userId === userId).length ?? 0;
+    
+    if (usable_slot && can_set_bakugan && roomData.turnState.previous_turn != userId && usersBakuganOnGate < 1) {
         const slotToUpdate = roomData.protalSlots.find((s) => s.id === slot)
         const deckToUpdate = roomData.decksState.find((s) => s.userId === userId)
         const bakuganFromDeck = deckToUpdate?.bakugans.find((b) => b?.bakuganData.key === bakuganKey)?.bakuganData

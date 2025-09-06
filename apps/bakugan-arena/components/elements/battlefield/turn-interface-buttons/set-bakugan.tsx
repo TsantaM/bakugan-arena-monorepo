@@ -11,25 +11,29 @@ import {
 } from "@/components/ui/select"
 import { Toaster } from "@/components/ui/sonner"
 import useGetRoomState from "@/src/sockets/get-room-state"
+import { portalSlotsType, portalSlotsTypeElement, slots_id } from "@bakugan-arena/game-data"
 import Image from "next/image"
+import { useEffect, useState } from "react"
 
 
 
-export default function SetBakuganComponent({ set_bakugan, roomId, userId, selectBakugan, selectZone }: { set_bakugan: boolean, roomId: string, userId: string, selectBakugan: (bakugan :string) => void, selectZone: (zone :string) => void }) {
+export default function SetBakuganComponent({ set_bakugan, slot, gate, roomId, userId, selectBakugan, selectZone }: { set_bakugan: boolean, slot: slots_id | '', gate: string, roomId: string, userId: string, selectBakugan: (bakugan: string) => void, selectZone: (zone: slots_id) => void }) {
 
 
     const { slots, roomState } = useGetRoomState({ roomId })
     console.log(slots)
+
     const playersBakugans = roomState?.decksState.find((d) => d.userId === userId)?.bakugans
     const usableBakugans = playersBakugans?.filter((b) => b?.bakuganData.onDomain === false && b.bakuganData.elimined === false).map((b) => b?.bakuganData)
-    const usableSlots = slots?.filter((s) => s.portalCard !== null && s.can_set === false)
-
+    const usableSlots = slots?.filter((s) => s.portalCard !== null && s.can_set === false).filter((s) => !s.bakugans?.some((b) => b.userId === userId))
+    const selectedSlot = slots?.find((s) => s.id === slot)
+    
 
     return (
         <>
 
             <div className="grid grid-cols-2 items-center justify-between gap-3">
-                <Select onValueChange={(val) => selectBakugan(val)} disabled={ !set_bakugan ? true : false }>
+                <Select onValueChange={(val) => selectBakugan(val)} disabled={!set_bakugan ? true : false}>
                     <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select a bakugan to set" />
                     </SelectTrigger>
@@ -46,7 +50,7 @@ export default function SetBakuganComponent({ set_bakugan, roomId, userId, selec
                     </SelectContent>
                 </Select>
 
-                <Select onValueChange={(val) => selectZone(val)} disabled={ !set_bakugan ? true : false }>
+                <Select onValueChange={(val) => selectZone(val as slots_id)} disabled={!set_bakugan ? true : false}>
                     <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select a gate card slot" />
                     </SelectTrigger>
@@ -55,6 +59,9 @@ export default function SetBakuganComponent({ set_bakugan, roomId, userId, selec
                             <SelectLabel>Usable Slots</SelectLabel>
                             {
                                 usableSlots?.map((s, index) => <SelectItem key={index} value={s.id}>{s.id} {s.portalCard?.userId === userId && `(${s.portalCard.key})`}</SelectItem>)
+                            }
+                            {
+                                selectedSlot && <SelectItem value={selectedSlot.id}>{selectedSlot.id} {`(${gate})`}</SelectItem>
                             }
                         </SelectGroup>
                     </SelectContent>

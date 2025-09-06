@@ -1,3 +1,3 @@
-import { createGameStateType } from "../functions/create-game-state";
+import { stateType } from "@bakugan-arena/game-data";
 
-export const Battle_Brawlers_Game_State: createGameStateType[] = []
+export const Battle_Brawlers_Game_State: stateType[] = []

@@ -4,13 +4,13 @@ import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-s
 
 export const socketTurn = (io: Server, socket: Socket) => {
 
-    socket.on('turn-action', ({ roomId }: { roomId: string }) => {
-        const roomData = Battle_Brawlers_Game_State.find((room) => room.roomId === roomId)
-        const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room.roomId === roomId)
+    socket.on('turn-action', ({ roomId, userId }: { roomId: string, userId: string }) => {
+        const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
+        const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
 
         console.log('bonsoir depuis le server')
         
-        if (roomData) {
+        if (roomData && roomData.turnState.previous_turn != userId) {
             console.log(roomData.roomId, roomIndex)
             // Add turn counter
             const turnCount = roomData.turnState.turnCount + 1
@@ -20,6 +20,8 @@ export const socketTurn = (io: Server, socket: Socket) => {
             const newUserTurn = players.find((p) => p != roomData.turnState.turn)
 
             const turn = newUserTurn ? roomData.turnState.turn = newUserTurn : roomData.turnState.turn
+
+            if(!Battle_Brawlers_Game_State[roomIndex]) return
 
             Battle_Brawlers_Game_State[roomIndex].turnState.turnCount = turnCount
             Battle_Brawlers_Game_State[roomIndex].turnState.turn = turn

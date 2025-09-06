@@ -3,6 +3,7 @@ import { AbilityCards, AbilityCardsList } from './src/battle-brawlers/ability-ca
 import { ExclusiveAbilities, ExclusiveAbilitiesList } from './src/battle-brawlers/exclusive-abilities'
 import { GateCards, GateCardsList } from './src/battle-brawlers/gate-gards'
 import { attribut, bakuganType, abilityCardsType, exclusiveAbilitiesType, gateCardType } from './src/type/game-data-types'
+import { slots_id, stateType, portalSlotsType, portalSlotsTypeElement, deckType } from './src/type/room-types'
 
 
 export {
@@ -21,5 +22,10 @@ export type {
     bakuganType,
     abilityCardsType,
     exclusiveAbilitiesType,
-    gateCardType
+    gateCardType,
+    slots_id,
+    stateType,
+    portalSlotsType,
+    portalSlotsTypeElement,
+    deckType
 }

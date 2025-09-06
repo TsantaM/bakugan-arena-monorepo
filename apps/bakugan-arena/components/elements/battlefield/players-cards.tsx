@@ -1,6 +1,6 @@
 'use client'
 
-import useGetRoomState, { stateType } from "@/src/sockets/get-room-state"
+import useGetRoomState from "@/src/sockets/get-room-state"
 import Image from "next/image"
 import { useEffect } from "react"
 import TurnInterface from "./turn-interface"

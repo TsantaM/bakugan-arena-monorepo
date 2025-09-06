@@ -18,14 +18,15 @@ import useSetGate from "@/src/sockets/set-gate"
 import useTurnAction from "@/src/sockets/turn-action"
 import { toast } from "sonner"
 import useSetBakugan from "@/src/sockets/set-bakugan"
+import { slots_id } from "@bakugan-arena/game-data"
 
 export default function TurnInterface({ turn, set_gate, set_bakugan, use_ability, roomId, userId }: { turn: boolean, set_gate: boolean, set_bakugan: boolean, use_ability: boolean, roomId: string, userId: string }) {
 
     const { SetGateCard } = useSetGate({ roomId: roomId, userId: userId })
     const { SetBakugan } = useSetBakugan({ roomId: roomId, userId: userId })
-    const { turnAction } = useTurnAction({ roomId })
+    const { turnAction } = useTurnAction({ roomId: roomId, userId: userId })
     const [gate, setGate] = useState<string>("")
-    const [slot, setSlot] = useState<string>("")
+    const [slot, setSlot] = useState<slots_id | ''>("")
     const [bakugan, setBakugan] = useState("")
     const [zone, setZone] = useState("")
 
@@ -34,7 +35,7 @@ export default function TurnInterface({ turn, set_gate, set_bakugan, use_ability
         setGate(gate)
     }
 
-    const selectSlot = (slot: string) => {
+    const selectSlot = (slot: slots_id) => {
         setSlot(slot)
     }
 
@@ -66,6 +67,11 @@ export default function TurnInterface({ turn, set_gate, set_bakugan, use_ability
         if (gate != '' && slot != '' || bakugan != '' && zone != '') {
             turnAction()
         }
+
+        setGate('')
+        setSlot('')
+        setZone('')
+        setBakugan('')
     }
 
 
@@ -94,10 +100,13 @@ export default function TurnInterface({ turn, set_gate, set_bakugan, use_ability
                         </DialogHeader>
                         <div className="flex flex-col gap-5">
                             <SetGateCardComponent set_gate={set_gate} roomId={roomId} userId={userId} selectGate={selectGate} selectSlot={selectSlot} />
-                            <SetBakuganComponent set_bakugan={set_bakugan} roomId={roomId} userId={userId} selectBakugan={selectBakugan} selectZone={selectZone} />
+                            <SetBakuganComponent set_bakugan={set_bakugan} roomId={roomId} userId={userId} selectBakugan={selectBakugan} selectZone={selectZone} slot={slot} gate={gate} />
                         </div>
                         <DialogFooter>
-                            <Button className="lg:w-[15vw]" onClick={handleConfirm}>Confirm</Button>
+                            <DialogClose asChild>
+                                <Button variant='destructive'>Cancel</Button>
+                            </DialogClose>
+                            <Button onClick={handleConfirm}>Confirm</Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
