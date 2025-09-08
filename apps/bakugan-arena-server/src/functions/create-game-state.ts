@@ -26,6 +26,8 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
                         image: bakugan.image,
                         powerLevel: bakugan.powerLevel,
                         currentPowerLevel: bakugan.powerLevel,
+                        activateAbilities: [],
+                        persistantAbilities: [],
                         elimined: false,
                         onDomain: false,
                         gateCard: null,
@@ -171,12 +173,18 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             use_ability_card: false
         }
 
-
+        const battleState = {
+            battleInProcess: false,
+            slot: null,
+            turns: 2,
+            paused: false
+        }
         // Just for checking state type this const state will never be used
 
         const state: stateType = {
             roomId: roomId,
             players: playersState,
+            battleState,
             turnState,
             decksState,
             protalSlots
@@ -185,6 +193,7 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
         return {
             roomId: roomId,
             players: playersState,
+            battleState,
             turnState,
             decksState,
             protalSlots

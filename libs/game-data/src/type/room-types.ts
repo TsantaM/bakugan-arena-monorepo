@@ -23,6 +23,14 @@ export type portalSlotsTypeElement = {
     }
 }
 
+export type battleState = {
+    battleInProcess: boolean,
+    slot: slots_id | null,
+    turns: number,
+    paused: boolean
+}
+
+
 export type portalSlotsType = {
     id: slots_id,
     can_set: boolean,
@@ -56,6 +64,8 @@ export type deckType = {
             image: string;
             powerLevel: number;
             currentPowerLevel: number;
+            activateAbilities: string[];
+            persistantAbilities: string[];
             elimined: boolean;
             onDomain: boolean;
             gateCard: null;
@@ -103,7 +113,8 @@ export type stateType = {
         set_new_gate: boolean;
         set_new_bakugan: boolean;
         use_ability_card: boolean;
-    }
+    },
+    battleState: battleState,
     decksState: deckType[];
     protalSlots: portalSlotsType;
 } | undefined

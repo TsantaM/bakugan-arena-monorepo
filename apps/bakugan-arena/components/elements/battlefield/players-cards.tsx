@@ -2,7 +2,6 @@
 
 import useGetRoomState from "@/src/sockets/get-room-state"
 import Image from "next/image"
-import { useEffect } from "react"
 import TurnInterface from "./turn-interface"
 import GameBoard from "./game-board/game-board"
 
@@ -26,6 +25,10 @@ export default function PlayerCards({ player, opponent, roomId, userId, turn, se
     const { roomState } = useGetRoomState({ roomId })
     const userData = roomState?.decksState.find((d) => d.userId === userId)
 
+    const battleState = roomState?.battleState
+    const slotOfBattle = roomState?.protalSlots.find((p) => p.id === battleState?.slot)
+    const battleConditions = slotOfBattle && battleState && battleState.battleInProcess && battleState.paused === false ? true : false
+
     return <>
 
         <div className="relative z-20 w-full h-[75vh] flex justify-between">
@@ -37,15 +40,25 @@ export default function PlayerCards({ player, opponent, roomId, userId, turn, se
                         }
                     </div>
                 </div>
-                <div className="relative z-20 w-full aspect-[3/4] bg-amber-400 p-1 rounded-lg opacity-0">
-                    <div className="w-full h-full bg-foreground rounded-sm">
+                <div className={`relative z-20 w-full aspect-[3/4] bg-amber-400 p-1 rounded-lg ${battleConditions ? `visible` : `hidden`}`}>
+                    <div className="w-full h-full rounded-sm">
+                        {
+                            slotOfBattle && slotOfBattle.bakugans.filter((b) => b.userId === userId).map((b, index) => <div key={index} className="flex flex-col">
 
+                                <Image src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} alt={b.key} width={25} height={25} />
+
+                            </div>)
+                        }
+                        {
+                            slotOfBattle && slotOfBattle.bakugans.filter((b) => b.userId === userId).map((b, index) => <p key={index}>{b.currentPower}</p>)
+                        }
                     </div>
+
                 </div>
                 <TurnInterface turn={turn} set_bakugan={set_bakugan} set_gate={set_gate} use_ability={use_ability} roomId={roomId} userId={userId} />
             </div>
 
-            <GameBoard roomId={roomId} userId={userId}/>
+            <GameBoard roomId={roomId} userId={userId} />
 
 
             <div className="relative z-20 w-[25vw] md:w-[20vw] lg:w-[15vw] self-end md:self-start flex flex-col gap-2">
@@ -57,9 +70,18 @@ export default function PlayerCards({ player, opponent, roomId, userId, turn, se
                     </div>
                 </div>
 
-                <div className="w-full aspect-[3/4] bg-amber-400 p-1 rounded-lg opacity-0">
-                    <div className="w-full h-full bg-foreground rounded-sm">
+                <div className={`w-full aspect-[3/4] bg-amber-400 p-1 rounded-lg ${battleConditions ? `visible` : `hidden`}`}>
+                    <div className="w-full h-full rounded-sm">
+                        {
+                            slotOfBattle && slotOfBattle.bakugans.filter((b) => b.userId !== userId).map((b, index) => <div key={index} className="flex flex-col">
 
+                                <Image src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} alt={b.key} width={25} height={25} />
+
+                            </div>)
+                        }
+                        {
+                            slotOfBattle && slotOfBattle.bakugans.filter((b) => b.userId !== userId).map((b, index) => <p key={index}>{b.currentPower}</p>)
+                        }
                     </div>
                 </div>
             </div>
