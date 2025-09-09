@@ -41,21 +41,32 @@ export default function PlayerCards({ player, opponent, roomId, userId, turn, se
                     </div>
                 </div>
                 <div className={`relative z-20 w-full aspect-[3/4] bg-amber-400 p-1 rounded-lg ${battleConditions ? `visible` : `hidden`}`}>
-                    <div className="w-full h-full rounded-sm">
+                    <div className="relative w-full h-full rounded-sm flex flex-col items-center justify-center gap-10" >
                         {
-                            slotOfBattle && slotOfBattle.bakugans.filter((b) => b.userId === userId).map((b, index) => <div key={index} className="flex flex-col">
+                            slotOfBattle && <Image src={`/images/attributs-background/${slotOfBattle.bakugans.find((b) => b.userId === userId)?.attribut}.png`} alt={`attribut background ${slotOfBattle.bakugans.find((b) => b.userId === userId)?.attribut}`} fill className="rounded-sm" />
+                        }
 
-                                <Image src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} alt={b.key} width={25} height={25} />
+                        {
+                            slotOfBattle && slotOfBattle.bakugans.filter((b) => b.userId === userId).map((b, index) => <div key={index} className="relative flex flex-col">
+
+                                <Image src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} alt={b.key} width={100} height={100} />
 
                             </div>)
                         }
                         {
-                            slotOfBattle && slotOfBattle.bakugans.filter((b) => b.userId === userId).map((b, index) => <p key={index}>{b.currentPower}</p>)
+                            slotOfBattle && slotOfBattle.bakugans.filter((b) => b.userId === userId).map((b, index) => <div key={index} className="rounded-sm bg-slate-950 absolute bottom-1 left-[50%] translate-x-[-50%] w-[95%] p-3 flex items-center justify-between">
+                                <div className="relative size-7">
+                                    {
+                                        slotOfBattle && <Image src={`/images/attributs/${slotOfBattle.bakugans.find((b) => b.userId === userId)?.attribut}.png`} alt={`attribut background ${slotOfBattle.bakugans.find((b) => b.userId === userId)?.attribut}`} fill className="rounded-sm" />
+                                    }
+                                </div>
+                                <p className="text-center leading-0">{b.currentPower}</p>
+                            </div>)
                         }
                     </div>
 
                 </div>
-                <TurnInterface turn={turn} set_bakugan={set_bakugan} set_gate={set_gate} use_ability={use_ability} roomId={roomId} userId={userId} />
+                <TurnInterface turn={turn} set_bakugan={set_bakugan} set_gate={set_gate} use_ability={use_ability} roomId={roomId} battleState={battleState} userId={userId} />
             </div>
 
             <GameBoard roomId={roomId} userId={userId} />
@@ -71,16 +82,27 @@ export default function PlayerCards({ player, opponent, roomId, userId, turn, se
                 </div>
 
                 <div className={`w-full aspect-[3/4] bg-amber-400 p-1 rounded-lg ${battleConditions ? `visible` : `hidden`}`}>
-                    <div className="w-full h-full rounded-sm">
+                    <div className="relative w-full h-full rounded-sm flex flex-col items-center justify-center gap-10">
                         {
-                            slotOfBattle && slotOfBattle.bakugans.filter((b) => b.userId !== userId).map((b, index) => <div key={index} className="flex flex-col">
+                            slotOfBattle && <Image src={`/images/attributs-background/${slotOfBattle.bakugans.find((b) => b.userId !== userId)?.attribut}.png`} alt={`attribut background ${slotOfBattle.bakugans.find((b) => b.userId !== userId)?.attribut}`} fill className="rounded-sm" />
+                        }
 
-                                <Image src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} alt={b.key} width={25} height={25} />
+                        {
+                            slotOfBattle && slotOfBattle.bakugans.filter((b) => b.userId !== userId).map((b, index) => <div key={index} className="relative flex flex-col">
+
+                                <Image src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} alt={b.key} width={100} height={100} />
 
                             </div>)
                         }
                         {
-                            slotOfBattle && slotOfBattle.bakugans.filter((b) => b.userId !== userId).map((b, index) => <p key={index}>{b.currentPower}</p>)
+                            slotOfBattle && slotOfBattle.bakugans.filter((b) => b.userId !== userId).map((b, index) => <div key={index} className="rounded-sm bg-slate-950 absolute bottom-1 left-[50%] translate-x-[-50%] w-[95%] p-3 flex items-center justify-between">
+                                <div className="relative size-7">
+                                    {
+                                        slotOfBattle && <Image src={`/images/attributs/${slotOfBattle.bakugans.find((b) => b.userId !== userId)?.attribut}.png`} alt={`attribut background ${slotOfBattle.bakugans.find((b) => b.userId !== userId)?.attribut}`} fill className="rounded-sm" />
+                                    }
+                                </div>
+                                <p className="text-center">{b.currentPower}</p>
+                            </div>)
                         }
                     </div>
                 </div>

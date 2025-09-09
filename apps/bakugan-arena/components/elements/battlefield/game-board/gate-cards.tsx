@@ -1,6 +1,6 @@
 'use client'
 
-import { portalSlotsTypeElement } from "@/src/sockets/get-room-state"
+import { portalSlotsTypeElement } from "@bakugan-arena/game-data"
 import Image from "next/image"
 
 

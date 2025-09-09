@@ -37,7 +37,6 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
                         key: c.key,
                         name: c.name,
                         description: c.description,
-                        usable: false,
                         used: false,
                         dead: false
                     }))
@@ -59,7 +58,6 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
                 name: c.name,
                 attribut: c.attribut,
                 description: c.description,
-                usable: false,
                 used: false,
                 dead: false
             }))

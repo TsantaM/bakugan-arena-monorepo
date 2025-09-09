@@ -74,7 +74,6 @@ export type deckType = {
             key: string;
             name: string;
             description: string;
-            usable: boolean;
             used: boolean;
             dead: boolean;
         }[];
@@ -84,7 +83,6 @@ export type deckType = {
         name: string;
         attribut: attribut;
         description: string;
-        usable: boolean;
         used: boolean;
         dead: boolean;
     }[];
