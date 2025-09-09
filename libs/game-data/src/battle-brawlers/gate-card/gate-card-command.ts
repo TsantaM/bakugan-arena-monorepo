@@ -4,7 +4,21 @@ export const Rechargement: gateCardType = {
     key: 'rechargement',
     name: 'Rechargement',
     maxInDeck: 1,
-    description: `Augmente le niveau de puissance du propriétaire de la carte de 100 G par Bakugan présent sur le domaine ayant le même élément`
+    description: `Augmente le niveau de puissance du propriétaire de la carte de 100 G par Bakugan présent sur le domaine ayant le même élément`,
+    onOpen: ({ roomState, slot, bakuganKey, userId }) => {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        const bakuganUser = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+
+        if (slotOfGate && bakuganUser) {
+            const bakuganAttribut = bakuganUser.attribut
+            const sameAttributOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === bakuganAttribut).map((b) => b.key))
+            if (sameAttributOnDomain) {
+                const merged = sameAttributOnDomain.flat()
+                const bonus = 100 * merged.length
+                bakuganUser.currentPower = bakuganUser.currentPower += bonus
+            }
+        }
+    }
 }
 
 export const TripleCombat: gateCardType = {

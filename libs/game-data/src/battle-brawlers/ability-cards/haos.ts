@@ -5,7 +5,17 @@ export const RapideHaos: abilityCardsType = {
     name: 'Rapide Haos',
     attribut: 'Haos',
     description: `Permet à l'utilisateur d'ajouter un bakugan en plus sur le terrain s'il y a déjà un bakugan Haos sur la carte`,
-    maxInDeck: 1
+    maxInDeck: 1,
+    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate) {
+            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+
+            if (user) {
+                user.currentPower += 100
+            }
+        }
+    }
 }
 
 export const EclatSoudain: abilityCardsType = {
@@ -13,7 +23,17 @@ export const EclatSoudain: abilityCardsType = {
     name: 'Eclat Soudain',
     attribut: 'Haos',
     maxInDeck: 1,
-    description: `Permet d'ajouter un Bakugan Haos en plus dans un combat, mais le bakugan ajouté se retire si Eclat Soudain est annulée`
+    description: `Permet d'ajouter un Bakugan Haos en plus dans un combat, mais le bakugan ajouté se retire si Eclat Soudain est annulée`,
+    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate) {
+            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+
+            if (user) {
+                user.currentPower += 100
+            }
+        }
+    }
 }
 
 export const LumiereDivine: abilityCardsType = {
@@ -21,7 +41,17 @@ export const LumiereDivine: abilityCardsType = {
     name: 'Lumière Divine',
     maxInDeck: 1,
     attribut: 'Haos',
-    description: `Permet de redonner vie à un Bakugan qui a été vaincu au combat`
+    description: `Permet de redonner vie à un Bakugan qui a été vaincu au combat`,
+    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate) {
+            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+
+            if (user) {
+                user.currentPower += 100
+            }
+        }
+    }
 }
 
 
@@ -30,7 +60,17 @@ export const ContreMaitrise: abilityCardsType = {
     attribut: 'Haos',
     name: 'Contre Maîtrise',
     description: `Annule toute carte maitrise utilisé par l'adversaire`,
-    maxInDeck: 3
+    maxInDeck: 3,
+    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate) {
+            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+
+            if (user) {
+                user.currentPower += 100
+            }
+        }
+    }
 }
 
 
@@ -39,5 +79,15 @@ export const HaosImmobilisation: abilityCardsType = {
     name: 'Haos Immobilisation',
     attribut: 'Haos',
     maxInDeck: 1,
-    description: `Ajoute 100 G de puissance à l'utilisateur et permet d'utiliser une carte maîtrise en plus`
+    description: `Ajoute 100 G de puissance à l'utilisateur et permet d'utiliser une carte maîtrise en plus`,
+    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate) {
+            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+
+            if (user) {
+                user.currentPower += 100
+            }
+        }
+    }
 }
