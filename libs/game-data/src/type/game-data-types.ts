@@ -40,7 +40,7 @@ export type gateCardType = {
     onOpen?: ({ roomState, slot }: {
         roomState: stateType;
         slot: slots_id;
-        bakuganKey: string;
+        bakuganKey?: string;
         userId: string
     }) => void,
     onTurnStart?: ({ roomState, slot }: {

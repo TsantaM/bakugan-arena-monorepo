@@ -9,6 +9,7 @@ export const MineFantome: gateCardType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
 
         if (roomState && slotOfGate && slotOfGate.state.open === false && slotOfGate.state.canceled === false) {
+            slotOfGate.state.open = true
             const bakuganOnSlot = slotOfGate.bakugans.map((b) => b.key)
             const bakuganOnSlotDeckState = roomState.decksState
                 .flatMap(deck => deck.bakugans)           // On prend tous les bakugans de tous les decks
@@ -27,6 +28,9 @@ export const MineFantome: gateCardType = {
             slotOfGate.can_set = true
             slotOfGate.state.open = false
             slotOfGate.state.canceled = false
+            roomState.battleState.battleInProcess = false
+            roomState.battleState.slot = null
+            roomState.battleState.paused = false
         }
     },
     onTurnEnd: ({ roomState, slot }) => {
@@ -53,7 +57,7 @@ export const Echange: gateCardType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
 
         if (slotOfGate && roomState && slotOfGate.state.open === false && slotOfGate.state.canceled === false) {
-
+            slotOfGate.state.open = true
             const usersBakugan = slotOfGate.bakugans.filter((b) => b.userId === userId)
             const usersBakuganKeys = usersBakugan.map((b) => b.key)
             const usersBakuganDeck = roomState.decksState

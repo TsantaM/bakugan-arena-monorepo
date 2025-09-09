@@ -4,6 +4,7 @@ import { socketGetRoomState } from "./sockets/get-room-data";
 import { socketTurn } from "./sockets/turn-action";
 import { socketUpdateGateState } from "./sockets/update-gate-state";
 import { socketUpdateBakuganState } from "./sockets/update-bakugans-state";
+import { socketActiveGateCard } from "./sockets/active-gate-card-socket";
 
 
 
@@ -24,6 +25,7 @@ io.on('connection', (socket) => {
     socketGetRoomState(io, socket)
     socketUpdateGateState(io, socket)
     socketUpdateBakuganState(io, socket)
+    socketActiveGateCard(io, socket)
     socketTurn(io, socket)
 
     socket.on('disconnect', (reason) => {

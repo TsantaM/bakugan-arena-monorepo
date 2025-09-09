@@ -13,6 +13,7 @@ export const Rechargement: gateCardType = {
             const bakuganAttribut = bakuganUser.attribut
             const sameAttributOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === bakuganAttribut).map((b) => b.key))
             if (sameAttributOnDomain) {
+                slotOfGate.state.open = true
                 const merged = sameAttributOnDomain.flat()
                 const bonus = 100 * merged.length
                 bakuganUser.currentPower = bakuganUser.currentPower += bonus

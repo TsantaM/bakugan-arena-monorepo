@@ -13,89 +13,15 @@ import {
     DialogTrigger,
     DialogClose
 } from "@/components/ui/dialog"
-import { useState } from "react"
-import useSetGate from "@/src/sockets/set-gate"
-import useTurnAction from "@/src/sockets/turn-action"
-import { toast } from "sonner"
-import useSetBakugan from "@/src/sockets/set-bakugan"
-import { slots_id } from "@bakugan-arena/game-data"
 import { battleState } from "@bakugan-arena/game-data/src/type/room-types"
 import UseAbilityCard from "./turn-interface-buttons/use-ability"
 import ActivateGateCard from "./turn-interface-buttons/active-gate"
+import useTurnActionStates from "@/src/hooks/turn-action-hook"
 
 export default function TurnInterface({ turn, set_gate, set_bakugan, use_ability, roomId, battleState, userId }: { turn: boolean, set_gate: boolean, set_bakugan: boolean, use_ability: boolean, roomId: string, battleState: battleState | undefined, userId: string }) {
 
+    const turnActionHook = useTurnActionStates({roomId: roomId, battleState: battleState, userId: userId})
 
-    const { SetGateCard } = useSetGate({ roomId: roomId, userId: userId })
-    const { SetBakugan } = useSetBakugan({ roomId: roomId, userId: userId })
-    const { turnAction } = useTurnAction({ roomId: roomId, userId: userId })
-    const [gate, setGate] = useState<string>("")
-    const [slot, setSlot] = useState<slots_id | ''>("")
-    const [bakugan, setBakugan] = useState("")
-    const [zone, setZone] = useState("")
-    const [ability, setAbility] = useState('')
-    const [active, setActive] = useState(false)
-
-
-    const selectGate = (gate: string) => {
-        setGate(gate)
-    }
-
-    const selectSlot = (slot: slots_id) => {
-        setSlot(slot)
-    }
-
-    const selectBakugan = (bakugan: string) => {
-        setBakugan(bakugan)
-    }
-
-    const selectZone = (zone: string) => {
-        setZone(zone)
-    }
-
-    const selectAbility = (ability: string) => {
-        setAbility(ability)
-    }
-
-    const setActiveGate = (active: boolean) => {
-        setActive(active)
-    }
-
-    const handleConfirm = () => {
-        if (gate != '' && slot != '') {
-            SetGateCard({ gateId: gate, slot: slot })
-            console.log(slot, gate)
-        } else {
-            toast.error('You must choice a usable gate card and a valid slot')
-            console.log(slot, gate)
-        }
-
-        if (bakugan != '' && zone != '') {
-            SetBakugan({ bakuganKey: bakugan, slot: zone })
-            console.log(slot, bakugan)
-        } else {
-            toast.error('You must choice a usable gate card and a valid slot')
-        }
-
-        if (gate != '' && slot != '' || bakugan != '' && zone != '') {
-            turnAction()
-        }
-
-        setGate('')
-        setSlot('')
-        setZone('')
-        setBakugan('')
-    }
-
-    const onBattleComfirm = () => {
-        if(bakugan != '' && ability != '') {
-            alert(`${bakugan} will use ${ability}`)
-        }
-
-        if(active === true) {
-            alert('Gate card we ll be activate')
-        }
-    }
 
     if (!turn) {
         return (
@@ -120,14 +46,15 @@ export default function TurnInterface({ turn, set_gate, set_bakugan, use_ability
                                     </DialogDescription>
                                 </DialogHeader>
                                 <div className="flex flex-col gap-2">
-                                    <UseAbilityCard bakuganKey={bakugan} roomId={roomId} userId={userId} selectAbility={selectAbility} selectBakugan={selectBakugan}/>
-                                    <ActivateGateCard roomId={roomId} userId={userId} setActiveGate={setActiveGate}/>
+                                    <UseAbilityCard bakuganKey={turnActionHook.abilityUser} roomId={roomId} userId={userId} selectAbility={turnActionHook.selectAbility} selectBakugan={turnActionHook.selectAbilityUser} />
+                                    <ActivateGateCard roomId={roomId} userId={userId} setActiveGate={turnActionHook.setActive} />
                                 </div>
                                 <DialogFooter>
                                     <DialogClose asChild>
                                         <Button variant='destructive'>Cancel</Button>
                                     </DialogClose>
-                                    <Button onClick={onBattleComfirm}>Confirm</Button>
+                                    <Button onClick={turnActionHook.handleBattleActionComfirm}>Confirm</Button>
+                                    <Button onClick={turnActionHook.handleSkipTurn} variant='destructive'>Skip Turn</Button>
                                 </DialogFooter>
                             </DialogContent>
 
@@ -139,14 +66,14 @@ export default function TurnInterface({ turn, set_gate, set_bakugan, use_ability
                                     </DialogDescription>
                                 </DialogHeader>
                                 <div className="flex flex-col gap-5">
-                                    <SetGateCardComponent set_gate={set_gate} roomId={roomId} userId={userId} selectGate={selectGate} selectSlot={selectSlot} />
-                                    <SetBakuganComponent set_bakugan={set_bakugan} roomId={roomId} userId={userId} selectBakugan={selectBakugan} selectZone={selectZone} slot={slot} gate={gate} />
+                                    <SetGateCardComponent set_gate={set_gate} roomId={roomId} userId={userId} selectGate={turnActionHook.selectGate} selectSlot={turnActionHook.selectSlot} />
+                                    <SetBakuganComponent set_bakugan={set_bakugan} roomId={roomId} userId={userId} selectBakugan={turnActionHook.selectBakuganToSet} selectZone={turnActionHook.selectZone} slot={turnActionHook.slot} gate={turnActionHook.gate} />
                                 </div>
                                 <DialogFooter>
                                     <DialogClose asChild>
                                         <Button variant='destructive'>Cancel</Button>
                                     </DialogClose>
-                                    <Button onClick={handleConfirm}>Confirm</Button>
+                                    <Button onClick={turnActionHook.handleConfirm}>Confirm</Button>
                                 </DialogFooter>
                             </DialogContent>
                     }
