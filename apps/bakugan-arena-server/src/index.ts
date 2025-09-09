@@ -5,6 +5,7 @@ import { socketTurn } from "./sockets/turn-action";
 import { socketUpdateGateState } from "./sockets/update-gate-state";
 import { socketUpdateBakuganState } from "./sockets/update-bakugans-state";
 import { socketActiveGateCard } from "./sockets/active-gate-card-socket";
+import { socketOnBattleEnd } from "./sockets/on-battle-end-socket";
 
 
 
@@ -26,6 +27,7 @@ io.on('connection', (socket) => {
     socketUpdateGateState(io, socket)
     socketUpdateBakuganState(io, socket)
     socketActiveGateCard(io, socket)
+    socketOnBattleEnd(io, socket)
     socketTurn(io, socket)
 
     socket.on('disconnect', (reason) => {

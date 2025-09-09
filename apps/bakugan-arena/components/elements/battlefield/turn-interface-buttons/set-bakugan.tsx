@@ -27,7 +27,7 @@ export default function SetBakuganComponent({ set_bakugan, slot, gate, roomId, u
     const usableBakugans = playersBakugans?.filter((b) => b?.bakuganData.onDomain === false && b.bakuganData.elimined === false).map((b) => b?.bakuganData)
 
     const usableBakugansCount = usableBakugans?.length ?? 3
-    const usableSlots = usableBakugansCount > 1 ? slots?.
+    const usableSlots = usableBakugansCount > 1 || slots?.filter((s) => s.portalCard !== null && s.can_set === false).length === 1 ? slots?.
         filter((s) => s.portalCard !== null && s.can_set === false).
         filter((s) => !s.bakugans?.some((b) => b.userId === userId))
 

@@ -6,6 +6,7 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: { roomId:
     const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
 
     const usable_slot = roomData?.protalSlots.find((s) => s.id === slot)?.portalCard != null
+    const usable_slots = roomData?.protalSlots.filter((s) => s.portalCard != null)
     const can_set_bakugan = roomData?.turnState.set_new_bakugan
     const usable_bakugan = roomData?.decksState.find((d) => d.userId === userId)?.bakugans.filter((b) => b?.bakuganData.onDomain === false && b?.bakuganData.elimined === false).length ?? 3
     const usersBakuganOnGate = roomData?.protalSlots.find((s) => s.id === slot)?.bakugans.filter((b) => b.userId === userId).length ?? 0;
@@ -32,7 +33,7 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: { roomId:
                 image: bakuganToAdd.image
             }
 
-            if (usable_bakugan === 1) {
+            if (usable_bakugan === 1 && usable_slots && usable_slots.length > 1) {
                 if (bakuganOpponent && !bakuganUser) {
                     if (!slotToUpdate?.bakugans.includes(newBakugan)) {
                         const newDeckState: typeof bakuganFromDeck = {

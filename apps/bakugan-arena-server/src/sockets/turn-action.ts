@@ -9,7 +9,7 @@ export const socketTurn = (io: Server, socket: Socket) => {
         const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
 
         console.log('bonsoir depuis le server')
-        
+
         if (roomData && roomData.turnState.previous_turn != userId) {
             console.log(roomData.roomId, roomIndex)
             // Add turn counter
@@ -21,7 +21,7 @@ export const socketTurn = (io: Server, socket: Socket) => {
 
             const turn = newUserTurn ? roomData.turnState.turn = newUserTurn : roomData.turnState.turn
 
-            if(!Battle_Brawlers_Game_State[roomIndex]) return
+            if (!Battle_Brawlers_Game_State[roomIndex]) return
 
             Battle_Brawlers_Game_State[roomIndex].turnState.turnCount = turnCount
             Battle_Brawlers_Game_State[roomIndex].turnState.turn = turn
@@ -36,12 +36,21 @@ export const socketTurn = (io: Server, socket: Socket) => {
                 })
             }
 
-            if(Battle_Brawlers_Game_State[roomIndex].turnState.turnCount > 2) {
+            if (Battle_Brawlers_Game_State[roomIndex].turnState.turnCount > 2) {
                 Battle_Brawlers_Game_State[roomIndex].turnState.set_new_bakugan = true
                 Battle_Brawlers_Game_State[roomIndex].turnState.use_ability_card = true
             }
 
-            CheckBattle({roomId})
+            if (Battle_Brawlers_Game_State[roomIndex].battleState.battleInProcess === true && !Battle_Brawlers_Game_State[roomIndex].battleState.paused) {
+
+                if (Battle_Brawlers_Game_State[roomIndex].battleState.turns > 0) {
+                    Battle_Brawlers_Game_State[roomIndex].battleState.turns -= 1
+                }
+            }
+
+            if (Battle_Brawlers_Game_State[roomIndex].battleState.battleInProcess === false) {
+                CheckBattle({ roomId })
+            }
 
             const state = Battle_Brawlers_Game_State[roomIndex]
             console.log('bonsoir depuis le server 2')

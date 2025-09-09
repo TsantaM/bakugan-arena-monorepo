@@ -17,11 +17,19 @@ import { battleState } from "@bakugan-arena/game-data/src/type/room-types"
 import UseAbilityCard from "./turn-interface-buttons/use-ability"
 import ActivateGateCard from "./turn-interface-buttons/active-gate"
 import useTurnActionStates from "@/src/hooks/turn-action-hook"
+import { useEffect } from "react"
+import { useSocket } from "@/src/providers/socket-provider"
 
 export default function TurnInterface({ turn, set_gate, set_bakugan, use_ability, roomId, battleState, userId }: { turn: boolean, set_gate: boolean, set_bakugan: boolean, use_ability: boolean, roomId: string, battleState: battleState | undefined, userId: string }) {
-
+    const socket = useSocket()
     const turnActionHook = useTurnActionStates({roomId: roomId, battleState: battleState, userId: userId})
-
+    useEffect(() => {
+        if(socket) {
+            if(battleState && battleState.turns === 0) {
+                socket.emit('resolve-battle', ({roomId}))
+            }
+        }
+    }, [battleState])
 
     if (!turn) {
         return (
