@@ -6,6 +6,7 @@ import { socketUpdateGateState } from "./sockets/update-gate-state";
 import { socketUpdateBakuganState } from "./sockets/update-bakugans-state";
 import { socketActiveGateCard } from "./sockets/active-gate-card-socket";
 import { socketOnBattleEnd } from "./sockets/on-battle-end-socket";
+import { socketUseAbilityCard } from "./sockets/use-ability-card-socket";
 
 
 
@@ -26,6 +27,7 @@ io.on('connection', (socket) => {
     socketGetRoomState(io, socket)
     socketUpdateGateState(io, socket)
     socketUpdateBakuganState(io, socket)
+    socketUseAbilityCard(io, socket)
     socketActiveGateCard(io, socket)
     socketOnBattleEnd(io, socket)
     socketTurn(io, socket)

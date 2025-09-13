@@ -9,12 +9,14 @@ import { slots_id } from "@bakugan-arena/game-data"
 import useTurnAction from "../sockets/turn-action"
 import { toast } from "sonner"
 import { battleState } from "@bakugan-arena/game-data/src/type/room-types"
+import useActiveAbilityCard from "../sockets/use-ability-card"
 
 export default function useTurnActionStates({ roomId, userId, battleState }: { roomId: string, userId: string, battleState: battleState | undefined }) {
     const { slots } = useGetRoomState({ roomId })
     const { SetGateCard } = useSetGate({ roomId: roomId, userId: userId })
     const { SetBakugan } = useSetBakugan({ roomId: roomId, userId: userId })
     const { ActiveGateCard } = useActiveGateCard({ roomId })
+    const {ActiveAbilityCard} = useActiveAbilityCard({roomId})
     const { turnAction } = useTurnAction({ roomId: roomId, userId: userId })
 
     // Gate id when chose a gate to set
@@ -112,7 +114,7 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
 
     const handleBattleActionComfirm = () => {
         if (abilityUser != '' && ability != '') {
-            alert(`${abilityUser} will use ${ability}`)
+            ActiveAbilityCard({abilityId: ability, bakuganKey: abilityUser, roomId: roomId, userId: userId})
         }
 
         if (active === true) {
