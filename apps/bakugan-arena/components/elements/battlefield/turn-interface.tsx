@@ -82,6 +82,7 @@ export default function TurnInterface({ turn, set_gate, set_bakugan, use_ability
                                         <Button variant='destructive'>Cancel</Button>
                                     </DialogClose>
                                     <Button onClick={turnActionHook.handleConfirm}>Confirm</Button>
+                                    <Button onClick={turnActionHook.handleSkipTurn} variant='destructive'>Skip Turn</Button>
                                 </DialogFooter>
                             </DialogContent>
                     }

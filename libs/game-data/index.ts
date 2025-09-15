@@ -4,6 +4,8 @@ import { ExclusiveAbilities, ExclusiveAbilitiesList } from './src/battle-brawler
 import { GateCards, GateCardsList } from './src/battle-brawlers/gate-gards'
 import { attribut, bakuganType, abilityCardsType, exclusiveAbilitiesType, gateCardType } from './src/type/game-data-types'
 import { slots_id, stateType, portalSlotsType, portalSlotsTypeElement, deckType } from './src/type/room-types'
+import { CheckGameFinished } from './src/function/check-game-finished'
+
 
 
 export {
@@ -14,7 +16,9 @@ export {
     ExclusiveAbilities,
     ExclusiveAbilitiesList,
     GateCards,
-    GateCardsList
+    GateCardsList,
+
+    CheckGameFinished
 }
 
 export type {
@@ -29,3 +33,4 @@ export type {
     portalSlotsTypeElement,
     deckType
 }
+

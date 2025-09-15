@@ -1,6 +1,7 @@
 import { Server, Socket } from "socket.io/dist";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { CheckBattle } from "../functions/check-battle-start";
+import { CheckGameFinished } from "@bakugan-arena/game-data";
 
 export const socketTurn = (io: Server, socket: Socket) => {
 
@@ -51,6 +52,8 @@ export const socketTurn = (io: Server, socket: Socket) => {
             if (Battle_Brawlers_Game_State[roomIndex].battleState.battleInProcess === false) {
                 CheckBattle({ roomId })
             }
+
+            CheckGameFinished({roomId, roomState: roomData})
 
             const state = Battle_Brawlers_Game_State[roomIndex]
             console.log('bonsoir depuis le server 2')

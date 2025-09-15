@@ -7,7 +7,10 @@ export const CreateRoom = async({player1ID, P1Deck, Player2ID, P2Deck} : {player
             player1Id: player1ID,
             p1Deck: P1Deck,
             player2Id: Player2ID,
-            p2Deck: P2Deck
+            p2Deck: P2Deck,
+            looser: '',
+            winner: '',
+            finished: false
         }
     })
 }

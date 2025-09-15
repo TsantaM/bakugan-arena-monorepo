@@ -101,10 +101,13 @@ model Deck {
 }
 
 model Rooms {
-  id         String   @id @default(uuid())
-  player1Id  String
-  p1Deck     String
-  player2Id  String
-  p2Deck     String
-  createdAt  DateTime @default(now())
+  id        String   @id @default(uuid())
+  player1Id String
+  p1Deck    String
+  player2Id String
+  p2Deck    String
+  finished  Boolean  @default(false)
+  winner    String
+  looser    String
+  createdAt DateTime @default(now())
 }

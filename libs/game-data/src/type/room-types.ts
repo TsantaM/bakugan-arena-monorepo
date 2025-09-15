@@ -115,4 +115,8 @@ export type stateType = {
     battleState: battleState,
     decksState: deckType[];
     protalSlots: portalSlotsType;
+    status: {
+        finished: boolean,
+        winner: string | null
+    }
 } | undefined

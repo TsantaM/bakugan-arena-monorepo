@@ -185,7 +185,11 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             battleState,
             turnState,
             decksState,
-            protalSlots
+            protalSlots,
+            status: {
+                finished: false,
+                winner: null
+            }
         }
 
         return {
@@ -194,7 +198,11 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             battleState,
             turnState,
             decksState,
-            protalSlots
+            protalSlots,
+            status: {
+                finished: false,
+                winner: null
+            }
         }
 
     }

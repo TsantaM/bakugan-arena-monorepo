@@ -9,6 +9,8 @@ export default function useGetRoomState({ roomId }: { roomId: string }) {
     const socket = useSocket()
     const [roomState, setRoomState] = useState<stateType | undefined>()
     const [slots, setSlots] = useState<portalSlotsType>()
+    const [finished, setFinished] = useState(false)
+    const [winner, setWinner] = useState<string | null>()
 
     const getRoomData = () => {
         if (socket) {
@@ -28,6 +30,10 @@ export default function useGetRoomState({ roomId }: { roomId: string }) {
                 console.log(state)
                 setRoomState(state)
                 setSlots(state?.protalSlots)
+                if(state && state.status.finished === true && state.status.winner != null) {
+                    setFinished(true)
+                    setWinner(state.status.winner)
+                }
             })
         }
     }, [socket, roomId])
@@ -37,6 +43,8 @@ export default function useGetRoomState({ roomId }: { roomId: string }) {
         setRoomState,
         slots,
         setSlots,
-        getRoomData
+        getRoomData,
+        finished,
+        winner
     }
 }
