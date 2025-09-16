@@ -9,7 +9,7 @@ export default function GateCardOnBoard({ userId, slot }: { userId: string, slot
     const playerBakugans = slot.bakugans.filter((b) => b.userId === userId)
     const oponentsBakugans = slot.bakugans.filter((b) => b.userId !== userId)
 
-    return <div className="relative aspect-[2/3] border border-slate-50 flex items-center justify-center text-white text-xs ">
+    return <div className="relative aspect-[2/3] border border-[var(--foreground)] flex items-center justify-center text-white text-xs ">
 
         {
             !slot.can_set && slot.portalCard !== null ?
@@ -37,7 +37,7 @@ export default function GateCardOnBoard({ userId, slot }: { userId: string, slot
                         </div>
                     </div>
 
-                </> : <p>{slot.id}</p>
+                </> : <p className="text-[var(--foreground)]">{slot.id}</p>
         }
 
 

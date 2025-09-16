@@ -60,7 +60,7 @@ export default function PlayerCards({ player, opponent, roomId, userId, turn, se
                                         slotOfBattle && <Image src={`/images/attributs/${slotOfBattle.bakugans.find((b) => b.userId === userId)?.attribut}.png`} alt={`attribut background ${slotOfBattle.bakugans.find((b) => b.userId === userId)?.attribut}`} fill className="rounded-sm" />
                                     }
                                 </div>
-                                <p className="text-center leading-0">{b.currentPower}</p>
+                                <p className="text-center leading-0 text-[white]">{b.currentPower}</p>
                             </div>)
                         }
                     </div>
@@ -101,7 +101,7 @@ export default function PlayerCards({ player, opponent, roomId, userId, turn, se
                                         slotOfBattle && <Image src={`/images/attributs/${slotOfBattle.bakugans.find((b) => b.userId !== userId)?.attribut}.png`} alt={`attribut background ${slotOfBattle.bakugans.find((b) => b.userId !== userId)?.attribut}`} fill className="rounded-sm" />
                                     }
                                 </div>
-                                <p className="text-center">{b.currentPower}</p>
+                                <p className="text-center leading-0 text-[white]">{b.currentPower}</p>
                             </div>)
                         }
                     </div>
