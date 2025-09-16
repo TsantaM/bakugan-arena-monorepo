@@ -43,6 +43,12 @@ export type gateCardType = {
         bakuganKey?: string;
         userId: string
     }) => void,
+    onCanceled?: ({ roomState, slot }: {
+        roomState: stateType;
+        slot: slots_id;
+        bakuganKey?: string;
+        userId: string
+    }) => void,
     onTurnStart?: ({ roomState, slot }: {
         roomState: stateType;
         slot: slots_id;

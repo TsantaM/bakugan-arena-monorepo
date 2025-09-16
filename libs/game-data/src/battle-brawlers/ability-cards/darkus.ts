@@ -1,4 +1,5 @@
 import { abilityCardsType } from "../../type/game-data-types";
+import { GateCardsList } from "../gate-gards";
 
 export const CoupDeGrace: abilityCardsType = {
     key: 'coup-de-grace',
@@ -10,9 +11,16 @@ export const CoupDeGrace: abilityCardsType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const gate = slotOfGate.portalCard?.key
+            if (user && gate && slotOfGate.state.open) {
+                const gateToCancel = GateCardsList.find((g) => g.key === gate)
 
-            if (user) {
-                user.currentPower += 100
+                if (gateToCancel && gateToCancel.onCanceled) {
+                    gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
+                    slotOfGate.state.canceled = true
+                }
+
+
             }
         }
     }
@@ -29,9 +37,11 @@ export const EpicesMortelles: abilityCardsType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
 
-            if (user) {
+            if (user && opponent) {
                 user.currentPower += 100
+                opponent.currentPower -= 100
             }
         }
     }
@@ -48,9 +58,15 @@ export const BoublierFusion: abilityCardsType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
 
-            if (user) {
-                user.currentPower += 100
+            if (user && opponent) {
+                const currentOpponentPower = opponent.currentPower
+                const baseOpponentPower = opponent.powerLevel
+                const opponentBoost = currentOpponentPower - baseOpponentPower
+                if (opponentBoost > 0) {
+                    user.currentPower += opponentBoost
+                }
             }
         }
     }
@@ -67,9 +83,13 @@ export const VengeanceAlItalienne: abilityCardsType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const opponents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
 
-            if (user) {
+            if (user && opponents.length > 0) {
                 user.currentPower += 100
+                opponents.forEach((opponent) => {
+                    opponent.currentPower -= 100
+                })
             }
         }
     }
@@ -82,13 +102,13 @@ export const PoivreDesCayenne: abilityCardsType = {
     attribut: 'Darkus',
     maxInDeck: 2,
     description: `Annule toutes les capacité de l'adversaire et retire 50 G à l'adversaire`,
-    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+    onActivate: ({ roomState, userId, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
-            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
 
-            if (user) {
-                user.currentPower += 100
+            if (opponent) {
+                opponent.currentPower -= 50
             }
         }
     }

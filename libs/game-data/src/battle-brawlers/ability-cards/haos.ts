@@ -79,14 +79,21 @@ export const HaosImmobilisation: abilityCardsType = {
     name: 'Haos Immobilisation',
     attribut: 'Haos',
     maxInDeck: 1,
-    description: `Ajoute 100 G de puissance à l'utilisateur et permet d'utiliser une carte maîtrise en plus`,
+    description: `Si trois Bakugans Haos sont sur le domaine, ajoute 100 G de puissance à l'utilisateur et permet rendre 3 cartes capacités supplémentaires au joueur`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (slotOfGate) {
-            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+        const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans?.filter((b) => b.attribut === 'Haos').map((b) => b.key) || [])
 
-            if (user) {
-                user.currentPower += 100
+        if (slotOfGate && haosOnDomain) {
+            const merged = haosOnDomain.flat()
+            if (merged.length >= 3 && slotOfGate) {
+                const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+                const player = roomState?.players.find((p) => p.userId === userId)
+
+                if (user && player) {
+                    user.currentPower += 100
+                    player.usable_abilitys = 3
+                }
             }
         }
     }

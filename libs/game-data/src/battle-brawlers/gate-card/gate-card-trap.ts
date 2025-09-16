@@ -33,6 +33,9 @@ export const MineFantome: gateCardType = {
             roomState.battleState.paused = false
         }
     },
+    onCanceled({ roomState, slot }) {
+        return
+    },
     onTurnEnd: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -100,6 +103,9 @@ export const Echange: gateCardType = {
                 )
             }
         }
+    },
+    onCanceled({ roomState, slot }) {
+        return
     },
 }
 

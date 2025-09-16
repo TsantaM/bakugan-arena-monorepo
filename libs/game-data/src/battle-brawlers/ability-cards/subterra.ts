@@ -1,4 +1,5 @@
 import { abilityCardsType } from "../../type/game-data-types";
+import { GateCardsList } from "../gate-gards";
 
 export const MagmaSupreme: abilityCardsType = {
     key: 'magma-supreme',
@@ -8,11 +9,23 @@ export const MagmaSupreme: abilityCardsType = {
     maxInDeck: 1,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (slotOfGate) {
+        if (slotOfGate && slotOfGate.portalCard) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const gate = slotOfGate.portalCard.key
 
-            if (user) {
-                user.currentPower += 100
+            if (user && gate) {
+
+                if (slotOfGate.state.open === true && slotOfGate.state.canceled === false) {
+                    const initialGate = GateCardsList.find((g) => g.key === gate)
+                    const newGate = GateCardsList.find((g) => g.key === 'reacteur-subterra')
+                    if (initialGate && initialGate.onCanceled && newGate && newGate.onOpen) {
+                        initialGate.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
+                        newGate.onOpen({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
+
+                    }
+                }
+
+                slotOfGate.portalCard.key = 'reacteur-subterra'
             }
         }
     }
@@ -66,9 +79,10 @@ export const Obstruction: abilityCardsType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
-
-            if (user) {
-                user.currentPower += 100
+            const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
+            if (user && opponent) {
+                const opponentPower = opponent.currentPower
+                user.currentPower += opponentPower
             }
         }
     }

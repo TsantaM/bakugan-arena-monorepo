@@ -1,5 +1,6 @@
 import { attribut, gateCardType } from "../../type/game-data-types"
 import { slots_id, stateType } from "../../type/room-types"
+import { BakuganList } from "../bakugans"
 
 export const ReacteurPyrus: gateCardType = {
     key: 'reacteur-pyrus',
@@ -12,10 +13,21 @@ export const ReacteurPyrus: gateCardType = {
         const attribut: attribut = 'Pyrus'
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
 
-        if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled) {
+        if (slotOfGate && !slotOfGate.state.canceled) {
             const bakuganWithAttribut = slotOfGate.bakugans.filter((b) => b.attribut === attribut)
             slotOfGate.state.open = true
             bakuganWithAttribut.forEach((b) => b.currentPower += 100)
+        }
+
+    },
+    onCanceled: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
+        const attribut: attribut = 'Pyrus'
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+
+        if (slotOfGate && slotOfGate.state.open && !slotOfGate.state.canceled) {
+            const bakuganWithAttribut = slotOfGate.bakugans.filter((b) => b.attribut === attribut)
+            slotOfGate.state.open = true
+            bakuganWithAttribut.forEach((b) => b.currentPower -= 100)
         }
 
     }
@@ -32,13 +44,23 @@ export const ReacteurHaos: gateCardType = {
         const attribut: attribut = 'Haos'
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
 
-        if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled) {
+        if (slotOfGate && !slotOfGate.state.canceled) {
             const bakuganWithAttribut = slotOfGate.bakugans.filter((b) => b.attribut === attribut)
             slotOfGate.state.open = true
             bakuganWithAttribut.forEach((b) => b.currentPower += 100)
         }
 
-    }
+    },
+    onCanceled({ roomState, slot }) {
+        const attribut: attribut = 'Haos'
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+
+        if (slotOfGate && slotOfGate.state.open && !slotOfGate.state.canceled) {
+            const bakuganWithAttribut = slotOfGate.bakugans.filter((b) => b.attribut === attribut)
+            slotOfGate.state.open = true
+            bakuganWithAttribut.forEach((b) => b.currentPower -= 100)
+        }
+    },
 }
 
 export const ReacteurVentus: gateCardType = {
@@ -52,12 +74,23 @@ export const ReacteurVentus: gateCardType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const attribut: attribut = 'Ventus'
 
-        if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled) {
+        if (slotOfGate && !slotOfGate.state.canceled) {
             const bakuganWithAttribut = slotOfGate.bakugans.filter((b) => b.attribut === attribut)
             slotOfGate.state.open = true
             bakuganWithAttribut.forEach((b) => b.currentPower += 100)
         }
 
+    },
+
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        const attribut: attribut = 'Ventus'
+
+        if (slotOfGate && slotOfGate.state.open && !slotOfGate.state.canceled) {
+            const bakuganWithAttribut = slotOfGate.bakugans.filter((b) => b.attribut === attribut)
+            slotOfGate.state.open = true
+            bakuganWithAttribut.forEach((b) => b.currentPower -= 100)
+        }
     }
 }
 
@@ -72,13 +105,23 @@ export const ReacteurAquos: gateCardType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const attribut: attribut = 'Aquos'
 
-        if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled) {
+        if (slotOfGate && !slotOfGate.state.canceled) {
             const bakuganWithAttribut = slotOfGate.bakugans.filter((b) => b.attribut === attribut)
             slotOfGate.state.open = true
             bakuganWithAttribut.forEach((b) => b.currentPower += 100)
         }
 
-    }
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        const attribut: attribut = 'Aquos'
+
+        if (slotOfGate && slotOfGate.state.open && !slotOfGate.state.canceled) {
+            const bakuganWithAttribut = slotOfGate.bakugans.filter((b) => b.attribut === attribut)
+            slotOfGate.state.open = true
+            bakuganWithAttribut.forEach((b) => b.currentPower -= 100)
+        }
+    },
 }
 
 export const ReacteurSubterra: gateCardType = {
@@ -91,14 +134,26 @@ export const ReacteurSubterra: gateCardType = {
         const attribut: attribut = 'Subterra'
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
 
-        if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled) {
+        if (slotOfGate && !slotOfGate.state.canceled) {
             slotOfGate.state.open = true
             const bakuganWithAttribut = slotOfGate.bakugans.filter((b) => b.attribut === attribut)
             slotOfGate.state.open = true
             bakuganWithAttribut.forEach((b) => b.currentPower += 100)
         }
 
-    }
+    },
+
+    onCanceled({ roomState, slot }) {
+        const attribut: attribut = 'Subterra'
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+
+        if (slotOfGate && slotOfGate.state.open && !slotOfGate.state.canceled) {
+            slotOfGate.state.open = true
+            const bakuganWithAttribut = slotOfGate.bakugans.filter((b) => b.attribut === attribut)
+            slotOfGate.state.open = true
+            bakuganWithAttribut.forEach((b) => b.currentPower -= 100)
+        }
+    },
 }
 
 export const ReacteurDarkus: gateCardType = {
@@ -112,10 +167,22 @@ export const ReacteurDarkus: gateCardType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const attribut: attribut = 'Darkus'
 
-        if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled) {
+        if (slotOfGate && !slotOfGate.state.canceled) {
             const bakuganWithAttribut = slotOfGate.bakugans.filter((b) => b.attribut === attribut)
             slotOfGate.state.open = true
             bakuganWithAttribut.forEach((b) => b.currentPower += 100)
+        }
+
+    },
+    onCanceled({ roomState, slot }) {
+
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        const attribut: attribut = 'Darkus'
+
+        if (slotOfGate && slotOfGate.state.open && !slotOfGate.state.canceled) {
+            const bakuganWithAttribut = slotOfGate.bakugans.filter((b) => b.attribut === attribut)
+            slotOfGate.state.open = true
+            bakuganWithAttribut.forEach((b) => b.currentPower -= 100)
         }
 
     }
@@ -138,7 +205,21 @@ export const PerilPyrus: gateCardType = {
             bakuganOnGate.forEach((b) => b.attribut = 'Pyrus')
         }
 
-    }
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate && slotOfGate.state.open && !slotOfGate.state.canceled) {
+            const bakuganOnGate = slotOfGate.bakugans
+            slotOfGate.state.open = true
+            bakuganOnGate.forEach((b) => {
+                const attribut = BakuganList.find((ba) => ba.key === b.key)?.attribut
+
+                if (attribut) {
+                    b.attribut = attribut
+                }
+            })
+        }
+    },
 }
 
 export const PerilAquos: gateCardType = {
@@ -155,7 +236,21 @@ export const PerilAquos: gateCardType = {
             bakuganOnGate.forEach((b) => b.attribut = 'Aquos')
         }
 
-    }
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate && slotOfGate.state.open && !slotOfGate.state.canceled) {
+            const bakuganOnGate = slotOfGate.bakugans
+            slotOfGate.state.open = true
+            bakuganOnGate.forEach((b) => {
+                const attribut = BakuganList.find((ba) => ba.key === b.key)?.attribut
+
+                if (attribut) {
+                    b.attribut = attribut
+                }
+            })
+        }
+    },
 }
 
 export const PerilVentus: gateCardType = {
@@ -172,7 +267,21 @@ export const PerilVentus: gateCardType = {
             bakuganOnGate.forEach((b) => b.attribut = 'Ventus')
         }
 
-    }
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate && slotOfGate.state.open && !slotOfGate.state.canceled) {
+            const bakuganOnGate = slotOfGate.bakugans
+            slotOfGate.state.open = true
+            bakuganOnGate.forEach((b) => {
+                const attribut = BakuganList.find((ba) => ba.key === b.key)?.attribut
+
+                if (attribut) {
+                    b.attribut = attribut
+                }
+            })
+        }
+    },
 }
 
 export const PerilSubterra: gateCardType = {
@@ -189,7 +298,21 @@ export const PerilSubterra: gateCardType = {
             bakuganOnGate.forEach((b) => b.attribut = 'Subterra')
         }
 
-    }
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate && slotOfGate.state.open && !slotOfGate.state.canceled) {
+            const bakuganOnGate = slotOfGate.bakugans
+            slotOfGate.state.open = true
+            bakuganOnGate.forEach((b) => {
+                const attribut = BakuganList.find((ba) => ba.key === b.key)?.attribut
+
+                if (attribut) {
+                    b.attribut = attribut
+                }
+            })
+        }
+    },
 }
 
 export const PerilHaos: gateCardType = {
@@ -206,7 +329,21 @@ export const PerilHaos: gateCardType = {
             bakuganOnGate.forEach((b) => b.attribut = 'Haos')
         }
 
-    }
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate && slotOfGate.state.open && !slotOfGate.state.canceled) {
+            const bakuganOnGate = slotOfGate.bakugans
+            slotOfGate.state.open = true
+            bakuganOnGate.forEach((b) => {
+                const attribut = BakuganList.find((ba) => ba.key === b.key)?.attribut
+
+                if (attribut) {
+                    b.attribut = attribut
+                }
+            })
+        }
+    },
 }
 
 export const PerilDarkus: gateCardType = {
@@ -223,7 +360,21 @@ export const PerilDarkus: gateCardType = {
             bakuganOnGate.forEach((b) => b.attribut = 'Darkus')
         }
 
-    }
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate && slotOfGate.state.open && !slotOfGate.state.canceled) {
+            const bakuganOnGate = slotOfGate.bakugans
+            slotOfGate.state.open = true
+            bakuganOnGate.forEach((b) => {
+                const attribut = BakuganList.find((ba) => ba.key === b.key)?.attribut
+
+                if (attribut) {
+                    b.attribut = attribut
+                }
+            })
+        }
+    },
 }
 
 // Fusions
@@ -243,7 +394,21 @@ export const FusionMarine: gateCardType = {
             bakuganOnGate.forEach((b) => b.attribut = 'Aquos')
         }
 
-    }
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate && slotOfGate.state.open && !slotOfGate.state.canceled) {
+            const bakuganOnGate = slotOfGate.bakugans
+            slotOfGate.state.open = true
+            bakuganOnGate.forEach((b) => {
+                const attribut = BakuganList.find((ba) => ba.key === b.key)?.attribut
+
+                if (attribut) {
+                    b.attribut = attribut
+                }
+            })
+        }
+    },
 }
 
 export const FusionAerienne: gateCardType = {
@@ -262,7 +427,21 @@ export const FusionAerienne: gateCardType = {
             bakuganOnGate.forEach((b) => b.attribut = 'Ventus')
         }
 
-    }
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate && slotOfGate.state.open && !slotOfGate.state.canceled) {
+            const bakuganOnGate = slotOfGate.bakugans
+            slotOfGate.state.open = true
+            bakuganOnGate.forEach((b) => {
+                const attribut = BakuganList.find((ba) => ba.key === b.key)?.attribut
+
+                if (attribut) {
+                    b.attribut = attribut
+                }
+            })
+        }
+    },
 }
 
 export const FusionTenebreuses: gateCardType = {
@@ -281,7 +460,21 @@ export const FusionTenebreuses: gateCardType = {
             bakuganOnGate.forEach((b) => b.attribut = 'Darkus')
         }
 
-    }
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate && slotOfGate.state.open && !slotOfGate.state.canceled) {
+            const bakuganOnGate = slotOfGate.bakugans
+            slotOfGate.state.open = true
+            bakuganOnGate.forEach((b) => {
+                const attribut = BakuganList.find((ba) => ba.key === b.key)?.attribut
+
+                if (attribut) {
+                    b.attribut = attribut
+                }
+            })
+        }
+    },
 }
 
 export const FusionTerrestre: gateCardType = {
@@ -300,7 +493,21 @@ export const FusionTerrestre: gateCardType = {
             bakuganOnGate.forEach((b) => b.attribut = 'Subterra')
         }
 
-    }
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate && slotOfGate.state.open && !slotOfGate.state.canceled) {
+            const bakuganOnGate = slotOfGate.bakugans
+            slotOfGate.state.open = true
+            bakuganOnGate.forEach((b) => {
+                const attribut = BakuganList.find((ba) => ba.key === b.key)?.attribut
+
+                if (attribut) {
+                    b.attribut = attribut
+                }
+            })
+        }
+    },
 }
 
 export const FusionLumineuse: gateCardType = {
@@ -319,7 +526,21 @@ export const FusionLumineuse: gateCardType = {
             bakuganOnGate.forEach((b) => b.attribut = 'Haos')
         }
 
-    }
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate && slotOfGate.state.open && !slotOfGate.state.canceled) {
+            const bakuganOnGate = slotOfGate.bakugans
+            slotOfGate.state.open = true
+            bakuganOnGate.forEach((b) => {
+                const attribut = BakuganList.find((ba) => ba.key === b.key)?.attribut
+
+                if (attribut) {
+                    b.attribut = attribut
+                }
+            })
+        }
+    },
 }
 
 export const FusionEnflammee: gateCardType = {
@@ -337,5 +558,19 @@ export const FusionEnflammee: gateCardType = {
             bakuganOnGate.forEach((b) => b.attribut = 'Pyrus')
         }
 
-    }
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate && slotOfGate.state.open && !slotOfGate.state.canceled) {
+            const bakuganOnGate = slotOfGate.bakugans
+            slotOfGate.state.open = true
+            bakuganOnGate.forEach((b) => {
+                const attribut = BakuganList.find((ba) => ba.key === b.key)?.attribut
+
+                if (attribut) {
+                    b.attribut = attribut
+                }
+            })
+        }
+    },
 }

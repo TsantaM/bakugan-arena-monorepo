@@ -1,4 +1,5 @@
 import { abilityCardsType } from "../../type/game-data-types";
+import { GateCardsList } from "../gate-gards";
 
 export const MurDeFeu: abilityCardsType = {
     key: "mur-de-feu",
@@ -43,10 +44,21 @@ export const RetroAction: abilityCardsType = {
     attribut: 'Pyrus',
     name: 'Retro Action',
     description: `Calcine la carte portail de l'adversaire si elle est ouverte et en annule tous les effets`,
-    onActivate: ({ roomState, slot }) => {
+    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (slotOfGate && slotOfGate.state.open && slotOfGate.state.canceled === false) {
-            slotOfGate.state.canceled = true
+        if (slotOfGate) {
+            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const gate = slotOfGate.portalCard?.key
+            if (user && gate && slotOfGate.state.open) {
+                const gateToCancel = GateCardsList.find((g) => g.key === gate)
+
+                if (gateToCancel && gateToCancel.onCanceled) {
+                    gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
+                    slotOfGate.state.canceled = true
+
+                }
+
+            }
         }
     }
 }
@@ -63,7 +75,7 @@ export const TourbillonDeFeu: abilityCardsType = {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
 
             if (user) {
-                user.currentPower += 100
+                user.currentPower += 50
             }
         }
     }
