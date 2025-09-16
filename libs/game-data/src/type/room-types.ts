@@ -97,6 +97,7 @@ export type deckType = {
     }[];
 }
 
+
 export type stateType = {
     roomId: string;
     players: {

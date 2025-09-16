@@ -2,6 +2,13 @@ import { slots_id, stateType } from "./room-types"
 
 export type attribut = 'Pyrus' | 'Subterra' | 'Haos' | 'Darkus' | 'Aquos' | 'Ventus'
 
+export type ExtraInputsTypes = 'target' | 'targets-slot' | 'slot'
+
+export type AbilityExtraInput = {
+    type: ExtraInputsTypes,
+    label: string
+}
+
 
 export type bakuganType = {
     name: string,
@@ -13,14 +20,14 @@ export type bakuganType = {
     exclusiveAbilities: string[]
 }
 
-
 export type abilityCardsType = {
     name: string,
     attribut: attribut,
     key: string,
     description: string,
     maxInDeck: number,
-    onActivate: ({ roomState, userId, bakuganKey, slot }: { roomState: stateType, roomId: string, userId: string, bakuganKey: string, slot: slots_id }) => void
+    extraInputs?: AbilityExtraInput[];
+    onActivate: ({ roomState, userId, bakuganKey, slot, slot_2, target }: { roomState: stateType, roomId: string, userId: string, bakuganKey: string, slot: slots_id, slot_2?: slots_id, target?: string }) => void
 }
 
 export type exclusiveAbilitiesType = {
@@ -28,6 +35,7 @@ export type exclusiveAbilitiesType = {
     name: string;
     description: string;
     maxInDeck: number;
+    extraInputs?: AbilityExtraInput[];
     onActivate: ({ roomState, userId, bakuganKey, slot }: { roomState: stateType, roomId: string, userId: string, bakuganKey: string, slot: slots_id }) => void
 }
 

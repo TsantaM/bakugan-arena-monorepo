@@ -6,13 +6,22 @@ export const MirageAquatique: abilityCardsType = {
     attribut: 'Aquos',
     description: `'Permet à l'utilisateur de se déplacer vers une autre carte portail et l'empêche de s'ouvrir`,
     maxInDeck: 2,
-    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+    extraInputs: [
+        {
+            label: `Slot de destination`,
+            type: "slot"
+        }
+    ],
+    onActivate: ({ roomState, userId, bakuganKey, slot, slot_2 }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (slotOfGate) {
+        const slotTarget = roomState?.protalSlots.find((s) => s.id === slot_2)
+        if (slotOfGate && slotTarget) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const index = slotOfGate.bakugans.findIndex((ba) => ba.key === user?.key && ba.userId === user.userId)
 
             if (user) {
-                user.currentPower += 100
+                slotTarget.bakugans.push(user)
+                slotOfGate.bakugans.splice(index, 1)
             }
         }
     }
