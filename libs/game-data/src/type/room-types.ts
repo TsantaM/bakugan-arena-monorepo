@@ -15,12 +15,15 @@ export type portalSlotsTypeElement = {
         powerLevel: number,
         currentPower: number,
         attribut: attribut,
-        image: string
+        image: string,
+        abilityBlock: boolean
     }[],
     state: {
         open: boolean,
-        canceled: boolean
-    }
+        canceled: boolean,
+        blocked: boolean
+    },
+    activateAbilities: activateAbilities[]
 }
 
 export type battleState = {
@@ -30,27 +33,25 @@ export type battleState = {
     paused: boolean
 }
 
+export type activateAbilities = {
+    id: number,
+    key: string,
+    userId: string,
+    bakuganKey: string,
+    canceled: boolean,
+}
 
-export type portalSlotsType = {
-    id: slots_id,
-    can_set: boolean,
-    portalCard: {
-        key: string,
-        userId: string
-    } | null,
-    bakugans: {
-        key: string,
-        userId: string,
-        powerLevel: number,
-        currentPower: number,
-        attribut: attribut,
-        image: string
-    }[],
-    state: {
-        open: boolean,
-        canceled: boolean
-    }
-}[]
+export type bakuganOnSlot = {
+    key: string,
+    userId: string,
+    powerLevel: number,
+    currentPower: number,
+    attribut: attribut,
+    image: string,
+    abilityBlock: boolean
+}
+
+export type portalSlotsType = portalSlotsTypeElement[]
 
 
 export type deckType = {
@@ -97,7 +98,6 @@ export type deckType = {
     }[];
 }
 
-
 export type stateType = {
     roomId: string;
     players: {
@@ -113,6 +113,7 @@ export type stateType = {
         set_new_bakugan: boolean;
         use_ability_card: boolean;
     },
+    persistantAbilities: activateAbilities[],
     battleState: battleState,
     decksState: deckType[];
     protalSlots: portalSlotsType;

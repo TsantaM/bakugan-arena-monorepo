@@ -27,13 +27,20 @@ export default function SetBakuganComponent({ set_bakugan, slot, gate, roomId, u
     const usableBakugans = playersBakugans?.filter((b) => b?.bakuganData.onDomain === false && b.bakuganData.elimined === false).map((b) => b?.bakuganData)
 
     const usableBakugansCount = usableBakugans?.length ?? 3
-    const usableSlots = usableBakugansCount > 1 || slots?.filter((s) => s.portalCard !== null && s.can_set === false).length === 1 ? slots?.
-        filter((s) => s.portalCard !== null && s.can_set === false).
-        filter((s) => !s.bakugans?.some((b) => b.userId === userId))
+    const noBakugansOnField = slots?.every((s) => (s.bakugans?.length ?? 0) === 0)             // il y a au moins une carte portail
 
-        : slots?.
-            filter((s) => s.bakugans.some((b) => b.userId != userId)).
-            filter((s) => s.bakugans.every((b) => b.userId != userId))
+    const usableSlots =
+        (usableBakugansCount > 1
+            || slots?.filter((s) => s.portalCard !== null && s.can_set === false).length === 1
+            || (slots?.filter((s) => s.portalCard !== null && (s.bakugans?.length ?? 0) > 0)?.length ?? 0) > 0
+            && noBakugansOnField) // ✅ ajout cas spécial
+            ? slots?.
+                filter((s) => s.portalCard !== null && s.can_set === false).
+                filter((s) => !s.bakugans?.some((b) => b.userId === userId))
+
+            : slots?.
+                filter((s) => s.bakugans.some((b) => b.userId != userId)).
+                filter((s) => s.bakugans.every((b) => b.userId != userId))
 
     const selectedSlot = usableBakugansCount > 1 && slots?.find((s) => s.id === slot)
 

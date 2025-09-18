@@ -44,6 +44,18 @@ export const EpicesMortelles: abilityCardsType = {
                 opponent.currentPower -= 100
             }
         }
+    },
+    onCanceled: ({ roomState, userId, bakuganKey, slot }) => {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate) {
+            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
+
+            if (user && opponent) {
+                user.currentPower -= 100
+                opponent.currentPower += 100
+            }
+        }
     }
 }
 
@@ -109,6 +121,16 @@ export const PoivreDesCayenne: abilityCardsType = {
 
             if (opponent) {
                 opponent.currentPower -= 50
+            }
+        }
+    },
+    onCanceled: ({ roomState, userId, slot }) => {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate) {
+            const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
+
+            if (opponent) {
+                opponent.currentPower += 50
             }
         }
     }

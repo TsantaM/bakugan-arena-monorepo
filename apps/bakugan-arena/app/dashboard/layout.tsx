@@ -1,8 +1,8 @@
 import AppSidebar from "@/components/elements/app-sidebar/app-sidebar"
+import { AnimatedThemeToggler } from "@/components/magicui/theme-toggler"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { SidebarInset, SidebarMenuSkeleton, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { ModeToggle } from "@/components/ui/theme-provider"
 import { getUser, getUserRole } from "@/src/actions/getUserSession"
 import { auth } from "@/src/lib/auth"
 import { SocketProvider } from "@/src/providers/socket-provider"
@@ -26,7 +26,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
                         <div className="w-full flex items-center justify-between">
                             <SidebarTrigger />
                             <div className="flex items-center gap-3">
-                                <ModeToggle />
+                                <AnimatedThemeToggler />
                                 <Suspense fallback={<SidebarMenuSkeleton />}>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger>

@@ -30,7 +30,16 @@ export const ReacteurPyrus: gateCardType = {
             bakuganWithAttribut.forEach((b) => b.currentPower -= 100)
         }
 
-    }
+    },
+
+    autoActivationCheck: ({ portalSlot }) => {
+        const bakugansOnSlot = portalSlot.bakugans.length
+        if (bakugansOnSlot >= 2) {
+            return true
+        } else {
+            return false
+        }
+    },
 }
 
 export const ReacteurHaos: gateCardType = {
@@ -59,6 +68,14 @@ export const ReacteurHaos: gateCardType = {
             const bakuganWithAttribut = slotOfGate.bakugans.filter((b) => b.attribut === attribut)
             slotOfGate.state.open = true
             bakuganWithAttribut.forEach((b) => b.currentPower -= 100)
+        }
+    },
+    autoActivationCheck: ({ portalSlot }) => {
+        const bakugansOnSlot = portalSlot.bakugans.length
+        if (bakugansOnSlot >= 2) {
+            return true
+        } else {
+            return false
         }
     },
 }
@@ -91,7 +108,15 @@ export const ReacteurVentus: gateCardType = {
             slotOfGate.state.open = true
             bakuganWithAttribut.forEach((b) => b.currentPower -= 100)
         }
-    }
+    },
+    autoActivationCheck: ({ portalSlot }) => {
+        const bakugansOnSlot = portalSlot.bakugans.length
+        if (bakugansOnSlot >= 2) {
+            return true
+        } else {
+            return false
+        }
+    },
 }
 
 export const ReacteurAquos: gateCardType = {
@@ -120,6 +145,14 @@ export const ReacteurAquos: gateCardType = {
             const bakuganWithAttribut = slotOfGate.bakugans.filter((b) => b.attribut === attribut)
             slotOfGate.state.open = true
             bakuganWithAttribut.forEach((b) => b.currentPower -= 100)
+        }
+    },
+    autoActivationCheck: ({ portalSlot }) => {
+        const bakugansOnSlot = portalSlot.bakugans.length
+        if (bakugansOnSlot >= 2) {
+            return true
+        } else {
+            return false
         }
     },
 }
@@ -154,6 +187,15 @@ export const ReacteurSubterra: gateCardType = {
             bakuganWithAttribut.forEach((b) => b.currentPower -= 100)
         }
     },
+
+    autoActivationCheck: ({ portalSlot }) => {
+        const bakugansOnSlot = portalSlot.bakugans.length
+        if (bakugansOnSlot >= 2) {
+            return true
+        } else {
+            return false
+        }
+    },
 }
 
 export const ReacteurDarkus: gateCardType = {
@@ -185,7 +227,15 @@ export const ReacteurDarkus: gateCardType = {
             bakuganWithAttribut.forEach((b) => b.currentPower -= 100)
         }
 
-    }
+    },
+    autoActivationCheck: ({ portalSlot }) => {
+        const bakugansOnSlot = portalSlot.bakugans.length
+        if (bakugansOnSlot >= 2) {
+            return true
+        } else {
+            return false
+        }
+    },
 }
 
 

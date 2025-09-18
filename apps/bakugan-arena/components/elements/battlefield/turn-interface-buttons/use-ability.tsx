@@ -12,12 +12,14 @@ import {
 import { Toaster } from "@/components/ui/sonner"
 
 import useGetRoomState from "@/src/sockets/get-room-state"
-import { BakuganList, slots_id } from "@bakugan-arena/game-data"
+import { AbilityCardsList, BakuganList, ExclusiveAbilitiesList, slots_id } from "@bakugan-arena/game-data"
+import AbilityExtraInputs from "./abilities-extra-actions"
 
 
-export default function UseAbilityCard({ selectAbility, selectBakugan, roomId, userId, bakuganKey }: { selectAbility: (ability: string) => void, selectBakugan: (bakugan: string) => void, roomId: string, userId: string, bakuganKey: string }) {
+export default function UseAbilityCard({ selectAbility, ability, selectBakugan, roomId, userId, bakuganKey }: { selectAbility: (ability: string) => void, ability: string, selectBakugan: (bakugan: string) => void, roomId: string, userId: string, bakuganKey: string }) {
 
     const { roomState } = useGetRoomState({ roomId })
+    const player = roomState?.players.find((p) => p.userId === userId)
     const battleState = roomState?.battleState
     const slotOfBattle = roomState?.protalSlots.find((b) => b.id === battleState?.slot)
     console.log(bakuganKey)
@@ -43,9 +45,13 @@ export default function UseAbilityCard({ selectAbility, selectBakugan, roomId, u
         console.log(usableExclusives)
 
         return (
-            <>
+            <div className="flex flex-col gap-2">
+                <div className="flex justify-between items-center">
+                    <p>Set a gate card</p>
+                    <p>{player?.usable_abilitys}</p>
+                </div>
                 <div className="grid grid-cols-2 items-center justify-between gap-3">
-                    <Select onValueChange={(val) => selectBakugan(val)} disabled={roomState.turnState.use_ability_card === false ? true : false}>
+                    <Select onValueChange={(val) => selectBakugan(val)} disabled={roomState.turnState.use_ability_card === false || player?.usable_abilitys === 0 ? true : false}>
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select a bakugan" />
                         </SelectTrigger>
@@ -59,7 +65,7 @@ export default function UseAbilityCard({ selectAbility, selectBakugan, roomId, u
                         </SelectContent>
                     </Select>
 
-                    <Select onValueChange={(val) => selectAbility(val as slots_id)} disabled={roomState.turnState.use_ability_card === false || bakuganKey === '' ? true : false}>
+                    <Select onValueChange={(val) => selectAbility(val as slots_id)} disabled={roomState.turnState.use_ability_card === false || bakuganKey === '' || player?.usable_abilitys === 0 ? true : false}>
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select a ability card" />
                         </SelectTrigger>
@@ -81,7 +87,7 @@ export default function UseAbilityCard({ selectAbility, selectBakugan, roomId, u
                 </div>
 
                 <Toaster />
-            </>
+            </div>
         )
     }
 

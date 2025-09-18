@@ -1,4 +1,4 @@
-import { BakuganList } from "@bakugan-arena/game-data"
+import { BakuganList, bakuganOnSlot, portalSlotsType } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
 export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: { roomId: string, bakuganKey: string, slot: string, userId: string }) => {
@@ -10,6 +10,7 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: { roomId:
     const can_set_bakugan = roomData?.turnState.set_new_bakugan
     const usable_bakugan = roomData?.decksState.find((d) => d.userId === userId)?.bakugans.filter((b) => b?.bakuganData.onDomain === false && b?.bakuganData.elimined === false).length ?? 3
     const usersBakuganOnGate = roomData?.protalSlots.find((s) => s.id === slot)?.bakugans.filter((b) => b.userId === userId).length ?? 0;
+    const slotsWithBakugans = roomData?.protalSlots.filter((s) => s.bakugans.length > 0 && s.portalCard !== null)
 
     if (usable_slot && can_set_bakugan && roomData.turnState.previous_turn != userId && usersBakuganOnGate < 1) {
 
@@ -24,16 +25,17 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: { roomId:
 
         if (slotToUpdate && bakuganToAdd && powerLevel && bakuganFromDeck.onDomain === false && bakuganFromDeck.elimined === false) {
 
-            const newBakugan = {
+            const newBakugan: bakuganOnSlot = {
                 key: bakuganToAdd.key,
                 userId: userId,
                 powerLevel: bakuganToAdd.powerLevel,
                 currentPower: powerLevel,
                 attribut: bakuganToAdd.attribut,
-                image: bakuganToAdd.image
+                image: bakuganToAdd.image,
+                abilityBlock: false
             }
 
-            if (usable_bakugan === 1 && usable_slots && usable_slots.length > 1) {
+            if (usable_bakugan === 1 && usable_slots && usable_slots.length > 1 && slotsWithBakugans && slotsWithBakugans.length > 0) {
                 if (bakuganOpponent && !bakuganUser) {
                     if (!slotToUpdate?.bakugans.includes(newBakugan)) {
                         const newDeckState: typeof bakuganFromDeck = {

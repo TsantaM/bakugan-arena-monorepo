@@ -27,8 +27,11 @@ export default function SetGateCardComponent({ set_gate, roomId, userId, selectG
     );
 
     return (
-        <>
-
+        <div className="flex flex-col gap-2">
+            <div className="flex justify-between items-center">
+                <p>Set a gate card</p>
+                <p>{player?.usable_gates}</p>
+            </div>
             <div className="grid grid-cols-2 items-center justify-between gap-3">
                 <Select onValueChange={(val) => selectGate(val)} disabled={set_gate === false || player?.usable_gates === 0 ? true : false}>
                     <SelectTrigger className="w-full">
@@ -60,7 +63,7 @@ export default function SetGateCardComponent({ set_gate, roomId, userId, selectG
             </div>
 
             <Toaster />
-        </>
+        </div>
 
     )
 }

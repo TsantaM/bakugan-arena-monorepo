@@ -1,13 +1,8 @@
-import { slots_id, stateType } from "./room-types"
+import { portalSlotsTypeElement, slots_id, stateType } from "./room-types"
 
 export type attribut = 'Pyrus' | 'Subterra' | 'Haos' | 'Darkus' | 'Aquos' | 'Ventus'
 
 export type ExtraInputsTypes = 'target' | 'targets-slot' | 'slot'
-
-export type AbilityExtraInput = {
-    type: ExtraInputsTypes,
-    label: string
-}
 
 
 export type bakuganType = {
@@ -26,8 +21,10 @@ export type abilityCardsType = {
     key: string,
     description: string,
     maxInDeck: number,
-    extraInputs?: AbilityExtraInput[];
-    onActivate: ({ roomState, userId, bakuganKey, slot, slot_2, target }: { roomState: stateType, roomId: string, userId: string, bakuganKey: string, slot: slots_id, slot_2?: slots_id, target?: string }) => void
+    extraInputs?: ExtraInputsTypes[];
+    onActivate: ({ roomState, userId, bakuganKey, slot, target_slot, slot_to_move, target }: { roomState: stateType, roomId: string, userId: string, bakuganKey: string, slot: slots_id, target_slot: slots_id | '', slot_to_move: slots_id | '', target?: string | '' }) => void
+    onCanceled?: ({ roomState, userId, bakuganKey, slot }: { roomState: stateType, userId: string, bakuganKey: string, slot: slots_id }) => void
+    onWin?: ({ roomState, userId, slot }: { roomState: stateType, userId: string, slot: portalSlotsTypeElement }) => void
 }
 
 export type exclusiveAbilitiesType = {
@@ -35,8 +32,10 @@ export type exclusiveAbilitiesType = {
     name: string;
     description: string;
     maxInDeck: number;
-    extraInputs?: AbilityExtraInput[];
-    onActivate: ({ roomState, userId, bakuganKey, slot }: { roomState: stateType, roomId: string, userId: string, bakuganKey: string, slot: slots_id }) => void
+    extraInputs?: ExtraInputsTypes[];
+    onActivate: ({ roomState, userId, bakuganKey, slot, target_slot, slot_to_move, target }: { roomState: stateType, roomId: string, userId: string, bakuganKey: string, slot: slots_id, target_slot: slots_id | '', slot_to_move: slots_id | '', target?: string | '' }) => void
+    onCanceled?: ({ roomState, userId, bakuganKey, slot }: { roomState: stateType, userId: string, bakuganKey: string, slot: slots_id }) => void
+    onWin?: ({ roomState, userId, slot }: { roomState: stateType, userId: string, slot: portalSlotsTypeElement }) => void
 }
 
 export type gateCardType = {
@@ -45,11 +44,11 @@ export type gateCardType = {
     description: string,
     maxInDeck: number,
     attribut?: attribut,
-    onOpen?: ({ roomState, slot }: {
+    onOpen: ({ roomState, slot }: {
         roomState: stateType;
         slot: slots_id;
         bakuganKey?: string;
-        userId: string
+        userId?: string
     }) => void,
     onCanceled?: ({ roomState, slot }: {
         roomState: stateType;
@@ -57,12 +56,5 @@ export type gateCardType = {
         bakuganKey?: string;
         userId: string
     }) => void,
-    onTurnStart?: ({ roomState, slot }: {
-        roomState: stateType;
-        slot: slots_id;
-    }) => boolean
-    onTurnEnd?: ({ roomState, slot }: {
-        roomState: stateType;
-        slot: slots_id;
-    }) => boolean
+    autoActivationCheck?: ({ roomState, portalSlot }: { roomState: stateType, portalSlot: portalSlotsTypeElement }) => boolean
 }

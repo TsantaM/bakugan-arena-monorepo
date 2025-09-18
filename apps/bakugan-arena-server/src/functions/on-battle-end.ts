@@ -1,3 +1,4 @@
+import { AbilityCardsList, ExclusiveAbilitiesList, ResetSlot } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
 export const onBattleEnd = ({ roomId }: { roomId: string }) => {
@@ -9,12 +10,13 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
 
         if (battleState.battleInProcess === true && !battleState.paused) {
             if (battleState.turns === 0) {
+                const slot = roomData.protalSlots.find((s) => s.id === battleState.slot)
                 const player1Bakugans = roomData.protalSlots.find((s) => s.id === battleState.slot)?.bakugans.filter((b) => b.userId === roomData.players[0].userId)
                 const player2Bakugans = roomData.protalSlots.find((s) => s.id === battleState.slot)?.bakugans.filter((b) => b.userId !== roomData.players[0].userId)
 
 
 
-                if (player1Bakugans && player2Bakugans) {
+                if (slot && player1Bakugans && player2Bakugans) {
                     const player1Total = player1Bakugans.reduce((acc, bakugan) => acc + bakugan.currentPower, 0)
                     const player1 = {
                         userId: roomData.players[0].userId,
@@ -27,6 +29,7 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
                     }
 
                     const keys = [...player1Bakugans.map((b) => b.key), ...player2Bakugans.map((b) => b.key)]
+                    const winner = player1.player1Total < player2.player2Total ? player2.userId : player1.userId
                     const loser = player1.player1Total < player2.player2Total ? player1.userId : player2.userId
                     const deckToUpdate = Battle_Brawlers_Game_State[roomIndex].decksState.find((d) => d.userId === loser)
                     const player1Deck = Battle_Brawlers_Game_State[roomIndex].decksState.find((d) => d.userId === player1.userId)
@@ -34,37 +37,60 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
 
 
                     if (deckToUpdate && deckToUpdate.bakugans && deckToUpdate.bakugans !== null && player1Deck && player2Deck) {
-                        deckToUpdate.bakugans.filter((b) => keys.includes(b?.bakuganData.key ? b?.bakuganData.key : '')).forEach((b) => {
-                            if (b && b.bakuganData) {
-                                b.bakuganData.onDomain = false
-                                b.bakuganData.elimined = true
-                            }
-                        })
-                        player1Deck.bakugans.filter((b) => keys.includes(b?.bakuganData.key ? b?.bakuganData.key : '')).forEach((b) => {
-                            if (b && b.bakuganData) {
-                                b.bakuganData.onDomain = false
-                            }
-                        })
-                        player2Deck.bakugans.filter((b) => keys.includes(b?.bakuganData.key ? b?.bakuganData.key : '')).forEach((b) => {
-                            if (b && b.bakuganData) {
-                                b.bakuganData.onDomain = false
-                            }
-                        })
+                        if (player1.player1Total !== player2.player2Total) {
+                            slot.activateAbilities.filter((a) => !a.canceled && a.userId === winner).forEach((a) => {
+                                const ability = AbilityCardsList.find((c) => c.key === a.key)
+                                const exclusive = ExclusiveAbilitiesList.find((c) => c.key === a.key)
+
+                                if (ability && ability.onWin) {
+                                    ability.onWin({ userId: winner, roomState: roomData, slot: slot })
+                                }
+
+                                if (exclusive && exclusive.onWin) {
+                                    exclusive.onWin({ userId: winner, roomState: roomData, slot: slot })
+                                }
+                            })
+
+                            deckToUpdate.bakugans.filter((b) => keys.includes(b?.bakuganData.key ? b?.bakuganData.key : '')).forEach((b) => {
+                                if (b && b.bakuganData) {
+                                    b.bakuganData.onDomain = false
+                                    b.bakuganData.elimined = true
+                                }
+                            })
+                            player1Deck.bakugans.filter((b) => keys.includes(b?.bakuganData.key ? b?.bakuganData.key : '')).forEach((b) => {
+                                if (b && b.bakuganData) {
+                                    b.bakuganData.onDomain = false
+                                }
+                            })
+                            player2Deck.bakugans.filter((b) => keys.includes(b?.bakuganData.key ? b?.bakuganData.key : '')).forEach((b) => {
+                                if (b && b.bakuganData) {
+                                    b.bakuganData.onDomain = false
+                                }
+                            })
+                        } else {
+                            player1Deck.bakugans.filter((b) => keys.includes(b?.bakuganData.key ? b?.bakuganData.key : '')).forEach((b) => {
+                                if (b && b.bakuganData) {
+                                    b.bakuganData.onDomain = false
+                                }
+                            })
+                            player2Deck.bakugans.filter((b) => keys.includes(b?.bakuganData.key ? b?.bakuganData.key : '')).forEach((b) => {
+                                if (b && b.bakuganData) {
+                                    b.bakuganData.onDomain = false
+                                }
+                            })
+                        }
                     }
 
                     const slotToUpdate = roomData.protalSlots.find((s) => s.id === battleState.slot)
                     if (slotToUpdate) {
-                        slotToUpdate.portalCard = null
-                        slotToUpdate.bakugans = []
-                        slotToUpdate.can_set = true
-                        slotToUpdate.state.open = false,
-                            slotToUpdate.state.canceled = false
+                        ResetSlot(slotToUpdate)
+
                     }
 
                     battleState.battleInProcess = false
                     battleState.slot = null
-                    battleState.turns = 2,
-                        battleState.paused = false
+                    battleState.turns = 2
+                    battleState.paused = false
                     roomData.turnState.set_new_gate = true
                     roomData.turnState.set_new_bakugan = true
 

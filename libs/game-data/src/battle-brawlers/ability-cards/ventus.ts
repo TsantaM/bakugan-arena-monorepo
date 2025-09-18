@@ -1,3 +1,4 @@
+import { CheckBattle } from "../../function/check-battle-in-process";
 import { abilityCardsType } from "../../type/game-data-types";
 import { GateCardsList } from "../gate-gards";
 
@@ -7,13 +8,23 @@ export const CombatAerien: abilityCardsType = {
     attribut: 'Ventus',
     description: `Permet à l'utilisateur de se déplacé vers une autre carte portail et l'empêche de s'ouvrir`,
     maxInDeck: 1,
-    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (slotOfGate) {
-            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+    extraInputs: ["slot"],
+    onActivate: ({ roomState, userId, bakuganKey, slot_to_move }) => {
+        if (roomState && slot_to_move !== '') {
+            const slotOfGate = roomState?.protalSlots.find((s) => s.bakugans.find((b) => b.key === bakuganKey && b.userId === userId))
+            console.log(slotOfGate)
+            const slotTarget = roomState?.protalSlots.find((s) => s.id === slot_to_move)
+            console.log(slotTarget)
+            if (slotOfGate && slotTarget && slotTarget.portalCard !== null) {
+                const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+                const index = slotOfGate.bakugans.findIndex((ba) => ba.key === user?.key && ba.userId === user.userId)
 
-            if (user) {
-                user.currentPower += 100
+                if (user) {
+                    slotTarget.bakugans.push(user)
+                    slotTarget.state.blocked = true
+                    slotOfGate.bakugans.splice(index, 1)
+                    CheckBattle({ roomState })
+                }
             }
         }
     }
@@ -49,13 +60,19 @@ export const SouffleTout: abilityCardsType = {
     attribut: 'Ventus',
     description: `Permet d'envoyer le Bakugan adverse sur une autre carte portail`,
     maxInDeck: 3,
-    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+    extraInputs: ["slot"],
+    onActivate: ({ roomState, userId, bakuganKey, slot, slot_to_move }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (slotOfGate) {
+        if (slotOfGate && slot_to_move !== '' && roomState) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
-
-            if (user) {
-                user.currentPower += 100
+            const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
+            const index = slotOfGate.bakugans.findIndex((ba) => ba.key === opponent?.key && ba.userId === opponent.userId)
+            const slotTarget = roomState?.protalSlots.find((s) => s.id === slot_to_move)
+            if (user && opponent && slotTarget && slotTarget.portalCard !== null) {
+                slotTarget.bakugans.push(opponent)
+                slotOfGate.bakugans.splice(index, 1)
+                CheckBattle({ roomState })
+                roomState.battleState.turns = 2
             }
         }
     }

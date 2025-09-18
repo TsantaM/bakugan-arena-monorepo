@@ -16,7 +16,7 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
     const { SetGateCard } = useSetGate({ roomId: roomId, userId: userId })
     const { SetBakugan } = useSetBakugan({ roomId: roomId, userId: userId })
     const { ActiveGateCard } = useActiveGateCard({ roomId })
-    const {ActiveAbilityCard} = useActiveAbilityCard({roomId})
+    const { ActiveAbilityCard } = useActiveAbilityCard({ roomId })
     const { turnAction } = useTurnAction({ roomId: roomId, userId: userId })
 
     // Gate id when chose a gate to set
@@ -43,6 +43,22 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
     // Slot where the gate to active is
     const [slotToActive, setSlotToActive] = useState<slots_id | ''>('')
 
+    // Extra inputs
+    const [target, setTarget] = useState('')
+    const [slot_target, set_slot_target] = useState<slots_id | ''>('')
+    const [slot_to_move, set_slot_to_move] = useState<slots_id | ''>('')
+
+    const selectTarget = (bakuganKey: string) => {
+        setTarget(bakuganKey)
+    }
+
+    const select_slot_target = (slot_target: slots_id) => {
+        set_slot_target(slot_target)
+    }
+
+    const select_slot_to_move = (slot_to_move: slots_id) => {
+        set_slot_to_move(slot_to_move)
+    }
 
     // Sates handler for children components
 
@@ -114,7 +130,7 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
 
     const handleBattleActionComfirm = () => {
         if (abilityUser != '' && ability != '') {
-            ActiveAbilityCard({abilityId: ability, bakuganKey: abilityUser, roomId: roomId, userId: userId})
+            ActiveAbilityCard({ abilityId: ability, bakuganKey: abilityUser, roomId: roomId, userId: userId, target_slot: slot_target, slot_to_move: slot_to_move, target: target })
         }
 
         if (active === true) {
@@ -164,6 +180,10 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
         abilityUser, setAbilityUser,
         active, setActive,
         slotToActive, setSlotToActive,
+        target, selectTarget,
+        slot_target, select_slot_target,
+        slot_to_move, select_slot_to_move,
+
         handleConfirm,
         handleBattleActionComfirm,
         handleSkipTurn,
@@ -174,6 +194,6 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
         selectAbilityUser,
         selectAbility,
         selectGateToActiveSlot,
-        setActiveGate
+        setActiveGate,
     }
 }

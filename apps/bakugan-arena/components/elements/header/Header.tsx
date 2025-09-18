@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Button } from "../../ui/button";
-import { ModeToggle } from "../../ui/theme-provider";
 import { getUser } from "@/src/actions/getUserSession";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../../ui/dropdown-menu";
 import { Avatar, AvatarImage } from "../../ui/avatar";
@@ -12,6 +11,7 @@ import { LogOutIcon, MenuIcon, User2 } from "lucide-react";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Logo from "@/components/ui/logo";
+import { AnimatedThemeToggler } from "@/components/magicui/theme-toggler";
 
 export default async function Header() {
 
@@ -43,7 +43,7 @@ export default async function Header() {
             </div>
 
             <div className="flex items-center gap-3">
-                <ModeToggle />
+                <AnimatedThemeToggler/>
                 {
                     user ?
                         <Suspense fallback={<Skeleton />}>

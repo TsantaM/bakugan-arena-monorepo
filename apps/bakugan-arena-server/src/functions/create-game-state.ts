@@ -91,60 +91,72 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
                 id: "slot-1",
                 can_set: false,
                 portalCard: null,
+                activateAbilities: [],
                 bakugans: [],
                 state: {
                     open: false,
-                    canceled: false
+                    canceled: false,
+                    blocked: false
                 }
             },
             {
                 id: "slot-2",
                 can_set: true,
                 portalCard: null,
+                activateAbilities: [],
                 bakugans: [],
                 state: {
                     open: false,
-                    canceled: false
+                    canceled: false,
+                    blocked: false
                 }
             },
             {
                 id: "slot-3",
                 can_set: false,
                 portalCard: null,
+                activateAbilities: [],
                 bakugans: [],
                 state: {
                     open: false,
-                    canceled: false
+                    canceled: false,
+                    blocked: false
                 }
             },
             {
                 id: "slot-4",
                 can_set: false,
                 portalCard: null,
+                activateAbilities: [],
                 bakugans: [],
                 state: {
                     open: false,
-                    canceled: false
+                    canceled: false,
+                    blocked: false
                 }
             },
             {
                 id: "slot-5",
                 can_set: false,
                 portalCard: null,
+                activateAbilities: [],
                 bakugans: [],
                 state: {
                     open: false,
-                    canceled: false
+                    canceled: false,
+                    blocked: false
                 }
             },
             {
                 id: "slot-6",
                 can_set: false,
                 portalCard: null,
+                activateAbilities: [],
                 bakugans: [],
                 state: {
                     open: false,
-                    canceled: false
+                    canceled: false,
+                    blocked: false
                 }
             },
         ];
@@ -183,6 +195,7 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             roomId: roomId,
             players: playersState,
             battleState,
+            persistantAbilities: [],
             turnState,
             decksState,
             protalSlots,
@@ -196,6 +209,7 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             roomId: roomId,
             players: playersState,
             battleState,
+            persistantAbilities: [],
             turnState,
             decksState,
             protalSlots,

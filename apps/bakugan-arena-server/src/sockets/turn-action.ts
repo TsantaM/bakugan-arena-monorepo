@@ -1,7 +1,6 @@
 import { Server, Socket } from "socket.io/dist";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
-import { CheckBattle } from "../functions/check-battle-start";
-import { CheckGameFinished } from "@bakugan-arena/game-data";
+import { CheckBattle, CheckGameFinished, GateCardsList } from "@bakugan-arena/game-data";
 
 export const socketTurn = (io: Server, socket: Socket) => {
 
@@ -9,7 +8,6 @@ export const socketTurn = (io: Server, socket: Socket) => {
         const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
         const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
 
-        console.log('bonsoir depuis le server')
 
         if (roomData && roomData.turnState.previous_turn != userId) {
             console.log(roomData.roomId, roomIndex)
@@ -29,17 +27,25 @@ export const socketTurn = (io: Server, socket: Socket) => {
 
             if (Battle_Brawlers_Game_State[roomIndex].turnState.turnCount === 2) {
                 Battle_Brawlers_Game_State[roomIndex].protalSlots[4].can_set = true
-            } else {
+                Battle_Brawlers_Game_State[roomIndex].turnState.set_new_bakugan = false
+
+            } else if (Battle_Brawlers_Game_State[roomIndex].turnState.turnCount > 2) {
+                Battle_Brawlers_Game_State[roomIndex].turnState.set_new_bakugan = true
+                Battle_Brawlers_Game_State[roomIndex].turnState.use_ability_card = true
                 Battle_Brawlers_Game_State[roomIndex].protalSlots.forEach(p => {
                     if (p.can_set === false && p.portalCard === null) {
                         p.can_set = true
                     }
                 })
-            }
 
-            if (Battle_Brawlers_Game_State[roomIndex].turnState.turnCount > 2) {
+            } else {
                 Battle_Brawlers_Game_State[roomIndex].turnState.set_new_bakugan = true
                 Battle_Brawlers_Game_State[roomIndex].turnState.use_ability_card = true
+                Battle_Brawlers_Game_State[roomIndex].protalSlots.forEach(p => {
+                    if (p.can_set === false && p.portalCard === null) {
+                        p.can_set = true
+                    }
+                })
             }
 
             if (Battle_Brawlers_Game_State[roomIndex].battleState.battleInProcess === true && !Battle_Brawlers_Game_State[roomIndex].battleState.paused) {
@@ -50,16 +56,26 @@ export const socketTurn = (io: Server, socket: Socket) => {
             }
 
             if (Battle_Brawlers_Game_State[roomIndex].battleState.battleInProcess === false) {
-                CheckBattle({ roomId })
+                CheckBattle({ roomState: Battle_Brawlers_Game_State[roomIndex] })
             }
 
-            CheckGameFinished({roomId, roomState: roomData})
+            CheckGameFinished({ roomId, roomState: roomData })
+            roomData.protalSlots.filter((s) => s.portalCard !== null && !s.state.open && !s.state.blocked).forEach((s) => {
+                const gateKey = s.portalCard?.key
+                if(gateKey) {
+                    const gate = GateCardsList.find((c) => c.key === gateKey)
+                    if(gate) {
+                        const activable = gate.autoActivationCheck ? gate.autoActivationCheck({portalSlot: s, roomState: roomData}) : false
+                        if(activable ) {
+                            gate.onOpen({roomState: roomData, slot: s.id})
+                        }
+                    }
+                }
+            })
 
             const state = Battle_Brawlers_Game_State[roomIndex]
-            console.log('bonsoir depuis le server 2')
 
             io.to(roomId).emit('turn-action', state)
-            console.log('bonsoir depuis le server 3')
 
         }
 

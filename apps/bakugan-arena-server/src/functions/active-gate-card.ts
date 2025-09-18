@@ -9,7 +9,7 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId }: { roomId: strin
     if (roomData) {
         const slotOfGate = roomData.protalSlots.find((s) => s.id === slot)
         const gateCard = GateCardsList.find((g) => g.key === gateId)
-        if (slotOfGate && slotOfGate.portalCard?.key === gateId && !slotOfGate.state.open && gateCard) {
+        if (slotOfGate && slotOfGate.portalCard?.key === gateId && !slotOfGate.state.open && !slotOfGate.state.blocked && gateCard) {
             const bakugan = slotOfGate.bakugans.find((b) => b.userId === userId)?.key
             const key = bakugan === undefined || bakugan === '' ? undefined : bakugan
 

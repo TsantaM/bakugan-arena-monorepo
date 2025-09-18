@@ -7,7 +7,7 @@ export default function useActiveGateCard({ roomId }: { roomId: string }) {
     const socket = useSocket()
     const { roomState, slots, setRoomState, setSlots } = useGetRoomState({ roomId })
 
-    const ActiveGateCard = ({ roomId, gateId, slot, userId }: { roomId: string, gateId: string, slot: slots_id, userId: string }) => {
+    const ActiveGateCard = ({ roomId, gateId, slot, userId}: { roomId: string, gateId: string, slot: slots_id, userId: string }) => {
         if (socket && slots && roomState) {
             socket.emit('active-gate-card', ({ roomId, gateId, slot, userId }))
         }

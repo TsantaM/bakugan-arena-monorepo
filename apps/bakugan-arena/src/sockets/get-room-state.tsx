@@ -30,7 +30,7 @@ export default function useGetRoomState({ roomId }: { roomId: string }) {
                 console.log(state)
                 setRoomState(state)
                 setSlots(state?.protalSlots)
-                if(state && state.status.finished === true && state.status.winner != null) {
+                if(state && state.status.finished === true) {
                     setFinished(true)
                     setWinner(state.status.winner)
                 }
