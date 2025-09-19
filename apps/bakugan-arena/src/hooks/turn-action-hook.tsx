@@ -5,14 +5,14 @@ import useActiveGateCard from "../sockets/active-gate-card"
 import useGetRoomState from "../sockets/get-room-state"
 import useSetBakugan from "../sockets/set-bakugan"
 import useSetGate from "../sockets/set-gate"
-import { slots_id } from "@bakugan-arena/game-data"
+import { AbilityCardsList, ExclusiveAbilitiesList, slots_id } from "@bakugan-arena/game-data"
 import useTurnAction from "../sockets/turn-action"
 import { toast } from "sonner"
 import { battleState } from "@bakugan-arena/game-data/src/type/room-types"
 import useActiveAbilityCard from "../sockets/use-ability-card"
 
 export default function useTurnActionStates({ roomId, userId, battleState }: { roomId: string, userId: string, battleState: battleState | undefined }) {
-    const { slots } = useGetRoomState({ roomId })
+    const { slots, roomState } = useGetRoomState({ roomId })
     const { SetGateCard } = useSetGate({ roomId: roomId, userId: userId })
     const { SetBakugan } = useSetBakugan({ roomId: roomId, userId: userId })
     const { ActiveGateCard } = useActiveGateCard({ roomId })
@@ -101,25 +101,38 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
 
 
     // Fuction of for confirm turn
+    const usersBakugans = roomState?.decksState.find((d) => d.userId === userId)?.bakugans.filter((b) => !b?.bakuganData.elimined && !b?.bakuganData.onDomain).length
+    const gateOnDomain = roomState?.protalSlots.filter((s) => s.portalCard !== null && !s.can_set)
+
 
     const handleConfirm = () => {
-        if (gate != '' && slot != '') {
-            SetGateCard({ gateId: gate, slot: slot })
-            console.log(slot, gate)
-        } else {
+        if (gateOnDomain?.length === 0 && gate === '' && slot === '') {
             toast.error('You must choice a usable gate card and a valid slot')
-            console.log(slot, gate)
-        }
-
-        if (bakuganToSet != '' && zone != '') {
-            SetBakugan({ bakuganKey: bakuganToSet, slot: zone })
-            console.log(slot, bakuganToSet)
+            return
         } else {
-            toast.error('You must choice a usable gate card and a valid slot')
-        }
+            if (battleState && !battleState.battleInProcess && roomState && roomState.turnState.turnCount > 2 && usersBakugans && usersBakugans > 0) {
+                if (bakuganToSet != '' && zone != '') {
+                    if (gate != '' && slot != '') {
+                        SetGateCard({ gateId: gate, slot: slot })
+                        console.log(slot, gate)
+                    }
+                    SetBakugan({ bakuganKey: bakuganToSet, slot: zone })
+                    console.log(slot, bakuganToSet)
+                    turnAction()
 
-        if (gate != '' && slot != '' || bakuganToSet != '' && zone != '') {
-            turnAction()
+                } else {
+                    toast.error('You must throw a Bakugan')
+                }
+            } else {
+                if (gate != '' && slot != '') {
+                    SetGateCard({ gateId: gate, slot: slot })
+                    console.log(slot, gate)
+                    turnAction()
+                } else {
+                    toast.error('You must choice a usable gate card and a valid slot')
+                    console.log(slot, gate)
+                }
+            }
         }
 
         setGate('')

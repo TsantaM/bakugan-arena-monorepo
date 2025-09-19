@@ -1,6 +1,7 @@
 import { CancelAbilityCard } from "../../function/cancel-ability-card"
 import { CheckBattle } from "../../function/check-battle-in-process"
 import { exclusiveAbilitiesType } from "../../type/game-data-types"
+import { GateCardsList } from "../gate-gards"
 
 export const OmbreBleue: exclusiveAbilitiesType = {
     key: 'ombre-bleue',
@@ -356,10 +357,17 @@ export const PlexusSolaire: exclusiveAbilitiesType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
+            const gate = GateCardsList.find((g) => g.key === slotOfGate.portalCard?.key)
 
-            if (user) {
-                user.currentPower += 100
+            if (user && opponent) {
+                opponent.currentPower -= 50
+                if(gate && gate.onCanceled && slotOfGate.state.open && !slotOfGate.state.canceled) {
+                    gate.onCanceled({roomState: roomState, slot: slot, userId: userId, bakuganKey: bakuganKey})
+                }
             }
+
+            
         }
     }
 }

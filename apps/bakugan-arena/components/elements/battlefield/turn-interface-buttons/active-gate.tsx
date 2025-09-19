@@ -10,8 +10,8 @@ export default function ActivateGateCard({ roomId, userId, setActiveGate }: { ro
     const battleSlotGateHowner = roomState?.protalSlots.find((p) => p.id === roomState.battleState.slot)?.portalCard?.userId
     const slot = roomState?.battleState.slot
     if (roomState && roomState.battleState.battleInProcess && !roomState.battleState.paused && battleSlotGateHowner && battleSlotGateHowner === userId && slot) {
-        const usable_gate = roomState.protalSlots.find((s) => s.id === slot)?.state.open || roomState.protalSlots.find((s) => s.id === slot)?.state.canceled
-        
+        const usable_gate = roomState.protalSlots.find((s) => s.id === slot)?.state.open || roomState.protalSlots.find((s) => s.id === slot)?.state.canceled || roomState.protalSlots.find((s) => s.id === slot)?.state.blocked
+
         return (
             <div className="flex items-center gap-5">
                 <Label htmlFor="active-gate">Active Gate Card</Label>

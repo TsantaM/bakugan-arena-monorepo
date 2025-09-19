@@ -27,7 +27,7 @@ export default function UseAbilityCard({ selectAbility, ability, selectBakugan, 
     if (battleState && battleState.battleInProcess && !battleState.paused && slotOfBattle) {
 
         const usersBakugan = slotOfBattle?.bakugans.filter((b) => b.userId === userId)
-        const usersBakuganKeys = slotOfBattle?.bakugans.filter((b) => b.userId === userId).map((b) => b.key)
+        const usersBakuganKeys = slotOfBattle?.bakugans.filter((b) => b.userId === userId && !b.abilityBlock).map((b) => b.key)
         const listBakugans = BakuganList.filter((b) => usersBakuganKeys.includes(b.key))
         const attribut = usersBakugan.find((a) => a.key === bakuganKey)?.attribut
         const usableAbilities = roomState.decksState.find((d) => d.userId === userId)?.abilities.filter((a) => a.used === false && a.dead === false).filter((a) => a.attribut === attribut).filter(
@@ -59,7 +59,7 @@ export default function UseAbilityCard({ selectAbility, ability, selectBakugan, 
                             <SelectGroup>
                                 <SelectLabel>User Bakugan</SelectLabel>
                                 {
-                                    listBakugans?.map((s, index) => <SelectItem key={index} value={s.key}>{s.name}</SelectItem>)
+                                    listBakugans?.map((s, index) => <SelectItem key={index} value={s.key} >{s.name}</SelectItem>)
                                 }
                             </SelectGroup>
                         </SelectContent>
