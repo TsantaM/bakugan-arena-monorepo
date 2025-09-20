@@ -1,5 +1,6 @@
 import { ResetSlot } from "../../function/reset-slot";
 import { gateCardType } from "../../type/game-data-types";
+import { stateType } from "../../type/room-types";
 
 export const Rechargement: gateCardType = {
     key: 'rechargement',
@@ -51,10 +52,76 @@ export const TripleCombat: gateCardType = {
 export const QuatuorDeCombat: gateCardType = {
     key: 'quatuor-de-combat',
     name: 'Quatuor de Combat',
-    description: `Oblige chacun des joueur à ajouter un Bakugan en plus sur le terrain jusqu'à ce qu'il y en ai quatre (2v2)`,
+    description: `Attire au jeu sur la carte le bakugan le plus faible encore jouable dans le deck de chaque joueur`,
     maxInDeck: 1,
     onOpen: ({ roomState, slot, userId }) => {
-        return
+        const opponentId = roomState?.players.find((p) => p.userId !== userId)?.userId
+        const findWeakest = ({ userId, roomState }: { userId: string, roomState: stateType }) => {
+            const deck = roomState?.decksState.find((d) => d.userId === userId)
+            const bakugans = deck?.bakugans.filter((b) => !b?.bakuganData.elimined && !b?.bakuganData.onDomain)
+            if (bakugans) {
+                if (bakugans.length === 3) {
+                    const firstBakugan = bakugans[0]
+                    const secondBakugan = bakugans[1]
+                    const thirdBakugan = bakugans[2]
+                    if (firstBakugan && secondBakugan && thirdBakugan) {
+                        const weakestFirst = firstBakugan?.bakuganData.powerLevel < secondBakugan.bakuganData.powerLevel ? firstBakugan : secondBakugan
+                        const weakest = weakestFirst.bakuganData.powerLevel < thirdBakugan.bakuganData.powerLevel ? weakestFirst : thirdBakugan
+                        return weakest
+                    }
+
+                } else if (bakugans.length === 2) {
+                    const firstBakugan = bakugans[0]
+                    const secondBakugan = bakugans[1]
+
+                    if (firstBakugan && secondBakugan) {
+                        const weakest = firstBakugan?.bakuganData.powerLevel < secondBakugan.bakuganData.powerLevel ? firstBakugan : secondBakugan
+                        return weakest
+                    }
+                } else {
+                    return bakugans[0]
+                }
+            } else {
+                return null
+            }
+        }
+        if (userId && opponentId) {
+            const userWeakest = findWeakest({ userId: userId, roomState: roomState })
+            const opponentWeakest = findWeakest({ userId: opponentId, roomState: roomState })
+            const slotToUpdate = roomState.protalSlots.find((s) => s.id === slot)
+            if (userWeakest && opponentWeakest && slotToUpdate && slotToUpdate.portalCard !== null && !slotToUpdate.state.canceled && !slotToUpdate.state.blocked) {
+                if (userWeakest !== null) {
+                    const usersBakugan = {
+                        key: userWeakest.bakuganData.key,
+                        userId: userId,
+                        powerLevel: userWeakest.bakuganData.powerLevel,
+                        currentPower: userWeakest.bakuganData.powerLevel,
+                        attribut: userWeakest.bakuganData.attribut,
+                        image: userWeakest.bakuganData.image,
+                        abilityBlock: false
+                    }
+
+                    slotToUpdate.bakugans.push(usersBakugan)
+
+                }
+
+                if (opponentWeakest !== null) {
+                    const opponentBakugan = {
+                        key: opponentWeakest.bakuganData.key,
+                        userId: opponentId,
+                        powerLevel: opponentWeakest.bakuganData.powerLevel,
+                        currentPower: opponentWeakest.bakuganData.powerLevel,
+                        attribut: opponentWeakest.bakuganData.attribut,
+                        image: opponentWeakest.bakuganData.image,
+                        abilityBlock: false
+                    }
+
+                    slotToUpdate.bakugans.push(opponentBakugan)
+                }
+                slotToUpdate.state.open
+            }
+
+        }
     }
 }
 

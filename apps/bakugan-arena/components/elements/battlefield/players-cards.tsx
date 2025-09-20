@@ -28,6 +28,11 @@ export default function PlayerCards({ player, opponent, roomId, userId, turn, se
     const battleState = roomState?.battleState
     const slotOfBattle = roomState?.protalSlots.find((p) => p.id === battleState?.slot)
     const battleConditions = slotOfBattle && battleState && battleState.battleInProcess && battleState.paused === false ? true : false
+    const usersBakugan = slotOfBattle?.bakugans.filter((b) => b.userId === userId)
+    const userTotal = usersBakugan?.reduce((acc, bakugan) => acc + bakugan.currentPower, 0)
+    const opponentsBakugan = slotOfBattle?.bakugans.filter((b) => b.userId !== userId)
+    const opponentsTotal = opponentsBakugan?.reduce((acc, bakugan) => acc + bakugan.currentPower, 0)
+
 
     return <>
 
@@ -60,7 +65,7 @@ export default function PlayerCards({ player, opponent, roomId, userId, turn, se
                                         slotOfBattle && <Image src={`/images/attributs/${slotOfBattle.bakugans.find((b) => b.userId === userId)?.attribut}.png`} alt={`attribut background ${slotOfBattle.bakugans.find((b) => b.userId === userId)?.attribut}`} fill className="rounded-sm" />
                                     }
                                 </div>
-                                <p className="text-center leading-0 text-[white]">{b.currentPower}</p>
+                                <p className="text-center leading-0 text-[white]">{userTotal ? userTotal : 0}</p>
                             </div>)
                         }
                     </div>
@@ -101,7 +106,7 @@ export default function PlayerCards({ player, opponent, roomId, userId, turn, se
                                         slotOfBattle && <Image src={`/images/attributs/${slotOfBattle.bakugans.find((b) => b.userId !== userId)?.attribut}.png`} alt={`attribut background ${slotOfBattle.bakugans.find((b) => b.userId !== userId)?.attribut}`} fill className="rounded-sm" />
                                     }
                                 </div>
-                                <p className="text-center leading-0 text-[white]">{b.currentPower}</p>
+                                <p className="text-center leading-0 text-[white]">{opponentsTotal ? opponentsTotal : 0}</p>
                             </div>)
                         }
                     </div>
