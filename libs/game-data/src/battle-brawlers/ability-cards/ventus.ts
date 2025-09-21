@@ -8,7 +8,7 @@ export const CombatAerien: abilityCardsType = {
     attribut: 'Ventus',
     description: `Permet à l'utilisateur de se déplacé vers une autre carte portail et l'empêche de s'ouvrir`,
     maxInDeck: 1,
-    extraInputs: ["slot"],
+    extraInputs: ["move-self"],
     onActivate: ({ roomState, userId, bakuganKey, slot_to_move }) => {
         if (roomState && slot_to_move !== '') {
             const slotOfGate = roomState?.protalSlots.find((s) => s.bakugans.find((b) => b.key === bakuganKey && b.userId === userId))
@@ -60,7 +60,7 @@ export const SouffleTout: abilityCardsType = {
     attribut: 'Ventus',
     description: `Permet d'envoyer le Bakugan adverse sur une autre carte portail`,
     maxInDeck: 3,
-    extraInputs: ["slot"],
+    extraInputs: ["move-opponent"],
     onActivate: ({ roomState, userId, bakuganKey, slot, slot_to_move }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate && slot_to_move !== '' && roomState) {
@@ -109,14 +109,31 @@ export const TornadeExtreme: abilityCardsType = {
     attribut: 'Ventus',
     description: `Permet à l'utilisateur d'attirer un Bakugan sur la carte portail où il se trouve`,
     maxInDeck: 1,
-    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+    extraInputs: ['drag-bakugan'],
+    onActivate: ({ roomState, userId, bakuganKey, slot, target, slotToDrag }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (slotOfGate) {
-            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+        const slotTarget = roomState?.protalSlots.find((s) => s.id === slotToDrag)
+        console.log(target, slotToDrag, slot)
+        console.log(slotOfGate)
+        // const targetToDrag = slotTarget?.bakugans.find((b) => b.key === target)
+        if (slotOfGate && slotTarget && target !== '' && slotToDrag !== '') {
+            const BakuganTargetIndex = slotTarget.bakugans.findIndex((b) => b.key === target)
+            const bakuganToDrag = slotTarget?.bakugans.find((b) => b.key === target)
+            const condition = slotOfGate && slotTarget && bakuganToDrag && BakuganTargetIndex ? true : false
 
-            if (user) {
-                user.currentPower += 100
-            }
+            console.log(slotTarget)
+            console.log(bakuganToDrag)
+            console.log(BakuganTargetIndex)
+            console.log(condition)
+
+            const user = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+
+            if (user && bakuganToDrag) {
+                    slotOfGate.bakugans.push(bakuganToDrag)
+                    slotTarget.bakugans.splice(BakuganTargetIndex, 1)
+                    CheckBattle({ roomState })
+                }
         }
+
     }
 }

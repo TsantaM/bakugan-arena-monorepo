@@ -56,7 +56,7 @@ export default function TurnInterface({ turn, set_gate, set_bakugan, use_ability
                                 </DialogHeader>
                                 <div className="flex flex-col gap-2">
                                     <UseAbilityCard bakuganKey={turnActionHook.abilityUser} ability={turnActionHook.ability} roomId={roomId} userId={userId} selectAbility={turnActionHook.selectAbility} selectBakugan={turnActionHook.selectAbilityUser} />
-                                    <AbilityExtraInputs ability={turnActionHook.ability} selected_slot_to_move={turnActionHook.select_slot_to_move} selected_target={turnActionHook.selectTarget} slot_target={turnActionHook.slot_target} selected_target_slot={turnActionHook.select_slot_target} bakuganKey={turnActionHook.abilityUser} roomId={roomId} userId={userId} />
+                                    <AbilityExtraInputs bakugaToAdd={turnActionHook.bakuganToAdd} select_bakugan_to_add={turnActionHook.select_bakugan_to_add} selectTarget={turnActionHook.selectTarget} target={turnActionHook.target} select_slot_to_drag={turnActionHook.select_slot_to_drag} slotToDrag={turnActionHook.slotToDrag} ability={turnActionHook.ability} selected_slot_to_move={turnActionHook.select_slot_to_move} selected_target={turnActionHook.selectTarget} slot_target={turnActionHook.slot_target} selected_target_slot={turnActionHook.select_slot_target} bakuganKey={turnActionHook.abilityUser} roomId={roomId} userId={userId} />
                                     <ActivateGateCard roomId={roomId} userId={userId} setActiveGate={turnActionHook.setActive} />
                                 </div>
                                 <DialogFooter>

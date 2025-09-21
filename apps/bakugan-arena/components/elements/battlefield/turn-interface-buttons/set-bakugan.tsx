@@ -11,9 +11,8 @@ import {
 } from "@/components/ui/select"
 import { Toaster } from "@/components/ui/sonner"
 import useGetRoomState from "@/src/sockets/get-room-state"
-import { portalSlotsType, portalSlotsTypeElement, slots_id } from "@bakugan-arena/game-data"
+import { slots_id } from "@bakugan-arena/game-data"
 import Image from "next/image"
-import { useEffect, useState } from "react"
 
 
 
@@ -51,7 +50,7 @@ export default function SetBakuganComponent({ set_bakugan, slot, gate, roomId, u
                 filter((s) => s.bakugans.some((b) => b.userId != userId)).
                 filter((s) => s.bakugans.every((b) => b.userId != userId))
 
-    const selectedSlot = !oneLeftAndOpponentsOnDomainAddNoGate ? slots?.find((s) => s.id === slot) : undefined
+    const selectedSlot = !oneLeftAndOpponentsOnDomainAddNoGate || noGateOnDomain ? slots?.find((s) => s.id === slot) : undefined
 
 
     return (

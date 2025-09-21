@@ -26,13 +26,27 @@ export const JetEnflamme: abilityCardsType = {
     attribut: 'Pyrus',
     maxInDeck: 1,
     description: `Permet d'ajouter un bakugan en plus au combat s'il y a déjà au moins un Bakugan Pyrus sur le terrain`,
-    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+    extraInputs: ['add-bakugan'],
+    onActivate: ({ roomState, userId, bakuganKey, slot, bakuganToAdd }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (slotOfGate) {
+        const deck = roomState?.decksState.find((d) => d.userId === userId)
+        const bakugan = deck?.bakugans.find((b) => b?.bakuganData.key === bakuganToAdd)
+        if (slotOfGate && deck && bakugan) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const pyrusOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Pyrus').map((b) => b.key)).flat()
+            const newBakugan = {
+                key: bakugan.bakuganData.key,
+                userId: userId,
+                powerLevel: bakugan.bakuganData.powerLevel,
+                currentPower: bakugan.bakuganData.powerLevel,
+                attribut: bakugan.bakuganData.attribut,
+                image: bakugan.bakuganData.image,
+                abilityBlock: false
+            }
 
-            if (user) {
-                user.currentPower += 100
+            if (user && pyrusOnDomain && pyrusOnDomain.length >= 2) {
+                slotOfGate.bakugans.push(newBakugan)
+                bakugan.bakuganData.onDomain = true
             }
         }
     }

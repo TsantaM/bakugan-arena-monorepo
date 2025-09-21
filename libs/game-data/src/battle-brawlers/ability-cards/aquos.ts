@@ -7,7 +7,7 @@ export const MirageAquatique: abilityCardsType = {
     attribut: 'Aquos',
     description: `'Permet à l'utilisateur de se déplacer vers une autre carte portail et l'empêche de s'ouvrir`,
     maxInDeck: 2,
-    extraInputs: ["slot"],
+    extraInputs: ["move-self"],
     onActivate: ({ roomState, userId, bakuganKey, slot_to_move }) => {
         console.log(slot_to_move)
         if (roomState && slot_to_move !== '' && roomState) {

@@ -102,7 +102,7 @@ export const QuatuorDeCombat: gateCardType = {
                     }
 
                     slotToUpdate.bakugans.push(usersBakugan)
-
+                    userWeakest.bakuganData.onDomain = true
                 }
 
                 if (opponentWeakest !== null) {
@@ -117,6 +117,7 @@ export const QuatuorDeCombat: gateCardType = {
                     }
 
                     slotToUpdate.bakugans.push(opponentBakugan)
+                    opponentWeakest.bakuganData.onDomain = true
                 }
                 slotToUpdate.state.open
             }

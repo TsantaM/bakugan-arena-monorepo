@@ -296,7 +296,7 @@ export const LanceEclair: exclusiveAbilitiesType = {
     name: 'Lancé Eclair',
     description: `Permet à l'utilisateur d'envoyer son adversaire sur une autre carte portail`,
     maxInDeck: 1,
-    extraInputs: ["slot"],
+    extraInputs: ["move-opponent"],
     onActivate: ({ roomState, userId, bakuganKey, slot, slot_to_move }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate && roomState) {

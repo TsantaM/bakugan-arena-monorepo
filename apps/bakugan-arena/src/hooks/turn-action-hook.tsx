@@ -47,6 +47,10 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
     const [target, setTarget] = useState('')
     const [slot_target, set_slot_target] = useState<slots_id | ''>('')
     const [slot_to_move, set_slot_to_move] = useState<slots_id | ''>('')
+    // Slot of bakugan to drag
+    const [slotToDrag, setSlotToDrag] = useState<slots_id | ''>('')
+    // Select bakugan to add on battlefield
+    const [bakuganToAdd, setBakuganToAdd] = useState('')
 
     const selectTarget = (bakuganKey: string) => {
         setTarget(bakuganKey)
@@ -58,6 +62,14 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
 
     const select_slot_to_move = (slot_to_move: slots_id) => {
         set_slot_to_move(slot_to_move)
+    }
+
+    const select_slot_to_drag = (slot_target: slots_id) => {
+        setSlotToDrag(slot_target)
+    }
+
+    const select_bakugan_to_add = (bakuganToAdd: string) => {
+        setBakuganToAdd(bakuganToAdd)
     }
 
     // Sates handler for children components
@@ -143,7 +155,7 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
 
     const handleBattleActionComfirm = () => {
         if (abilityUser != '' && ability != '') {
-            ActiveAbilityCard({ abilityId: ability, bakuganKey: abilityUser, roomId: roomId, userId: userId, target_slot: slot_target, slot_to_move: slot_to_move, target: target })
+            ActiveAbilityCard({ abilityId: ability, bakuganKey: abilityUser, roomId: roomId, userId: userId, target_slot: slot_target, slot_to_move: slot_to_move, target: target, slotToDrag: slotToDrag, bakuganToAdd: bakuganToAdd })
         }
 
         if (active === true) {
@@ -196,6 +208,8 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
         target, selectTarget,
         slot_target, select_slot_target,
         slot_to_move, select_slot_to_move,
+        slotToDrag, select_slot_to_drag,
+        bakuganToAdd, select_bakugan_to_add,
 
         handleConfirm,
         handleBattleActionComfirm,
