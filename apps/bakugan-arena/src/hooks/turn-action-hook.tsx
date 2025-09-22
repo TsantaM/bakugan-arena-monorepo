@@ -5,7 +5,7 @@ import useActiveGateCard from "../sockets/active-gate-card"
 import useGetRoomState from "../sockets/get-room-state"
 import useSetBakugan from "../sockets/set-bakugan"
 import useSetGate from "../sockets/set-gate"
-import { AbilityCardsList, ExclusiveAbilitiesList, slots_id } from "@bakugan-arena/game-data"
+import { AbilityCardsList, bakuganToMoveType, ExclusiveAbilitiesList, slots_id } from "@bakugan-arena/game-data"
 import useTurnAction from "../sockets/turn-action"
 import { toast } from "sonner"
 import { battleState } from "@bakugan-arena/game-data/src/type/room-types"
@@ -51,6 +51,10 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
     const [slotToDrag, setSlotToDrag] = useState<slots_id | ''>('')
     // Select bakugan to add on battlefield
     const [bakuganToAdd, setBakuganToAdd] = useState('')
+    // Select bakugan to Move
+    const [bakuganToMove, setBakuganToMove] = useState<bakuganToMoveType | undefined>()
+    // Select bakugan to move destination
+    const [destination, setDestination] = useState<slots_id | ''>('')
 
     const selectTarget = (bakuganKey: string) => {
         setTarget(bakuganKey)
@@ -70,6 +74,14 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
 
     const select_bakugan_to_add = (bakuganToAdd: string) => {
         setBakuganToAdd(bakuganToAdd)
+    }
+
+    const select_bakugan_to_move = (bakuganToMove: bakuganToMoveType) => {
+        setBakuganToMove(bakuganToMove)
+    }
+
+    const select_destination = (destination: slots_id) => {
+        setDestination(destination)
     }
 
     // Sates handler for children components
@@ -130,6 +142,9 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
                     }
                     SetBakugan({ bakuganKey: bakuganToSet, slot: zone })
                     console.log(slot, bakuganToSet)
+                    if (abilityUser != '' && ability != '') {
+                        ActiveAbilityCard({ abilityId: ability, bakuganKey: abilityUser, roomId: roomId, userId: userId, target_slot: slot_target, slot_to_move: slot_to_move, target: target, slotToDrag: slotToDrag, bakuganToAdd: bakuganToAdd, bakuganToMove: bakuganToMove, destination: destination, zone: zone as slots_id | '' })
+                    }
                     turnAction()
 
                 } else {
@@ -151,11 +166,22 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
         setSlot('')
         setZone('')
         setBakuganToSet('')
+        setAbility('')
+        setAbilityUser('')
+        setActive(false)
+        setActiveGate(false)
+        setBakuganToAdd('')
+        setBakuganToMove(undefined)
+        setBakuganToSet('')
+        setDestination('')
+        setSlotToActive('')
+        setSlotToDrag('')
+        setTarget('')
     }
 
     const handleBattleActionComfirm = () => {
         if (abilityUser != '' && ability != '') {
-            ActiveAbilityCard({ abilityId: ability, bakuganKey: abilityUser, roomId: roomId, userId: userId, target_slot: slot_target, slot_to_move: slot_to_move, target: target, slotToDrag: slotToDrag, bakuganToAdd: bakuganToAdd })
+            ActiveAbilityCard({ abilityId: ability, bakuganKey: abilityUser, roomId: roomId, userId: userId, target_slot: slot_target, slot_to_move: slot_to_move, target: target, slotToDrag: slotToDrag, bakuganToAdd: bakuganToAdd, bakuganToMove: bakuganToMove, destination: destination })
         }
 
         if (active === true) {
@@ -210,6 +236,8 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
         slot_to_move, select_slot_to_move,
         slotToDrag, select_slot_to_drag,
         bakuganToAdd, select_bakugan_to_add,
+        bakuganToMove, select_bakugan_to_move,
+        destination, select_destination,
 
         handleConfirm,
         handleBattleActionComfirm,

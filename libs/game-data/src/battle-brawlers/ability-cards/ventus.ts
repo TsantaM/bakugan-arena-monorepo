@@ -9,6 +9,7 @@ export const CombatAerien: abilityCardsType = {
     description: `Permet à l'utilisateur de se déplacé vers une autre carte portail et l'empêche de s'ouvrir`,
     maxInDeck: 1,
     extraInputs: ["move-self"],
+    usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot_to_move }) => {
         if (roomState && slot_to_move !== '') {
             const slotOfGate = roomState?.protalSlots.find((s) => s.bakugans.find((b) => b.key === bakuganKey && b.userId === userId))
@@ -36,6 +37,7 @@ export const TornadeChaosTotal: abilityCardsType = {
     maxInDeck: 1,
     attribut: 'Ventus',
     description: `Annule toutes les effets de la carte portail si elle est ouverte avant l'activation de cette capacité`,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -61,6 +63,7 @@ export const SouffleTout: abilityCardsType = {
     description: `Permet d'envoyer le Bakugan adverse sur une autre carte portail`,
     maxInDeck: 3,
     extraInputs: ["move-opponent"],
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot, slot_to_move }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate && slot_to_move !== '' && roomState) {
@@ -84,6 +87,7 @@ export const RetourDair: abilityCardsType = {
     attribut: 'Ventus',
     maxInDeck: 1,
     description: `Permet à l'utilisateur de se retirer du combat`,
+    usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate && roomState) {
@@ -110,6 +114,7 @@ export const TornadeExtreme: abilityCardsType = {
     description: `Permet à l'utilisateur d'attirer un Bakugan sur la carte portail où il se trouve`,
     maxInDeck: 1,
     extraInputs: ['drag-bakugan'],
+    usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot, target, slotToDrag }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const slotTarget = roomState?.protalSlots.find((s) => s.id === slotToDrag)

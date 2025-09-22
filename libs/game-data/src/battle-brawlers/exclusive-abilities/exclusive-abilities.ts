@@ -8,6 +8,7 @@ export const OmbreBleue: exclusiveAbilitiesType = {
     name: 'Ombre Bleue',
     description: `Ajoute 50G à l'utilisateur et empêche l'ouverture de la carte portail`,
     maxInDeck: 1,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -25,6 +26,7 @@ export const ChambreDeGravite: exclusiveAbilitiesType = {
     name: 'Chambre de Gravité',
     description: `Permet d'attirer un bakugan sur la carte portail où se trouve l'utilisateur.`,
     maxInDeck: 1,
+    usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -42,6 +44,7 @@ export const DragonoidPlus: exclusiveAbilitiesType = {
     name: 'Dragonoid Plus',
     description: `Ajoute 100G à l'utilisateur et l'effet persiste jusqu'à l'annulation de la capacité`,
     maxInDeck: 1,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -59,6 +62,7 @@ export const ImpactMajeur: exclusiveAbilitiesType = {
     name: 'Impact Majeur',
     description: `Ajoute 75G à l'utilisateur et baisse celui de l'adversaire de 75G tout en empêchant la carte portail de s'ouvir`,
     maxInDeck: 1,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -76,6 +80,7 @@ export const SabreDeLaMort: exclusiveAbilitiesType = {
     name: 'Sabre de la Mort',
     description: `Permet à l'utilisateur de se déplacer vers une autre carte portail ou de joindre le combat s'il n'est pas encore sur le domaine`,
     maxInDeck: 1,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -93,6 +98,7 @@ export const VentViolentDeNobelesseVerte: exclusiveAbilitiesType = {
     name: 'Vent Violent de Noblesse Verte',
     description: `Ajoute 100G à l'utilisateur`,
     maxInDeck: 1,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -110,15 +116,33 @@ export const AntiMuse: exclusiveAbilitiesType = {
     name: 'Anti Muse',
     description: `Attire un Bakugan sur la carte portail où se trouve l'utilisateur`,
     maxInDeck: 1,
-    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+    extraInputs: ['drag-bakugan'],
+    usable_in_neutral: true,
+    onActivate: ({ roomState, userId, bakuganKey, slot, target, slotToDrag }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (slotOfGate) {
-            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+        const slotTarget = roomState?.protalSlots.find((s) => s.id === slotToDrag)
+        console.log(target, slotToDrag, slot)
+        console.log(slotOfGate)
+        // const targetToDrag = slotTarget?.bakugans.find((b) => b.key === target)
+        if (slotOfGate && slotTarget && target !== '' && slotToDrag !== '') {
+            const BakuganTargetIndex = slotTarget.bakugans.findIndex((b) => b.key === target)
+            const bakuganToDrag = slotTarget?.bakugans.find((b) => b.key === target)
+            const condition = slotOfGate && slotTarget && bakuganToDrag && BakuganTargetIndex ? true : false
 
-            if (user) {
-                user.currentPower += 100
+            console.log(slotTarget)
+            console.log(bakuganToDrag)
+            console.log(BakuganTargetIndex)
+            console.log(condition)
+
+            const user = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+
+            if (user && bakuganToDrag) {
+                slotOfGate.bakugans.push(bakuganToDrag)
+                slotTarget.bakugans.splice(BakuganTargetIndex, 1)
+                CheckBattle({ roomState })
             }
         }
+
     }
 }
 
@@ -127,6 +151,7 @@ export const AileEnflamee: exclusiveAbilitiesType = {
     name: 'Aile enflammée',
     description: `Ajoute 50 G à l'utilisateur (effet persistant)`,
     maxInDeck: 1,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -144,6 +169,7 @@ export const VisageDuChagrin: exclusiveAbilitiesType = {
     name: 'Visage du Chagrin',
     description: `Rend toutes les carte maîtrises de l'adversaire inutiles et si l'utilisateur remporte le duel il redonne vie à tout bakugan alié vaincu au combat`,
     maxInDeck: 1,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -160,10 +186,10 @@ export const VisageDuChagrin: exclusiveAbilitiesType = {
         const deckToUpdate = roomState?.decksState.find((d) => d.userId === userId)
         console.log(userId)
         console.log('fortress win')
-        if(deckToUpdate) {
+        if (deckToUpdate) {
             deckToUpdate.bakugans.filter((b) => b && b.bakuganData.elimined === true).forEach((b) => {
-                    b?.bakuganData.elimined ? b.bakuganData.elimined = false : b?.bakuganData.elimined
-             })
+                b?.bakuganData.elimined ? b.bakuganData.elimined = false : b?.bakuganData.elimined
+            })
         }
     },
 }
@@ -173,6 +199,7 @@ export const VisageDeLaFureur: exclusiveAbilitiesType = {
     name: 'Visage de la Fureur',
     description: `Ajoute 100 G à l'utilisateur`,
     maxInDeck: 1,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -190,6 +217,7 @@ export const GaucheGigantesque: exclusiveAbilitiesType = {
     name: 'Gauche Gigantesque',
     description: `Détruit la carte portail de l'adversaire`,
     maxInDeck: 1,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -207,6 +235,7 @@ export const MassueGigantesque: exclusiveAbilitiesType = {
     name: 'Massue Gigantesque',
     description: `Ajoute 100G à l'utilisateur et en retire 50 à l'adversaire`,
     maxInDeck: 1,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -224,6 +253,7 @@ export const TempeteDePlume: exclusiveAbilitiesType = {
     name: 'Tempête de Plume',
     description: `Ajoute 100 G à l'utilisateur`,
     maxInDeck: 1,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -241,6 +271,7 @@ export const RayonGamma: exclusiveAbilitiesType = {
     name: 'Rayon Gamma',
     description: `Annule toutes les capacité de l'adversaire et ajoute 50G à l'utilisateur`,
     maxInDeck: 1,
+    usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -260,6 +291,7 @@ export const DimmensionQuatre: exclusiveAbilitiesType = {
     name: 'Dimmension Quatre',
     description: `Annule toutes les carte maitrises de l'adversaire`,
     maxInDeck: 1,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -278,16 +310,28 @@ export const Marionnette: exclusiveAbilitiesType = {
     key: 'marionnette',
     name: 'Marionnette',
     maxInDeck: 1,
+    usable_in_neutral: true,
     description: "Permet de déplacer un Bakugan vers une autre carte portail",
-    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+    extraInputs: ['move-bakugan'],
+    onActivate: ({ roomState, userId, bakuganKey, slot, bakuganToMove, destination }) => {
+        console.log('bonsoir marionnatte')
+        console.log(bakuganToMove, destination)
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (slotOfGate) {
-            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+        if (bakuganToMove && destination !== '') {
+            const targetSlot = roomState?.protalSlots.find((s) => s.id === destination && s.portalCard !== null)
+            const initialSlot = roomState?.protalSlots.find((s) => s.id === bakuganToMove?.slot)
+            const bakuganTarget = initialSlot?.bakugans.find((b) => b.key === bakuganToMove?.bakuganKey && b.userId === bakuganToMove?.userId)
+            const user = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            console.log(slotOfGate, targetSlot, initialSlot, bakuganTarget, user)
 
-            if (user) {
-                user.currentPower += 100
+            if (user && slotOfGate && initialSlot && targetSlot && bakuganToMove && bakuganTarget) {
+                const index = initialSlot.bakugans.findIndex((b) => b.key === bakuganToMove?.bakuganKey && b.userId === bakuganToMove?.userId)
+                targetSlot.bakugans.push(bakuganTarget)
+                initialSlot.bakugans.splice(index, 1)
+                CheckBattle({ roomState })
             }
         }
+
     }
 }
 
@@ -297,6 +341,7 @@ export const LanceEclair: exclusiveAbilitiesType = {
     description: `Permet à l'utilisateur d'envoyer son adversaire sur une autre carte portail`,
     maxInDeck: 1,
     extraInputs: ["move-opponent"],
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot, slot_to_move }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate && roomState) {
@@ -319,6 +364,7 @@ export const MachettesJumelles: exclusiveAbilitiesType = {
     name: 'Machette Jumelle',
     maxInDeck: 1,
     description: `Ajoute 100 G à l'utilisateur`,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -336,6 +382,7 @@ export const RobotallionExecution: exclusiveAbilitiesType = {
     name: 'Robotalion Execution',
     maxInDeck: 1,
     description: `Augmente le niveau de puissance de l'utilisateur de 50 G`,
+    usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -353,6 +400,7 @@ export const PlexusSolaire: exclusiveAbilitiesType = {
     name: 'Plexus Solaire',
     maxInDeck: 1,
     description: `Annule la carte portail si elle est ouverte et retire 50 G à l'adversaire`,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -362,12 +410,12 @@ export const PlexusSolaire: exclusiveAbilitiesType = {
 
             if (user && opponent) {
                 opponent.currentPower -= 50
-                if(gate && gate.onCanceled && slotOfGate.state.open && !slotOfGate.state.canceled) {
-                    gate.onCanceled({roomState: roomState, slot: slot, userId: userId, bakuganKey: bakuganKey})
+                if (gate && gate.onCanceled && slotOfGate.state.open && !slotOfGate.state.canceled) {
+                    gate.onCanceled({ roomState: roomState, slot: slot, userId: userId, bakuganKey: bakuganKey })
                 }
             }
 
-            
+
         }
     }
 }
@@ -377,6 +425,7 @@ export const EffecteurdOmbre: exclusiveAbilitiesType = {
     description: `Annule la carte portail si elle est ouverte ainsi que la carte portail de l'adversaire tout en lui retirant 50 G`,
     name: `Effaceur d'ombre`,
     maxInDeck: 1,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -394,6 +443,7 @@ export const LanceDeFeu: exclusiveAbilitiesType = {
     name: 'Lance de Feu',
     maxInDeck: 1,
     description: `Ajoute 100 G à l'utilisateur`,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -411,6 +461,7 @@ export const JavelotAquos: exclusiveAbilitiesType = {
     name: 'Javelot Aquos',
     maxInDeck: 1,
     description: `Permet à l'utilisateur d'échanger la place de deux cartes portails juxtaposées`,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -428,6 +479,7 @@ export const Tsunami: exclusiveAbilitiesType = {
     name: 'Tsunami',
     maxInDeck: 1,
     description: `Ne peux être activée que si trois (3) Bakugans aqos aliés sont sur le domaine, et élimine tout Bakuant présent sur le domaine ayant un niveau de puissance inférieur à l'utilisateur`,
+    usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -445,6 +497,7 @@ export const TrappeDeSable: exclusiveAbilitiesType = {
     name: 'Trappe de Sable',
     description: `Permet d'attaquer un Bakugan se trouvant sur une autre carte portail et baise le niveau de puissance de la cible de 50 G`,
     maxInDeck: 1,
+    usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -462,6 +515,7 @@ export const MaitreDesProfondeurs: exclusiveAbilitiesType = {
     name: 'Maitre des profondeurs',
     description: `Ajoute 100 G à l'utilisateur`,
     maxInDeck: 1,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -479,6 +533,7 @@ export const DivisionHolographique: exclusiveAbilitiesType = {
     name: 'Division Holographique',
     maxInDeck: 1,
     description: `Permet à l'utilisateur de se protéger en absorbant la puissance des carte maîtrise utilisé contre lui`,
+    usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -496,6 +551,7 @@ export const RegainSubit: exclusiveAbilitiesType = {
     name: 'Regain Subit',
     maxInDeck: 1,
     description: `Retire 100 G à tous les bakugans adverse et ajoute 100 G à l'utilisateur`,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -513,6 +569,7 @@ export const CapeDeFeu: exclusiveAbilitiesType = {
     name: 'Cape de Feu',
     maxInDeck: 1,
     description: `Ajoute 100 G en plus à l'utilisateur`,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -522,5 +579,41 @@ export const CapeDeFeu: exclusiveAbilitiesType = {
                 user.currentPower += 100
             }
         }
+    }
+}
+
+export const SouffleInfini: exclusiveAbilitiesType = {
+    key: 'souffle-infini',
+    name: 'Souffle Infini',
+    maxInDeck: 1,
+    description: `Attire un bakugan sur la même carte portail que l'utilisateur et retire 50G à la cible`,
+    extraInputs: ['drag-bakugan'],
+    usable_in_neutral: true,
+    onActivate: ({ roomState, userId, bakuganKey, slot, target, slotToDrag }) => {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        const slotTarget = roomState?.protalSlots.find((s) => s.id === slotToDrag)
+        console.log(target, slotToDrag, slot)
+        console.log(slotOfGate)
+        // const targetToDrag = slotTarget?.bakugans.find((b) => b.key === target)
+        if (slotOfGate && slotTarget && target !== '' && slotToDrag !== '') {
+            const BakuganTargetIndex = slotTarget.bakugans.findIndex((b) => b.key === target)
+            const bakuganToDrag = slotTarget?.bakugans.find((b) => b.key === target)
+            const condition = slotOfGate && slotTarget && bakuganToDrag && BakuganTargetIndex ? true : false
+
+            console.log(slotTarget)
+            console.log(bakuganToDrag)
+            console.log(BakuganTargetIndex)
+            console.log(condition)
+
+            const user = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+
+            if (user && bakuganToDrag) {
+                bakuganToDrag.currentPower = bakuganToDrag.currentPower - 50
+                slotOfGate.bakugans.push(bakuganToDrag)
+                slotTarget.bakugans.splice(BakuganTargetIndex, 1)
+                CheckBattle({ roomState })
+            }
+        }
+
     }
 }

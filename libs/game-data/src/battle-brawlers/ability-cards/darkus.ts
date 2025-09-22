@@ -7,6 +7,7 @@ export const CoupDeGrace: abilityCardsType = {
     attribut: 'Darkus',
     description: `Détruit la carte portail et en annule tous les effets, mais ne fonctionne que si la carte portail est ouverte`,
     maxInDeck: 2,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -33,6 +34,7 @@ export const EpicesMortelles: abilityCardsType = {
     maxInDeck: 1,
     attribut: 'Darkus',
     description: `Ajoute 100 G de puissance à l'utilisateur et en retire autant a les adversaires.`,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -66,6 +68,7 @@ export const BoublierFusion: abilityCardsType = {
     attribut: 'Darkus',
     maxInDeck: 1,
     description: `Vole tous les boost obtenut par l'adversaire pendant le match`,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -91,6 +94,7 @@ export const VengeanceAlItalienne: abilityCardsType = {
     attribut: 'Darkus',
     maxInDeck: 1,
     description: `Permet de retirer 100 G de puissances à tous les bakugans adverse et augmente le niveau de puissance de l'utilisateur de 100 G`,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -114,6 +118,7 @@ export const PoivreDesCayenne: abilityCardsType = {
     attribut: 'Darkus',
     maxInDeck: 2,
     description: `Annule toutes les capacité de l'adversaire et retire 50 G à l'adversaire`,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {

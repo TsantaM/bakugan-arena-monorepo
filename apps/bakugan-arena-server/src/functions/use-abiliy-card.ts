@@ -1,8 +1,8 @@
-import { AbilityCardsList, ExclusiveAbilitiesList, slots_id } from "@bakugan-arena/game-data";
+import { AbilityCardsList, bakuganToMoveType, ExclusiveAbilitiesList, slots_id } from "@bakugan-arena/game-data";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { activateAbilities } from "@bakugan-arena/game-data/src/type/room-types";
 
-export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganKey, target_slot, slot_to_move, target, slotToDrag, bakuganToAdd }: { roomId: string, abilityId: string, slot: slots_id, userId: string, bakuganKey: string, target_slot: slots_id | '', slot_to_move: slots_id | '', target: string | '', slotToDrag: slots_id | '', bakuganToAdd: string }) => {
+export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganKey, target_slot, slot_to_move, target, slotToDrag, bakuganToAdd, bakuganToMove, destination }: { roomId: string, abilityId: string, slot: slots_id, userId: string, bakuganKey: string, target_slot: slots_id | '', slot_to_move: slots_id | '', target: string | '', slotToDrag: slots_id | '', bakuganToAdd: string, bakuganToMove: bakuganToMoveType | undefined, destination: slots_id | '' }) => {
     const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
     const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
     const abilities = [...AbilityCardsList, ...ExclusiveAbilitiesList]
@@ -14,7 +14,7 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
     console.log(target, slotToDrag)
 
     if (roomData && abilityToUse && playerAbilities && playerAbilities > 0 && abilityUser && !abilityUser.abilityBlock) {
-        abilityToUse.onActivate({ roomState: roomData, roomId: roomId, bakuganKey: bakuganKey, slot: slot, userId: userId, target_slot: target_slot, slot_to_move: slot_to_move, target: target, slotToDrag: slotToDrag, bakuganToAdd: bakuganToAdd })
+        abilityToUse.onActivate({ roomState: roomData, roomId: roomId, bakuganKey: bakuganKey, slot: slot, userId: userId, target_slot: target_slot, slot_to_move: slot_to_move, target: target, slotToDrag: slotToDrag, bakuganToAdd: bakuganToAdd, bakuganToMove: bakuganToMove, destination: destination })
 
 
         if (slotObj) {

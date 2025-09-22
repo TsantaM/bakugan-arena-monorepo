@@ -61,13 +61,15 @@ export const socketTurn = (io: Server, socket: Socket) => {
 
             CheckGameFinished({ roomId, roomState: roomData })
             roomData.protalSlots.filter((s) => s.portalCard !== null && !s.state.open && !s.state.blocked).forEach((s) => {
+                const bakuganKey = s.bakugans.find((b) => b.userId === s.portalCard?.userId)?.key
+                const userId = s.portalCard?.userId
                 const gateKey = s.portalCard?.key
                 if(gateKey) {
                     const gate = GateCardsList.find((c) => c.key === gateKey)
                     if(gate) {
                         const activable = gate.autoActivationCheck ? gate.autoActivationCheck({portalSlot: s, roomState: roomData}) : false
                         if(activable ) {
-                            gate.onOpen({roomState: roomData, slot: s.id})
+                            gate.onOpen({roomState: roomData, slot: s.id, bakuganKey: bakuganKey, userId: userId })
                         }
                     }
                 }

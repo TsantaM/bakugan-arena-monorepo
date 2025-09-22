@@ -1,4 +1,5 @@
 import { abilityCardsType } from "../../type/game-data-types";
+import { bakuganOnSlot } from "../../type/room-types";
 import { GateCardsList } from "../gate-gards";
 
 export const MurDeFeu: abilityCardsType = {
@@ -7,6 +8,7 @@ export const MurDeFeu: abilityCardsType = {
     attribut: "Pyrus",
     description: "Retire 50 G aux bakugans adverses",
     maxInDeck: 3,
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
 
@@ -27,6 +29,7 @@ export const JetEnflamme: abilityCardsType = {
     maxInDeck: 1,
     description: `Permet d'ajouter un bakugan en plus au combat s'il y a déjà au moins un Bakugan Pyrus sur le terrain`,
     extraInputs: ['add-bakugan'],
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot, bakuganToAdd }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const deck = roomState?.decksState.find((d) => d.userId === userId)
@@ -34,14 +37,15 @@ export const JetEnflamme: abilityCardsType = {
         if (slotOfGate && deck && bakugan) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
             const pyrusOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Pyrus').map((b) => b.key)).flat()
-            const newBakugan = {
+            const newBakugan: bakuganOnSlot = {
                 key: bakugan.bakuganData.key,
                 userId: userId,
                 powerLevel: bakugan.bakuganData.powerLevel,
                 currentPower: bakugan.bakuganData.powerLevel,
                 attribut: bakugan.bakuganData.attribut,
                 image: bakugan.bakuganData.image,
-                abilityBlock: false
+                abilityBlock: false,
+                assist: true
             }
 
             if (user && pyrusOnDomain && pyrusOnDomain.length >= 2) {
@@ -49,7 +53,26 @@ export const JetEnflamme: abilityCardsType = {
                 bakugan.bakuganData.onDomain = true
             }
         }
-    }
+    },
+    onCanceled({ roomState, userId, slot }) {
+        const slotToUpdate = roomState?.protalSlots.find((s) => s.id === slot)
+        const deck = roomState?.decksState.find((d) => d.userId === userId)
+        if (slotToUpdate && deck) {
+            const assistsBakugans = slotToUpdate.bakugans.filter((b) => b.userId === userId && b.assist)
+
+            assistsBakugans.forEach((a) => {
+                const index = slotToUpdate.bakugans.findIndex((b) => b.key === a.key && b.assist === a.assist && b.userId === a.userId)
+                slotToUpdate.bakugans.splice(index, 1)
+
+                const deckDataToUpdate = deck.bakugans.find((b) => b?.bakuganData.key === a.key)
+                if (deckDataToUpdate) {
+                    deckDataToUpdate.bakuganData.onDomain = false
+                }
+
+            })
+
+        }
+    },
 }
 
 export const RetroAction: abilityCardsType = {
@@ -57,6 +80,7 @@ export const RetroAction: abilityCardsType = {
     maxInDeck: 2,
     attribut: 'Pyrus',
     name: 'Retro Action',
+    usable_in_neutral: false,
     description: `Calcine la carte portail de l'adversaire si elle est ouverte et en annule tous les effets`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -82,6 +106,7 @@ export const TourbillonDeFeu: abilityCardsType = {
     attribut: 'Pyrus',
     name: 'Tourbillon de Feu',
     maxInDeck: 1,
+    usable_in_neutral: false,
     description: `Protège l'utilisateur contre les effets de la carte portail et ajoute 50 G à l'utilisateur`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)

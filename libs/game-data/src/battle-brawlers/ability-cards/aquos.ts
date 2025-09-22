@@ -8,6 +8,7 @@ export const MirageAquatique: abilityCardsType = {
     description: `'Permet à l'utilisateur de se déplacer vers une autre carte portail et l'empêche de s'ouvrir`,
     maxInDeck: 2,
     extraInputs: ["move-self"],
+    usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot_to_move }) => {
         console.log(slot_to_move)
         if (roomState && slot_to_move !== '' && roomState) {
@@ -36,6 +37,7 @@ export const BarrageDeau: abilityCardsType = {
     name: `Barrage d'Eau`,
     maxInDeck: 1,
     attribut: 'Aquos',
+    usable_in_neutral: true,
     description: `Empêche l'activation de toute capacité sur le domaine pendant 3 tours`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -55,6 +57,7 @@ export const BouclierAquos: abilityCardsType = {
     description: 'Protège contre toute capacité adverse pendant le tour',
     maxInDeck: 2,
     name: 'Bouclier Aquos',
+    usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -72,6 +75,7 @@ export const PlongeeEnEauProfonde: abilityCardsType = {
     name: 'Plongée en Eau Profonde',
     attribut: 'Aquos',
     maxInDeck: 1,
+    usable_in_neutral: false,
     description: `Transforme le terrain en aquos et empêche l'activation de toute carte maîtrise qui ne sont pas de l'attribut Aquos`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)

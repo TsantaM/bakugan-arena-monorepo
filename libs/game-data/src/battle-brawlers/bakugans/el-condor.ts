@@ -16,7 +16,7 @@ export const ElCondorVentus: bakuganType = {
     attribut: 'Ventus',
     family: 'El Condor',
     image: 'el-condor',
-    exclusiveAbilities: ['plexus-solaire'],
+    exclusiveAbilities: ['plexus-solaire', 'souffle-infini'],
     powerLevel: 310
 }
 

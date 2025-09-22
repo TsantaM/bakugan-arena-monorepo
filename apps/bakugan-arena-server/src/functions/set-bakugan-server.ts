@@ -81,7 +81,8 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: { roomId:
                 currentPower: powerLevel,
                 attribut: bakuganToAdd.attribut,
                 image: bakuganToAdd.image,
-                abilityBlock: false
+                abilityBlock: false,
+                assist: false
             }
 
             if (

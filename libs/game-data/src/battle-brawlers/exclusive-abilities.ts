@@ -1,6 +1,6 @@
 
 import { exclusiveAbilitiesType } from "../type/game-data-types";
-import { AileEnflamee, AntiMuse, CapeDeFeu, ChambreDeGravite, DimmensionQuatre, DivisionHolographique, DragonoidPlus, EffecteurdOmbre, GaucheGigantesque, ImpactMajeur, JavelotAquos, LanceDeFeu, LanceEclair, MachettesJumelles, MaitreDesProfondeurs, Marionnette, MassueGigantesque, OmbreBleue, PlexusSolaire, RayonGamma, RegainSubit, RobotallionExecution, SabreDeLaMort, TempeteDePlume, TrappeDeSable, Tsunami, VentViolentDeNobelesseVerte, VisageDeLaFureur, VisageDuChagrin } from "./exclusive-abilities/exclusive-abilities";
+import { AileEnflamee, AntiMuse, CapeDeFeu, ChambreDeGravite, DimmensionQuatre, DivisionHolographique, DragonoidPlus, EffecteurdOmbre, GaucheGigantesque, ImpactMajeur, JavelotAquos, LanceDeFeu, LanceEclair, MachettesJumelles, MaitreDesProfondeurs, Marionnette, MassueGigantesque, OmbreBleue, PlexusSolaire, RayonGamma, RegainSubit, RobotallionExecution, SabreDeLaMort, SouffleInfini, TempeteDePlume, TrappeDeSable, Tsunami, VentViolentDeNobelesseVerte, VisageDeLaFureur, VisageDuChagrin } from "./exclusive-abilities/exclusive-abilities";
 
 export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [OmbreBleue.key]: OmbreBleue,
@@ -32,6 +32,7 @@ export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [DivisionHolographique.key]: DivisionHolographique,
     [RegainSubit.key]: RegainSubit,
     [CapeDeFeu.key]: CapeDeFeu,
+    [SouffleInfini.key]: SouffleInfini
 }
 
 export const ExclusiveAbilitiesList: exclusiveAbilitiesType[] = Object.values(ExclusiveAbilities) 

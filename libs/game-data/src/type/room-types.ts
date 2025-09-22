@@ -2,30 +2,6 @@ import { attribut } from "./game-data-types"
 
 export type slots_id = "slot-1" | "slot-2" | "slot-3" | "slot-4" | "slot-5" | "slot-6"
 
-export type portalSlotsTypeElement = {
-    id: slots_id,
-    can_set: boolean,
-    portalCard: {
-        key: string,
-        userId: string
-    } | null,
-    bakugans: {
-        key: string,
-        userId: string,
-        powerLevel: number,
-        currentPower: number,
-        attribut: attribut,
-        image: string,
-        abilityBlock: boolean
-    }[],
-    state: {
-        open: boolean,
-        canceled: boolean,
-        blocked: boolean
-    },
-    activateAbilities: activateAbilities[]
-}
-
 export type battleState = {
     battleInProcess: boolean,
     slot: slots_id | null,
@@ -48,7 +24,24 @@ export type bakuganOnSlot = {
     currentPower: number,
     attribut: attribut,
     image: string,
-    abilityBlock: boolean
+    abilityBlock: boolean,
+    assist: boolean
+}
+
+export type portalSlotsTypeElement = {
+    id: slots_id,
+    can_set: boolean,
+    portalCard: {
+        key: string,
+        userId: string
+    } | null,
+    bakugans: bakuganOnSlot[],
+    state: {
+        open: boolean,
+        canceled: boolean,
+        blocked: boolean
+    },
+    activateAbilities: activateAbilities[]
 }
 
 export type portalSlotsType = portalSlotsTypeElement[]

@@ -107,7 +107,7 @@ export const Echange: gateCardType = {
     },
     autoActivationCheck({ portalSlot }) {
         const enoughPowerLevels = portalSlot.bakugans.filter((b) => b.currentPower >= 400)
-        if(enoughPowerLevels.length > 0) {
+        if (enoughPowerLevels.length > 0) {
             return true
         } else {
             return false
@@ -123,4 +123,40 @@ export const SuperPyrus: gateCardType = {
     onOpen: ({ roomState, slot, userId }) => {
         return
     }
+}
+
+export const AspirateurDePuissance: gateCardType = {
+    key: 'aspirateur-de-puissance',
+    name: 'Aspirateur de Puissance',
+    maxInDeck: 1,
+    description: `Permet de voler 100G au Bakugan adverse`,
+    onOpen: ({ roomState, slot, userId, bakuganKey }) => {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        const bakuganUser = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+        const bakuganOpponent = slotOfGate?.bakugans.find((b) => b.userId !== userId)
+
+        if (slotOfGate && bakuganUser && bakuganOpponent && !slotOfGate.state.open && !slotOfGate.state.canceled) {
+            bakuganOpponent.currentPower = bakuganOpponent.currentPower - 100
+            bakuganUser.currentPower = bakuganUser.currentPower + 100
+            slotOfGate.state.open = true
+        }
+    },
+    onCanceled: ({ roomState, slot, userId, bakuganKey }) => {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        const bakuganUser = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+        const bakuganOpponent = slotOfGate?.bakugans.find((b) => b.userId !== userId)
+
+        if (slotOfGate && bakuganUser && bakuganOpponent && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
+            bakuganUser.currentPower = bakuganUser.currentPower - 100
+            bakuganOpponent.currentPower = bakuganOpponent.currentPower + 100
+            slotOfGate.state.open = true
+        }
+    },
+    autoActivationCheck({ roomState, portalSlot }) {
+        if (roomState && roomState.battleState.battleInProcess && !roomState.battleState.paused && roomState.battleState.slot === portalSlot.id) {
+            return true
+        } else {
+            return false
+        }
+    },
 }

@@ -20,6 +20,7 @@ import useTurnActionStates from "@/src/hooks/turn-action-hook"
 import { useEffect } from "react"
 import { useSocket } from "@/src/providers/socket-provider"
 import AbilityExtraInputs from "./turn-interface-buttons/abilities-extra-actions"
+import UseAbilityCardInNeutral from "./turn-interface-buttons/use-ability-card-in-neutral"
 
 export default function TurnInterface({ turn, set_gate, set_bakugan, use_ability, roomId, battleState, userId }: { turn: boolean, set_gate: boolean, set_bakugan: boolean, use_ability: boolean, roomId: string, battleState: battleState | undefined, userId: string }) {
     const socket = useSocket()
@@ -56,7 +57,7 @@ export default function TurnInterface({ turn, set_gate, set_bakugan, use_ability
                                 </DialogHeader>
                                 <div className="flex flex-col gap-2">
                                     <UseAbilityCard bakuganKey={turnActionHook.abilityUser} ability={turnActionHook.ability} roomId={roomId} userId={userId} selectAbility={turnActionHook.selectAbility} selectBakugan={turnActionHook.selectAbilityUser} />
-                                    <AbilityExtraInputs bakugaToAdd={turnActionHook.bakuganToAdd} select_bakugan_to_add={turnActionHook.select_bakugan_to_add} selectTarget={turnActionHook.selectTarget} target={turnActionHook.target} select_slot_to_drag={turnActionHook.select_slot_to_drag} slotToDrag={turnActionHook.slotToDrag} ability={turnActionHook.ability} selected_slot_to_move={turnActionHook.select_slot_to_move} selected_target={turnActionHook.selectTarget} slot_target={turnActionHook.slot_target} selected_target_slot={turnActionHook.select_slot_target} bakuganKey={turnActionHook.abilityUser} roomId={roomId} userId={userId} />
+                                    <AbilityExtraInputs bakuganToMove={turnActionHook.bakuganToMove} select_bakugan_to_move={turnActionHook.select_bakugan_to_move} select_destination={turnActionHook.select_destination} bakugaToAdd={turnActionHook.bakuganToAdd} select_bakugan_to_add={turnActionHook.select_bakugan_to_add} selectTarget={turnActionHook.selectTarget} target={turnActionHook.target} select_slot_to_drag={turnActionHook.select_slot_to_drag} slotToDrag={turnActionHook.slotToDrag} ability={turnActionHook.ability} selected_slot_to_move={turnActionHook.select_slot_to_move} selected_target={turnActionHook.selectTarget} slot_target={turnActionHook.slot_target} selected_target_slot={turnActionHook.select_slot_target} bakuganKey={turnActionHook.abilityUser} roomId={roomId} userId={userId} />
                                     <ActivateGateCard roomId={roomId} userId={userId} setActiveGate={turnActionHook.setActive} />
                                 </div>
                                 <DialogFooter>
@@ -78,7 +79,8 @@ export default function TurnInterface({ turn, set_gate, set_bakugan, use_ability
                                 <div className="flex flex-col gap-5">
                                     <SetGateCardComponent set_gate={set_gate} roomId={roomId} userId={userId} selectGate={turnActionHook.selectGate} selectSlot={turnActionHook.selectSlot} />
                                     <SetBakuganComponent set_bakugan={set_bakugan} roomId={roomId} userId={userId} selectBakugan={turnActionHook.selectBakuganToSet} selectZone={turnActionHook.selectZone} slot={turnActionHook.slot} gate={turnActionHook.gate} />
-
+                                    <UseAbilityCardInNeutral zone={turnActionHook.zone} bakuganKey={turnActionHook.abilityUser} ability={turnActionHook.ability} roomId={roomId} userId={userId} selectAbility={turnActionHook.selectAbility} selectBakugan={turnActionHook.selectAbilityUser} abilityUser={turnActionHook.abilityUser} bakuganToSet={turnActionHook.bakuganToSet} />
+                                    <AbilityExtraInputs bakuganToMove={turnActionHook.bakuganToMove} select_bakugan_to_move={turnActionHook.select_bakugan_to_move} select_destination={turnActionHook.select_destination} bakugaToAdd={turnActionHook.bakuganToAdd} select_bakugan_to_add={turnActionHook.select_bakugan_to_add} selectTarget={turnActionHook.selectTarget} target={turnActionHook.target} select_slot_to_drag={turnActionHook.select_slot_to_drag} slotToDrag={turnActionHook.slotToDrag} ability={turnActionHook.ability} selected_slot_to_move={turnActionHook.select_slot_to_move} selected_target={turnActionHook.selectTarget} slot_target={turnActionHook.slot_target} selected_target_slot={turnActionHook.select_slot_target} bakuganKey={turnActionHook.abilityUser} roomId={roomId} userId={userId} />
                                 </div>
                                 <DialogFooter>
                                     <DialogClose asChild>

@@ -1,6 +1,6 @@
 import { FusionAerienne, FusionEnflammee, FusionLumineuse, FusionMarine, FusionTenebreuses, FusionTerrestre, PerilAquos, PerilDarkus, PerilHaos, PerilPyrus, PerilSubterra, PerilVentus, ReacteurAquos, ReacteurDarkus, ReacteurHaos, ReacteurPyrus, ReacteurSubterra, ReacteurVentus } from "./gate-card/gate-card-elementary";
 import { Echange, MineFantome, SuperPyrus } from "./gate-card/gate-card-trap";
-import { Armistice, BoucEmissaire, QuatuorDeCombat, Rechargement, RetourDAssenceur, TripleCombat } from "./gate-card/gate-card-command";
+import { Armistice, BoucEmissaire, GrandEsprit, QuatuorDeCombat, Rechargement, RetourDAssenceur, TripleCombat } from "./gate-card/gate-card-command";
 import { gateCardType } from "../type/game-data-types";
 
 export const GateCards: Record<string, gateCardType> = {
@@ -48,7 +48,8 @@ export const GateCards: Record<string, gateCardType> = {
     [QuatuorDeCombat.key]: QuatuorDeCombat,
     [RetourDAssenceur.key]: RetourDAssenceur,
     [BoucEmissaire.key]: BoucEmissaire,
-    [Armistice.key]: Armistice
+    [Armistice.key]: Armistice,
+    [GrandEsprit.key]: GrandEsprit
 
 }
 
