@@ -1,4 +1,4 @@
-import { BakuganList, bakuganOnSlot, portalSlotsType } from "@bakugan-arena/game-data"
+import { BakuganList, bakuganOnSlot, portalSlotsType, setBakuganProps } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
 /**
@@ -7,7 +7,7 @@ import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-s
  * Place un Bakugan sur un slot de portail si toutes les conditions sont remplies.
  */
 
-export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: { roomId: string, bakuganKey: string, slot: string, userId: string }) => {
+export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuganProps) => {
 
     // --- Find the current room by roomId / Récupérer la room actuelle par roomId
 

@@ -7,7 +7,7 @@ import { slots_id, stateType, portalSlotsType, portalSlotsTypeElement, deckType,
 import { CheckGameFinished } from './src/function/check-game-finished'
 import { CheckBattle } from './src/function/check-battle-in-process'
 import { ResetSlot } from "./src/function/reset-slot";
-
+import { activeGateCardProps, setBakuganProps, setGateCardProps, useAbilityCardProps } from './src/type/sockets-props-types'
 
 export {
     Bakugans,
@@ -36,6 +36,12 @@ export type {
     portalSlotsTypeElement,
     deckType,
     bakuganOnSlot,
-    bakuganToMoveType
+    bakuganToMoveType,
+
+
+    activeGateCardProps,
+    setBakuganProps,
+    setGateCardProps,
+    useAbilityCardProps
 }
 

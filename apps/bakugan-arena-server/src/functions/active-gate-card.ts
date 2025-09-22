@@ -1,7 +1,9 @@
-import { GateCardsList, slots_id } from "@bakugan-arena/game-data"
+import { activeGateCardProps, GateCardsList, slots_id } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
-export const ActiveGateCard = ({ roomId, gateId, slot, userId }: { roomId: string, gateId: string, slot: slots_id, userId: string }) => {
+
+
+export const ActiveGateCard = ({ roomId, gateId, slot, userId }: activeGateCardProps ) => {
     const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
     const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
 

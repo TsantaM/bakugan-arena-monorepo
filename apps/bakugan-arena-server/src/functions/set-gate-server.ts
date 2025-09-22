@@ -1,6 +1,7 @@
+import { setGateCardProps } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
-export const UpdateGate = ({ roomId, gateId, slot, userId }: { roomId: string, gateId: string, slot: string, userId: string }) => {
+export const UpdateGate = ({ roomId, gateId, slot, userId }: setGateCardProps) => {
     const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
     const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
 
