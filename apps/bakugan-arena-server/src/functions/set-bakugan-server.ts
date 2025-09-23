@@ -1,257 +1,112 @@
-import { BakuganList, bakuganOnSlot, portalSlotsType, setBakuganProps } from "@bakugan-arena/game-data"
+import { addBakuganToSlot, BakuganList, setBakuganProps, slots_id } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
-
-/**
- * Place a Bakugan on a portal slot in the room if all conditions are met.
- * 
- * Place un Bakugan sur un slot de portail si toutes les conditions sont remplies.
- */
 
 export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuganProps) => {
 
-    // --- Find the current room by roomId / Récupérer la room actuelle par roomId
-
+    // FR: Récupération de la room actuelle par son ID
+    // ENG Get the current room by its ID
     const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
+
+    // FR: Index de la room dans l'état global pour mise à jour
+    // ENG Index of the room in the global state for updating
     const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
 
-    // --- Check if the target slot is usable (has a portal card)
-    // Vérifie si le slot ciblé est utilisable (possède une carte portail)
-    const usable_slot = roomData?.protalSlots.find((s) => s.id === slot)?.portalCard != null
+    // FR: Nombre de Bakugan du joueur disponibles pour être posés (pas sur le domaine, pas éliminés)
+    // ENG Number of the player's Bakugan available to be placed (not on the domain, not eliminated)
+    const usable_bakugan = roomData?.decksState
+        .find((d) => d.userId === userId)
+        ?.bakugans.filter((b) => b?.bakuganData.onDomain === false && b?.bakuganData.elimined === false)
+        .length ?? 3
 
+    // FR: Nombre de Bakugan du joueur déjà présents sur le slot ciblé
+    // ENG Number of the player's Bakugan already on the target slot
+    const usersBakuganOnGate = roomData?.protalSlots
+        .find((s) => s.id === slot)
+        ?.bakugans.filter((b) => b.userId === userId).length ?? 0
 
-    // --- All slots that are usable (have a portal card)
-    // Tous les slots utilisables (avec une carte portail)
-    const usable_slots = roomData?.protalSlots.filter((s) => s.portalCard != null)
+    // FR: Récupération du slot ciblé
+    // ENG Get the target slot
+    const slotToUpdate = roomData?.protalSlots.find((s) => s.id === slot)
 
-    // --- Check if the player can set a new Bakugan this turn
-    // Vérifie si le joueur peut poser un nouveau Bakugan ce tour-ci
-    const can_set_bakugan = roomData?.turnState.set_new_bakugan
+    // FR: Vérifie si le slot est utilisable (possède une carte portail)
+    // ENG Check if the slot is usable (has a portal card)
+    const isSlotUsable = slotToUpdate?.portalCard != null
 
-    // --- Count of Bakugan available to place (not on domain and not eliminated)
-    // Nombre de Bakugan du joueur disponibles pour être posés (pas sur le domaine et pas éliminés)
-    const usable_bakugan = roomData?.decksState.find((d) => d.userId === userId)?.bakugans.filter((b) => b?.bakuganData.onDomain === false && b?.bakuganData.elimined === false).length ?? 3
-    const usersBakuganOnGate = roomData?.protalSlots.find((s) => s.id === slot)?.bakugans.filter((b) => b.userId === userId).length ?? 0;
+    // FR: Vérifie si le joueur peut poser un Bakugan ce tour
+    // ENG Check if the player can place a Bakugan this turn
+    const canPlayerSetBakugan = roomData?.turnState.set_new_bakugan
 
-    // --- Count of this user's Bakugan already on the target slot
-    // Nombre de Bakugan du joueur déjà présents sur ce slot
-    const slotsWithBakugans = roomData?.protalSlots.filter((s) => s.bakugans.length > 0 && s.portalCard !== null)
+    // FR: Vérifie si ce n'est pas le tour précédent du joueur
+    // ENG Check if it's not the previous turn of this player
+    const isNotPreviousTurn = roomData?.turnState.previous_turn !== userId
 
+    // FR: Vérifie si le joueur n'a pas déjà de Bakugan sur ce slot
+    // ENG Check if the player has no Bakugan on this slot
+    const hasNoBakuganOnSlot = usersBakuganOnGate < 1
 
-    // --- Main conditions to place a Bakugan
-    // Conditions principales pour poser un Bakugan :
-    // 1. Slot usable / Slot utilisable
-    // 2. Player can place Bakugan this turn / Joueur peut poser un Bakugan
-    // 3. Not the previous turn of this player / Pas le tour précédent du joueur
-    // 4. Player has no Bakugan already on this slot / Aucun Bakugan du joueur sur ce slot
-    if (usable_slot && can_set_bakugan && roomData.turnState.previous_turn != userId && usersBakuganOnGate < 1) {
+    // FR: Vérifie si toutes les conditions pour poser un Bakugan sont remplies
+    // ENG Check if all conditions to place a Bakugan are met
+    const canPlaceBakugan = isSlotUsable && canPlayerSetBakugan && isNotPreviousTurn && hasNoBakuganOnSlot
 
-        // --- Get the slot and deck to update / Récupère le slot et le deck à mettre à jour
-        const slotToUpdate = roomData.protalSlots.find((s) => s.id === slot)
-        const deckToUpdate = roomData.decksState.find((s) => s.userId === userId)
+    if (!canPlaceBakugan) return
 
-        // --- Get the selected Bakugan data from the deck / Récupère les données du Bakugan choisi depuis le deck
-        const bakuganFromDeck = deckToUpdate?.bakugans.find((b) => b?.bakuganData.key === bakuganKey)?.bakuganData
+    // FR: Récupération du deck du joueur
+    // ENG Get the player's deck
+    const deckToUpdate = roomData.decksState.find((s) => s.userId === userId)
 
-        // --- Opponent's Bakugans / Bakugan de l'adversaire
-        const opponentsBakugans = roomData?.decksState.find((d) => d.userId !== userId)?.bakugans
-        const opponentsUsableBakugans = opponentsBakugans?.filter(
-            (b) => b?.bakuganData.onDomain === false && b.bakuganData.elimined === false
-        ).length ?? 0
+    // FR: Récupération des données du Bakugan choisi depuis le deck
+    // ENG Get the selected Bakugan data from the deck
+    const bakuganFromDeck = deckToUpdate?.bakugans.find((b) => b?.bakuganData.key === bakuganKey)?.bakuganData
 
-        // --- Check if slot contains opponent's or user's Bakugan
-        // Vérifie si le slot contient un Bakugan de l'adversaire ou du joueur
-        const bakuganOpponent = slotToUpdate?.bakugans.some((b) => b.userId != userId)
-        const bakuganUser = slotToUpdate?.bakugans.some((b) => b.userId === userId)
+    // FR: Récupération des données générales du Bakugan à partir de la liste globale
+    // ENG Get the general Bakugan data from the global list
+    const bakuganToAdd = BakuganList.find((b) => b.key === bakuganKey)
 
-        // --- Get Bakugan data to add and current power level
-        // Récupère le Bakugan à ajouter et sa puissance actuelle
-        const bakuganToAdd = BakuganList.find((b) => b.key === bakuganKey)
-        const powerLevel = bakuganFromDeck?.currentPowerLevel
+    if (!bakuganFromDeck || !bakuganToAdd) return
 
-        // --- Only proceed if slot, Bakugan, and conditions are valid
-        // Ne continue que si slot, Bakugan et conditions sont valides
-        if (slotToUpdate && bakuganToAdd && powerLevel && bakuganFromDeck.onDomain === false && bakuganFromDeck.elimined === false) {
+    // FR: Récupération des Bakugan de l'adversaire
+    // ENG Get the opponent's Bakugan
+    const opponentsBakugans = roomData?.decksState.find((d) => d.userId !== userId)?.bakugans
 
-            // --- Create new Bakugan object for the slot
-            // Crée un nouvel objet Bakugan pour le slot
-            const newBakugan: bakuganOnSlot = {
-                key: bakuganToAdd.key,
-                userId: userId,
-                powerLevel: bakuganToAdd.powerLevel,
-                currentPower: powerLevel,
-                attribut: bakuganToAdd.attribut,
-                image: bakuganToAdd.image,
-                abilityBlock: false,
-                assist: false
-            }
+    // FR: Nombre de Bakugan jouables de l'adversaire (pas sur le domaine, pas éliminés)
+    // ENG Number of usable opponent Bakugan (not on domain, not eliminated)
+    const opponentsUsableBakugans = opponentsBakugans?.filter(
+        (b) => b?.bakuganData.onDomain === false && b.bakuganData.elimined === false
+    ).length ?? 0
 
-            if (
-                usable_bakugan === 1 &&
-                usable_slots &&
-                usable_slots.length > 1 &&
-                slotsWithBakugans &&
-                slotsWithBakugans.length > 0
-            ) {
+    // FR: Vérifie si le slot contient un Bakugan adverse
+    // ENG Check if the slot contains an opponent's Bakugan
+    const slotHasOpponentBakugan = slotToUpdate?.bakugans.some((b) => b.userId !== userId)
 
-                // --- Last Bakugan must go on a slot with an opponent if opponent has none usable
-                // Le dernier Bakugan doit aller sur un slot avec un adversaire si l'adversaire n'a plus de Bakugan jouables
-                if (opponentsUsableBakugans === 0) {
-                    // restriction : dernier bakugan doit aller sur un slot avec un adversaire
-                    if (bakuganOpponent && !bakuganUser) {
-                        if (!slotToUpdate?.bakugans.includes(newBakugan)) {
-                            // --- Update deck and room state / Met à jour le deck et l'état de la room
+    // FR: Vérifie si le slot contient un Bakugan du joueur
+    // ENG Check if the slot contains a player's Bakugan
+    const slotHasUserBakugan = slotToUpdate?.bakugans.some((b) => b.userId === userId)
 
-                            const newDeckState: typeof bakuganFromDeck = {
-                                ...bakuganFromDeck,
-                                onDomain: true,
-                            }
+    // FR: Vérifie si c'est le dernier Bakugan du joueur à poser
+    // ENG Check if this is the player's last Bakugan to place
+    const isLastBakugan = usable_bakugan === 1
 
-                            console.log(newDeckState)
+    // FR: Vérifie si l'adversaire a encore des Bakugan jouables
+    // ENG Check if the opponent still has usable Bakugan
+    const opponentHasUsableBakugan = opponentsUsableBakugans > 0
 
-                            const state: typeof roomData = {
-                                ...roomData,
-                                protalSlots: roomData.protalSlots.map((s) =>
-                                    s.id === slotToUpdate.id
-                                        ? {
-                                            ...s,
-                                            bakugans: [...s.bakugans, newBakugan],
-                                        }
-                                        : s
-                                ),
+    // FR: Calcul du flag pour savoir si on peut placer le Bakugan sur ce slot
+    // ENG Calculate the flag to know if the Bakugan can be placed on this slot
+    const canPlace = !isLastBakugan || (isLastBakugan && (
+        !opponentHasUsableBakugan
+            ? slotHasOpponentBakugan && !slotHasUserBakugan
+            : opponentHasUsableBakugan
+    ))
 
-                                decksState: roomData.decksState.map((d) =>
-                                    d.userId === userId
-                                        ? {
-                                            ...d,
-                                            bakugans: d.bakugans.map((b) =>
-                                                b?.bakuganData.key === bakuganKey
-                                                    ? {
-                                                        ...b,
-                                                        bakuganData: {
-                                                            ...b.bakuganData,
-                                                            onDomain: true,
-                                                        },
-                                                    }
-                                                    : b
-                                            ),
-                                        }
-                                        : d
-                                ),
-                            }
+    if (!canPlace) return
 
-                            console.log(state)
-
-                            if (roomIndex != -1) {
-                                Battle_Brawlers_Game_State[roomIndex] = state
-                            }
-                        }
-                    } else {
-                        // Cannot place Bakugan here / Ne peut pas poser ici
-                        return
-                    }
-                } else {
-                    // Opponent still has usable Bakugan
-                    // L'adversaire a encore des Bakugan → placement normal
-                    if (!slotToUpdate?.bakugans.includes(newBakugan)) {
-                        const newDeckState: typeof bakuganFromDeck = {
-                            ...bakuganFromDeck,
-                            onDomain: true,
-                        }
-
-                        console.log(newDeckState)
-
-                        const state: typeof roomData = {
-                            ...roomData,
-                            protalSlots: roomData.protalSlots.map((s) =>
-                                s.id === slotToUpdate.id
-                                    ? {
-                                        ...s,
-                                        bakugans: [...s.bakugans, newBakugan],
-                                    }
-                                    : s
-                            ),
-
-                            decksState: roomData.decksState.map((d) =>
-                                d.userId === userId
-                                    ? {
-                                        ...d,
-                                        bakugans: d.bakugans.map((b) =>
-                                            b?.bakuganData.key === bakuganKey
-                                                ? {
-                                                    ...b,
-                                                    bakuganData: {
-                                                        ...b.bakuganData,
-                                                        onDomain: true,
-                                                    },
-                                                }
-                                                : b
-                                        ),
-                                    }
-                                    : d
-                            ),
-                        }
-
-                        console.log(state)
-
-                        if (roomIndex != -1) {
-                            Battle_Brawlers_Game_State[roomIndex] = state
-                        }
-                    }
-                }
-            } else {
-                // cas général (pas le dernier Bakugan) → logique normale
-                if (!slotToUpdate?.bakugans.includes(newBakugan)) {
-                    const newDeckState: typeof bakuganFromDeck = {
-                        ...bakuganFromDeck,
-                        onDomain: true,
-                    }
-
-                    console.log(newDeckState)
-
-                    const state: typeof roomData = {
-                        ...roomData,
-                        protalSlots: roomData.protalSlots.map((s) =>
-                            s.id === slotToUpdate.id
-                                ? {
-                                    ...s,
-                                    bakugans: [...s.bakugans, newBakugan],
-                                }
-                                : s
-                        ),
-
-                        decksState: roomData.decksState.map((d) =>
-                            d.userId === userId
-                                ? {
-                                    ...d,
-                                    bakugans: d.bakugans.map((b) =>
-                                        b?.bakuganData.key === bakuganKey
-                                            ? {
-                                                ...b,
-                                                bakuganData: {
-                                                    ...b.bakuganData,
-                                                    onDomain: true,
-                                                },
-                                            }
-                                            : b
-                                    ),
-                                }
-                                : d
-                        ),
-                    }
-
-                    console.log(state)
-
-                    if (roomIndex != -1) {
-                        Battle_Brawlers_Game_State[roomIndex] = state
-                    }
-                }
-            }
-
-
-        }
-
-
-
-    }
-
+    // FR: Placement du Bakugan sur le slot via la fonction utilitaire
+    // ENG Place the Bakugan on the slot using the utility function
+    Battle_Brawlers_Game_State[roomIndex] = addBakuganToSlot({
+        bakuganFromDeck,
+        bakuganToAdd,
+        roomData,
+        slotId: slot as slots_id,
+        userId
+    })
 }

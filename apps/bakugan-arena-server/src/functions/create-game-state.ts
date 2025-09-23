@@ -205,19 +205,7 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             }
         }
 
-        return {
-            roomId: roomId,
-            players: playersState,
-            battleState,
-            persistantAbilities: [],
-            turnState,
-            decksState,
-            protalSlots,
-            status: {
-                finished: false,
-                winner: null
-            }
-        }
+        return state
 
     }
 }

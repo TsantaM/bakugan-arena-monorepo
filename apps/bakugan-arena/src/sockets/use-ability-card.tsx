@@ -1,16 +1,15 @@
 'use client'
 
-import { bakuganToMoveType, slots_id, stateType, useAbilityCardProps } from "@bakugan-arena/game-data"
+import { bakuganToMoveType, slots_id, stateType, useAbilityCardProps, useAbilityCardPropsFront } from "@bakugan-arena/game-data"
 import { useSocket } from "../providers/socket-provider"
 import useGetRoomState from "./get-room-state"
 import { useEffect } from "react"
-
 
 export default function useActiveAbilityCard({ roomId }: { roomId: string }) {
     const socket = useSocket()
     const { roomState, slots, setRoomState, setSlots } = useGetRoomState({ roomId })
 
-    const ActiveAbilityCard = ({ roomId, abilityId, userId, bakuganKey, slot_to_move, target_slot, target, slotToDrag, bakuganToAdd, bakuganToMove, destination, zone }: useAbilityCardProps) => {
+    const ActiveAbilityCard = ({ roomId, abilityId, userId, bakuganKey, slot_to_move, target_slot, target, slotToDrag, bakuganToAdd, bakuganToMove, destination, zone }: useAbilityCardPropsFront) => {
 
         const slotOfUser = slots?.find((s) => s.bakugans.find((b) => b.key === bakuganKey && b.userId === userId))?.id
         if (socket && roomState) {

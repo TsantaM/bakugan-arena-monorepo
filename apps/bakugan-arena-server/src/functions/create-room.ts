@@ -1,5 +1,4 @@
 import prisma from "@bakugan-arena/prisma"
-import { waitingListElements } from "../sockets/search-opponent"
 
 export const CreateRoom = async({player1ID, P1Deck, Player2ID, P2Deck} : {player1ID: string, P1Deck: string, Player2ID: string, P2Deck: string}) => {
     return await prisma.rooms.create({
