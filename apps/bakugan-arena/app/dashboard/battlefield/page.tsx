@@ -1,5 +1,4 @@
 import BattleFieldPage from "@/components/elements/battlefield/battlefield-page"
-import PlayerCards from "@/components/elements/battlefield/players-cards"
 import { RoomDataAction } from "@/src/actions/battlefield/get-players-data"
 import { getUser } from "@/src/actions/getUserSession"
 import { unauthorized } from "next/navigation"

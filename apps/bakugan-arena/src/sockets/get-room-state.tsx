@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useSocket } from "../providers/socket-provider";
-import { attribut, portalSlotsType, stateType } from "@bakugan-arena/game-data";
+import { attribut, deckType, portalSlotsType, stateType } from "@bakugan-arena/game-data";
 
 
 export default function useGetRoomState({ roomId }: { roomId: string }) {
     const socket = useSocket()
     const [roomState, setRoomState] = useState<stateType | undefined>()
     const [slots, setSlots] = useState<portalSlotsType>()
+    const [decksState, setDecksState] = useState<deckType[] | undefined>()
     const [finished, setFinished] = useState(false)
     const [winner, setWinner] = useState<string | null>()
 
@@ -30,7 +31,8 @@ export default function useGetRoomState({ roomId }: { roomId: string }) {
                 console.log(state)
                 setRoomState(state)
                 setSlots(state?.protalSlots)
-                if(state && state.status.finished === true) {
+                setDecksState(state?.decksState)
+                if (state && state.status.finished === true) {
                     setFinished(true)
                     setWinner(state.status.winner)
                 }
@@ -43,6 +45,7 @@ export default function useGetRoomState({ roomId }: { roomId: string }) {
         setRoomState,
         slots,
         setSlots,
+        decksState,
         getRoomData,
         finished,
         winner

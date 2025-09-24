@@ -22,7 +22,7 @@ import { useSocket } from "@/src/providers/socket-provider"
 import AbilityExtraInputs from "./turn-interface-buttons/abilities-extra-actions"
 import UseAbilityCardInNeutral from "./turn-interface-buttons/use-ability-card-in-neutral"
 
-export default function TurnInterface({ turn, set_gate, set_bakugan, use_ability, roomId, battleState, userId }: { turn: boolean, set_gate: boolean, set_bakugan: boolean, use_ability: boolean, roomId: string, battleState: battleState | undefined, userId: string }) {
+export default function TurnInterface({ turn, set_gate, set_bakugan, roomId, battleState, userId }: { turn: boolean, set_gate: boolean, set_bakugan: boolean, use_ability: boolean, roomId: string, battleState: battleState | undefined, userId: string }) {
     const socket = useSocket()
     const turnActionHook = useTurnActionStates({ roomId: roomId, battleState: battleState, userId: userId })
     useEffect(() => {
@@ -58,7 +58,7 @@ export default function TurnInterface({ turn, set_gate, set_bakugan, use_ability
                                 <div className="flex flex-col gap-2">
                                     <UseAbilityCard bakuganKey={turnActionHook.abilityUser} ability={turnActionHook.ability} roomId={roomId} userId={userId} selectAbility={turnActionHook.selectAbility} selectBakugan={turnActionHook.selectAbilityUser} />
                                     <AbilityExtraInputs bakuganToMove={turnActionHook.bakuganToMove} select_bakugan_to_move={turnActionHook.select_bakugan_to_move} select_destination={turnActionHook.select_destination} bakugaToAdd={turnActionHook.bakuganToAdd} select_bakugan_to_add={turnActionHook.select_bakugan_to_add} selectTarget={turnActionHook.selectTarget} target={turnActionHook.target} select_slot_to_drag={turnActionHook.select_slot_to_drag} slotToDrag={turnActionHook.slotToDrag} ability={turnActionHook.ability} selected_slot_to_move={turnActionHook.select_slot_to_move} selected_target={turnActionHook.selectTarget} slot_target={turnActionHook.slot_target} selected_target_slot={turnActionHook.select_slot_target} bakuganKey={turnActionHook.abilityUser} roomId={roomId} userId={userId} />
-                                    <ActivateGateCard roomId={roomId} userId={userId} setActiveGate={turnActionHook.setActive} />
+                                    <ActivateGateCard roomId={roomId} userId={userId} setActiveGate={turnActionHook.setActiveGate} />
                                 </div>
                                 <DialogFooter>
                                     <DialogClose asChild>

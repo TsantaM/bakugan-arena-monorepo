@@ -23,7 +23,6 @@ export type player = {
 export default function PlayerCards({ player, opponent, roomId, userId, turn, set_gate, set_bakugan, use_ability }: { player: player | undefined, opponent: player | undefined, roomId: string, userId: string, turn: boolean, set_gate: boolean, set_bakugan: boolean, use_ability: boolean }) {
 
     const { roomState } = useGetRoomState({ roomId })
-    const userData = roomState?.decksState.find((d) => d.userId === userId)
 
     const battleState = roomState?.battleState
     const slotOfBattle = roomState?.protalSlots.find((p) => p.id === battleState?.slot)
