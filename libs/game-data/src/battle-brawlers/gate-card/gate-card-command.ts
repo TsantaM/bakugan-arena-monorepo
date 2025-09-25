@@ -22,9 +22,10 @@ export const Rechargement: gateCardType = {
             }
         }
     },
-    onCanceled: ({ roomState, slot, userId, bakuganKey }) => {
+    onCanceled: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        const bakuganUser = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+        const gateOwner = slotOfGate?.bakugans.find((b) => b.userId === slotOfGate.portalCard?.userId)
+        const bakuganUser = slotOfGate?.bakugans.find((b) => b.key === gateOwner?.key && b.userId === gateOwner.userId)
 
         if (slotOfGate && bakuganUser && slotOfGate.state.open && !slotOfGate.state.canceled) {
             const bakuganAttribut = bakuganUser.attribut

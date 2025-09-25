@@ -60,8 +60,8 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
 
     // FR: Mise à jour des bakugans selon le résultat ===
     // ENG:  Update bakugans according to the result ===
-    if (deckToUpdate && deckToUpdate.bakugans && p1Deck && p2Deck) {
-        if (!isEquality && winner && loser) {
+    if (p1Deck && p2Deck) {
+        if (!isEquality && winner && loser && deckToUpdate && deckToUpdate.bakugans) {
             // FR Si il y a un gagnant, appliquer les effets de victoire ===
             // ENG: Apply winner abilities effects ===
             applyWinAbilitiesEffects({ slot: slot, winner: winner, roomData: roomData })

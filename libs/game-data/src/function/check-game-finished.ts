@@ -10,6 +10,10 @@ export const CheckGameFinished = async ({ roomId, roomState }: { roomId: string,
         const player2 = roomState.players[1].userId
         const p2Decks = roomState.decksState.find((d) => d.userId === player2)
 
+        const gateOnDomain = roomState.protalSlots.filter((s) => s.portalCard !== null && s.can_set === false)
+        const p1Gates = roomState.players.find((p) => p.userId === player1)?.usable_gates
+        const p2Gates = roomState.players.find((p) => p.userId === player2)?.usable_gates
+
         if (p1Decks && p2Decks) {
 
             const p1State = p1Decks.bakugans.reduce((count, b) => {
@@ -64,6 +68,20 @@ export const CheckGameFinished = async ({ roomId, roomState }: { roomId: string,
                         finished: true,
                     }
                 })
+            } else if (gateOnDomain.length === 0 && p1Gates && p2Gates && p1Gates === 0 && p2Gates === 0) {
+
+                roomState.status.finished = true,
+                    roomState.status.winner = null
+
+                await prisma.rooms.update({
+                    where: {
+                        id: roomId
+                    },
+                    data: {
+                        finished: true,
+                    }
+                })
+
             } else if (p1State > 0 && p2State > 0) {
                 return
             } else {
