@@ -1,9 +1,13 @@
 'use client'
 
-import useGetRoomState from "@/src/sockets/get-room-state"
-import Image from "next/image"
 import TurnInterface from "./turn-interface"
 import GameBoard from "./game-board/game-board"
+import TurnCounter from "./game-board/turn-counter"
+import { ProfilePictureLeft, ProfilePictureRigth } from "./game-board/profile-picture-zone"
+import { BakuganPreviewOnFocused, BattleBakuganPreview } from "./game-board/bakugan-preview"
+import { AliveCounterLeft, AliveCounterRight } from "./game-board/alive-counter"
+import { useFocusedBakugan } from "@/src/store/focused-bakugan-store"
+import { useGlobalGameState } from "@/src/store/global-game-state-store"
 
 
 export type player = {
@@ -20,96 +24,51 @@ export type player = {
     };
 }
 
-export default function PlayerCards({ player, opponent, roomId, userId, turn, set_gate, set_bakugan, use_ability }: { player: player | undefined, opponent: player | undefined, roomId: string, userId: string, turn: boolean, set_gate: boolean, set_bakugan: boolean, use_ability: boolean }) {
+export default function PlayerCards({ player, opponent, roomId, userId, turn, set_bakugan, use_ability }: { player: player | undefined, opponent: player | undefined, roomId: string, userId: string, turn: boolean, set_bakugan: boolean, use_ability: boolean }) {
 
-    const { roomState } = useGetRoomState({ roomId })
+    const slots = useGlobalGameState((state) => state.gameState?.protalSlots)
+    const battleState = useGlobalGameState((state) => state.gameState?.battleState)
 
-    const battleState = roomState?.battleState
-    const slotOfBattle = roomState?.protalSlots.find((p) => p.id === battleState?.slot)
+    const { usersBakugan, opponentBakugan } = useFocusedBakugan()
+    const playerData = player?.player
+    const opponentData = opponent?.player
+
+    const slotOfBattle = slots?.find((p) => p.id === battleState?.slot)
     const battleConditions = slotOfBattle && battleState && battleState.battleInProcess && battleState.paused === false ? true : false
-    const usersBakugan = slotOfBattle?.bakugans.filter((b) => b.userId === userId)
-    const userTotal = usersBakugan?.reduce((acc, bakugan) => acc + bakugan.currentPower, 0)
-    const opponentsBakugan = slotOfBattle?.bakugans.filter((b) => b.userId !== userId)
-    const opponentsTotal = opponentsBakugan?.reduce((acc, bakugan) => acc + bakugan.currentPower, 0)
 
 
     return <>
-
         <div className="relative z-20 w-full h-[75vh] flex justify-between">
             <div className="w-[25vw] md:w-[20vw] lg:w-[15vw] flex flex-col gap-2">
-                <div className="relative z-20 w-full aspect-[4/3] bg-amber-400 p-1 rounded-lg">
-                    <div className="relative w-full h-full bg-foreground rounded-sm overflow-hidden">
-                        {
-                            player?.player.image && player!.player.displayUsername ? <Image src={player.player.image} alt={player.player.displayUsername} fill /> : <Image src={'/images/default-profil-picture.png'} alt={''} fill />
-                        }
-                    </div>
-                </div>
-                <div className={`relative z-20 w-full aspect-[3/4] bg-amber-400 p-1 rounded-lg ${battleConditions ? `visible` : `hidden`}`}>
-                    <div className="relative w-full h-full rounded-sm flex flex-col items-center justify-center gap-10" >
-                        {
-                            slotOfBattle && <Image src={`/images/attributs-background/${slotOfBattle.bakugans.find((b) => b.userId === userId)?.attribut}.png`} alt={`attribut background ${slotOfBattle.bakugans.find((b) => b.userId === userId)?.attribut}`} fill className="rounded-sm" />
-                        }
+                {
+                    playerData && <ProfilePictureLeft player={playerData} />
+                }
+                {
+                    !usersBakugan && !opponentBakugan && battleConditions && slotOfBattle && player && <BattleBakuganPreview battleState={battleState} roomId={roomId} slot={slotOfBattle} userId={player?.player.id} />
+                }
+                {
+                    usersBakugan && <BakuganPreviewOnFocused bakugan={usersBakugan} />
+                }
 
-                        {
-                            slotOfBattle && slotOfBattle.bakugans.filter((b) => b.userId === userId).map((b, index) => <div key={index} className="relative flex flex-col">
-
-                                <Image src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} alt={b.key} width={100} height={100} />
-
-                            </div>)
-                        }
-                        {
-                            slotOfBattle && slotOfBattle.bakugans.filter((b) => b.userId === userId).map((b, index) => <div key={index} className="rounded-sm bg-slate-950 absolute bottom-1 left-[50%] translate-x-[-50%] w-[95%] p-3 flex items-center justify-between">
-                                <div className="relative size-7">
-                                    {
-                                        slotOfBattle && <Image src={`/images/attributs/${slotOfBattle.bakugans.find((b) => b.userId === userId)?.attribut}.png`} alt={`attribut background ${slotOfBattle.bakugans.find((b) => b.userId === userId)?.attribut}`} fill className="rounded-sm" />
-                                    }
-                                </div>
-                                <p className="text-center leading-0 text-[white]">{userTotal ? userTotal : 0}</p>
-                            </div>)
-                        }
-                    </div>
-
-                </div>
-                <TurnInterface turn={turn} set_bakugan={set_bakugan} set_gate={set_gate} use_ability={use_ability} roomId={roomId} battleState={battleState} userId={userId} />
+                <TurnInterface turn={turn} set_bakugan={set_bakugan} use_ability={use_ability} roomId={roomId} battleState={battleState} userId={userId} />
             </div>
 
-            <GameBoard roomId={roomId} userId={userId} />
+            <AliveCounterLeft userId={userId} />
+            <TurnCounter />
+            <AliveCounterRight userId={userId} />
 
+            <GameBoard userId={userId} />
 
-            <div className="relative z-20 w-[25vw] md:w-[20vw] lg:w-[15vw] self-end md:self-start flex flex-col gap-2">
-                <div className="w-full aspect-[4/3] bg-amber-400 p-1 rounded-lg">
-                    <div className="relative w-full h-full bg-foreground rounded-sm overflow-hidden">
-                        {
-                            opponent?.player.image && opponent!.player.displayUsername ? <Image src={opponent.player.image} alt={opponent.player.displayUsername} fill /> : <Image src={'/images/default-profil-picture.png'} alt={''} fill />
-                        }
-                    </div>
-                </div>
-
-                <div className={`w-full aspect-[3/4] bg-amber-400 p-1 rounded-lg ${battleConditions ? `visible` : `hidden`}`}>
-                    <div className="relative w-full h-full rounded-sm flex flex-col items-center justify-center gap-10">
-                        {
-                            slotOfBattle && <Image src={`/images/attributs-background/${slotOfBattle.bakugans.find((b) => b.userId !== userId)?.attribut}.png`} alt={`attribut background ${slotOfBattle.bakugans.find((b) => b.userId !== userId)?.attribut}`} fill className="rounded-sm" />
-                        }
-
-                        {
-                            slotOfBattle && slotOfBattle.bakugans.filter((b) => b.userId !== userId).map((b, index) => <div key={index} className="relative flex flex-col">
-
-                                <Image src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} alt={b.key} width={100} height={100} />
-
-                            </div>)
-                        }
-                        {
-                            slotOfBattle && slotOfBattle.bakugans.filter((b) => b.userId !== userId).map((b, index) => <div key={index} className="rounded-sm bg-slate-950 absolute bottom-1 left-[50%] translate-x-[-50%] w-[95%] p-3 flex items-center justify-between">
-                                <div className="relative size-7">
-                                    {
-                                        slotOfBattle && <Image src={`/images/attributs/${slotOfBattle.bakugans.find((b) => b.userId !== userId)?.attribut}.png`} alt={`attribut background ${slotOfBattle.bakugans.find((b) => b.userId !== userId)?.attribut}`} fill className="rounded-sm" />
-                                    }
-                                </div>
-                                <p className="text-center leading-0 text-[white]">{opponentsTotal ? opponentsTotal : 0}</p>
-                            </div>)
-                        }
-                    </div>
-                </div>
+            <div className="relative z-20 w-[25vw] md:w-[20vw] lg:w-[15vw] self-start flex flex-col gap-2">
+                {
+                    opponentData && <ProfilePictureRigth player={opponentData} />
+                }
+                {
+                    !opponentBakugan && !usersBakugan && battleConditions && slotOfBattle && opponent && <BattleBakuganPreview battleState={battleState} roomId={roomId} slot={slotOfBattle} userId={opponent?.player.id} />
+                }
+                {
+                    opponentBakugan && <BakuganPreviewOnFocused bakugan={opponentBakugan} />
+                }
             </div>
 
         </div>

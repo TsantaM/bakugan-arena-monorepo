@@ -1,6 +1,7 @@
 import { gateCardType } from "../../type/game-data-types";
 import { ResetSlot } from "../../function/reset-slot";
 import { CheckGameFinished } from "../../function/check-game-finished";
+import { CheckBattle } from "../../function/check-battle-in-process";
 
 export const MineFantome: gateCardType = {
     key: 'mine-fantome',
@@ -27,6 +28,10 @@ export const MineFantome: gateCardType = {
             roomState.battleState.battleInProcess = false
             roomState.battleState.slot = null
             roomState.battleState.paused = false
+
+            roomState.turnState.set_new_bakugan = true
+            roomState.turnState.set_new_gate = true
+
             CheckGameFinished({ roomId: roomState.roomId, roomState })
         }
 
@@ -74,29 +79,44 @@ export const Echange: gateCardType = {
                 .find(d => d.userId !== userId)?.bakugans
                 .filter((b): b is NonNullable<typeof b> => b !== null && b !== undefined) // on retire null/undefined
                 .map(b => b.bakuganData)                  // On prend les données réelles du bakugan
-                .filter(bd => usersBakuganKeys.includes(bd.key))               // On garde uniquement ceux sur la carte
+                .filter(bd => opponentsBakuganKey.includes(bd.key))               // On garde uniquement ceux sur la carte
                 .map(bd => bd)
             const totalPowerOpponentsBakugans = opponentsBakugan.reduce((acc, bakugan) => acc + bakugan.currentPower, 0)
 
             if (totalPowerUsersBakugans >= 400) {
                 usersBakuganDeck?.forEach((b) => {
-                    b.onDomain = false,
-                        b.elimined = true
+                    b.onDomain = false
+                    b.elimined = true
                 })
-                slotOfGate.bakugans = slotOfGate.bakugans.filter(
-                    (b) => !usersBakuganKeys.includes(b.key)
-                )
+                // slotOfGate.bakugans = slotOfGate.bakugans.filter(
+                //     (b) => !usersBakuganKeys.includes(b.key)
+                // )
+            } else {
+                usersBakuganDeck?.forEach((b) => {
+                    b.onDomain = false
+                })
             }
 
             if (totalPowerOpponentsBakugans >= 400) {
+                console.log('elimination')
                 opponentsBakuganDeck?.forEach((b) => {
-                    b.onDomain = false,
-                        b.elimined = true
+                    b.onDomain = false
+                    b.elimined = true
                 })
-                slotOfGate.bakugans = slotOfGate.bakugans.filter(
-                    (b) => !opponentsBakuganKey.includes(b.key)
-                )
+                // slotOfGate.bakugans = slotOfGate.bakugans.filter(
+                //     (b) => !opponentsBakuganKey.includes(b.key)
+                // )
+            } else {
+                opponentsBakuganDeck?.forEach((b) => {
+                    b.onDomain = false
+                })
             }
+
+            ResetSlot(slotOfGate)
+            CheckBattle({ roomState })
+
+            roomState.turnState.set_new_bakugan = true
+            roomState.turnState.set_new_gate = true
 
             CheckGameFinished({ roomId: roomState.roomId, roomState })
 

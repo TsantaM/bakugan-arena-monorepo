@@ -24,8 +24,13 @@ export const MirageAquatique: abilityCardsType = {
                     slotTarget.bakugans.push(user)
                     slotTarget.state.blocked = true
                     slotOfGate.bakugans.splice(index, 1)
-                    CheckBattle({ roomState })
+
+                    roomState.battleState.battleInProcess = false
+                    roomState.battleState.paused = false
+                    roomState.battleState.slot = null
                     roomState.battleState.turns = 2
+
+                    CheckBattle({ roomState })
                 }
             }
         }

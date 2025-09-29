@@ -119,6 +119,9 @@ export const AntiMuse: exclusiveAbilitiesType = {
     extraInputs: ['drag-bakugan'],
     usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot, target, slotToDrag }) => {
+
+        if(!roomState) return
+
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const slotTarget = roomState?.protalSlots.find((s) => s.id === slotToDrag)
         console.log(target, slotToDrag, slot)
@@ -139,6 +142,12 @@ export const AntiMuse: exclusiveAbilitiesType = {
             if (user && bakuganToDrag) {
                 slotOfGate.bakugans.push(bakuganToDrag)
                 slotTarget.bakugans.splice(BakuganTargetIndex, 1)
+
+                roomState.battleState.battleInProcess = false
+                roomState.battleState.paused = false
+                roomState.battleState.slot = null
+                roomState.battleState.turns = 2
+
                 CheckBattle({ roomState })
             }
         }
@@ -423,6 +432,7 @@ export const PlexusSolaire: exclusiveAbilitiesType = {
                 opponent.currentPower -= 50
                 if (gate && gate.onCanceled && slotOfGate.state.open && !slotOfGate.state.canceled) {
                     gate.onCanceled({ roomState: roomState, slot: slot, userId: userId, bakuganKey: bakuganKey })
+                    slotOfGate.state.canceled = true
                 }
             }
 
@@ -567,9 +577,13 @@ export const RegainSubit: exclusiveAbilitiesType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const opponents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
 
-            if (user) {
+            if (user && opponents.length > 0) {
                 user.currentPower += 100
+                opponents.forEach((opponent) => {
+                    opponent.currentPower -= 100
+                })
             }
         }
     }

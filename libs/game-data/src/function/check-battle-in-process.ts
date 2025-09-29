@@ -22,7 +22,7 @@ export const CheckBattle = ({ roomState }: { roomState: stateType }) => {
                 use_ability_card: true
             }
 
-        } 
+        }
         else {
             roomState.battleState = {
                 ...roomState.battleState,

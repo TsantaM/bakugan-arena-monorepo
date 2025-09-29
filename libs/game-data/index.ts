@@ -3,7 +3,7 @@ import { AbilityCards, AbilityCardsList } from './src/battle-brawlers/ability-ca
 import { ExclusiveAbilities, ExclusiveAbilitiesList } from './src/battle-brawlers/exclusive-abilities'
 import { GateCards, GateCardsList } from './src/battle-brawlers/gate-gards'
 import { attribut, bakuganType, abilityCardsType, exclusiveAbilitiesType, gateCardType, bakuganToMoveType } from './src/type/game-data-types'
-import { slots_id, stateType, portalSlotsType, portalSlotsTypeElement, deckType, bakuganOnSlot } from './src/type/room-types'
+import { slots_id, stateType, portalSlotsType, portalSlotsTypeElement, deckType, bakuganOnSlot, deck, playerType, playersType } from './src/type/room-types'
 import { CheckGameFinished } from './src/function/check-game-finished'
 import { CheckBattle } from './src/function/check-battle-in-process'
 import { ResetSlot } from "./src/function/reset-slot";
@@ -54,6 +54,10 @@ export type {
     abilityCardsType,
     exclusiveAbilitiesType,
     gateCardType,
+    
+    playersType,
+    deck,
+    playerType,
     slots_id,
     stateType,
     portalSlotsType,

@@ -2,6 +2,24 @@ import { attribut } from "./game-data-types"
 
 export type slots_id = "slot-1" | "slot-2" | "slot-3" | "slot-4" | "slot-5" | "slot-6"
 
+export type playersType = {
+    id: string;
+    image: string | null;
+    displayUsername: string | null;
+}
+
+export type deck = {
+    bakugans: string[];
+    ability: string[];
+    exclusiveAbilities: string[];
+    gateCards: string[];
+}
+
+export type playerType = {
+    player: playersType;
+    deck: deck;
+}
+
 export type battleState = {
     battleInProcess: boolean,
     slot: slots_id | null,

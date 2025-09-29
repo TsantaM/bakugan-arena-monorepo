@@ -24,6 +24,12 @@ export const CombatAerien: abilityCardsType = {
                     slotTarget.bakugans.push(user)
                     slotTarget.state.blocked = true
                     slotOfGate.bakugans.splice(index, 1)
+
+                    roomState.battleState.battleInProcess = false
+                    roomState.battleState.paused = false
+                    roomState.battleState.slot = null
+                    roomState.battleState.turns = 2
+
                     CheckBattle({ roomState })
                 }
             }
@@ -74,8 +80,22 @@ export const SouffleTout: abilityCardsType = {
             if (user && opponent && slotTarget && slotTarget.portalCard !== null) {
                 slotTarget.bakugans.push(opponent)
                 slotOfGate.bakugans.splice(index, 1)
-                CheckBattle({ roomState })
+
+                roomState.battleState.battleInProcess = false
+                roomState.battleState.paused = false
+                roomState.battleState.slot = null
                 roomState.battleState.turns = 2
+
+                CheckBattle({ roomState })
+                if (!roomState.battleState.battleInProcess) {
+                    roomState.battleState.turns = 2
+                    roomState.turnState = {
+                        ...roomState.turnState,
+                        set_new_bakugan: true,
+                        set_new_gate: true,
+                        use_ability_card: true
+                    }
+                }
             }
         }
     }
@@ -134,10 +154,10 @@ export const TornadeExtreme: abilityCardsType = {
             const user = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
 
             if (user && bakuganToDrag) {
-                    slotOfGate.bakugans.push(bakuganToDrag)
-                    slotTarget.bakugans.splice(BakuganTargetIndex, 1)
-                    CheckBattle({ roomState })
-                }
+                slotOfGate.bakugans.push(bakuganToDrag)
+                slotTarget.bakugans.splice(BakuganTargetIndex, 1)
+                CheckBattle({ roomState })
+            }
         }
 
     }

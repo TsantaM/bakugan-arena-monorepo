@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSocket } from "../providers/socket-provider";
 import { attribut, deckType, portalSlotsType, stateType } from "@bakugan-arena/game-data";
+import { useGlobalGameState } from "../store/global-game-state-store";
 
 
 export default function useGetRoomState({ roomId }: { roomId: string }) {
@@ -12,7 +13,7 @@ export default function useGetRoomState({ roomId }: { roomId: string }) {
     const [decksState, setDecksState] = useState<deckType[] | undefined>()
     const [finished, setFinished] = useState(false)
     const [winner, setWinner] = useState<string | null>()
-
+    const { setGlobalState } = useGlobalGameState()
     const getRoomData = () => {
         if (socket) {
             socket.emit('get-room-state', ({ roomId }))
@@ -29,6 +30,8 @@ export default function useGetRoomState({ roomId }: { roomId: string }) {
             socket.emit('get-room-state', ({ roomId }))
             socket.on('room-state', (state: stateType) => {
                 console.log(state)
+                setGlobalState(state)
+
                 setRoomState(state)
                 setSlots(state?.protalSlots)
                 setDecksState(state?.decksState)

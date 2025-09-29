@@ -58,11 +58,11 @@ export const GrandEsprit: gateCardType = {
     },
     onCanceled({ roomState, slot, bakuganKey, userId }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        const bakuganUser = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+        const bakuganUser = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === slotOfGate.portalCard?.userId)
         const gateCount = roomState?.protalSlots.filter((s) => s.portalCard !== null)
 
         if (slotOfGate && bakuganUser && gateCount && slotOfGate.state.open && !slotOfGate.state.canceled) {
-            const malus = 100 * gateCount.length
+            const malus = 50 * gateCount.length
             bakuganUser.currentPower = bakuganUser.currentPower - malus
             slotOfGate.state.canceled = true
         }

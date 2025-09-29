@@ -1,13 +1,12 @@
 "use client"
 
-import useGetRoomState from "@/src/sockets/get-room-state"
 import { useRef, useState } from "react"
 import GateCardOnBoard from "./gate-cards"
+import { useGlobalGameState } from "@/src/store/global-game-state-store"
 
-export default function MapScrollable({ roomId, userId }: { roomId: string, userId: string }) {
+export default function MapScrollable({ userId }: { userId: string }) {
 
-  const { slots } = useGetRoomState({ roomId })
-
+  const slots = useGlobalGameState((state) => state.gameState?.protalSlots)
   const mapRef = useRef<HTMLDivElement>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [startPos, setStartPos] = useState({ x: 0, y: 0 })
@@ -42,9 +41,9 @@ export default function MapScrollable({ roomId, userId }: { roomId: string, user
           onMouseDown={handleMouseDown}
         >
           {/* Ici tu peux mettre ta grille de cartes */}
-          <div className="rotate-x-45 grid grid-cols-3 grid-rows-2 items-center justify-center">
+          <div className="rotate-x-90 grid grid-cols-3 grid-rows-2 items-center justify-center">
             {slots.map((s, index) => (
-              <GateCardOnBoard slot={s} key={index} userId={userId}/>
+              <GateCardOnBoard slotId={s.id} key={index} userId={userId}/>
             ))}
           </div>
         </div>
