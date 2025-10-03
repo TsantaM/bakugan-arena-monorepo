@@ -118,7 +118,8 @@ export const TripleCombat: gateCardType = {
                         attribut: userStrongest.bakuganData.attribut,
                         image: userStrongest.bakuganData.image,
                         abilityBlock: false,
-                        assist: false
+                        assist: false,
+                        family: userStrongest.bakuganData.family
                     }
 
                     slotToUpdate.bakugans.push(usersBakugan)
@@ -190,7 +191,8 @@ export const QuatuorDeCombat: gateCardType = {
                         attribut: userWeakest.bakuganData.attribut,
                         image: userWeakest.bakuganData.image,
                         abilityBlock: false,
-                        assist: false
+                        assist: false,
+                        family: userWeakest.bakuganData.family
                     }
 
                     slotToUpdate.bakugans.push(usersBakugan)
@@ -206,7 +208,8 @@ export const QuatuorDeCombat: gateCardType = {
                         attribut: opponentWeakest.bakuganData.attribut,
                         image: opponentWeakest.bakuganData.image,
                         abilityBlock: false,
-                        assist: false
+                        assist: false,
+                        family: opponentWeakest.bakuganData.family
                     }
 
                     slotToUpdate.bakugans.push(opponentBakugan)

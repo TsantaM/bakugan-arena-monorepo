@@ -23,7 +23,7 @@ export function BattleBakuganPreview({ slot, userId, battleState, roomId }: { sl
     return (
         <>
 
-            <div className={`relative z-20 w-full aspect-[3/4] bg-amber-400 p-1 flex`}>
+            <div className={`relative z-50 w-full aspect-[3/4] bg-amber-400 p-1 flex`}>
                 {
                     bakugans.map((b, index) => <SpritePreview bakugan={b} key={index} />)
                 }
@@ -38,7 +38,7 @@ export function BakuganPreviewOnFocused({ bakugan }: { bakugan: bakuganOnSlot}) 
     return (
         <>
 
-            <div className={`relative z-20 w-full aspect-[3/4] bg-amber-400 p-1 flex`}>
+            <div className={`relative z-50 w-full aspect-[3/4] bg-amber-400 p-1 flex`}>
                 <SpritePreview bakugan={bakugan} />
                 <PowerLevel  attribut={bakugan.attribut} powerLevel={bakugan.currentPower} />
             </div>

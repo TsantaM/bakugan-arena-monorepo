@@ -1,4 +1,5 @@
-import { bakuganType } from "../../type/game-data-types"
+import { bakuganType, gateCardType } from "../../type/game-data-types"
+import { CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
 
 export const FalconeerPyrus: bakuganType = {
     key: 'falconeer-pyrus',
@@ -18,4 +19,17 @@ export const FalconeerVentus: bakuganType = {
     exclusiveAbilities: [],
     family: 'Falconeer',
     image: 'falconeer'
+}
+
+export const FalconeerGateCard: gateCardType = {
+    key: 'falconeer-gate-card',
+    name: 'Carte Personnage: Falconeer',
+    maxInDeck: 1,
+    description: `Lorsque cette carte est activée elle double le niveau de tous les Falconneer présent sur elle`,
+    family: 'Falconeer',
+    onOpen({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'falconeer-gate-card')
+        CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Falconeer' })
+
+    },
 }

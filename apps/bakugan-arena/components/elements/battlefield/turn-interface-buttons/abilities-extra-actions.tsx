@@ -1,67 +1,73 @@
 'use client'
 
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
-import useGetRoomState from "@/src/sockets/get-room-state"
-import { AbilityCardsList, BakuganList, bakuganToMoveType, ExclusiveAbilitiesList, slots_id } from "@bakugan-arena/game-data"
+import { useGlobalGameState } from "@/src/store/global-game-state-store"
+import { useTurnActionStore } from "@/src/store/turn-actions-store"
+import { AbilityCardsList, AddBakuganAbilityFilter, BakuganList, DragBakuganAbilityFilter, ExclusiveAbilitiesList, MoveBakuganAbilityFilters, MoveOpponentAbilityFilter, slots_id } from "@bakugan-arena/game-data"
 import Image from "next/image"
 
 type AbilityExtraInputsProps = {
-    roomId: string,
-    ability: string,
-    bakuganKey: string,
-    userId: string,
-    slot_target: slots_id | '',
-    slotToDrag: slots_id | '',
-    target: string | '',
-    bakugaToAdd: string | '',
-    bakuganToMove: bakuganToMoveType | undefined,
-    selectTarget: (bakuganKey: string) => void,
-    selected_target: (bakuganKey: string) => void,
-    selected_target_slot: (slot_target: slots_id) => void,
-    selected_slot_to_move: (slot_to_move: slots_id) => void,
-    select_slot_to_drag: (slot_target: slots_id) => void,
-    select_bakugan_to_add: (bakugan_to_add: string) => void,
-    select_bakugan_to_move: (bakuganToMove : bakuganToMoveType) => void,
-    select_destination: (destination: slots_id) => void
-}
+    userId: string,}
 
 export default function AbilityExtraInputs({
-    roomId, ability, bakuganKey, userId, slot_target, target, slotToDrag, bakuganToMove ,selected_target, selected_slot_to_move, selected_target_slot, select_slot_to_drag, selectTarget, select_bakugan_to_add, select_bakugan_to_move, select_destination }
+    userId }
     : AbilityExtraInputsProps) {
 
+
+    const { ability, abilityUser: bakuganKey, target, slotToDrag, bakuganToMove } = useTurnActionStore((state) => state.turnActions)
+    const {
+        selectTarget,
+        select_slot_to_move :selected_slot_to_move,
+        select_slot_to_drag,
+        select_bakugan_to_add,
+        select_bakugan_to_move,
+        select_destination
+    } = useTurnActionStore()
+    
     console.log(target, slotToDrag)
 
-    const { roomState } = useGetRoomState({ roomId })
-    const abilityUserSlots = roomState?.protalSlots.find((s) => s.bakugans.find((b) => b.key === bakuganKey && b.userId === userId))?.id
+
     console.log(ability)
     const abilityData = AbilityCardsList.find((a) => a.key === ability)
     console.log(abilityData)
     const exclusiveData = ExclusiveAbilitiesList.find((e) => e.key === ability)
 
-    const otherSlots = roomState?.protalSlots.filter((s) => s.id !== abilityUserSlots && s.portalCard !== null)
-    const targets = otherSlots?.find((s) => s.id === slot_target)?.bakugans
+    const slots = useGlobalGameState((state) => state.gameState?.protalSlots)
+    const decksState = useGlobalGameState((state) => state.gameState?.decksState)
 
-    const draggableSlots = roomState?.protalSlots.filter((s) => s.id !== abilityUserSlots)
-    const draggables = draggableSlots?.find((s) => s.id === slotToDrag)?.bakugans
+    // Move Bakugan Filter
+    const bakuganToMoveInput = MoveBakuganAbilityFilters({bakuganToMove, slots})
 
-    const addableBakugans = roomState?.decksState.find((d) => d.userId === userId)?.bakugans.filter((b) => !b?.bakuganData.elimined && !b?.bakuganData.onDomain)
-    const bakuganToMoveList: bakuganToMoveType[] | undefined = roomState?.protalSlots.filter((s) => s.portalCard !== null && !s.can_set && s.bakugans.length > 0).flatMap((slot) =>
-        slot.bakugans.map((bakugan) => ({
-            slot: slot.id,
-            bakuganKey: bakugan.key,
-            userId: bakugan.userId
-        }))
-    )
-    const bakuganToMoveDestinations = roomState?.protalSlots.filter((s) => s.id !== bakuganToMove?.slot && !s.can_set && s.portalCard !== null)
+    const bakuganToMoveList = bakuganToMoveInput?.bakuganToMoveList
+    const bakuganToMoveDestinations = bakuganToMoveInput?.bakuganToMoveDestinations
 
-    if (roomState && abilityData && abilityData.extraInputs) {
+
+    // Move Opponent Filter && Move Self Filter
+    const moveOpponentInput = MoveOpponentAbilityFilter({slots, bakuganKey, userId})
+
+    const otherSlots = moveOpponentInput?.otherSlots
+
+    // Drag Bakugan Filter
+    const dragBakuganInput = DragBakuganAbilityFilter({slots, bakuganKey, slotToDrag, userId})
+
+    const draggableSlots = dragBakuganInput?.draggableSlots
+    const draggables = dragBakuganInput?.draggables 
+
+    // Add Bakugan Filter
+    const addBakuganInput = AddBakuganAbilityFilter({decksState, userId})
+
+    const addableBakugans = addBakuganInput?.addableBakugans
+
+    console.log(abilityData?.extraInputs)
+
+    if (abilityData && abilityData.extraInputs) {
         return <div className="grid grid-cols-2 items-center justify-between gap-3">
 
             {
                 abilityData.extraInputs.includes('move-bakugan') && bakuganToMoveList && <>
                     <Select onValueChange={(val) => {
                         const select_bakugan = bakuganToMoveList.find((b) => b.bakuganKey === val)
-                        if(select_bakugan) {
+                        if (select_bakugan) {
                             select_bakugan_to_move(select_bakugan)
                         }
                     }}>
@@ -86,7 +92,7 @@ export default function AbilityExtraInputs({
                             <SelectGroup>
                                 <SelectLabel>Select the target of ability</SelectLabel>
                                 {
-                                    bakuganToMoveDestinations && bakuganToMoveDestinations.map((s, index) => <SelectItem key={index} value={s.id}>{s.id}</SelectItem>)
+                                    bakuganToMoveDestinations?.map((s, index) => <SelectItem key={index} value={s.id}>{s.id}</SelectItem>)
                                 }
                             </SelectGroup>
                         </SelectContent>
@@ -178,14 +184,14 @@ export default function AbilityExtraInputs({
             }
         </div>
     }
-    if (roomState && exclusiveData && exclusiveData.extraInputs) {
+    if (exclusiveData && exclusiveData.extraInputs) {
         return <div className="grid grid-cols-2 items-center justify-between gap-3">
 
             {
                 exclusiveData.extraInputs.includes('move-bakugan') && bakuganToMoveList && <>
                     <Select onValueChange={(val) => {
                         const select_bakugan = bakuganToMoveList.find((b) => b.bakuganKey === val)
-                        if(select_bakugan) {
+                        if (select_bakugan) {
                             select_bakugan_to_move(select_bakugan)
                         }
                     }}>
@@ -303,3 +309,80 @@ export default function AbilityExtraInputs({
         </div>
     }
 }
+
+// 'use client'
+
+// import { useTurnActionStore } from "@/src/store/turn-actions-store"
+// import { AbilityCardsList, ExclusiveAbilitiesList } from "@bakugan-arena/game-data"
+// import MoveBakugan from "./extra-inputs-abilities/move-bakugan"
+// import MoveOpponent from "./extra-inputs-abilities/move-opponent"
+// import MoveSelf from "./extra-inputs-abilities/move-self"
+// import DragBakugan from "./extra-inputs-abilities/drag-bakugan"
+// import AddBakugan from "./extra-inputs-abilities/add-bakugan"
+
+// type AbilityExtraInputsProps = {
+//     userId: string,
+// }
+
+// export default function AbilityExtraInputs({
+//     userId }
+//     : AbilityExtraInputsProps) {
+
+//     const { ability } = useTurnActionStore((state) => state.turnActions)
+
+//     console.log(ability)
+//     const abilityData = AbilityCardsList.find((a) => a.key === ability)
+//     console.log(abilityData)
+//     const exclusiveData = ExclusiveAbilitiesList.find((e) => e.key === ability)
+
+//     console.log(abilityData?.extraInputs)
+
+//     if (abilityData && abilityData.extraInputs) {
+//         return <div className="grid grid-cols-2 items-center justify-between gap-3">
+
+//             {
+//                 abilityData.extraInputs.includes('move-bakugan') && <MoveBakugan />
+//             }
+
+//             {
+//                 abilityData.extraInputs.includes('move-opponent') && <MoveOpponent userId={userId} />
+//             }
+
+//             {
+//                 abilityData.extraInputs.includes('move-self') && <MoveSelf userId={userId} />
+//             }
+
+//             {
+//                 abilityData.extraInputs.includes('drag-bakugan') && <DragBakugan userId={userId} />
+//             }
+
+//             {
+//                 abilityData.extraInputs.includes('add-bakugan') && <AddBakugan userId={userId} />
+//             }
+//         </div>
+//     }
+//     if (exclusiveData && exclusiveData.extraInputs) {
+//         return <div className="grid grid-cols-2 items-center justify-between gap-3">
+
+//             {
+//                 exclusiveData.extraInputs.includes('move-bakugan') && <MoveBakugan />
+//             }
+
+//             {
+//                 exclusiveData.extraInputs.includes('move-opponent') && <MoveOpponent userId={userId} />
+//             }
+
+//             {
+//                 exclusiveData.extraInputs.includes('move-self') && <MoveSelf userId={userId} />
+//             }
+
+//             {
+//                 exclusiveData.extraInputs.includes('drag-bakugan') && <DragBakugan userId={userId} />
+//             }
+
+//             {
+//                 exclusiveData.extraInputs.includes('add-bakugan') && <AddBakugan userId={userId} />
+//             }
+//         </div>
+//     }
+// }

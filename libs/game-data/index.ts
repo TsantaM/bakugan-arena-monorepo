@@ -18,6 +18,14 @@ import { updateDeckGates, updateSlot } from './src/function/update-deck-data-gat
 import { updateTurnState } from './src/function/update-turn-state'
 import { handleBattle } from './src/function/handle-battle'
 import { handleGateCards } from './src/function/gate-card-auto-activation'
+import { FindUsableSlotAndGates } from './src/function/filters/set-gate-card-filters'
+import { SetBakuganFilters } from './src/function/filters/set-bakugan-filters'
+import { SelectAbilityCardFilters } from './src/function/filters/select-ability-card-filters'
+import { SelectAbilityCardInNeutralFilters } from './src/function/filters/select-ability-card-in-neutral'
+import { MoveBakuganAbilityFilters } from './src/function/filters/move-bakugan-ability-filters'
+import { MoveOpponentAbilityFilter } from './src/function/filters/move-opponent-ability-filter'
+import { DragBakuganAbilityFilter } from './src/function/filters/drag-bakugan-ability-filter'
+import { AddBakuganAbilityFilter } from './src/function/filters/add-bakugan-ability-filter'
 
 export {
     Bakugans,
@@ -44,7 +52,16 @@ export {
     handleGateCards,
     addBakuganToSlot,
     updateDeckGates,
-    updateSlot
+    updateSlot,
+
+    FindUsableSlotAndGates,
+    SetBakuganFilters,
+    SelectAbilityCardFilters,
+    SelectAbilityCardInNeutralFilters,
+    MoveBakuganAbilityFilters,
+    MoveOpponentAbilityFilter,
+    DragBakuganAbilityFilter,
+    AddBakuganAbilityFilter
 
 }
 

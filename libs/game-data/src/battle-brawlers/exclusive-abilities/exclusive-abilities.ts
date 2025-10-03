@@ -120,7 +120,7 @@ export const AntiMuse: exclusiveAbilitiesType = {
     usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot, target, slotToDrag }) => {
 
-        if(!roomState) return
+        if (!roomState) return
 
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const slotTarget = roomState?.protalSlots.find((s) => s.id === slotToDrag)
@@ -206,19 +206,68 @@ export const VisageDuChagrin: exclusiveAbilitiesType = {
 export const VisageDeLaFureur: exclusiveAbilitiesType = {
     key: 'visage-de-la-fureur',
     name: 'Visage de la Fureur',
-    description: `Ajoute 100 G à l'utilisateur`,
+    description: `Ajoute 100 G à l'utilisateur et en retire autant à tous les adversaires`,
     maxInDeck: 1,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const opponents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
 
-            if (user) {
+            if (user && opponents.length > 0) {
                 user.currentPower += 100
+                opponents.forEach((opponent) => {
+                    opponent.currentPower -= 100
+                })
             }
         }
     }
+}
+
+export const VisageDeJoie: exclusiveAbilitiesType = {
+    key: 'visage-de-joie',
+    name: 'Visage de Joie',
+    description: `Désactive la carte portail si elle est déjà ouverte et l'empêche de s'ouvrir si elle ne l'est pas encore. Si l'utilisateur gagne la batail il peut réutiliser toutes les cartes maîtrises qu'il a déjà utiliser`,
+    maxInDeck: 1,
+    usable_in_neutral: true,
+    onActivate({ roomState, userId, bakuganKey, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        const gate = GateCardsList.find((g) => g.key === slotOfGate?.portalCard?.key)
+
+        if (slotOfGate && gate) {
+            if (slotOfGate.state.open) {
+                if (gate.onCanceled) {
+                    gate.onCanceled({ roomState, slot, userId, bakuganKey })
+                }
+                slotOfGate.state.canceled = true
+            } else {
+                slotOfGate.state.blocked = true
+            }
+        }
+    },
+    onWin: ({ roomState, userId }) => {
+        const deckToUpdate = roomState?.decksState.find((d) => d.userId === userId)
+        const player = roomState?.players.find((p) => p.userId === userId)
+        console.log(userId)
+        console.log('fortress win')
+        if (deckToUpdate) {
+            deckToUpdate.abilities.filter((a) => a.used === true).forEach((a) => {
+                a.used = false
+            })
+            deckToUpdate.bakugans.forEach((b) => {
+                const abilities = b?.excluAbilitiesState.filter((a) => a.used === true)
+                if (abilities) {
+                    abilities.forEach((a) => {
+                        a.used = false
+                    })
+                }
+            })
+        }
+        if (player) {
+            player.usable_abilitys = 3
+        }
+    },
 }
 
 export const GaucheGigantesque: exclusiveAbilitiesType = {

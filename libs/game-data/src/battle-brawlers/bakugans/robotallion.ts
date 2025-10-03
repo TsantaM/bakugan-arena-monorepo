@@ -1,4 +1,5 @@
-import { bakuganType } from "../../type/game-data-types"
+import { bakuganType, gateCardType } from "../../type/game-data-types"
+import { CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
 
 export const RobotallionPyrus: bakuganType = {
     key: 'robotallion-pyrus',
@@ -38,4 +39,17 @@ export const RobotallionHaos: bakuganType = {
     family: 'Robotallion',
     powerLevel: 310,
     exclusiveAbilities: ['robotalion-execution']
+}
+
+export const RobotallionGateCard: gateCardType = {
+    key: 'robotallion-gate-card',
+    name: 'Carte Personnage: Robotallion',
+    maxInDeck: 1,
+    family: 'Robotallion',
+    description: `Lorsque cette carte est activée elle double le niveau de tous les Robotallion présent sur elle`,
+    onOpen({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'robotallion-gate-card')
+        CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Robotallion' })
+
+    },
 }

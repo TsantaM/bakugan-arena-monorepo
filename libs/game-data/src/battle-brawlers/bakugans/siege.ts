@@ -1,4 +1,5 @@
-import { bakuganType } from "../../type/game-data-types"
+import { bakuganType, gateCardType } from "../../type/game-data-types"
+import { CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
 
 export const SiegePyrus: bakuganType = {
     key: 'siege-pyrus',
@@ -38,4 +39,17 @@ export const SiegeDarkus: bakuganType = {
     image: 'siege',
     exclusiveAbilities: [],
     powerLevel: 330
+}
+
+export const SiegeGateCard: gateCardType = {
+    key: 'siege-gate-card',
+    name: 'Carte Personnage: Siege',
+    maxInDeck: 1,
+    family: 'Siege',
+    description: `Lorsque cette carte est activée elle double le niveau de tous les Siege présent sur elle`,
+    onOpen({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'siege-gate-card')
+        CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Siege' })
+
+    },
 }

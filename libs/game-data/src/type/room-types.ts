@@ -43,7 +43,8 @@ export type bakuganOnSlot = {
     attribut: attribut,
     image: string,
     abilityBlock: boolean,
-    assist: boolean
+    assist: boolean,
+    family: string
 }
 
 export type portalSlotsTypeElement = {
@@ -81,6 +82,7 @@ export type deckType = {
             elimined: boolean;
             onDomain: boolean;
             gateCard: null;
+            family: string
         };
         excluAbilitiesState: {
             key: string;
@@ -93,7 +95,7 @@ export type deckType = {
     abilities: {
         key: string;
         name: string;
-        attribut: attribut;
+        attribut: attribut | undefined;
         description: string;
         used: boolean;
         dead: boolean;

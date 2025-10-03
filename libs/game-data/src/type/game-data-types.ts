@@ -28,7 +28,7 @@ export type bakuganType = {
 
 export type abilityCardsType = {
     name: string,
-    attribut: attribut,
+    attribut?: attribut,
     key: string,
     description: string,
     maxInDeck: number,
@@ -57,6 +57,7 @@ export type gateCardType = {
     description: string,
     maxInDeck: number,
     attribut?: attribut,
+    family?: string,
     onOpen: ({ roomState, slot }: {
         roomState: stateType;
         slot: slots_id;

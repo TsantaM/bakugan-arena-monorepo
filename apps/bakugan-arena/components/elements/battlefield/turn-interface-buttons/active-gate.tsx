@@ -3,9 +3,10 @@
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import useGetRoomState from "@/src/sockets/get-room-state"
+import { useTurnActionStore } from "@/src/store/turn-actions-store"
 
-export default function ActivateGateCard({ roomId, userId, setActiveGate }: { roomId: string, userId: string, setActiveGate: (active: boolean) => void }) {
-
+export default function ActivateGateCard({ roomId, userId }: { roomId: string, userId: string }) {
+    const {setActiveGate} = useTurnActionStore()
     const { roomState } = useGetRoomState({ roomId })
     const battleSlotGateHowner = roomState?.protalSlots.find((p) => p.id === roomState.battleState.slot)?.portalCard?.userId
     const slot = roomState?.battleState.slot

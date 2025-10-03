@@ -32,14 +32,20 @@ export default function ManageGateCardsInDeckEditor({ deckId, gateCards, bakugan
     const queryClient = useQueryClient()
 
     const deckCards = gateCards ? gateCards?.map((c) => GateCardsList.find(card => card.key === c)) : []
+    const cardInDeck = GateCardsList.filter((c) => gateCards.includes(c.key))
 
     const bakugansAttribut = BakuganList.filter((b) => bakugans.includes(b.key)).map((a) => a.attribut)
-    const cardInDeck = GateCardsList.filter((c) => gateCards.includes(c.key))
-    const notInDeckCards = GateCardsList.filter((c) => c.attribut ? bakugansAttribut.includes(c.attribut) : c).filter((c) => {
+    const bakugansFamilies = BakuganList.filter((b) => bakugans.includes(b.key)).map((a) => a.family)
+    const familiesGateCards = GateCardsList.filter((c) => bakugansFamilies.includes(c.family ? c.family : '')).filter((c) => {
+        const exemplary = cardInDeck.filter((a) => c.key === a.key).length
+        return c.maxInDeck > exemplary
+    })
+    console.log(familiesGateCards)
+    const notInDeckCards = [GateCardsList.filter((c) => c.attribut ? bakugansAttribut.includes(c.attribut) : c).filter((c) => !c.family).filter((c) => {
         const exemplary = cardInDeck.filter((a) => c.key === a.key).length
 
         return c.maxInDeck > exemplary
-    })
+    }), familiesGateCards].flat()
 
     const addGateToDeck = async (cardId: string) => {
         return await AddGateCardToDeck({ cardId, deckId })
@@ -75,7 +81,7 @@ export default function ManageGateCardsInDeckEditor({ deckId, gateCards, bakugan
                                         role="combobox"
                                         aria-expanded={open}
                                         className="w-[200px] lg:w-[300px] justify-between"
-                                        disabled={addGateToDeckMutation.isPending || notInDeckCards.length === 5 ? true : false}
+                                        disabled={addGateToDeckMutation.isPending || gateCards.length === 5 ? true : false}
                                     >
                                         {value ? (
                                             (() => {

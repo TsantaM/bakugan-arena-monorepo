@@ -12,22 +12,20 @@ import {
 import { Toaster } from "@/components/ui/sonner"
 
 import { useGlobalGameState } from "@/src/store/global-game-state-store"
-import { slots_id } from "@bakugan-arena/game-data"
+import { useTurnActionStore } from "@/src/store/turn-actions-store"
+import { FindUsableSlotAndGates, slots_id } from "@bakugan-arena/game-data"
 
 
-export default function SetGateCardComponent({ userId, selectGate, selectSlot }: { userId: string, selectGate: (gate: string) => void, selectSlot: (slot: slots_id) => void }) {
+export default function SetGateCardComponent({ userId}: { userId: string}) {
 
     const player = useGlobalGameState((state) => state.gameState?.players.find((p) => p.userId === userId))
     const slots = useGlobalGameState((state) => state.gameState?.protalSlots)
     const set_gate = useGlobalGameState((state) => state.gameState?.turnState.set_new_gate) ? useGlobalGameState((state) => state.gameState?.turnState.set_new_gate) : false
-    const usableSlots = slots?.filter((s) => s.can_set)
     const gates = useGlobalGameState((state) => state.gameState?.decksState.find((d) => d.userId === userId))?.gates
-    
-    const usableGates = gates?.filter((g) => g.usable && !g.dead && !g.set).filter(
-        (item, index, self) =>
-            index === self.findIndex((t) => t.key === item.key)
-    )
 
+    const {setGate: selectGate, setSlot: selectSlot} = useTurnActionStore()
+
+    const {usableGates, usableSlots} = FindUsableSlotAndGates({gates: gates, slots: slots})
 
     // ----------------------- 
 

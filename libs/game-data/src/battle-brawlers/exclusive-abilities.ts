@@ -1,6 +1,6 @@
 
 import { exclusiveAbilitiesType } from "../type/game-data-types";
-import { AileEnflamee, AntiMuse, CapeDeFeu, ChambreDeGravite, DimmensionQuatre, DivisionHolographique, DragonoidPlus, EffecteurdOmbre, GaucheGigantesque, ImpactMajeur, JavelotAquos, LanceDeFeu, LanceEclair, MachettesJumelles, MaitreDesProfondeurs, Marionnette, MassueGigantesque, OmbreBleue, PlexusSolaire, RayonGamma, RegainSubit, RobotallionExecution, SabreDeLaMort, SouffleInfini, TempeteDePlume, TrappeDeSable, Tsunami, VentViolentDeNobelesseVerte, VisageDeLaFureur, VisageDuChagrin } from "./exclusive-abilities/exclusive-abilities";
+import { AileEnflamee, AntiMuse, CapeDeFeu, ChambreDeGravite, DimmensionQuatre, DivisionHolographique, DragonoidPlus, EffecteurdOmbre, GaucheGigantesque, ImpactMajeur, JavelotAquos, LanceDeFeu, LanceEclair, MachettesJumelles, MaitreDesProfondeurs, Marionnette, MassueGigantesque, OmbreBleue, PlexusSolaire, RayonGamma, RegainSubit, RobotallionExecution, SabreDeLaMort, SouffleInfini, TempeteDePlume, TrappeDeSable, Tsunami, VentViolentDeNobelesseVerte, VisageDeJoie, VisageDeLaFureur, VisageDuChagrin } from "./exclusive-abilities/exclusive-abilities";
 
 export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [OmbreBleue.key]: OmbreBleue,
@@ -11,6 +11,7 @@ export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [ImpactMajeur.key]: ImpactMajeur,
     [AntiMuse.key]: AntiMuse,
     [AileEnflamee.key]: AileEnflamee,
+    [VisageDeJoie.key]: VisageDeJoie,
     [VisageDuChagrin.key]: VisageDuChagrin,
     [VisageDeLaFureur.key]: VisageDeLaFureur,
     [MassueGigantesque.key]: MassueGigantesque,

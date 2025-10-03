@@ -36,6 +36,7 @@ export function addBakuganToSlot({ bakuganFromDeck, bakuganToAdd, roomData, slot
         image: bakuganToAdd.image,
         abilityBlock: false,
         assist: false,
+        family: bakuganToAdd.family
     }
 
     const newState = {

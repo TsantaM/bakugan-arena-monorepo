@@ -8,6 +8,7 @@ import { useGSAP } from '@gsap/react'
 import { useEffect, useRef, useState } from "react"
 import { useGlobalGameState } from "@/src/store/global-game-state-store"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
+import Anchor from "./anchor"
 
 export default function GateCardOnBoard({ userId, slotId }: { userId: string, slotId: slots_id }) {
 
@@ -215,21 +216,21 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
                                 <div ref={openGateOverlay} className="overlay z-20 absolute w-full h-full top-0 left-0 bg-cyan-100 shadow-2xs shadow-cyan-300 opacity-0"></div>
                                 <div ref={stateChangeOverlay} className="overlay z-20 absolute w-full h-full top-0 left-0 bg-neutral-950 shadow-2xs opacity-0"></div>
 
-                                <div className="relative w-full h-full flex flex-col justify-around items-center">
-                                    <div className="relative z-40 flex items-center gap-3">
+                                <div className="relative w-full h-full flex flex-col justify-between items-center p-5">
+                                    <div className="relative z-40 flex items-center self-end gap-3">
                                         {
 
                                             oponentsBakugans.map((o, index) =>
-                                                <BakuganSprite bakugan={o} userId={userId} key={index} />
+                                                <Anchor bakugan={o} key={index} />
                                             )
 
                                         }
                                     </div>
 
-                                    <div className="relative z-40 flex items-center gap-3">
+                                    <div className="relative z-40 flex items-center self-start gap-3">
                                         {
                                             playerBakugans.map((p, index) =>
-                                                <BakuganSprite bakugan={p} userId={userId} key={index} />
+                                                <Anchor bakugan={p} key={index} />
                                             )
                                         }
                                     </div>

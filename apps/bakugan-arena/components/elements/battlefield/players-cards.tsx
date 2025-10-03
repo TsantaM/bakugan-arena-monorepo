@@ -39,7 +39,7 @@ export default function PlayerCards({ player, opponent, roomId, userId, turn, se
 
     return <>
         <div className="relative z-20 w-full h-[75vh] flex justify-between">
-            <div className="w-[25vw] md:w-[20vw] lg:w-[15vw] flex flex-col gap-2">
+            <div className="relative z-50 w-[25vw] md:w-[20vw] lg:w-[15vw] flex flex-col gap-2">
                 {
                     playerData && <ProfilePictureLeft player={playerData} />
                 }
@@ -50,7 +50,6 @@ export default function PlayerCards({ player, opponent, roomId, userId, turn, se
                     usersBakugan && <BakuganPreviewOnFocused bakugan={usersBakugan} />
                 }
 
-                <TurnInterface turn={turn} set_bakugan={set_bakugan} use_ability={use_ability} roomId={roomId} battleState={battleState} userId={userId} />
             </div>
 
             <AliveCounterLeft userId={userId} />
@@ -59,7 +58,7 @@ export default function PlayerCards({ player, opponent, roomId, userId, turn, se
 
             <GameBoard userId={userId} />
 
-            <div className="relative z-20 w-[25vw] md:w-[20vw] lg:w-[15vw] self-start flex flex-col gap-2">
+            <div className="relative z-50 w-[25vw] md:w-[20vw] lg:w-[15vw] self-start flex flex-col gap-2">
                 {
                     opponentData && <ProfilePictureRigth player={opponentData} />
                 }
@@ -72,6 +71,7 @@ export default function PlayerCards({ player, opponent, roomId, userId, turn, se
             </div>
 
         </div>
+        <TurnInterface turn={turn} set_bakugan={set_bakugan} use_ability={use_ability} roomId={roomId} battleState={battleState} userId={userId} />
 
 
     </>

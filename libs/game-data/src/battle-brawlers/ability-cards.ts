@@ -5,6 +5,9 @@ import { ContreMaitrise, EclatSoudain, HaosImmobilisation, LumiereDivine, Rapide
 import { BoublierFusion, CoupDeGrace, EpicesMortelles, PoivreDesCayenne, VengeanceAlItalienne } from "./ability-cards/darkus";
 import { CombatAerien, RetourDair, SouffleTout, TornadeChaosTotal, TornadeExtreme } from "./ability-cards/ventus";
 import { abilityCardsType } from "../type/game-data-types";
+import { AquosSubterra, DarkusPyrus, HaosVentus, PyrusDarkus, SubterraAquos, VentusHaos } from "./ability-cards/diagonal-combination";
+import { AquosVentus, DarkusAquos, HaosDarkus, SubterraHaos, SubterraPyrus, VentusPyrus } from "./ability-cards/combinations-simple";
+import { PyrusAquosHaos, VentusSubterraDarkus } from "./ability-cards/combination-triple";
 
 export const AbilityCards: Record<string, abilityCardsType> = {
     // Pyrus
@@ -13,6 +16,8 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     [JetEnflamme.key]: JetEnflamme,
     [RetroAction.key]: RetroAction,
     [TourbillonDeFeu.key]: TourbillonDeFeu,
+    [PyrusDarkus.key]: PyrusDarkus,
+    [SubterraPyrus.key]: SubterraPyrus,
 
     // Aquos
 
@@ -20,7 +25,8 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     [BarrageDeau.key]: BarrageDeau,
     [BouclierAquos.key]: BouclierAquos,
     [PlongeeEnEauProfonde.key]: PlongeeEnEauProfonde,
-
+    [AquosSubterra.key]: AquosSubterra,
+    [AquosVentus.key]: AquosVentus,
 
     // Subterra
 
@@ -29,6 +35,8 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     [CopieConforme.key]: CopieConforme,
     [Obstruction.key]: Obstruction,
     [ForceDattraction.key]: ForceDattraction,
+    [SubterraAquos.key]: SubterraAquos,
+    [SubterraHaos.key]: SubterraHaos,
 
     // Haos
 
@@ -37,6 +45,8 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     [LumiereDivine.key]: LumiereDivine,
     [ContreMaitrise.key]: ContreMaitrise,
     [HaosImmobilisation.key]: HaosImmobilisation,
+    [HaosDarkus.key]: HaosDarkus,
+    [HaosVentus.key]: HaosVentus,
 
     // Darkus
 
@@ -45,6 +55,8 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     [BoublierFusion.key]: BoublierFusion,
     [VengeanceAlItalienne.key]: VengeanceAlItalienne,
     [PoivreDesCayenne.key]: PoivreDesCayenne,
+    [DarkusAquos.key]: DarkusAquos,
+    [DarkusPyrus.key]: DarkusPyrus,
 
     // Ventus
 
@@ -52,7 +64,13 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     [TornadeChaosTotal.key]: TornadeChaosTotal,
     [SouffleTout.key]: SouffleTout,
     [RetourDair.key]: RetourDair,
-    [TornadeExtreme.key]: TornadeExtreme
+    [TornadeExtreme.key]: TornadeExtreme,
+    [VentusHaos.key]: VentusHaos,
+    [VentusPyrus.key]: VentusPyrus,
+
+    // Combination Triple
+    [PyrusAquosHaos.key]: PyrusAquosHaos,
+    [VentusSubterraDarkus.key]: VentusSubterraDarkus
 }
 
 export const AbilityCardsList: abilityCardsType[] = Object.values(AbilityCards) 

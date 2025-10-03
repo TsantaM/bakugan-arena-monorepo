@@ -1,4 +1,6 @@
-import { bakuganType } from "../../type/game-data-types"
+import { bakuganType, gateCardType } from "../../type/game-data-types"
+import { CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+
 
 export const DragonoidPyrus: bakuganType = {
     name: 'Dragonoid',
@@ -28,4 +30,17 @@ export const UltimateDragonoid: bakuganType = {
     key: 'ultimate-dragonoid-pyrus',
     family: 'Dragonoid',
     exclusiveAbilities: []
+}
+
+export const DragonoidGateCard: gateCardType = {
+    key: 'dragonoid-gate-card',
+    name: 'Carte Personnage: Dragonoid',
+    maxInDeck: 1,
+    description: `Lorsque cette carte est activée elle double le niveau de tous les Dragonoid présent sur elle`,
+    family: 'Dragonoid',
+    onOpen({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'dragonoid-gate-card')
+        CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Dragonoid' })
+
+    },
 }

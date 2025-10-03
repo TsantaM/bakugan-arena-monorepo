@@ -46,7 +46,8 @@ export const EclatSoudain: abilityCardsType = {
                 attribut: bakugan.bakuganData.attribut,
                 image: bakugan.bakuganData.image,
                 abilityBlock: false,
-                assist: true
+                assist: true,
+                family: bakugan.bakuganData.family
             }
 
             if (user && haosOnDomain && haosOnDomain.length >= 2) {

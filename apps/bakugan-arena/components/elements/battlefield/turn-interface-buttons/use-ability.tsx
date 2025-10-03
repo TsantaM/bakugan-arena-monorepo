@@ -11,40 +11,36 @@ import {
 } from "@/components/ui/select"
 import { Toaster } from "@/components/ui/sonner"
 
-import useGetRoomState from "@/src/sockets/get-room-state"
 import { useGlobalGameState } from "@/src/store/global-game-state-store"
-import { BakuganList, slots_id } from "@bakugan-arena/game-data"
+import { useTurnActionStore } from "@/src/store/turn-actions-store"
+import { SelectAbilityCardFilters, slots_id } from "@bakugan-arena/game-data"
 
 
-export default function UseAbilityCard({ selectAbility, ability, selectBakugan, userId, bakuganKey }: { selectAbility: (ability: string) => void, ability: string, selectBakugan: (bakugan: string) => void, roomId: string, userId: string, bakuganKey: string }) {
+export default function UseAbilityCard({ roomId, userId }: { roomId: string, userId: string }) {
 
     const turnState = useGlobalGameState((state) => state.gameState?.turnState)
     const player = useGlobalGameState((state) => state.gameState?.players.find((p) => p.userId === userId))
     const battleState = useGlobalGameState((state) => state.gameState?.battleState)
     const slotOfBattle = useGlobalGameState((state) => state.gameState?.protalSlots.find((b) => b.id === state.gameState?.battleState.slot))
     const playersDeck = useGlobalGameState((state) => state.gameState?.decksState.find((d) => d.userId === userId))
+
+    const { selectAbility, selectAbilityUser: selectBakugan, } = useTurnActionStore()
+    const { abilityUser: bakuganKey } = useTurnActionStore((state) => state.turnActions)
     console.log(bakuganKey)
 
     // ---------------------------
-    
+
 
 
     if (battleState && battleState.battleInProcess && !battleState.paused && slotOfBattle) {
 
-        const usersBakugan = slotOfBattle?.bakugans.filter((b) => b.userId === userId)
-        const usersBakuganKeys = slotOfBattle?.bakugans.filter((b) => b.userId === userId && !b.abilityBlock).map((b) => b.key)
-        const listBakugans = BakuganList.filter((b) => usersBakuganKeys.includes(b.key))
-        const attribut = usersBakugan.find((a) => a.key === bakuganKey)?.attribut
-        const usableAbilities = playersDeck?.abilities.filter((a) => a.used === false && a.dead === false).filter((a) => a.attribut === attribut).filter(
-            (item, index, self) =>
-                index === self.findIndex((t) => t.key === item.key)
-        );
+        const selectAbilityInputs = SelectAbilityCardFilters({bakuganKey: bakuganKey, playersDeck: playersDeck, slotOfBattle: slotOfBattle, userId: userId})
 
-        const usableExclusives = playersDeck?.bakugans.find((b) => b?.bakuganData.key === bakuganKey)?.excluAbilitiesState.filter((c) => c.dead === false && c.used === false && c.dead === false).filter(
-            (item, index, self) =>
-                index === self.findIndex((t) => t.key === item.key)
-        );
+        if(!selectAbilityInputs) return
 
+        const bakuganList = selectAbilityInputs.bakugansList
+        const usableAbilities = selectAbilityInputs.usableAbilities
+        const usableExclusives = selectAbilityInputs.usableExclusives
 
         console.log(usableAbilities)
         console.log(usableExclusives)
@@ -64,7 +60,7 @@ export default function UseAbilityCard({ selectAbility, ability, selectBakugan, 
                             <SelectGroup>
                                 <SelectLabel>User Bakugan</SelectLabel>
                                 {
-                                    listBakugans?.map((s, index) => <SelectItem key={index} value={s.key} >{s.name}</SelectItem>)
+                                    bakuganList?.map((s, index) => <SelectItem key={index} value={s.key} >{s.name}</SelectItem>)
                                 }
                             </SelectGroup>
                         </SelectContent>

@@ -40,12 +40,18 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
     const deckAbilityCards = AbilityCardsList.filter((c) => abilityCards?.includes(c.key))
     const deckCards = abilityCards ? abilityCards?.map((c) => AbilityCardsList.find(card => card.key === c)) : []
 
-
-    const notInDeckAbilities = AbilityCardsList.filter((c) => bakugansAttribut.includes(c.attribut)).filter((c) => {
+    const notInDeckAttributLessAbilities = AbilityCardsList.filter((a) => !a.attribut).filter((c) => {
         const exemplary = deckCards.filter((a) => a?.key === c.key).length
 
         return c.maxInDeck > exemplary
     })
+
+    console.log(notInDeckAttributLessAbilities)
+    const notInDeckAbilities = [AbilityCardsList.filter((c) => c.attribut !== undefined && bakugansAttribut.includes(c.attribut)).filter((c) => {
+        const exemplary = deckCards.filter((a) => a?.key === c.key).length
+
+        return c.maxInDeck > exemplary
+    }), notInDeckAttributLessAbilities].flat()
 
     const addCardToDeck = async (cardId: string) => {
         return await AddAbilityCardToDeck({ cardId, deckId })
@@ -91,7 +97,7 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
                                                 if (!selectedCard) return "Select Ability Cards..."
 
                                                 const { name, attribut } = selectedCard
-                                                const imageUrl = `/images/attribut/${attribut.toUpperCase()}.png`
+                                                const imageUrl = `/images/attribut/${attribut?.toUpperCase()}.png`
 
                                                 return (
                                                     <>
@@ -122,8 +128,8 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
                                                             addCardToDeckMutation.mutate(b.key)
                                                         }}
                                                     >
-                                                        <Image src={`/images/attributs/${b.attribut.toUpperCase()}.png`} alt={b.attribut} width={20} height={20} />
-                                                        {b.name}
+                                                        {b.attribut && <Image src={`/images/attributs/${b.attribut?.toUpperCase()}.png`} alt={b.attribut} width={20} height={20} />
+                                                        }                                                        {b.name}
                                                         <Check
                                                             className={cn(
                                                                 "ml-auto",

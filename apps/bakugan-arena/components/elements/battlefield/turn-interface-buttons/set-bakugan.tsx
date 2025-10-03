@@ -11,47 +11,29 @@ import {
 } from "@/components/ui/select"
 import { Toaster } from "@/components/ui/sonner"
 import useGetRoomState from "@/src/sockets/get-room-state"
-import { slots_id } from "@bakugan-arena/game-data"
+import { useGlobalGameState } from "@/src/store/global-game-state-store"
+import { useTurnActionStore } from "@/src/store/turn-actions-store"
+import { SetBakuganFilters, slots_id } from "@bakugan-arena/game-data"
 import Image from "next/image"
 
 
 
-export default function SetBakuganComponent({ set_bakugan, slot, gate, roomId, userId, selectBakugan, selectZone }: { set_bakugan: boolean, slot: slots_id | '', gate: string, roomId: string, userId: string, selectBakugan: (bakugan: string) => void, selectZone: (zone: slots_id) => void }) {
+export default function SetBakuganComponent({ set_bakugan, userId }: { set_bakugan: boolean, userId: string }) {
 
+    const { selectBakuganToSet: selectBakugan, selectZone } = useTurnActionStore()
+    const { slot, gate } = useTurnActionStore((state) => state.turnActions)
 
-    const { slots, roomState } = useGetRoomState({ roomId })
-    console.log(slots)
+    const decksState = useGlobalGameState((state) => state.gameState?.decksState)
+    const slots = useGlobalGameState((state) => state.gameState?.protalSlots)
+    if (!decksState) return
 
-    const playersBakugans = roomState?.decksState.find((d) => d.userId === userId)?.bakugans
-    const opponentsBakugans = roomState?.decksState.find((d) => d.userId !== userId)?.bakugans
-    
-    const usableBakugans = playersBakugans?.filter((b) => b?.bakuganData.onDomain === false && b.bakuganData.elimined === false).map((b) => b?.bakuganData)
-    const opponentsUsableBakugans = opponentsBakugans?.filter((b) => b?.bakuganData.onDomain === false && b.bakuganData.elimined === false).map((b) => b?.bakuganData)
+    const playerDeck = decksState.find((d) => d.userId === userId)
+    const opponentBakugans = decksState.find((d) => d.userId !== userId)
 
-    const usableBakugansCount = usableBakugans?.length ?? 3
-    const slotWithBakugan = roomState?.protalSlots.filter((s) => s.can_set === false && s.portalCard !== null && s.bakugans.length > 0)
-    const slotWithGate = roomState?.protalSlots.filter((s) => s.portalCard !== null && !s.can_set)
-    // il y a au moins une carte portail
-    const oneBakuganLeft = usableBakugansCount === 1
-    const opponentsOneBakuganLeft = opponentsUsableBakugans?.length ? opponentsUsableBakugans?.length <= 1 : false
-    const noBakuganOnDomain = slotWithBakugan?.length === 0
-    const noGateOnDomain =slotWithGate?.length === 0
-
-    const oneLeftAndOpponentsOnDomain = oneBakuganLeft && !noBakuganOnDomain && !opponentsOneBakuganLeft
-    const oneLeftAndOpponentsOnDomainAddNoGate = oneLeftAndOpponentsOnDomain && !noGateOnDomain
-
-    const usableSlots =
-        !oneLeftAndOpponentsOnDomain // ✅ ajout cas spécial
-            ? slots?.
-                filter((s) => s.portalCard !== null && s.can_set === false).
-                filter((s) => !s.bakugans?.some((b) => b.userId === userId))
-
-            : slots?.
-                filter((s) => s.bakugans.some((b) => b.userId != userId)).
-                filter((s) => s.bakugans.every((b) => b.userId != userId))
-
-    const selectedSlot = !oneLeftAndOpponentsOnDomainAddNoGate || noGateOnDomain ? slots?.find((s) => s.id === slot) : undefined
-
+    const filtered = SetBakuganFilters({ playersDeck: playerDeck, opponentDeck: opponentBakugans, slot: slot, slots: slots, userId: userId })
+    const usableBakugans = filtered?.usableBakugans
+    const usableSlots = filtered?.usableSlots
+    const selectedSlot = filtered?.selectedSlot
 
     return (
         <>

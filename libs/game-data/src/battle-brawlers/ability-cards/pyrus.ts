@@ -45,7 +45,8 @@ export const JetEnflamme: abilityCardsType = {
                 attribut: bakugan.bakuganData.attribut,
                 image: bakugan.bakuganData.image,
                 abilityBlock: false,
-                assist: true
+                assist: true,
+                family: bakugan.bakuganData.family
             }
 
             if (user && pyrusOnDomain && pyrusOnDomain.length >= 2) {

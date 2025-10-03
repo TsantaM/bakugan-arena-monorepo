@@ -31,6 +31,7 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
                         elimined: false,
                         onDomain: false,
                         gateCard: null,
+                        family: bakugan.family
                     }
 
                     const excluAbilitiesState = bakuganAbilities.map((c) => ({

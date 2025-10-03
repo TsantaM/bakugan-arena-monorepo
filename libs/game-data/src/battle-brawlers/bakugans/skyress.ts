@@ -1,4 +1,5 @@
-import { bakuganType } from "../../type/game-data-types"
+import { bakuganType, gateCardType } from "../../type/game-data-types"
+import { CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
 
 export const SkyressVentus: bakuganType = {
     name: 'Skyress',
@@ -18,4 +19,17 @@ export const SkyressStormVentus: bakuganType = {
     powerLevel: 450,
     family: 'Skyress',
     exclusiveAbilities: []
+}
+
+export const SkyressGateCard: gateCardType = {
+    key: 'skyress-gate-card',
+    name: 'Carte Personnage: Skyress',
+    maxInDeck: 1,
+    family: 'Skyress',
+    description: `Lorsque cette carte est activée elle double le niveau de tous les Skyress présent sur elle`,
+    onOpen({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'skyress-gate-card')
+        CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Skyress' })
+
+    },
 }
