@@ -146,73 +146,73 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
 
             resetInputs()
         }
+    }
+    // FR : Confirme une action pendant une bataille (activation capacité ou portail)
+    // EN : Confirm a battle action (ability activation or gate activation)
+    const handleBattleActionComfirm = () => {
+        // FR : Si une capacité est sélectionnée, on l’active
+        // EN : If an ability is selected, activate it
+        if (turnActions.abilityUser !== '' && turnActions.ability !== '') {
+            ActiveAbilityCard({
+                abilityId: turnActions.ability, bakuganKey: turnActions.abilityUser,
+                roomId: roomId, userId: userId,
+                target_slot: turnActions.slot_target, slot_to_move: turnActions.slot_to_move, target: turnActions.target,
+                slotToDrag: turnActions.slotToDrag, bakuganToAdd: turnActions.bakuganToAdd,
+                bakuganToMove: turnActions.bakuganToMove, destination: turnActions.destination
+            })
+        }
 
-        // FR : Confirme une action pendant une bataille (activation capacité ou portail)
-        // EN : Confirm a battle action (ability activation or gate activation)
-        const handleBattleActionComfirm = () => {
-            // FR : Si une capacité est sélectionnée, on l’active
-            // EN : If an ability is selected, activate it
-            if (turnActions.abilityUser !== '' && turnActions.ability !== '') {
-                ActiveAbilityCard({
-                    abilityId: turnActions.ability, bakuganKey: turnActions.abilityUser,
-                    roomId: roomId, userId: userId,
-                    target_slot: turnActions.slot_target, slot_to_move: turnActions.slot_to_move, target: turnActions.target,
-                    slotToDrag: turnActions.slotToDrag, bakuganToAdd: turnActions.bakuganToAdd,
-                    bakuganToMove: turnActions.bakuganToMove, destination: turnActions.destination
-                })
-            }
+        // FR : Si l’activation d’un portail est demandée
+        // EN : If portal activation is requested
+        if (turnActions.active === true) {
+            if (battleState && slots) {
+                const battleInProcess = battleState.battleInProcess && !battleState.paused
 
-            // FR : Si l’activation d’un portail est demandée
-            // EN : If portal activation is requested
-            if (turnActions.active === true) {
-                if (battleState && slots) {
-                    const battleInProcess = battleState.battleInProcess && !battleState.paused
+                // FR : Cas 1 → Bataille en cours, on active le portail du slot de bataille
+                // EN : Case 1 → Battle in progress, activate the gate card on the battle slot
+                if (battleInProcess && battleState.slot !== null) {
+                    const slot = battleState.slot
+                    const gateId = slots.find((s) => s.id === slot)?.portalCard?.key
 
-                    // FR : Cas 1 → Bataille en cours, on active le portail du slot de bataille
-                    // EN : Case 1 → Battle in progress, activate the gate card on the battle slot
-                    if (battleInProcess && battleState.slot !== null) {
-                        const slot = battleState.slot
-                        const gateId = slots.find((s) => s.id === slot)?.portalCard?.key
+                    if (gateId) {
+                        ActiveGateCard({ gateId: gateId, roomId: roomId, slot: slot, userId: userId })
+                    }
 
-                        if (gateId) {
+                } else {
+                    // FR : Cas 2 → Pas de bataille en cours, mais un slot spécifique a été choisi
+                    // EN : Case 2 → No battle in progress, but a specific slot was selected
+                    if (turnActions.slotToActive !== '' && turnActions.active) {
+                        const slot = slots.find((s) => s.id === turnActions.slotToActive)?.id
+                        const gateId = slots.find((s) => s.id === turnActions.slotToActive)?.portalCard?.key
+
+                        if (slot && gateId) {
                             ActiveGateCard({ gateId: gateId, roomId: roomId, slot: slot, userId: userId })
-                        }
-
-                    } else {
-                        // FR : Cas 2 → Pas de bataille en cours, mais un slot spécifique a été choisi
-                        // EN : Case 2 → No battle in progress, but a specific slot was selected
-                        if (turnActions.slotToActive !== '' && turnActions.active) {
-                            const slot = slots.find((s) => s.id === turnActions.slotToActive)?.id
-                            const gateId = slots.find((s) => s.id === turnActions.slotToActive)?.portalCard?.key
-
-                            if (slot && gateId) {
-                                ActiveGateCard({ gateId: gateId, roomId: roomId, slot: slot, userId: userId })
-                            }
                         }
                     }
                 }
             }
-
-            // FR : Si une capacité ou un portail a été activé → fin du tour
-            // EN : If an ability or a gate was activated → end turn
-            if (turnActions.active || turnActions.abilityUser != '' && turnActions.ability != '') {
-                turnAction()
-            }
-            resetInputs()
         }
 
-        // FR : Passe le tour sans rien faire
-        // EN : Skip turn without doing anything
-        const handleSkipTurn = () => {
+        // FR : Si une capacité ou un portail a été activé → fin du tour
+        // EN : If an ability or a gate was activated → end turn
+        if (turnActions.active || turnActions.abilityUser != '' && turnActions.ability != '') {
             turnAction()
-            resetInputs()
         }
+        resetInputs()
+    }
 
-        return {
+    // FR : Passe le tour sans rien faire
+    // EN : Skip turn without doing anything
+    const handleSkipTurn = () => {
+        turnAction()
+        resetInputs()
+    }
 
-            handleConfirm,
-            handleBattleActionComfirm,
-            handleSkipTurn,
-        }
+    return {
+
+        handleConfirm,
+        handleBattleActionComfirm,
+        handleSkipTurn,
     }
 }
+
