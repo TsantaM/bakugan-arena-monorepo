@@ -1,11 +1,11 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
-import { CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
 
 export const MantrisPyrus: bakuganType = {
     key: 'mantris-pyrus',
     name: 'Mantris',
     attribut: 'Pyrus',
-    image:'mantris',
+    image: 'mantris',
     powerLevel: 320,
     family: 'Mantris',
     exclusiveAbilities: ['marionnette', 'lance-eclair', 'machettes-jumelles']
@@ -15,7 +15,7 @@ export const MantrisDarkus: bakuganType = {
     key: 'mantris-darkus',
     name: 'Mantris',
     attribut: 'Darkus',
-    image:'mantris',
+    image: 'mantris',
     powerLevel: 320,
     family: 'Mantris',
     exclusiveAbilities: ['marionnette', 'lance-eclair', 'machettes-jumelles']
@@ -25,7 +25,7 @@ export const MantrisHaos: bakuganType = {
     key: 'mantris-haos',
     name: 'Mantris',
     attribut: 'Haos',
-    image:'mantris',
+    image: 'mantris',
     powerLevel: 320,
     family: 'Mantris',
     exclusiveAbilities: ['marionnette', 'lance-eclair', 'machettes-jumelles']
@@ -35,7 +35,7 @@ export const MantrisSubterra: bakuganType = {
     key: 'mantris-subterra',
     name: 'Mantris',
     attribut: 'Subterra',
-    image:'mantris',
+    image: 'mantris',
     powerLevel: 320,
     family: 'Mantris',
     exclusiveAbilities: ['marionnette', 'lance-eclair', 'machettes-jumelles']
@@ -50,6 +50,17 @@ export const MantrisGateCard: gateCardType = {
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'mantris-gate-card')
         CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Mantris' })
-
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'mantris-gate-card')
+        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'Mantris' })
+    },
+    autoActivationCheck: ({ portalSlot }) => {
+        const bakugansOnSlot = portalSlot.bakugans.length
+        if (bakugansOnSlot >= 2) {
+            return true
+        } else {
+            return false
+        }
     },
 }
