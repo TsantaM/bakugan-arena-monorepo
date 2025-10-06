@@ -23,7 +23,7 @@ export function CancelCaracterGateCard({ slotOfGate, family }: { slotOfGate: por
         bakugansTarget.forEach((b) => {
             const basePower = BakuganList.find((l) => l.key === b.key && l.family === family)?.powerLevel
             if (!basePower) return
-            b.currentPower +- basePower
+            b.currentPower -= basePower
         })
         slotOfGate.state.canceled = true
     }

@@ -200,7 +200,7 @@ export const ReacteurSubterra: gateCardType = {
 
 export const ReacteurDarkus: gateCardType = {
     key: 'reacteur-darkus',
-    name: 'Reacteur darkus',
+    name: 'Reacteur Darkus',
     attribut: 'Darkus',
     description: 'Ajoute 100 G à tous les bakugans Darkus sur la carte',
     maxInDeck: 3,
