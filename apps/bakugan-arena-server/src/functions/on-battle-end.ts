@@ -79,7 +79,9 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
         }
     }
 
+    const winnerId = winner !== null ? winner : undefined
+    const loserId = loser !== null ? loser : undefined
     // FR: Finaliser la bataille ===
     //ENG: Finalize battle: reset slot, battle state, etc. ===
-    finalizeBattle(roomData)
+    finalizeBattle({roomData, winnerId: winnerId, loserId: loserId})
 }

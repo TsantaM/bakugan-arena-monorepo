@@ -24,7 +24,7 @@ export type player = {
     };
 }
 
-export default function PlayerCards({ player, opponent, roomId, userId, turn, set_bakugan, use_ability }: { player: player | undefined, opponent: player | undefined, roomId: string, userId: string, turn: boolean, set_bakugan: boolean, use_ability: boolean }) {
+export default function PlayerCards({ player, opponent, roomId, userId }: { player: player | undefined, opponent: player | undefined, roomId: string, userId: string }) {
 
     const slots = useGlobalGameState((state) => state.gameState?.protalSlots)
     const battleState = useGlobalGameState((state) => state.gameState?.battleState)
@@ -71,7 +71,7 @@ export default function PlayerCards({ player, opponent, roomId, userId, turn, se
             </div>
 
         </div>
-        <TurnInterface turn={turn} set_bakugan={set_bakugan} use_ability={use_ability} roomId={roomId} battleState={battleState} userId={userId} />
+        <TurnInterface roomId={roomId} userId={userId} />
 
 
     </>

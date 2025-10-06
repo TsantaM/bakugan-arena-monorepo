@@ -7,7 +7,7 @@ export const socketTurn = (io: Server, socket: Socket) => {
     // FR: On écoute l'événement "turn-action" envoyé par un joueur
     // ENG: Listen for the "turn-action" event triggered by a player
     socket.on('turn-action', ({ roomId, userId }: { roomId: string, userId: string }) => {
-        
+
         // FR: On récupère les données de la salle correspondant au roomId
         // ENG: Retrieve the room data matching the given roomId
         const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
@@ -18,7 +18,7 @@ export const socketTurn = (io: Server, socket: Socket) => {
 
         // FR: Si la salle n'existe pas ou que l'index est invalide, on arrête
         // ENG: If the room does not exist or index is invalid, exit early
-        if(!roomData || roomIndex === -1) return
+        if (!roomData || roomIndex === -1) return
 
         // FR: Mise à jour de l'état du tour (joueur actif, compteur, autorisations, etc.)
         // ENG: Update the turn state (active player, counter, available actions, etc.)

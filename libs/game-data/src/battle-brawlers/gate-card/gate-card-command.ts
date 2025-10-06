@@ -110,7 +110,12 @@ export const TripleCombat: gateCardType = {
             const slotToUpdate = roomState.protalSlots.find((s) => s.id === slot)
             if (userStrongest && slotToUpdate && slotToUpdate.portalCard !== null && !slotToUpdate.state.canceled && !slotToUpdate.state.blocked) {
                 if (userStrongest !== null) {
+
+                    const lastId = slotToUpdate.bakugans.length > 0 ? slotToUpdate.bakugans[slotToUpdate.bakugans.length - 1].id : 0
+                    const newId = lastId + 1
+
                     const usersBakugan: bakuganOnSlot = {
+                        id: newId,
                         key: userStrongest.bakuganData.key,
                         userId: userId,
                         powerLevel: userStrongest.bakuganData.powerLevel,
@@ -182,8 +187,14 @@ export const QuatuorDeCombat: gateCardType = {
             const opponentWeakest = findWeakest({ userId: opponentId, roomState: roomState })
             const slotToUpdate = roomState.protalSlots.find((s) => s.id === slot)
             if (userWeakest && opponentWeakest && slotToUpdate && slotToUpdate.portalCard !== null && !slotToUpdate.state.canceled && !slotToUpdate.state.blocked) {
+
+                const lastId = slotToUpdate.bakugans.length > 0 ? slotToUpdate.bakugans[slotToUpdate.bakugans.length - 1].id : 0
+                const newId = lastId + 1
+
                 if (userWeakest !== null) {
+
                     const usersBakugan: bakuganOnSlot = {
+                        id: newId,
                         key: userWeakest.bakuganData.key,
                         userId: userId,
                         powerLevel: userWeakest.bakuganData.powerLevel,
@@ -200,7 +211,10 @@ export const QuatuorDeCombat: gateCardType = {
                 }
 
                 if (opponentWeakest !== null) {
+                    const lastId = slotToUpdate.bakugans.length > 0 ? slotToUpdate.bakugans[slotToUpdate.bakugans.length - 1].id : 0
+                    const newId = lastId + 1
                     const opponentBakugan: bakuganOnSlot = {
+                        id: newId,
                         key: opponentWeakest.bakuganData.key,
                         userId: opponentId,
                         powerLevel: opponentWeakest.bakuganData.powerLevel,

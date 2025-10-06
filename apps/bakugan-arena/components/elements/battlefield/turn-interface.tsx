@@ -22,12 +22,16 @@ import AbilityExtraInputs from "./turn-interface-buttons/abilities-extra-actions
 import UseAbilityCardInNeutral from "./turn-interface-buttons/use-ability-card-in-neutral"
 import { useGlobalGameState } from "@/src/store/global-game-state-store"
 
-export default function TurnInterface({ turn, set_bakugan, roomId, battleState, userId }: { turn: boolean, set_bakugan: boolean, use_ability: boolean, roomId: string, battleState: battleState | undefined, userId: string }) {
+export default function TurnInterface({ roomId, userId }: { roomId: string, userId: string }) {
     const socket = useSocket()
     const roomState = useGlobalGameState((state) => state.gameState)
+    const battleState = useGlobalGameState((state) => state.gameState?.battleState)
+    const turnState = useGlobalGameState((state) => state.gameState?.turnState)
+    const set_bakugan = useGlobalGameState((state) => state.gameState?.turnState.set_new_bakugan)
     const refresh = useGlobalGameState((state) => state.setRefreshKey)
     const setGateState = useGlobalGameState((state) => state.setGlobalState)
     const turnActionHook = useTurnActionStates({ roomId: roomId, battleState: battleState, userId: userId })
+
 
     const resolveBattle = () => {
         if (socket) {
@@ -39,8 +43,8 @@ export default function TurnInterface({ turn, set_bakugan, roomId, battleState, 
             refresh()
         }
     }
-
-    if (!turn) {
+    if(!turnState) return
+    if (turnState.turn !== userId) {
         return (
 
             roomState?.battleState && roomState.battleState.battleInProcess && roomState?.battleState?.turns === 0 ? <Button className="flex gap-2 flex-row absolute left-[50%] bottom-7 translate-x-[-50%] z-20" onClick={resolveBattle}>Resolve Battle</Button> : <p className="flex gap-2 flex-row absolute left-[50%] bottom-7 translate-x-[-50%] z-20">It's your opponent's turn</p>
@@ -92,7 +96,7 @@ export default function TurnInterface({ turn, set_bakugan, roomId, battleState, 
                                     <div className="flex flex-col gap-5">
                                         <SetGateCardComponent userId={userId}/>
 
-                                        <SetBakuganComponent set_bakugan={set_bakugan} userId={userId}/>
+                                        <SetBakuganComponent set_bakugan={set_bakugan ? set_bakugan : false} userId={userId}/>
 
                                         <UseAbilityCardInNeutral roomId={roomId} userId={userId}/>
                                         

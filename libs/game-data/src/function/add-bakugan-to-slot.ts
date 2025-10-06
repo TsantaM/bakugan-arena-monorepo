@@ -27,7 +27,14 @@ export function addBakuganToSlot({ bakuganFromDeck, bakuganToAdd, roomData, slot
     if(!roomData) return
     if(!bakuganToAdd) return
     
+    const slot = roomData.protalSlots.find((s) => s.id === slotId)
+
+    const lastId = slot && slot?.bakugans.length > 0 ? slot.bakugans[slot.bakugans.length - 1].id : 0
+    const newId = lastId + 1
+
+
     const newBakugan: bakuganOnSlot = {
+        id: newId,
         key: bakuganToAdd.key,
         userId: userId,
         powerLevel: bakuganToAdd.powerLevel,

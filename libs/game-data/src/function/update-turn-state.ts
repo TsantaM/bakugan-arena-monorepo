@@ -1,8 +1,8 @@
 import { stateType } from "../type/room-types";
 
 export function updateTurnState(roomData: stateType) {
-    if(!roomData) return
-    
+    if (!roomData) return
+
     const { turnState, decksState, protalSlots } = roomData
 
     // Incrément du compteur de tours
@@ -10,7 +10,16 @@ export function updateTurnState(roomData: stateType) {
 
     // Détermination du joueur qui joue
     const players = decksState.map(d => d.userId)
-    turnState.turn = players.find(p => p !== turnState.turn) ?? turnState.turn
+    console.log('updateTurnState - Current turn:', turnState.can_change_player_turn)
+    if (turnState.can_change_player_turn === true) {
+        console.log('updateTurnState - Changing turn from', turnState.can_change_player_turn)
+        turnState.previous_turn = turnState.turn
+        turnState.turn = players.find(p => p !== turnState.turn) ?? turnState.turn
+    }
+
+    turnState.can_change_player_turn = true
+
+    console.log('updateTurnState - New turn:', turnState)
 
     // Règles selon le nombre de tours
     if (turnState.turnCount === 2) {

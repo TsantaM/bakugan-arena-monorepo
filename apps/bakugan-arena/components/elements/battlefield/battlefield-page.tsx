@@ -4,6 +4,7 @@ import useGetRoomState from "@/src/sockets/get-room-state"
 import PlayerCards, { player } from "./players-cards"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { useGlobalGameState } from "@/src/store/global-game-state-store"
 
 type BattleFieldPageProps = {
     player: player | undefined,
@@ -16,8 +17,8 @@ type BattleFieldPageProps = {
 export default function BattleFieldPage({ player, opponent, roomId, userId }: BattleFieldPageProps) {
 
     const { roomState, finished, winner} = useGetRoomState({ roomId })
-    const turn = roomState && roomState.turnState.turn === userId ? true : false
-
+    const state = useGlobalGameState((state) => state.gameState)
+    console.log( 'BattleFieldPage' , state)
     if(finished) {
         return (
             <section className="h-screen flex flex-col items-center justify-center gap-3">
@@ -37,7 +38,7 @@ export default function BattleFieldPage({ player, opponent, roomId, userId }: Ba
         <>
 
             {
-                roomState && <PlayerCards player={player} opponent={opponent} roomId={roomId} userId={userId} turn={turn} set_gate={roomState?.turnState.set_new_gate} set_bakugan={roomState?.turnState.set_new_bakugan} use_ability={roomState?.turnState.use_ability_card} />
+                roomState && <PlayerCards player={player} opponent={opponent} roomId={roomId} userId={userId} />
             }
 
         </>

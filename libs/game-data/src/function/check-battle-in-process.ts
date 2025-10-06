@@ -15,11 +15,16 @@ export const CheckBattle = ({ roomState }: { roomState: stateType }) => {
                 paused: false
             }
 
+            const firstBakuganOnSlotUserId = slotWithTwoBakugans.bakugans[0].userId
+            const lastBakuganOnSlotUserId = slotWithTwoBakugans.bakugans[slotWithTwoBakugans.bakugans.length - 1].userId
+
             roomState.turnState = {
                 ...roomState.turnState,
                 set_new_bakugan: false,
                 set_new_gate: false,
-                use_ability_card: true
+                use_ability_card: true,
+                turn: lastBakuganOnSlotUserId,
+                previous_turn: firstBakuganOnSlotUserId
             }
 
         }

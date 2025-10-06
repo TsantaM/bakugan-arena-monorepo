@@ -1,5 +1,6 @@
 import { AbilityCardsList, attribut, BakuganList, ExclusiveAbilitiesList, GateCardsList, portalSlotsType, stateType } from "@bakugan-arena/game-data"
 import { getDecksDataPrisma, getRoomPlayers } from "./get-room-data"
+import { turnStateType } from "@bakugan-arena/game-data/src/type/room-types"
 
 export const createGameState = async ({ roomId }: { roomId: string }) => {
     const decksData = await getDecksDataPrisma({ roomId })
@@ -175,13 +176,14 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             }
         ]
 
-        const turnState = {
+        const turnState: turnStateType = {
             turn: players.player1.player1?.id ? players.player1.player1?.id : '',
             previous_turn: undefined,
             turnCount: 1,
             set_new_gate: true,
             set_new_bakugan: false,
-            use_ability_card: false
+            use_ability_card: false,
+            can_change_player_turn: true
         }
 
         const battleState = {

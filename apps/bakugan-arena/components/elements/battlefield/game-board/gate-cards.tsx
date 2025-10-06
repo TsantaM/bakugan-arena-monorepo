@@ -110,28 +110,6 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
                 return
             }
         }
-
-        // if (open) {
-        //     timeline.fromTo(overlay.current, {
-        //         opacity: 0,
-        //     }, {
-        //         opacity: 1,
-        //     })
-        //     timeline.fromTo(overlay.current, {
-        //         opacity: 1,
-        //     },
-        //         {
-        //             opacity: 0,
-        //             display: 'none'
-        //         })
-        //     timeline.fromTo(image.current,
-        //         {
-        //             opacity: 0
-        //         }, {
-        //         opacity: 1
-        //     })
-        // }
-
     }, [set, removeGate, setGateOverlay.current, removeGateOverlay.current])
 
     useGSAP(() => {
