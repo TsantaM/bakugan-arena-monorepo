@@ -3,12 +3,16 @@
 import { useFocusedBakugan } from "@/src/store/focused-bakugan-store"
 import { useSpritePositionAnchor } from "@/src/store/sprites-positions-anchor"
 import { bakuganOnSlot } from "@bakugan-arena/game-data"
+import { useGSAP } from "@gsap/react"
+import gsap from "gsap"
 import Image from "next/image"
-import { useEffect } from "react"
+import { useEffect, useRef, useState } from "react"
 
 export default function BakuganSprite({ bakugan, userId }: { bakugan: bakuganOnSlot, userId: string }) {
 
     const { reset, setOpponentBakugan, opponentBakugan, setUsersBakugan, usersBakugan } = useFocusedBakugan()
+    const bakuganRef = useRef(null)
+    const [set, setSet] = useState<boolean | undefined>(false)
 
     const setFocusedBakugan = () => {
         console.log(bakugan.userId, userId)
@@ -35,13 +39,37 @@ export default function BakuganSprite({ bakugan, userId }: { bakugan: bakuganOnS
 
     useEffect(() => {
         console.log(`y: ${position?.y}, x : ${position?.x}`)
+        if(set === false && position){
+            setSet(true)
+        }
     }, [position])
 
+    useGSAP(() => {
+        if (bakuganRef.current && position) {
+            if(set) {
+            const origin = bakugan.userId === userId ? { x: '50%', y: '90%' } : { x: '10%', y: '50%' }
+            gsap.fromTo(bakuganRef.current,
+                {
+                    top: origin.y,
+                    left: origin.x,
+                    scale: 0.5,
+                },
+                {
+                    top: `${position.y - 20 + position.h / 2}px`,
+                    left: `${position.x + 10 + position.w / 2}px`,
+                    scale: 1,
+                    duration: 1,
+                    ease: "power2.out",
+                }
+            )
+            }
+        }
+    }, [bakuganRef.current, set])
 
     if (!position) return
 
     return (
-        <div className={`fixed z-10 size-12 lg:size-20`} style={{
+        <div ref={bakuganRef} className={`fixed z-10 size-12 lg:size-20`} style={{
             top: `${position.y - 20 + position.h / 2}px`,
             left: `${position.x + 10 + position.w / 2}px`,
             transform: 'translate(-50%, -50%)'

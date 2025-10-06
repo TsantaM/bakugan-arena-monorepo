@@ -38,7 +38,12 @@ export const EclatSoudain: abilityCardsType = {
         if (slotOfGate && deck && bakugan) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
             const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Haos').map((b) => b.key)).flat()
+
+            const lastId = slotOfGate.bakugans.length > 0 ? slotOfGate.bakugans[slotOfGate.bakugans.length - 1].id : 0
+            const newId = lastId + 1
+
             const newBakugan: bakuganOnSlot = {
+                id: newId,
                 key: bakugan.bakuganData.key,
                 userId: userId,
                 powerLevel: bakugan.bakuganData.powerLevel,

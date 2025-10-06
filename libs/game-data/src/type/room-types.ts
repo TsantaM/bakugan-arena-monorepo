@@ -2,6 +2,16 @@ import { attribut } from "./game-data-types"
 
 export type slots_id = "slot-1" | "slot-2" | "slot-3" | "slot-4" | "slot-5" | "slot-6"
 
+export type turnStateType = {
+    can_change_player_turn: boolean;
+    turn: string;
+    previous_turn: string | undefined
+    turnCount: number;
+    set_new_gate: boolean;
+    set_new_bakugan: boolean;
+    use_ability_card: boolean;
+}
+
 export type playersType = {
     id: string;
     image: string | null;
@@ -36,6 +46,7 @@ export type activateAbilities = {
 }
 
 export type bakuganOnSlot = {
+    id: number,
     key: string,
     userId: string,
     powerLevel: number,
@@ -118,14 +129,7 @@ export type stateType = {
         usable_gates: number,
         usable_abilitys: number
     }[];
-    turnState: {
-        turn: string;
-        previous_turn: string | undefined
-        turnCount: number;
-        set_new_gate: boolean;
-        set_new_bakugan: boolean;
-        use_ability_card: boolean;
-    },
+    turnState: turnStateType,
     persistantAbilities: activateAbilities[],
     battleState: battleState,
     decksState: deckType[];
