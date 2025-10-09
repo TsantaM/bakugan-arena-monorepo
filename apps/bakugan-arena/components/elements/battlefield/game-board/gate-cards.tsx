@@ -198,8 +198,8 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
                                     <div className="relative z-40 flex items-center self-end gap-3">
                                         {
 
-                                            oponentsBakugans.map((o, index) =>
-                                                <Anchor bakugan={o} key={index} />
+                                            oponentsBakugans.map((o) =>
+                                                <Anchor bakugan={o} key={`${o.userId}-${o.key}-${o.id}`} />
                                             )
 
                                         }
@@ -207,8 +207,8 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
 
                                     <div className="relative z-40 flex items-center self-start gap-3">
                                         {
-                                            playerBakugans.map((p, index) =>
-                                                <Anchor bakugan={p} key={index} />
+                                            playerBakugans.map((p) =>
+                                                <Anchor bakugan={p} key={`${p.userId}-${p.key}-${p.id}`} />
                                             )
                                         }
                                     </div>

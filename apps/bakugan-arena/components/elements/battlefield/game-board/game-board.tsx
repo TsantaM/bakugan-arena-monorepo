@@ -35,7 +35,7 @@ export default function MapScrollable({ userId }: { userId: string }) {
     return (
       <>
         {
-          slotWithBakugans?.map((b, index) => <BakuganSprite key={index} bakugan={b} userId={userId} />)
+          slotWithBakugans?.map((b) => <BakuganSprite key={`${b.userId}-${b.key}-${b.id}`} bakugan={b} userId={userId} />)
         }
         <div
           className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] w-full h-[75vh] overflow-hidden cursor-grab"

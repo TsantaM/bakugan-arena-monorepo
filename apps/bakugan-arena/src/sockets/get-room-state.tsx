@@ -13,7 +13,8 @@ export default function useGetRoomState({ roomId }: { roomId: string }) {
     const [decksState, setDecksState] = useState<deckType[] | undefined>()
     const [finished, setFinished] = useState(false)
     const [winner, setWinner] = useState<string | null>()
-    const { setGlobalState } = useGlobalGameState()
+    const { setGlobalState, setSlots: initializeSlots } = useGlobalGameState()
+    const slotsToMap = useGlobalGameState((state) => state.portalSlots)
     const getRoomData = () => {
         if (socket) {
             socket.emit('get-room-state', ({ roomId }))
@@ -35,10 +36,14 @@ export default function useGetRoomState({ roomId }: { roomId: string }) {
                 setRoomState(state)
                 setSlots(state?.protalSlots)
                 setDecksState(state?.decksState)
+                if(slotsToMap.length === 0 && state) {
+                    initializeSlots(state.protalSlots)
+                }
                 if (state && state.status.finished === true) {
                     setFinished(true)
                     setWinner(state.status.winner)
                 }
+
             })
         }
     }, [socket, roomId])
