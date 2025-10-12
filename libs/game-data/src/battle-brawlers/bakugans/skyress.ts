@@ -1,5 +1,5 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
-import { CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
 
 export const SkyressVentus: bakuganType = {
     name: 'Skyress',
@@ -31,5 +31,17 @@ export const SkyressGateCard: gateCardType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'skyress-gate-card')
         CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Skyress' })
 
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'skyress-gate-card')
+        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'Skyress' })
+    },
+    autoActivationCheck: ({ portalSlot }) => {
+        const bakugansOnSlot = portalSlot.bakugans.length
+        if (bakugansOnSlot >= 2) {
+            return true
+        } else {
+            return false
+        }
     },
 }

@@ -1,5 +1,5 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
-import { CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
 
 export const RobotallionPyrus: bakuganType = {
     key: 'robotallion-pyrus',
@@ -51,5 +51,17 @@ export const RobotallionGateCard: gateCardType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'robotallion-gate-card')
         CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Robotallion' })
 
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'robotallion-gate-card')
+        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'Robotallion' })
+    },
+    autoActivationCheck: ({ portalSlot }) => {
+        const bakugansOnSlot = portalSlot.bakugans.length
+        if (bakugansOnSlot >= 2) {
+            return true
+        } else {
+            return false
+        }
     },
 }

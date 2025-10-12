@@ -4,15 +4,21 @@ import prisma from "@bakugan-arena/prisma"
 
 export const CheckGameFinished = async ({ roomId, roomState }: { roomId: string, roomState: stateType }) => {
 
-    if (roomState && roomState.status.finished === false && roomState.status.winner === null) {
+    if (roomState && roomState.status.finished === false) {
         const player1 = roomState.players[0].userId
         const p1Decks = roomState.decksState.find((d) => d.userId === player1)
         const player2 = roomState.players[1].userId
         const p2Decks = roomState.decksState.find((d) => d.userId === player2)
 
-        const gateOnDomain = roomState.protalSlots.filter((s) => s.portalCard !== null && s.can_set === false)
+        const gateOnDomain = roomState.protalSlots.filter((s) => s.portalCard !== null)
         const p1Gates = roomState.players.find((p) => p.userId === player1)?.usable_gates
         const p2Gates = roomState.players.find((p) => p.userId === player2)?.usable_gates
+
+        console.log('gate on domain' , gateOnDomain.length)
+        console.log('p1Gates', p1Gates)
+        console.log('p2Gates', p2Gates)
+        const nullVerify = gateOnDomain.length === 0 && p1Gates === 0 && p2Gates === 0 ? true : false
+        console.log('null verify' , nullVerify)
 
         if (p1Decks && p2Decks) {
 
@@ -68,7 +74,7 @@ export const CheckGameFinished = async ({ roomId, roomState }: { roomId: string,
                         finished: true,
                     }
                 })
-            } else if (gateOnDomain.length === 0 && p1Gates && p2Gates && p1Gates === 0 && p2Gates === 0) {
+            } else if (gateOnDomain.length === 0 && p1Gates === 0 && p2Gates === 0) {
 
                 roomState.status.finished = true,
                     roomState.status.winner = null

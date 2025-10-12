@@ -1,5 +1,5 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
-import { CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
 
 export const HarpusVentus: bakuganType = {
     key: 'harpus-ventus',
@@ -21,5 +21,17 @@ export const HarpusGateCard: gateCardType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'harpus-gate-card')
         CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Harpus' })
 
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'harpus-gate-card')
+        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'Harpus' })
+    },
+    autoActivationCheck: ({ portalSlot }) => {
+        const bakugansOnSlot = portalSlot.bakugans.length
+        if (bakugansOnSlot >= 2) {
+            return true
+        } else {
+            return false
+        }
     },
 }

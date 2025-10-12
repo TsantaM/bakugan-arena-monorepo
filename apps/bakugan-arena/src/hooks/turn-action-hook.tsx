@@ -146,6 +146,8 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
 
             resetInputs()
         }
+        
+        resetInputs()
     }
     // FR : Confirme une action pendant une bataille (activation capacité ou portail)
     // EN : Confirm a battle action (ability activation or gate activation)

@@ -1,5 +1,5 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
-import { CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
 
 export const WormquakeSubterra: bakuganType = {
     key: 'wormquake-subterra',
@@ -31,5 +31,17 @@ export const WormquakeGateCard: gateCardType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'wormquake-gate-card')
         CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Wormquake' })
 
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'wormquake-gate-card')
+        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'Wormquake' })
+    },
+    autoActivationCheck: ({ portalSlot }) => {
+        const bakugansOnSlot = portalSlot.bakugans.length
+        if (bakugansOnSlot >= 2) {
+            return true
+        } else {
+            return false
+        }
     },
 }

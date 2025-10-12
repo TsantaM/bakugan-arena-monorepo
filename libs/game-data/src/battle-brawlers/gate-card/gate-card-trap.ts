@@ -10,7 +10,9 @@ export const MineFantome: gateCardType = {
     description: `Lorsque deux Bakugans se retrouvent sur cette carte ils sont tous les deux éliminés peu importe à qui ils appartiennent`,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (roomState && slotOfGate && slotOfGate.state.open === false && slotOfGate.state.canceled === false) {
+        const otherPlayerId = roomState?.players.find((p) => p.userId !== slotOfGate?.portalCard?.userId)?.userId
+
+        if (roomState && slotOfGate && slotOfGate.portalCard !== null && slotOfGate.state.open === false && slotOfGate.state.canceled === false && otherPlayerId) {
             slotOfGate.state.open = true
             const bakuganOnSlot = slotOfGate.bakugans.map((b) => b.key)
             const bakuganOnSlotDeckState = roomState.decksState
@@ -24,6 +26,11 @@ export const MineFantome: gateCardType = {
                 b.onDomain = false
                 b.elimined = true
             })
+
+            roomState.turnState.turn = slotOfGate.portalCard.userId
+            roomState.turnState.previous_turn = otherPlayerId
+            roomState.turnState.can_change_player_turn = false
+
             ResetSlot(slotOfGate)
             roomState.battleState.battleInProcess = false
             roomState.battleState.slot = null
@@ -31,6 +38,7 @@ export const MineFantome: gateCardType = {
 
             roomState.turnState.set_new_bakugan = true
             roomState.turnState.set_new_gate = true
+
 
             CheckGameFinished({ roomId: roomState.roomId, roomState })
         }
@@ -149,15 +157,15 @@ export const AspirateurDePuissance: gateCardType = {
     key: 'aspirateur-de-puissance',
     name: 'Aspirateur de Puissance',
     maxInDeck: 1,
-    description: `Permet de voler 100G au Bakugan adverse`,
-    onOpen: ({ roomState, slot, userId, bakuganKey }) => {
+    description: `Permet au premier Bakugan mit en jeu de voler 100 G de puissance au dernier Bakugan mit en jeu`,
+    onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        const bakuganUser = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
-        const bakuganOpponent = slotOfGate?.bakugans.find((b) => b.userId !== userId)
 
-        if (slotOfGate && bakuganUser && bakuganOpponent && !slotOfGate.state.open && !slotOfGate.state.canceled) {
-            bakuganOpponent.currentPower = bakuganOpponent.currentPower - 100
-            bakuganUser.currentPower = bakuganUser.currentPower + 100
+        if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
+            const firstBakugan = slotOfGate.bakugans[0]
+            const lastBakugan = slotOfGate.bakugans[slotOfGate.bakugans.length - 1]
+            firstBakugan.currentPower = firstBakugan.currentPower + 100
+            lastBakugan.currentPower = lastBakugan.currentPower - 100
             slotOfGate.state.open = true
         }
     },
@@ -167,13 +175,16 @@ export const AspirateurDePuissance: gateCardType = {
         const bakuganOpponent = slotOfGate?.bakugans.find((b) => b.userId !== userId)
 
         if (slotOfGate && bakuganUser && bakuganOpponent && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
-            bakuganUser.currentPower = bakuganUser.currentPower - 100
-            bakuganOpponent.currentPower = bakuganOpponent.currentPower + 100
-            slotOfGate.state.open = true
+            const firstBakugan = slotOfGate.bakugans[0]
+            const lastBakugan = slotOfGate.bakugans[slotOfGate.bakugans.length - 1]
+            firstBakugan.currentPower = firstBakugan.currentPower - 100
+            lastBakugan.currentPower = lastBakugan.currentPower + 100
+            slotOfGate.state.canceled = true
         }
     },
-    autoActivationCheck({ roomState, portalSlot }) {
-        if (roomState && roomState.battleState.battleInProcess && !roomState.battleState.paused && roomState.battleState.slot === portalSlot.id) {
+    autoActivationCheck: ({ portalSlot }) => {
+        const bakugansOnSlot = portalSlot.bakugans.length
+        if (bakugansOnSlot >= 2) {
             return true
         } else {
             return false

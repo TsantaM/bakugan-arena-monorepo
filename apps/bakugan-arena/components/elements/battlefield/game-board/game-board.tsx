@@ -35,17 +35,17 @@ export default function MapScrollable({ userId }: { userId: string }) {
     return (
       <>
         {
-          slotWithBakugans?.map((b, index) => <BakuganSprite key={index} bakugan={b} userId={userId} />)
+          slotWithBakugans?.map((b) => <BakuganSprite key={`${b.userId}-${b.key}-${b.id}`} bakugan={b} userId={userId} />)
         }
         <div
-          className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] w-full h-[75vh] overflow-hidden cursor-grab"
+          className="absolute left-[50%] translate-x-[-50%] w-full h-[75vh] overflow-hidden cursor-grab"
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
         >
           <div
             ref={mapRef}
-            className={`perspective-[1000px] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[100vw] lg:w-[70vw] lg:h-[75vh]`}
+            className={`perspective-[1000px] absolute left-[50%] translate-x-[-50%] w-[100vw] lg:w-[70vw] lg:h-[75vh]`}
             style={{ transform: `translate(${offset.x}px, ${offset.y}px)` }}
             onMouseDown={handleMouseDown}
           >
