@@ -13,18 +13,23 @@ type globalGateStateType = {
     refreshKey: number,
     setGlobalState: (state: stateType) => void,
     setRefreshKey: () => void
+    cleanState: () => void
 }
 
 export const useGlobalGameState = create<globalGateStateType>((set) => ({
     gameState: null,
     refreshKey: 0,
     portalSlots: [],
+    cleanState() {
+        set(() => ({ gameState: null }))
+        set(() => ({ portalSlots: [] }))
+    },
     setSlots(slots) {
-        set(() => ({portalSlots: slots}))
+        set(() => ({ portalSlots: slots }))
     },
     cleanSlots() {
         set(() => (
-            {portalSlots: []}
+            { portalSlots: [] }
         ))
     },
     setUpdateSlot(slot) {

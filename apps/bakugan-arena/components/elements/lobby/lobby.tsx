@@ -61,7 +61,7 @@ export default function Lobby() {
             <Card>
                 <CardHeader>
                     <CardTitle className="text-center text-lg lg:text-2xl">
-                        Choice a deck and lunch a game
+                        Choice a deck and launch a game
                     </CardTitle>
                 </CardHeader>
 
