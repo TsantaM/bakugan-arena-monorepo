@@ -1,4 +1,5 @@
 import { ResetSlot } from "../../function/reset-slot";
+import { GateCardImages } from "../../store/gate-card-images";
 import { gateCardType } from "../../type/game-data-types";
 import { bakuganOnSlot, stateType } from "../../type/room-types";
 
@@ -7,6 +8,7 @@ export const Rechargement: gateCardType = {
     name: 'Rechargement',
     maxInDeck: 1,
     description: `Augmente le niveau de puissance du propriétaire de la carte de 100 G par Bakugan présent sur le domaine ayant le même élément`,
+    image: GateCardImages.command,
     onOpen: ({ roomState, slot, bakuganKey, userId }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const bakuganUser = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
@@ -45,6 +47,7 @@ export const GrandEsprit: gateCardType = {
     name: 'Grand Esprit',
     maxInDeck: 1,
     description: `Augmente le niveau de puissance du propriétaire de la carte de 50 G par cartes portails présentes sur le domaine`,
+    image: GateCardImages.command,
     onOpen({ roomState, slot, bakuganKey, userId }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const bakuganUser = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
@@ -73,6 +76,7 @@ export const TripleCombat: gateCardType = {
     key: 'triple-combat',
     name: 'Triple Combat',
     description: `Permet au propriétaire de la carte d'attirer le bakugan de son deck non éliminé et hors domaine ayant le niveau de puissance le plus faible`,
+    image: GateCardImages.command,
     maxInDeck: 1,
     onOpen: ({ roomState, slot, userId }) => {
         const opponentId = roomState?.players.find((p) => p.userId !== userId)?.userId
@@ -150,6 +154,7 @@ export const QuatuorDeCombat: gateCardType = {
     key: 'quatuor-de-combat',
     name: 'Quatuor de Combat',
     description: `Attire au jeu sur la carte le bakugan le plus puissant encore jouable dans le deck de chaque joueur`,
+    image: GateCardImages.command,
     maxInDeck: 1,
     onOpen: ({ roomState, slot, userId }) => {
         const opponentId = roomState?.players.find((p) => p.userId !== userId)?.userId
@@ -250,6 +255,7 @@ export const RetourDAssenceur: gateCardType = {
     name: `Retour d'assenceur`,
     maxInDeck: 1,
     description: `Oblige le Bakugan de l'adversaire mis en jeu à revenir immédiatement entre les main de son propriétaire`,
+    image: GateCardImages.command,
     onOpen({ roomState, slot, userId }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
@@ -284,6 +290,7 @@ export const BoucEmissaire: gateCardType = {
     name: 'Bouc Emissaire',
     maxInDeck: 1,
     description: `Le propriétaire du premier Bakugan placé sur la carte peut décider de continuer le combat ou d'y mettre fin`,
+    image: GateCardImages.command,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
 
@@ -302,6 +309,7 @@ export const Armistice: gateCardType = {
     name: 'Armistice',
     maxInDeck: 1,
     description: `Met fin au combat et tous les Bakugans sur la carte quittent le champs de batail. Toutes les cartes maîtrises utilisées seront perdues`,
+    image: GateCardImages.command,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {

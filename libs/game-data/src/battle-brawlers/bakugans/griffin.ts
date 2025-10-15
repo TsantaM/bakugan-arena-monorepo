@@ -1,5 +1,6 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
 import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { GateCardImages } from "../../store/gate-card-images"
 
 export const GriffinPyrus: bakuganType = {
     key: 'griffin-pyrus',
@@ -8,7 +9,9 @@ export const GriffinPyrus: bakuganType = {
     family: 'griffin',
     image: 'griffin',
     powerLevel: 320,
-    exclusiveAbilities: ['aile-enflammee']
+    exclusiveAbilities: ['aile-enflammee'],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const GriffinHaos: bakuganType = {
@@ -18,7 +21,9 @@ export const GriffinHaos: bakuganType = {
     family: 'griffin',
     image: 'griffin',
     powerLevel: 320,
-    exclusiveAbilities: []
+    exclusiveAbilities: [],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const GriffinAquos: bakuganType = {
@@ -28,7 +33,9 @@ export const GriffinAquos: bakuganType = {
     family: 'griffin',
     image: 'griffin',
     powerLevel: 320,
-    exclusiveAbilities: []
+    exclusiveAbilities: [],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const GriffinGateCard: gateCardType = {
@@ -37,6 +44,7 @@ export const GriffinGateCard: gateCardType = {
     maxInDeck: 1,
     family: 'griffin',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Griffin présent sur elle`,
+    image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'griffin-gate-card')
         CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'griffin' })

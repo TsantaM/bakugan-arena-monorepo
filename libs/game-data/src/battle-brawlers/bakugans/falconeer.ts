@@ -1,5 +1,6 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
 import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { GateCardImages } from "../../store/gate-card-images"
 
 export const FalconeerPyrus: bakuganType = {
     key: 'falconeer-pyrus',
@@ -8,7 +9,9 @@ export const FalconeerPyrus: bakuganType = {
     powerLevel: 290,
     exclusiveAbilities: [],
     family: 'Falconeer',
-    image: 'falconeer'
+    image: 'falconeer',
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const FalconeerVentus: bakuganType = {
@@ -18,13 +21,16 @@ export const FalconeerVentus: bakuganType = {
     powerLevel: 290,
     exclusiveAbilities: [],
     family: 'Falconeer',
-    image: 'falconeer'
+    image: 'falconeer',
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const FalconeerGateCard: gateCardType = {
     key: 'falconeer-gate-card',
     name: 'Carte Personnage: Falconeer',
     maxInDeck: 1,
+    image: GateCardImages.caracter,
     description: `Lorsque cette carte est activée elle double le niveau de tous les Falconneer présent sur elle`,
     family: 'Falconeer',
     onOpen({ roomState, slot }) {

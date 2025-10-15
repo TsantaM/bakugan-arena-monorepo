@@ -1,5 +1,6 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
 import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { GateCardImages } from "../../store/gate-card-images"
 
 export const FearReaperPyrus: bakuganType = {
     key: 'fear-reaper-pyrus',
@@ -8,7 +9,9 @@ export const FearReaperPyrus: bakuganType = {
     attribut: 'Pyrus',
     family: 'Fear Reaper',
     powerLevel: 330,
-    exclusiveAbilities: []
+    exclusiveAbilities: [],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const FearReaperHaos: bakuganType = {
@@ -18,7 +21,9 @@ export const FearReaperHaos: bakuganType = {
     attribut: 'Haos',
     family: 'Fear Reaper',
     powerLevel: 330,
-    exclusiveAbilities: []
+    exclusiveAbilities: [],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const FearReaperDarkus: bakuganType = {
@@ -28,7 +33,9 @@ export const FearReaperDarkus: bakuganType = {
     attribut: 'Darkus',
     family: 'Fear Reaper',
     powerLevel: 330,
-    exclusiveAbilities: []
+    exclusiveAbilities: [],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const FearReaperAquos: bakuganType = {
@@ -38,7 +45,9 @@ export const FearReaperAquos: bakuganType = {
     attribut: 'Aquos',
     family: 'Fear Reaper',
     powerLevel: 330,
-    exclusiveAbilities: []
+    exclusiveAbilities: [],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const FearReaperGateCard: gateCardType = {
@@ -47,6 +56,7 @@ export const FearReaperGateCard: gateCardType = {
     maxInDeck: 1,
     description: `Lorsque cette carte est activée elle double le niveau de tous les Fear Reaper présent sur elle`,
     family: 'Fear Reaper',
+    image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'fear-reaper-gate-card')
         CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Fear Reaper' })

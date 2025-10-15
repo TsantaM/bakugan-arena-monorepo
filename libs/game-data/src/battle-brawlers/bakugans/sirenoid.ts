@@ -1,5 +1,6 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
 import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { GateCardImages } from "../../store/gate-card-images"
 
 export const SirenoidAquos: bakuganType = {
     key: 'sirenoid-aquos',
@@ -8,7 +9,9 @@ export const SirenoidAquos: bakuganType = {
     image: 'sirenoid',
     family: 'sirenoid',
     powerLevel: 370,
-    exclusiveAbilities: ['anti-muse']
+    exclusiveAbilities: ['anti-muse'],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const SirenoidGateCard: gateCardType = {
@@ -17,6 +20,7 @@ export const SirenoidGateCard: gateCardType = {
     maxInDeck: 1,
     family: 'sirenoid',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Sirenoid présent sur elle`,
+    image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'sirenoid-gate-card')
         CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'sirenoid' })

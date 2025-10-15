@@ -35,7 +35,8 @@ export default function ManageBakugansInDeck({ deckId, bakugans }: { deckId: str
 
     const bakugansInDeck = BakuganList.filter((b) => bakugans?.includes(b.key))
     const bakuganInDeckFamilies = bakugansInDeck.map((b) => b.family)
-    const notInDeckBakugans = BakuganList.filter((b) => !bakuganInDeckFamilies.includes(b.family))
+    const bakuganInDeckBanList = bakugansInDeck.map((b) => b.banList).flat()
+    const notInDeckBakugans = BakuganList.filter((b) => !bakuganInDeckFamilies.includes(b.family) && !bakuganInDeckBanList.includes(b.key))
 
     console.log(notInDeckBakugans)
 

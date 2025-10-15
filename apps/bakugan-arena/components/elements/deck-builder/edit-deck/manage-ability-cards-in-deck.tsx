@@ -34,7 +34,9 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
     const queryClient = useQueryClient()
 
     // Récupère l'attribut des bakugans dans l'équite
-    const bakugansAttribut = [... new Set(BakuganList.filter((b) => bakugans.includes(b.key)).map((b) => b.attribut))]
+    const firstAttribut = [... new Set(BakuganList.filter((b) => bakugans.includes(b.key)).map((b) => b.attribut))]
+    const secondAttribut = [... new Set(BakuganList.filter((b) => bakugans.includes(b.key)).map((b) => b.seconaryAttribut))]
+    const bakugansAttribut = [firstAttribut, secondAttribut].flat()
     console.log(abilityCards)
 
     const deckAbilityCards = AbilityCardsList.filter((c) => abilityCards?.includes(c.key))
@@ -47,7 +49,7 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
     })
 
     console.log(notInDeckAttributLessAbilities)
-    const notInDeckAbilities = [AbilityCardsList.filter((c) => c.attribut !== undefined && bakugansAttribut.includes(c.attribut)).filter((c) => {
+    const notInDeckAbilities = [AbilityCardsList.filter((c) => c.attribut !== undefined && bakugansAttribut.includes(c.attribut) && secondAttribut.includes(c.attribut)).filter((c) => {
         const exemplary = deckCards.filter((a) => a?.key === c.key).length
 
         return c.maxInDeck > exemplary

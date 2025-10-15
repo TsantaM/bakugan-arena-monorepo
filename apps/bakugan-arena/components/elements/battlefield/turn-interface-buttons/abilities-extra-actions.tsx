@@ -17,6 +17,7 @@ export default function AbilityExtraInputs({ userId }: AbilityExtraInputsProps) 
     console.log(ability)
     const abilityData = AbilityCardsList.find((a) => a.key === ability)
     const exclusiveData = ExclusiveAbilitiesList.find((e) => e.key === ability)
+    console.log(exclusiveData, exclusiveData?.extraInputs?.includes("move-bakugan"))
 
     if (abilityData && abilityData.extraInputs) {
         return (

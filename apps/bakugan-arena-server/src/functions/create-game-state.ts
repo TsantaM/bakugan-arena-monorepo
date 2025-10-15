@@ -39,6 +39,7 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
                         key: c.key,
                         name: c.name,
                         description: c.description,
+                        usable_if_user_not_on_domain: c.usable_if_user_not_on_domain,
                         used: false,
                         dead: false
                     }))

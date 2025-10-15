@@ -1,13 +1,13 @@
 'use client'
 
-import { GateCardsList, portalSlotsTypeElement, slots_id } from "@bakugan-arena/game-data"
+import { GateCardsList, GetGateCardImage, portalSlotsTypeElement, slots_id } from "@bakugan-arena/game-data"
 import Image from "next/image"
 import { useGSAP } from '@gsap/react'
 import { useEffect, useRef, useState } from "react"
 import { useGlobalGameState } from "@/src/store/global-game-state-store"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import Anchor from "./anchor"
-import { useAnimStore, useGateCardStateChangeAnimation, useSetGateCardAnimation } from "@/src/store/global-animation-timeline-store"
+import { useGateCardStateChangeAnimation, useSetGateCardAnimation } from "@/src/store/global-animation-timeline-store"
 import { useSpritePositionAnchor } from "@/src/store/sprites-positions-anchor"
 
 export default function GateCardOnBoard({ userId, slotId }: { userId: string, slotId: slots_id }) {
@@ -199,7 +199,7 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
                     {
                         !slot.can_set && slot.portalCard !== null ?
                             <>
-                                <Image ref={image} src={!slot.state.open ? "/images/cards/portal_card.png" : '/images/cards/open-portal-card.png'} alt='gate-card-design' fill />
+                                <Image ref={image} src={!slot.state.open ? "/images/cards/portal_card.png" : `/images/cards/${GetGateCardImage({slot : slot})}`} alt='gate-card-design' fill />
 
                                 <div ref={setGateOverlay} className="overlay z-20 absolute w-full h-full top-0 left-0 bg-cyan-100 shadow-2xs shadow-cyan-300 opacity-0"></div>
                                 <div ref={openGateOverlay} className="overlay z-20 absolute w-full h-full top-0 left-0 bg-cyan-100 shadow-2xs shadow-cyan-300 opacity-0"></div>

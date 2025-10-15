@@ -1,5 +1,6 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
 import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { GateCardImages } from "../../store/gate-card-images"
 
 export const MonarusVentus: bakuganType = {
     key: 'monarus-ventus',
@@ -8,7 +9,9 @@ export const MonarusVentus: bakuganType = {
     attribut: 'Ventus',
     family: 'Monarus',
     powerLevel: 290,
-    exclusiveAbilities: []
+    exclusiveAbilities: [],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const MonarusGateCard: gateCardType = {
@@ -17,6 +20,7 @@ export const MonarusGateCard: gateCardType = {
     maxInDeck: 1,
     family: 'Monarus',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Monarus présent sur elle`,
+    image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'monarus-gate-card')
         CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Monarus' })

@@ -1,5 +1,7 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
 import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { GateCardImages } from "../../store/gate-card-images"
+import { StarterBanList } from "../../store/starter-banlist"
 
 export const HydranoidDarkus: bakuganType = {
     key: 'hydranoid-darkus',
@@ -8,7 +10,9 @@ export const HydranoidDarkus: bakuganType = {
     image: 'hydranoid',
     powerLevel: 340,
     family: 'Hydranoid',
-    exclusiveAbilities: ['chambre-de-gravité']
+    exclusiveAbilities: ['chambre-de-gravité'],
+    banList: StarterBanList,
+    canChangeAttribut: false
 }
 
 export const DeltaHydranoidDarkus: bakuganType = {
@@ -18,7 +22,9 @@ export const DeltaHydranoidDarkus: bakuganType = {
     image: 'hydranoid-delta',
     powerLevel: 450,
     family: 'Hydranoid',
-    exclusiveAbilities: []
+    exclusiveAbilities: [],
+    banList: StarterBanList,
+    canChangeAttribut: false
 }
 
 export const AlphaHydranoidDarkus: bakuganType = {
@@ -28,7 +34,9 @@ export const AlphaHydranoidDarkus: bakuganType = {
     image: 'hydranoid-alpha',
     powerLevel: 500,
     family: 'Hydranoid',
-    exclusiveAbilities: []
+    exclusiveAbilities: [],
+    banList: StarterBanList,
+    canChangeAttribut: false
 }
 
 export const HydranoidGateCard: gateCardType = {
@@ -37,6 +45,7 @@ export const HydranoidGateCard: gateCardType = {
     maxInDeck: 1,
     family: 'Hydranoid',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Hydranoid présent sur elle`,
+    image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'hydranoid-gate-card')
         CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Hydranoid' })

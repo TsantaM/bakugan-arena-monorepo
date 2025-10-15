@@ -2,12 +2,14 @@ import { gateCardType } from "../../type/game-data-types";
 import { ResetSlot } from "../../function/reset-slot";
 import { CheckGameFinished } from "../../function/check-game-finished";
 import { CheckBattle } from "../../function/check-battle-in-process";
+import { GateCardImages } from "../../store/gate-card-images";
 
 export const MineFantome: gateCardType = {
     key: 'mine-fantome',
     name: 'Mine Fantôme',
     maxInDeck: 1,
     description: `Lorsque deux Bakugans se retrouvent sur cette carte ils sont tous les deux éliminés peu importe à qui ils appartiennent`,
+    image: GateCardImages.command,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const otherPlayerId = roomState?.players.find((p) => p.userId !== slotOfGate?.portalCard?.userId)?.userId
@@ -64,6 +66,7 @@ export const Echange: gateCardType = {
     name: 'Echange',
     maxInDeck: 1,
     description: `Tout Bakugan ayant un niveau de puissance supérieur ou égale à 400 G perd automatiquement`,
+    image: GateCardImages.command,
     onOpen: ({ roomState, slot, userId }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
 
@@ -147,6 +150,7 @@ export const SuperPyrus: gateCardType = {
     key: 'super-pyrus',
     name: 'Super Pyrus',
     maxInDeck: 1,
+    image: GateCardImages.command,
     description: `Echange les niveau de puissance des bakugans au combat. Si elle n'est pas activée par le propriétaire, elle s'active automatiquement à la fin du combat.`,
     onOpen: ({ roomState, slot, userId }) => {
         return
@@ -158,6 +162,7 @@ export const AspirateurDePuissance: gateCardType = {
     name: 'Aspirateur de Puissance',
     maxInDeck: 1,
     description: `Permet au premier Bakugan mit en jeu de voler 100 G de puissance au dernier Bakugan mit en jeu`,
+    image: GateCardImages.command,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
 

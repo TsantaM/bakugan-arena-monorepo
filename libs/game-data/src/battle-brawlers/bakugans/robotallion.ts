@@ -1,5 +1,6 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
 import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { GateCardImages } from "../../store/gate-card-images"
 
 export const RobotallionPyrus: bakuganType = {
     key: 'robotallion-pyrus',
@@ -8,7 +9,9 @@ export const RobotallionPyrus: bakuganType = {
     attribut: 'Pyrus',
     family: 'Robotallion',
     powerLevel: 310,
-    exclusiveAbilities: ['robotalion-execution']
+    exclusiveAbilities: ['robotalion-execution'],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const RobotallionAquos: bakuganType = {
@@ -18,7 +21,9 @@ export const RobotallionAquos: bakuganType = {
     attribut: 'Aquos',
     family: 'Robotallion',
     powerLevel: 310,
-    exclusiveAbilities: ['robotalion-execution']
+    exclusiveAbilities: ['robotalion-execution'],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const RobotallionDarkus: bakuganType = {
@@ -28,7 +33,9 @@ export const RobotallionDarkus: bakuganType = {
     attribut: 'Darkus',
     family: 'Robotallion',
     powerLevel: 310,
-    exclusiveAbilities: ['robotalion-execution']
+    exclusiveAbilities: ['robotalion-execution'],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const RobotallionHaos: bakuganType = {
@@ -38,7 +45,9 @@ export const RobotallionHaos: bakuganType = {
     attribut: 'Haos',
     family: 'Robotallion',
     powerLevel: 310,
-    exclusiveAbilities: ['robotalion-execution']
+    exclusiveAbilities: ['robotalion-execution'],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const RobotallionGateCard: gateCardType = {
@@ -47,6 +56,7 @@ export const RobotallionGateCard: gateCardType = {
     maxInDeck: 1,
     family: 'Robotallion',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Robotallion présent sur elle`,
+    image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'robotallion-gate-card')
         CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Robotallion' })

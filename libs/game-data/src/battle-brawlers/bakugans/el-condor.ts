@@ -1,5 +1,6 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
 import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { GateCardImages } from "../../store/gate-card-images"
 
 export const ElCondorHaos: bakuganType = {
     key: 'el-condor-haos',
@@ -8,7 +9,9 @@ export const ElCondorHaos: bakuganType = {
     family: 'El Condor',
     image: 'el-condor',
     exclusiveAbilities: ['plexus-solaire'],
-    powerLevel: 310
+    powerLevel: 310,
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const ElCondorVentus: bakuganType = {
@@ -18,7 +21,9 @@ export const ElCondorVentus: bakuganType = {
     family: 'El Condor',
     image: 'el-condor',
     exclusiveAbilities: ['plexus-solaire', 'souffle-infini'],
-    powerLevel: 310
+    powerLevel: 310,
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const ElCondorSubterra: bakuganType = {
@@ -28,13 +33,16 @@ export const ElCondorSubterra: bakuganType = {
     family: 'El Condor',
     image: 'el-condor',
     exclusiveAbilities: ['plexus-solaire'],
-    powerLevel: 310
+    powerLevel: 310,
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const ElCondorGateCard: gateCardType = {
     key: 'el-condor-gate-card',
     name: 'Carte Personnage: El Condor',
     maxInDeck: 1,
+    image: GateCardImages.caracter,
     description: `Lorsque cette carte est activée elle double le niveau de tous les El Condor présent sur elle`,
     family: 'El Condor',
     onOpen({ roomState, slot }) {

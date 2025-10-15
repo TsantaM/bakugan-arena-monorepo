@@ -1,5 +1,7 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
 import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { GateCardImages } from "../../store/gate-card-images"
+import { StarterBanList } from "../../store/starter-banlist"
 
 export const TentaclearHaos: bakuganType = {
     key: 'tentaclear-haos',
@@ -8,7 +10,9 @@ export const TentaclearHaos: bakuganType = {
     powerLevel: 370,
     family: 'Tentaclear',
     image: 'tentaclear',
-    exclusiveAbilities: ['rayon-gamma']
+    exclusiveAbilities: ['rayon-gamma'],
+    banList: StarterBanList,
+    canChangeAttribut: false
 }
 
 export const TentaclearGateCard: gateCardType = {
@@ -17,6 +21,7 @@ export const TentaclearGateCard: gateCardType = {
     maxInDeck: 1,
     family: 'Tentaclear',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Tentaclear présent sur elle`,
+    image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'tentaclear-gate-card')
         CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Tentaclear' })

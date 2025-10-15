@@ -1,5 +1,6 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
 import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { GateCardImages } from "../../store/gate-card-images"
 
 const powerLevel: number = 330
 const family: string = 'Centipod'
@@ -11,7 +12,9 @@ export const CentipodDarkus: bakuganType = {
     image: 'centipod',
     family: 'Centipod',
     exclusiveAbilities: ['regain-subit'],
-    powerLevel: powerLevel
+    powerLevel: powerLevel,
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const CentipodPyrus: bakuganType = {
@@ -21,7 +24,9 @@ export const CentipodPyrus: bakuganType = {
     image: 'centipod',
     family: 'Centipod',
     exclusiveAbilities: [],
-    powerLevel: powerLevel
+    powerLevel: powerLevel,
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const CentipodHaos: bakuganType = {
@@ -31,7 +36,9 @@ export const CentipodHaos: bakuganType = {
     image: 'centipod',
     family: 'Centipod',
     exclusiveAbilities: [],
-    powerLevel: powerLevel
+    powerLevel: powerLevel,
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const CentipodSubterra: bakuganType = {
@@ -41,7 +48,9 @@ export const CentipodSubterra: bakuganType = {
     image: 'centipod',
     family: 'Centipod',
     exclusiveAbilities: [],
-    powerLevel: powerLevel
+    powerLevel: powerLevel,
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const CentipodGateCard: gateCardType = {
@@ -50,6 +59,7 @@ export const CentipodGateCard: gateCardType = {
     maxInDeck: 1,
     family: 'Centipod',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Centipod présent sur elle`,
+    image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'centipod-gate-card')
         CaracterGateCardEffect({ slotOfGate: slotOfGate, family: family })

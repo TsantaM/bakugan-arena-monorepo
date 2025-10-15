@@ -1,5 +1,6 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
 import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { GateCardImages } from "../../store/gate-card-images"
 
 export const MantrisPyrus: bakuganType = {
     key: 'mantris-pyrus',
@@ -8,7 +9,9 @@ export const MantrisPyrus: bakuganType = {
     image: 'mantris',
     powerLevel: 320,
     family: 'Mantris',
-    exclusiveAbilities: ['marionnette', 'lance-eclair', 'machettes-jumelles']
+    exclusiveAbilities: ['marionnette', 'lance-eclair', 'machettes-jumelles'],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const MantrisDarkus: bakuganType = {
@@ -18,7 +21,9 @@ export const MantrisDarkus: bakuganType = {
     image: 'mantris',
     powerLevel: 320,
     family: 'Mantris',
-    exclusiveAbilities: ['marionnette', 'lance-eclair', 'machettes-jumelles']
+    exclusiveAbilities: ['marionnette', 'lance-eclair', 'machettes-jumelles'],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const MantrisHaos: bakuganType = {
@@ -28,7 +33,9 @@ export const MantrisHaos: bakuganType = {
     image: 'mantris',
     powerLevel: 320,
     family: 'Mantris',
-    exclusiveAbilities: ['marionnette', 'lance-eclair', 'machettes-jumelles']
+    exclusiveAbilities: ['marionnette', 'lance-eclair', 'machettes-jumelles'],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const MantrisSubterra: bakuganType = {
@@ -38,7 +45,9 @@ export const MantrisSubterra: bakuganType = {
     image: 'mantris',
     powerLevel: 320,
     family: 'Mantris',
-    exclusiveAbilities: ['marionnette', 'lance-eclair', 'machettes-jumelles']
+    exclusiveAbilities: ['marionnette', 'lance-eclair', 'machettes-jumelles'],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const MantrisGateCard: gateCardType = {
@@ -47,6 +56,7 @@ export const MantrisGateCard: gateCardType = {
     maxInDeck: 1,
     family: 'Mantris',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Mantris présent sur elle`,
+    image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'mantris-gate-card')
         CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Mantris' })

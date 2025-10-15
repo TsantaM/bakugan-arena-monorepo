@@ -79,7 +79,7 @@ export default function UseAbilityCardInNeutral({ roomId, userId }: { roomId: st
                         <SelectGroup>
                             <SelectLabel>Usable Exclusive Abilities</SelectLabel>
                             {
-                                usableExclusives?.map((s, index) => <SelectItem key={index} value={s.key}>{s.name}</SelectItem>)
+                                usableExclusives?.map((s, index) => s && <SelectItem key={index} value={s.key}>{s.name}</SelectItem>)
                             }
                         </SelectGroup>
                     </SelectContent>

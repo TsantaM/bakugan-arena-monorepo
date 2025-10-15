@@ -1,5 +1,6 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
 import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { GateCardImages } from "../../store/gate-card-images"
 
 export const WormquakeSubterra: bakuganType = {
     key: 'wormquake-subterra',
@@ -8,7 +9,9 @@ export const WormquakeSubterra: bakuganType = {
     exclusiveAbilities: ['trappe-de-sable'],
     family: 'Wormquake',
     image: 'wormquake',
-    powerLevel: 300
+    powerLevel: 300,
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const WormquakeDarkus: bakuganType = {
@@ -18,7 +21,9 @@ export const WormquakeDarkus: bakuganType = {
     exclusiveAbilities: [],
     family: 'Wormquake',
     image: 'wormquake',
-    powerLevel: 300
+    powerLevel: 300,
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const WormquakeGateCard: gateCardType = {
@@ -27,6 +32,7 @@ export const WormquakeGateCard: gateCardType = {
     maxInDeck: 1,
     family: 'Wormquake',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Wormquake présent sur elle`,
+    image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'wormquake-gate-card')
         CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Wormquake' })
