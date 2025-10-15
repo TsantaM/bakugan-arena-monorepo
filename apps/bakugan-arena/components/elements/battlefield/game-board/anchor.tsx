@@ -1,10 +1,10 @@
 'use client'
 
 import { spritePosition, useSpritePositionAnchor } from "@/src/store/sprites-positions-anchor";
-import { bakuganOnSlot } from "@bakugan-arena/game-data";
+import { bakuganOnSlot, slots_id } from "@bakugan-arena/game-data";
 import { useEffect, useRef } from "react";
 
-export default function Anchor({ bakugan }: { bakugan: bakuganOnSlot }) {
+export default function Anchor({ bakugan, slotId }: { bakugan: bakuganOnSlot, slotId: slots_id }) {
   const ref = useRef<HTMLDivElement>(null)
   const { setSpritesPositions } = useSpritePositionAnchor()
 
@@ -18,6 +18,7 @@ export default function Anchor({ bakugan }: { bakugan: bakuganOnSlot }) {
       if (!ref.current) return
       if(!rect) return
       const data: spritePosition = {
+        slotId: slotId,
         key: bakugan.key,
         userId: bakugan.userId,
         x: rect.left,

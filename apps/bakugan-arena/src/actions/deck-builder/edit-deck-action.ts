@@ -32,7 +32,10 @@ export const AddBakuganToDeckAction = async ({ bakuganId, deckId }: { bakuganId:
     const user = await getUser()
 
     if (user && deckData) {
-        if (!deckData.bakugans.includes(bakuganId) && deckData.bakugans.length < 3) {
+
+        const banList = BakuganList.filter((b) => deckData.bakugans.includes(b.key)).map((b) => b.banList).flat()
+
+        if (!deckData.bakugans.includes(bakuganId) && deckData.bakugans.length < 3 && !banList.includes(bakuganId)) {
             return await prisma.deck.update({
                 where: {
                     id: deckId,

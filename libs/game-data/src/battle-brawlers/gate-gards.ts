@@ -1,5 +1,5 @@
 import { FusionAerienne, FusionEnflammee, FusionLumineuse, FusionMarine, FusionTenebreuses, FusionTerrestre, PerilAquos, PerilDarkus, PerilHaos, PerilPyrus, PerilSubterra, PerilVentus, ReacteurAquos, ReacteurDarkus, ReacteurHaos, ReacteurPyrus, ReacteurSubterra, ReacteurVentus } from "./gate-card/gate-card-elementary";
-import { Echange, MineFantome, SuperPyrus } from "./gate-card/gate-card-trap";
+import { AspirateurDePuissance, Echange, MineFantome, SuperPyrus } from "./gate-card/gate-card-trap";
 import { Armistice, BoucEmissaire, GrandEsprit, QuatuorDeCombat, Rechargement, RetourDAssenceur, TripleCombat } from "./gate-card/gate-card-command";
 import { gateCardType } from "../type/game-data-types";
 import { CentipodGateCard } from "./bakugans/centipod";
@@ -65,7 +65,7 @@ export const GateCards: Record<string, gateCardType> = {
     [MineFantome.key]: MineFantome,
     [Echange.key]: Echange,
     [SuperPyrus.key]: SuperPyrus,
-
+    [AspirateurDePuissance.key]: AspirateurDePuissance,
 
     // Commandement
 

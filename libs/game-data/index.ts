@@ -26,6 +26,7 @@ import { MoveBakuganAbilityFilters } from './src/function/filters/move-bakugan-a
 import { MoveOpponentAbilityFilter } from './src/function/filters/move-opponent-ability-filter'
 import { DragBakuganAbilityFilter } from './src/function/filters/drag-bakugan-ability-filter'
 import { AddBakuganAbilityFilter } from './src/function/filters/add-bakugan-ability-filter'
+import { GetGateCardImage } from './src/function/get-gate-card-image'
 
 export {
     Bakugans,
@@ -61,8 +62,9 @@ export {
     MoveBakuganAbilityFilters,
     MoveOpponentAbilityFilter,
     DragBakuganAbilityFilter,
-    AddBakuganAbilityFilter
+    AddBakuganAbilityFilter,
 
+    GetGateCardImage
 }
 
 export type {

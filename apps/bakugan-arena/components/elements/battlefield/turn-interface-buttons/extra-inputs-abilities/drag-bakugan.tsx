@@ -7,12 +7,12 @@ import { BakuganList, DragBakuganAbilityFilter, slots_id } from "@bakugan-arena/
 
 export default function DragBakugan({ userId }: { userId: string }) {
 
-    const { abilityUser: bakuganKey, slotToDrag } = useTurnActionStore((state) => state.turnActions)
+    const { abilityUser: bakuganKey, slotToDrag, ability, zone } = useTurnActionStore((state) => state.turnActions)
     const { selectTarget, select_slot_to_drag } = useTurnActionStore()
     const slots = useGlobalGameState((state) => state.gameState?.protalSlots)
 
     // Drag Bakugan Filter
-    const dragBakuganInput = DragBakuganAbilityFilter({ slots, bakuganKey, slotToDrag, userId })
+    const dragBakuganInput = DragBakuganAbilityFilter({ slots, bakuganKey, slotToDrag, userId, ability: ability, zone: zone })
 
     const draggableSlots = dragBakuganInput?.draggableSlots
     const draggables = dragBakuganInput?.draggables

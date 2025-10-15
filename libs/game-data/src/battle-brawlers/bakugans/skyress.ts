@@ -1,5 +1,7 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
-import { CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { StarterBanList } from "../../store/starter-banlist"
+import { GateCardImages } from "../../store/gate-card-images"
 
 export const SkyressVentus: bakuganType = {
     name: 'Skyress',
@@ -8,7 +10,9 @@ export const SkyressVentus: bakuganType = {
     key: 'skyress-ventus',
     powerLevel: 370,
     family: 'Skyress',
-    exclusiveAbilities: ['vent-violent-de-noblesse-verte']
+    exclusiveAbilities: ['vent-violent-de-noblesse-verte'],
+    banList: StarterBanList,
+    canChangeAttribut: false
 }
 
 export const SkyressStormVentus: bakuganType = {
@@ -18,7 +22,9 @@ export const SkyressStormVentus: bakuganType = {
     key: 'skyress-storm-ventus',
     powerLevel: 450,
     family: 'Skyress',
-    exclusiveAbilities: []
+    exclusiveAbilities: [],
+    banList: StarterBanList,
+    canChangeAttribut: false
 }
 
 export const SkyressGateCard: gateCardType = {
@@ -27,9 +33,22 @@ export const SkyressGateCard: gateCardType = {
     maxInDeck: 1,
     family: 'Skyress',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Skyress présent sur elle`,
+    image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'skyress-gate-card')
         CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Skyress' })
 
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'skyress-gate-card')
+        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'Skyress' })
+    },
+    autoActivationCheck: ({ portalSlot }) => {
+        const bakugansOnSlot = portalSlot.bakugans.length
+        if (bakugansOnSlot >= 2) {
+            return true
+        } else {
+            return false
+        }
     },
 }

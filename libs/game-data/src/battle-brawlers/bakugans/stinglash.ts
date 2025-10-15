@@ -1,5 +1,6 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
-import { CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { GateCardImages } from "../../store/gate-card-images"
 
 export const StinglashAquos: bakuganType = {
     key: 'stinglash-aquos',
@@ -8,7 +9,9 @@ export const StinglashAquos: bakuganType = {
     image: 'stinglash',
     family: 'Stinglash',
     exclusiveAbilities: ['maitre-des-profondeurs'],
-    powerLevel: 300
+    powerLevel: 300,
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const StinglashDarkus: bakuganType = {
@@ -18,7 +21,9 @@ export const StinglashDarkus: bakuganType = {
     image: 'stinglash',
     family: 'Stinglash',
     exclusiveAbilities: [],
-    powerLevel: 300
+    powerLevel: 300,
+    banList: [],
+    canChangeAttribut: false
 }
 
 
@@ -29,7 +34,9 @@ export const StinglashSubterra: bakuganType = {
     image: 'stinglash',
     family: 'Stinglash',
     exclusiveAbilities: [],
-    powerLevel: 300
+    powerLevel: 300,
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const StinglashGateCard: gateCardType = {
@@ -38,9 +45,22 @@ export const StinglashGateCard: gateCardType = {
     maxInDeck: 1,
     family: 'Stinglash',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Stinglash présent sur elle`,
+    image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'stinglash-gate-card')
         CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Stinglash' })
 
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'stinglash-gate-card')
+        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'Stinglash' })
+    },
+    autoActivationCheck: ({ portalSlot }) => {
+        const bakugansOnSlot = portalSlot.bakugans.length
+        if (bakugansOnSlot >= 2) {
+            return true
+        } else {
+            return false
+        }
     },
 }

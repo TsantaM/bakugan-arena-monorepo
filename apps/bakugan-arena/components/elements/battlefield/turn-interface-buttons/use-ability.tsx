@@ -25,7 +25,7 @@ export default function UseAbilityCard({ roomId, userId }: { roomId: string, use
     const playersDeck = useGlobalGameState((state) => state.gameState?.decksState.find((d) => d.userId === userId))
 
     const { selectAbility, selectAbilityUser: selectBakugan, } = useTurnActionStore()
-    const { abilityUser: bakuganKey } = useTurnActionStore((state) => state.turnActions)
+    const { abilityUser: bakuganKey, ability } = useTurnActionStore((state) => state.turnActions)
     console.log(bakuganKey)
 
     // ---------------------------
@@ -42,8 +42,7 @@ export default function UseAbilityCard({ roomId, userId }: { roomId: string, use
         const usableAbilities = selectAbilityInputs.usableAbilities
         const usableExclusives = selectAbilityInputs.usableExclusives
 
-        console.log(usableAbilities)
-        console.log(usableExclusives)
+        console.log('ability', ability)
 
         return (
             <div className="flex flex-col gap-2">
@@ -80,7 +79,7 @@ export default function UseAbilityCard({ roomId, userId }: { roomId: string, use
                             <SelectGroup>
                                 <SelectLabel>Usable Exclusive Abilities</SelectLabel>
                                 {
-                                    usableExclusives?.map((s, index) => <SelectItem key={index} value={s.key}>{s.name}</SelectItem>)
+                                    usableExclusives?.map((s, index) => s && <SelectItem key={index} value={s.key}>{s.name}</SelectItem>)
                                 }
                             </SelectGroup>
                         </SelectContent>

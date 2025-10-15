@@ -19,11 +19,15 @@ export type ExtraInputsTypes =
 export type bakuganType = {
     name: string,
     attribut: attribut,
+    canChangeAttribut: boolean,
+    seconaryAttribut?: attribut
     powerLevel: number,
     image: string,
     key: string,
     family: string,
     exclusiveAbilities: string[]
+    // List of bakugans tha you can use with this one
+    banList: string[]
 }
 
 export type abilityCardsType = {
@@ -34,6 +38,7 @@ export type abilityCardsType = {
     maxInDeck: number,
     extraInputs?: ExtraInputsTypes[],
     usable_in_neutral: boolean,
+    slotLimits?: boolean,
     onActivate: ({ roomState, userId, bakuganKey, slot, target_slot, slot_to_move, target, slotToDrag, bakuganToAdd, bakuganToMove, destination }: { roomState: stateType, roomId: string, userId: string, bakuganKey: string, slot: slots_id, target_slot: slots_id | '', slot_to_move: slots_id | '', target?: string | '', slotToDrag?: slots_id | '', bakuganToAdd?: string, bakuganToMove?: bakuganToMoveType, destination: slots_id | '' }) => void
     onCanceled?: ({ roomState, userId, bakuganKey, slot }: { roomState: stateType, userId: string, bakuganKey: string, slot: slots_id }) => void
     onWin?: ({ roomState, userId, slot }: { roomState: stateType, userId: string, slot: portalSlotsTypeElement }) => void
@@ -46,6 +51,8 @@ export type exclusiveAbilitiesType = {
     maxInDeck: number;
     extraInputs?: ExtraInputsTypes[],
     usable_in_neutral: boolean,
+    slotLimits?: boolean,
+    usable_if_user_not_on_domain: boolean,
     onActivate: ({ roomState, userId, bakuganKey, slot, target_slot, slot_to_move, target, slotToDrag, bakuganToAdd, bakuganToMove, destination }: { roomState: stateType, roomId: string, userId: string, bakuganKey: string, slot: slots_id, target_slot: slots_id | '', slot_to_move: slots_id | '', target?: string | '', slotToDrag?: slots_id | '', bakuganToAdd?: string, bakuganToMove?: bakuganToMoveType, destination: slots_id | '' }) => void
     onCanceled?: ({ roomState, userId, bakuganKey, slot }: { roomState: stateType, userId: string, bakuganKey: string, slot: slots_id }) => void
     onWin?: ({ roomState, userId, slot }: { roomState: stateType, userId: string, slot: portalSlotsTypeElement }) => void
@@ -58,6 +65,7 @@ export type gateCardType = {
     maxInDeck: number,
     attribut?: attribut,
     family?: string,
+    image: string,
     onOpen: ({ roomState, slot }: {
         roomState: stateType;
         slot: slots_id;

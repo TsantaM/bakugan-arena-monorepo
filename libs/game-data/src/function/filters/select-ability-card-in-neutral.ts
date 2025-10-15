@@ -24,10 +24,15 @@ export function SelectAbilityCardInNeutralFilters({ slots, userId, decksState, b
             index === self.findIndex((t) => t.key === item.key)
     );
 
-    const usableExclusives = decksState.find((d) => d.userId === userId)?.bakugans.find((b) => b?.bakuganData.key === bakuganKey)?.excluAbilitiesState.filter((c) => c.dead === false && c.used === false && c.dead === false && exclusivesUsableInNeutral.includes(c.key)).filter(
+    const usable_if_user_not_on_domain = decksState.find((d) => d.userId === userId)?.bakugans.filter((b) => !b?.bakuganData.elimined)?.map((b) => b?.excluAbilitiesState).flat().filter((c) => c && c.dead === false && c.used === false && c.dead === false && exclusivesUsableInNeutral.includes(c.key) && c.usable_if_user_not_on_domain).filter(
+        (item, index, self) =>
+            item && index === self.findIndex((t) => t && t.key === item.key)
+    );
+
+    const usableExclusives = [decksState.find((d) => d.userId === userId)?.bakugans.find((b) => b?.bakuganData.key === bakuganKey)?.excluAbilitiesState.filter((c) => c.dead === false && c.used === false && c.dead === false && exclusivesUsableInNeutral.includes(c.key)).filter(
         (item, index, self) =>
             index === self.findIndex((t) => t.key === item.key)
-    );
+    ), usable_if_user_not_on_domain].flat();
 
     return {
         bakuganList,

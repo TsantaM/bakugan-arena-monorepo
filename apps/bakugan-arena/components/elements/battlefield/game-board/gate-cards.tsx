@@ -1,14 +1,14 @@
 'use client'
 
-import { GateCardsList, portalSlotsTypeElement, slots_id } from "@bakugan-arena/game-data"
+import { GateCardsList, GetGateCardImage, portalSlotsTypeElement, slots_id } from "@bakugan-arena/game-data"
 import Image from "next/image"
-import BakuganSprite from "./bakugan-sprite"
-import gsap from "gsap"
 import { useGSAP } from '@gsap/react'
 import { useEffect, useRef, useState } from "react"
 import { useGlobalGameState } from "@/src/store/global-game-state-store"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import Anchor from "./anchor"
+import { useGateCardStateChangeAnimation, useSetGateCardAnimation } from "@/src/store/global-animation-timeline-store"
+import { useSpritePositionAnchor } from "@/src/store/sprites-positions-anchor"
 
 export default function GateCardOnBoard({ userId, slotId }: { userId: string, slotId: slots_id }) {
 
@@ -22,6 +22,10 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
     const [removeGate, setRemoveGate] = useState(false)
     const [open, setOpen] = useState(false)
     const [state, setState] = useState(false)
+    // const { setSpritesPositions, removePosition } = useSpritePositionAnchor()
+    const positions = useSpritePositionAnchor((state) => state.spritesPositions)
+    const { add: addGateCardTimeline } = useSetGateCardAnimation()
+    const { add: addGateCardStateChangeAnimation } = useGateCardStateChangeAnimation()
 
     const gateCardData = GateCardsList.find((g) => g.key === slot?.portalCard?.key)
 
@@ -61,50 +65,62 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
         }
     }, [slot])
 
+    // useEffect(() => {
+    //     const positionsOnSlot = positions.filter((p) => p.slotId === slotId)
+    //     console.log(positionsOnSlot)
+    //     positionsOnSlot.forEach((p) => {
+    //         const bakuganOnSlotKeys = slot.bakugans.map((b) => b.key)
+    //         if(!bakuganOnSlotKeys.includes(p.key)) {
+    //             removePosition(p)
+    //         } else {
+    //             return
+    //         }
+    //     })
+
+    // }, [slot.bakugans])
+
     useGSAP(() => {
         if (setGateOverlay.current && image.current) {
-            const setGateCard = gsap.timeline()
-            setGateCard.pause()
-            setGateCard.fromTo([setGateOverlay.current, image.current], {
-                opacity: 1,
-                scale: 0
-            },
-                {
-                    scale: 1,
-                })
-            setGateCard.fromTo(setGateOverlay.current,
-                {
-                    opacity: 1,
-                }, {
-                opacity: 0,
-                display: 'none'
-            })
             console.log('setGateCard')
             if (set) {
-                setGateCard.play()
+                addGateCardTimeline((setGateCard) => {
+                    setGateCard.fromTo([setGateOverlay.current, image.current], {
+                        opacity: 1,
+                        scale: 0
+                    },
+                        {
+                            scale: 1,
+                        })
+                    setGateCard.fromTo(setGateOverlay.current,
+                        {
+                            opacity: 1,
+                        }, {
+                        opacity: 0,
+                        display: 'none'
+                    })
+                })
             }
         }
 
         console.log(removeGateOverlay.current)
         if (removeGateOverlay.current) {
             console.log('in ' + set)
-            const removeGateCard = gsap.timeline()
-            removeGateCard.pause()
-            removeGateCard.fromTo(removeGateOverlay.current, {
-                opacity: 0,
-            },
-                {
-                    opacity: 1,
-                })
-            removeGateCard.to(removeGateOverlay.current, {
-                opacity: 0,
-                display: 'none',
-                onComplete: () => setRemoveGate(false)
-            })
             if (removeGate) {
                 console.log(set)
                 console.log(removeGateOverlay.current)
-                removeGateCard.play()
+                addGateCardStateChangeAnimation((removeGateCard) => {
+                    removeGateCard.fromTo(removeGateOverlay.current, {
+                        opacity: 0,
+                    },
+                        {
+                            opacity: 1,
+                        })
+                    removeGateCard.to(removeGateOverlay.current, {
+                        opacity: 0,
+                        display: 'none',
+                        onComplete: () => setRemoveGate(false)
+                    })
+                })
                 console.log('animation close')
             } else {
                 return
@@ -115,36 +131,33 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
     useGSAP(() => {
 
         if (openGateOverlay.current) {
-            const openGateCard = gsap.timeline()
-            openGateCard.pause()
-
-            openGateCard.fromTo(openGateOverlay.current,
-                {
-                    display: 'block',
-                    opacity: 0
-                },
-                {
-                    opacity: 1,
-                }
-            )
-            openGateCard.fromTo(image,
-                {
-                    display: 'block',
-                    opacity: 0
-                },
-                {
-                    opacity: 1
-                }
-            )
-            openGateCard.to(openGateOverlay.current,
-                {
-                    opacity: 0,
-                    display: 'none',
-                }
-            )
-
             if (open) {
-                openGateCard.play()
+                addGateCardStateChangeAnimation((openGateCard) => {
+                    openGateCard.fromTo(openGateOverlay.current,
+                        {
+                            display: 'block',
+                            opacity: 0
+                        },
+                        {
+                            opacity: 1,
+                        }
+                    )
+                    openGateCard.fromTo(image,
+                        {
+                            display: 'block',
+                            opacity: 0
+                        },
+                        {
+                            opacity: 1
+                        }
+                    )
+                    openGateCard.to(openGateOverlay.current,
+                        {
+                            opacity: 0,
+                            display: 'none',
+                        }
+                    )
+                })
             }
 
         }
@@ -153,26 +166,24 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
     useGSAP(() => {
 
         if (stateChangeOverlay.current && state) {
-            const stateChange = gsap.timeline()
-            stateChange.pause()
-            console.log('changed ' + state)
-            stateChange.fromTo(stateChangeOverlay.current,
-                {
-                    opacity: 0
-                },
-                {
-                    opacity: 0.5
-                }
-            )
-            stateChange.to(image.current,
-                {
-                    opacity: 0.5,
-                    onComplete: () => setState(false)
-                }
-            )
 
             if (state) {
-                stateChange.play()
+                addGateCardStateChangeAnimation((stateChange) => {
+                    stateChange.fromTo(stateChangeOverlay.current,
+                        {
+                            opacity: 0
+                        },
+                        {
+                            opacity: 0.5
+                        }
+                    )
+                    stateChange.to(image.current,
+                        {
+                            opacity: 0.5,
+                            onComplete: () => setState(false)
+                        }
+                    )
+                })
             }
         }
 
@@ -188,7 +199,7 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
                     {
                         !slot.can_set && slot.portalCard !== null ?
                             <>
-                                <Image ref={image} src={!slot.state.open ? "/images/cards/portal_card.png" : '/images/cards/open-portal-card.png'} alt='gate-card-design' fill />
+                                <Image ref={image} src={!slot.state.open ? "/images/cards/portal_card.png" : `/images/cards/${GetGateCardImage({slot : slot})}`} alt='gate-card-design' fill />
 
                                 <div ref={setGateOverlay} className="overlay z-20 absolute w-full h-full top-0 left-0 bg-cyan-100 shadow-2xs shadow-cyan-300 opacity-0"></div>
                                 <div ref={openGateOverlay} className="overlay z-20 absolute w-full h-full top-0 left-0 bg-cyan-100 shadow-2xs shadow-cyan-300 opacity-0"></div>
@@ -198,8 +209,8 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
                                     <div className="relative z-40 flex items-center self-end gap-3">
                                         {
 
-                                            oponentsBakugans.map((o, index) =>
-                                                <Anchor bakugan={o} key={index} />
+                                            oponentsBakugans.map((o) =>
+                                                <Anchor bakugan={o} key={`${o.userId}-${o.key}-${o.id}`} slotId={slotId}/>
                                             )
 
                                         }
@@ -207,8 +218,8 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
 
                                     <div className="relative z-40 flex items-center self-start gap-3">
                                         {
-                                            playerBakugans.map((p, index) =>
-                                                <Anchor bakugan={p} key={index} />
+                                            playerBakugans.map((p) =>
+                                                <Anchor bakugan={p} key={`${p.userId}-${p.key}-${p.id}`} slotId={slotId}/>
                                             )
                                         }
                                     </div>

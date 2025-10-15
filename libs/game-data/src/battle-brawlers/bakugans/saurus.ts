@@ -1,5 +1,6 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
-import { CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { GateCardImages } from "../../store/gate-card-images"
 
 export const SaurusPyrus: bakuganType = {
     key: 'saurus-pyrus',
@@ -8,7 +9,9 @@ export const SaurusPyrus: bakuganType = {
     attribut: 'Pyrus',
     family: 'Saurus',
     powerLevel: 290,
-    exclusiveAbilities: []
+    exclusiveAbilities: [],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const SaurusSubterra: bakuganType = {
@@ -18,7 +21,9 @@ export const SaurusSubterra: bakuganType = {
     attribut: 'Subterra',
     family: 'Saurus',
     powerLevel: 290,
-    exclusiveAbilities: []
+    exclusiveAbilities: [],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const SaurusHaos: bakuganType = {
@@ -28,7 +33,9 @@ export const SaurusHaos: bakuganType = {
     attribut: 'Haos',
     family: 'Saurus',
     powerLevel: 290,
-    exclusiveAbilities: []
+    exclusiveAbilities: [],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const SaurusGateCard: gateCardType = {
@@ -37,9 +44,22 @@ export const SaurusGateCard: gateCardType = {
     maxInDeck: 1,
     family: 'Saurus',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Saurus présent sur elle`,
+    image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'saurus-gate-card')
         CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Saurus' })
 
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'saurus-gate-card')
+        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'Saurus' })
+    },
+    autoActivationCheck: ({ portalSlot }) => {
+        const bakugansOnSlot = portalSlot.bakugans.length
+        if (bakugansOnSlot >= 2) {
+            return true
+        } else {
+            return false
+        }
     },
 }

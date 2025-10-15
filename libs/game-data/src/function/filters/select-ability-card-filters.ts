@@ -16,10 +16,17 @@ export function SelectAbilityCardFilters({ slotOfBattle, userId, bakuganKey, pla
             index === self.findIndex((t) => t.key === item.key)
     ), attributLessAbilities].flat();
 
-    const usableExclusives = playersDeck?.bakugans.find((b) => b?.bakuganData.key === bakuganKey)?.excluAbilitiesState.filter((c) => c.dead === false && c.used === false && c.dead === false).filter(
+
+    const usable_if_user_not_on_domain = playersDeck?.bakugans.filter((b) => !b?.bakuganData.elimined )?.map((b) => b?.excluAbilitiesState).flat().filter((c) => c && c.dead === false && c.used === false && c.dead === false && c.usable_if_user_not_on_domain ).filter(
+        (item, index, self) =>
+            item && index === self.findIndex((t) => t && t.key === item.key)
+            
+    );
+
+    const usableExclusives = [playersDeck?.bakugans.find((b) => b?.bakuganData.key === bakuganKey)?.excluAbilitiesState.filter((c) => c.dead === false && c.used === false && c.dead === false).filter(
         (item, index, self) =>
             index === self.findIndex((t) => t.key === item.key)
-    );
+    ), usable_if_user_not_on_domain].flat();
     return {
         bakugansList,
         usableAbilities,

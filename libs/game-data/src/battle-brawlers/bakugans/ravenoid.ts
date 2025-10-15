@@ -1,5 +1,6 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
-import { CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { GateCardImages } from "../../store/gate-card-images"
 
 export const RavenoidPyrus: bakuganType = {
     key: 'ravenoid-pyrus',
@@ -8,7 +9,9 @@ export const RavenoidPyrus: bakuganType = {
     image: 'ravenoid',
     family: 'Ravenoid',
     powerLevel: 300,
-    exclusiveAbilities: [`effaceur-d'ombre`]
+    exclusiveAbilities: [`effaceur-d'ombre`],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const RavenoidVentus: bakuganType = {
@@ -18,7 +21,9 @@ export const RavenoidVentus: bakuganType = {
     image: 'ravenoid',
     family: 'Ravenoid',
     powerLevel: 300,
-    exclusiveAbilities: [`effaceur-d'ombre`]
+    exclusiveAbilities: [`effaceur-d'ombre`],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const RavenoidHaos: bakuganType = {
@@ -28,7 +33,9 @@ export const RavenoidHaos: bakuganType = {
     image: 'ravenoid',
     family: 'Ravenoid',
     powerLevel: 300,
-    exclusiveAbilities: [`effaceur-d'ombre`]
+    exclusiveAbilities: [`effaceur-d'ombre`],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const RavenoidGateCard: gateCardType = {
@@ -37,9 +44,22 @@ export const RavenoidGateCard: gateCardType = {
     maxInDeck: 1,
     family: 'Ravenoid',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Ravenoid présent sur elle`,
+    image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'ravenoid-gate-card')
         CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Ravenoid' })
 
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'ravenoid-gate-card')
+        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'Ravenoid' })
+    },
+    autoActivationCheck: ({ portalSlot }) => {
+        const bakugansOnSlot = portalSlot.bakugans.length
+        if (bakugansOnSlot >= 2) {
+            return true
+        } else {
+            return false
+        }
     },
 }

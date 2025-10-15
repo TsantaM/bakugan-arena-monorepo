@@ -1,5 +1,6 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
-import { CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { GateCardImages } from "../../store/gate-card-images"
 
 export const GarganoidPyrus: bakuganType = {
     key: 'garganoid-pyrus',
@@ -8,7 +9,9 @@ export const GarganoidPyrus: bakuganType = {
     attribut: 'Pyrus',
     powerLevel: 330,
     family: 'Garganoid',
-    exclusiveAbilities: ['cape de feu']
+    exclusiveAbilities: ['cape de feu'],
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const GaraganoidAquos: bakuganType = {
@@ -18,7 +21,9 @@ export const GaraganoidAquos: bakuganType = {
     exclusiveAbilities: [],
     family: 'Garganoid',
     image: 'garganoid',
-    powerLevel: 330
+    powerLevel: 330,
+    banList: [],
+    canChangeAttribut: false
 }
 
 export const GarganoidGateCard: gateCardType = {
@@ -26,10 +31,23 @@ export const GarganoidGateCard: gateCardType = {
     name: 'Carte Personnage: Garganoid',
     maxInDeck: 1,
     description: `Lorsque cette carte est activée elle double le niveau de tous les Garganoid présent sur elle`,
+    image: GateCardImages.caracter,
     family: 'Garganoid',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'garganoid-gate-card')
         CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Garganoid' })
 
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'garganoid-gate-card')
+        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'Garganoid' })
+    },
+    autoActivationCheck: ({ portalSlot }) => {
+        const bakugansOnSlot = portalSlot.bakugans.length
+        if (bakugansOnSlot >= 2) {
+            return true
+        } else {
+            return false
+        }
     },
 }

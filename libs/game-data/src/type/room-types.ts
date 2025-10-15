@@ -99,6 +99,7 @@ export type deckType = {
             key: string;
             name: string;
             description: string;
+            usable_if_user_not_on_domain: boolean,
             used: boolean;
             dead: boolean;
         }[];

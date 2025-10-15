@@ -23,6 +23,7 @@ export const RapideHaos: abilityCardsType = {
     }
 }
 
+
 export const EclatSoudain: abilityCardsType = {
     key: 'eclat-soudain',
     name: 'Eclat Soudain',
@@ -82,6 +83,7 @@ export const EclatSoudain: abilityCardsType = {
     },
 }
 
+
 export const LumiereDivine: abilityCardsType = {
     key: 'lumiere-divine',
     name: 'Lumière Divine',
@@ -115,16 +117,14 @@ export const ContreMaitrise: abilityCardsType = {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
             const lastAbility = slotOfGate.activateAbilities.find((a) => a.userId !== userId)
 
-            if (lastAbility) {
+            if (lastAbility && !lastAbility.canceled) {
                 const ability = AbilityCardsList.find((a) => a.key === lastAbility.key)
                 const exclusive = ExclusiveAbilitiesList.find((a) => a.key === lastAbility.key)
 
                 if (ability && ability.onCanceled) ability.onCanceled({ roomState, bakuganKey: lastAbility.bakuganKey, slot: slot, userId: lastAbility.userId })
                 if (exclusive && exclusive.onCanceled) exclusive.onCanceled({ roomState, bakuganKey: lastAbility.bakuganKey, slot: slot, userId: lastAbility.userId })
-            }
 
-            if (user) {
-                user.currentPower += 100
+                lastAbility.canceled = true
             }
         }
     }

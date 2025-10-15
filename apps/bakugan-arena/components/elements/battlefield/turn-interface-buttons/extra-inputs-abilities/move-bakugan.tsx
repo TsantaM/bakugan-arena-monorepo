@@ -5,20 +5,20 @@ import { useGlobalGameState } from "@/src/store/global-game-state-store"
 import { useTurnActionStore } from "@/src/store/turn-actions-store"
 import { BakuganList, MoveBakuganAbilityFilters, slots_id } from "@bakugan-arena/game-data"
 
-export default function MoveBakugan() {
+export default function MoveBakugan({userId} : {userId: string}) {
 
     const { select_bakugan_to_move, select_destination } = useTurnActionStore()
-    const { bakuganToMove } = useTurnActionStore((state) => state.turnActions)
+    const { bakuganToMove, zone, abilityUser, ability } = useTurnActionStore((state) => state.turnActions)
 
     const slots = useGlobalGameState((state) => state.gameState?.protalSlots)
 
     // Move Bakugan Filter
-    const bakuganToMoveInput = MoveBakuganAbilityFilters({ bakuganToMove, slots })
+    const bakuganToMoveInput = MoveBakuganAbilityFilters({ bakuganToMove, slots, bakuganKey: abilityUser, userId: userId, zone: zone, ability: ability })
 
     const bakuganToMoveList = bakuganToMoveInput?.bakuganToMoveList
     const bakuganToMoveDestinations = bakuganToMoveInput?.bakuganToMoveDestinations
 
-    if(bakuganToMoveList) return (
+    return (
         <>
             <Select onValueChange={(val) => {
                 const select_bakugan = bakuganToMoveList?.find((b) => b.bakuganKey === val)

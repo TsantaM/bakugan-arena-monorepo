@@ -8,12 +8,12 @@ import { MoveOpponentAbilityFilter, slots_id } from "@bakugan-arena/game-data"
 export default function MoveSelf({userId} : {userId : string}) {
 
         const { select_slot_to_move: selected_slot_to_move } = useTurnActionStore()
-        const { abilityUser: bakuganKey } = useTurnActionStore((state) => state.turnActions)
+        const { abilityUser: bakuganKey, zone, ability } = useTurnActionStore((state) => state.turnActions)
     
     
         const slots = useGlobalGameState((state) => state.gameState?.protalSlots)
     
-        const moveOpponentInput = MoveOpponentAbilityFilter({ slots, bakuganKey, userId })
+        const moveOpponentInput = MoveOpponentAbilityFilter({ slots, bakuganKey, userId, zone: zone, ability: ability })
     
         const otherSlots = moveOpponentInput?.otherSlots
     

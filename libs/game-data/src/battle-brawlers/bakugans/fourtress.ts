@@ -1,5 +1,7 @@
 import { bakuganType, gateCardType } from "../../type/game-data-types"
-import { CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { GateCardImages } from "../../store/gate-card-images"
+import { StarterBanList } from "../../store/starter-banlist"
 
 export const FourtressPyrus: bakuganType = {
     key: 'fourtress-pyrus',
@@ -8,7 +10,9 @@ export const FourtressPyrus: bakuganType = {
     image: 'fourtress',
     family: 'Fortress',
     powerLevel: 370,
-    exclusiveAbilities: ['visage-de-la-fureur', 'visage-du-chagrin', 'visage-de-joie']
+    exclusiveAbilities: ['visage-de-la-fureur', 'visage-du-chagrin', 'visage-de-joie'],
+    banList: StarterBanList,
+    canChangeAttribut: false
 }
 
 export const FortressGateCard: gateCardType = {
@@ -16,11 +20,24 @@ export const FortressGateCard: gateCardType = {
     name: 'Carte Personnage: Fortress',
     maxInDeck: 1,
     description: `Lorsque cette carte est activée elle double le niveau de tous les Fortress présent sur elle`,
+    image: GateCardImages.caracter,
     family: 'Fortress',
     onOpen({ roomState, slot }) {
-        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'fortress-gate-card')
         console.log('gateCardFortress')
         CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Fortress' })
 
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'fortress-gate-card')
+        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'Fortress' })
+    },
+    autoActivationCheck: ({ portalSlot }) => {
+        const bakugansOnSlot = portalSlot.bakugans.length
+        if (bakugansOnSlot >= 2) {
+            return true
+        } else {
+            return false
+        }
     },
 }
