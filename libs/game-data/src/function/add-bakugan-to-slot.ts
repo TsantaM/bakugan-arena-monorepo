@@ -20,10 +20,11 @@ type addBakuganToSlotParams = {
         gateCard: null
     }
     ,
-    bakuganToAdd: bakuganType
+    bakuganToAdd: bakuganType | bakuganOnSlot,
+    assist?: boolean
 }
 
-export function addBakuganToSlot({ bakuganFromDeck, bakuganToAdd, roomData, slotId, userId }: addBakuganToSlotParams) {
+export function addBakuganToSlot({ bakuganFromDeck, bakuganToAdd, roomData, slotId, userId, assist }: addBakuganToSlotParams) {
     if(!roomData) return
     if(!bakuganToAdd) return
     
@@ -42,8 +43,8 @@ export function addBakuganToSlot({ bakuganFromDeck, bakuganToAdd, roomData, slot
         attribut: bakuganToAdd.attribut,
         image: bakuganToAdd.image,
         abilityBlock: false,
-        assist: false,
-        family: bakuganToAdd.family
+        assist: assist ? assist : false,
+        family: bakuganToAdd.family,
     }
 
     const newState = {
