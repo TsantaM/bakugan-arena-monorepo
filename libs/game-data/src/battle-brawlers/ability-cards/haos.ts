@@ -1,8 +1,6 @@
-import { addBakuganToSlot } from "../../function/add-bakugan-to-slot";
 import { abilityCardsType } from "../../type/game-data-types";
 import { bakuganOnSlot } from "../../type/room-types";
 import { AbilityCardsList } from "../ability-cards";
-import { BakuganList } from "../bakugans";
 import { ExclusiveAbilitiesList } from "../exclusive-abilities";
 
 export const RapideHaos: abilityCardsType = {
@@ -38,13 +36,29 @@ export const EclatSoudain: abilityCardsType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const deck = roomState?.decksState.find((d) => d.userId === userId)
         const bakugan = deck?.bakugans.find((b) => b?.bakuganData.key === bakuganToAdd)
-        const bakuganToAddData = BakuganList.find((b) => b.key === bakugan?.bakuganData.key)
-        if (slotOfGate && deck && bakugan && bakuganToAddData) {
+        if (slotOfGate && deck && bakugan) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
             const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Haos').map((b) => b.key)).flat()
 
+            const lastId = slotOfGate.bakugans.length > 0 ? slotOfGate.bakugans[slotOfGate.bakugans.length - 1].id : 0
+            const newId = lastId + 1
+
+            const newBakugan: bakuganOnSlot = {
+                id: newId,
+                key: bakugan.bakuganData.key,
+                userId: userId,
+                powerLevel: bakugan.bakuganData.powerLevel,
+                currentPower: bakugan.bakuganData.powerLevel,
+                attribut: bakugan.bakuganData.attribut,
+                image: bakugan.bakuganData.image,
+                abilityBlock: false,
+                assist: true,
+                family: bakugan.bakuganData.family
+            }
+
             if (user && haosOnDomain && haosOnDomain.length >= 2) {
-                addBakuganToSlot({ bakuganFromDeck: bakugan.bakuganData, bakuganToAdd: bakuganToAddData, roomData: roomState, slotId: slotOfGate.id, userId, assist: true })
+                slotOfGate.bakugans.push(newBakugan)
+                bakugan.bakuganData.onDomain = true
             }
         }
     },
