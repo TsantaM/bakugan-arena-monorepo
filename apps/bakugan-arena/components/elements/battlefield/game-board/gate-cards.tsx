@@ -1,6 +1,6 @@
 'use client'
 
-import { GateCardsList, GetGateCardImage, portalSlotsTypeElement, slots_id } from "@bakugan-arena/game-data"
+import { BakuganList, GateCardsList, GetGateCardImage, slots_id } from "@bakugan-arena/game-data"
 import Image from "next/image"
 import { useGSAP } from '@gsap/react'
 import { useEffect, useRef, useState } from "react"
@@ -22,7 +22,6 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
     const [removeGate, setRemoveGate] = useState(false)
     const [open, setOpen] = useState(false)
     const [state, setState] = useState(false)
-    // const { setSpritesPositions, removePosition } = useSpritePositionAnchor()
     const positions = useSpritePositionAnchor((state) => state.spritesPositions)
     const { add: addGateCardTimeline } = useSetGateCardAnimation()
     const { add: addGateCardStateChangeAnimation } = useGateCardStateChangeAnimation()
@@ -64,20 +63,6 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
             setState(false)
         }
     }, [slot])
-
-    // useEffect(() => {
-    //     const positionsOnSlot = positions.filter((p) => p.slotId === slotId)
-    //     console.log(positionsOnSlot)
-    //     positionsOnSlot.forEach((p) => {
-    //         const bakuganOnSlotKeys = slot.bakugans.map((b) => b.key)
-    //         if(!bakuganOnSlotKeys.includes(p.key)) {
-    //             removePosition(p)
-    //         } else {
-    //             return
-    //         }
-    //     })
-
-    // }, [slot.bakugans])
 
     useGSAP(() => {
         if (setGateOverlay.current && image.current) {
@@ -199,7 +184,7 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
                     {
                         !slot.can_set && slot.portalCard !== null ?
                             <>
-                                <Image ref={image} src={!slot.state.open ? "/images/cards/portal_card.png" : `/images/cards/${GetGateCardImage({slot : slot})}`} alt='gate-card-design' fill />
+                                <Image ref={image} src={!slot.state.open ? "/images/cards/portal_card.png" : `/images/cards/${GetGateCardImage({ slot: slot })}`} alt='gate-card-design' fill />
 
                                 <div ref={setGateOverlay} className="overlay z-20 absolute w-full h-full top-0 left-0 bg-cyan-100 shadow-2xs shadow-cyan-300 opacity-0"></div>
                                 <div ref={openGateOverlay} className="overlay z-20 absolute w-full h-full top-0 left-0 bg-cyan-100 shadow-2xs shadow-cyan-300 opacity-0"></div>
@@ -210,7 +195,7 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
                                         {
 
                                             oponentsBakugans.map((o) =>
-                                                <Anchor bakugan={o} key={`${o.userId}-${o.key}-${o.id}`} slotId={slotId}/>
+                                                <Anchor bakugan={o} key={`${o.userId}-${o.key}-${o.id}`} slotId={slotId} />
                                             )
 
                                         }
@@ -219,7 +204,7 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
                                     <div className="relative z-40 flex items-center self-start gap-3">
                                         {
                                             playerBakugans.map((p) =>
-                                                <Anchor bakugan={p} key={`${p.userId}-${p.key}-${p.id}`} slotId={slotId}/>
+                                                <Anchor bakugan={p} key={`${p.userId}-${p.key}-${p.id}`} slotId={slotId} />
                                             )
                                         }
                                     </div>
@@ -239,6 +224,17 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
                         <p className="text-sm">
                             <span>Description : </span> {slot.portalCard.userId !== userId && !slot.state.open ? '???' : gateCardData.description}
                         </p>
+
+                        {
+                            slot.bakugans.map((b, index) => <div key={index} className="flex flex-col gap-2">
+                                <h5>{BakuganList.find((bakugan) => bakugan.key === b.key)?.name}</h5>
+                                <ul>
+                                    {
+                                        slot.activateAbilities.filter((a) => a.bakuganKey === b.key && a.userId === b.userId).map((a, index) => <li key={index}>{a.key} {`(${a.canceled ? 'Canceled' : 'Active'})`}</li>)   
+                                    }
+                                </ul>
+                            </div>)
+                        }
                     </div>
                 </HoverCardContent>
             }

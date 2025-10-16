@@ -34,9 +34,6 @@ export default function MapScrollable({ userId }: { userId: string }) {
   if (slots) {
     return (
       <>
-        {
-          slotWithBakugans?.map((b) => <BakuganSprite key={`${b.userId}-${b.key}-${b.id}`} bakugan={b} userId={userId} />)
-        }
         <div
           className="absolute left-[50%] translate-x-[-50%] w-full h-[75vh] overflow-hidden cursor-grab"
           onMouseMove={handleMouseMove}
@@ -49,7 +46,6 @@ export default function MapScrollable({ userId }: { userId: string }) {
             style={{ transform: `translate(${offset.x}px, ${offset.y}px)` }}
             onMouseDown={handleMouseDown}
           >
-            {/* Ici tu peux mettre ta grille de cartes */}
             <div className="rotate-x-[50deg] lg:rotate-x-90 grid grid-cols-3 grid-rows-2 items-center justify-center">
               {slots.map((s, index) => (
                 <GateCardOnBoard slotId={s.id} key={index} userId={userId} />
@@ -57,6 +53,9 @@ export default function MapScrollable({ userId }: { userId: string }) {
             </div>
           </div>
         </div>
+        {
+          slotWithBakugans?.map((b) => <BakuganSprite key={`${b.userId}-${b.key}-${b.id}`} bakugan={b} userId={userId} />)
+        }
       </>
     )
   }

@@ -5,10 +5,10 @@ import { useChangePowerLevelAnimation, useSetBakuganAnimation } from "@/src/stor
 import { useSpritePositionAnchor } from "@/src/store/sprites-positions-anchor"
 import { attribut, bakuganOnSlot } from "@bakugan-arena/game-data"
 import { useGSAP } from "@gsap/react"
-import gsap from "gsap"
 import localFont from "next/font/local"
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
+
 
 const squareMetal = localFont({
     src: [{
@@ -127,12 +127,12 @@ export default function BakuganSprite({ bakugan, userId }: { bakugan: bakuganOnS
     }, [bakuganRef.current, set])
 
     useEffect(() => {
+        if (currentPower === null) {
+            setCurrentPower(bakugan.powerLevel)
+        }
         if (currentPower !== null && bakugan.currentPower !== currentPower) {
             const powerChange = bakugan.currentPower > currentPower ? bakugan.currentPower - currentPower : currentPower - bakugan.currentPower
             setChange(powerChange)
-        }
-        if (currentPower === null) {
-            setCurrentPower(bakugan.currentPower)
         }
     }, [bakugan.currentPower])
 
