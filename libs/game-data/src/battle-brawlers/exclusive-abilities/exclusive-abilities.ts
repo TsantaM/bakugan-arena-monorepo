@@ -548,9 +548,15 @@ export const EffecteurdOmbre: exclusiveAbilitiesType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
+            const gateCard = GateCardsList.find((card) => card.key === slotOfGate.portalCard?.key)
+            if (slotOfGate.state.open && !slotOfGate.state.canceled && gateCard && gateCard.onCanceled) {
+                gateCard.onCanceled({ roomState: roomState, slot: slot, userId: userId, bakuganKey: bakuganKey })
+            }
+            slotOfGate.state.canceled = true
 
-            if (user) {
-                user.currentPower += 100
+            if (user && opponent) {
+                opponent.currentPower -= 50
             }
         }
     }
