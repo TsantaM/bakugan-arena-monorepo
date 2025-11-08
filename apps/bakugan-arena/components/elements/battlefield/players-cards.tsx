@@ -38,7 +38,7 @@ export default function PlayerCards({ player, opponent, roomId, userId }: { play
 
 
     return <>
-        <div className="relative z-20 w-full h-[75vh] flex justify-between">
+        <div className="relative z-20 w-full h-[85vh] flex justify-between">
             <div className="relative z-50 w-[25vw] md:w-[20vw] lg:w-[15vw] flex flex-col gap-2">
                 {
                     playerData && <ProfilePictureLeft player={playerData} />
@@ -56,7 +56,8 @@ export default function PlayerCards({ player, opponent, roomId, userId }: { play
             <TurnCounter />
             <AliveCounterRight userId={userId} />
 
-            <GameBoard userId={userId} />
+            <iframe src="http://localhost:5173/" className="w-full h-full absolute top-0 left-0"></iframe>
+            {/* <GameBoard userId={userId} /> */}
 
             <div className="relative z-50 w-[25vw] md:w-[20vw] lg:w-[15vw] self-start flex flex-col gap-2">
                 {

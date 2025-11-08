@@ -1,5 +1,6 @@
 import { CheckBattle } from "../../function/check-battle-in-process";
-import { abilityCardsType } from "../../type/game-data-types";
+import { type abilityCardsType } from "../../type/game-data-types";
+import type { bakuganOnSlot } from "../../type/room-types";
 
 export const MirageAquatique: abilityCardsType = {
     key: 'mirage-aquatique',
@@ -21,7 +22,11 @@ export const MirageAquatique: abilityCardsType = {
                 const index = slotOfGate.bakugans.findIndex((ba) => ba.key === user?.key && ba.userId === user.userId)
 
                 if (user) {
-                    slotTarget.bakugans.push(user)
+                    const newUserState: bakuganOnSlot = {
+                        ...user,
+                        slot_id: slot_to_move
+                    }
+                    slotTarget.bakugans.push(newUserState)
                     slotTarget.state.blocked = true
                     slotOfGate.bakugans.splice(index, 1)
 

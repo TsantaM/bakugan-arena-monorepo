@@ -1,7 +1,7 @@
 import { CancelAbilityCard } from "../../function/cancel-ability-card"
 import { CheckBattle } from "../../function/check-battle-in-process"
-import { exclusiveAbilitiesType } from "../../type/game-data-types"
-import { bakuganOnSlot } from "../../type/room-types"
+import { type exclusiveAbilitiesType } from "../../type/game-data-types"
+import { type bakuganOnSlot } from "../../type/room-types"
 import { GateCardsList } from "../gate-gards"
 
 export const OmbreBleue: exclusiveAbilitiesType = {
@@ -102,6 +102,7 @@ export const SabreDeLaMort: exclusiveAbilitiesType = {
                     const newId = lastId + 1
 
                     const usersBakugan: bakuganOnSlot = {
+                        slot_id: slot,
                         id: newId,
                         key: tigrerra.bakuganData.key,
                         userId: userId,
@@ -427,7 +428,13 @@ export const Marionnette: exclusiveAbilitiesType = {
 
             if (user && slotOfGate && initialSlot && targetSlot && bakuganToMove && bakuganTarget) {
                 const index = initialSlot.bakugans.findIndex((b) => b.key === bakuganToMove?.bakuganKey && b.userId === bakuganToMove?.userId)
-                targetSlot.bakugans.push(bakuganTarget)
+                
+                const newState: bakuganOnSlot = {
+                    ...bakuganTarget,
+                    slot_id: destination
+                }
+                
+                targetSlot.bakugans.push(newState)
                 initialSlot.bakugans.splice(index, 1)
                 CheckBattle({ roomState })
             }
@@ -452,7 +459,13 @@ export const LanceEclair: exclusiveAbilitiesType = {
             const index = slotOfGate.bakugans.findIndex((ba) => ba.key === opponent?.key && ba.userId === opponent.userId)
             const slotTarget = roomState?.protalSlots.find((s) => s.id === slot_to_move)
             if (user && opponent && slotTarget && slotTarget.portalCard !== null) {
-                slotTarget.bakugans.push(opponent)
+
+                const newOpponentState: bakuganOnSlot = {
+                    ...opponent,
+                    slot_id: slotTarget.id
+                }
+
+                slotTarget.bakugans.push(newOpponentState)
                 slotOfGate.bakugans.splice(index, 1)
                 CheckBattle({ roomState })
                 roomState.battleState.turns = 2

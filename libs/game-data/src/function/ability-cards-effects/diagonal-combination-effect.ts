@@ -1,6 +1,6 @@
 import { BakuganList } from "../../battle-brawlers/bakugans";
-import { attribut } from "../../type/game-data-types";
-import { portalSlotsType, portalSlotsTypeElement } from "../../type/room-types";
+import { type attribut } from "../../type/game-data-types";
+import { type portalSlotsType, type portalSlotsTypeElement } from "../../type/room-types";
 
 export function DiagonalCombinationEffect({ slotOfGate, bakuganKey, userId, attribut, attributWeak, portalSlots }: { slotOfGate: portalSlotsTypeElement, bakuganKey: string, userId: string, attribut: attribut, attributWeak: attribut, portalSlots: portalSlotsType }) {
     const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)

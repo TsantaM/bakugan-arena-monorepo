@@ -1,4 +1,4 @@
-import { stateType } from "../type/room-types";
+import { type stateType } from "../type/room-types";
 import { GateCardsList } from "../battle-brawlers/gate-gards";
 
 

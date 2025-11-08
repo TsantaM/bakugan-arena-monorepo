@@ -1,5 +1,6 @@
 import { CheckBattle } from "../../function/check-battle-in-process";
-import { abilityCardsType } from "../../type/game-data-types";
+import { type abilityCardsType } from "../../type/game-data-types";
+import type { bakuganOnSlot } from "../../type/room-types";
 import { GateCardsList } from "../gate-gards";
 
 export const CombatAerien: abilityCardsType = {
@@ -19,9 +20,12 @@ export const CombatAerien: abilityCardsType = {
             if (slotOfGate && slotTarget && slotTarget.portalCard !== null) {
                 const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
                 const index = slotOfGate.bakugans.findIndex((ba) => ba.key === user?.key && ba.userId === user.userId)
-
                 if (user) {
-                    slotTarget.bakugans.push(user)
+                    const newUserState: bakuganOnSlot = {
+                        ...user,
+                        slot_id: slot_to_move
+                    }
+                    slotTarget.bakugans.push(newUserState)
                     slotTarget.state.blocked = true
                     slotOfGate.bakugans.splice(index, 1)
 
@@ -78,7 +82,13 @@ export const SouffleTout: abilityCardsType = {
             const index = slotOfGate.bakugans.findIndex((ba) => ba.key === opponent?.key && ba.userId === opponent.userId)
             const slotTarget = roomState?.protalSlots.find((s) => s.id === slot_to_move)
             if (user && opponent && slotTarget && slotTarget.portalCard !== null) {
-                slotTarget.bakugans.push(opponent)
+
+                const newOpponentState: bakuganOnSlot = {
+                    ...opponent,
+                    slot_id: slot_to_move
+                }
+
+                slotTarget.bakugans.push(newOpponentState)
                 slotOfGate.bakugans.splice(index, 1)
 
                 roomState.battleState.battleInProcess = false
@@ -154,7 +164,13 @@ export const TornadeExtreme: abilityCardsType = {
             const user = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
 
             if (user && bakuganToDrag) {
-                slotOfGate.bakugans.push(bakuganToDrag)
+
+                const newState: bakuganOnSlot = {
+                    ...bakuganToDrag,
+                    slot_id: slot
+                }
+
+                slotOfGate.bakugans.push(newState)
                 slotTarget.bakugans.splice(BakuganTargetIndex, 1)
                 CheckBattle({ roomState })
             }

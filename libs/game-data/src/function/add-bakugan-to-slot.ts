@@ -1,5 +1,5 @@
-import { attribut, bakuganType } from "../type/game-data-types"
-import { stateType, slots_id, bakuganOnSlot } from "../type/room-types"
+import { type attribut, type bakuganType } from "../type/game-data-types"
+import { type stateType, type slots_id, type bakuganOnSlot } from "../type/room-types"
 
 type addBakuganToSlotParams = {
     roomData: stateType,
@@ -35,6 +35,7 @@ export function addBakuganToSlot({ bakuganFromDeck, bakuganToAdd, roomData, slot
 
 
     const newBakugan: bakuganOnSlot = {
+        slot_id: slotId,
         id: newId,
         key: bakuganToAdd.key,
         userId: userId,

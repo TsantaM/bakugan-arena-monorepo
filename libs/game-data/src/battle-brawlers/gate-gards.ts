@@ -1,7 +1,7 @@
 import { FusionAerienne, FusionEnflammee, FusionLumineuse, FusionMarine, FusionTenebreuses, FusionTerrestre, PerilAquos, PerilDarkus, PerilHaos, PerilPyrus, PerilSubterra, PerilVentus, ReacteurAquos, ReacteurDarkus, ReacteurHaos, ReacteurPyrus, ReacteurSubterra, ReacteurVentus } from "./gate-card/gate-card-elementary";
 import { AspirateurDePuissance, Echange, MineFantome, SuperPyrus } from "./gate-card/gate-card-trap";
 import { Armistice, BoucEmissaire, GrandEsprit, QuatuorDeCombat, Rechargement, RetourDAssenceur, TripleCombat } from "./gate-card/gate-card-command";
-import { gateCardType } from "../type/game-data-types";
+import { type gateCardType } from "../type/game-data-types";
 import { CentipodGateCard } from "./bakugans/centipod";
 import { CycloidGateCard } from "./bakugans/cycloid";
 import { DragonoidGateCard } from "./bakugans/dragonoid";

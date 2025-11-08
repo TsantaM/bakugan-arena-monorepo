@@ -1,6 +1,7 @@
 import { Server, Socket } from "socket.io/dist";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
-import { CheckGameFinished, handleBattle, handleGateCards, updateTurnState } from "@bakugan-arena/game-data";
+import { handleBattle, handleGateCards, updateTurnState } from "@bakugan-arena/game-data";
+import { CheckGameFinished } from "@bakugan-arena/prisma";
 
 export const socketTurn = (io: Server, socket: Socket) => {
 

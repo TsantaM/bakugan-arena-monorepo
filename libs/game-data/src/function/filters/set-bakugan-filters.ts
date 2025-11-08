@@ -1,4 +1,4 @@
-import { deckType, portalSlotsType, slots_id } from '../../type/room-types'
+import { type deckType, type portalSlotsType, type slots_id } from '../../type/room-types'
 
 export function SetBakuganFilters({ playersDeck, opponentDeck, slots, slot, userId }: { playersDeck: deckType | undefined, opponentDeck: deckType | undefined, slots: portalSlotsType | undefined, slot: "" | slots_id,  userId: string }) {
 

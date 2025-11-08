@@ -1,5 +1,6 @@
 import { CheckBattle } from "../../function/check-battle-in-process";
-import { abilityCardsType } from "../../type/game-data-types";
+import { type abilityCardsType } from "../../type/game-data-types";
+import type { bakuganOnSlot } from "../../type/room-types";
 import { GateCardsList } from "../gate-gards";
 
 export const MagmaSupreme: abilityCardsType = {
@@ -24,7 +25,7 @@ export const MagmaSupreme: abilityCardsType = {
                         initialGate.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
                         slotOfGate.state.open = false
                         slotOfGate.state.canceled = false
-                        
+
                         newGate.onOpen({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
 
                     }
@@ -124,7 +125,12 @@ export const ForceDattraction: abilityCardsType = {
             const user = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
 
             if (user && bakuganToDrag) {
-                slotOfGate.bakugans.push(bakuganToDrag)
+                const newState: bakuganOnSlot = {
+                    ...bakuganToDrag,
+                    slot_id: slot
+                }
+
+                slotOfGate.bakugans.push(newState)
                 slotTarget.bakugans.splice(BakuganTargetIndex, 1)
                 CheckBattle({ roomState })
             }

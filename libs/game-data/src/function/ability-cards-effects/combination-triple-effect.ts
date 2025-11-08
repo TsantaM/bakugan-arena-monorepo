@@ -1,6 +1,6 @@
 import { BakuganList } from "../../battle-brawlers/bakugans";
-import { attribut } from "../../type/game-data-types";
-import { portalSlotsType } from "../../type/room-types";
+import { type attribut } from "../../type/game-data-types";
+import { type portalSlotsType } from "../../type/room-types";
 
 export function CombinationTripleEffect({ userId, attribut_one, attribut_tree, attribut_two, portalSlots }: { userId: string, attribut_one: attribut, attribut_two: attribut, attribut_tree: attribut, portalSlots: portalSlotsType }) {
     const keys = portalSlots.filter((s) => s.bakugans.length > 0 && s.portalCard !== null && !s.can_set).map((b) => b.bakugans).flat().filter((b) => b.userId === userId).map((b) => b.key)

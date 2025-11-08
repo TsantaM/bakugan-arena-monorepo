@@ -1,4 +1,4 @@
-import { deckType, portalSlotsTypeElement } from "../type/room-types";
+import { type deckType, type portalSlotsTypeElement } from "../type/room-types";
 
 type getPlayerDecksAndBakugansProps = {
     slot: portalSlotsTypeElement,

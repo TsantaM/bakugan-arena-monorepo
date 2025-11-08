@@ -1,4 +1,4 @@
-import { portalSlotsTypeElement, deckType } from '../../type/room-types'
+import { type portalSlotsTypeElement, type deckType } from '../../type/room-types'
 import { BakuganList } from '../../battle-brawlers/bakugans'
 
 export function SelectAbilityCardFilters({ slotOfBattle, userId, bakuganKey, playersDeck }: { slotOfBattle: portalSlotsTypeElement | undefined, userId: string, bakuganKey: string, playersDeck: deckType | undefined }) {

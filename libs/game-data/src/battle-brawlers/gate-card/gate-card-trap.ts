@@ -1,6 +1,5 @@
 import { gateCardType } from "../../type/game-data-types";
 import { ResetSlot } from "../../function/reset-slot";
-import { CheckGameFinished } from "../../function/check-game-finished";
 import { CheckBattle } from "../../function/check-battle-in-process";
 import { GateCardImages } from "../../store/gate-card-images";
 
@@ -41,8 +40,6 @@ export const MineFantome: gateCardType = {
             roomState.turnState.set_new_bakugan = true
             roomState.turnState.set_new_gate = true
 
-
-            CheckGameFinished({ roomId: roomState.roomId, roomState })
         }
 
     },
@@ -129,7 +126,6 @@ export const Echange: gateCardType = {
             roomState.turnState.set_new_bakugan = true
             roomState.turnState.set_new_gate = true
 
-            CheckGameFinished({ roomId: roomState.roomId, roomState })
 
         }
     },

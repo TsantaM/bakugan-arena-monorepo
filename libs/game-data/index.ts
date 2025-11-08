@@ -2,12 +2,11 @@ import { BakuganList, Bakugans } from './src/battle-brawlers/bakugans'
 import { AbilityCards, AbilityCardsList } from './src/battle-brawlers/ability-cards'
 import { ExclusiveAbilities, ExclusiveAbilitiesList } from './src/battle-brawlers/exclusive-abilities'
 import { GateCards, GateCardsList } from './src/battle-brawlers/gate-gards'
-import { attribut, bakuganType, abilityCardsType, exclusiveAbilitiesType, gateCardType, bakuganToMoveType } from './src/type/game-data-types'
-import { slots_id, stateType, portalSlotsType, portalSlotsTypeElement, deckType, bakuganOnSlot, deck, playerType, playersType } from './src/type/room-types'
-import { CheckGameFinished } from './src/function/check-game-finished'
+import type { attribut, bakuganType, abilityCardsType, exclusiveAbilitiesType, gateCardType, bakuganToMoveType } from './src/type/game-data-types'
+import type { slots_id, stateType, portalSlotsType, portalSlotsTypeElement, deckType, bakuganOnSlot, deck, playerType, playersType } from './src/type/room-types'
 import { CheckBattle } from './src/function/check-battle-in-process'
 import { ResetSlot } from "./src/function/reset-slot";
-import { activeGateCardProps, setBakuganProps, setGateCardProps, useAbilityCardProps, useAbilityCardPropsFront } from './src/type/sockets-props-types'
+import type { activeGateCardProps, setBakuganProps, setGateCardProps, useAbilityCardProps, useAbilityCardPropsFront } from './src/type/sockets-props-types'
 import { applyWinAbilitiesEffects } from './src/function/apply-win-abilities-effects'
 import { determineWinner } from './src/function/determine-battle-winner'
 import { finalizeBattle } from './src/function/finalize-battle'
@@ -27,6 +26,7 @@ import { MoveOpponentAbilityFilter } from './src/function/filters/move-opponent-
 import { DragBakuganAbilityFilter } from './src/function/filters/drag-bakugan-ability-filter'
 import { AddBakuganAbilityFilter } from './src/function/filters/add-bakugan-ability-filter'
 import { GetGateCardImage } from './src/function/get-gate-card-image'
+import {Slots} from './src/store/slots'
 
 export {
     Bakugans,
@@ -37,8 +37,8 @@ export {
     ExclusiveAbilitiesList,
     GateCards,
     GateCardsList,
+    Slots,
 
-    CheckGameFinished,
     CheckBattle,
     ResetSlot,
 

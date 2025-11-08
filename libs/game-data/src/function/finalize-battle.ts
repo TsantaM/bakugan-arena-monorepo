@@ -1,4 +1,4 @@
-import { stateType } from "../type/room-types";
+import { type stateType } from "../type/room-types";
 import { ResetSlot } from "./reset-slot";
 
 export const finalizeBattle = ({ roomData, winnerId, loserId }: { roomData: stateType, winnerId?: string, loserId?: string }) => {

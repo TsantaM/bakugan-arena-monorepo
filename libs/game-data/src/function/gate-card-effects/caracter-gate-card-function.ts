@@ -1,4 +1,4 @@
-import { portalSlotsTypeElement } from "../../type/room-types";
+import { type portalSlotsTypeElement } from "../../type/room-types";
 import { BakuganList } from '../../battle-brawlers/bakugans'
 
 export function CaracterGateCardEffect({ slotOfGate, family }: { slotOfGate: portalSlotsTypeElement | undefined, family: string }) {

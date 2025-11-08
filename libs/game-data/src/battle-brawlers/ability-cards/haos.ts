@@ -1,5 +1,5 @@
-import { abilityCardsType } from "../../type/game-data-types";
-import { bakuganOnSlot } from "../../type/room-types";
+import { type abilityCardsType } from "../../type/game-data-types";
+import { type bakuganOnSlot } from "../../type/room-types";
 import { AbilityCardsList } from "../ability-cards";
 import { ExclusiveAbilitiesList } from "../exclusive-abilities";
 
@@ -44,6 +44,7 @@ export const EclatSoudain: abilityCardsType = {
             const newId = lastId + 1
 
             const newBakugan: bakuganOnSlot = {
+                slot_id: slot,
                 id: newId,
                 key: bakugan.bakuganData.key,
                 userId: userId,

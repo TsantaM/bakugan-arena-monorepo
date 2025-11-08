@@ -1,4 +1,4 @@
-import { attribut } from "./game-data-types"
+import { type attribut } from "./game-data-types"
 
 export type slots_id = "slot-1" | "slot-2" | "slot-3" | "slot-4" | "slot-5" | "slot-6"
 
@@ -46,6 +46,7 @@ export type activateAbilities = {
 }
 
 export type bakuganOnSlot = {
+    slot_id: slots_id
     id: number,
     key: string,
     userId: string,

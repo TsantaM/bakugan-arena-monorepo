@@ -1,4 +1,4 @@
-import { stateType } from "../type/room-types";
+import { type stateType } from "../type/room-types";
 
 export function updateTurnState(roomData: stateType) {
     if (!roomData) return

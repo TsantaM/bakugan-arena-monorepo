@@ -1,4 +1,4 @@
-import { portalSlotsTypeElement, stateType } from "../type/room-types";
+import { type portalSlotsTypeElement, type stateType } from "../type/room-types";
 import { ExclusiveAbilitiesList } from "../battle-brawlers/exclusive-abilities";
 import { AbilityCardsList } from "../battle-brawlers/ability-cards";
 

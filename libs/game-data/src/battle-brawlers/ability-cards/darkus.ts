@@ -1,4 +1,4 @@
-import { abilityCardsType } from "../../type/game-data-types";
+import { type abilityCardsType } from "../../type/game-data-types";
 import { GateCardsList } from "../gate-gards";
 
 export const CoupDeGrace: abilityCardsType = {

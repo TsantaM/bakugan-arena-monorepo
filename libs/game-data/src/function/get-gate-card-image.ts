@@ -1,4 +1,4 @@
-import { portalSlotsTypeElement } from '../type/room-types'
+import { type portalSlotsTypeElement } from '../type/room-types'
 import { GateCardsList } from "../battle-brawlers/gate-gards";
 
 

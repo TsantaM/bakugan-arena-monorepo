@@ -1,5 +1,5 @@
-import { portalSlotsType, slots_id } from '../../type/room-types'
-import { bakuganToMoveType } from '../../type/game-data-types'
+import { type portalSlotsType, type slots_id } from '../../type/room-types'
+import { type bakuganToMoveType } from '../../type/game-data-types'
 import { AbilityCardsList } from '../../battle-brawlers/ability-cards'
 import { ExclusiveAbilitiesList } from '../../battle-brawlers/exclusive-abilities'
 import { slots_limits } from '../../store/slots-limits'

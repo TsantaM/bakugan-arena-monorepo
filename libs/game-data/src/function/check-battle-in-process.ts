@@ -1,4 +1,4 @@
-import { stateType } from '../../src/type/room-types'
+import { type stateType } from '../../src/type/room-types'
 
 
 export const CheckBattle = ({ roomState }: { roomState: stateType }) => {

@@ -1,6 +1,7 @@
-import { stateType } from '../../src/type/room-types'
-import prisma from "@bakugan-arena/prisma"
+import { type stateType } from '../../game-data/src/type/room-types'
+import { PrismaClient } from '../generated/prisma'
 
+const prisma = new PrismaClient();
 
 export const CheckGameFinished = async ({ roomId, roomState }: { roomId: string, roomState: stateType }) => {
 

@@ -1,4 +1,4 @@
-import { slots_id, stateType } from "../type/room-types";
+import { type slots_id, type stateType } from "../type/room-types";
 import { AbilityCardsList } from "../battle-brawlers/ability-cards";
 import { ExclusiveAbilitiesList } from "../battle-brawlers/exclusive-abilities";
 

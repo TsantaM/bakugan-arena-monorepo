@@ -1,4 +1,4 @@
-import { deckType, portalSlotsType } from '../../type/room-types'
+import { type deckType, type portalSlotsType } from '../../type/room-types'
 import { BakuganList } from '../../battle-brawlers/bakugans'
 import { AbilityCardsList } from '../../battle-brawlers/ability-cards'
 import { ExclusiveAbilitiesList } from '../../battle-brawlers/exclusive-abilities'

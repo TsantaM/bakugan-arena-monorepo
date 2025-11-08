@@ -1,4 +1,4 @@
-import { deckType } from '../../type/room-types'
+import { type deckType } from '../../type/room-types'
 
 export function AddBakuganAbilityFilter({decksState, userId} : {decksState: deckType[] | undefined , userId: string}) {
 

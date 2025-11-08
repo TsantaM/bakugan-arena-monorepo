@@ -1,4 +1,4 @@
-import { portalSlotsTypeElement } from "../type/room-types";
+import { type portalSlotsTypeElement } from "../type/room-types";
 
 export function ResetSlot(slot: portalSlotsTypeElement) {
     slot.bakugans = []

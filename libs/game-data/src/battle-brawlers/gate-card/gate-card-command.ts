@@ -1,7 +1,7 @@
 import { ResetSlot } from "../../function/reset-slot";
 import { GateCardImages } from "../../store/gate-card-images";
-import { gateCardType } from "../../type/game-data-types";
-import { bakuganOnSlot, stateType } from "../../type/room-types";
+import { type gateCardType } from "../../type/game-data-types";
+import { type bakuganOnSlot, type stateType } from "../../type/room-types";
 
 export const Rechargement: gateCardType = {
     key: 'rechargement',
@@ -119,6 +119,7 @@ export const TripleCombat: gateCardType = {
                     const newId = lastId + 1
 
                     const usersBakugan: bakuganOnSlot = {
+                        slot_id: slot,
                         id: newId,
                         key: userStrongest.bakuganData.key,
                         userId: userId,
@@ -199,6 +200,7 @@ export const QuatuorDeCombat: gateCardType = {
                 if (userWeakest !== null) {
 
                     const usersBakugan: bakuganOnSlot = {
+                        slot_id: slot,
                         id: newId,
                         key: userWeakest.bakuganData.key,
                         userId: userId,
@@ -219,6 +221,7 @@ export const QuatuorDeCombat: gateCardType = {
                     const lastId = slotToUpdate.bakugans.length > 0 ? slotToUpdate.bakugans[slotToUpdate.bakugans.length - 1].id : 0
                     const newId = lastId + 1
                     const opponentBakugan: bakuganOnSlot = {
+                        slot_id: slot,
                         id: newId,
                         key: opponentWeakest.bakuganData.key,
                         userId: opponentId,

@@ -1,4 +1,4 @@
-import { deckType } from "../type/room-types";
+import { type deckType } from "../type/room-types";
 
 type UpdateDeckBakugansOptions = {
     deck: deckType

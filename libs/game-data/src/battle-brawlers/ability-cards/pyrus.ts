@@ -1,5 +1,5 @@
-import { abilityCardsType } from "../../type/game-data-types";
-import { bakuganOnSlot } from "../../type/room-types";
+import { type abilityCardsType } from "../../type/game-data-types";
+import { type bakuganOnSlot } from "../../type/room-types";
 import { GateCardsList } from "../gate-gards";
 
 export const MurDeFeu: abilityCardsType = {
@@ -42,6 +42,7 @@ export const JetEnflamme: abilityCardsType = {
             const newId = lastId + 1
 
             const newBakugan: bakuganOnSlot = {
+                slot_id: slot,
                 id: newId,
                 key: bakugan.bakuganData.key,
                 userId: userId,

@@ -1,5 +1,5 @@
 import { CheckBattle } from "./check-battle-in-process"
-import { stateType } from "../type/room-types";
+import { type stateType } from "../type/room-types";
 
 export function handleBattle(roomData: stateType) {
 
