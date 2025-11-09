@@ -42,7 +42,6 @@ export default function ManageGateCardsInDeckEditor({ deckId, gateCards, bakugan
         const exemplary = cardInDeck.filter((a) => c.key === a.key).length
         return c.maxInDeck > exemplary
     })
-    console.log(familiesGateCards)
     const notInDeckCards = [GateCardsList.filter((c) => c.attribut ? bakugansAttribut.includes(c.attribut) : c).filter((c) => !c.family).filter((c) => {
         const exemplary = cardInDeck.filter((a) => c.key === a.key).length
 

@@ -26,7 +26,6 @@ export default function UseAbilityCard({ roomId, userId }: { roomId: string, use
 
     const { selectAbility, selectAbilityUser: selectBakugan, } = useTurnActionStore()
     const { abilityUser: bakuganKey, ability } = useTurnActionStore((state) => state.turnActions)
-    console.log(bakuganKey)
 
     // ---------------------------
 
@@ -42,7 +41,6 @@ export default function UseAbilityCard({ roomId, userId }: { roomId: string, use
         const usableAbilities = selectAbilityInputs.usableAbilities
         const usableExclusives = selectAbilityInputs.usableExclusives
 
-        console.log('ability', ability)
 
         return (
             <div className="flex flex-col gap-2">

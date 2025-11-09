@@ -48,7 +48,6 @@ export default function TurnInterface({ roomId, userId }: { roomId: string, user
 
     const resolveBattle = () => {
         if (socket) {
-            console.log('clicked')
             socket.emit('resolve-battle', ({ roomId }))
             socket.on('update-room-state', (state: stateType) => {
                 if (!state) return

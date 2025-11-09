@@ -38,7 +38,6 @@ export default function useSetGate({ roomId, userId }: { roomId: string, userId:
     useEffect(() => {
         if (socket) {
             socket.on('update-room-state', (state: stateType) => {
-                console.log(state)
                 setRoomState(state)
                 setSlots(state?.protalSlots)
                 if (!state) return

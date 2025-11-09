@@ -2,12 +2,11 @@
 
 import useGetRoomState from "@/src/sockets/get-room-state"
 import PlayerCards, { player } from "./players-cards"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
 import { useGlobalGameState } from "@/src/store/global-game-state-store"
 import GameFinishedScreen from "./game-finished-screen"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
+import { useSocket } from "@/src/providers/socket-provider"
 
 type BattleFieldPageProps = {
     player: player | undefined,
@@ -23,10 +22,13 @@ export default function BattleFieldPage({ player, opponent, roomId, userId }: Ba
     const { roomState } = useGetRoomState({ roomId })
     const cleanState = useGlobalGameState((state) => state.cleanState)
     const finished = useGlobalGameState((state) => state.gameState?.status.finished)
+    const socket = useSocket()
 
     useEffect(() => {
+        if(!socket) return
+        socket.emit('init-room-state', ({ roomId }))
         cleanState()
-    }, [router, roomId])
+    }, [socket])
 
     return (
         <>

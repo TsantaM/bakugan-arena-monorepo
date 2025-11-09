@@ -30,21 +30,16 @@ export default function BakuganSprite({ bakugan, userId }: { bakugan: bakuganOnS
     const { add: powerLevelChange } = useChangePowerLevelAnimation()
 
     const setFocusedBakugan = () => {
-        console.log(bakugan.userId, userId)
 
         if (bakugan.userId === userId) {
             setUsersBakugan(bakugan)
-            console.log(usersBakugan)
         } else {
             setOpponentBakugan(bakugan)
-            console.log(opponentBakugan)
         }
     }
 
     const resetStore = () => {
         reset()
-        console.log(usersBakugan)
-        console.log(opponentBakugan)
 
     }
 
@@ -64,7 +59,6 @@ export default function BakuganSprite({ bakugan, userId }: { bakugan: bakuganOnS
     }
 
     useEffect(() => {
-        console.log(`y: ${position?.y}, x : ${position?.x}`)
         if (set === false && position) {
             setSet(true)
         }

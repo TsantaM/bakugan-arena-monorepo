@@ -38,10 +38,8 @@ export default function ManageBakugansInDeck({ deckId, bakugans }: { deckId: str
     const bakuganInDeckBanList = bakugansInDeck.map((b) => b.banList).flat()
     const notInDeckBakugans = BakuganList.filter((b) => !bakuganInDeckFamilies.includes(b.family) && !bakuganInDeckBanList.includes(b.key))
 
-    console.log(notInDeckBakugans)
 
     const addBakuganToDeck = async (bakuganId: string) => {
-        console.log(bakuganId)
         await AddBakuganToDeckAction({ bakuganId, deckId })
     }
 

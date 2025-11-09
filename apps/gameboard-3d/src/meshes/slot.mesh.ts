@@ -28,6 +28,11 @@ function createSlotMesh({ slot, plane }: { slot: portalSlotsTypeElement, plane: 
             const texture = new THREE.TextureLoader().load(`./../images/cards/portal_card.png`)
             mesh.material.map = texture
         }
+
+        if(slot.state.canceled === true) {
+            mesh.material.color.set(0.1, 0.1, 0.1)
+        }
+
     } else {
         mesh.material.transparent = true
         mesh.material.visible = false

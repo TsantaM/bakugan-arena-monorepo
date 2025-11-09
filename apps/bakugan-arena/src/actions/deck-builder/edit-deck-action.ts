@@ -72,10 +72,8 @@ export const RemoveBakuganInDeckAction = async ({ bakuganId, deckId }: { bakugan
         })
 
         const attributs = BakuganList.filter((b) => deckData?.bakugans.includes(b.key)).map((a) => a.attribut)
-        console.log(attributs)
         const sameAttribut = attributs.filter((a) => a === toRemove?.attribut)
         const same = sameAttribut.length - 1
-        console.log(sameAttribut)
 
 
         // Remove ability && gate cards with same attribut if same === 0

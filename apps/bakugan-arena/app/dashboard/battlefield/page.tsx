@@ -15,11 +15,8 @@ export default async function BattleField({ searchParams }: { searchParams: { id
     }
 
 
-        console.log(RoomData)
         const player = RoomData?.find((d) => d.player.id === user.id)
-        console.log(player)
         const opponent = RoomData?.find((d) => d.player.id != user.id)
-        console.log(opponent)
 
         return <>
 

@@ -29,7 +29,6 @@ export default function useGetRoomState({ roomId }: { roomId: string }) {
         if (socket) {
             socket.emit('get-room-state', ({ roomId }))
             socket.on('room-state', (state: stateType) => {
-                console.log(state)
                 setRoomState(state)
                 setGlobalState(state)
                 setSlots(state?.protalSlots)
@@ -69,7 +68,6 @@ export default function useGetRoomState({ roomId }: { roomId: string }) {
         if (socket) {
             socket.emit('get-room-state', ({ roomId }))
             socket.on('room-state', (state: stateType) => {
-                console.log(state)
                 setGlobalState(state)
                 setRoomState(state)
                 setSlots(state?.protalSlots)

@@ -37,7 +37,6 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
 
         if (slot.portalCard === null && !removeGate && set) {
             setRemoveGate(true)
-            console.log(removeGate)
         }
 
         if (slot.state.open === true && !open) {
@@ -66,7 +65,6 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
 
     useGSAP(() => {
         if (setGateOverlay.current && image.current) {
-            console.log('setGateCard')
             if (set) {
                 addGateCardTimeline((setGateCard) => {
                     setGateCard.fromTo([setGateOverlay.current, image.current], {
@@ -87,12 +85,8 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
             }
         }
 
-        console.log(removeGateOverlay.current)
         if (removeGateOverlay.current) {
-            console.log('in ' + set)
             if (removeGate) {
-                console.log(set)
-                console.log(removeGateOverlay.current)
                 addGateCardStateChangeAnimation((removeGateCard) => {
                     removeGateCard.fromTo(removeGateOverlay.current, {
                         opacity: 0,
@@ -106,7 +100,6 @@ export default function GateCardOnBoard({ userId, slotId }: { userId: string, sl
                         onComplete: () => setRemoveGate(false)
                     })
                 })
-                console.log('animation close')
             } else {
                 return
             }

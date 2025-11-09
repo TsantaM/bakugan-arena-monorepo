@@ -31,7 +31,6 @@ export default function useSetBakugan({ roomId, userId }: { roomId: string, user
     useEffect(() => {
         if (socket) {
             socket.on('update-room-state', (state: stateType) => {
-                console.log(state)
                 setRoomState(state)
                 setSlots(state?.protalSlots)
                 if (!state) return

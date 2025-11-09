@@ -39,7 +39,6 @@ export default function UseSearchOpponent() {
         if (!socket) return
 
         socket.on('match-found', (roomId) => {
-            console.log('Match found', roomId)
             redirect(`/dashboard/battlefield?id=${roomId}`)
         })
     }, [socket])

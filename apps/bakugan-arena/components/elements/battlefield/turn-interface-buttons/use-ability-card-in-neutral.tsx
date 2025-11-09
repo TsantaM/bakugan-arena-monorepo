@@ -40,9 +40,6 @@ export default function UseAbilityCardInNeutral({ roomId, userId }: { roomId: st
 
 
 
-    console.log(bakuganKey, ability)
-    console.log(usableAbilities)
-    console.log(usableExclusives)
 
     return (
         <div className="flex flex-col gap-2">

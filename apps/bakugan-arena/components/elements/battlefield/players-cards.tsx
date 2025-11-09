@@ -8,7 +8,10 @@ import { BakuganPreviewOnFocused, BattleBakuganPreview } from "./game-board/baku
 import { AliveCounterLeft, AliveCounterRight } from "./game-board/alive-counter"
 import { useFocusedBakugan } from "@/src/store/focused-bakugan-store"
 import { useGlobalGameState } from "@/src/store/global-game-state-store"
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
+import { roomStateType } from "@bakugan-arena/game-data/src/type/room-types"
+import { useSocket } from "@/src/providers/socket-provider"
+import { InitGameRoomMessage } from "@/src/functions/iframe-messages"
 
 
 export type player = {
@@ -27,6 +30,7 @@ export type player = {
 
 export default function PlayerCards({ player, opponent, roomId, userId }: { player: player | undefined, opponent: player | undefined, roomId: string, userId: string }) {
 
+    const socket = useSocket()
     const slots = useGlobalGameState((state) => state.gameState?.protalSlots)
     const battleState = useGlobalGameState((state) => state.gameState?.battleState)
 
@@ -37,6 +41,22 @@ export default function PlayerCards({ player, opponent, roomId, userId }: { play
     const slotOfBattle = slots?.find((p) => p.id === battleState?.slot)
     const battleConditions = slotOfBattle && battleState && battleState.battleInProcess && battleState.paused === false ? true : false
     const iframeRef = useRef<HTMLIFrameElement>(null)
+
+    useEffect(() => {
+        if (!socket) return
+        socket.on('init-room-state', (state: roomStateType) => {
+            if (iframeRef !== null && iframeRef.current !== null) {
+                InitGameRoomMessage({
+                    iframe: iframeRef.current,
+                    slots: state.portalSlots,
+                    userId: userId
+                })
+            }
+        })
+
+    }, [socket, iframeRef.current])
+
+
 
     return <>
         <div className="relative z-20 w-full h-[85vh] flex justify-between">
@@ -57,7 +77,19 @@ export default function PlayerCards({ player, opponent, roomId, userId }: { play
             <TurnCounter />
             <AliveCounterRight userId={userId} />
 
-            <iframe ref={iframeRef} src="http://localhost:5173/" className="w-full h-full absolute top-0 left-0"></iframe>
+            <iframe ref={iframeRef} src="http://localhost:5173/" className="w-full h-full absolute top-0 left-0" onLoad={() => {
+                if (!socket) return
+                socket.emit('init-room-state', ({ roomId }))
+                socket.on('init-room-state', (state: roomStateType) => {
+                    if (iframeRef !== null && iframeRef.current !== null) {
+                        InitGameRoomMessage({
+                            iframe: iframeRef.current,
+                            slots: state.portalSlots,
+                            userId: userId
+                        })
+                    }
+                })
+            }}></iframe>
             {/* <GameBoard userId={userId} /> */}
 
             <div className="relative z-50 w-[25vw] md:w-[20vw] lg:w-[15vw] self-start flex flex-col gap-2">

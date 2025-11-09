@@ -53,19 +53,15 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
         if (roomState && roomState.turnState.turnCount <= 2) {
             if (turnActions.gate === '' && turnActions.slot === '') {
                 toast.error('You must choice a usable gate card and a valid slot')
-                console.log('Cas : 1')
                 return
             } else {
                 SetGateCard({ gateId: turnActions.gate, slot: turnActions.slot })
-                console.log(turnActions.slot, turnActions.gate)
-                console.log('Cas : 2')
                 // FR : Fin de tour → signal au serveur
                 // EN : End of turn → notify server
                 turnAction()
 
             }
         } else if (battleState && !battleState.battleInProcess && roomState && roomState.turnState.turnCount > 2 && usersBakugans && usersBakugans > 0) {
-            console.log('Cas : 3')
             // FR : Cas 1 → On est en dehors d’un combat, le tour est avancé (>2) et le joueur a encore des Bakugans
             // EN : Case 1 → Outside of battle, turn count > 2, and player still has Bakugans
 
@@ -76,12 +72,10 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
                 // EN : If a gate card is also selected, place it
                 if (turnActions.gate !== '' && turnActions.slot !== '') {
                     SetGateCard({ gateId: turnActions.gate, slot: turnActions.slot })
-                    console.log(turnActions.slot, turnActions.gate)
                 }
                 // FR : On lance le Bakugan choisi
                 // EN : Throw the selected Bakugan
                 SetBakugan({ bakuganKey: turnActions.bakuganToSet, slot: turnActions.zone })
-                console.log(turnActions.slot, turnActions.bakuganToSet)
 
                 // FR : Si une capacité est sélectionnée, on l’active
                 // EN : If an ability is selected, activate it
@@ -103,11 +97,9 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
                 // FR : Erreur si le joueur n’a pas lancé de Bakugan
                 // EN : Error if player did not throw a Bakugan
                 toast.error('You must throw a Bakugan')
-                console.log('Cas : 4')
 
             }
         } else {
-            console.log('Cas : 5')
             // FR : Cas 1 → On est en dehors d’un combat, le tour est avancé (>2) et le joueur a encore des Bakugans
             // EN : Case 1 → Outside of battle, turn count > 2, and player still has Bakugans
 
@@ -118,12 +110,10 @@ export default function useTurnActionStates({ roomId, userId, battleState }: { r
                 // EN : If a gate card is also selected, place it
                 if (turnActions.gate !== '' && turnActions.slot !== '') {
                     SetGateCard({ gateId: turnActions.gate, slot: turnActions.slot })
-                    console.log(turnActions.slot, turnActions.gate)
                 }
                 // FR : On lance le Bakugan choisi
                 // EN : Throw the selected Bakugan
                 SetBakugan({ bakuganKey: turnActions.bakuganToSet, slot: turnActions.zone })
-                console.log(turnActions.slot, turnActions.bakuganToSet)
 
                 // FR : Si une capacité est sélectionnée, on l’active
                 // EN : If an ability is selected, activate it

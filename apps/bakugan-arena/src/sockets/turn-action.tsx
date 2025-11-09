@@ -23,7 +23,6 @@ export default function useTurnAction({ roomId, userId }: { roomId: string, user
     const turnAction = () => {
         if (socket) {
             socket.emit('turn-action', ({ roomId, userId }))
-            console.log('turn action')
         }
     }
 
@@ -31,7 +30,6 @@ export default function useTurnAction({ roomId, userId }: { roomId: string, user
     useEffect(() => {
         if (socket) {
             socket.on('turn-action', (state: stateType) => {
-                console.log('turn action', state)
                 setRoomState(state)
                 getRoomData()
                 if (!state) return

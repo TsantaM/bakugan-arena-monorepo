@@ -88,7 +88,6 @@ export default function DesignTest() {
             }
         }
         setSlot(newSlot)
-        console.log(slot)
     }
 
     const blockGate = () => {

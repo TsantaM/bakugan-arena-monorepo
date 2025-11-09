@@ -9,7 +9,6 @@ export default function Anchor({ bakugan, slotId }: { bakugan: bakuganOnSlot, sl
   const { setSpritesPositions } = useSpritePositionAnchor()
 
   const rect = ref.current?.getBoundingClientRect()
-  console.log(rect?.top, rect?.left)
 
   useEffect(() => {
     if (!ref.current) return
@@ -27,7 +26,6 @@ export default function Anchor({ bakugan, slotId }: { bakugan: bakuganOnSlot, sl
         w: rect.width,
       }
       setSpritesPositions(data)
-      console.log(data.x, data.y)
     }
 
     // 🔎 Première update

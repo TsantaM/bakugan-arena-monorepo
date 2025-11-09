@@ -70,7 +70,6 @@ export default function useActiveAbilityCard({ roomId }: { roomId: string }) {
     useEffect(() => {
         if (socket) {
             socket.on('update-room-state', (state: stateType) => {
-                console.log(state)
                 setRoomState(state)
                 setSlots(state?.protalSlots)
                 if (!state) return

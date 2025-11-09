@@ -32,7 +32,6 @@ export default function EditDeck({ id }: { id: string }) {
         queryFn: deckData,
     })
 
-    console.log(getDeckData.data)
 
     const EditDeckNameForm = useForm({
         resolver: zodResolver(EditDeckNameSchema), defaultValues: {

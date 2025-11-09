@@ -47,8 +47,6 @@ export default function EditAccount({ username, displayUsername, imgUrl }: { use
 
     }
 
-    console.log(editAccountForm.formState.errors)
-
     return (
         <Card>
             <CardHeader>
