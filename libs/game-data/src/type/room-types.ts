@@ -141,3 +141,10 @@ export type stateType = {
         winner: string | null
     }
 } | undefined
+
+export type roomStateType = {
+    turnState: turnStateType;
+    deck: deckType[];
+    portalSlots: portalSlotsType;
+    battleState: battleState;
+}
