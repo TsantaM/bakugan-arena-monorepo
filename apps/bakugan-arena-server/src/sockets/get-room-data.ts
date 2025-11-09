@@ -1,5 +1,6 @@
 import { Server, Socket } from "socket.io/dist"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
+import { initRoomState } from "../functions/init-game-room"
 
 
 const roomState = ({roomId} : {roomId: string}) => {
@@ -13,4 +14,12 @@ export const socketGetRoomState = (io: Server, socket: Socket) => {
         socket.join(roomId)
         io.to(roomId).emit('room-state', state)
     })
+}
+
+export const socketInitiRoomState = (io: Server, socket: Socket) => {
+    socket.on('init-room-state', ({roomId}: {roomId: string}) => {
+        const state = initRoomState({roomId})
+        if(!state) return
+        io.to(roomId).emit('init-room-state', state)
+    } )
 }

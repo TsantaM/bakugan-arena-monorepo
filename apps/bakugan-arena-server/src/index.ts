@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
 import { removeToWaitingList, setupSearchOpponentSocket } from "./sockets/search-opponent";
-import { socketGetRoomState } from "./sockets/get-room-data";
+import { socketGetRoomState, socketInitiRoomState } from "./sockets/get-room-data";
 import { socketTurn } from "./sockets/turn-action";
 import { socketUpdateGateState } from "./sockets/update-gate-state";
 import { socketUpdateBakuganState } from "./sockets/update-bakugans-state";
@@ -25,6 +25,7 @@ io.on('connection', (socket) => {
     console.log('A user connected:', 'socketId : ', socket.id, 'userId : ', userId );
     setupSearchOpponentSocket(io, socket)
     socketGetRoomState(io, socket)
+    socketInitiRoomState(io, socket)
     socketUpdateGateState(io, socket)
     socketUpdateBakuganState(io, socket)
     socketUseAbilityCard(io, socket)
