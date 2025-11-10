@@ -79,7 +79,7 @@ export const UpdateGate = ({ roomId, gateId, slot, userId }: setGateCardProps) =
             {
                 type: 'SET_GATE_CARD',
                 data : {
-                    slot: slotToUpdate,
+                    slot: newSlotState,
                 },
                 resolved: false
             }

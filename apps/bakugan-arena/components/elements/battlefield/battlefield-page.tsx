@@ -7,6 +7,8 @@ import GameFinishedScreen from "./game-finished-screen"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import { useSocket } from "@/src/providers/socket-provider"
+import { AnimationDirectivesTypes } from "@bakugan-arena/game-data"
+import { useAnimationStore } from "@/src/store/animations-store"
 
 type BattleFieldPageProps = {
     player: player | undefined,
@@ -22,12 +24,23 @@ export default function BattleFieldPage({ player, opponent, roomId, userId }: Ba
     const { roomState } = useGetRoomState({ roomId })
     const cleanState = useGlobalGameState((state) => state.cleanState)
     const finished = useGlobalGameState((state) => state.gameState?.status.finished)
+    const { clearStore, setAnimationAndMessages, Animations } = useAnimationStore()
     const socket = useSocket()
 
     useEffect(() => {
-        if(!socket) return
+        clearStore()
+        if (!socket) return
         socket.emit('init-room-state', ({ roomId }))
         cleanState()
+    }, [socket])
+
+    useEffect(() => {
+        if (!socket) return
+        socket.on('animations', (animations: AnimationDirectivesTypes[]) => {
+            setAnimationAndMessages(animations)
+            console.log(Animations)
+        })
+
     }, [socket])
 
     return (

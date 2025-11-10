@@ -40,6 +40,7 @@ export const socketTurn = (io: Server, socket: Socket) => {
         // FR: On envoie le nouvel état du jeu à tous les joueurs de la salle
         // ENG: Emit the updated game state to all players in the room
         io.to(roomId).emit("turn-action", roomData)
+        io.to(roomId).emit('animations', roomData.animations)
 
     })
 

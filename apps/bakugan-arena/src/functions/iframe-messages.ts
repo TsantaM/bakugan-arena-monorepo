@@ -1,6 +1,6 @@
-import { MessageToIframe, portalSlotsType } from "@bakugan-arena/game-data";
+import { AnimationDirectivesTypes, MessageToIframe, portalSlotsType } from "@bakugan-arena/game-data";
 
-export function InitGameRoomMessage( {iframe, slots, userId } : { iframe: HTMLIFrameElement, slots: portalSlotsType, userId: string }) {
+export function InitGameRoomMessage({ iframe, slots, userId }: { iframe: HTMLIFrameElement, slots: portalSlotsType, userId: string }) {
 
     const message: MessageToIframe = {
         type: "INIT_GAME_ROOM",
@@ -14,4 +14,13 @@ export function InitGameRoomMessage( {iframe, slots, userId } : { iframe: HTMLIF
     iframe.contentWindow?.postMessage(message, 'http://localhost:5173/')
     console.log(iframe.contentWindow)
 
+}
+
+
+export function SendAnimationsMessage({ iframe, animation }: { iframe: HTMLIFrameElement, animation: AnimationDirectivesTypes }) {
+    const message: MessageToIframe = {
+        type: 'TURN_ACTION_ANIMATION',
+        data: animation
+    }
+    iframe.contentWindow?.postMessage(message, 'http://localhost:5173/')
 }

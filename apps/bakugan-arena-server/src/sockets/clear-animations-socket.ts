@@ -2,7 +2,7 @@ import { Server, Socket } from "socket.io/dist";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 
 export const socketCleanAnimations = (io: Server, socket: Socket) => {
-    socket.on('clean-animation-table', ({ roomId, userId }: { roomId: string, userId: string }) => {
+    socket.on('turn-action', ({ roomId, userId }: { roomId: string, userId: string }) => {
         // FR: On récupère les données de la salle correspondant au roomId
         // ENG: Retrieve the room data matching the given roomId
         const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)

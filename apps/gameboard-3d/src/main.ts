@@ -5,6 +5,7 @@ import { PlaneMesh } from './meshes/plane.mesh'
 import { Slots, type MessageToIframe } from '@bakugan-arena/game-data'
 import { createSlotMesh } from './meshes/slot.mesh'
 import { createSprite } from './meshes/bakugan.mesh'
+import { SetGateCardFunctionAndAnimation } from './scene-modifications-functions/set-gate-card-function-animation'
 
 const canvas = document.getElementById('gameboard-canvas')
 
@@ -46,21 +47,15 @@ if (canvas) {
   })
 
   // Listen INIT_GAME_ROOM message
-  console.log('bonsoir')
-
-
   window.addEventListener('message', (event: MessageEvent<MessageToIframe>) => {
     if (event.data.type === 'INIT_GAME_ROOM') {
       const slots = event.data.data.slots
       userId = event.data.data.userId
 
-      console.log(slots)
 
       for (let i = 0; i < slots.length; i++) {
         const slot = slots[i]
-        console.log(slot)
         if (slot.portalCard !== null) {
-          console.log('used')
           createSlotMesh({
             plane: plane,
             slot: slot
@@ -80,6 +75,19 @@ if (canvas) {
           }
         }
 
+      }
+
+    }
+
+    if (event.data.type === 'TURN_ACTION_ANIMATION') {
+      const data = event.data.data
+      console.log(data)
+
+      if(data.type === 'SET_GATE_CARD') {
+        SetGateCardFunctionAndAnimation({
+          plane: plane,
+          slot: data.data.slot
+        })
       }
 
     }

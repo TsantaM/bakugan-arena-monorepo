@@ -4,6 +4,9 @@ import { SetGateCardAnimation } from "../animations/set-gate-card-animation";
 import { createSlotMesh } from "../meshes/slot.mesh";
 
 export function SetGateCardFunctionAndAnimation({ slot, plane }: { slot: portalSlotsTypeElement, plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap> }) {
+    
+    console.log(slot)
+    
     createSlotMesh({
         plane: plane,
         slot: slot

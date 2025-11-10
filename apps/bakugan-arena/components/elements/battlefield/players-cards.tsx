@@ -10,7 +10,8 @@ import { useGlobalGameState } from "@/src/store/global-game-state-store"
 import { useEffect, useRef } from "react"
 import { roomStateType } from "@bakugan-arena/game-data/src/type/room-types"
 import { useSocket } from "@/src/providers/socket-provider"
-import { InitGameRoomMessage } from "@/src/functions/iframe-messages"
+import { InitGameRoomMessage, SendAnimationsMessage } from "@/src/functions/iframe-messages"
+import { useAnimationStore } from "@/src/store/animations-store"
 
 
 export type player = {
@@ -40,22 +41,22 @@ export default function PlayerCards({ player, opponent, roomId, userId }: { play
     const slotOfBattle = slots?.find((p) => p.id === battleState?.slot)
     const battleConditions = slotOfBattle && battleState && battleState.battleInProcess && battleState.paused === false ? true : false
     const iframeRef = useRef<HTMLIFrameElement>(null)
+    const animations = useAnimationStore((state) => state.Animations)
 
     useEffect(() => {
-        if (!socket) return
-        socket.on('init-room-state', (state: roomStateType) => {
-            if (iframeRef !== null && iframeRef.current !== null) {
-                InitGameRoomMessage({
-                    iframe: iframeRef.current,
-                    slots: state.portalSlots,
-                    userId: userId
-                })
-            }
-        })
 
-    }, [socket, iframeRef.current])
+        if(animations.length <= 0) return
+        if(iframeRef.current) {
+            const firstAnimation = animations[0]
+            console.log(firstAnimation)
+            SendAnimationsMessage({
+                iframe: iframeRef.current,
+                animation: firstAnimation
+            })
+        }
+        
 
-
+    }, [animations, iframeRef.current])
 
     return <>
         <div className="relative z-20 w-full h-[85vh] flex justify-between">

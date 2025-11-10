@@ -1,4 +1,5 @@
 import { portalSlotsType } from '../type/room-types'
+import { AnimationDirectivesTypes } from './animations-directives'
 
 export type MessageToIframe =
     {
@@ -9,6 +10,7 @@ export type MessageToIframe =
         }
     } | {
         type: 'TURN_ACTION_ANIMATION',
+        data: AnimationDirectivesTypes
     }
 
 export type MessageFromIframe =
