@@ -7,7 +7,7 @@ export const socketTurn = (io: Server, socket: Socket) => {
 
     // FR: On écoute l'événement "turn-action" envoyé par un joueur
     // ENG: Listen for the "turn-action" event triggered by a player
-    socket.on('turn-action', ({ roomId, userId }: { roomId: string, userId: string }) => {
+    socket.on('turn-action', ({ roomId }: { roomId: string, userId: string }) => {
 
         // FR: On récupère les données de la salle correspondant au roomId
         // ENG: Retrieve the room data matching the given roomId

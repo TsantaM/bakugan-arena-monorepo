@@ -7,6 +7,7 @@ import { socketUpdateBakuganState } from "./sockets/update-bakugans-state";
 import { socketActiveGateCard } from "./sockets/active-gate-card-socket";
 import { socketOnBattleEnd } from "./sockets/on-battle-end-socket";
 import { socketUseAbilityCard } from "./sockets/use-ability-card-socket";
+import { socketCleanAnimations } from "./sockets/clear-animations-socket";
 
 
 
@@ -25,6 +26,7 @@ io.on('connection', (socket) => {
     console.log('A user connected:', 'socketId : ', socket.id, 'userId : ', userId );
     setupSearchOpponentSocket(io, socket)
     socketGetRoomState(io, socket)
+    socketCleanAnimations(io, socket)
     socketInitiRoomState(io, socket)
     socketUpdateGateState(io, socket)
     socketUpdateBakuganState(io, socket)

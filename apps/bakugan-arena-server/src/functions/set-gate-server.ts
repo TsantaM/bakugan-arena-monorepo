@@ -1,4 +1,4 @@
-import { setGateCardProps, updateDeckGates, updateSlot } from "@bakugan-arena/game-data"
+import { setGateCardProps, stateType, updateDeckGates, updateSlot } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
 export const UpdateGate = ({ roomId, gateId, slot, userId }: setGateCardProps) => {
@@ -65,7 +65,7 @@ export const UpdateGate = ({ roomId, gateId, slot, userId }: setGateCardProps) =
     // - players (decrease usable_gates by 1)
     // - slots (add the placed gate)
     // - player's deck (update gates)
-    const state = {
+    const state: stateType = {
         ...roomData,
         players: roomData.players.map((p) =>
             p.userId === newPlayerState.userId ? { ...p, usable_gates: p.usable_gates - 1 } : p
@@ -73,7 +73,17 @@ export const UpdateGate = ({ roomId, gateId, slot, userId }: setGateCardProps) =
         protalSlots: updateSlot(roomData.protalSlots, slotToUpdate.id, newSlotState),
         decksState: roomData.decksState.map((d) =>
             d.userId === userId ? { ...d, gates: newDeckState.gates } : d
-        )
+        ),
+        animations: [
+            ...roomData.animations,
+            {
+                type: 'SET_GATE_CARD',
+                data : {
+                    slot: slotToUpdate,
+                },
+                resolved: false
+            }
+        ]
     }
 
     // FR: Sauvegarde du nouvel état de la salle dans l'état global

@@ -1,7 +1,6 @@
 'use client'
 
 import TurnInterface from "./turn-interface"
-import GameBoard from "./game-board/game-board"
 import TurnCounter from "./game-board/turn-counter"
 import { ProfilePictureLeft, ProfilePictureRigth } from "./game-board/profile-picture-zone"
 import { BakuganPreviewOnFocused, BattleBakuganPreview } from "./game-board/bakugan-preview"
@@ -77,20 +76,20 @@ export default function PlayerCards({ player, opponent, roomId, userId }: { play
             <TurnCounter />
             <AliveCounterRight userId={userId} />
 
-            <iframe ref={iframeRef} src="http://localhost:5173/" className="w-full h-full absolute top-0 left-0" onLoad={() => {
-                if (!socket) return
-                socket.emit('init-room-state', ({ roomId }))
-                socket.on('init-room-state', (state: roomStateType) => {
-                    if (iframeRef !== null && iframeRef.current !== null) {
-                        InitGameRoomMessage({
-                            iframe: iframeRef.current,
-                            slots: state.portalSlots,
-                            userId: userId
-                        })
-                    }
-                })
-            }}></iframe>
-            {/* <GameBoard userId={userId} /> */}
+            <iframe ref={iframeRef} src="http://localhost:5173/" className="w-full h-full absolute top-0 left-0"
+                onLoad={() => {
+                    if (!socket) return
+                    socket.emit('init-room-state', ({ roomId }))
+                    socket.on('init-room-state', (state: roomStateType) => {
+                        if (iframeRef !== null && iframeRef.current !== null) {
+                            InitGameRoomMessage({
+                                iframe: iframeRef.current,
+                                slots: state.portalSlots,
+                                userId: userId
+                            })
+                        }
+                    })
+                }}></iframe>
 
             <div className="relative z-50 w-[25vw] md:w-[20vw] lg:w-[15vw] self-start flex flex-col gap-2">
                 {
