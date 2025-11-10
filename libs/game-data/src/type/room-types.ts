@@ -1,3 +1,4 @@
+import { AnimationDirectivesTypes } from "./animations-directives";
 import { type attribut } from "./game-data-types"
 
 export type slots_id = "slot-1" | "slot-2" | "slot-3" | "slot-4" | "slot-5" | "slot-6"
@@ -139,7 +140,8 @@ export type stateType = {
     status: {
         finished: boolean,
         winner: string | null
-    }
+    },
+    animations: AnimationDirectivesTypes[]
 } | undefined
 
 export type roomStateType = {

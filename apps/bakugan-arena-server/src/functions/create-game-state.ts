@@ -206,7 +206,8 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             status: {
                 finished: false,
                 winner: null
-            }
+            },
+            animations: []
         }
 
         return state

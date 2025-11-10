@@ -27,7 +27,8 @@ import { DragBakuganAbilityFilter } from './src/function/filters/drag-bakugan-ab
 import { AddBakuganAbilityFilter } from './src/function/filters/add-bakugan-ability-filter'
 import { GetGateCardImage } from './src/function/get-gate-card-image'
 import {Slots} from './src/store/slots'
-import { MessageToIframe, MessageFromIframe } from './src/type/iframe-messages'
+import type { MessageToIframe, MessageFromIframe } from './src/type/iframe-messages'
+import type {AnimationDirectivesTypes} from './src/type/animations-directives'
 
 export {
     Bakugans,
@@ -93,7 +94,8 @@ export type {
     useAbilityCardProps,
 
     MessageToIframe,
-    MessageFromIframe
+    MessageFromIframe,
+    AnimationDirectivesTypes
 
 }
 
