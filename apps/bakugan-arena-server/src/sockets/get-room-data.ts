@@ -18,6 +18,7 @@ export const socketGetRoomState = (io: Server, socket: Socket) => {
 
 export const socketInitiRoomState = (io: Server, socket: Socket) => {
     socket.on('init-room-state', ({roomId}: {roomId: string}) => {
+        socket.join(roomId)
         const state = initRoomState({roomId})
         if(!state) return
         io.to(roomId).emit('init-room-state', state)

@@ -23,6 +23,7 @@ export default function useTurnAction({ roomId, userId }: { roomId: string, user
     const turnAction = () => {
         if (socket) {
             socket.emit('turn-action', ({ roomId, userId }))
+            socket.emit('clean-animation-table', ({ roomId, userId }))
         }
     }
 

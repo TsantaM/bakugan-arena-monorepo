@@ -11,9 +11,9 @@ type RemoveGateCardFunctionAnimationProps = {
     camera: THREE.PerspectiveCamera
 }
 
-function RemoveGateCardFunctionAnimation({ plane, slot, userId, scene, camera, }: RemoveGateCardFunctionAnimationProps) {
+async function RemoveGateCardFunctionAnimation({ plane, slot, userId, scene, camera, }: RemoveGateCardFunctionAnimationProps) {
 
-    function gateCardRemover() {
+    async function gateCardRemover() {
         const mesh = plane.getObjectByName(slot.id)
         console.log(mesh)
         if (!mesh) return
@@ -35,7 +35,7 @@ function RemoveGateCardFunctionAnimation({ plane, slot, userId, scene, camera, }
             )
         })
     } else {
-        gateCardRemover()
+        await gateCardRemover()
     }
 }
 

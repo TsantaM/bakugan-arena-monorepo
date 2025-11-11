@@ -7,10 +7,8 @@ import { BakuganPreviewOnFocused, BattleBakuganPreview } from "./game-board/baku
 import { AliveCounterLeft, AliveCounterRight } from "./game-board/alive-counter"
 import { useFocusedBakugan } from "@/src/store/focused-bakugan-store"
 import { useGlobalGameState } from "@/src/store/global-game-state-store"
-import { useEffect, useRef } from "react"
-import { roomStateType } from "@bakugan-arena/game-data/src/type/room-types"
+import { useRef } from "react"
 import { useSocket } from "@/src/providers/socket-provider"
-import { InitGameRoomMessage, SendAnimationsMessage } from "@/src/functions/iframe-messages"
 import { useAnimationStore } from "@/src/store/animations-store"
 
 
@@ -41,22 +39,9 @@ export default function PlayerCards({ player, opponent, roomId, userId }: { play
     const slotOfBattle = slots?.find((p) => p.id === battleState?.slot)
     const battleConditions = slotOfBattle && battleState && battleState.battleInProcess && battleState.paused === false ? true : false
     const iframeRef = useRef<HTMLIFrameElement>(null)
-    const animations = useAnimationStore((state) => state.Animations)
+    const link = `http://localhost:5173/?roomId=${roomId}&userId=${userId}`
 
-    useEffect(() => {
 
-        if(animations.length <= 0) return
-        if(iframeRef.current) {
-            const firstAnimation = animations[0]
-            console.log(firstAnimation)
-            SendAnimationsMessage({
-                iframe: iframeRef.current,
-                animation: firstAnimation
-            })
-        }
-        
-
-    }, [animations, iframeRef.current])
 
     return <>
         <div className="relative z-20 w-full h-[85vh] flex justify-between">
@@ -77,20 +62,7 @@ export default function PlayerCards({ player, opponent, roomId, userId }: { play
             <TurnCounter />
             <AliveCounterRight userId={userId} />
 
-            <iframe ref={iframeRef} src="http://localhost:5173/" className="w-full h-full absolute top-0 left-0"
-                onLoad={() => {
-                    if (!socket) return
-                    socket.emit('init-room-state', ({ roomId }))
-                    socket.on('init-room-state', (state: roomStateType) => {
-                        if (iframeRef !== null && iframeRef.current !== null) {
-                            InitGameRoomMessage({
-                                iframe: iframeRef.current,
-                                slots: state.portalSlots,
-                                userId: userId
-                            })
-                        }
-                    })
-                }}></iframe>
+            <iframe ref={iframeRef} src={link} className="w-full h-full absolute top-0 left-0"></iframe>
 
             <div className="relative z-50 w-[25vw] md:w-[20vw] lg:w-[15vw] self-start flex flex-col gap-2">
                 {

@@ -1,4 +1,4 @@
-import { addBakuganToSlot, BakuganList, setBakuganProps, slots_id } from "@bakugan-arena/game-data"
+import { addBakuganToSlot, AnimationDirectivesTypes, BakuganList, setBakuganProps, Slots, slots_id } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
 export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuganProps) => {
@@ -109,4 +109,19 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuga
         slotId: slot as slots_id,
         userId
     })
+
+    const slots = Battle_Brawlers_Game_State[roomIndex]?.protalSlots
+
+    if(!slots) return
+    const bakugan = slots[Slots.indexOf(slot as slots_id)].bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+    if(!bakugan) return
+    const animation: AnimationDirectivesTypes = {
+        type: 'SET_BAKUGAN',
+        data: {
+            bakugan: bakugan,
+            slot: slots[Slots.indexOf(slot as slots_id)],
+        },
+        resolved: false,
+    }
+     Battle_Brawlers_Game_State[roomIndex]?.animations.push(animation)
 }

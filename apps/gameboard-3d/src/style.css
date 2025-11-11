@@ -20,10 +20,11 @@
 
 }
 
-.buttons {
+button {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   gap: 10px;

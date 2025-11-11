@@ -1,29 +1,51 @@
 import { BakuganList } from "../../battle-brawlers/bakugans"
-import { attribut } from "../../type/game-data-types"
-import { portalSlotsTypeElement, slots_id, stateType } from "../../type/room-types"
+import type { attribut } from "../../type/game-data-types"
+import type { bakuganOnSlot, portalSlotsTypeElement, slots_id, stateType } from "../../type/room-types"
+import { PowerChangeDirectiveAnumation } from "../create-animation-directives/power-change"
 
 export function ElementaryGateCardOnOpen({ roomState, slot, attribut }: { roomState: stateType, slot: slots_id, attribut: attribut }) {
-    const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+    if (!roomState) return
+    const slotOfGate = roomState.protalSlots.find((s) => s.id === slot)
 
     if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
         const keys = slotOfGate.bakugans.map((b) => b.key)
         const secondAttributs = BakuganList.filter((b) => keys.includes(b.key) && b.seconaryAttribut === attribut).map((b) => b.key)
         const bakuganWithAttribut = [slotOfGate.bakugans.filter((b) => b.attribut === attribut), slotOfGate.bakugans.filter((b) => secondAttributs.includes(b.key))].flat()
         slotOfGate.state.open = true
-        bakuganWithAttribut.forEach((b) => b.currentPower += 100)
+        let bakugans: bakuganOnSlot[] = []
+        bakuganWithAttribut.forEach((b) => {
+            b.currentPower += 100
+            bakugans.push(b)
+        })
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: bakugans,
+            powerChange: 100,
+            malus: false
+        })
     }
 
 }
 
 export function ElementaryGateCardOnCancel({ roomState, slot, attribut }: { roomState: stateType, slot: slots_id, attribut: attribut }) {
+    if (!roomState) return
     const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-
     if (slotOfGate && slotOfGate.state.open && !slotOfGate.state.canceled) {
         const keys = slotOfGate.bakugans.map((b) => b.key)
         const secondAttributs = BakuganList.filter((b) => keys.includes(b.key) && b.seconaryAttribut === attribut).map((b) => b.key)
         const bakuganWithAttribut = [slotOfGate.bakugans.filter((b) => b.attribut === attribut), slotOfGate.bakugans.filter((b) => secondAttributs.includes(b.key))].flat()
         slotOfGate.state.canceled = true
-        bakuganWithAttribut.forEach((b) => b.currentPower -= 100)
+        let bakugans: bakuganOnSlot[] = []
+        bakuganWithAttribut.forEach((b) => {
+            b.currentPower -= 100
+            bakugans.push(b)
+        })
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: bakugans,
+            powerChange: 100,
+            malus: true
+        })
     }
 }
 
@@ -57,7 +79,7 @@ export function PerilGateCardOnCanel({ roomState, slot }: { roomState: stateType
         slotOfGate.state.canceled = true
 
     }
-    
+
 }
 
 export function DoubleBakuganCheck({ portalSlot }: { portalSlot: portalSlotsTypeElement }) {

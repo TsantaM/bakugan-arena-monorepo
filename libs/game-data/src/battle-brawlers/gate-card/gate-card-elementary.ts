@@ -1,7 +1,7 @@
 import { DoubleBakuganCheck, ElementaryGateCardOnCancel, ElementaryGateCardOnOpen, PerilGateCardOnCanel, PerilGateCardOnOpen } from "../../function/gate-card-effects/elementary-gate-card-function"
 import { GateCardImages } from "../../store/gate-card-images"
-import { attribut, gateCardType } from "../../type/game-data-types"
-import { slots_id, stateType } from "../../type/room-types"
+import type { gateCardType } from "../../type/game-data-types"
+import type { slots_id, stateType } from "../../type/room-types"
 import { BakuganList } from "../bakugans"
 
 export const ReacteurPyrus: gateCardType = {

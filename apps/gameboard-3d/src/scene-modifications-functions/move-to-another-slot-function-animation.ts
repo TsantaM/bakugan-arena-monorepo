@@ -10,7 +10,7 @@ type MoveToAnotherSlotFunctionAnimationProps = {
     userId: string
 }
 
-function MoveToAnotherSlotFunctionAnimation({ scene, bakugan, initialSlot, newSlot, userId }: MoveToAnotherSlotFunctionAnimationProps) {
+async function MoveToAnotherSlotFunctionAnimation({ scene, bakugan, initialSlot, newSlot, userId }: MoveToAnotherSlotFunctionAnimationProps) {
 
     initialSlot.bakugans.filter((baks) => baks.userId === bakugan.userId).forEach((b) => {
         if (b.userId === bakugan.userId && b.key !== bakugan.key) {
@@ -26,7 +26,7 @@ function MoveToAnotherSlotFunctionAnimation({ scene, bakugan, initialSlot, newSl
     })
 
     console.log('amimation gogo')
-    MoveBakugan({
+    await MoveBakugan({
         bakugan: bakugan,
         scene: scene,
         slot: newSlot,

@@ -11,7 +11,7 @@ type ComeBackBakuganFunctionAnimationProps = {
     userId: string
 }
 
-function ComeBackBakuganFunctionAnimation({ bakugan, camera, scene, slot, userId }: ComeBackBakuganFunctionAnimationProps) {
+async function ComeBackBakuganFunctionAnimation({ bakugan, camera, scene, slot, userId }: ComeBackBakuganFunctionAnimationProps) {
     const reajustSpritesPositions = () => {
         slot.bakugans.splice(slot.bakugans.indexOf(bakugan), 1)
         slot.bakugans.filter((b) => b.userId === bakugan.userId && b.key !== bakugan.key).forEach((b) => {
@@ -25,7 +25,7 @@ function ComeBackBakuganFunctionAnimation({ bakugan, camera, scene, slot, userId
     }
     console.log('comeback')
     
-    ComeBackBakuganAnimation({
+    await ComeBackBakuganAnimation({
         bakugan: bakugan,
         camera: camera,
         scene: scene,

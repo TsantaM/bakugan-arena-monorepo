@@ -68,4 +68,13 @@ export type AnimationDirectivesTypes =
         },
         message?: Message[]
         resolved: boolean
+    } | {
+        type: 'POWER_CHANGE',
+        data: {
+            bakugan: bakuganOnSlot[],
+            powerChange: number,
+            malus?: boolean
+        },
+        message?: Message[]
+        resolved: boolean
     }

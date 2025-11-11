@@ -47,6 +47,14 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId }: activeGateCardP
             //
             // EN : Trigger the Gate Card's special "onOpen" effect if it exists,
             //      passing the required context (room state, slot, Bakugan, and player)
+            roomData.animations.push({
+                type: "OPEN_GATE_CARD",
+                data: {
+                    slot: slotOfGate,
+                    slotId: slotOfGate.id
+                },
+                resolved: false
+            })
             gateCard.onOpen?.({ roomState: roomData, slot: slot, bakuganKey: key, userId: userId })
         }
     }

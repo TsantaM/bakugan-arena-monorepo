@@ -6,7 +6,7 @@ export function GetSpritePosition({ slotIndex, bakugan, userId, slot }: { slotIn
     const isAlly = bakugan.userId === userId ? true : false
     console.log('is ally', isAlly)
     const BakugansOnSlot = slot.bakugans.filter(b => b.userId === bakugan.userId)
-    const bakuganIndex = BakugansOnSlot.findIndex(b => b === bakugan)
+    const bakuganIndex = BakugansOnSlot.findIndex(b => b.key === bakugan.key && b.userId === bakugan.userId)
     console.log(BakugansOnSlot, userId)
 
     if(bakuganIndex === -1) return

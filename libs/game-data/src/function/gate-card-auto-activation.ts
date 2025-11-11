@@ -17,6 +17,14 @@ export function handleGateCards(roomData: stateType) {
                 : false
 
             if (canActivate) {
+                roomData.animations.push({
+                    type: "OPEN_GATE_CARD",
+                    data: {
+                        slot: slot,
+                        slotId: slot.id
+                    },
+                    resolved: false
+                })
                 gate.onOpen({
                     roomState: roomData,
                     slot: slot.id,

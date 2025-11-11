@@ -38,7 +38,6 @@ export default function BattleFieldPage({ player, opponent, roomId, userId }: Ba
         if (!socket) return
         socket.on('animations', (animations: AnimationDirectivesTypes[]) => {
             setAnimationAndMessages(animations)
-            console.log(Animations)
         })
 
     }, [socket])

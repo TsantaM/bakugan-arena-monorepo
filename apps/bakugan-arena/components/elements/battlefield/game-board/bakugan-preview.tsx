@@ -2,10 +2,11 @@
 
 import Image from "next/image"
 import localFont from 'next/font/local'
-import { attribut, bakuganOnSlot, portalSlotsTypeElement } from "@bakugan-arena/game-data"
+import { attribut, bakuganOnSlot, MessageFromIframe, portalSlotsTypeElement } from "@bakugan-arena/game-data"
 import { useEffect, useRef, useState } from "react"
 import { useSocket } from "@/src/providers/socket-provider"
 import { battleState } from "@bakugan-arena/game-data/src/type/room-types"
+import { useAnimationStore } from "@/src/store/animations-store"
 
 const squareMetal = localFont({
     src: [{
@@ -27,20 +28,20 @@ export function BattleBakuganPreview({ slot, userId, battleState, roomId }: { sl
                 {
                     bakugans.map((b, index) => <SpritePreview bakugan={b} key={index} />)
                 }
-                <PowerLevel battleState={battleState} roomId={roomId}  attribut={firstBakuganAttribut} powerLevel={powerLevel} />
+                <PowerLevel battleState={battleState} roomId={roomId} attribut={firstBakuganAttribut} powerLevel={powerLevel} />
             </div>
         </>
     )
 }
 
-export function BakuganPreviewOnFocused({ bakugan }: { bakugan: bakuganOnSlot}) {
+export function BakuganPreviewOnFocused({ bakugan }: { bakugan: bakuganOnSlot }) {
 
     return (
         <>
 
             <div className={`relative z-50 w-full aspect-[3/4] bg-amber-400 p-1 flex`}>
                 <SpritePreview bakugan={bakugan} />
-                <PowerLevel  attribut={bakugan.attribut} powerLevel={bakugan.currentPower} />
+                <PowerLevel attribut={bakugan.attribut} powerLevel={bakugan.currentPower} />
             </div>
         </>
     )
@@ -60,32 +61,48 @@ export function SpritePreview({ bakugan }: { bakugan: bakuganOnSlot }) {
     )
 }
 
-export function PowerLevel({ powerLevel, attribut, battleState, roomId }: { powerLevel: number, attribut: attribut, battleState?: battleState | undefined, roomId?: string }) {
+export function PowerLevel({ powerLevel, attribut }: { powerLevel: number, attribut: attribut, battleState?: battleState | undefined, roomId?: string }) {
 
-    const socket = useSocket()
     const [power, setPower] = useState(powerLevel)
     const prevPower = useRef(powerLevel)
+    const animations = useAnimationStore((state) => state.Animations)
+    const { removeFirst } = useAnimationStore()
 
-    useEffect(() => {
-        const initial = prevPower.current
-        const step = initial < powerLevel ? 5 : -5
+    const updateAnimationsTable = () => {
+        if (animations.length <= 0) return
+        const firstAnimation = animations[0]
 
-        if (initial === powerLevel) return
+        if (firstAnimation.type === 'POWER_CHANGE') {
 
-        const interval = setInterval(() => {
-            setPower(prev => {
-                const next = prev + step
-                if ((step > 0 && next >= powerLevel) || (step < 0 && next <= powerLevel)) {
-                    clearInterval(interval)
-                    return powerLevel
-                }
-                return next
-            })
-        }, 30) // 30ms entre chaque incrément
+            const initial = prevPower.current
+            const step = initial < powerLevel ? 5 : -5
 
-        prevPower.current = powerLevel
+            if (initial === powerLevel) return
 
-    }, [powerLevel])
+            const interval = setInterval(() => {
+                setPower(prev => {
+                    const next = prev + step
+                    if ((step > 0 && next >= powerLevel) || (step < 0 && next <= powerLevel)) {
+                        clearInterval(interval)
+                        return powerLevel
+                    }
+                    return next
+                })
+            }, 30) // 30ms entre chaque incrément
+
+            prevPower.current = powerLevel
+
+            removeFirst()
+        }
+
+    }
+
+    window.addEventListener('message', (event: MessageEvent<MessageFromIframe>) => {
+        const type = event.data.type
+        if (type === 'ANIMATION_DONE') {
+            updateAnimationsTable()
+        }
+    })
 
     return (
         <div className="absolute bottom-2 right-3 w-[90%] aspect-[7/2]">

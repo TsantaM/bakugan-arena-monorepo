@@ -5,7 +5,7 @@ import { SetBakuganAnimation } from '../animations/set-bakugan-animation'
 import { MoveBakugan } from '../animations/move-bakugan-animation'
 
 
-function SetBakuganFunctionAnimation({ bakugan, scene, slot, camera, userId }: { scene: THREE.Scene, bakugan: bakuganOnSlot, slot: portalSlotsTypeElement, camera: THREE.PerspectiveCamera, userId: string }) {
+async function SetBakuganFunctionAnimation({ bakugan, scene, slot, camera, userId }: { scene: THREE.Scene, bakugan: bakuganOnSlot, slot: portalSlotsTypeElement, camera: THREE.PerspectiveCamera, userId: string }) {
     createSprite({
         bakugan: bakugan,
         scene: scene,
@@ -37,7 +37,7 @@ function SetBakuganFunctionAnimation({ bakugan, scene, slot, camera, userId }: {
 
     })
 
-    SetBakuganAnimation({
+    await SetBakuganAnimation({
         bakugan: bakugan,
         bakuganMesh: bakuganMesh as THREE.Sprite<THREE.Object3DEventMap>,
         camera: camera,

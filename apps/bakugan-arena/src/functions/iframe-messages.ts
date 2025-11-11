@@ -1,26 +1,34 @@
 import { AnimationDirectivesTypes, MessageToIframe, portalSlotsType } from "@bakugan-arena/game-data";
 
-export function InitGameRoomMessage({ iframe, slots, userId }: { iframe: HTMLIFrameElement, slots: portalSlotsType, userId: string }) {
+export function InitGameRoomMessage({ iframe, slots, userId, token, roomId }: { iframe: HTMLIFrameElement, slots: portalSlotsType, userId: string, token: string, roomId: string }) {
 
     const message: MessageToIframe = {
         type: "INIT_GAME_ROOM",
         data: {
             slots: slots,
             userId: userId
-        }
+        },
+        token: token,
+        roomId: roomId,
+        userId: userId
     }
 
     console.log(message)
-    iframe.contentWindow?.postMessage(message, 'http://localhost:5173/')
+    if(iframe.contentWindow === null) return
+    iframe.contentWindow.postMessage(message, 'http://localhost:5173/')
     console.log(iframe.contentWindow)
 
 }
 
 
-export function SendAnimationsMessage({ iframe, animation }: { iframe: HTMLIFrameElement, animation: AnimationDirectivesTypes }) {
+export function SendAnimationsMessage({ iframe, animation, token, userId, roomId }: { iframe: HTMLIFrameElement, animation: AnimationDirectivesTypes, token: string, userId: string, roomId: string }) {
     const message: MessageToIframe = {
         type: 'TURN_ACTION_ANIMATION',
-        data: animation
+        data: animation,
+        token: token,
+        roomId: roomId,
+        userId: userId
     }
-    iframe.contentWindow?.postMessage(message, 'http://localhost:5173/')
+    if(iframe.contentWindow === null) return
+    iframe.contentWindow.postMessage(message, 'http://localhost:5173/')
 }
