@@ -47,7 +47,7 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
         return c.maxInDeck > exemplary
     })
 
-    const notInDeckAbilities = [AbilityCardsList.filter((c) => c.attribut !== undefined && bakugansAttribut.includes(c.attribut) && secondAttribut.includes(c.attribut)).filter((c) => {
+    const notInDeckAbilities = [AbilityCardsList.filter((c) => c.attribut !== undefined && bakugansAttribut.includes(c.attribut) || secondAttribut.includes(c.attribut)).filter((c) => {
         const exemplary = deckCards.filter((a) => a?.key === c.key).length
 
         return c.maxInDeck > exemplary
