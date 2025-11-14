@@ -29,6 +29,9 @@ import { GetGateCardImage } from './src/function/get-gate-card-image'
 import {Slots} from './src/store/slots'
 import type { MessageToIframe, MessageFromIframe } from './src/type/iframe-messages'
 import type {AnimationDirectivesTypes} from './src/type/animations-directives'
+import {ComeBackBakuganDirectiveAnimation} from './src/function/create-animation-directives/come-back-bakugan'
+import {ElimineBakuganDirectiveAnimation} from './src/function/create-animation-directives/elimine-bakugan'
+import {RemoveGateCardDirectiveAnimation} from './src/function/create-animation-directives/remove-gate-card'
 
 export {
     Bakugans,
@@ -66,7 +69,11 @@ export {
     DragBakuganAbilityFilter,
     AddBakuganAbilityFilter,
 
-    GetGateCardImage
+    GetGateCardImage,
+
+    ComeBackBakuganDirectiveAnimation,
+    ElimineBakuganDirectiveAnimation,
+    RemoveGateCardDirectiveAnimation
 }
 
 export type {

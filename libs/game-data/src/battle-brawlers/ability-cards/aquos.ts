@@ -1,6 +1,7 @@
 import { CheckBattle } from "../../function/check-battle-in-process";
 import { type abilityCardsType } from "../../type/game-data-types";
 import type { bakuganOnSlot } from "../../type/room-types";
+import { MoveToAnotherSlotDirectiveAnimation } from '../../function/create-animation-directives/move-to-another-slot'
 
 export const MirageAquatique: abilityCardsType = {
     key: 'mirage-aquatique',
@@ -29,7 +30,12 @@ export const MirageAquatique: abilityCardsType = {
                     slotTarget.bakugans.push(newUserState)
                     slotTarget.state.blocked = true
                     slotOfGate.bakugans.splice(index, 1)
-
+                    MoveToAnotherSlotDirectiveAnimation({
+                        animations: roomState.animations,
+                        bakugan: user,
+                        initialSlot: structuredClone(slotOfGate),
+                        newSlot: structuredClone(slotTarget)
+                    })
                     roomState.battleState.battleInProcess = false
                     roomState.battleState.paused = false
                     roomState.battleState.slot = null

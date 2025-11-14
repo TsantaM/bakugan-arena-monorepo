@@ -25,7 +25,7 @@ export function SetGateCardAnimation({
             onComplete: () => {
                 resolve() // ✅ l’animation est terminée, on résout la promesse
             }
-        })
+        }).timeScale(1)
 
         // Animation principale
         timeline.fromTo(

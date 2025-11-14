@@ -24,12 +24,12 @@ export const PreyasGateCard: gateCardType = {
     image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'preyas-gate-card')
-        CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Preyas' })
+        CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Preyas' })
 
     },
     onCanceled({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'preyas-gate-card')
-        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'Preyas' })
+        CancelCaracterGateCard({ roomState: roomState, slotOfGate: slotOfGate, family: 'Preyas' })
     },
     autoActivationCheck: ({ portalSlot }) => {
         const bakugansOnSlot = portalSlot.bakugans.length
@@ -63,12 +63,12 @@ export const DiabloGateCard: gateCardType = {
     image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'diablo-gate-card')
-        CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Diablo' })
+        CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Diablo' })
 
     },
     onCanceled({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'diablo-gate-card')
-        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'Diablo' })
+        CancelCaracterGateCard({ roomState: roomState, slotOfGate: slotOfGate, family: 'Diablo' })
     },
     autoActivationCheck: ({ portalSlot }) => {
         const bakugansOnSlot = portalSlot.bakugans.length
@@ -103,11 +103,11 @@ export const AngeloGateCard: gateCardType = {
     image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'angelo-gate-card')
-        CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Angelo' })
+        CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Angelo' })
     },
     onCanceled({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'angelo-gate-card')
-        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'Angelo' })
+        CancelCaracterGateCard({ roomState: roomState, slotOfGate: slotOfGate, family: 'Angelo' })
     },
     autoActivationCheck: ({ portalSlot }) => {
         const bakugansOnSlot = portalSlot.bakugans.length

@@ -59,11 +59,11 @@ export const SiegeGateCard: gateCardType = {
     image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'siege-gate-card')
-        CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Siege' })
+        CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Siege' })
     },
     onCanceled({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'siege-gate-card')
-        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'Siege' })
+        CancelCaracterGateCard({ roomState: roomState, slotOfGate: slotOfGate, family: 'Siege' })
     },
     autoActivationCheck: ({ portalSlot }) => {
         const bakugansOnSlot = portalSlot.bakugans.length

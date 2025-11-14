@@ -35,12 +35,12 @@ export const FalconeerGateCard: gateCardType = {
     family: 'Falconeer',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'falconeer-gate-card')
-        CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Falconeer' })
+        CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Falconeer' })
 
     },
     onCanceled({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'falconeer-gate-card')
-        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'Falconeer' })
+        CancelCaracterGateCard({ roomState: roomState, slotOfGate: slotOfGate, family: 'Falconeer' })
     },
     autoActivationCheck: ({ portalSlot }) => {
         const bakugansOnSlot = portalSlot.bakugans.length

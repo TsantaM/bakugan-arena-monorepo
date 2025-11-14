@@ -1,5 +1,5 @@
 import { CombinationSimpleFunction } from "../../function/ability-cards-effects/combination-simple-effects";
-import { abilityCardsType } from "../../type/game-data-types";
+import { type abilityCardsType } from "../../type/game-data-types";
 
 export const SubterraPyrus: abilityCardsType = {
     key: 'combination-subterra-pyrus',
@@ -10,8 +10,9 @@ export const SubterraPyrus: abilityCardsType = {
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if(!roomState) return
         if (slotOfGate) {
-            CombinationSimpleFunction({slotOfGate: slotOfGate, attribut: 'Pyrus', attributWeak: 'Subterra', bakuganKey: bakuganKey, userId: userId})
+            CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Pyrus', attributWeak: 'Subterra', bakuganKey: bakuganKey, userId: userId})
         }
     },
 }
@@ -25,8 +26,9 @@ export const SubterraHaos: abilityCardsType = {
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if(!roomState) return
         if (slotOfGate) {
-            CombinationSimpleFunction({slotOfGate: slotOfGate, attribut: 'Subterra', attributWeak: 'Haos', bakuganKey: bakuganKey, userId: userId})
+            CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Subterra', attributWeak: 'Haos', bakuganKey: bakuganKey, userId: userId})
         }
     },
 }
@@ -40,8 +42,9 @@ export const HaosDarkus: abilityCardsType = {
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if(!roomState) return
         if (slotOfGate) {
-            CombinationSimpleFunction({slotOfGate: slotOfGate, attribut: 'Haos', attributWeak: 'Darkus', bakuganKey: bakuganKey, userId: userId})
+            CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Haos', attributWeak: 'Darkus', bakuganKey: bakuganKey, userId: userId})
         }
     },
 }
@@ -55,8 +58,9 @@ export const DarkusAquos: abilityCardsType = {
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if(!roomState) return
         if (slotOfGate) {
-            CombinationSimpleFunction({slotOfGate: slotOfGate, attribut: 'Darkus', attributWeak: 'Aquos', bakuganKey: bakuganKey, userId: userId})
+            CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Darkus', attributWeak: 'Aquos', bakuganKey: bakuganKey, userId: userId})
         }
     },
 }
@@ -70,8 +74,9 @@ export const AquosVentus: abilityCardsType = {
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if(!roomState) return
         if (slotOfGate) {
-            CombinationSimpleFunction({slotOfGate: slotOfGate, attribut: 'Aquos', attributWeak: 'Ventus', bakuganKey: bakuganKey, userId: userId})
+            CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Aquos', attributWeak: 'Ventus', bakuganKey: bakuganKey, userId: userId})
         }
     },
 }
@@ -85,8 +90,9 @@ export const VentusPyrus: abilityCardsType = {
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if(!roomState) return
         if (slotOfGate) {
-            CombinationSimpleFunction({slotOfGate: slotOfGate, attribut: 'Ventus', attributWeak: 'Pyrus', bakuganKey: bakuganKey, userId: userId})
+            CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Ventus', attributWeak: 'Pyrus', bakuganKey: bakuganKey, userId: userId})
         }
     },
 }

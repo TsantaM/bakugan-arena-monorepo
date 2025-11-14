@@ -5,7 +5,6 @@ import { ElimineBakuganAnimation } from '../animations/elimine-bakugan-animation
 
 async function ElimineBakuganFunctionAnimation({ bakugan, scene, slot, userId }: { scene: THREE.Scene, bakugan: bakuganOnSlot, slot: portalSlotsTypeElement, userId: string }) {
 
-    slot.bakugans.forEach((b) => console.log(b))
 
     await ElimineBakuganAnimation({
         bakugan: bakugan,

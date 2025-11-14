@@ -9,14 +9,17 @@ export const socketOnBattleEnd = (io: Server, socket: Socket) => {
         const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
 
         if (roomData && roomData.battleState.turns === 0 && roomData.battleState.battleInProcess && !roomData.battleState.paused) {
+            roomData.animations = []
             onBattleEnd({ roomId })
-            CheckGameFinished({roomId, roomState: roomData})
+            CheckGameFinished({ roomId, roomState: roomData })
         }
-        
+
         const state = Battle_Brawlers_Game_State[roomIndex]
 
         if (state) {
             io.to(roomId).emit('update-room-state', state)
+            io.to(roomId).emit('animations', state.animations)
+
         }
     })
 }

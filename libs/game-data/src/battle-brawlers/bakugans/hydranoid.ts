@@ -48,12 +48,12 @@ export const HydranoidGateCard: gateCardType = {
     image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'hydranoid-gate-card')
-        CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Hydranoid' })
+        CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Hydranoid' })
 
     },
     onCanceled({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'hydranoid-gate-card')
-        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'Hydranoid' })
+        CancelCaracterGateCard({ roomState: roomState, slotOfGate: slotOfGate, family: 'Hydranoid' })
     },
     autoActivationCheck: ({ portalSlot }) => {
         const bakugansOnSlot = portalSlot.bakugans.length

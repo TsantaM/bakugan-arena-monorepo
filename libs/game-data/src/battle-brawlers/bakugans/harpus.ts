@@ -24,12 +24,12 @@ export const HarpusGateCard: gateCardType = {
     image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'harpus-gate-card')
-        CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Harpus' })
+        CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Harpus' })
 
     },
     onCanceled({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'harpus-gate-card')
-        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'Harpus' })
+        CancelCaracterGateCard({ roomState: roomState, slotOfGate: slotOfGate, family: 'Harpus' })
     },
     autoActivationCheck: ({ portalSlot }) => {
         const bakugansOnSlot = portalSlot.bakugans.length

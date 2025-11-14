@@ -14,7 +14,6 @@ async function MoveToAnotherSlotFunctionAnimation({ scene, bakugan, initialSlot,
 
     initialSlot.bakugans.filter((baks) => baks.userId === bakugan.userId).forEach((b) => {
         if (b.userId === bakugan.userId && b.key !== bakugan.key) {
-            console.log('animation go')
             MoveBakugan({
                 bakugan: b,
                 scene: scene,
@@ -25,7 +24,6 @@ async function MoveToAnotherSlotFunctionAnimation({ scene, bakugan, initialSlot,
 
     })
 
-    console.log('amimation gogo')
     await MoveBakugan({
         bakugan: bakugan,
         scene: scene,

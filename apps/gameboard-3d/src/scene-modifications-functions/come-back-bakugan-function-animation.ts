@@ -23,7 +23,6 @@ async function ComeBackBakuganFunctionAnimation({ bakugan, camera, scene, slot, 
             })
         })
     }
-    console.log('comeback')
     
     await ComeBackBakuganAnimation({
         bakugan: bakugan,

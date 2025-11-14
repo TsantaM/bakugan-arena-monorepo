@@ -47,12 +47,12 @@ export const ElCondorGateCard: gateCardType = {
     family: 'El Condor',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'el-condor-gate-card')
-        CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'El Condor' })
+        CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'El Condor' })
 
     },
     onCanceled({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'el-condor-gate-card')
-        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'El Condor' })
+        CancelCaracterGateCard({ roomState: roomState, slotOfGate: slotOfGate, family: 'El Condor' })
     },
     autoActivationCheck: ({ portalSlot }) => {
         const bakugansOnSlot = portalSlot.bakugans.length

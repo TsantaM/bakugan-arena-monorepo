@@ -9,8 +9,8 @@ export const PyrusAquosHaos: abilityCardsType = {
     usable_in_neutral: true,
     onActivate({ roomState, userId }) {
         const portalSlots = roomState?.protalSlots
-        if(!portalSlots) return
-        CombinationTripleEffect({attribut_one: 'Pyrus', attribut_two: 'Aquos', attribut_tree: 'Haos', portalSlots: portalSlots, userId: userId })
+        if (!portalSlots) return
+        CombinationTripleEffect({ animations: roomState.animations, attribut_one: 'Pyrus', attribut_two: 'Aquos', attribut_tree: 'Haos', portalSlots: portalSlots, userId: userId })
     },
 }
 
@@ -22,7 +22,7 @@ export const VentusSubterraDarkus: abilityCardsType = {
     usable_in_neutral: true,
     onActivate({ roomState, userId }) {
         const portalSlots = roomState?.protalSlots
-        if(!portalSlots) return
-        CombinationTripleEffect({attribut_one: 'Ventus', attribut_two: 'Subterra', attribut_tree: 'Darkus', portalSlots: portalSlots, userId: userId })
+        if (!portalSlots) return
+        CombinationTripleEffect({ animations: roomState.animations, attribut_one: 'Ventus', attribut_two: 'Subterra', attribut_tree: 'Darkus', portalSlots: portalSlots, userId: userId })
     },
 }

@@ -1,4 +1,7 @@
 import { CheckBattle } from "../../function/check-battle-in-process";
+import { CancelGateCardDirectiveAnimation } from "../../function/create-animation-directives/cancel-gate-card";
+import { ComeBackBakuganDirectiveAnimation } from "../../function/create-animation-directives/come-back-bakugan";
+import { MoveToAnotherSlotDirectiveAnimation } from "../../function/create-animation-directives/move-to-another-slot";
 import { type abilityCardsType } from "../../type/game-data-types";
 import type { bakuganOnSlot } from "../../type/room-types";
 import { GateCardsList } from "../gate-gards";
@@ -29,6 +32,13 @@ export const CombatAerien: abilityCardsType = {
                     slotTarget.state.blocked = true
                     slotOfGate.bakugans.splice(index, 1)
 
+                    MoveToAnotherSlotDirectiveAnimation({
+                        animations: roomState.animations,
+                        bakugan: user,
+                        initialSlot: structuredClone(slotOfGate),
+                        newSlot: structuredClone(slotTarget)
+                    })
+
                     roomState.battleState.battleInProcess = false
                     roomState.battleState.paused = false
                     roomState.battleState.slot = null
@@ -49,13 +59,17 @@ export const TornadeChaosTotal: abilityCardsType = {
     description: `Annule toutes les effets de la carte portail si elle est ouverte avant l'activation de cette capacité`,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        if (!roomState) return
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
             const gate = slotOfGate.portalCard?.key
             if (user && gate && slotOfGate.state.open) {
                 const gateToCancel = GateCardsList.find((g) => g.key === gate)
-
+                CancelGateCardDirectiveAnimation({
+                    animations: roomState.animations,
+                    slot: slotOfGate
+                })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
                     slotOfGate.state.canceled = true
@@ -90,6 +104,13 @@ export const SouffleTout: abilityCardsType = {
 
                 slotTarget.bakugans.push(newOpponentState)
                 slotOfGate.bakugans.splice(index, 1)
+
+                MoveToAnotherSlotDirectiveAnimation({
+                    animations: roomState?.animations,
+                    bakugan: opponent,
+                    initialSlot: structuredClone(slotTarget),
+                    newSlot: structuredClone(slotTarget)
+                })
 
                 roomState.battleState.battleInProcess = false
                 roomState.battleState.paused = false
@@ -128,6 +149,11 @@ export const RetourDair: abilityCardsType = {
             if (user && bakuganInDeck) {
                 slotOfGate.bakugans.splice(index, 1)
                 bakuganInDeck.bakuganData.onDomain = false
+                ComeBackBakuganDirectiveAnimation({
+                    animations: roomState.animations,
+                    bakugan: user,
+                    slot: slotOfGate
+                })
             }
 
             roomState.battleState.battleInProcess = false
@@ -146,6 +172,7 @@ export const TornadeExtreme: abilityCardsType = {
     extraInputs: ['drag-bakugan'],
     usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot, target, slotToDrag }) => {
+        if(!roomState) return
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const slotTarget = roomState?.protalSlots.find((s) => s.id === slotToDrag)
         console.log(target, slotToDrag, slot)
@@ -172,6 +199,12 @@ export const TornadeExtreme: abilityCardsType = {
 
                 slotOfGate.bakugans.push(newState)
                 slotTarget.bakugans.splice(BakuganTargetIndex, 1)
+                MoveToAnotherSlotDirectiveAnimation({
+                    animations: roomState?.animations,
+                    bakugan: bakuganToDrag,
+                    initialSlot: slotTarget,
+                    newSlot: slotOfGate
+                })
                 CheckBattle({ roomState })
             }
         }

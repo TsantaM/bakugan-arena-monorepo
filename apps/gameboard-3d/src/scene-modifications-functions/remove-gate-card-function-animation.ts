@@ -15,7 +15,6 @@ async function RemoveGateCardFunctionAnimation({ plane, slot, userId, scene, cam
 
     async function gateCardRemover() {
         const mesh = plane.getObjectByName(slot.id)
-        console.log(mesh)
         if (!mesh) return
         RemoveGateCardAnimation({
             mesh: mesh as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>

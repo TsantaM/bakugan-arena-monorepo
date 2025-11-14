@@ -20,7 +20,7 @@ export function handleGateCards(roomData: stateType) {
                 roomData.animations.push({
                     type: "OPEN_GATE_CARD",
                     data: {
-                        slot: slot,
+                        slot: structuredClone(slot),
                         slotId: slot.id
                     },
                     resolved: false

@@ -1,4 +1,5 @@
 import { type stateType } from "../type/room-types";
+import { RemoveGateCardDirectiveAnimation } from "./create-animation-directives/remove-gate-card";
 import { ResetSlot } from "./reset-slot";
 
 export const finalizeBattle = ({ roomData, winnerId, loserId }: { roomData: stateType, winnerId?: string, loserId?: string }) => {
@@ -16,6 +17,13 @@ export const finalizeBattle = ({ roomData, winnerId, loserId }: { roomData: stat
 
         console.log("Turn set to winner:", roomData.turnState)
     }
+
+    if(!slotToUpdate) return
+
+    RemoveGateCardDirectiveAnimation({
+        animations: roomData.animations,
+        slot: slotToUpdate
+    })
 
     if (slotToUpdate) ResetSlot(slotToUpdate)
 

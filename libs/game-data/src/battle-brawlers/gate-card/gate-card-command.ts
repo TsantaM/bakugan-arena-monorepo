@@ -1,3 +1,7 @@
+import { ComeBackBakuganDirectiveAnimation } from "../../function/create-animation-directives/come-back-bakugan";
+import { PowerChangeDirectiveAnumation } from "../../function/create-animation-directives/power-change";
+import { RemoveGateCardDirectiveAnimation } from "../../function/create-animation-directives/remove-gate-card";
+import { SetBakuganDirectiveAnimation } from "../../function/create-animation-directives/set-bakugan-animation-directives";
 import { ResetSlot } from "../../function/reset-slot";
 import { GateCardImages } from "../../store/gate-card-images";
 import { type gateCardType } from "../../type/game-data-types";
@@ -10,6 +14,7 @@ export const Rechargement: gateCardType = {
     description: `Augmente le niveau de puissance du propriétaire de la carte de 100 G par Bakugan présent sur le domaine ayant le même élément`,
     image: GateCardImages.command,
     onOpen: ({ roomState, slot, bakuganKey, userId }) => {
+        if (!roomState) return
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const bakuganUser = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
 
@@ -21,10 +26,17 @@ export const Rechargement: gateCardType = {
                 const merged = sameAttributOnDomain.flat()
                 const bonus = 100 * merged.length
                 bakuganUser.currentPower = bakuganUser.currentPower += bonus
+                PowerChangeDirectiveAnumation({
+                    animations: roomState?.animations,
+                    bakugans: [bakuganUser],
+                    powerChange: bonus,
+                    malus: false
+                })
             }
         }
     },
     onCanceled: ({ roomState, slot }) => {
+        if (!roomState) return
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const gateOwner = slotOfGate?.bakugans.find((b) => b.userId === slotOfGate.portalCard?.userId)
         const bakuganUser = slotOfGate?.bakugans.find((b) => b.key === gateOwner?.key && b.userId === gateOwner.userId)
@@ -37,6 +49,12 @@ export const Rechargement: gateCardType = {
                 const malus = 100 * merged.length
                 bakuganUser.currentPower = bakuganUser.currentPower -= malus
                 slotOfGate.state.canceled = true
+                PowerChangeDirectiveAnumation({
+                    animations: roomState?.animations,
+                    bakugans: [bakuganUser],
+                    powerChange: malus,
+                    malus: false
+                })
             }
         }
     }
@@ -49,6 +67,7 @@ export const GrandEsprit: gateCardType = {
     description: `Augmente le niveau de puissance du propriétaire de la carte de 50 G par cartes portails présentes sur le domaine`,
     image: GateCardImages.command,
     onOpen({ roomState, slot, bakuganKey, userId }) {
+        if (!roomState) return
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const bakuganUser = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
         const gateCount = roomState?.protalSlots.filter((s) => s.portalCard !== null)
@@ -57,9 +76,16 @@ export const GrandEsprit: gateCardType = {
             const bonus = 50 * gateCount.length
             bakuganUser.currentPower = bakuganUser.currentPower + bonus
             slotOfGate.state.open = true
+            PowerChangeDirectiveAnumation({
+                animations: roomState?.animations,
+                bakugans: [bakuganUser],
+                powerChange: bonus,
+                malus: false
+            })
         }
     },
     onCanceled({ roomState, slot, bakuganKey, userId }) {
+        if (!roomState) return
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const bakuganUser = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === slotOfGate.portalCard?.userId)
         const gateCount = roomState?.protalSlots.filter((s) => s.portalCard !== null)
@@ -68,6 +94,12 @@ export const GrandEsprit: gateCardType = {
             const malus = 50 * gateCount.length
             bakuganUser.currentPower = bakuganUser.currentPower - malus
             slotOfGate.state.canceled = true
+            PowerChangeDirectiveAnumation({
+                animations: roomState?.animations,
+                bakugans: [bakuganUser],
+                powerChange: malus,
+                malus: false
+            })
         }
     },
 }
@@ -135,6 +167,11 @@ export const TripleCombat: gateCardType = {
                     slotToUpdate.bakugans.push(usersBakugan)
                     userStrongest.bakuganData.onDomain = true
                     slotToUpdate.state.open = true
+                    SetBakuganDirectiveAnimation({
+                        animations: roomState.animations,
+                        bakugan: usersBakugan,
+                        slot: slotToUpdate
+                    })
 
                 }
             }
@@ -215,6 +252,11 @@ export const QuatuorDeCombat: gateCardType = {
 
                     slotToUpdate.bakugans.push(usersBakugan)
                     userWeakest.bakuganData.onDomain = true
+                    SetBakuganDirectiveAnimation({
+                        animations: roomState.animations,
+                        bakugan: usersBakugan,
+                        slot: slotToUpdate
+                    })
                 }
 
                 if (opponentWeakest !== null) {
@@ -237,7 +279,11 @@ export const QuatuorDeCombat: gateCardType = {
                     slotToUpdate.bakugans.push(opponentBakugan)
                     opponentWeakest.bakuganData.onDomain = true
                     slotToUpdate.state.open = true
-
+                    SetBakuganDirectiveAnimation({
+                        animations: roomState.animations,
+                        bakugan: opponentBakugan,
+                        slot: slotToUpdate
+                    })
                 }
             }
 
@@ -278,6 +324,11 @@ export const RetourDAssenceur: gateCardType = {
                         roomState.battleState.battleInProcess = false
                         roomState.battleState.slot = null
                         roomState.battleState.paused = false
+                        ComeBackBakuganDirectiveAnimation({
+                            animations: roomState.animations,
+                            bakugan: b,
+                            slot: slotOfGate
+                        })
                     }
                 })
             }
@@ -298,6 +349,10 @@ export const BoucEmissaire: gateCardType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
 
         if (roomState && slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
+            RemoveGateCardDirectiveAnimation({
+                animations: roomState.animations,
+                slot: slotOfGate
+            })
             ResetSlot(slotOfGate)
 
             roomState.battleState.battleInProcess = false
@@ -314,9 +369,14 @@ export const Armistice: gateCardType = {
     description: `Met fin au combat et tous les Bakugans sur la carte quittent le champs de batail. Toutes les cartes maîtrises utilisées seront perdues`,
     image: GateCardImages.command,
     onOpen({ roomState, slot }) {
+        if(!roomState) return
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const bakugansOnGate = slotOfGate.bakugans.map((b) => b.key)
+            RemoveGateCardDirectiveAnimation({
+                animations: roomState.animations,
+                slot: slotOfGate
+            })
             ResetSlot(slotOfGate)
 
             if (roomState && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {

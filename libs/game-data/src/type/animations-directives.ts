@@ -77,4 +77,13 @@ export type AnimationDirectivesTypes =
         },
         message?: Message[]
         resolved: boolean
+    } | {
+        type: 'MOVE_TO_ANOTHER_SLOT',
+        data: {
+            initialSlot: portalSlotsTypeElement,
+            newSlot: portalSlotsTypeElement,
+            bakugan: bakuganOnSlot,
+        },
+        message?: Message[]
+        resolved: boolean
     }

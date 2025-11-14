@@ -1,4 +1,6 @@
 import { CheckBattle } from "../../function/check-battle-in-process";
+import { MoveToAnotherSlotDirectiveAnimation } from "../../function/create-animation-directives/move-to-another-slot";
+import { PowerChangeDirectiveAnumation } from "../../function/create-animation-directives/power-change";
 import { type abilityCardsType } from "../../type/game-data-types";
 import type { bakuganOnSlot } from "../../type/room-types";
 import { GateCardsList } from "../gate-gards";
@@ -25,9 +27,15 @@ export const MagmaSupreme: abilityCardsType = {
                         initialGate.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
                         slotOfGate.state.open = false
                         slotOfGate.state.canceled = false
-
+                        roomState?.animations.push({
+                            type: "OPEN_GATE_CARD",
+                            data: {
+                                slot: slotOfGate,
+                                slotId: slotOfGate.id
+                            },
+                            resolved: false
+                        })
                         newGate.onOpen({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
-
                     }
                 }
 
@@ -65,12 +73,19 @@ export const CopieConforme: abilityCardsType = {
     description: `Permet de copier une des carte maîtrise déjà utilisée par l'adversaire`,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        if (!roomState) return
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
 
             if (user) {
                 user.currentPower += 100
+                PowerChangeDirectiveAnumation({
+                    animations: roomState?.animations,
+                    bakugans: [user],
+                    powerChange: 100,
+                    malus: false
+                })
             }
         }
     }
@@ -85,6 +100,7 @@ export const Obstruction: abilityCardsType = {
     description: `L'utilisateur s'empare du niveau de puissance de l'adversaire avant l'utilisation de la maîtrise`,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        if(!roomState) return
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
@@ -92,6 +108,12 @@ export const Obstruction: abilityCardsType = {
             if (user && opponent) {
                 const opponentPower = opponent.currentPower
                 user.currentPower += opponentPower
+                PowerChangeDirectiveAnumation({
+                    animations: roomState?.animations,
+                    bakugans: [user],
+                    powerChange: opponentPower,
+                    malus: false
+                })
             }
         }
     }
@@ -113,6 +135,7 @@ export const ForceDattraction: abilityCardsType = {
         console.log(slotOfGate)
         // const targetToDrag = slotTarget?.bakugans.find((b) => b.key === target)
         if (slotOfGate && slotTarget && target !== '' && slotToDrag !== '') {
+            if(!roomState) return
             const BakuganTargetIndex = slotTarget.bakugans.findIndex((b) => b.key === target)
             const bakuganToDrag = slotTarget?.bakugans.find((b) => b.key === target)
             const condition = slotOfGate && slotTarget && bakuganToDrag && BakuganTargetIndex ? true : false
@@ -132,6 +155,12 @@ export const ForceDattraction: abilityCardsType = {
 
                 slotOfGate.bakugans.push(newState)
                 slotTarget.bakugans.splice(BakuganTargetIndex, 1)
+                MoveToAnotherSlotDirectiveAnimation({
+                    animations: roomState?.animations,
+                    bakugan: bakuganToDrag,
+                    initialSlot: slotTarget,
+                    newSlot: slotOfGate
+                })
                 CheckBattle({ roomState })
             }
         }

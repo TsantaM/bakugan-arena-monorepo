@@ -62,12 +62,12 @@ export const CentipodGateCard: gateCardType = {
     image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'centipod-gate-card')
-        CaracterGateCardEffect({ slotOfGate: slotOfGate, family: family })
+        CaracterGateCardEffect({ roomState: roomState, slotOfGate: slotOfGate, family: family })
 
     },
     onCanceled({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'centipod-gate-card')
-        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: family })
+        CancelCaracterGateCard({ roomState: roomState, slotOfGate: slotOfGate, family: family })
     },
     autoActivationCheck: ({ portalSlot }) => {
         const bakugansOnSlot = portalSlot.bakugans.length

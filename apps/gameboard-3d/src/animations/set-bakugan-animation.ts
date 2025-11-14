@@ -47,7 +47,7 @@ export function SetBakuganAnimation({
                 resolve() // ✅ l’animation est terminée, on résout la promesse
 
             },
-        });
+        }).timeScale(1);
 
         // === Animation de déplacement ===
         timeline.fromTo(

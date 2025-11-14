@@ -42,7 +42,7 @@ export function PowerChangeAnimation({
         powerChangeMesh.removeFromParent();
         resolve(); // ✅ l’animation est terminée
       }
-    });
+    }).timeScale(1.5);
 
     // Animation : le texte flotte vers le haut puis disparaît
     timeline.fromTo(
@@ -56,7 +56,6 @@ export function PowerChangeAnimation({
         yoyo: true,
         repeat: 1,
         duration: 0.8,
-        ease: 'power1.inOut'
       }
     );
   });

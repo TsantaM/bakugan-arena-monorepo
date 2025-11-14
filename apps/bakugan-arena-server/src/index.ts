@@ -32,7 +32,6 @@ io.on('connection', (socket) => {
     socketUpdateBakuganState(io, socket)
     socketUseAbilityCard(io, socket)
     socketActiveGateCard(io, socket)
-    socketOnBattleEnd(io, socket)
     socketTurn(io, socket)
 
     socket.on('disconnect', (reason) => {

@@ -23,12 +23,12 @@ export const SirenoidGateCard: gateCardType = {
     image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'sirenoid-gate-card')
-        CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'sirenoid' })
+        CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'sirenoid' })
 
     },
     onCanceled({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'sirenoid-gate-card')
-        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'sirenoid' })
+        CancelCaracterGateCard({ roomState: roomState, slotOfGate: slotOfGate, family: 'sirenoid' })
     },
     autoActivationCheck: ({ portalSlot }) => {
         const bakugansOnSlot = portalSlot.bakugans.length

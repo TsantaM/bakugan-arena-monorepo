@@ -2,12 +2,9 @@ import type { bakuganOnSlot, portalSlotsTypeElement } from "@bakugan-arena/game-
 
 export function GetSpritePosition({ slotIndex, bakugan, userId, slot }: { slotIndex: number, bakugan: bakuganOnSlot, userId: string, slot: portalSlotsTypeElement }) {
 
-    console.log(bakugan.userId, userId)
     const isAlly = bakugan.userId === userId ? true : false
-    console.log('is ally', isAlly)
     const BakugansOnSlot = slot.bakugans.filter(b => b.userId === bakugan.userId)
     const bakuganIndex = BakugansOnSlot.findIndex(b => b.key === bakugan.key && b.userId === bakugan.userId)
-    console.log(BakugansOnSlot, userId)
 
     if(bakuganIndex === -1) return
 
@@ -20,7 +17,6 @@ export function GetSpritePosition({ slotIndex, bakugan, userId, slot }: { slotIn
     const third = bakuganIndex === 2 ? true : false
 
 
-    console.log(oneBakugans, twoBakugans, threeBakugans, first, second, third, bakuganIndex)
 
     const lineX: (slot : number) => number | undefined = (slot) => {
         switch (slot + 1) {
@@ -146,7 +142,6 @@ export function GetSpritePosition({ slotIndex, bakugan, userId, slot }: { slotIn
         }
     }
     const xPos = lineX(slotIndex)
-    console.log('line X', xPos)
 
     const lineZ: (slot: number) => number | undefined = (slot) => {
         switch (slot + 1) {
@@ -291,7 +286,6 @@ export function GetSpritePosition({ slotIndex, bakugan, userId, slot }: { slotIn
         }
     }
     const zPos = lineZ(slotIndex)
-    console.log('line Z', zPos)
 
     if(!xPos) return
     if(!zPos) return
@@ -300,7 +294,6 @@ export function GetSpritePosition({ slotIndex, bakugan, userId, slot }: { slotIn
         const start = 12 / 2
         const x = start + -xPos * cellSize
         const z = start + -zPos * cellSize
-        console.log(x, z)
         return {x, z}
 
 }

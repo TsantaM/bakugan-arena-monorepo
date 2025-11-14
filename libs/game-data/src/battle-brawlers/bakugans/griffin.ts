@@ -47,11 +47,11 @@ export const GriffinGateCard: gateCardType = {
     image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'griffin-gate-card')
-        CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'griffin' })
+        CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'griffin' })
     },
     onCanceled({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'griffin-gate-card')
-        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'griffin' })
+        CancelCaracterGateCard({ roomState: roomState, slotOfGate: slotOfGate, family: 'griffin' })
     },
     autoActivationCheck: ({ portalSlot }) => {
         const bakugansOnSlot = portalSlot.bakugans.length

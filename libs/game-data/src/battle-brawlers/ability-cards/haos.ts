@@ -1,3 +1,6 @@
+import { ComeBackBakuganDirectiveAnimation } from "../../function/create-animation-directives/come-back-bakugan";
+import { PowerChangeDirectiveAnumation } from "../../function/create-animation-directives/power-change";
+import { SetBakuganDirectiveAnimation } from "../../function/create-animation-directives/set-bakugan-animation-directives";
 import { type abilityCardsType } from "../../type/game-data-types";
 import { type bakuganOnSlot } from "../../type/room-types";
 import { AbilityCardsList } from "../ability-cards";
@@ -12,12 +15,19 @@ export const RapideHaos: abilityCardsType = {
     usable_in_neutral: false,
     extraInputs: ['add-bakugan'],
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        if (!roomState) return
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
 
             if (user) {
                 user.currentPower += 100
+                PowerChangeDirectiveAnumation({
+                    animations: roomState?.animations,
+                    bakugans: [user],
+                    powerChange: 100,
+                    malus: false
+                })
             }
         }
     }
@@ -33,6 +43,7 @@ export const EclatSoudain: abilityCardsType = {
     usable_in_neutral: false,
     extraInputs: ['add-bakugan'],
     onActivate: ({ roomState, userId, bakuganKey, slot, bakuganToAdd }) => {
+        if (!roomState) return
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const deck = roomState?.decksState.find((d) => d.userId === userId)
         const bakugan = deck?.bakugans.find((b) => b?.bakuganData.key === bakuganToAdd)
@@ -60,10 +71,16 @@ export const EclatSoudain: abilityCardsType = {
             if (user && haosOnDomain && haosOnDomain.length >= 2) {
                 slotOfGate.bakugans.push(newBakugan)
                 bakugan.bakuganData.onDomain = true
+                SetBakuganDirectiveAnimation({
+                    animations: roomState.animations,
+                    bakugan: newBakugan,
+                    slot: slotOfGate
+                })
             }
         }
     },
     onCanceled({ roomState, userId, slot }) {
+        if (!roomState) return
         const slotToUpdate = roomState?.protalSlots.find((s) => s.id === slot)
         const deck = roomState?.decksState.find((d) => d.userId === userId)
         if (slotToUpdate && deck) {
@@ -72,6 +89,12 @@ export const EclatSoudain: abilityCardsType = {
             assistsBakugans.forEach((a) => {
                 const index = slotToUpdate.bakugans.findIndex((b) => b.key === a.key && b.assist === a.assist && b.userId === a.userId)
                 slotToUpdate.bakugans.splice(index, 1)
+
+                ComeBackBakuganDirectiveAnimation({
+                    animations: roomState?.animations,
+                    bakugan: a,
+                    slot: slotToUpdate
+                })
 
                 const deckDataToUpdate = deck.bakugans.find((b) => b?.bakuganData.key === a.key)
                 if (deckDataToUpdate) {
@@ -93,12 +116,19 @@ export const LumiereDivine: abilityCardsType = {
     description: `Permet de redonner vie à un Bakugan qui a été vaincu au combat`,
     usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        if (!roomState) return
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
 
             if (user) {
                 user.currentPower += 100
+                PowerChangeDirectiveAnumation({
+                    animations: roomState?.animations,
+                    bakugans: [user],
+                    powerChange: 100,
+                    malus: false
+                })
             }
         }
     }
@@ -112,10 +142,10 @@ export const ContreMaitrise: abilityCardsType = {
     description: `Annule toute carte maitrise utilisé par l'adversaire`,
     maxInDeck: 3,
     usable_in_neutral: false,
-    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+    onActivate: ({ roomState, userId, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
-            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            // const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
             const lastAbility = slotOfGate.activateAbilities.find((a) => a.userId !== userId)
 
             if (lastAbility && !lastAbility.canceled) {
@@ -140,6 +170,7 @@ export const HaosImmobilisation: abilityCardsType = {
     description: `Si deux (2) Bakugans Haos sont sur le domaine, ajoute 100 G de puissance à l'utilisateur et permet rendre 3 cartes capacités supplémentaires au joueur`,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        if (!roomState) return
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans?.filter((b) => b.attribut === 'Haos').map((b) => b.key) || [])
 
@@ -152,17 +183,30 @@ export const HaosImmobilisation: abilityCardsType = {
                 if (user && player) {
                     user.currentPower += 100
                     player.usable_abilitys = 3
+                    PowerChangeDirectiveAnumation({
+                        animations: roomState?.animations,
+                        bakugans: [user],
+                        powerChange: 100,
+                        malus: false
+                    })
                 }
             }
         }
     },
     onCanceled: ({ roomState, userId, bakuganKey, slot }) => {
+        if(!roomState) return
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
 
             if (user) {
                 user.currentPower -= 100
+                PowerChangeDirectiveAnumation({
+                    animations: roomState?.animations,
+                    bakugans: [user],
+                    powerChange: 100,
+                    malus: true
+                })
             }
         }
     }

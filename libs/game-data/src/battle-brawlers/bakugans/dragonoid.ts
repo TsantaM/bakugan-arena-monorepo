@@ -49,12 +49,12 @@ export const DragonoidGateCard: gateCardType = {
     family: 'Dragonoid',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'dragonoid-gate-card')
-        CaracterGateCardEffect({ slotOfGate: slotOfGate, family: 'Dragonoid' })
+        CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Dragonoid' })
 
     },
     onCanceled({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'dragonoid-gate-card')
-        CancelCaracterGateCard({ slotOfGate: slotOfGate, family: 'Dragonoid' })
+        CancelCaracterGateCard({ roomState: roomState, slotOfGate: slotOfGate, family: 'Dragonoid' })
     },
     autoActivationCheck: ({ portalSlot }) => {
         const bakugansOnSlot = portalSlot.bakugans.length

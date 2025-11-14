@@ -1,4 +1,4 @@
-import { applyWinAbilitiesEffects, determineWinner, finalizeBattle, getPlayerDecksAndBakugans, updateDeckBakugans } from "@bakugan-arena/game-data"
+import { applyWinAbilitiesEffects, ComeBackBakuganDirectiveAnimation, determineWinner, ElimineBakuganDirectiveAnimation, finalizeBattle, getPlayerDecksAndBakugans, updateDeckBakugans } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
 
@@ -34,7 +34,7 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
 
     // FR: Récupération des bakugans et decks des joueurs ===
     // ENG Get each player's bakugans and their deck ===
-    const {player1Bakugans, p1Deck, player2Bakugans, p2Deck} = getPlayerDecksAndBakugans({slot, decksState, players})
+    const { player1Bakugans, p1Deck, player2Bakugans, p2Deck } = getPlayerDecksAndBakugans({ slot, decksState, players })
     if (player1Bakugans.length === 0 || player2Bakugans.length === 0) return  // Si un joueur n'a pas de bakugans, exit
 
     // FR: Calcul de la puissance totale de chaque joueur ===
@@ -62,6 +62,27 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
     // ENG:  Update bakugans according to the result ===
     if (p1Deck && p2Deck) {
         if (!isEquality && winner && loser && deckToUpdate && deckToUpdate.bakugans) {
+
+            slot.bakugans.forEach((bakugan) => {
+                if (bakugan.userId === loser) {
+                    ElimineBakuganDirectiveAnimation({
+                        animations: roomData.animations,
+                        bakugan: bakugan,
+                        slot: slot
+                    })
+                }
+            })
+
+            slot.bakugans.forEach((bakugan) => {
+                if (bakugan.userId === winner) {
+                    ComeBackBakuganDirectiveAnimation({
+                        animations: roomData.animations,
+                        bakugan: bakugan,
+                        slot: slot
+                    })
+                }
+            })
+
             // FR Si il y a un gagnant, appliquer les effets de victoire ===
             // ENG: Apply winner abilities effects ===
             applyWinAbilitiesEffects({ slot: slot, winner: winner, roomData: roomData })
@@ -71,9 +92,19 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
             updateDeckBakugans({ deck: deckToUpdate, keys: keys, eliminate: true })
             updateDeckBakugans({ deck: p1Deck, keys: keys })
             updateDeckBakugans({ deck: p2Deck, keys: keys })
+
+
+
         } else {
             // FR Si égalité, juste désactiver le flag onDomain ===
             // ENG: If equality, just reset onDomain for involved bakugans ===
+            slot.bakugans.forEach((bakugan) => {
+                ComeBackBakuganDirectiveAnimation({
+                    animations: roomData.animations,
+                    bakugan: bakugan,
+                    slot: slot
+                })
+            })
             updateDeckBakugans({ deck: p1Deck, keys: keys })
             updateDeckBakugans({ deck: p2Deck, keys: keys })
         }
@@ -83,5 +114,5 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
     const loserId = loser !== null ? loser : undefined
     // FR: Finaliser la bataille ===
     //ENG: Finalize battle: reset slot, battle state, etc. ===
-    finalizeBattle({roomData, winnerId: winnerId, loserId: loserId})
+    finalizeBattle({ roomData, winnerId: winnerId, loserId: loserId })
 }

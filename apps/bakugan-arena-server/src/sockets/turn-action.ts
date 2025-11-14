@@ -2,6 +2,7 @@ import { Server, Socket } from "socket.io/dist";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { handleBattle, handleGateCards, updateTurnState } from "@bakugan-arena/game-data";
 import { CheckGameFinished } from "@bakugan-arena/prisma";
+import { onBattleEnd } from "../functions/on-battle-end";
 
 export const socketTurn = (io: Server, socket: Socket) => {
 
@@ -32,6 +33,12 @@ export const socketTurn = (io: Server, socket: Socket) => {
         // FR: Vérification et activation automatique des cartes portail si leurs conditions sont remplies
         // ENG: Check and auto-activate gate cards if their conditions are met
         handleGateCards(roomData)
+
+
+        if (roomData && roomData.battleState.turns === 0 && roomData.battleState.battleInProcess && !roomData.battleState.paused) {
+            onBattleEnd({ roomId })
+            CheckGameFinished({ roomId, roomState: roomData })
+        }
 
         // FR: Vérification si la partie est terminée (conditions de victoire/défaite)
         // ENG: Check if the game has ended (victory/defeat conditions)

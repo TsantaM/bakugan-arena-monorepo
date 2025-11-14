@@ -119,7 +119,7 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuga
         type: 'SET_BAKUGAN',
         data: {
             bakugan: bakugan,
-            slot: slots[Slots.indexOf(slot as slots_id)],
+            slot: structuredClone(slots[Slots.indexOf(slot as slots_id)]),
         },
         resolved: false,
     }

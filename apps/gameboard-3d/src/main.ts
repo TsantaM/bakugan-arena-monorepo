@@ -11,15 +11,24 @@ import { OpenGateGateCardFunctionAnimation } from './scene-modifications-functio
 import { PowerChangeAnimation } from './animations/power-change-animation'
 import { io } from 'socket.io-client'
 import type { roomStateType } from '@bakugan-arena/game-data/src/type/room-types'
+import { ComeBackBakuganFunctionAnimation } from './scene-modifications-functions/come-back-bakugan-function-animation'
+import { ElimineBakuganFunctionAnimation } from './scene-modifications-functions/elimine-bakugan-function-animation'
+import { RemoveGateCardFunctionAnimation } from './scene-modifications-functions/remove-gate-card-function-animation'
+import { CancelGateCardAnimation } from './animations/cancel-gate-card-animation'
+import { MoveToAnotherSlotFunctionAnimation } from './scene-modifications-functions/move-to-another-slot-function-animation'
 
 const canvas = document.getElementById('gameboard-canvas')
 const params = new URLSearchParams(window.location.search)
 const roomId = params.get('roomId')
 const userId = params.get('userId')
 const socket = io("http://localhost:3005")
+const reload = document.getElementById("init-room")
 
 socket.emit('init-room-state', ({ roomId }))
+reload?.addEventListener('click', () => {
+  socket.emit('init-room-state', ({ roomId }))
 
+})
 
 if (roomId !== null && userId !== null) {
   if (canvas) {
@@ -55,12 +64,15 @@ if (roomId !== null && userId !== null) {
 
     })
 
-    scene.add(plane)
-    scene.add(light)
-    scene.add(camera)
-
     // INIT Room
     socket.on('init-room-state', (state: roomStateType) => {
+      plane.clear()
+      scene.clear()
+      scene.add(plane)
+      scene.add(light)
+      scene.add(camera)
+
+      camera.position.set(3, 5, 8)
       const slots = state.portalSlots
       for (let i = 0; i < slots.length; i++) {
         const slot = slots[i]
@@ -88,7 +100,13 @@ if (roomId !== null && userId !== null) {
     })
 
     socket.on('animations', async (animations: AnimationDirectivesTypes[]) => {
-      let animationsTable: AnimationDirectivesTypes[] = [...animations];
+      console.log('from-server', animations)
+      let animationsTable: AnimationDirectivesTypes[] = [];
+
+      console.log('1', animationsTable)
+
+      animationsTable = animations;
+      console.log('2', animationsTable)
 
       for (const anim of animationsTable) {
 
@@ -109,12 +127,32 @@ if (roomId !== null && userId !== null) {
           });
         }
 
+        if(anim.type === 'MOVE_TO_ANOTHER_SLOT') {
+          await MoveToAnotherSlotFunctionAnimation({
+            bakugan: anim.data.bakugan,
+            initialSlot: anim.data.initialSlot,
+            newSlot: anim.data.newSlot,
+            scene: scene,
+            userId: userId
+          })
+        }
+
         if (anim.type === 'OPEN_GATE_CARD') {
           await OpenGateGateCardFunctionAnimation({
             plane: plane,
             slot: anim.data.slot,
             slotId: anim.data.slotId
           });
+        }
+
+        if (anim.type === 'CANCEL_GATE_CARD') {
+
+          const mesh = plane.getObjectByName(anim.data.slot.id)
+          if (!mesh) return
+          await CancelGateCardAnimation({
+            mesh: mesh as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>,
+            slot: anim.data.slot
+          })
         }
 
         if (anim.type === 'POWER_CHANGE') {
@@ -130,8 +168,41 @@ if (roomId !== null && userId !== null) {
           }
         }
 
+        if (anim.type === 'COME_BACK_BAKUGAN') {
+          ComeBackBakuganFunctionAnimation({
+            bakugan: anim.data.bakugan,
+            slot: anim.data.slot,
+            camera: camera,
+            scene: scene,
+            userId: userId
+          })
+        }
+
+        if (anim.type === 'ELIMINE_BAKUGAN') {
+          ElimineBakuganFunctionAnimation({
+            bakugan: anim.data.bakugan,
+            scene: scene,
+            slot: anim.data.slot,
+            userId: userId
+          })
+        }
+
+        if (anim.type === 'REMOVE_GATE_CARD') {
+          await RemoveGateCardFunctionAnimation({
+            plane: plane,
+            slot: anim.data.slot,
+            camera: camera,
+            scene: scene,
+            userId: userId
+          })
+        }
+
       }
     });
+
+    scene.add(plane)
+    scene.add(light)
+    scene.add(camera)
 
 
     loop()
