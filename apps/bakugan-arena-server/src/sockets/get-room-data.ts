@@ -21,6 +21,6 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
         socket.join(roomId)
         const state = initRoomState({roomId})
         if(!state) return
-        io.to(roomId).emit('init-room-state', state)
+        socket.emit('init-room-state', state)
     } )
 }

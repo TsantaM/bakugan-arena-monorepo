@@ -63,9 +63,8 @@ export default async function Layout({ children }: { children: React.ReactNode }
                                     </DropdownMenu>
                                 </Suspense>
                             </div>
-
                         </div>
-                        {children}
+                            {children}
                     </main>
                 </SidebarInset>
             </SidebarProvider>

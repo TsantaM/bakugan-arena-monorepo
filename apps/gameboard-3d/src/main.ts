@@ -21,6 +21,8 @@ const canvas = document.getElementById('gameboard-canvas')
 const params = new URLSearchParams(window.location.search)
 const roomId = params.get('roomId')
 const userId = params.get('userId')
+const userImage = params.get('userImage')
+const opponentImage = params.get('opponentImage')
 const socket = io("http://localhost:3005")
 const reload = document.getElementById("init-room")
 
@@ -29,6 +31,10 @@ reload?.addEventListener('click', () => {
   socket.emit('init-room-state', ({ roomId }))
 
 })
+
+
+console.log(userImage, opponentImage)
+
 
 if (roomId !== null && userId !== null) {
   if (canvas) {

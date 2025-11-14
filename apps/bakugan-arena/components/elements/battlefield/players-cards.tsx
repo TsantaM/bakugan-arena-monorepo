@@ -39,7 +39,7 @@ export default function PlayerCards({ player, opponent, roomId, userId }: { play
     const slotOfBattle = slots?.find((p) => p.id === battleState?.slot)
     const battleConditions = slotOfBattle && battleState && battleState.battleInProcess && battleState.paused === false ? true : false
     const iframeRef = useRef<HTMLIFrameElement>(null)
-    const link = `http://localhost:5173/?roomId=${roomId}&userId=${userId}`
+    const link = `http://localhost:5173/?roomId=${roomId}&userId=${userId}&userImage=${playerData?.image ? playerData?.image : undefined}&opponentImage=${opponentData?.image ? opponentData?.image : undefined}`
 
 
 
