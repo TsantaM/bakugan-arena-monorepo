@@ -18,10 +18,10 @@ export default async function BattleField({ searchParams }: { searchParams: { id
         const player = RoomData?.find((d) => d.player.id === user.id)
         const opponent = RoomData?.find((d) => d.player.id != user.id)
 
-        return <>
+        return <div>
 
             <BattleFieldPage player={player} opponent={opponent} roomId={roomId} userId={user.id}/>
 
-        </>
+        </div>
     }
 
