@@ -42,7 +42,6 @@ export const MineFantome: gateCardType = {
 
             roomState.turnState.turn = slotOfGate.portalCard.userId
             roomState.turnState.previous_turn = otherPlayerId
-            roomState.turnState.can_change_player_turn = false
 
             RemoveGateCardDirectiveAnimation({
                 animations: roomState.animations,

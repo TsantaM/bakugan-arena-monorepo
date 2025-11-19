@@ -1,10 +1,11 @@
 import { type stateType } from '../../src/type/room-types'
+import { OnBattleStartAnimationDirectives } from './create-animation-directives/on-battle-start-animation-directives'
 
 
 export const CheckBattle = ({ roomState }: { roomState: stateType }) => {
 
     if (roomState) {
-        const slotWithTwoBakugans = roomState.protalSlots.find((s) => s.bakugans.length >= 2)
+        const slotWithTwoBakugans = structuredClone(roomState.protalSlots.find((s) => s.bakugans.length >= 2 && new Set(s.bakugans.map((b) => b.userId)).size >= 2));
 
         if (slotWithTwoBakugans && roomState && !roomState.battleState.battleInProcess && roomState.battleState.slot === null) {
             roomState.battleState = {
@@ -26,6 +27,12 @@ export const CheckBattle = ({ roomState }: { roomState: stateType }) => {
                 turn: lastBakuganOnSlotUserId,
                 previous_turn: firstBakuganOnSlotUserId
             }
+
+            OnBattleStartAnimationDirectives({
+                animations: roomState.animations,
+                slot: slotWithTwoBakugans
+            })
+
 
         }
         else {

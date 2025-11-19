@@ -86,4 +86,11 @@ export type AnimationDirectivesTypes =
         },
         message?: Message[]
         resolved: boolean
+    } | {
+        type: 'BATTLE_START',
+        data: {
+            slot: portalSlotsTypeElement
+        },
+        message?: Message[]
+        resolved: boolean
     }

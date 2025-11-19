@@ -1,19 +1,65 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="/src/style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gameboard Bakugan Arena</title>
-  </head>
-  <body>
-    <div id="gameboard">
-      <canvas id="gameboard-canvas">
 
-      </canvas>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="src/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gameboard Bakugan Arena</title>
+</head>
+
+<body>
+  <div id="gameboard" class="bg-slate-900">
+    <canvas id="gameboard-canvas" class="bg-slate-900">
+
+    </canvas>
+  </div>
+  <button id="init-room">Reload</button>
+  <div class="buttons">
+    <button id="add-bakugan">Add bakugan</button>
+    <button id="add-renforts">Add Renforts</button>
+  </div>
+
+  <!-- PROFILE PICTURE COMPONENTS -->
+  <div class="container">
+    <div class='data-container' id="left-data-container">
+      <div class="profile-picture" id="left-profile-picture">
+        <div class="image-container">
+          <img src="/images/default-profil-picture.png" alt="default profile picture" class="profile-image">
+        </div>
+      </div>
     </div>
-    <button id="init-room">Reload</button>
+    <!-- TURN COUNT INTERFACE AND ELIMINATED -->
 
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+    <div class="turn-and-eliminated">
+      <div class='eliminated left-eliminated'>
+        <div class="circle left-circle"></div>
+        <div class="circle left-circle"></div>
+        <div class="circle left-circle dead"></div>
+      </div>
+
+      <p class='turn-count-number'>12T</p>
+
+      <div class='eliminated right-eliminated'>
+        <div class="circle right-circle dead"></div>
+        <div class="circle right-circle"></div>
+        <div class="circle right-circle"></div>
+
+      </div>
+    </div>
+
+    <!-- TURN COUNT INTERFACE AND ELIMINATED -->
+    <div class='data-container' id="right-data-container">
+      <div class="profile-picture" id="right-profile-picture">
+        <div class="image-container">
+          <img src="/images/default-profil-picture.png" alt="default profile picture" class="profile-image">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
 </html>

@@ -26,12 +26,13 @@ import { MoveOpponentAbilityFilter } from './src/function/filters/move-opponent-
 import { DragBakuganAbilityFilter } from './src/function/filters/drag-bakugan-ability-filter'
 import { AddBakuganAbilityFilter } from './src/function/filters/add-bakugan-ability-filter'
 import { GetGateCardImage } from './src/function/get-gate-card-image'
-import {Slots} from './src/store/slots'
+import { Slots } from './src/store/slots'
 import type { MessageToIframe, MessageFromIframe } from './src/type/iframe-messages'
-import type {AnimationDirectivesTypes} from './src/type/animations-directives'
-import {ComeBackBakuganDirectiveAnimation} from './src/function/create-animation-directives/come-back-bakugan'
-import {ElimineBakuganDirectiveAnimation} from './src/function/create-animation-directives/elimine-bakugan'
-import {RemoveGateCardDirectiveAnimation} from './src/function/create-animation-directives/remove-gate-card'
+import type { AnimationDirectivesTypes } from './src/type/animations-directives'
+import { ComeBackBakuganDirectiveAnimation } from './src/function/create-animation-directives/come-back-bakugan'
+import { ElimineBakuganDirectiveAnimation } from './src/function/create-animation-directives/elimine-bakugan'
+import { RemoveGateCardDirectiveAnimation } from './src/function/create-animation-directives/remove-gate-card'
+import { OnBattleStartAnimationDirectives } from './src/function/create-animation-directives/on-battle-start-animation-directives'
 
 export {
     Bakugans,
@@ -73,7 +74,8 @@ export {
 
     ComeBackBakuganDirectiveAnimation,
     ElimineBakuganDirectiveAnimation,
-    RemoveGateCardDirectiveAnimation
+    RemoveGateCardDirectiveAnimation,
+    OnBattleStartAnimationDirectives
 }
 
 export type {
@@ -82,7 +84,7 @@ export type {
     abilityCardsType,
     exclusiveAbilitiesType,
     gateCardType,
-    
+
     playersType,
     deck,
     playerType,

@@ -8,14 +8,16 @@ import { createSprite } from './meshes/bakugan.mesh'
 import { SetGateCardFunctionAndAnimation } from './scene-modifications-functions/set-gate-card-function-animation'
 import { SetBakuganFunctionAnimation } from './scene-modifications-functions/set-bakugan-function-animation'
 import { OpenGateGateCardFunctionAnimation } from './scene-modifications-functions/open-gate-card-function-animation'
-import { PowerChangeAnimation } from './animations/power-change-animation'
+import { PowerChangeAnimation, PowerChangeNumberAnimation } from './animations/power-change-animation'
 import { io } from 'socket.io-client'
-import type { roomStateType } from '@bakugan-arena/game-data/src/type/room-types'
+import type { bakuganOnSlot, portalSlotsTypeElement, roomStateType, slots_id } from '@bakugan-arena/game-data/src/type/room-types'
 import { ComeBackBakuganFunctionAnimation } from './scene-modifications-functions/come-back-bakugan-function-animation'
 import { ElimineBakuganFunctionAnimation } from './scene-modifications-functions/elimine-bakugan-function-animation'
 import { RemoveGateCardFunctionAnimation } from './scene-modifications-functions/remove-gate-card-function-animation'
 import { CancelGateCardAnimation } from './animations/cancel-gate-card-animation'
 import { MoveToAnotherSlotFunctionAnimation } from './scene-modifications-functions/move-to-another-slot-function-animation'
+import { OnBattleStartFunctionAnimation } from './scene-modifications-functions/on-battle-start-function-animation'
+import { AddRenfortToBattleField } from './animations/add-renfort-to-battlefield'
 
 const canvas = document.getElementById('gameboard-canvas')
 const params = new URLSearchParams(window.location.search)
@@ -30,6 +32,105 @@ socket.emit('init-room-state', ({ roomId }))
 reload?.addEventListener('click', () => {
   socket.emit('init-room-state', ({ roomId }))
 
+})
+
+const add = document.getElementById('add-bakugan')
+add?.addEventListener('click', () => {
+
+  document.getElementById('left-bakugan-previews-container')?.remove()
+  document.getElementById('right-bakugan-previews-container')?.remove()
+
+  const bakugan1: bakuganOnSlot = {
+    attribut: 'Ventus',
+    abilityBlock: false,
+    assist: false,
+    currentPower: 370,
+    family: 'skyress',
+    id: 1,
+    image: 'skyress',
+    key: 'skyress-ventus',
+    powerLevel: 370,
+    slot_id: 'slot-2',
+    userId: 'user-2'
+  }
+
+  const bakugan2: bakuganOnSlot = {
+    attribut: 'Darkus',
+    abilityBlock: false,
+    assist: false,
+    currentPower: 450,
+    family: 'tigrerra',
+    id: 1,
+    image: 'hydranoid',
+    key: 'hydranoid-darkus',
+    powerLevel: 450,
+    slot_id: 'slot-2',
+    userId: 'user-1'
+  }
+
+  const slot: portalSlotsTypeElement = {
+    id: 'slot-2',
+    activateAbilities: [],
+    bakugans: [bakugan1, bakugan2],
+    can_set: false,
+    portalCard: {
+      key: 'mine-fantome',
+      userId: 'user-1'
+    },
+    state: {
+      blocked: false,
+      canceled: false,
+      open: false
+    }
+  }
+
+  OnBattleStartFunctionAnimation({
+    slot: slot,
+    userId: 'user-1'
+  })
+
+})
+const renfort = document.getElementById('add-renforts')
+renfort?.addEventListener('click', () => {
+
+  const bakugan: bakuganOnSlot = {
+    attribut: 'Darkus',
+    abilityBlock: false,
+    assist: false,
+    currentPower: 350,
+    family: 'centipod',
+    id: 1,
+    image: 'centipod',
+    key: 'centipod-darkus',
+    powerLevel: 350,
+    slot_id: 'slot-2',
+    userId: 'user-1'
+  }
+
+  const bakugan1: bakuganOnSlot = {
+    attribut: 'Haos',
+    abilityBlock: false,
+    assist: false,
+    currentPower: 350,
+    family: 'tuskor',
+    id: 1,
+    image: 'tuskor',
+    key: 'tuskor-haos',
+    powerLevel: 350,
+    slot_id: 'slot-2',
+    userId: 'user-2'
+  }
+
+  AddRenfortToBattleField({
+    bakugan: bakugan,
+    userId: 'user-1',
+    final_power: 500 + 350
+  })
+  AddRenfortToBattleField({
+    bakugan: bakugan1,
+    userId: 'user-1',
+    final_power: 500 + 350,
+  })
 })
 
 
@@ -103,106 +204,182 @@ if (roomId !== null && userId !== null) {
         }
 
       }
+
+      if (state.battleState.battleInProcess && !state.battleState.paused) {
+        const slotOfBattle = state.portalSlots.find((s) => s.id === state.battleState.slot)
+        if (!slotOfBattle) return
+        OnBattleStartFunctionAnimation({
+          slot: slotOfBattle,
+          userId: userId
+        })
+      }
     })
 
     socket.on('animations', async (animations: AnimationDirectivesTypes[]) => {
-      console.log('from-server', animations)
-      let animationsTable: AnimationDirectivesTypes[] = [];
+      console.log(animations)
+      // On va parcourir la liste avec un index manuel
+      let i = 0;
 
-      console.log('1', animationsTable)
+      while (i < animations.length) {
 
-      animationsTable = animations;
-      console.log('2', animationsTable)
+        const current = animations[i];
 
-      for (const anim of animationsTable) {
+        // --------------------------
+        // 🎯 GROUPE POWER_CHANGE
+        // --------------------------
+        if (current.type === 'POWER_CHANGE') {
 
-        if (anim.type === 'SET_GATE_CARD') {
+          const group: AnimationDirectivesTypes[] = [];
+
+          // Tant que les animations suivantes sont aussi POWER_CHANGE,
+          // on les ajoute au même batch.
+          while (i < animations.length && animations[i].type === 'POWER_CHANGE') {
+            group.push(animations[i]);
+            i++;
+          }
+
+          // Exécuter toutes les POWER_CHANGE simultanément
+          await Promise.all(
+            group.map(anim => {
+              if (anim.type !== 'POWER_CHANGE') return
+              return Promise.all(
+                anim.data.bakugan.map(b =>
+                  PowerChangeAnimation({
+                    bakugan: b,
+                    camera: camera,
+                    powerChange: anim.data.powerChange,
+                    scene: scene,
+                    malus: anim.data.malus
+                  })
+                )
+              );
+            })
+          );
+
+          // 2️⃣ Regrouper tous les powerChanges par userId + slot
+          const combinedPowerChanges = new Map<string, number>();
+
+          for (const anim of group) {
+            if (anim.type !== 'POWER_CHANGE') return
+            for (const b of anim.data.bakugan) {
+              const key = `${b.userId}-${b.slot_id}`;
+              const old = combinedPowerChanges.get(key) || 0;
+              const delta = anim.data.malus ? -anim.data.powerChange : anim.data.powerChange
+              combinedPowerChanges.set(key, old + delta);
+            }
+          }
+
+          // 3️⃣ Appliquer une seule PowerChangeNumberAnimation par groupe
+          for (const [key, totalChange] of combinedPowerChanges.entries()) {
+            console.log(combinedPowerChanges)
+            const [userId, slot, number] = key.split('-');
+            const slotId = `${slot}-${number}`
+            const powerContainer = document.getElementById(key);
+            if (!powerContainer) continue;
+            console.log(powerContainer)
+            console.log(userId, slotId)
+
+            const oldPower = parseInt(powerContainer.textContent || "0");
+            const newPower = oldPower + totalChange;
+
+            console.log(oldPower, totalChange, oldPower + totalChange)
+
+            PowerChangeNumberAnimation({
+              userId: userId,
+              slotId: slotId as slots_id,
+              newPower: newPower
+            });
+          }
+
+          continue; // important
+        }
+
+        // --------------------------
+        // 🎯 LES AUTRES ANIMATIONS
+        // --------------------------
+
+        if (current.type === 'SET_GATE_CARD') {
           await SetGateCardFunctionAndAnimation({
-            plane: plane,
-            slot: anim.data.slot
+            plane,
+            slot: current.data.slot
           });
         }
 
-        if (anim.type === 'SET_BAKUGAN') {
+        if (current.type === 'SET_BAKUGAN') {
           await SetBakuganFunctionAnimation({
-            bakugan: anim.data.bakugan,
-            slot: anim.data.slot,
-            camera: camera,
-            scene: scene,
-            userId: userId
+            bakugan: current.data.bakugan,
+            slot: current.data.slot,
+            camera,
+            scene,
+            userId
           });
         }
 
-        if(anim.type === 'MOVE_TO_ANOTHER_SLOT') {
+        if (current.type === 'MOVE_TO_ANOTHER_SLOT') {
           await MoveToAnotherSlotFunctionAnimation({
-            bakugan: anim.data.bakugan,
-            initialSlot: anim.data.initialSlot,
-            newSlot: anim.data.newSlot,
-            scene: scene,
-            userId: userId
-          })
-        }
-
-        if (anim.type === 'OPEN_GATE_CARD') {
-          await OpenGateGateCardFunctionAnimation({
-            plane: plane,
-            slot: anim.data.slot,
-            slotId: anim.data.slotId
+            bakugan: current.data.bakugan,
+            initialSlot: current.data.initialSlot,
+            newSlot: current.data.newSlot,
+            scene,
+            userId
           });
         }
 
-        if (anim.type === 'CANCEL_GATE_CARD') {
-
-          const mesh = plane.getObjectByName(anim.data.slot.id)
-          if (!mesh) return
-          await CancelGateCardAnimation({
-            mesh: mesh as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>,
-            slot: anim.data.slot
-          })
+        if (current.type === 'OPEN_GATE_CARD') {
+          await OpenGateGateCardFunctionAnimation({
+            plane,
+            slot: current.data.slot,
+            slotId: current.data.slotId
+          });
         }
 
-        if (anim.type === 'POWER_CHANGE') {
-          // Si tu veux que chaque animation de PowerChange soit aussi séquentielle
-          for (const b of anim.data.bakugan) {
-            await PowerChangeAnimation({
-              bakugan: b,
-              camera: camera,
-              powerChange: anim.data.powerChange,
-              scene: scene,
-              malus: anim.data.malus
+        if (current.type === 'CANCEL_GATE_CARD') {
+          const mesh = plane.getObjectByName(current.data.slot.id)
+          if (mesh) {
+            await CancelGateCardAnimation({
+              mesh: mesh as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>,
+              slot: current.data.slot
             });
           }
         }
 
-        if (anim.type === 'COME_BACK_BAKUGAN') {
-          ComeBackBakuganFunctionAnimation({
-            bakugan: anim.data.bakugan,
-            slot: anim.data.slot,
-            camera: camera,
-            scene: scene,
-            userId: userId
-          })
+        if (current.type === 'COME_BACK_BAKUGAN') {
+          await ComeBackBakuganFunctionAnimation({
+            bakugan: current.data.bakugan,
+            slot: current.data.slot,
+            camera,
+            scene,
+            userId
+          });
         }
 
-        if (anim.type === 'ELIMINE_BAKUGAN') {
-          ElimineBakuganFunctionAnimation({
-            bakugan: anim.data.bakugan,
-            scene: scene,
-            slot: anim.data.slot,
-            userId: userId
-          })
+        if (current.type === 'ELIMINE_BAKUGAN') {
+          await ElimineBakuganFunctionAnimation({
+            bakugan: current.data.bakugan,
+            scene,
+            slot: current.data.slot,
+            userId
+          });
         }
 
-        if (anim.type === 'REMOVE_GATE_CARD') {
+        if (current.type === 'REMOVE_GATE_CARD') {
           await RemoveGateCardFunctionAnimation({
-            plane: plane,
-            slot: anim.data.slot,
-            camera: camera,
-            scene: scene,
+            plane,
+            slot: current.data.slot,
+            camera,
+            scene,
+            userId
+          });
+        }
+
+        if (current.type === 'BATTLE_START') {
+          await OnBattleStartFunctionAnimation({
+            slot: current.data.slot,
             userId: userId
           })
         }
 
+        i++; // avancer à l'animation suivante
       }
     });
 

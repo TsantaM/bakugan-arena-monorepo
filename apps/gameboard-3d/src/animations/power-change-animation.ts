@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
 import { FontLoader, TextGeometry } from 'three/examples/jsm/Addons.js';
-import type { bakuganOnSlot } from '@bakugan-arena/game-data';
+import type { bakuganOnSlot, slots_id } from '@bakugan-arena/game-data';
 
 // ✅ On charge la police une seule fois (à l’extérieur de la fonction)
 const loader = new FontLoader();
@@ -59,4 +59,26 @@ export function PowerChangeAnimation({
       }
     );
   });
+}
+
+export function PowerChangeNumberAnimation({ userId, slotId, newPower }: { userId: string, slotId: slots_id, newPower: number }) {
+  // Fonction pour le changement de puissance
+  const powerContainer = document.getElementById(`${userId}-${slotId}`)
+  if (!powerContainer) return
+  let power = parseInt(powerContainer.textContent)
+
+  console.log(power, newPower, newPower < power)
+
+  const step = 5
+  const interval = setInterval(() => {
+    if (newPower < power) {
+      power -= step
+    } else {
+      power += step
+    }
+    powerContainer.textContent = power.toString()
+
+    if (power === newPower || power === 0)
+      clearInterval(interval)
+  }, 25)
 }

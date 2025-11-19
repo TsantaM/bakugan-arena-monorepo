@@ -1,3 +1,4 @@
+import { OnBattleStartAnimationDirectives } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
 export const CheckBattle = ({ roomId }: { roomId: string }) => {
@@ -12,12 +13,12 @@ export const CheckBattle = ({ roomId }: { roomId: string }) => {
     if (roomData) {
         // FR : On vérifie si un slot contient au moins deux Bakugans (condition pour démarrer une bataille)
         // EN : Check if any slot contains at least two Bakugans (condition to start a battle)
-        const slotWithTwoBakugans = roomData.protalSlots.find((s) => s.bakugans.length >= 2)
+        const slotWithTwoBakugans = structuredClone(roomData.protalSlots.find((s) => s.bakugans.length >= 2))
 
         // FR : Si un tel slot existe et que la room est bien trouvée dans l'état global
         // EN : If such a slot exists and the room is found in the global state
         if (slotWithTwoBakugans && Battle_Brawlers_Game_State[roomIndex]) {
-            
+
             // FR : On met à jour l'état de la bataille pour signaler qu'une bataille commence
             // EN : Update the battle state to indicate a battle has started
             Battle_Brawlers_Game_State[roomIndex].battleState = {
@@ -40,6 +41,11 @@ export const CheckBattle = ({ roomId }: { roomId: string }) => {
             Battle_Brawlers_Game_State[roomIndex].turnState.set_new_bakugan = false
             Battle_Brawlers_Game_State[roomIndex].turnState.set_new_gate = false
             Battle_Brawlers_Game_State[roomIndex].turnState.use_ability_card = true
+
+            OnBattleStartAnimationDirectives({
+                animations: Battle_Brawlers_Game_State[roomIndex].animations,
+                slot: slotWithTwoBakugans
+            })
 
         } else {
             // FR : Si aucune condition n'est remplie, on sort simplement de la fonction
