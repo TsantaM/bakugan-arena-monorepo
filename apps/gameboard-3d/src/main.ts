@@ -10,14 +10,13 @@ import { SetBakuganFunctionAnimation } from './scene-modifications-functions/set
 import { OpenGateGateCardFunctionAnimation } from './scene-modifications-functions/open-gate-card-function-animation'
 import { PowerChangeAnimation, PowerChangeNumberAnimation } from './animations/power-change-animation'
 import { io } from 'socket.io-client'
-import type { bakuganOnSlot, portalSlotsTypeElement, roomStateType, slots_id } from '@bakugan-arena/game-data/src/type/room-types'
+import type { roomStateType, slots_id } from '@bakugan-arena/game-data/src/type/room-types'
 import { ComeBackBakuganFunctionAnimation } from './scene-modifications-functions/come-back-bakugan-function-animation'
 import { ElimineBakuganFunctionAnimation } from './scene-modifications-functions/elimine-bakugan-function-animation'
 import { RemoveGateCardFunctionAnimation } from './scene-modifications-functions/remove-gate-card-function-animation'
 import { CancelGateCardAnimation } from './animations/cancel-gate-card-animation'
 import { MoveToAnotherSlotFunctionAnimation } from './scene-modifications-functions/move-to-another-slot-function-animation'
 import { OnBattleStartFunctionAnimation } from './scene-modifications-functions/on-battle-start-function-animation'
-import { AddRenfortToBattleField } from './animations/add-renfort-to-battlefield'
 
 const canvas = document.getElementById('gameboard-canvas')
 const params = new URLSearchParams(window.location.search)
@@ -28,114 +27,21 @@ const opponentImage = params.get('opponentImage')
 const socket = io("http://localhost:3005")
 const reload = document.getElementById("init-room")
 
+if (userImage) {
+  const left_profile_picture = document.getElementById('left-profile-picture-img')
+  if (left_profile_picture) left_profile_picture.setAttribute('src', userImage)
+}
+
+if (opponentImage) {
+  const right_profile_picture = document.getElementById('right-profile-picture-img')
+  if (right_profile_picture) right_profile_picture.setAttribute('src', opponentImage)
+}
+
+
 socket.emit('init-room-state', ({ roomId }))
 reload?.addEventListener('click', () => {
   socket.emit('init-room-state', ({ roomId }))
-
 })
-
-const add = document.getElementById('add-bakugan')
-add?.addEventListener('click', () => {
-
-  document.getElementById('left-bakugan-previews-container')?.remove()
-  document.getElementById('right-bakugan-previews-container')?.remove()
-
-  const bakugan1: bakuganOnSlot = {
-    attribut: 'Ventus',
-    abilityBlock: false,
-    assist: false,
-    currentPower: 370,
-    family: 'skyress',
-    id: 1,
-    image: 'skyress',
-    key: 'skyress-ventus',
-    powerLevel: 370,
-    slot_id: 'slot-2',
-    userId: 'user-2'
-  }
-
-  const bakugan2: bakuganOnSlot = {
-    attribut: 'Darkus',
-    abilityBlock: false,
-    assist: false,
-    currentPower: 450,
-    family: 'tigrerra',
-    id: 1,
-    image: 'hydranoid',
-    key: 'hydranoid-darkus',
-    powerLevel: 450,
-    slot_id: 'slot-2',
-    userId: 'user-1'
-  }
-
-  const slot: portalSlotsTypeElement = {
-    id: 'slot-2',
-    activateAbilities: [],
-    bakugans: [bakugan1, bakugan2],
-    can_set: false,
-    portalCard: {
-      key: 'mine-fantome',
-      userId: 'user-1'
-    },
-    state: {
-      blocked: false,
-      canceled: false,
-      open: false
-    }
-  }
-
-  OnBattleStartFunctionAnimation({
-    slot: slot,
-    userId: 'user-1'
-  })
-
-})
-const renfort = document.getElementById('add-renforts')
-renfort?.addEventListener('click', () => {
-
-  const bakugan: bakuganOnSlot = {
-    attribut: 'Darkus',
-    abilityBlock: false,
-    assist: false,
-    currentPower: 350,
-    family: 'centipod',
-    id: 1,
-    image: 'centipod',
-    key: 'centipod-darkus',
-    powerLevel: 350,
-    slot_id: 'slot-2',
-    userId: 'user-1'
-  }
-
-  const bakugan1: bakuganOnSlot = {
-    attribut: 'Haos',
-    abilityBlock: false,
-    assist: false,
-    currentPower: 350,
-    family: 'tuskor',
-    id: 1,
-    image: 'tuskor',
-    key: 'tuskor-haos',
-    powerLevel: 350,
-    slot_id: 'slot-2',
-    userId: 'user-2'
-  }
-
-  AddRenfortToBattleField({
-    bakugan: bakugan,
-    userId: 'user-1',
-    final_power: 500 + 350
-  })
-  AddRenfortToBattleField({
-    bakugan: bakugan1,
-    userId: 'user-1',
-    final_power: 500 + 350,
-  })
-})
-
-
-console.log(userImage, opponentImage)
-
 
 if (roomId !== null && userId !== null) {
   if (canvas) {
@@ -179,6 +85,9 @@ if (roomId !== null && userId !== null) {
       scene.add(light)
       scene.add(camera)
 
+      document.getElementById('left-bakugan-previews-container')?.remove()
+      document.getElementById('right-bakugan-previews-container')?.remove()
+
       camera.position.set(3, 5, 8)
       const slots = state.portalSlots
       for (let i = 0; i < slots.length; i++) {
@@ -205,6 +114,7 @@ if (roomId !== null && userId !== null) {
 
       }
 
+
       if (state.battleState.battleInProcess && !state.battleState.paused) {
         const slotOfBattle = state.portalSlots.find((s) => s.id === state.battleState.slot)
         if (!slotOfBattle) return
@@ -217,28 +127,20 @@ if (roomId !== null && userId !== null) {
 
     socket.on('animations', async (animations: AnimationDirectivesTypes[]) => {
       console.log(animations)
-      // On va parcourir la liste avec un index manuel
       let i = 0;
 
       while (i < animations.length) {
 
         const current = animations[i];
-
-        // --------------------------
-        // 🎯 GROUPE POWER_CHANGE
-        // --------------------------
         if (current.type === 'POWER_CHANGE') {
 
           const group: AnimationDirectivesTypes[] = [];
 
-          // Tant que les animations suivantes sont aussi POWER_CHANGE,
-          // on les ajoute au même batch.
           while (i < animations.length && animations[i].type === 'POWER_CHANGE') {
             group.push(animations[i]);
             i++;
           }
 
-          // Exécuter toutes les POWER_CHANGE simultanément
           await Promise.all(
             group.map(anim => {
               if (anim.type !== 'POWER_CHANGE') return
@@ -254,9 +156,10 @@ if (roomId !== null && userId !== null) {
                 )
               );
             })
+
+
           );
 
-          // 2️⃣ Regrouper tous les powerChanges par userId + slot
           const combinedPowerChanges = new Map<string, number>();
 
           for (const anim of group) {
@@ -264,38 +167,36 @@ if (roomId !== null && userId !== null) {
             for (const b of anim.data.bakugan) {
               const key = `${b.userId}-${b.slot_id}`;
               const old = combinedPowerChanges.get(key) || 0;
-              const delta = anim.data.malus ? -anim.data.powerChange : anim.data.powerChange
+              const delta = anim.data.malus ? -anim.data.powerChange : anim.data.powerChange;
               combinedPowerChanges.set(key, old + delta);
             }
           }
 
-          // 3️⃣ Appliquer une seule PowerChangeNumberAnimation par groupe
-          for (const [key, totalChange] of combinedPowerChanges.entries()) {
-            console.log(combinedPowerChanges)
-            const [userId, slot, number] = key.split('-');
-            const slotId = `${slot}-${number}`
-            const powerContainer = document.getElementById(key);
-            if (!powerContainer) continue;
-            console.log(powerContainer)
-            console.log(userId, slotId)
+          await Promise.all(
+            Array.from(combinedPowerChanges.entries()).map(([key, totalChange]) => {
+              return (async () => {
+                const [userId, slot, number] = key.split("-");
+                const slotId = `${slot}-${number}`;
+                const powerContainer = document.getElementById(key);
+                if (!powerContainer) return;
 
-            const oldPower = parseInt(powerContainer.textContent || "0");
-            const newPower = oldPower + totalChange;
+                const oldPower = parseInt(powerContainer.textContent || "0");
+                const newPower = oldPower + totalChange;
 
-            console.log(oldPower, totalChange, oldPower + totalChange)
+                await PowerChangeNumberAnimation({
+                  userId,
+                  slotId: slotId as slots_id,
+                  newPower
+                });
+              })();
+            })
+          );
 
-            PowerChangeNumberAnimation({
-              userId: userId,
-              slotId: slotId as slots_id,
-              newPower: newPower
-            });
-          }
-
-          continue; // important
+          continue;
         }
 
         // --------------------------
-        // 🎯 LES AUTRES ANIMATIONS
+        // OTHERS ANIMATIONS TYPES
         // --------------------------
 
         if (current.type === 'SET_GATE_CARD') {
@@ -403,4 +304,3 @@ if (roomId !== null && userId !== null) {
 
   }
 }
-

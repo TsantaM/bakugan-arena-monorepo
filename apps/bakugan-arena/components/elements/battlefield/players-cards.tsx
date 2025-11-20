@@ -1,15 +1,15 @@
 'use client'
 
 import TurnInterface from "./turn-interface"
-import TurnCounter from "./game-board/turn-counter"
-import { ProfilePictureLeft, ProfilePictureRigth } from "./game-board/profile-picture-zone"
-import { BakuganPreviewOnFocused, BattleBakuganPreview } from "./game-board/bakugan-preview"
-import { AliveCounterLeft, AliveCounterRight } from "./game-board/alive-counter"
+// import TurnCounter from "./game-board/turn-counter"
+// import { ProfilePictureLeft, ProfilePictureRigth } from "./game-board/profile-picture-zone"
+// import { BakuganPreviewOnFocused, BattleBakuganPreview } from "./game-board/bakugan-preview"
+// import { AliveCounterLeft, AliveCounterRight } from "./game-board/alive-counter"
 import { useFocusedBakugan } from "@/src/store/focused-bakugan-store"
 import { useGlobalGameState } from "@/src/store/global-game-state-store"
 import { useRef } from "react"
 import { useSocket } from "@/src/providers/socket-provider"
-import { useAnimationStore } from "@/src/store/animations-store"
+// import { useAnimationStore } from "@/src/store/animations-store"
 
 
 export type player = {
@@ -32,7 +32,7 @@ export default function PlayerCards({ player, opponent, roomId, userId }: { play
     const slots = useGlobalGameState((state) => state.gameState?.protalSlots)
     const battleState = useGlobalGameState((state) => state.gameState?.battleState)
 
-    const { usersBakugan, opponentBakugan } = useFocusedBakugan()
+    // const { usersBakugan, opponentBakugan } = useFocusedBakugan()
     const playerData = player?.player
     const opponentData = opponent?.player
 
@@ -45,7 +45,7 @@ export default function PlayerCards({ player, opponent, roomId, userId }: { play
 
     return <>
         <div className="relative z-20 w-full h-[85vh] flex justify-between">
-            <div className="relative z-50 w-[25vw] md:w-[20vw] lg:w-[15vw] flex flex-col gap-2">
+            {/* <div className="relative z-50 w-[25vw] md:w-[20vw] lg:w-[15vw] flex flex-col gap-2">
                 {
                     playerData && <ProfilePictureLeft player={playerData} />
                 }
@@ -56,15 +56,15 @@ export default function PlayerCards({ player, opponent, roomId, userId }: { play
                     usersBakugan && <BakuganPreviewOnFocused bakugan={usersBakugan} />
                 }
 
-            </div>
+            </div> */}
 
-            <AliveCounterLeft userId={userId} />
+            {/* <AliveCounterLeft userId={userId} />
             <TurnCounter />
-            <AliveCounterRight userId={userId} />
+            <AliveCounterRight userId={userId} /> */}
 
             <iframe ref={iframeRef} src={link} className="w-full h-full absolute top-0 left-0"></iframe>
 
-            <div className="relative z-50 w-[25vw] md:w-[20vw] lg:w-[15vw] self-start flex flex-col gap-2">
+            {/* <div className="relative z-50 w-[25vw] md:w-[20vw] lg:w-[15vw] self-start flex flex-col gap-2">
                 {
                     opponentData && <ProfilePictureRigth player={opponentData} />
                 }
@@ -74,7 +74,7 @@ export default function PlayerCards({ player, opponent, roomId, userId }: { play
                 {
                     opponentBakugan && <BakuganPreviewOnFocused bakugan={opponentBakugan} />
                 }
-            </div>
+            </div> */}
 
         </div>
         <TurnInterface roomId={roomId} userId={userId} />
