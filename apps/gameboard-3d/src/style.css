@@ -9,6 +9,11 @@
 
 p {
   font-family: metal;
+  color: whitesmoke;
+}
+
+body {
+  overflow: hidden;
 }
 
 * {
@@ -48,7 +53,8 @@ p {
   position: absolute;
   z-index: 2;
   top: 0;
-  left: 0;
+  transform: translateX(-50%);
+  left: 50%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -305,6 +311,22 @@ p {
       font-size: 3rem !important;
     }
   }
+
+  .select-one {
+    padding: 0 !important;
+    align-items: center !important;
+
+    .bakugan-selecter {
+      .image-bakugan-selecter-container {
+        height: 30vh !important;
+      }
+    }
+
+  }
+
+  .skip-or-confirm-button {
+    width: 5vw !important;
+  }
 }
 
 .buttons {
@@ -316,5 +338,329 @@ p {
   justify-content: space-between;
   /* background: red; */
   gap: 2vw;
+
+}
+
+/* SELECT ONE */
+.select-one {
+  padding: 5vw 5vw;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  width: 100dvw;
+  height: 100dvh;
+  gap: 3vw;
+  flex-wrap: wrap;
+
+  .stack-container {
+    transform: translateX(20%) translateY(50%);
+    position: relative;
+    height: 30%;
+    aspect-ratio: 2/3;
+  }
+
+  .card-selecter {
+    place-self: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    aspect-ratio: 2/3;
+
+    .gate-card-background {
+      transition: 0.2s;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+  }
+
+  .card-selecter:hover {
+    .gate-card-background {
+      transform: translateY(-25%);
+    }
+  }
+
+  .card-selecter.active {
+    .gate-card-background {
+      transform: translateY(-25%);
+    }
+  }
+
+  .card-selecter:nth-child(2) {
+    transform: translateX(50%);
+  }
+
+  .card-selecter:nth-child(3) {
+    transform: translateX(100%);
+  }
+
+  .card-selecter:nth-child(4) {
+    transform: translateX(150%);
+  }
+
+  .card-selecter:nth-child(5) {
+    transform: translateX(200%);
+  }
+
+  .card-selecter:nth-child(6) {
+    transform: translateX(250%);
+  }
+
+
+  .card-selecter:hover::before {
+    opacity: 1;
+  }
+
+  .skip-or-confirm-button {
+    position: absolute;
+    z-index: 3;
+    bottom: 2vh;
+    left: 50%;
+    transform: translateX(-50%);
+    clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 25% 100%, 50% 50%, 25% 0);
+    background: red;
+    width: 10vw;
+    aspect-ratio: 1/1;
+  }
+
+  .skip-or-confirm-button::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: -25%;
+    width: 100%;
+    height: 100%;
+    background: yellow;
+    clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 25% 100%, 50% 50%, 25% 0);
+
+  }
+
+  .hovered-card-description {
+    width: 50%;
+    position: absolute;
+    right: 50%;
+    top: 30%;
+    transform: translateX(50%) translateY(-30%);
+    text-align: center;
+
+    .card-name {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+  }
+
+
+  .skipable:hover {
+    animation: buttonPusle 0.5s infinite alternate-reverse ease-in-out;
+
+  }
+
+  .skipable:hover::before {
+    animation: buttonPusle 0.5s infinite alternate-reverse ease-in-out;
+  }
+
+  .bakugan-selecter {
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-75%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2vw;
+
+    .image-bakugan-selecter-container {
+      position: relative;
+      height: 20vh;
+      aspect-ratio: 1/1;
+
+      .bakugan-image-selecter {
+        transition: 0.2s;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+      }
+
+      .bakugan-data {
+        text-align: center;
+        font-weight: bold;
+        font-size: 1rem;
+        opacity: 0;
+      }
+
+    }
+
+    .image-bakugan-selecter-container:hover {
+      .bakugan-image-selecter {
+        transform: translateY(-20%);
+      }
+
+      .bakugan-data {
+        animation-delay: 0.2s;
+        animation: textFade 0.5s forwards;
+      }
+    }
+
+  }
+
+}
+
+.select-one::before {
+  content: "";
+  display: block;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100dvw;
+  height: 100dvh;
+  background: whitesmoke;
+  opacity: 0.5;
+}
+
+@keyframes buttonPusle {
+  0% {
+    /* clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 25% 100%, 50% 50%, 25% 0); */
+  }
+
+  100% {
+    clip-path: polygon(60% 0, 95% 50%, 60% 100%, 20% 100%, 50% 50%, 20% 0);
+  }
+}
+
+@keyframes textFade {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(-150%);
+  }
+}
+
+
+/* Turn Action CSS */
+
+
+.turn-interface {
+  padding-left: 2vw;
+  position: absolute;
+  bottom: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  gap: 1vw;
+  width: 100%;
+
+  .bakugans {
+    display: flex;
+    gap: 0.5vw;
+    align-items: center;
+    justify-content: space-between;
+
+    .image-bakugan-selecter-container {
+      position: relative;
+      height: 15vh;
+      aspect-ratio: 1/1;
+
+      .bakugan-image-selecter {
+        transition: 0.2s;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+      }
+
+      .bakugan-data {
+        text-align: center;
+        font-weight: bold;
+        font-size: 1rem;
+        opacity: 0;
+      }
+
+    }
+
+    .image-bakugan-selecter-container:hover {
+      .bakugan-image-selecter {
+        transform: translateY(-20%);
+      }
+
+      .bakugan-data {
+        animation-delay: 0.2s;
+        animation: textFade 0.5s forwards;
+      }
+    }
+
+  }
+
+  .stack-container {
+    position: relative;
+    height: 15vh;
+    aspect-ratio: 2/3;
+  }
+
+  .card-selecter {
+    place-self: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    aspect-ratio: 2/3;
+
+    .gate-card-background {
+      transition: 0.2s;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+  }
+
+  .card-selecter:hover {
+    .gate-card-background {
+      transform: translateY(-25%);
+    }
+  }
+
+  .card-selecter.active {
+    .gate-card-background {
+      transform: translateY(-25%);
+    }
+  }
+
+  .card-selecter:nth-child(2) {
+    transform: translateX(50%);
+  }
+
+  .card-selecter:nth-child(3) {
+    transform: translateX(100%);
+  }
+
+  .card-selecter:nth-child(4) {
+    transform: translateX(150%);
+  }
+
+  .card-selecter:nth-child(5) {
+    transform: translateX(200%);
+  }
+
+  .card-selecter:nth-child(6) {
+    transform: translateX(250%);
+  }
 
 }

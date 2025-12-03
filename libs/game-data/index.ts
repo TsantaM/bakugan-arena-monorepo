@@ -33,6 +33,7 @@ import { ComeBackBakuganDirectiveAnimation } from './src/function/create-animati
 import { ElimineBakuganDirectiveAnimation } from './src/function/create-animation-directives/elimine-bakugan'
 import { RemoveGateCardDirectiveAnimation } from './src/function/create-animation-directives/remove-gate-card'
 import { OnBattleStartAnimationDirectives } from './src/function/create-animation-directives/on-battle-start-animation-directives'
+import { CreateActionRequestFunction } from './src/function/create-action-request-function'
 
 export {
     Bakugans,
@@ -75,7 +76,10 @@ export {
     ComeBackBakuganDirectiveAnimation,
     ElimineBakuganDirectiveAnimation,
     RemoveGateCardDirectiveAnimation,
-    OnBattleStartAnimationDirectives
+    OnBattleStartAnimationDirectives,
+
+    CreateActionRequestFunction
+
 }
 
 export type {

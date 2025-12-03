@@ -17,6 +17,8 @@ import { RemoveGateCardFunctionAnimation } from './scene-modifications-functions
 import { CancelGateCardAnimation } from './animations/cancel-gate-card-animation'
 import { MoveToAnotherSlotFunctionAnimation } from './scene-modifications-functions/move-to-another-slot-function-animation'
 import { OnBattleStartFunctionAnimation } from './scene-modifications-functions/on-battle-start-function-animation'
+import type { ActivePlayerActionRequestType, InactivePlayerActionRequestType } from '@bakugan-arena/game-data/src/type/actions-serveur-requests'
+import { TurnActionBuilder } from './turn-action-management'
 
 const canvas = document.getElementById('gameboard-canvas')
 const params = new URLSearchParams(window.location.search)
@@ -38,9 +40,29 @@ if (opponentImage) {
 }
 
 
-socket.emit('init-room-state', ({ roomId }))
+socket.emit('init-room-state', ({ roomId, userId }))
+socket.on('turn-action-request', (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
+  console.log(request)
+
+  const actions = [request.actions.mustDo, request.actions.mustDoOne, request.actions.optional].flat();
+  console.log(actions)
+
+  TurnActionBuilder({
+    actions: actions
+  })
+})
 reload?.addEventListener('click', () => {
-  socket.emit('init-room-state', ({ roomId }))
+  socket.emit('init-room-state', ({ roomId, userId }))
+  socket.on('turn-action-request', (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
+    console.log(request)
+
+    const actions = [request.actions.mustDo, request.actions.mustDoOne, request.actions.optional].flat();
+    console.log(actions)
+
+    TurnActionBuilder({
+      actions: actions
+    })
+  })
 })
 
 if (roomId !== null && userId !== null) {
@@ -284,6 +306,17 @@ if (roomId !== null && userId !== null) {
       }
     });
 
+    socket.on('turn-action-request', (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
+      console.log(request)
+
+      const actions = [request.actions.mustDo, request.actions.mustDoOne, request.actions.optional].flat();
+      console.log(actions)
+
+      TurnActionBuilder({
+        actions: actions
+      })
+    })
+
     scene.add(plane)
     scene.add(light)
     scene.add(camera)
@@ -304,3 +337,5 @@ if (roomId !== null && userId !== null) {
 
   }
 }
+
+

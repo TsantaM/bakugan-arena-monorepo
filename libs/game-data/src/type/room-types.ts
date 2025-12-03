@@ -1,5 +1,6 @@
 import { AnimationDirectivesTypes } from "./animations-directives";
 import { type attribut } from "./game-data-types"
+import { ActivePlayerActionRequestType, InactivePlayerActionRequestType } from './actions-serveur-requests'
 
 export type slots_id = "slot-1" | "slot-2" | "slot-3" | "slot-4" | "slot-5" | "slot-6"
 
@@ -126,6 +127,7 @@ export type deckType = {
 }
 
 export type stateType = {
+    connectedsUsers: Map<string, string>
     roomId: string;
     players: {
         userId: string,
@@ -141,7 +143,9 @@ export type stateType = {
         finished: boolean,
         winner: string | null
     },
-    animations: AnimationDirectivesTypes[]
+    animations: AnimationDirectivesTypes[],
+    InactivePlayerActionRequest: InactivePlayerActionRequestType,
+    ActivePlayerActionRequest: ActivePlayerActionRequestType,
 } | undefined
 
 export type roomStateType = {

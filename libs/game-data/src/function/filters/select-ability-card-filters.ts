@@ -27,6 +27,7 @@ export function SelectAbilityCardFilters({ slotOfBattle, userId, bakuganKey, pla
         (item, index, self) =>
             index === self.findIndex((t) => t.key === item.key)
     ), usable_if_user_not_on_domain].flat();
+    
     return {
         bakugansList,
         usableAbilities,

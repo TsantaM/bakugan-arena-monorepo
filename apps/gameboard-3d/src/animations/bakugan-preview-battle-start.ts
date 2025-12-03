@@ -1,6 +1,6 @@
 import gsap from 'gsap'
 
-function BakuganPreviewOnBattleStartAnimation(containerId: string) {
+async function BakuganPreviewOnBattleStartAnimation(containerId: string) {
     const container = document.getElementById(containerId)
     const x = containerId === 'left-bakugan-previews-container' ? window.innerWidth / 2.5 : -window.innerWidth / 2.5
 

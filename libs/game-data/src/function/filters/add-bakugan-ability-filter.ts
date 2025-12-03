@@ -9,4 +9,5 @@ export function AddBakuganAbilityFilter({decksState, userId} : {decksState: deck
         return {
             addableBakugans
         }
+        
 }

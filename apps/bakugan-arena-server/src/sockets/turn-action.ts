@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io/dist";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
-import { handleBattle, handleGateCards, updateTurnState } from "@bakugan-arena/game-data";
+import { CreateActionRequestFunction, handleBattle, handleGateCards, updateTurnState } from "@bakugan-arena/game-data";
 import { CheckGameFinished } from "@bakugan-arena/prisma";
 import { onBattleEnd } from "../functions/on-battle-end";
 
@@ -8,7 +8,7 @@ export const socketTurn = (io: Server, socket: Socket) => {
 
     // FR: On écoute l'événement "turn-action" envoyé par un joueur
     // ENG: Listen for the "turn-action" event triggered by a player
-    socket.on('turn-action', ({ roomId }: { roomId: string, userId: string }) => {
+    socket.on('turn-action', ({ roomId, userId }: { roomId: string, userId: string }) => {
 
         // FR: On récupère les données de la salle correspondant au roomId
         // ENG: Retrieve the room data matching the given roomId
@@ -44,11 +44,31 @@ export const socketTurn = (io: Server, socket: Socket) => {
         // ENG: Check if the game has ended (victory/defeat conditions)
         CheckGameFinished({ roomId, roomState: roomData })
 
+        CreateActionRequestFunction({ roomState: roomData })
+
         // FR: On envoie le nouvel état du jeu à tous les joueurs de la salle
         // ENG: Emit the updated game state to all players in the room
         const animations = roomData.animations
         io.to(roomId).emit("turn-action", roomData)
         io.to(roomId).emit('animations', animations)
+
+        console.log('active', roomData.ActivePlayerActionRequest)
+        console.log('inactive', roomData.InactivePlayerActionRequest)
+        console.log('ids', userId, roomData.turnState.turn)
+        console.log(userId === roomData.turnState.turn)
+
+        const activeSocket = roomData.connectedsUsers.get(roomData.turnState.turn)
+        const inactiveSocket = roomData.connectedsUsers.get(roomData.turnState.previous_turn || '')
+
+        if(activeSocket) {
+            const request = roomData.ActivePlayerActionRequest
+            io.to(activeSocket).emit('turn-action-request', request)
+        }
+
+        if(inactiveSocket) {
+            const request = roomData.InactivePlayerActionRequest
+            io.to(inactiveSocket).emit('turn-action-request', request)
+        }
 
     })
 

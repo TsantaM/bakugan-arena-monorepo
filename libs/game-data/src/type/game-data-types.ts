@@ -39,6 +39,7 @@ export type abilityCardsType = {
     extraInputs?: ExtraInputsTypes[],
     usable_in_neutral: boolean,
     slotLimits?: boolean,
+    image?: string,
     onActivate: ({ roomState, userId, bakuganKey, slot, target_slot, slot_to_move, target, slotToDrag, bakuganToAdd, bakuganToMove, destination }: { roomState: stateType, roomId: string, userId: string, bakuganKey: string, slot: slots_id, target_slot: slots_id | '', slot_to_move: slots_id | '', target?: string | '', slotToDrag?: slots_id | '', bakuganToAdd?: string, bakuganToMove?: bakuganToMoveType, destination: slots_id | '' }) => void
     onCanceled?: ({ roomState, userId, bakuganKey, slot }: { roomState: stateType, userId: string, bakuganKey: string, slot: slots_id }) => void
     onWin?: ({ roomState, userId, slot }: { roomState: stateType, userId: string, slot: portalSlotsTypeElement }) => void
@@ -53,6 +54,7 @@ export type exclusiveAbilitiesType = {
     usable_in_neutral: boolean,
     slotLimits?: boolean,
     usable_if_user_not_on_domain: boolean,
+    image?: string,
     onActivate: ({ roomState, userId, bakuganKey, slot, target_slot, slot_to_move, target, slotToDrag, bakuganToAdd, bakuganToMove, destination }: { roomState: stateType, roomId: string, userId: string, bakuganKey: string, slot: slots_id, target_slot: slots_id | '', slot_to_move: slots_id | '', target?: string | '', slotToDrag?: slots_id | '', bakuganToAdd?: string, bakuganToMove?: bakuganToMoveType, destination: slots_id | '' }) => void
     onCanceled?: ({ roomState, userId, bakuganKey, slot }: { roomState: stateType, userId: string, bakuganKey: string, slot: slots_id }) => void
     onWin?: ({ roomState, userId, slot }: { roomState: stateType, userId: string, slot: portalSlotsTypeElement }) => void

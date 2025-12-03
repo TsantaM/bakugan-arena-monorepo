@@ -8,10 +8,13 @@ function AddRenfortToBattleField({ bakugan, userId }: { bakugan: bakuganOnSlot, 
     const containerId = bakugan.userId === userId ? 'left-bakugan-previews-container' : 'right-bakugan-previews-container'
     const container = document.getElementById(containerId)
 
-    const {newContainer, sprite_container} = CreateSpritePreviewContainer({
+    const newCont = CreateSpritePreviewContainer({
         bakugan: bakugan,
         userId: userId
     })
+
+    const newContainer = newCont.newContainer
+    const sprite_container = newCont.sprite_container
 
     if (container) {
         const containerPosition = container.getBoundingClientRect()
@@ -39,6 +42,8 @@ function AddRenfortToBattleField({ bakugan, userId }: { bakugan: bakuganOnSlot, 
 
         if (component && globlal_sprite_container && powerContainer) {
 
+            console.log(component)
+
             const newPower = parseInt(powerContainer.textContent) + bakugan.currentPower
             console.log(newPower)
             const timeline = gsap.timeline()
@@ -48,7 +53,8 @@ function AddRenfortToBattleField({ bakugan, userId }: { bakugan: bakuganOnSlot, 
             }, {
                 x: bakugan.userId === userId ? window.innerWidth / 4 : -window.innerWidth / 4,
                 y: -20,
-                scale: 1
+                scale: 1,
+                duration: 5
             })
             timeline.to(component, {
                 delay: 0.15,

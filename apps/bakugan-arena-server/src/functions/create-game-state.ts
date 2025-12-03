@@ -196,6 +196,7 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
         // Just for checking state type this const state will never be used
 
         const state: stateType = {
+            connectedsUsers: new Map(),
             roomId: roomId,
             players: playersState,
             battleState,
@@ -207,7 +208,23 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
                 finished: false,
                 winner: null
             },
-            animations: []
+            animations: [],
+            ActivePlayerActionRequest: {
+                target: 'ACTIVE_PLAYER',
+                actions: {
+                    mustDo: [],
+                    mustDoOne: [],
+                    optional: []
+                }
+            },
+            InactivePlayerActionRequest: {
+                target: 'INACTIVE_PLAYER',
+                actions: {
+                    mustDo: [],
+                    mustDoOne: [],
+                    optional: []
+                }
+            }
         }
 
         return state
