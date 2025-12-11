@@ -25,6 +25,7 @@ async function SetBakuganFunctionAnimation({ bakugan, scene, slot, camera, userI
     if (!bakuganMesh) return
     if (!sphere) return
 
+
     slot.bakugans.filter((baks) => baks.userId === bakugan.userId).forEach((b) => {
         if (b.userId === bakugan.userId && b.id !== bakugan.id) {
             MoveBakugan({

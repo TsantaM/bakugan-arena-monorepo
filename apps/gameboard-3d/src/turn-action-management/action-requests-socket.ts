@@ -7,7 +7,6 @@ const socket = io("http://localhost:3005")
 let request_list: ActionType[] = []
 
 socket.on('turn-action-request', (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
-    console.log(request)
     request_list = []
 
     request.actions.mustDo.forEach((action) => {
@@ -15,6 +14,5 @@ socket.on('turn-action-request', (request: ActivePlayerActionRequestType | Inact
         request_list.push(action)
     })
 
-    console.log(request_list)
 
 })

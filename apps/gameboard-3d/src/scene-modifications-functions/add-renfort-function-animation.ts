@@ -7,14 +7,14 @@ export function AddRenfortAnimationAndFunction({ }: {}) {
 
 }
 
-export function SetBakuganAndAddRenfortAnimationAndFunction({ bakugan, scene, slot, camera, userId }: { scene: THREE.Scene, bakugan: bakuganOnSlot, slot: portalSlotsTypeElement, camera: THREE.PerspectiveCamera, userId: string }) {
+export async function SetBakuganAndAddRenfortAnimationAndFunction({ bakugan, scene, slot, camera, userId }: { scene: THREE.Scene, bakugan: bakuganOnSlot, slot: portalSlotsTypeElement, camera: THREE.PerspectiveCamera, userId: string }) {
     
     const powerContainer = document.getElementById(`${bakugan.userId}-${bakugan.slot_id}`)
     
     if(!powerContainer) return
     const final_power = parseInt(powerContainer.innerHTML) + bakugan.currentPower
 
-    SetBakuganFunctionAnimation({
+    await SetBakuganFunctionAnimation({
         bakugan: bakugan,
         camera: camera,
         scene: scene,

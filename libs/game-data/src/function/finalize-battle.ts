@@ -33,4 +33,10 @@ export const finalizeBattle = ({ roomData, winnerId, loserId }: { roomData: stat
     battleState.paused = false
     turnState.set_new_gate = true
     turnState.set_new_bakugan = true
+
+    roomData.animations.push({
+        type: 'BATTLE-END',
+        resolved: false
+    })
+
 }

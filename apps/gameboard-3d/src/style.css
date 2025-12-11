@@ -631,6 +631,12 @@ body {
     }
   }
 
+  .selected-card {
+    .gate-card-background {
+      transform: translateY(-25%);
+    }
+  }
+
   .card-selecter:hover {
     .gate-card-background {
       transform: translateY(-25%);

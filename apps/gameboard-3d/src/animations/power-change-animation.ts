@@ -67,7 +67,6 @@ export function PowerChangeNumberAnimation({ userId, slotId, newPower }: { userI
   if (!powerContainer) return
   let power = parseInt(powerContainer.textContent)
 
-  console.log(power, newPower, newPower < power)
 
   const step = 5
   const interval = setInterval(() => {

@@ -1,7 +1,6 @@
 import type { portalSlotsTypeElement } from "@bakugan-arena/game-data";
 import { CreateBakuganPreviewContainer } from "../functions/create-bakugan-preview-container";
 import { AddRenfortToBattleField } from "../animations/add-renfort-to-battlefield";
-import { BakuganPreviewOnBattleStartAnimation } from "../animations/bakugan-preview-battle-start";
 
 async function OnBattleStartFunctionAnimation({ slot, userId }: { slot: portalSlotsTypeElement, userId: string }) {
 
@@ -29,8 +28,8 @@ async function OnBattleStartFunctionAnimation({ slot, userId }: { slot: portalSl
     bakugans.splice(bakugans.indexOf(userBakugan[0]), 1)
     bakugans.splice(bakugans.indexOf(opponentsBakugan[0]), 1)
 
-    await BakuganPreviewOnBattleStartAnimation(container.id)
-    await BakuganPreviewOnBattleStartAnimation(opponentContainer.id)
+    // await BakuganPreviewOnBattleStartAnimation(container.id)
+    // await BakuganPreviewOnBattleStartAnimation(opponentContainer.id)
 
     bakugans.forEach((bakugan) => {
 

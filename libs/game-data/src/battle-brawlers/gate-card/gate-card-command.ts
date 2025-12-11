@@ -1,7 +1,7 @@
+import { SetBakuganAndAddRenfortAnimationDirective } from "../../function/create-animation-directives/add-renfort-directive";
 import { ComeBackBakuganDirectiveAnimation } from "../../function/create-animation-directives/come-back-bakugan";
 import { PowerChangeDirectiveAnumation } from "../../function/create-animation-directives/power-change";
 import { RemoveGateCardDirectiveAnimation } from "../../function/create-animation-directives/remove-gate-card";
-import { SetBakuganDirectiveAnimation } from "../../function/create-animation-directives/set-bakugan-animation-directives";
 import { ResetSlot } from "../../function/reset-slot";
 import { GateCardImages } from "../../store/gate-card-images";
 import { type gateCardType } from "../../type/game-data-types";
@@ -84,7 +84,7 @@ export const GrandEsprit: gateCardType = {
             })
         }
     },
-    onCanceled({ roomState, slot, bakuganKey, userId }) {
+    onCanceled({ roomState, slot, bakuganKey }) {
         if (!roomState) return
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const bakuganUser = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === slotOfGate.portalCard?.userId)
@@ -167,7 +167,7 @@ export const TripleCombat: gateCardType = {
                     slotToUpdate.bakugans.push(usersBakugan)
                     userStrongest.bakuganData.onDomain = true
                     slotToUpdate.state.open = true
-                    SetBakuganDirectiveAnimation({
+                    SetBakuganAndAddRenfortAnimationDirective({
                         animations: roomState.animations,
                         bakugan: usersBakugan,
                         slot: slotToUpdate
@@ -252,7 +252,7 @@ export const QuatuorDeCombat: gateCardType = {
 
                     slotToUpdate.bakugans.push(usersBakugan)
                     userWeakest.bakuganData.onDomain = true
-                    SetBakuganDirectiveAnimation({
+                    SetBakuganAndAddRenfortAnimationDirective({
                         animations: roomState.animations,
                         bakugan: usersBakugan,
                         slot: slotToUpdate
@@ -279,7 +279,7 @@ export const QuatuorDeCombat: gateCardType = {
                     slotToUpdate.bakugans.push(opponentBakugan)
                     opponentWeakest.bakuganData.onDomain = true
                     slotToUpdate.state.open = true
-                    SetBakuganDirectiveAnimation({
+                    SetBakuganAndAddRenfortAnimationDirective({
                         animations: roomState.animations,
                         bakugan: opponentBakugan,
                         slot: slotToUpdate
@@ -334,7 +334,7 @@ export const RetourDAssenceur: gateCardType = {
             }
         }
     },
-    onCanceled({ roomState, slot }) {
+    onCanceled() {
         return
     },
 }
@@ -396,7 +396,7 @@ export const Armistice: gateCardType = {
 
         }
     },
-    onCanceled({ roomState, slot }) {
+    onCanceled() {
         return
     },
 }

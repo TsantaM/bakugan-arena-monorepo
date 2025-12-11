@@ -2,9 +2,9 @@ import { PowerChangeDirectiveAnumation } from "../../function/create-animation-d
 import { type abilityCardsType } from "../../type/game-data-types";
 import { type bakuganOnSlot } from "../../type/room-types";
 import { GateCardsList } from "../gate-gards";
-import { SetBakuganDirectiveAnimation } from '../../function/create-animation-directives/set-bakugan-animation-directives'
 import { ComeBackBakuganDirectiveAnimation } from "../../function/create-animation-directives/come-back-bakugan";
 import { CancelGateCardDirectiveAnimation } from "../../function/create-animation-directives/cancel-gate-card";
+import { SetBakuganAndAddRenfortAnimationDirective } from "../../function/create-animation-directives/add-renfort-directive";
 
 export const MurDeFeu: abilityCardsType = {
     key: "mur-de-feu",
@@ -74,7 +74,7 @@ export const JetEnflamme: abilityCardsType = {
             if (user && pyrusOnDomain && pyrusOnDomain.length >= 2) {
                 slotOfGate.bakugans.push(newBakugan)
                 bakugan.bakuganData.onDomain = true
-                SetBakuganDirectiveAnimation({
+                SetBakuganAndAddRenfortAnimationDirective({
                     animations: roomState.animations,
                     bakugan: newBakugan,
                     slot: slotOfGate

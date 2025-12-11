@@ -42,19 +42,17 @@ function AddRenfortToBattleField({ bakugan, userId }: { bakugan: bakuganOnSlot, 
 
         if (component && globlal_sprite_container && powerContainer) {
 
-            console.log(component)
 
             const newPower = parseInt(powerContainer.textContent) + bakugan.currentPower
-            console.log(newPower)
             const timeline = gsap.timeline()
             timeline.fromTo(component, {
-                x: bakugan.userId === userId ? window.innerWidth / 2 : -window.innerWidth / 2,
+                x: bakugan.userId === userId ? window.innerWidth / 3 : -window.innerWidth / 3,
                 scale: 0
             }, {
                 x: bakugan.userId === userId ? window.innerWidth / 4 : -window.innerWidth / 4,
                 y: -20,
                 scale: 1,
-                duration: 5
+                duration: 1
             })
             timeline.to(component, {
                 delay: 0.15,

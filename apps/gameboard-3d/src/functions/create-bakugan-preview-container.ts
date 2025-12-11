@@ -18,6 +18,7 @@ function CreateBakuganPreviewContainer({ bakugan, userId }: { bakugan: bakuganOn
     // Sprites
     const sprite_container = document.createElement('div')
     sprite_container.classList.add('sprite-container')
+    sprite_container.setAttribute('data-key', `${bakugan.key}-${bakugan.userId}-${bakugan.slot_id}`)
     sprite_container.id = bakugan.userId === userId ? 'left-sprite-container' : 'right-sprite-container'
     const attribut_background = document.createElement('img')
     attribut_background.classList.add('attribut-background')
@@ -68,6 +69,7 @@ function CreateSpritePreviewContainer({ bakugan, userId }: { bakugan: bakuganOnS
 
     const sprite_container = document.createElement('div')
     sprite_container.classList.add('sprite-container')
+    sprite_container.setAttribute('data-key', `${bakugan.key}-${bakugan.userId}-${bakugan.slot_id}`)
     sprite_container.id = bakugan.userId === userId ? 'left-sprite-container' : 'right-sprite-container'
     const attribut_background = document.createElement('img')
     attribut_background.classList.add('attribut-background')

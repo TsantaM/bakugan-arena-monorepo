@@ -93,4 +93,16 @@ export type AnimationDirectivesTypes =
         },
         message?: Message[]
         resolved: boolean
+    } | {
+        type: 'BATTLE-END',
+        message?: Message[],
+        resolved: boolean
+    } | {
+        type: 'SET_BAKUGAN_AND_ADD_RENFORT',
+        data: {
+            bakugan: bakuganOnSlot,
+            slot: portalSlotsTypeElement
+        },
+        message?: Message[],
+        resolved: boolean
     }

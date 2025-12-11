@@ -119,7 +119,7 @@ export type ActionRequestAnswerType = [
         data: {
             key: string,
             userId: string,
-            slot: slots_id
+            slot: slots_id | ''
         } | undefined
     },
     {
@@ -127,7 +127,7 @@ export type ActionRequestAnswerType = [
         data: {
             key: string,
             userId: string,
-            slot: slots_id
+            slot: slots_id | ''
         } | undefined
     },
     {

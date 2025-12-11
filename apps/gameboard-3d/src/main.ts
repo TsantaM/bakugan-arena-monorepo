@@ -19,6 +19,8 @@ import { MoveToAnotherSlotFunctionAnimation } from './scene-modifications-functi
 import { OnBattleStartFunctionAnimation } from './scene-modifications-functions/on-battle-start-function-animation'
 import type { ActivePlayerActionRequestType, InactivePlayerActionRequestType } from '@bakugan-arena/game-data/src/type/actions-serveur-requests'
 import { TurnActionBuilder } from './turn-action-management'
+import { OnBattleEndAnimation } from './animations/on-battle-end-animation'
+import { SetBakuganAndAddRenfortAnimationAndFunction } from './scene-modifications-functions/add-renfort-function-animation'
 
 const canvas = document.getElementById('gameboard-canvas')
 const params = new URLSearchParams(window.location.search)
@@ -28,6 +30,12 @@ const userImage = params.get('userImage')
 const opponentImage = params.get('opponentImage')
 const socket = io("http://localhost:3005")
 const reload = document.getElementById("init-room")
+const scene = new THREE.Scene()
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
+const plane = PlaneMesh.clone()
+plane.material.transparent = true
+camera.position.set(3, 5, 8)
+plane.rotateX(-Math.PI / 2)
 
 if (userImage) {
   const left_profile_picture = document.getElementById('left-profile-picture-img')
@@ -42,36 +50,36 @@ if (opponentImage) {
 
 socket.emit('init-room-state', ({ roomId, userId }))
 socket.on('turn-action-request', (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
-  console.log(request)
-
-  const actions = [request.actions.mustDo, request.actions.mustDoOne, request.actions.optional].flat();
-  console.log(actions)
+  if (userId === null) return
 
   TurnActionBuilder({
-    actions: actions
+    request: request,
+    userId: userId,
+    camera: camera,
+    scene: scene,
+    plane: plane
   })
 })
 reload?.addEventListener('click', () => {
   socket.emit('init-room-state', ({ roomId, userId }))
   socket.on('turn-action-request', (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
-    console.log(request)
-
-    const actions = [request.actions.mustDo, request.actions.mustDoOne, request.actions.optional].flat();
-    console.log(actions)
+    if (userId === null) return
 
     TurnActionBuilder({
-      actions: actions
+      request: request,
+      userId: userId,
+      camera: camera,
+      scene: scene,
+      plane: plane
     })
   })
 })
 
 if (roomId !== null && userId !== null) {
   if (canvas) {
-    const scene = new THREE.Scene()
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
     renderer.setSize(window.innerWidth, window.innerHeight)
     renderer.setPixelRatio(window.devicePixelRatio)
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
     const controls = new OrbitControls(camera, renderer.domElement)
     const light = new THREE.AmbientLight('white', 3)
     const plane = PlaneMesh.clone()
@@ -148,7 +156,6 @@ if (roomId !== null && userId !== null) {
     })
 
     socket.on('animations', async (animations: AnimationDirectivesTypes[]) => {
-      console.log(animations)
       let i = 0;
 
       while (i < animations.length) {
@@ -302,18 +309,31 @@ if (roomId !== null && userId !== null) {
           })
         }
 
+        if (current.type === 'BATTLE-END') {
+          await OnBattleEndAnimation()
+        }
+
+        if (current.type === 'SET_BAKUGAN_AND_ADD_RENFORT') {
+          await SetBakuganAndAddRenfortAnimationAndFunction({
+            bakugan: current.data.bakugan,
+            camera: camera,
+            scene: scene,
+            slot: current.data.slot,
+            userId: userId
+          })
+        }
+
         i++; // avancer à l'animation suivante
       }
     });
 
     socket.on('turn-action-request', (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
-      console.log(request)
-
-      const actions = [request.actions.mustDo, request.actions.mustDoOne, request.actions.optional].flat();
-      console.log(actions)
-
       TurnActionBuilder({
-        actions: actions
+        request: request,
+        userId: userId,
+        camera: camera,
+        scene: scene,
+        plane: plane
       })
     })
 
