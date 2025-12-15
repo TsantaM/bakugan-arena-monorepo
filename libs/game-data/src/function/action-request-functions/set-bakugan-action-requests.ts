@@ -1,7 +1,6 @@
-import { ActionType } from '../../type/actions-serveur-requests'
-import { stateType } from '../../type/room-types'
+import type { ActionType } from '../../type/actions-serveur-requests'
+import type { stateType } from '../../type/room-types'
 import { SetBakuganFilters } from '../filters/set-bakugan-filters'
-import { FindUsableSlotAndGates } from '../filters/set-gate-card-filters'
 
 export function SetBakuganActionRequest({ roomState }: { roomState: stateType }) {
     if (!roomState) return
@@ -21,11 +20,6 @@ export function SetBakuganActionRequest({ roomState }: { roomState: stateType })
         userId: activePlayer.userId
     })
 
-    const { usableSlots } = FindUsableSlotAndGates({
-        gates: activePlayer.gates,
-        slots: roomState.protalSlots
-    })
-
     const SlotsWithUsersBakugan = roomState.protalSlots.filter((slot) => slot.bakugans.some((bakugan) => bakugan.userId === activePlayer.userId))
     const SlotsWithBakugans = roomState.protalSlots.filter((slot) => slot.bakugans.length > 0)
 
@@ -41,8 +35,7 @@ export function SetBakuganActionRequest({ roomState }: { roomState: stateType })
                 key: b!.key,
                 name: b!.name
             })),
-            slots: bankugansAndSlots.usableSlots.map((slot) => slot.id),
-            setableSlots: usableSlots ? usableSlots.map((slot) => slot.id) : []
+            setableSlots: bankugansAndSlots.usableSlots.map((slot) => slot.id)
         }
     }
 

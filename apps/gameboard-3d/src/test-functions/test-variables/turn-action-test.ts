@@ -22,8 +22,8 @@ export const TurnActionData: ActivePlayerActionRequestType | InactivePlayerActio
                         name: 'Monarus'
                     }
                     ],
-                    setableSlots: ['slot-5'],
-                    slots: ['slot-5']
+                    setableSlots: ['slot-5', 'slot-2'],
+                    slots: ['slot-5', 'slot-2']
                 }
             },
             // {

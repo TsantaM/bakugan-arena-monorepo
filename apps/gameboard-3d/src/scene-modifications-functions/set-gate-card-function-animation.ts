@@ -5,7 +5,6 @@ import { createSlotMesh } from "../meshes/slot.mesh";
 
 export async function SetGateCardFunctionAndAnimation({ slot, plane }: { slot: portalSlotsTypeElement, plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap> }) {
     
-    
     createSlotMesh({
         plane: plane,
         slot: slot

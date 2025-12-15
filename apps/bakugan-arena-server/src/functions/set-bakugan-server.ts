@@ -1,7 +1,7 @@
 import { addBakuganToSlot, AnimationDirectivesTypes, BakuganList, setBakuganProps, Slots, slots_id } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
-export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuganProps) => {
+export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuganProps): AnimationDirectivesTypes[] | undefined => {
 
     // FR: Récupération de la room actuelle par son ID
     // ENG Get the current room by its ID
@@ -112,9 +112,9 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuga
 
     const slots = Battle_Brawlers_Game_State[roomIndex]?.protalSlots
 
-    if(!slots) return
+    if (!slots) return
     const bakugan = slots[Slots.indexOf(slot as slots_id)].bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
-    if(!bakugan) return
+    if (!bakugan) return
     const animation: AnimationDirectivesTypes = {
         type: 'SET_BAKUGAN',
         data: {
@@ -123,5 +123,7 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuga
         },
         resolved: false,
     }
-     Battle_Brawlers_Game_State[roomIndex]?.animations.push(animation)
+    // Battle_Brawlers_Game_State[roomIndex]?.animations.push(animation)
+
+    return [animation]
 }

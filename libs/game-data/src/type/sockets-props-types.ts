@@ -1,5 +1,5 @@
-import { portalSlotsTypeElement, slots_id, stateType, } from "./room-types"
-import { bakuganToMoveType } from './game-data-types'
+import type { slots_id } from "./room-types"
+import type { bakuganToMoveType } from './game-data-types'
 
 export type activeGateCardProps = { roomId: string, gateId: string, slot: slots_id, userId: string }
 export type setBakuganProps = { roomId: string, bakuganKey: string, slot: string, userId: string }

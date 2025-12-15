@@ -1,6 +1,6 @@
-import { ActionType, notOnBoardBakugans, onBoardBakugans, SelectableAbilityCardAction } from '../../type/actions-serveur-requests'
+import type { ActionType, notOnBoardBakugans, onBoardBakugans, SelectableAbilityCardAction } from '../../type/actions-serveur-requests'
 import { SelectAbilityCardFilters } from '../filters/select-ability-card-filters'
-import { stateType } from '../../type/room-types'
+import type { stateType } from '../../type/room-types'
 import { Slots } from '../../store/slots'
 import { AbilityCardsList } from '../../battle-brawlers/ability-cards'
 import { ExclusiveAbilitiesList } from '../../battle-brawlers/exclusive-abilities'
@@ -17,6 +17,10 @@ export function UseAbilityCardActionRequest({ roomState }: { roomState: stateTyp
 
     if (!activePlayer) return
     if (!inactivePlayer) return
+
+    const usableAbilitiesCount: number = roomState.players.find((player) => player.userId === activePlayer?.userId)?.usable_abilitys || 0
+
+    if (usableAbilitiesCount === 0) return
 
     const activePlayerBakugansOnSlot = roomState.protalSlots.filter((slot) => slot.bakugans.some((bakugan) => bakugan.userId === activePlayer.userId)).map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === activePlayer.userId)
 

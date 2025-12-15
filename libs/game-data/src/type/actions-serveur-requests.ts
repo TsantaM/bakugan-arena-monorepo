@@ -55,7 +55,6 @@ export type ActionType = {
     type: 'SET_BAKUGAN',
     data: {
         bakugans: SelectableBakuganAction[],
-        slots: slots_id[],
         setableSlots: slots_id[]
     }
 } | {

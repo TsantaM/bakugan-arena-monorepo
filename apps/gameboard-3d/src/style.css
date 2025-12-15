@@ -557,13 +557,15 @@ body {
 .turn-interface {
   padding-left: 2vw;
   position: absolute;
-  bottom: 10%;
+  bottom: 1vh;
   display: flex;
   flex-direction: column;
   align-items: start;
   justify-content: start;
   gap: 1vw;
   width: 100%;
+  background: red;
+  width: 0;
 
   .bakugans {
     display: flex;
@@ -605,6 +607,11 @@ body {
       }
     }
 
+    .selected-bakugan {
+      .bakugan-image-selecter {
+        transform: translateY(-20%);
+      }
+    }
   }
 
   .stack-container {

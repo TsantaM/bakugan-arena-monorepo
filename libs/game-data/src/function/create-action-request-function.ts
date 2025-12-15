@@ -1,4 +1,4 @@
-import { stateType } from '../type/room-types'
+import type { stateType } from '../type/room-types'
 import { SetBakuganActionRequest } from './action-request-functions/set-bakugan-action-requests'
 import { SelectGateCardActionRequest, SetGateCardActionRequest } from './action-request-functions/set-gate-gard-action-request'
 import { UseAbilityCardActionRequest } from './action-request-functions/use-ability-card-action-request'

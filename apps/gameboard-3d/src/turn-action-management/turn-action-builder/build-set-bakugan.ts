@@ -12,6 +12,7 @@ export function BuildSetBakugan({ action, turnActionContainer }: { action: Actio
     bakugans.forEach((bakugan, index) => {
         const bakuganElement = document.createElement('div');
         bakuganElement.classList.add('image-bakugan-selecter-container');
+        bakuganElement.classList.add('select-bakugan-action');
         bakuganElement.setAttribute('data-key', bakugan.key);
         bakuganElement.id = `${bakugan.key}-${index}`;
 

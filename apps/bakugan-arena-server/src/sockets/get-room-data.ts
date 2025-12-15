@@ -14,6 +14,19 @@ export const socketGetRoomState = (io: Server, socket: Socket) => {
         const state = roomState({ roomId })
         socket.join(roomId)
         io.to(roomId).emit('room-state', state)
+        if (!state) return
+        const activeSocket = state.connectedsUsers.get(state.turnState.turn)
+        const inactiveSocket = state.connectedsUsers.get(state.turnState.previous_turn || '')
+
+        if (activeSocket) {
+            const request = state.ActivePlayerActionRequest
+            io.to(activeSocket).emit('turn-action-request', request)
+        }
+
+        if (inactiveSocket) {
+            const request = state.InactivePlayerActionRequest
+            io.to(inactiveSocket).emit('turn-action-request', request)
+        }
     })
 }
 
@@ -42,14 +55,40 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
             const activeSocket = roomData.connectedsUsers.get(roomData.turnState.turn)
             const inactiveSocket = roomData.connectedsUsers.get(roomData.turnState.previous_turn || '')
 
-            if (activeSocket) {
-                const request = roomData.ActivePlayerActionRequest
-                io.to(activeSocket).emit('turn-action-request', request)
+            if (roomData.turnState.turn === userId) {
+                if (activeSocket) {
+                    const request = roomData.ActivePlayerActionRequest
+                    const merged = [request.actions.mustDo, request.actions.mustDoOne, request.actions.optional].flat()
+                    if (merged.length === 0) return
+                    io.to(activeSocket).emit('turn-action-request', request)
+                }
+            } else {
+                if (inactiveSocket) {
+                    const request = roomData.InactivePlayerActionRequest
+                    const merged = [request.actions.mustDo, request.actions.mustDoOne, request.actions.optional].flat()
+                    if (merged.length === 0) return
+                    io.to(inactiveSocket).emit('turn-action-request', request)
+                }
             }
 
-            if (inactiveSocket) {
-                const request = roomData.InactivePlayerActionRequest
-                io.to(inactiveSocket).emit('turn-action-request', request)
+        } else {
+            const activeSocket = roomData.connectedsUsers.get(roomData.turnState.turn)
+            const inactiveSocket = roomData.connectedsUsers.get(roomData.turnState.previous_turn || '')
+
+            if (roomData.turnState.turn === userId) {
+                if (activeSocket) {
+                    const request = roomData.ActivePlayerActionRequest
+                    const merged = [request.actions.mustDo, request.actions.mustDoOne, request.actions.optional].flat()
+                    if (merged.length === 0) return
+                    io.to(activeSocket).emit('turn-action-request', request)
+                }
+            } else {
+                if (inactiveSocket) {
+                    const request = roomData.InactivePlayerActionRequest
+                    const merged = [request.actions.mustDo, request.actions.mustDoOne, request.actions.optional].flat()
+                    if (merged.length === 0) return
+                    io.to(inactiveSocket).emit('turn-action-request', request)
+                }
             }
         }
 

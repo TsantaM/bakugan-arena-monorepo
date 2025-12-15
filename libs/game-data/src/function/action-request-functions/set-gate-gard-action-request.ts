@@ -12,6 +12,9 @@ export function SetGateCardActionRequest({ roomState }: { roomState: stateType }
     const turnCount = roomState.turnState.turnCount
 
     if (!activePlayer) return
+    const usableGatesCount: number = roomState.players.find((player) => player.userId === activePlayer?.userId)?.usable_gates || 0
+
+    if (usableGatesCount === 0) return
 
     const { usableGates, usableSlots } = FindUsableSlotAndGates({
         gates: activePlayer.gates,
@@ -61,6 +64,10 @@ export function SelectGateCardActionRequest({ roomState }: { roomState: stateTyp
 
     if (!activePlayer) return
     if (!inactivePlayer) return
+
+    const usableGatesCount: number = roomState.players.find((player) => player.userId === activePlayer?.userId)?.usable_gates || 0
+
+    if (usableGatesCount === 0) return
 
     const { usableGates, usableSlots } = FindUsableSlotAndGates({
         gates: activePlayer.gates,

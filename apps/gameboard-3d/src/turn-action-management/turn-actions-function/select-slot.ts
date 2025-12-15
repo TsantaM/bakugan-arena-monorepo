@@ -1,11 +1,18 @@
-import { GateCardsList, Slots, type slots_id } from "@bakugan-arena/game-data";
+import { BakuganList, GateCardsList, Slots, type attribut, type slots_id } from "@bakugan-arena/game-data";
 import { slotMesh } from "../../meshes/slot.mesh";
 import { getSlotMeshPosition } from "../../functions/get-slot-mesh-position";
 import * as THREE from 'three'
 import { getAttributColor } from "../../functions/get-attrubut-color";
-import type { SelectableGateCardAction } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
+import type { SelectableBakuganAction, SelectableGateCardAction } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
 
 export function SelectSlotOnMouseMove({ plane, slots, hoveredSlot, event, camera }: { plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>, slots: slots_id[], hoveredSlot: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap> | null, event: MouseEvent, camera: THREE.PerspectiveCamera }): THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap> | null {
+
+    if (isMouseOverUI(event)) {
+        if (hoveredSlot) {
+            hoveredSlot.visible = false
+        }
+        return null
+    }
 
     const raycaster = new THREE.Raycaster()
     const mouse = new THREE.Vector2()
@@ -78,7 +85,6 @@ export function SelectCard({ data, selectGateCard, userId, cardsToSelect, card, 
 }) {
 
     if (selectGateCard.data && selectGateCard.data.key === data.key) {
-        alert("1")
         selectGateCard.data = undefined
         cardsToSelect.forEach((c) => {
             c.classList.remove('selected-card')
@@ -87,7 +93,6 @@ export function SelectCard({ data, selectGateCard, userId, cardsToSelect, card, 
         console.log(selectGateCard.data)
 
     } else {
-        alert('2')
         selectGateCard.data = undefined
         selectGateCard.data = {
             key: data.key,
@@ -113,13 +118,9 @@ export function SelectCard({ data, selectGateCard, userId, cardsToSelect, card, 
     }
 
     if (selectGateCard.data === undefined || selectGateCard.data.slot === '') {
-        console.log("1", plane.children.map((c) => c.name))
-        console.log('eh')
 
         let toRemove: THREE.Object3D[] = []
 
-
-        console.log("2", plane.children.map((c) => c.name))
         slots.forEach((slot) => {
             plane.traverse((mesh) => {
                 if (mesh.name === slot) {
@@ -129,15 +130,11 @@ export function SelectCard({ data, selectGateCard, userId, cardsToSelect, card, 
         })
 
         toRemove.forEach((mesh) => {
-            if(mesh.parent) {
+            if (mesh.parent) {
                 mesh.parent.remove(mesh)
             }
         })
     }
-
-    plane.children.forEach((child) => {
-        console.log(child.name, child.userData.userData)
-    })
 
 }
 
@@ -159,4 +156,134 @@ export function createOverableSlot(slot: slots_id, plane: THREE.Mesh<THREE.Plane
         classes: ['turn-action-mesh', additionalClass, 'slot-selecter']
     }
     plane.add(newSlot)
+}
+
+export function createOverableBakuganSlot(slot: slots_id, plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>, data: SelectableBakuganAction, overable: boolean) {
+    const newSlot = slotMesh.clone()
+    const position = getSlotMeshPosition({ index: Slots.indexOf(slot) })
+    newSlot.position.set(position.x, 5, position.z)
+    newSlot.name = slot
+    newSlot.visible = overable ? false : true
+    const texture = new THREE.TextureLoader().load(`./../images/cards/portal_card.png`)
+    const bakuganData = BakuganList.find((c) => c.key === data.key)
+    const gateColor = bakuganData && bakuganData.attribut ? getAttributColor(bakuganData.attribut) : 'crimson'
+    const color = new THREE.Color(gateColor)
+    newSlot.material.map = texture
+    newSlot.material.color = color
+    const additionalClass = overable ? 'overable' : 'selected-slot'
+    newSlot.userData = {
+        classes: ['turn-action-mesh', additionalClass, 'slot-selecter']
+    }
+    plane.add(newSlot)
+}
+
+export function SelectBakugan({ data, selectBakugan, userId, bakuganToSelect, bakugan }: {
+    data: SelectableBakuganAction,
+    selectBakugan: {
+        type: "SET_BAKUGAN";
+        data: {
+            key: string;
+            userId: string;
+            slot: slots_id | "";
+        } | undefined;
+    },
+    userId: string,
+    bakuganToSelect: NodeListOf<Element>,
+    bakugan: Element,
+    slots: slots_id[]
+}) {
+
+    if (selectBakugan.data && selectBakugan.data.key === data.key) {
+        selectBakugan.data = undefined
+        bakuganToSelect.forEach((c) => {
+            c.classList.remove('selected-bakugan')
+        })
+    } else {
+        selectBakugan.data = undefined
+        selectBakugan.data = {
+            key: data.key,
+            slot: '',
+            userId: userId
+        }
+
+        bakugan.classList.add('selected-bakugan')
+        bakuganToSelect.forEach((c) => {
+            if (c === bakugan) return
+            if (c.classList.contains('selected-bakugan')) {
+                c.classList.remove('selected-bakugan')
+            }
+        })
+    }
+
+}
+
+export function SelectSlotToSetBakugan({ plane, slots, hoveredSlot, event, camera, attribut }: { plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>, slots: slots_id[], hoveredSlot: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap> | null, event: MouseEvent, camera: THREE.PerspectiveCamera, attribut: attribut }): THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap> | null {
+
+    if (isMouseOverUI(event)) {
+        if (hoveredSlot) {
+            hoveredSlot.material.color.set(0xffffff)
+        }
+        return null
+    }
+
+    const raycaster = new THREE.Raycaster()
+    const mouse = new THREE.Vector2()
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera)
+
+    let newHoveredSlot = hoveredSlot
+
+    const intersects = raycaster.intersectObjects(plane.children, true)
+    if (intersects.length === 0) {
+        if (newHoveredSlot) {
+            newHoveredSlot.material.color.set(0xffffff)
+            newHoveredSlot = null
+        }
+    }
+
+    if (intersects[0]) {
+        const newSlot = plane.getObjectByName(intersects[0].object.name) as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap> | undefined
+
+
+        if (newSlot && !slots.includes(newSlot.name as slots_id)) {
+            if (newHoveredSlot !== null) {
+                newHoveredSlot.material.color.set(0xffffff)
+                newHoveredSlot = null
+            }
+        }
+
+        if (newSlot && slots.includes(newSlot.name as slots_id)) {
+            const color = new THREE.Color(getAttributColor(attribut))
+
+            if (newHoveredSlot !== null && newHoveredSlot !== newSlot && slots.includes(newSlot.name as slots_id)) {
+                newHoveredSlot.material.color.set('white')
+                newHoveredSlot = newSlot as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>
+                newSlot.material.color.set(color)
+
+            } else if (!newHoveredSlot && slots.includes(newSlot.name as slots_id)) {
+                newHoveredSlot = newSlot as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>
+                newSlot.material.color.set(color)
+
+            } else if (newHoveredSlot && slots.includes(newSlot.name as slots_id) === false) {
+                newSlot.material.color.set('white')
+                newHoveredSlot = null
+            }
+        }
+
+    }
+
+    return newHoveredSlot
+
+}
+
+function isMouseOverUI(event: MouseEvent): boolean {
+    const target = event.target as HTMLElement | null
+    if (!target) return false
+
+    return Boolean(
+        target.closest('.select-bakugan-action') ||
+        target.closest('.card-selecter')
+    )
 }

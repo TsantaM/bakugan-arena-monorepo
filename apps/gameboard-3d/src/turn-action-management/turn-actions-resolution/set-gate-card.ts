@@ -2,85 +2,130 @@ import type { ActionRequestAnswerType, ActionType } from "@bakugan-arena/game-da
 import * as THREE from 'three'
 import { type slots_id } from "@bakugan-arena/game-data"
 import { createOverableSlot, SelectCard, SelectSlotOnMouseMove } from "../turn-actions-function/select-slot"
+import { Socket } from "socket.io-client"
+import { clearTurnInterface } from "./action-scope"
 
-export function SetGateCard({ userId, SelectedActions, actions, camera, plane }: {
-    userId: string,
+
+export function SetGateCard({
+    socket,
+    userId,
+    SelectedActions,
+    actions,
+    camera,
+    plane,
+    roomId
+}: {
+    socket: Socket
+    userId: string
     SelectedActions: ActionRequestAnswerType
-    actions: ActionType[],
-    camera: THREE.PerspectiveCamera,
-    scene: THREE.Scene<THREE.Object3DEventMap>,
-    plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>
+    actions: ActionType[]
+    camera: THREE.PerspectiveCamera
+    plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>
+    roomId: string
 }) {
 
-    const selectGateCard = SelectedActions.find((action) => action.type === 'SET_GATE_CARD_ACTION')
-    const cards = actions.find((action) => action.type === 'SET_GATE_CARD_ACTION')?.data.cards
-    const slots = actions.find((action) => action.type === 'SET_GATE_CARD_ACTION')?.data.slots
-    if (!selectGateCard) return
-    if (!cards) return
-    if (!slots) return
+    const selectGateCard = SelectedActions.find(a => a.type === 'SET_GATE_CARD_ACTION')
+    const cards = actions.find(a => a.type === 'SET_GATE_CARD_ACTION')?.data.cards
+    const slots = actions.find(a => a.type === 'SET_GATE_CARD_ACTION')?.data.slots
 
-    const cardsToSelect = document.querySelectorAll('.card-selecter');
-    const currentCameraPosition = structuredClone(camera.position)
-    console.log(currentCameraPosition)
+    if (!selectGateCard || !cards || !slots) return
+
+    const cardsToSelect = document.querySelectorAll('.card-selecter')
+    if (!cardsToSelect.length) return
+
+    const cardClickHandlers = new Map<Element, EventListener>()
+    let mouseMoveHandler: ((e: MouseEvent) => void) | null = null
+    let clickHandler: (() => void) | null = null
+
+    function cleanup(cleanAll: boolean) {
+        if (mouseMoveHandler)
+            window.removeEventListener('mousemove', mouseMoveHandler)
+
+        if (clickHandler)
+            window.removeEventListener('click', clickHandler)
+
+        if (cleanAll) {
+            cardClickHandlers.forEach((handler, el) => {
+                el.removeEventListener('click', handler)
+            })
+        }
+
+        cardClickHandlers.clear()
+        mouseMoveHandler = null
+        clickHandler = null
+    }
 
     cardsToSelect.forEach(card => {
-        card.addEventListener('click', () => {
-            const data = cards.find((c) => c.key === card.getAttribute('data-key'))
+        const handler = () => {
+            const data = cards.find(c => c.key === card.getAttribute('data-key'))
             if (!data) return
-            console.log(data)
+
+            cleanup(false) // 🔒 garantit un seul flow actif
 
             SelectCard({
-                card: card,
-                cardsToSelect: cardsToSelect,
-                data: data,
-                plane: plane,
-                selectGateCard: selectGateCard,
-                userId: userId,
-                slots: slots
+                card,
+                cardsToSelect,
+                data,
+                plane,
+                selectGateCard,
+                userId,
+                slots
             })
 
-            if (selectGateCard.data && selectGateCard.data.key === data.key) {
-                alert('3')
-                slots.forEach((slot) => createOverableSlot(slot, plane, data, true))
-                let hoveredSlot: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap> | null = null
+            if (!selectGateCard.data || selectGateCard.data.key !== data.key)
+                return
 
-                window.addEventListener('mousemove', (event: MouseEvent) => {
-                    const newHoveredSlot = SelectSlotOnMouseMove({
-                        plane: plane,
-                        slots: slots,
-                        hoveredSlot: hoveredSlot,
-                        camera: camera,
-                        event: event
-                    })
-                    hoveredSlot = newHoveredSlot
-                })
+            slots.forEach(slot => createOverableSlot(slot, plane, data, true))
 
-                window.addEventListener('click', () => {
-                    if (!selectGateCard.data) return
-                    if (hoveredSlot) {
-                        selectGateCard.data.slot = hoveredSlot.name as slots_id
-                        console.log(selectGateCard.data)
-                        hoveredSlot = null
-                        // Nettoyage des slots affichés
-                        slots.forEach((slot) => {
-                            const slotMesh = plane.getObjectByName(slot)
-                            if (slotMesh && slotMesh.userData.classes.includes("overable")) {
-                                plane.remove(slotMesh)
-                            }
-                        })
+            let hoveredSlot: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial> | null = null
 
-                        const data = cards.find((c) => c.key === selectGateCard.data?.key)
-                        if (!data) return
-                        // alert('first pass')
-                        console.log("3", plane.children.map((c) => c.name))
-
-                        createOverableSlot(selectGateCard.data.slot, plane, data, false)
-                    }
+            mouseMoveHandler = (event) => {
+                hoveredSlot = SelectSlotOnMouseMove({
+                    plane,
+                    slots,
+                    hoveredSlot,
+                    camera,
+                    event
                 })
             }
 
-            return
-        })
+            clickHandler = () => {
+                if (!selectGateCard.data || !hoveredSlot) return
+
+                selectGateCard.data.slot = hoveredSlot.name as slots_id
+
+                slots.forEach(slot => {
+                    const mesh = plane.getObjectByName(slot)
+                    if (mesh && mesh.userData.classes?.includes("overable")) {
+                        plane.remove(mesh)
+                    }
+                })
+
+                clearTurnInterface()
+
+
+                socket.emit('set-gate', {
+                    roomId,
+                    gateId: selectGateCard.data.key,
+                    slot: selectGateCard.data.slot,
+                    userId
+                })
+
+                if (actions.length === 1) {
+                    socket.emit('turn-action', { roomId, userId })
+                }
+
+                cleanup(true)
+            }
+
+            window.addEventListener('mousemove', mouseMoveHandler)
+            window.addEventListener('click', clickHandler)
+        }
+
+        card.addEventListener('click', handler)
+        cardClickHandlers.set(card, handler)
     })
 
+    // 🔑 option pro : retour d’un destroy explicite
+    return cleanup
 }

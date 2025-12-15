@@ -1,7 +1,10 @@
-import { setGateCardProps, stateType, updateDeckGates, updateSlot } from "@bakugan-arena/game-data"
+import { AnimationDirectivesTypes, setGateCardProps, stateType, updateDeckGates, updateSlot } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
+import { removeActionByType } from '@bakugan-arena/game-data/src/function/create-animation-directives/remove-action-by-type'
+import { ActivePlayerActionRequestType, InactivePlayerActionRequestType } from "@bakugan-arena/game-data/src/type/actions-serveur-requests"
 
-export const UpdateGate = ({ roomId, gateId, slot, userId }: setGateCardProps) => {
+
+export const UpdateGate: ({ roomId, gateId, slot, userId }: setGateCardProps) => AnimationDirectivesTypes[] | undefined = ({ roomId, gateId, slot, userId }: setGateCardProps) => {
     // FR: Récupère l'état de la salle correspondant à l'ID
     // ENG: Retrieve the game room state matching the room ID
     const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
@@ -73,20 +76,28 @@ export const UpdateGate = ({ roomId, gateId, slot, userId }: setGateCardProps) =
         protalSlots: updateSlot(roomData.protalSlots, slotToUpdate.id, newSlotState),
         decksState: roomData.decksState.map((d) =>
             d.userId === userId ? { ...d, gates: newDeckState.gates } : d
-        ),
-        animations: [
-            ...roomData.animations,
-            {
-                type: 'SET_GATE_CARD',
-                data : {
-                    slot: newSlotState,
-                },
-                resolved: false
-            }
-        ]
+        )
+        // animations: [
+        //     ...roomData.animations,
+        //     {
+        //         type: 'SET_GATE_CARD',
+        //         data: {
+        //             slot: newSlotState,
+        //         },
+        //         resolved: false
+        //     }
+        // ]
     }
 
     // FR: Sauvegarde du nouvel état de la salle dans l'état global
     // ENG: Save the new room state back into the global state
     Battle_Brawlers_Game_State[roomIndex] = state
+
+    return [{
+        type: 'SET_GATE_CARD',
+        data: {
+            slot: newSlotState,
+        },
+        resolved: false
+    }]
 }
