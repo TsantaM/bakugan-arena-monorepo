@@ -39,7 +39,6 @@ export type notOnBoardBakugans = {
 
 export type SelectableAbilityCardAction = {
     onBoardBakugans: onBoardBakugans[],
-    notOnBoardBakugans: notOnBoardBakugans[]
 }
 
 export type ActionType = {

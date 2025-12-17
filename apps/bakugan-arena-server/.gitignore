@@ -2,4 +2,4 @@ dist
 node_modules
 /generated/prisma
 # env files (can opt-in for committing if needed)
-.env*
+.env

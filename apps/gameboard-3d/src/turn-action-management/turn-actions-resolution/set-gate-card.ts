@@ -111,10 +111,6 @@ export function SetGateCard({
                     userId
                 })
 
-                if (actions.length === 1) {
-                    socket.emit('turn-action', { roomId, userId })
-                }
-
                 cleanup(true)
             }
 

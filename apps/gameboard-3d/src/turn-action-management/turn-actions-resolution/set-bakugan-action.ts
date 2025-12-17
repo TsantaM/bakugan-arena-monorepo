@@ -136,8 +136,6 @@ export function SetBakugan({
                 cleanup(slots, true)
                 hoveredSlot = null
 
-                console.log(payload)
-
                 clearTurnInterface()
 
                 socket.emit('set-bakugan', ({ roomId: payload.roomId, bakuganKey: payload.bakuganKey, slot: payload.slot, userId: payload.userId }))
@@ -145,6 +143,7 @@ export function SetBakugan({
                 console.log('actions', actions)
 
                 if (actions.length === 1) {
+                    socket.emit('clean-animation-table', ({ roomId }))
                     socket.emit('turn-action', ({ roomId: roomId, userId: userId }))
                 }
 

@@ -23,37 +23,24 @@ export function removeActionByType<
 ): ActivePlayerActionRequestType | InactivePlayerActionRequestType {
 
   const mustDo = removeByType(request.actions.mustDo, typeToRemove)
-  const optional = removeByType(request.actions.optional, typeToRemove)
+  let optional = removeByType(request.actions.optional, typeToRemove)
+  let mustDoOne = request.actions.mustDoOne
 
   // Traitement spécifique à mustDoOne
-  const originalMustDoOne = request.actions.mustDoOne
 
-  let mustDoOne: ActionType[] = []
-  let newOptional = [...optional]
-
-  let removedFromMustDoOne = false
-
-  for (const action of originalMustDoOne) {
-    if (action.type === typeToRemove) {
-      removedFromMustDoOne = true
-    } else {
-      mustDoOne.push(action)
-    }
-  }
-
-  // Si on a supprimé une action depuis mustDoOne,
-  // alors les restantes vont dans optional
-  if (removedFromMustDoOne) {
-    newOptional = [...newOptional, ...mustDoOne]
+  if (request.actions.mustDoOne.some((action) => action.type === typeToRemove)) {
+    mustDoOne = removeByType(request.actions.mustDoOne, typeToRemove)
+    optional = [...optional, mustDoOne].flat()
     mustDoOne = []
   }
+
 
   return {
     ...request,
     actions: {
       mustDo,
       mustDoOne,
-      optional: newOptional,
+      optional: optional,
     }
   }
 }

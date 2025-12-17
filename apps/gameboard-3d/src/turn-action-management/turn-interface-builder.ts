@@ -5,6 +5,7 @@ import { BuildSelectBakugan } from "./turn-action-builder/build-select-bakugan";
 import { BuildSetGateCards } from "./turn-action-builder/build-set-gate-cards";
 import { BuildSetBakugan } from "./turn-action-builder/build-set-bakugan";
 import { BuildUseAbilityCard } from "./turn-action-builder/build-use-ability-card";
+import { clearTurnInterface } from "./turn-actions-resolution/action-scope";
 
 export const TurnActionInterfaceBuilder = ({ request }: { request: ActivePlayerActionRequestType | InactivePlayerActionRequestType }) => {
 
@@ -24,13 +25,23 @@ export const TurnActionInterfaceBuilder = ({ request }: { request: ActivePlayerA
         BuildSelectAbilityCard({ action: actions[0] })
         BuildSelectBakugan({ action: actions[0] })
     } else {
-        if (document.querySelector('.turn-interface')) {
-            document.querySelector('.turn-interface')?.remove()
-        }
-
+        clearTurnInterface()
+        if(actions.length === 0) return
         const turnActionContainer = document.createElement('div')
         turnActionContainer.classList.add('turn-interface')
+
+        const button = document.createElement('button')
+        button.id = 'next-turn-button'
+
+        const img = document.createElement('img')
+        img.src = 'next-turn-icon.png'
+        img.alt = ''
+        img.id = 'next-turn-button-icon'
+
+        button.appendChild(img)
+
         document.body.appendChild(turnActionContainer)
+        document.body.appendChild(button)
 
         actions.forEach((action) => {
             BuildSetGateCards({ action: action, turnActionContainer: turnActionContainer })

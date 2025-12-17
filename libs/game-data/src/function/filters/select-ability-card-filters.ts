@@ -1,7 +1,7 @@
 import { type portalSlotsTypeElement, type deckType } from '../../type/room-types'
 import { BakuganList } from '../../battle-brawlers/bakugans'
 
-export function SelectAbilityCardFilters({ slotOfBattle, userId, bakuganKey, playersDeck }: { slotOfBattle: portalSlotsTypeElement | undefined, userId: string, bakuganKey: string, playersDeck: deckType | undefined }) {
+export function SelectAbilityCardFilters({ slotOfBattle, userId, bakuganKey, playersDeck }: { slotOfBattle?: portalSlotsTypeElement | undefined, userId: string, bakuganKey: string, playersDeck: deckType | undefined }) {
     if (!slotOfBattle) return
     if (!playersDeck) return
     const usersBakugan = slotOfBattle?.bakugans.filter((b) => b.userId === userId)

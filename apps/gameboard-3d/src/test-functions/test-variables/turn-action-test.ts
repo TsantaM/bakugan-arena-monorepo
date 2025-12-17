@@ -4,28 +4,28 @@ export const TurnActionData: ActivePlayerActionRequestType | InactivePlayerActio
     target: 'ACTIVE_PLAYER',
     actions: {
         mustDo: [
-            {
-                type: 'SET_BAKUGAN',
-                data: {
-                    bakugans: [{
-                        key: 'skyress-storm-ventus',
-                        attribut: 'Ventus',
-                        currentPower: 450,
-                        image: 'skyress-storm',
-                        name: 'Skyress'
-                    },
-                    {
-                        key: 'monarus-ventus',
-                        attribut: 'Ventus',
-                        currentPower: 310,
-                        image: 'monarus',
-                        name: 'Monarus'
-                    }
-                    ],
-                    setableSlots: ['slot-5', 'slot-2'],
-                    slots: ['slot-5', 'slot-2']
-                }
-            },
+            // {
+            //     type: 'SET_BAKUGAN',
+            //     data: {
+            //         bakugans: [{
+            //             key: 'skyress-storm-ventus',
+            //             attribut: 'Ventus',
+            //             currentPower: 450,
+            //             image: 'skyress-storm',
+            //             name: 'Skyress'
+            //         },
+            //         {
+            //             key: 'monarus-ventus',
+            //             attribut: 'Ventus',
+            //             currentPower: 310,
+            //             image: 'monarus',
+            //             name: 'Monarus'
+            //         }
+            //         ],
+            //         setableSlots: ['slot-5', 'slot-2'],
+            //         slots: ['slot-5', 'slot-2']
+            //     }
+            // },
             // {
             //     type: 'SELECT_GATE_CARD',
             //     data: [
@@ -84,28 +84,28 @@ export const TurnActionData: ActivePlayerActionRequestType | InactivePlayerActio
             //         }
             //     ]
             // },
-            {
-                type: 'SET_GATE_CARD_ACTION',
-                data: {
-                    cards: [
-                        {
-                            key: 'mine-fantome',
-                            description: "...",
-                            name: 'Mine Fantôme',
-                            image: 'command-gate-card.png'
-                        },
-                        {
-                            key: 'reacteur-haos',
-                            description: "...",
-                            name: 'Reacteur Haos',
-                            image: 'open-portal-card.png'
-                        }
-                    ],
-                    slots: ['slot-1', "slot-3", "slot-4", 'slot-6']
-                }
-            }
+
         ],
         mustDoOne: [],
-        optional: []
+        optional: [{
+            type: 'SET_GATE_CARD_ACTION',
+            data: {
+                cards: [
+                    {
+                        key: 'mine-fantome',
+                        description: "...",
+                        name: 'Mine Fantôme',
+                        image: 'command-gate-card.png'
+                    },
+                    {
+                        key: 'reacteur-haos',
+                        description: "...",
+                        name: 'Reacteur Haos',
+                        image: 'open-portal-card.png'
+                    }
+                ],
+                slots: ['slot-1', "slot-3", "slot-4", 'slot-6']
+            }
+        }]
     }
 }

@@ -57,6 +57,7 @@ export function TurnActionBuilder({ request, userId, camera, scene, plane, roomI
         camera: camera,
         scene: scene,
         plane: plane,
-        roomId: roomId
+        roomId: roomId,
+        request: request
     })
 }

@@ -553,6 +553,17 @@ body {
 
 /* Turn Action CSS */
 
+#next-turn-button {
+  position: absolute;
+  right: 5vw;
+  bottom: 1vw;
+  cursor: pointer;
+
+  img {
+    max-width: 15vw;
+    cursor: pointer;
+  }
+}
 
 .turn-interface {
   padding-left: 2vw;
@@ -562,10 +573,9 @@ body {
   flex-direction: column;
   align-items: start;
   justify-content: start;
-  gap: 1vw;
+  gap: 2vw;
   width: 100%;
-  background: red;
-  width: 0;
+  width: 100%;
 
   .bakugans {
     display: flex;
@@ -676,4 +686,25 @@ body {
     transform: translateX(250%);
   }
 
+}
+
+@media (width >=48rem
+  /* 768px */
+) {
+  #next-turn-button {
+    position: absolute;
+    right: 5vw;
+    bottom: 1vw;
+    cursor: pointer;
+
+    img {
+      max-width: 7vw;
+      cursor: pointer;
+    }
+  }
+
+  .turn-interface {
+    display: flex;
+    flex-direction: row !important;
+  }
 }

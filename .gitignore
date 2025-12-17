@@ -7,3 +7,4 @@ pnpm-lock.yaml
 # Autres dossiers temporaires
 dist
 .next
+.env

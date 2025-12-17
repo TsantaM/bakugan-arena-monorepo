@@ -14,7 +14,6 @@ export function SelectAbilityCard({ userId, SelectedActions, actions }: {
 
     const Abilities: SelectableAbilityCardAction = {
         onBoardBakugans: SelectablesAbilityCards.map((data) => data.onBoardBakugans).flat(),
-        notOnBoardBakugans: SelectablesAbilityCards.map((data) => data.notOnBoardBakugans).flat()
     }
 
     const merged = [Abilities.onBoardBakugans].flat()

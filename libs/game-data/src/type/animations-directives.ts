@@ -1,6 +1,6 @@
 import type { portalSlotsTypeElement, bakuganOnSlot, slots_id } from '../type/room-types'
 
-type Message = {
+export type Message = {
     userId: string,
     text: string
 }
