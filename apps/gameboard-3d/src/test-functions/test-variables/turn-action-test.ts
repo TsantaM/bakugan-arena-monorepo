@@ -4,28 +4,27 @@ export const TurnActionData: ActivePlayerActionRequestType | InactivePlayerActio
     target: 'ACTIVE_PLAYER',
     actions: {
         mustDo: [
-            // {
-            //     type: 'SET_BAKUGAN',
-            //     data: {
-            //         bakugans: [{
-            //             key: 'skyress-storm-ventus',
-            //             attribut: 'Ventus',
-            //             currentPower: 450,
-            //             image: 'skyress-storm',
-            //             name: 'Skyress'
-            //         },
-            //         {
-            //             key: 'monarus-ventus',
-            //             attribut: 'Ventus',
-            //             currentPower: 310,
-            //             image: 'monarus',
-            //             name: 'Monarus'
-            //         }
-            //         ],
-            //         setableSlots: ['slot-5', 'slot-2'],
-            //         slots: ['slot-5', 'slot-2']
-            //     }
-            // },
+            {
+                type: 'SET_BAKUGAN',
+                data: {
+                    bakugans: [{
+                        key: 'skyress-storm-ventus',
+                        attribut: 'Ventus',
+                        currentPower: 450,
+                        image: 'skyress-storm',
+                        name: 'Skyress'
+                    },
+                    {
+                        key: 'monarus-ventus',
+                        attribut: 'Ventus',
+                        currentPower: 310,
+                        image: 'monarus',
+                        name: 'Monarus'
+                    }
+                    ],
+                    setableSlots: ['slot-5', 'slot-2'],
+                }
+            },
             // {
             //     type: 'SELECT_GATE_CARD',
             //     data: [
@@ -86,7 +85,57 @@ export const TurnActionData: ActivePlayerActionRequestType | InactivePlayerActio
             // },
 
         ],
-        mustDoOne: [],
+        mustDoOne: [{
+            type: 'USE_ABILITY_CARD',
+            data: {
+                onBoardBakugans: [{
+                    slot: 'slot-2',
+                    bakuganKey: 'mantris-haos',
+                    abilities: [{
+                        key: 'eclat-soudain',
+                        description: '...',
+                        image: 'ability_card_HAOS.jpg',
+                        name: 'Eclat Soudain'
+                    },
+                    ]
+                },
+                {
+                    slot: 'slot-2',
+                    bakuganKey: 'siege-haos',
+                    abilities: [{
+                        key: 'eclat-soudain',
+                        description: '...',
+                        image: 'ability_card_HAOS.jpg',
+                        name: 'Eclat Soudain'
+                    },
+                    {
+                        key: 'lumière',
+                        description: '...',
+                        image: 'ability_card_PYRUS.jpg',
+                        name: 'Lumière Envahissante'
+                    },
+                    {
+                        key: 'lumière1',
+                        description: '...',
+                        image: 'ability_card_PYRUS.jpg',
+                        name: 'Lumière Envahissante'
+                    },
+                    {
+                        key: 'lumière2',
+                        description: '...',
+                        image: 'ability_card_PYRUS.jpg',
+                        name: 'Lumière Envahissante'
+                    },
+                    {
+                        key: 'lumière3',
+                        description: '...',
+                        image: 'ability_card_PYRUS.jpg',
+                        name: 'Lumière Envahissante'
+                    }
+                    ]
+                }]
+            }
+        }],
         optional: [{
             type: 'SET_GATE_CARD_ACTION',
             data: {

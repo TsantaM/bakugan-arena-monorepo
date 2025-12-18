@@ -133,9 +133,9 @@ export type ActionRequestAnswerType = [
         data: {
             key: string,
             userId: string,
-            bakuganId: string,
-            slot: slots_id
-        }[] | undefined
+            bakuganId: string | '',
+            slot: slots_id | ''
+        } | undefined
     },
     {
         type : 'ACTIVE_GATE_CARD',

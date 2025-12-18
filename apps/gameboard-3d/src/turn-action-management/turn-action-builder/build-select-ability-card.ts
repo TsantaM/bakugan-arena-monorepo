@@ -7,10 +7,9 @@ export function BuildSelectAbilityCard({ action }: { action: ActionType }) {
 
     const Abilities: SelectableAbilityCardAction = {
         onBoardBakugans: action.data.map((data) => data.onBoardBakugans).flat(),
-        notOnBoardBakugans: action.data.map((data) => data.notOnBoardBakugans).flat()
     }
 
-    const merged = [Abilities.onBoardBakugans, Abilities.notOnBoardBakugans].flat()
+    const merged = [Abilities.onBoardBakugans].flat()
     const cards = merged.map(bakugan => bakugan.abilities).flat();
 
 

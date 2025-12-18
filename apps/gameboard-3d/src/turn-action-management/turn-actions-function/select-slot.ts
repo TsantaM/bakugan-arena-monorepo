@@ -3,7 +3,7 @@ import { slotMesh } from "../../meshes/slot.mesh";
 import { getSlotMeshPosition } from "../../functions/get-slot-mesh-position";
 import * as THREE from 'three'
 import { getAttributColor } from "../../functions/get-attrubut-color";
-import type { SelectableBakuganAction, SelectableGateCardAction } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
+import type { onBoardBakugans, SelectableBakuganAction, SelectableGateCardAction } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
 
 export function SelectSlotOnMouseMove({ plane, slots, hoveredSlot, event, camera }: { plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>, slots: slots_id[], hoveredSlot: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap> | null, event: MouseEvent, camera: THREE.PerspectiveCamera }): THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap> | null {
 
@@ -135,6 +135,144 @@ export function SelectCard({ data, selectGateCard, userId, cardsToSelect, card, 
             }
         })
     }
+
+}
+
+export function SelectAbilityCardForStandardTurn({ data, useAbilityCard, userId, cardsToUse, card, scene, bakugans }: {
+    data: SelectableGateCardAction,
+    useAbilityCard: {
+        type: "USE_ABILITY_CARD";
+        data: {
+            key: string;
+            userId: string;
+            bakuganId: string | "";
+            slot: slots_id | "";
+        } | undefined;
+    },
+    userId: string,
+    cardsToUse: NodeListOf<Element>,
+    card: Element,
+    scene: THREE.Scene<THREE.Object3DEventMap>
+    bakugans: onBoardBakugans[]
+}) {
+
+    if (useAbilityCard.type !== "USE_ABILITY_CARD") return
+    console.log('first', useAbilityCard.data?.key, useAbilityCard.type)
+
+    if (useAbilityCard.data && useAbilityCard.data.key === data.key) {
+        useAbilityCard.data = undefined
+        cardsToUse.forEach((c) => {
+            c.classList.remove('selected-card')
+        })
+
+        console.log(useAbilityCard.data)
+
+    } else {
+        useAbilityCard.data = undefined
+        useAbilityCard.data = {
+            key: data.key,
+            userId: userId,
+            bakuganId: '',
+            slot: '' as slots_id
+        }
+
+        card.classList.add('selected-card')
+        cardsToUse.forEach((c) => {
+            if (c === card) return
+            if (c.classList.contains('selected-card')) {
+                c.classList.remove('selected-card')
+            }
+        })
+
+        // slots.forEach((slot) => {
+        //     const mesh = plane.getObjectByName(slot)
+        //     if (mesh && mesh.userData && mesh.userData.classes.includes('slot-selecter') && (mesh.userData.classes.includes('overable') || mesh.userData.classes.includes('selected-slot'))) {
+        //         console.log(mesh.userData, mesh.name)
+        //         plane.remove(mesh)
+        //     }
+        // })
+    }
+
+    if (useAbilityCard.data !== undefined) {
+
+        bakugans.forEach((bakugan) => {
+
+            const mesh = scene.getObjectByName(`${bakugan.bakuganKey}-${userId}`) as THREE.Sprite<THREE.Object3DEventMap>
+            if (!mesh) return
+
+            if (bakugan.abilities.some((ability) => ability.key === data.key)) {
+                mesh.material.opacity = 1
+            } else {
+                mesh.material.transparent = true
+                mesh.material.opacity = 0.5
+            }
+
+        })
+
+    } else {
+        bakugans.forEach((bakugan) => {
+
+            const mesh = scene.getObjectByName(`${bakugan.bakuganKey}-${userId}`) as THREE.Sprite<THREE.Object3DEventMap>
+            if (!mesh) return
+
+            mesh.material.opacity = 1
+
+        })
+    }
+
+
+}
+
+export function SelectBakuganOnMouseMove({ bakugan, event, camera, scene, names }: { bakugan: THREE.Sprite<THREE.Object3DEventMap> | null, event: MouseEvent, camera: THREE.PerspectiveCamera, scene: THREE.Scene<THREE.Object3DEventMap>, names: string[] }): THREE.Sprite<THREE.Object3DEventMap> | null {
+
+    const raycaster = new THREE.Raycaster()
+    const mouse = new THREE.Vector2()
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera)
+
+    let selecter: THREE.Sprite<THREE.Object3DEventMap> | null = bakugan
+
+    const intersects = raycaster.intersectObjects(scene.children, true)
+    if (intersects.length === 0) {
+        if (selecter) {
+            selecter.material.color.set('white')
+            selecter = null
+        }
+    }
+
+    if (intersects[0]) {
+        const mesh = scene.getObjectByName(intersects[0].object.name) as THREE.Sprite<THREE.Object3DEventMap>
+        if (mesh) {
+            const color = new THREE.Color(getAttributColor(mesh.userData.attribut))
+
+            if (names.includes(mesh.name)) {
+                if (selecter !== null) {
+                    if (selecter.name !== mesh.name) {
+                        selecter.material.color.set('white')
+                        selecter = mesh
+                        mesh.material.color.set(color)
+                    } else {
+                        return selecter
+                    }
+                } else {
+                    if (names.includes(mesh.name)) {
+                        selecter = mesh
+                        mesh.material.color.set(color)
+                    }
+                }
+            } else {
+                selecter?.material.color.set('white')
+                selecter = null
+                return selecter
+            }
+        }
+    }
+
+    console.log(selecter?.name)
+
+    return selecter
 
 }
 

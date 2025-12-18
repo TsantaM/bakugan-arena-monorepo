@@ -13,6 +13,10 @@ function createSprite({ bakugan, scene, slot, slotIndex, userId }: { bakugan: ba
     bakuganMesh.scale.set(2, 2, 1)
     bakuganMesh.position.set(0, 0.75, 0)
     bakuganMesh.name = `${bakugan.key}-${bakugan.userId}`
+    bakuganMesh.userData = {
+        attribut: bakugan.attribut,
+        bakuganKey: bakugan.key,
+    }
 
     const position = GetSpritePosition({
         bakugan: bakugan,

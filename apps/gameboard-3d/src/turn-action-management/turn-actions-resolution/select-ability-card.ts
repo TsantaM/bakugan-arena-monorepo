@@ -1,4 +1,4 @@
-import type { ActionRequestAnswerType, ActionType, SelectableAbilityCardAction } from "@bakugan-arena/game-data/src/type/actions-serveur-requests"
+import type { ActionRequestAnswerType, ActionType } from "@bakugan-arena/game-data/src/type/actions-serveur-requests"
 
 export function SelectAbilityCard({ userId, SelectedActions, actions }: {
     userId: string,
@@ -9,28 +9,37 @@ export function SelectAbilityCard({ userId, SelectedActions, actions }: {
     const SelectAbilityCardAction = SelectedActions.find((action) => action.type === 'SELECT_ABILITY_CARD')
     const SelectablesAbilityCards = actions.find((action) => action.type === 'SELECT_ABILITY_CARD')?.data
 
+    const onBoardBakugans = actions.find(a => a.type === 'USE_ABILITY_CARD')?.data.onBoardBakugans
+    if (!onBoardBakugans) return
+
+    const bakugans = onBoardBakugans.map((bakugan) => bakugan)
+
+
+    const Abilities = [...new Map(
+        onBoardBakugans
+            .flatMap(b => b.abilities)
+            .map(card => [card.key, card])
+    ).values()]
+
     if (!SelectAbilityCardAction) return
     if (!SelectablesAbilityCards) return
 
-    const Abilities: SelectableAbilityCardAction = {
-        onBoardBakugans: SelectablesAbilityCards.map((data) => data.onBoardBakugans).flat(),
-    }
-
-    const merged = [Abilities.onBoardBakugans].flat()
-    const cards = merged.map(bakugan => bakugan.abilities).flat();
+    const selectOne = document.getElementById('stack-selecte-one')
+    if (!selectOne) return
 
     const cardsToSelect = document.querySelectorAll('.card-selecter');
     cardsToSelect.forEach(card => {
         card.addEventListener('click', () => {
-            const selectedCard = cards.find(c => c.key === card.getAttribute('data-key'))
-            const onBoardBakugans = merged.find((bakugan) => bakugan.abilities.some((ability) => ability.key === selectedCard?.key))
+            const selectedCard = Abilities.find(c => c.key === card.getAttribute('data-key'))
+            const bakugan = bakugans.find((bakugan) => bakugan.abilities.some((ability) => ability.key === selectedCard?.key))
+            if(!bakugan) return
             if (!selectedCard) return
             if (!onBoardBakugans) return
 
             const newData = {
-                bakuganId: onBoardBakugans.bakuganKey,
+                bakuganId: bakugan.bakuganKey,
                 key: selectedCard.key,
-                slot: onBoardBakugans.slot,
+                slot: bakugan.slot,
                 userId: userId
             }
 

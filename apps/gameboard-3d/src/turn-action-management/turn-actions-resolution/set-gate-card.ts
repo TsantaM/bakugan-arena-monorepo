@@ -30,7 +30,7 @@ export function SetGateCard({
 
     if (!selectGateCard || !cards || !slots) return
 
-    const cardsToSelect = document.querySelectorAll('.card-selecter')
+    const cardsToSelect = document.querySelectorAll('.gate-card-selecter')
     if (!cardsToSelect.length) return
 
     const cardClickHandlers = new Map<Element, EventListener>()

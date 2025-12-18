@@ -573,9 +573,9 @@ body {
   flex-direction: column;
   align-items: start;
   justify-content: start;
-  gap: 2vw;
-  width: 100%;
-  width: 100%;
+  gap: 3vw;
+  width: 1vw;
+  /* background: red; */
 
   .bakugans {
     display: flex;
@@ -706,5 +706,9 @@ body {
   .turn-interface {
     display: flex;
     flex-direction: row !important;
+  }
+
+  .stack-container {
+    min-width: 30vw !important;
   }
 }

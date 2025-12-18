@@ -5,10 +5,11 @@ import { SelectAbilityCard } from "./turn-actions-resolution/select-ability-card
 import { SetGateCard } from "./turn-actions-resolution/set-gate-card"
 import * as THREE from 'three'
 import { SetBakugan } from "./turn-actions-resolution/set-bakugan-action"
-import type { Socket } from "socket.io-client"
+import { type Socket } from "socket.io-client"
 import { NextTurnButtonAction } from "./turn-actions-resolution/next-turn-button"
+import { UseAbilityCard } from "./turn-actions-resolution/use-ability-card"
 
-export function TurnActionResolution({ request, SelectedActions, userId, actions, camera, plane, roomId, socket }: {
+export function TurnActionResolution({ request, SelectedActions, userId, actions, camera, plane, roomId, socket, scene }: {
     request: ActivePlayerActionRequestType | InactivePlayerActionRequestType, SelectedActions: ActionRequestAnswerType, userId: string, actions: ActionType[], camera: THREE.PerspectiveCamera,
     scene: THREE.Scene<THREE.Object3DEventMap>, plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>, roomId: string, socket: Socket
 }) {
@@ -18,5 +19,6 @@ export function TurnActionResolution({ request, SelectedActions, userId, actions
 
     SetGateCard({ SelectedActions: SelectedActions, userId: userId, actions: actions, camera: camera, plane: plane, roomId: roomId, socket: socket })
     SetBakugan({ SelectedActions: SelectedActions, actions: actions, userId: userId, camera: camera, plane: plane, roomId: roomId, socket: socket })
+    UseAbilityCard({ scene: scene, SelectedActions: SelectedActions, actions: actions, userId: userId, camera: camera, roomId: roomId, socket: socket })
     NextTurnButtonAction({request: request, socket: socket, userId: userId, roomId: roomId})
 }

@@ -1,9 +1,11 @@
 import type { SelectableBakuganAction, SelectableGateCardAction } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
+import type { AbilityCard } from "../turn-action-management/turn-action-builder/build-use-ability-card";
 
 export function CreateGateCardSelecter({ card, index, multiSelect = false }: { card: SelectableGateCardAction, index: number, multiSelect?: boolean }) {
 
     const cardElement = document.createElement('div');
     cardElement.classList.add('card-selecter');
+    cardElement.classList.add('gate-card-selecter');
     cardElement.id = `${card.key}-${index}`
     cardElement.setAttribute('data-key', card.key);
 
@@ -23,6 +25,30 @@ export function CreateGateCardSelecter({ card, index, multiSelect = false }: { c
         stackContainer.appendChild(cardElement);
     }
 
+}
+
+export function CreateAbilityCardSelecter({ card, index, multiSelect = false }: { card: AbilityCard, index: number, multiSelect?: boolean }) {
+    const cardElement = document.createElement('div');
+    cardElement.classList.add('card-selecter');
+    cardElement.classList.add('ability-card-selecter');
+    cardElement.id = `${card.key}-${index}`
+    cardElement.setAttribute('data-key', card.key);
+
+    const cardImage = document.createElement('img');
+    cardImage.src = `/images/cards/${card.image}`
+    cardImage.classList.add('gate-card-background');
+
+    cardElement.appendChild(cardImage);
+
+    if (multiSelect) {
+        const stackContainer = document.getElementById('ability-cards')
+        if (!stackContainer) return
+        stackContainer.appendChild(cardElement);
+    } else {
+        const stackContainer = document.getElementById('stack-selecte-one')
+        if (!stackContainer) return
+        stackContainer.appendChild(cardElement);
+    }
 }
 
 
