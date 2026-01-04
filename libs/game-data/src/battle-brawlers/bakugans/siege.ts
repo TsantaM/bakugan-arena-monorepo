@@ -56,10 +56,12 @@ export const SiegeGateCard: gateCardType = {
     maxInDeck: 1,
     family: 'Siege',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Siege présent sur elle`,
-    image: GateCardImages.caracter,
+    image: 'siege.png',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'siege-gate-card')
         CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Siege' })
+        return null
+
     },
     onCanceled({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'siege-gate-card')

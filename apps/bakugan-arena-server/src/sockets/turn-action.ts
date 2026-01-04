@@ -1,10 +1,13 @@
 import { Server, Socket } from "socket.io/dist";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
-import { CreateActionRequestFunction, handleBattle, handleGateCards, updateTurnState } from "@bakugan-arena/game-data";
+import { CheckBattleStillInProcess, CreateActionRequestFunction, handleBattle, handleGateCards, updateTurnState } from "@bakugan-arena/game-data";
 import { CheckGameFinished } from "@bakugan-arena/prisma";
 import { onBattleEnd } from "../functions/on-battle-end";
+import { clearAnimationsInRoom } from "./clear-animations-socket";
+import { turnCountSocketProps } from "@bakugan-arena/game-data/src/type/sockets-props-types";
+import { ClearDomain } from "../functions/clear-domain";
 
-export function turnActionUpdater({ roomId, userId, io }: { roomId: string, userId: string, io: Server }) {
+export function turnActionUpdater({ roomId, userId, io, updateBattleState = true }: { roomId: string, userId: string, io: Server, updateBattleState?: boolean }) {
     const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
 
     // FR: On récupère aussi l'index de cette salle pour des modifications directes
@@ -22,7 +25,7 @@ export function turnActionUpdater({ roomId, userId, io }: { roomId: string, user
 
     // FR: Gestion de la logique des batailles (diminution de tours restants ou lancement de combat)
     // ENG: Handle battle logic (decrease remaining turns or trigger a new battle)
-    handleBattle(roomData)
+    handleBattle(roomData, updateBattleState)
 
     // FR: Vérification et activation automatique des cartes portail si leurs conditions sont remplies
     // ENG: Check and auto-activate gate cards if their conditions are met
@@ -37,6 +40,10 @@ export function turnActionUpdater({ roomId, userId, io }: { roomId: string, user
     // FR: Vérification si la partie est terminée (conditions de victoire/défaite)
     // ENG: Check if the game has ended (victory/defeat conditions)
     CheckGameFinished({ roomId, roomState: roomData })
+
+    CheckBattleStillInProcess(roomData)
+
+    ClearDomain(roomData, userId)
 
     CreateActionRequestFunction({ roomState: roomData })
 
@@ -63,6 +70,15 @@ export function turnActionUpdater({ roomId, userId, io }: { roomId: string, user
         const request = roomData.InactivePlayerActionRequest
         io.to(inactiveSocket).emit('turn-action-request', request)
     }
+
+    const turnState: turnCountSocketProps = {
+        turnCount: roomData.turnState.turnCount,
+        battleTurn: roomData.battleState.battleInProcess ? roomData.battleState.turns : undefined
+    }
+
+    io.to(roomId).emit('turn-count-updater', turnState)
+
+    clearAnimationsInRoom(roomId)
 
 }
 

@@ -139,7 +139,8 @@ body {
   }
 
   .turn-count-number {
-    font-size: 1.25rem;
+    font-size: 1rem;
+    text-align: center;
     font-style: italic;
     font-weight: bold;
     color: oklch(66.6% 0.179 58.318);
@@ -271,7 +272,7 @@ body {
   }
 
   .turn-count-number {
-    font-size: 4.5rem !important;
+    font-size: 3.5rem !important;
   }
 
   .power-container {
@@ -301,7 +302,7 @@ body {
   }
 
   .turn-count-number {
-    font-size: 6rem !important;
+    font-size: 4.5rem !important;
   }
 
   .power-container {
@@ -379,6 +380,7 @@ body {
       top: 0;
       left: 0;
     }
+
   }
 
   .card-selecter:hover {
@@ -686,6 +688,47 @@ body {
     transform: translateX(250%);
   }
 
+  .open-gate-card-button {
+    padding: 1vw;
+    border-radius: 0.5rem;
+    color: #fff;
+    font-size: 1rem;
+    width: 25vw;
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+  }
+
+  .open-gate-card-button::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    background: #7b3306;
+    opacity: 0.5;
+  }
+ 
+  .open-gate-card-button:hover::before {
+    opacity: 1;
+    transition: 0.75;
+  }
+
+}
+
+.card-description {
+  display: none;
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  .card-title {
+    font-size: 5vw;
+  }
 }
 
 @media (width >=48rem
@@ -704,11 +747,19 @@ body {
   }
 
   .turn-interface {
+    width: 100dvw;
     display: flex;
     flex-direction: row !important;
+    flex-wrap: wrap;
+    .open-gate-card-button {
+      width: 15dvw;
+    }
+
   }
 
   .stack-container {
     min-width: 30vw !important;
   }
+
+
 }

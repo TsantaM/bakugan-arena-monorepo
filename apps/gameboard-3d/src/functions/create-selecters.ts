@@ -1,5 +1,6 @@
 import type { SelectableBakuganAction, SelectableGateCardAction } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
 import type { AbilityCard } from "../turn-action-management/turn-action-builder/build-use-ability-card";
+import type { attribut } from "@bakugan-arena/game-data";
 
 export function CreateGateCardSelecter({ card, index, multiSelect = false }: { card: SelectableGateCardAction, index: number, multiSelect?: boolean }) {
 
@@ -9,8 +10,18 @@ export function CreateGateCardSelecter({ card, index, multiSelect = false }: { c
     cardElement.id = `${card.key}-${index}`
     cardElement.setAttribute('data-key', card.key);
 
+    const cardDescription = document.createElement('div')
+    cardDescription.classList.add('card-description');
+    const cardTitle = document.createElement('p')
+    cardTitle.classList.add('card-title')
+    cardTitle.textContent = card.name
+    cardDescription.appendChild(cardTitle)
+    cardDescription.setAttribute('data-key', card.key)
+    document.body.appendChild(cardDescription)
+
     const cardImage = document.createElement('img');
     cardImage.src = `/images/cards/${card.image}`
+    console.log(cardImage.src)
     cardImage.classList.add('gate-card-background');
 
     cardElement.appendChild(cardImage);
@@ -27,15 +38,24 @@ export function CreateGateCardSelecter({ card, index, multiSelect = false }: { c
 
 }
 
-export function CreateAbilityCardSelecter({ card, index, multiSelect = false }: { card: AbilityCard, index: number, multiSelect?: boolean }) {
+export function CreateAbilityCardSelecter({ card, index, multiSelect = false, attribut }: { card: AbilityCard, index: number, multiSelect?: boolean, attribut: attribut | undefined }) {
     const cardElement = document.createElement('div');
     cardElement.classList.add('card-selecter');
     cardElement.classList.add('ability-card-selecter');
     cardElement.id = `${card.key}-${index}`
     cardElement.setAttribute('data-key', card.key);
 
+    const cardDescription = document.createElement('div')
+    cardDescription.classList.add('card-description');
+    const cardTitle = document.createElement('p')
+    cardTitle.classList.add('card-title')
+    cardTitle.textContent = card.name
+    cardDescription.appendChild(cardTitle)
+    cardDescription.setAttribute('data-key', card.key)
+    document.body.appendChild(cardDescription)
+
     const cardImage = document.createElement('img');
-    cardImage.src = `/images/cards/${card.image}`
+    cardImage.src = card.image === '' ? `/images/cards/special_ability_card_${attribut?.toUpperCase()}.jpg` : `/images/cards/${card.image}`;
     cardImage.classList.add('gate-card-background');
 
     cardElement.appendChild(cardImage);

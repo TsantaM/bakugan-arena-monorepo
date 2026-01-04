@@ -25,17 +25,17 @@ export const TurnActionData: ActivePlayerActionRequestType | InactivePlayerActio
                     setableSlots: ['slot-5', 'slot-2'],
                 }
             },
-            // {
-            //     type: 'SELECT_GATE_CARD',
-            //     data: [
-            //         {
-            //             key: 'mine-fantome',
-            //             description: 'Blablabla',
-            //             image:'command-gate-card.png',
-            //             name: 'Mine Fantôme'
-            //         }
-            //     ]
-            // },
+            {
+                type: 'SELECT_GATE_CARD',
+                data: [
+                    {
+                        key: 'mine-fantome',
+                        description: 'Blablabla',
+                        image:'command-gate-card.png',
+                        name: 'Mine Fantôme'
+                    }
+                ]
+            },
             // {
             //     type: 'SELECT_BAKUGAN',
             //     data: [
@@ -87,54 +87,55 @@ export const TurnActionData: ActivePlayerActionRequestType | InactivePlayerActio
         ],
         mustDoOne: [{
             type: 'USE_ABILITY_CARD',
-            data: {
-                onBoardBakugans: [{
-                    slot: 'slot-2',
-                    bakuganKey: 'mantris-haos',
-                    abilities: [{
-                        key: 'eclat-soudain',
-                        description: '...',
-                        image: 'ability_card_HAOS.jpg',
-                        name: 'Eclat Soudain'
-                    },
-                    ]
+            data: [{
+                slot: 'slot-2',
+                bakuganKey: 'mantris-haos',
+                attribut: 'Haos',
+                abilities: [{
+                    key: 'eclat-soudain',
+                    description: '...',
+                    image: 'ability_card_HAOS.jpg',
+                    name: 'Eclat Soudain'
+                },
+                ]
+            },
+            {
+                slot: 'slot-2',
+                attribut: 'Haos',
+                bakuganKey: 'siege-haos',
+                abilities: [{
+                    key: 'eclat-soudain',
+                    description: '...',
+                    image: 'ability_card_HAOS.jpg',
+                    name: 'Eclat Soudain'
                 },
                 {
-                    slot: 'slot-2',
-                    bakuganKey: 'siege-haos',
-                    abilities: [{
-                        key: 'eclat-soudain',
-                        description: '...',
-                        image: 'ability_card_HAOS.jpg',
-                        name: 'Eclat Soudain'
-                    },
-                    {
-                        key: 'lumière',
-                        description: '...',
-                        image: 'ability_card_PYRUS.jpg',
-                        name: 'Lumière Envahissante'
-                    },
-                    {
-                        key: 'lumière1',
-                        description: '...',
-                        image: 'ability_card_PYRUS.jpg',
-                        name: 'Lumière Envahissante'
-                    },
-                    {
-                        key: 'lumière2',
-                        description: '...',
-                        image: 'ability_card_PYRUS.jpg',
-                        name: 'Lumière Envahissante'
-                    },
-                    {
-                        key: 'lumière3',
-                        description: '...',
-                        image: 'ability_card_PYRUS.jpg',
-                        name: 'Lumière Envahissante'
-                    }
-                    ]
-                }]
-            }
+                    key: 'lumière',
+                    description: '...',
+                    image: 'ability_card_PYRUS.jpg',
+                    name: 'Lumière Envahissante'
+                },
+                {
+                    key: 'lumière1',
+                    description: '...',
+                    image: 'ability_card_PYRUS.jpg',
+                    name: 'Lumière Envahissante1'
+                },
+                {
+                    key: 'lumière2',
+                    description: '...',
+                    image: 'ability_card_PYRUS.jpg',
+                    name: 'Lumière Envahissante2'
+                },
+                {
+                    key: 'lumière3',
+                    description: '...',
+                    image: 'ability_card_PYRUS.jpg',
+                    name: 'Lumière Envahissante3'
+                }
+                ]
+            }]
+
         }],
         optional: [{
             type: 'SET_GATE_CARD_ACTION',
@@ -155,6 +156,9 @@ export const TurnActionData: ActivePlayerActionRequestType | InactivePlayerActio
                 ],
                 slots: ['slot-1', "slot-3", "slot-4", 'slot-6']
             }
+        }, {
+            type: "OPEN_GATE_CARD",
+            slot: 'slot-2'
         }]
     }
 }

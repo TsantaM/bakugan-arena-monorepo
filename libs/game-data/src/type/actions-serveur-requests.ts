@@ -1,5 +1,5 @@
 import type { attribut } from './game-data-types'
-import type { portalSlotsTypeElement, slots_id } from './room-types'
+import type { bakuganInDeck, portalSlotsTypeElement, slots_id } from './room-types'
 
 export type SelectableBakuganAction = {
     key: string,
@@ -19,6 +19,7 @@ export type SelectableGateCardAction = {
 export type onBoardBakugans = {
     slot: slots_id,
     bakuganKey: string,
+    attribut: attribut,
     abilities: {
         key: string,
         name: string,
@@ -37,9 +38,7 @@ export type notOnBoardBakugans = {
     }[]
 }
 
-export type SelectableAbilityCardAction = {
-    onBoardBakugans: onBoardBakugans[],
-}
+export type SelectableAbilityCardAction = onBoardBakugans[]
 
 export type ActionType = {
     type: 'SELECT_BAKUGAN',
@@ -68,6 +67,10 @@ export type ActionType = {
 } | {
     type: 'ACTIVE_GATE_CARD',
     data: portalSlotsTypeElement
+} | {
+    type: 'OPEN_GATE_CARD',
+    slot: slots_id,
+    gateId: string
 }
 
 export type ActivePlayerActionRequestType = {
@@ -87,6 +90,8 @@ export type InactivePlayerActionRequestType = {
         optional: ActionType[]
     }
 }
+
+// Ce bloc doit surement envore faire l'objet d'une refactorisation car il est absurdement verbeux et long
 
 export type ActionRequestAnswerType = [
     {
@@ -138,9 +143,79 @@ export type ActionRequestAnswerType = [
         } | undefined
     },
     {
-        type : 'ACTIVE_GATE_CARD',
+        type: 'ACTIVE_GATE_CARD',
         data: {
             slot: slots_id
         } | undefined
     }
 ]
+
+
+// --------------------------------------------
+
+export type AbilityCardsActionsRequestsType = {
+    roomId: string,
+    cardKey: string,
+    userId: string,
+    bakuganKey: string,
+    slot: slots_id,
+    data: AbilityCardsActions
+}
+
+export type bakuganToMoveType = {
+    key: string,
+    userId: string,
+    slot: slots_id
+}
+
+export type AbilityCardsActions = {
+    type: 'SELECT_SLOT',
+    message: string,
+    slots: slots_id[]
+} | {
+    type: 'SELECT_BAKUGAN_TO_SET',
+    message: string,
+    bakugans: bakuganInDeck[]
+} | {
+    type: 'MOVE_BAKUGAN_TO_ANOTHER_SLOT',
+    message: string,
+    bakugans: bakuganToMoveType[],
+    slots: slots_id[]
+} | {
+    type: 'SELECT_BAKUGAN_ON_DOMAIN',
+    message: string,
+    bakugans: bakuganToMoveType[],
+} | {
+    type: 'ATTRACT_BAKUGAN',
+    message: string,
+    bakugans: bakuganToMoveType[]
+}
+
+export type resolutionType = {
+    cardKey: string;
+    userId: string;
+    bakuganKey: string;
+    slot: slots_id;
+    roomId: string;
+    data: resolutionDataType;
+}
+
+
+export type resolutionDataType = {
+    type: 'SELECT_BAKUGAN_TO_SET',
+    bakugan: bakuganInDeck
+} | {
+    type: 'MOVE_BAKUGAN_TO_ANOTHER_SLOT',
+    bakugan: bakuganToMoveType,
+    slot: slots_id
+} | {
+    type: 'SELECT_BAKUGAN_ON_DOMAIN',
+    bakugan: string,
+    slot: slots_id
+} | {
+    type: 'ATTRACT_BAKUGAN',
+    bakugan: bakuganToMoveType
+} | {
+    type: 'SELECT_SLOT',
+    slot: slots_id
+}

@@ -4,6 +4,7 @@ import { PowerChangeDirectiveAnumation } from "../../function/create-animation-d
 import { RemoveGateCardDirectiveAnimation } from "../../function/create-animation-directives/remove-gate-card";
 import { ResetSlot } from "../../function/reset-slot";
 import { GateCardImages } from "../../store/gate-card-images";
+import { AnimationDirectivesTypes } from "../../type/animations-directives";
 import { type gateCardType } from "../../type/game-data-types";
 import { type bakuganOnSlot, type stateType } from "../../type/room-types";
 
@@ -14,7 +15,7 @@ export const Rechargement: gateCardType = {
     description: `Augmente le niveau de puissance du propriétaire de la carte de 100 G par Bakugan présent sur le domaine ayant le même élément`,
     image: GateCardImages.command,
     onOpen: ({ roomState, slot, bakuganKey, userId }) => {
-        if (!roomState) return
+        if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const bakuganUser = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
 
@@ -34,6 +35,9 @@ export const Rechargement: gateCardType = {
                 })
             }
         }
+
+        return null
+
     },
     onCanceled: ({ roomState, slot }) => {
         if (!roomState) return
@@ -67,7 +71,7 @@ export const GrandEsprit: gateCardType = {
     description: `Augmente le niveau de puissance du propriétaire de la carte de 50 G par cartes portails présentes sur le domaine`,
     image: GateCardImages.command,
     onOpen({ roomState, slot, bakuganKey, userId }) {
-        if (!roomState) return
+        if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const bakuganUser = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
         const gateCount = roomState?.protalSlots.filter((s) => s.portalCard !== null)
@@ -83,6 +87,8 @@ export const GrandEsprit: gateCardType = {
                 malus: false
             })
         }
+
+        return null
     },
     onCanceled({ roomState, slot, bakuganKey }) {
         if (!roomState) return
@@ -177,6 +183,7 @@ export const TripleCombat: gateCardType = {
             }
 
         }
+        return null
     },
     autoActivationCheck: ({ portalSlot }) => {
         const bakugansOnSlot = portalSlot.bakugans.length
@@ -288,6 +295,8 @@ export const QuatuorDeCombat: gateCardType = {
             }
 
         }
+
+        return null
     },
     autoActivationCheck: ({ portalSlot }) => {
         const bakugansOnSlot = portalSlot.bakugans.length
@@ -333,6 +342,8 @@ export const RetourDAssenceur: gateCardType = {
                 })
             }
         }
+
+        return null
     },
     onCanceled() {
         return
@@ -359,6 +370,8 @@ export const BoucEmissaire: gateCardType = {
             roomState.battleState.slot = null
             roomState.battleState.paused = false
         }
+
+        return null
     }
 }
 
@@ -369,7 +382,8 @@ export const Armistice: gateCardType = {
     description: `Met fin au combat et tous les Bakugans sur la carte quittent le champs de batail. Toutes les cartes maîtrises utilisées seront perdues`,
     image: GateCardImages.command,
     onOpen({ roomState, slot }) {
-        if(!roomState) return
+        if (!roomState) return null
+
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const bakugansOnGate = slotOfGate.bakugans.map((b) => b.key)
@@ -392,9 +406,25 @@ export const Armistice: gateCardType = {
                 roomState.battleState.battleInProcess = false
                 roomState.battleState.slot = null
                 roomState.battleState.paused = false
+
+                const animation: AnimationDirectivesTypes = {
+                    type: 'BATTLE-END',
+                    resolved: false,
+                }
+
+                roomState.animations.push(animation)
+
             }
 
+            return {
+                turnAction: true
+            }
+
+        } else {
+            return null
         }
+
+
     },
     onCanceled() {
         return

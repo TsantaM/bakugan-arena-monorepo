@@ -7,11 +7,11 @@ import type { portalSlotsType } from '@bakugan-arena/game-data'
 import { OnBattleEndAnimation } from './animations/on-battle-end-animation'
 import { TurnActionBuilder } from './turn-action-management'
 import { TurnActionData } from './test-functions/test-variables/turn-action-test'
-import { io, type Socket } from 'socket.io-client'
+import { io } from 'socket.io-client'
 
 const canvas = document.getElementById('gameboard-canvas')
 const userId = 'user-1';
-const roomId = '12345'
+const roomId = '12345';
 
 const slots: portalSlotsType = [
     {
@@ -125,7 +125,6 @@ if (canvas) {
         }
 
     })
-
 
     InitTestBattleField({
         plane: plane,

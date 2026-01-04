@@ -25,6 +25,8 @@ export const CycloidGateCard: gateCardType = {
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'cycloid-gate-card')
         CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Cycloid' })
+        return null
+
     },
     onCanceled({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'cycloid-gate-card')

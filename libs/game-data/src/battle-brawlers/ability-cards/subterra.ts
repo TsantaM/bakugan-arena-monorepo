@@ -1,8 +1,11 @@
+import { OpenGateCardActionRequest } from "../../function/action-request-functions/open-gate-card-action-request";
 import { CheckBattle } from "../../function/check-battle-in-process";
 import { MoveToAnotherSlotDirectiveAnimation } from "../../function/create-animation-directives/move-to-another-slot";
 import { PowerChangeDirectiveAnumation } from "../../function/create-animation-directives/power-change";
+import { StandardCardsImages } from "../../store/ability-cards-images";
+import type { AbilityCardsActions, bakuganToMoveType } from "../../type/actions-serveur-requests";
 import { type abilityCardsType } from "../../type/game-data-types";
-import type { bakuganOnSlot } from "../../type/room-types";
+import type { bakuganOnSlot, slots_id } from "../../type/room-types";
 import { GateCardsList } from "../gate-gards";
 
 export const MagmaSupreme: abilityCardsType = {
@@ -12,6 +15,7 @@ export const MagmaSupreme: abilityCardsType = {
     attribut: 'Subterra',
     maxInDeck: 1,
     usable_in_neutral: false,
+    image: StandardCardsImages.subterra,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate && slotOfGate.portalCard) {
@@ -42,6 +46,7 @@ export const MagmaSupreme: abilityCardsType = {
                 slotOfGate.portalCard.key = 'reacteur-subterra'
             }
         }
+        return null
     }
 }
 
@@ -51,6 +56,7 @@ export const ChuteColossale: abilityCardsType = {
     name: 'Chute Colossale',
     maxInDeck: 2,
     description: `Permet à l'utilisateur de déplacer la carte portail où il se trouve vers une autre place sur le domaine`,
+    image: StandardCardsImages.subterra,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -61,6 +67,8 @@ export const ChuteColossale: abilityCardsType = {
                 user.currentPower += 100
             }
         }
+
+        return null
     }
 }
 
@@ -71,9 +79,10 @@ export const CopieConforme: abilityCardsType = {
     attribut: 'Subterra',
     maxInDeck: 1,
     description: `Permet de copier une des carte maîtrise déjà utilisée par l'adversaire`,
+    image: StandardCardsImages.subterra,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        if (!roomState) return
+        if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
@@ -88,6 +97,8 @@ export const CopieConforme: abilityCardsType = {
                 })
             }
         }
+
+        return null
     }
 }
 
@@ -98,9 +109,10 @@ export const Obstruction: abilityCardsType = {
     attribut: 'Subterra',
     maxInDeck: 1,
     description: `L'utilisateur s'empare du niveau de puissance de l'adversaire avant l'utilisation de la maîtrise`,
+    image: StandardCardsImages.subterra,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        if(!roomState) return
+        if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
@@ -116,6 +128,8 @@ export const Obstruction: abilityCardsType = {
                 })
             }
         }
+
+        return null
     }
 }
 
@@ -126,16 +140,49 @@ export const ForceDattraction: abilityCardsType = {
     maxInDeck: 2,
     attribut: 'Subterra',
     description: `Permet d'attirer un bakugan alier sur la carte portail où se trouve l'utilisateur`,
+    image: StandardCardsImages.subterra,
     extraInputs: ['drag-bakugan'],
     usable_in_neutral: false,
-    onActivate: ({ roomState, userId, bakuganKey, slot, target, slotToDrag }) => {
+
+    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        if (!roomState) return null
+
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        const deck = roomState?.decksState.find((d) => d.userId === userId)
+        const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
+
+        if (!slotOfGate && !deck && !userData) return null
+
+        const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot && s.bakugans.length > 0).map((slot) => slot.bakugans).flat()
+        const bakugans: bakuganToMoveType[] = slots.map((bakugan) => ({
+            key: bakugan.key,
+            userId: bakugan.userId,
+            slot: bakugan.slot_id
+        }))
+
+        const request: AbilityCardsActions = {
+            type: 'SELECT_BAKUGAN_ON_DOMAIN',
+            message: "Force d'attraction : Choissez un Bakugan à attirer",
+            bakugans: bakugans
+        }
+
+        return request
+
+
+    },
+    onAdditionalEffect: ({ resolution, roomData: roomState }) => {
+        if (!roomState) return
+        if (resolution.data.type !== 'SELECT_BAKUGAN_ON_DOMAIN') return
+
+        const slotToDrag: slots_id = resolution.data.slot
+        const target: string = resolution.data.bakugan
         const slotTarget = roomState?.protalSlots.find((s) => s.id === slotToDrag)
-        console.log(target, slotToDrag, slot)
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === resolution.slot);
+        console.log(target, slotToDrag)
         console.log(slotOfGate)
+
         // const targetToDrag = slotTarget?.bakugans.find((b) => b.key === target)
-        if (slotOfGate && slotTarget && target !== '' && slotToDrag !== '') {
-            if(!roomState) return
+        if (slotOfGate && slotTarget && target !== '') {
             const BakuganTargetIndex = slotTarget.bakugans.findIndex((b) => b.key === target)
             const bakuganToDrag = slotTarget?.bakugans.find((b) => b.key === target)
             const condition = slotOfGate && slotTarget && bakuganToDrag && BakuganTargetIndex ? true : false
@@ -145,12 +192,13 @@ export const ForceDattraction: abilityCardsType = {
             console.log(BakuganTargetIndex)
             console.log(condition)
 
-            const user = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const user = slotOfGate?.bakugans.find((b) => b.key === resolution.bakuganKey && b.userId === resolution.userId)
 
             if (user && bakuganToDrag) {
+
                 const newState: bakuganOnSlot = {
                     ...bakuganToDrag,
-                    slot_id: slot
+                    slot_id: slotOfGate.id
                 }
 
                 slotOfGate.bakugans.push(newState)
@@ -162,8 +210,10 @@ export const ForceDattraction: abilityCardsType = {
                     newSlot: slotOfGate
                 })
                 CheckBattle({ roomState })
+                OpenGateCardActionRequest({ roomState })
+
             }
         }
-
     }
+
 }

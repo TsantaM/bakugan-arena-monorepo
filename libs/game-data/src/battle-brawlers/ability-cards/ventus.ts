@@ -1,10 +1,13 @@
-import { CheckBattle } from "../../function/check-battle-in-process";
 import { CancelGateCardDirectiveAnimation } from "../../function/create-animation-directives/cancel-gate-card";
 import { ComeBackBakuganDirectiveAnimation } from "../../function/create-animation-directives/come-back-bakugan";
-import { MoveToAnotherSlotDirectiveAnimation } from "../../function/create-animation-directives/move-to-another-slot";
+import { StandardCardsImages } from "../../store/ability-cards-images";
+import type { AbilityCardsActions, bakuganToMoveType } from "../../type/actions-serveur-requests";
 import { type abilityCardsType } from "../../type/game-data-types";
-import type { bakuganOnSlot } from "../../type/room-types";
+import type { bakuganOnSlot, slots_id } from "../../type/room-types";
 import { GateCardsList } from "../gate-gards";
+import { MoveToAnotherSlotDirectiveAnimation } from "../../function/create-animation-directives/move-to-another-slot";
+import { OpenGateCardActionRequest } from "../../function/action-request-functions/open-gate-card-action-request";
+import { CheckBattleStillInProcess } from "../../function/check-battle-still-in-process";
 
 export const CombatAerien: abilityCardsType = {
     key: 'combat-aerien',
@@ -14,40 +17,73 @@ export const CombatAerien: abilityCardsType = {
     maxInDeck: 1,
     extraInputs: ["move-self"],
     usable_in_neutral: true,
-    onActivate: ({ roomState, userId, bakuganKey, slot_to_move }) => {
-        if (roomState && slot_to_move !== '') {
-            const slotOfGate = roomState?.protalSlots.find((s) => s.bakugans.find((b) => b.key === bakuganKey && b.userId === userId))
-            console.log(slotOfGate)
-            const slotTarget = roomState?.protalSlots.find((s) => s.id === slot_to_move)
-            console.log(slotTarget)
-            if (slotOfGate && slotTarget && slotTarget.portalCard !== null) {
-                const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
-                const index = slotOfGate.bakugans.findIndex((ba) => ba.key === user?.key && ba.userId === user.userId)
-                if (user) {
-                    const newUserState: bakuganOnSlot = {
-                        ...user,
-                        slot_id: slot_to_move
-                    }
-                    slotTarget.bakugans.push(newUserState)
-                    slotTarget.state.blocked = true
-                    slotOfGate.bakugans.splice(index, 1)
+    image: StandardCardsImages.ventus,
+    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
 
-                    MoveToAnotherSlotDirectiveAnimation({
-                        animations: roomState.animations,
-                        bakugan: user,
-                        initialSlot: structuredClone(slotOfGate),
-                        newSlot: structuredClone(slotTarget)
-                    })
+        if (!roomState) return null
 
-                    roomState.battleState.battleInProcess = false
-                    roomState.battleState.paused = false
-                    roomState.battleState.slot = null
-                    roomState.battleState.turns = 2
+        const opponentsUsableBakugans = roomState.decksState.find((deck) => deck.userId !== userId)?.bakugans.filter((deck) => !deck?.bakuganData.elimined && !deck?.bakuganData.onDomain)
+        const opponentBakugansOnField = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.slot_id !== slot && bakugan.userId !== userId)
 
-                    CheckBattle({ roomState })
+        if ((opponentsUsableBakugans && opponentsUsableBakugans.length === 0 && opponentBakugansOnField.length === 0)) return null
+
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        const deck = roomState?.decksState.find((d) => d.userId === userId)
+        const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
+
+        if (!slotOfGate && !deck && !userData) return null
+
+        const slots: slots_id[] = opponentsUsableBakugans && opponentsUsableBakugans.length === 0 && opponentBakugansOnField.length > 0 ? opponentBakugansOnField.map((bakugan) => bakugan.slot_id) : roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot).map((slot) => slot.id)
+
+        if (slots.length <= 0) return null
+
+        const request: AbilityCardsActions = {
+            type: 'SELECT_SLOT',
+            message: 'Combat Aérien : Choisissez le slot de déstination',
+            slots: slots
+        }
+
+        return request
+
+    },
+    onAdditionalEffect: ({ resolution, roomData }) => {
+
+        if (!roomData) return
+        if (resolution.data.type !== 'SELECT_SLOT') return
+        const destination = resolution.data.slot
+        const slotOfGate = roomData.protalSlots.find((s) => s.bakugans.find((b) => b.key === resolution.bakuganKey && b.userId === resolution.userId))
+        console.log(slotOfGate)
+        const slotTarget = roomData.protalSlots.find((s) => s.id === destination)
+        console.log(slotTarget)
+        if (slotOfGate && slotTarget && slotTarget.portalCard !== null) {
+            const user = slotOfGate.bakugans.find((b) => b.key === resolution.bakuganKey && b.userId === resolution.userId)
+            const index = slotOfGate.bakugans.findIndex((ba) => ba.key === user?.key && ba.userId === user.userId)
+            if (user) {
+                const newUserState: bakuganOnSlot = {
+                    ...user,
+                    slot_id: destination
+                }
+                slotTarget.bakugans.push(newUserState)
+                slotTarget.state.blocked = true
+                slotOfGate.bakugans.splice(index, 1)
+
+                MoveToAnotherSlotDirectiveAnimation({
+                    animations: roomData.animations,
+                    bakugan: user,
+                    initialSlot: structuredClone(slotOfGate),
+                    newSlot: structuredClone(slotTarget)
+                })
+
+                CheckBattleStillInProcess(roomData)
+                OpenGateCardActionRequest({ roomState: roomData })
+
+                return {
+                    turnActionLaucher: true
                 }
             }
         }
+
+
     }
 }
 
@@ -57,9 +93,10 @@ export const TornadeChaosTotal: abilityCardsType = {
     maxInDeck: 1,
     attribut: 'Ventus',
     description: `Annule toutes les effets de la carte portail si elle est ouverte avant l'activation de cette capacité`,
+    image: StandardCardsImages.ventus,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        if (!roomState) return
+        if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
@@ -77,6 +114,8 @@ export const TornadeChaosTotal: abilityCardsType = {
 
             }
         }
+
+        return null
     }
 }
 
@@ -87,45 +126,74 @@ export const SouffleTout: abilityCardsType = {
     description: `Permet d'envoyer le Bakugan adverse sur une autre carte portail`,
     maxInDeck: 3,
     extraInputs: ["move-opponent"],
+    image: StandardCardsImages.ventus,
     usable_in_neutral: false,
-    onActivate: ({ roomState, userId, bakuganKey, slot, slot_to_move }) => {
+    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+
+        if (!roomState) return null
+
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (slotOfGate && slot_to_move !== '' && roomState) {
-            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
-            const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
-            const index = slotOfGate.bakugans.findIndex((ba) => ba.key === opponent?.key && ba.userId === opponent.userId)
-            const slotTarget = roomState?.protalSlots.find((s) => s.id === slot_to_move)
-            if (user && opponent && slotTarget && slotTarget.portalCard !== null) {
+        const deck = roomState?.decksState.find((d) => d.userId === userId)
+        const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
+
+        if (!slotOfGate && !deck && !userData) return null
+        if (!slotOfGate) return null
+
+        const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot).map((slot) => slot.id)
+        const bakugans: bakuganToMoveType[] = slotOfGate.bakugans.filter((b) => b.userId !== userId).map((b) => ({
+            key: b.key,
+            userId: b.userId,
+            slot: slotOfGate.id
+        }))
+
+        if (slots.length <= 0) return null
+
+        const request: AbilityCardsActions = {
+            type: 'MOVE_BAKUGAN_TO_ANOTHER_SLOT',
+            message: 'Souffle Tout : Selectionnez un bakugan à déplacer et le slot de destination',
+            bakugans: bakugans,
+            slots: slots
+        }
+
+        return request
+
+    },
+    onAdditionalEffect: ({ resolution, roomData: roomState }) => {
+        if (resolution.data.type !== 'MOVE_BAKUGAN_TO_ANOTHER_SLOT') return
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === resolution.slot)
+        const { data } = resolution
+
+        if (slotOfGate && roomState) {
+            const bakugans = roomState.protalSlots.map((b) => b.bakugans).flat()
+            const opponent = bakugans.find((b) => b.userId === data.bakugan.userId && b.key === data.bakugan.key)
+            const initialSlot = roomState.protalSlots.find((slot) => slot.id === opponent?.slot_id)
+            const index = initialSlot?.bakugans.findIndex((ba) => ba.key === opponent?.key && ba.userId === opponent.userId)
+            const slotTarget = roomState?.protalSlots.find((s) => s.id === data.slot)
+            console.log('indentifiants', data.bakugan.key, data.bakugan.userId, data.bakugan.slot)
+            console.log('datas', opponent?.key, initialSlot?.id, index, slotTarget)
+
+            if (opponent && slotTarget && slotTarget.portalCard !== null && index !== undefined && index >= 0 && initialSlot) {
 
                 const newOpponentState: bakuganOnSlot = {
                     ...opponent,
-                    slot_id: slot_to_move
+                    slot_id: data.slot
                 }
 
                 slotTarget.bakugans.push(newOpponentState)
-                slotOfGate.bakugans.splice(index, 1)
+                initialSlot.bakugans.splice(index, 1)
 
                 MoveToAnotherSlotDirectiveAnimation({
                     animations: roomState?.animations,
                     bakugan: opponent,
-                    initialSlot: structuredClone(slotTarget),
+                    initialSlot: structuredClone(initialSlot),
                     newSlot: structuredClone(slotTarget)
                 })
 
-                roomState.battleState.battleInProcess = false
-                roomState.battleState.paused = false
-                roomState.battleState.slot = null
-                roomState.battleState.turns = 2
+                CheckBattleStillInProcess(roomState)
+                OpenGateCardActionRequest({ roomState })
 
-                CheckBattle({ roomState })
-                if (!roomState.battleState.battleInProcess) {
-                    roomState.battleState.turns = 2
-                    roomState.turnState = {
-                        ...roomState.turnState,
-                        set_new_bakugan: true,
-                        set_new_gate: true,
-                        use_ability_card: true
-                    }
+                return {
+                    turnActionLaucher: true
                 }
             }
         }
@@ -138,6 +206,7 @@ export const RetourDair: abilityCardsType = {
     attribut: 'Ventus',
     maxInDeck: 1,
     description: `Permet à l'utilisateur de se retirer du combat`,
+    image: StandardCardsImages.ventus,
     usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -156,10 +225,11 @@ export const RetourDair: abilityCardsType = {
                 })
             }
 
-            roomState.battleState.battleInProcess = false
-            roomState.battleState.slot = null
-            roomState.battleState.paused = false
+            CheckBattleStillInProcess(roomState)
+
         }
+
+        return null
     }
 }
 
@@ -170,15 +240,47 @@ export const TornadeExtreme: abilityCardsType = {
     description: `Permet à l'utilisateur d'attirer un Bakugan sur la carte portail où il se trouve`,
     maxInDeck: 1,
     extraInputs: ['drag-bakugan'],
+    image: StandardCardsImages.ventus,
     usable_in_neutral: true,
-    onActivate: ({ roomState, userId, bakuganKey, slot, target, slotToDrag }) => {
-        if(!roomState) return
+    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        if (!roomState) return null
+
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        const deck = roomState?.decksState.find((d) => d.userId === userId)
+        const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
+
+        if (!slotOfGate && !deck && !userData) return null
+
+        const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot && s.bakugans.length > 0).map((slot) => slot.bakugans).flat()
+        const bakugans: bakuganToMoveType[] = slots.map((bakugan) => ({
+            key: bakugan.key,
+            userId: bakugan.userId,
+            slot: bakugan.slot_id
+        }))
+
+        const request: AbilityCardsActions = {
+            type: 'SELECT_BAKUGAN_ON_DOMAIN',
+            message: 'Tornade Extreme : Choissez un Bakugan à attirer',
+            bakugans: bakugans
+        }
+
+        return request
+
+
+    },
+    onAdditionalEffect: ({ resolution, roomData: roomState }) => {
+        if (!roomState) return
+        if (resolution.data.type !== 'SELECT_BAKUGAN_ON_DOMAIN') return
+
+        const slotToDrag: slots_id = resolution.data.slot
+        const target: string = resolution.data.bakugan
         const slotTarget = roomState?.protalSlots.find((s) => s.id === slotToDrag)
-        console.log(target, slotToDrag, slot)
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === resolution.slot);
+        console.log(target, slotToDrag)
         console.log(slotOfGate)
+
         // const targetToDrag = slotTarget?.bakugans.find((b) => b.key === target)
-        if (slotOfGate && slotTarget && target !== '' && slotToDrag !== '') {
+        if (slotOfGate && slotTarget && target !== '') {
             const BakuganTargetIndex = slotTarget.bakugans.findIndex((b) => b.key === target)
             const bakuganToDrag = slotTarget?.bakugans.find((b) => b.key === target)
             const condition = slotOfGate && slotTarget && bakuganToDrag && BakuganTargetIndex ? true : false
@@ -188,13 +290,13 @@ export const TornadeExtreme: abilityCardsType = {
             console.log(BakuganTargetIndex)
             console.log(condition)
 
-            const user = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const user = slotOfGate?.bakugans.find((b) => b.key === resolution.bakuganKey && b.userId === resolution.userId)
 
             if (user && bakuganToDrag) {
 
                 const newState: bakuganOnSlot = {
                     ...bakuganToDrag,
-                    slot_id: slot
+                    slot_id: slotOfGate.id
                 }
 
                 slotOfGate.bakugans.push(newState)
@@ -205,9 +307,10 @@ export const TornadeExtreme: abilityCardsType = {
                     initialSlot: slotTarget,
                     newSlot: slotOfGate
                 })
-                CheckBattle({ roomState })
+                CheckBattleStillInProcess(roomState)
+                OpenGateCardActionRequest({ roomState })
+
             }
         }
-
     }
 }

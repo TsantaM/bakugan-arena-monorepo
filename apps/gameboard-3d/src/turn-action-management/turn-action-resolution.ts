@@ -8,6 +8,7 @@ import { SetBakugan } from "./turn-actions-resolution/set-bakugan-action"
 import { type Socket } from "socket.io-client"
 import { NextTurnButtonAction } from "./turn-actions-resolution/next-turn-button"
 import { UseAbilityCard } from "./turn-actions-resolution/use-ability-card"
+import { OpenGateCardResolution } from "./turn-actions-resolution/open-gate-card-resolution"
 
 export function TurnActionResolution({ request, SelectedActions, userId, actions, camera, plane, roomId, socket, scene }: {
     request: ActivePlayerActionRequestType | InactivePlayerActionRequestType, SelectedActions: ActionRequestAnswerType, userId: string, actions: ActionType[], camera: THREE.PerspectiveCamera,
@@ -21,4 +22,5 @@ export function TurnActionResolution({ request, SelectedActions, userId, actions
     SetBakugan({ SelectedActions: SelectedActions, actions: actions, userId: userId, camera: camera, plane: plane, roomId: roomId, socket: socket })
     UseAbilityCard({ scene: scene, SelectedActions: SelectedActions, actions: actions, userId: userId, camera: camera, roomId: roomId, socket: socket })
     NextTurnButtonAction({request: request, socket: socket, userId: userId, roomId: roomId})
+    OpenGateCardResolution({actions: actions, socket: socket, userId: userId, roomId: roomId})
 }

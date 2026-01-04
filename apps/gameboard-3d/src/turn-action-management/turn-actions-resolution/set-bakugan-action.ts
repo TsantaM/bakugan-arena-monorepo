@@ -109,7 +109,6 @@ export function SetBakugan({
 
             if (!selectBakugan.data || selectBakugan.data.key !== data.key) return
 
-
             mouseMoveHandler = (event: MouseEvent) => {
                 hoveredSlot = SelectSlotToSetBakugan({
                     plane,
@@ -157,4 +156,9 @@ export function SetBakugan({
         bakugan.addEventListener('click', handler)
         bakuganClickHandlers.set(bakugan, handler)
     })
+
+    if (SelectedActions.find(a => a.type === 'SET_BAKUGAN')?.data) {
+        cleanupListeners(mouseMoveHandler, clickHandler, false)
+    }
+
 }

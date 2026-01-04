@@ -1,8 +1,10 @@
 import { SetBakuganAndAddRenfortAnimationDirective } from "../../function/create-animation-directives/add-renfort-directive";
 import { ComeBackBakuganDirectiveAnimation } from "../../function/create-animation-directives/come-back-bakugan";
 import { PowerChangeDirectiveAnumation } from "../../function/create-animation-directives/power-change";
+import { StandardCardsImages } from "../../store/ability-cards-images";
+import type { AbilityCardsActions } from "../../type/actions-serveur-requests";
 import { type abilityCardsType } from "../../type/game-data-types";
-import { type bakuganOnSlot } from "../../type/room-types";
+import type { bakuganOnSlot } from "../../type/room-types";
 import { AbilityCardsList } from "../ability-cards";
 import { ExclusiveAbilitiesList } from "../exclusive-abilities";
 
@@ -14,8 +16,9 @@ export const RapideHaos: abilityCardsType = {
     maxInDeck: 1,
     usable_in_neutral: false,
     extraInputs: ['add-bakugan'],
+    image: StandardCardsImages.haos,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        if (!roomState) return
+        if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
@@ -30,6 +33,8 @@ export const RapideHaos: abilityCardsType = {
                 })
             }
         }
+
+        return null
     }
 }
 
@@ -41,12 +46,40 @@ export const EclatSoudain: abilityCardsType = {
     maxInDeck: 1,
     description: `Permet d'ajouter un Bakugan Haos en plus dans un combat, mais le bakugan ajouté se retire si Eclat Soudain est annulée`,
     usable_in_neutral: false,
+    image: StandardCardsImages.haos,
     extraInputs: ['add-bakugan'],
-    onActivate: ({ roomState, userId, bakuganKey, slot, bakuganToAdd }) => {
-        if (!roomState) return
+    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const deck = roomState?.decksState.find((d) => d.userId === userId)
-        const bakugan = deck?.bakugans.find((b) => b?.bakuganData.key === bakuganToAdd)
+        const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
+
+        if (!slotOfGate && !deck && !userData) return null
+        if (!deck) return null
+        const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Haos').map((b) => b.key)).flat()
+        if (haosOnDomain.length < 2) return null
+        const bakugans = deck.bakugans.filter((bakugan) => bakugan && bakugan.bakuganData.onDomain === false && bakugan.bakuganData.elimined === false).filter((bakugan) => bakugan !== undefined && bakugan !== null)
+        const request: AbilityCardsActions = {
+            type: 'SELECT_BAKUGAN_TO_SET',
+            message: 'Eclat Soudain: Quel Bakugan ajouter ?',
+            bakugans: bakugans
+        }
+        return request
+    },
+
+    onAdditionalEffect({ resolution, roomData: roomState }) {
+
+        if (!roomState) return null
+        if (resolution.data.type !== 'SELECT_BAKUGAN_TO_SET') return;
+
+        const { bakuganKey, slot, userId } = resolution
+        const data = resolution.data
+
+        const bakugan = data.bakugan
+
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        const deck = roomState?.decksState.find((d) => d.userId === userId)
+
         if (slotOfGate && deck && bakugan) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
             const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Haos').map((b) => b.key)).flat()
@@ -79,6 +112,7 @@ export const EclatSoudain: abilityCardsType = {
             }
         }
     },
+
     onCanceled({ roomState, userId, slot }) {
         if (!roomState) return
         const slotToUpdate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -114,9 +148,10 @@ export const LumiereDivine: abilityCardsType = {
     maxInDeck: 1,
     attribut: 'Haos',
     description: `Permet de redonner vie à un Bakugan qui a été vaincu au combat`,
+    image: StandardCardsImages.haos,
     usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        if (!roomState) return
+        if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
@@ -131,6 +166,8 @@ export const LumiereDivine: abilityCardsType = {
                 })
             }
         }
+
+        return null
     }
 }
 
@@ -141,6 +178,7 @@ export const ContreMaitrise: abilityCardsType = {
     name: 'Contre Maîtrise',
     description: `Annule toute carte maitrise utilisé par l'adversaire`,
     maxInDeck: 3,
+    image: StandardCardsImages.haos,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -158,6 +196,8 @@ export const ContreMaitrise: abilityCardsType = {
                 lastAbility.canceled = true
             }
         }
+
+        return null
     }
 }
 
@@ -168,9 +208,10 @@ export const HaosImmobilisation: abilityCardsType = {
     attribut: 'Haos',
     maxInDeck: 1,
     description: `Si deux (2) Bakugans Haos sont sur le domaine, ajoute 100 G de puissance à l'utilisateur et permet rendre 3 cartes capacités supplémentaires au joueur`,
+    image: StandardCardsImages.haos,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        if (!roomState) return
+        if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans?.filter((b) => b.attribut === 'Haos').map((b) => b.key) || [])
 
@@ -192,9 +233,11 @@ export const HaosImmobilisation: abilityCardsType = {
                 }
             }
         }
+
+        return null
     },
     onCanceled: ({ roomState, userId, bakuganKey, slot }) => {
-        if(!roomState) return
+        if (!roomState) return
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)

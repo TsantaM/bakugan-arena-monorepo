@@ -224,7 +224,8 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
                     mustDoOne: [],
                     optional: []
                 }
-            }
+            },
+            AbilityAditionalRequest: []
         }
 
         return state

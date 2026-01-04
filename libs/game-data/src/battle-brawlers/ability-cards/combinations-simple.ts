@@ -10,10 +10,10 @@ export const SubterraPyrus: abilityCardsType = {
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if(!roomState) return
-        if (slotOfGate) {
-            CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Pyrus', attributWeak: 'Subterra', bakuganKey: bakuganKey, userId: userId})
-        }
+        if (!roomState) return null
+        if (!slotOfGate) return null
+        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Pyrus', attributWeak: 'Subterra', bakuganKey: bakuganKey, userId: userId })
+        return null
     },
 }
 
@@ -26,10 +26,10 @@ export const SubterraHaos: abilityCardsType = {
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if(!roomState) return
-        if (slotOfGate) {
-            CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Subterra', attributWeak: 'Haos', bakuganKey: bakuganKey, userId: userId})
-        }
+        if (!roomState) return null
+        if (!slotOfGate) return null
+        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Subterra', attributWeak: 'Haos', bakuganKey: bakuganKey, userId: userId })
+        return null
     },
 }
 
@@ -42,10 +42,10 @@ export const HaosDarkus: abilityCardsType = {
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if(!roomState) return
-        if (slotOfGate) {
-            CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Haos', attributWeak: 'Darkus', bakuganKey: bakuganKey, userId: userId})
-        }
+        if (!roomState) return null
+        if (!slotOfGate) return null
+        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Haos', attributWeak: 'Darkus', bakuganKey: bakuganKey, userId: userId })
+        return null
     },
 }
 
@@ -58,10 +58,10 @@ export const DarkusAquos: abilityCardsType = {
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if(!roomState) return
-        if (slotOfGate) {
-            CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Darkus', attributWeak: 'Aquos', bakuganKey: bakuganKey, userId: userId})
-        }
+        if (!roomState) return null
+        if (!slotOfGate) return null
+        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Darkus', attributWeak: 'Aquos', bakuganKey: bakuganKey, userId: userId })
+        return null
     },
 }
 
@@ -74,10 +74,10 @@ export const AquosVentus: abilityCardsType = {
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if(!roomState) return
-        if (slotOfGate) {
-            CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Aquos', attributWeak: 'Ventus', bakuganKey: bakuganKey, userId: userId})
-        }
+        if (!roomState) return null
+        if (!slotOfGate) return null
+        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Aquos', attributWeak: 'Ventus', bakuganKey: bakuganKey, userId: userId })
+        return null
     },
 }
 
@@ -90,9 +90,9 @@ export const VentusPyrus: abilityCardsType = {
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if(!roomState) return
-        if (slotOfGate) {
-            CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Ventus', attributWeak: 'Pyrus', bakuganKey: bakuganKey, userId: userId})
-        }
+        if (!roomState) return null
+        if (!slotOfGate) return null
+        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Ventus', attributWeak: 'Pyrus', bakuganKey: bakuganKey, userId: userId })
+        return null
     },
 }

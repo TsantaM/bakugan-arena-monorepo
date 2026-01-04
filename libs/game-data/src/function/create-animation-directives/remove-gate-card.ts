@@ -1,5 +1,5 @@
 import type { AnimationDirectivesTypes } from '../../type/animations-directives'
-import { bakuganOnSlot, portalSlotsTypeElement } from '../../type/room-types';
+import type { portalSlotsTypeElement } from '../../type/room-types';
 
 
 type Props = {
@@ -10,7 +10,22 @@ type Props = {
 type RemoveGateCardDirectiveAnimationType = ({ animations, slot }: Props) => void
 
 export const RemoveGateCardDirectiveAnimation: RemoveGateCardDirectiveAnimationType = ({ animations, slot }) => {
-    const comeBackBakuganDirective: AnimationDirectivesTypes = {
+
+    slot.bakugans.forEach((bakugan) => {
+        const comeBackBakuganDirective: AnimationDirectivesTypes = {
+            type: 'COME_BACK_BAKUGAN',
+            data: {
+                bakugan: bakugan,
+                slot: slot
+            },
+            resolved: false,
+        }
+
+        animations.push(comeBackBakuganDirective)
+
+    })
+
+    const removeGateCard: AnimationDirectivesTypes = {
         type: 'REMOVE_GATE_CARD',
         data: {
             slot: slot
@@ -18,5 +33,5 @@ export const RemoveGateCardDirectiveAnimation: RemoveGateCardDirectiveAnimationT
         resolved: false,
     }
 
-    animations.push(comeBackBakuganDirective)
+    animations.push(removeGateCard)
 }

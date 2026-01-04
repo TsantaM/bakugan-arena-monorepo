@@ -56,10 +56,11 @@ export const RobotallionGateCard: gateCardType = {
     maxInDeck: 1,
     family: 'Robotallion',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Robotallion présent sur elle`,
-    image: GateCardImages.caracter,
+    image: 'robotallion.png',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'robotallion-gate-card')
         CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Robotallion' })
+        return null
 
     },
     onCanceled({ roomState, slot }) {

@@ -52,18 +52,19 @@ export function UseAbilityCardActionRequest({ roomState }: { roomState: stateTyp
                 key: ability!.key,
                 name: ability!.name,
                 description: ability!.description,
-                image: AbilityCardsList.find((card) => card.key === ability.key)?.image || ''
+                image: AbilityCardsList.find((card) => card.key === ability.key)?.image || `special_ability_card_${bakugan.attribut.toUpperCase()}.jpg`
             })),
             selectAbilitiesResult && selectAbilitiesResult.usableExclusives && selectAbilitiesResult.usableExclusives.filter((ability) => ability !== undefined).map((ability) => ({
                 key: ability.key,
                 name: ability.name,
                 description: ability!.description,
-                image: ExclusiveAbilitiesList.find((card) => card.key === ability!.key)?.image || ''
+                image: ExclusiveAbilitiesList.find((card) => card.key === ability!.key)?.image || `special_ability_card_${bakugan.attribut.toUpperCase()}.jpg`
             }))].flat().filter((ability) => ability !== undefined)
 
         const abilitieRequest: onBoardBakugans = {
             slot: bakugan.slot_id,
             bakuganKey: bakugan.key,
+            attribut: bakugan.attribut,
             abilities: abilities
         }
 
@@ -71,12 +72,10 @@ export function UseAbilityCardActionRequest({ roomState }: { roomState: stateTyp
 
     })
 
-    const requestAction: SelectableAbilityCardAction = {
-        onBoardBakugans: onBoardAbilities,
-    }
+    const requestAction: SelectableAbilityCardAction = onBoardAbilities
 
-    const totalCard = requestAction.onBoardBakugans.map((bakugan) => bakugan.abilities).flat().length
-    if(totalCard === 0) return
+    const totalCard = requestAction.map((bakugan) => bakugan.abilities).flat().length
+    if (totalCard === 0) return
 
     if (turnCount > 0) {
         if ((!battleState.battleInProcess || battleState.paused) && bakuganOnFieldCount > 0) {

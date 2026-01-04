@@ -34,6 +34,7 @@ import { ElimineBakuganDirectiveAnimation } from './src/function/create-animatio
 import { RemoveGateCardDirectiveAnimation } from './src/function/create-animation-directives/remove-gate-card'
 import { OnBattleStartAnimationDirectives } from './src/function/create-animation-directives/on-battle-start-animation-directives'
 import { CreateActionRequestFunction } from './src/function/create-action-request-function'
+import { CheckBattleStillInProcess } from "./src/function/check-battle-still-in-process"
 
 export {
     Bakugans,
@@ -77,6 +78,7 @@ export {
     ElimineBakuganDirectiveAnimation,
     RemoveGateCardDirectiveAnimation,
     OnBattleStartAnimationDirectives,
+    CheckBattleStillInProcess,
 
     CreateActionRequestFunction
 

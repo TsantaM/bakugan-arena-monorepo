@@ -21,10 +21,11 @@ export const PreyasGateCard: gateCardType = {
     maxInDeck: 1,
     family: 'Preyas',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Preyas présent sur elle`,
-    image: GateCardImages.caracter,
+    image: 'preyas.png',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'preyas-gate-card')
         CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Preyas' })
+        return null
 
     },
     onCanceled({ roomState, slot }) {
@@ -64,6 +65,8 @@ export const DiabloGateCard: gateCardType = {
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'diablo-gate-card')
         CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Diablo' })
+        return null
+
 
     },
     onCanceled({ roomState, slot }) {
@@ -104,6 +107,8 @@ export const AngeloGateCard: gateCardType = {
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'angelo-gate-card')
         CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Angelo' })
+        return null
+
     },
     onCanceled({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'angelo-gate-card')

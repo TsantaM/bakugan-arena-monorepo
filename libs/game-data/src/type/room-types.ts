@@ -1,6 +1,6 @@
-import { AnimationDirectivesTypes } from "./animations-directives";
+import type { AnimationDirectivesTypes } from "./animations-directives";
 import { type attribut } from "./game-data-types"
-import { ActivePlayerActionRequestType, InactivePlayerActionRequestType } from './actions-serveur-requests'
+import type { AbilityCardsActionsRequestsType, ActivePlayerActionRequestType, InactivePlayerActionRequestType } from './actions-serveur-requests'
 
 export type slots_id = "slot-1" | "slot-2" | "slot-3" | "slot-4" | "slot-5" | "slot-6"
 
@@ -79,34 +79,35 @@ export type portalSlotsTypeElement = {
 
 export type portalSlotsType = portalSlotsTypeElement[]
 
+export type bakuganInDeck = ({
+    bakuganData: {
+        key: string;
+        name: string;
+        attribut: attribut;
+        image: string;
+        powerLevel: number;
+        currentPowerLevel: number;
+        activateAbilities: string[];
+        persistantAbilities: string[];
+        elimined: boolean;
+        onDomain: boolean;
+        gateCard: null;
+        family: string
+    };
+    excluAbilitiesState: {
+        key: string;
+        name: string;
+        description: string;
+        usable_if_user_not_on_domain: boolean,
+        used: boolean;
+        dead: boolean;
+    }[];
+} | null | undefined);
 
 export type deckType = {
     deckId: string;
     userId: string;
-    bakugans: ({
-        bakuganData: {
-            key: string;
-            name: string;
-            attribut: attribut;
-            image: string;
-            powerLevel: number;
-            currentPowerLevel: number;
-            activateAbilities: string[];
-            persistantAbilities: string[];
-            elimined: boolean;
-            onDomain: boolean;
-            gateCard: null;
-            family: string
-        };
-        excluAbilitiesState: {
-            key: string;
-            name: string;
-            description: string;
-            usable_if_user_not_on_domain: boolean,
-            used: boolean;
-            dead: boolean;
-        }[];
-    } | null | undefined)[];
+    bakugans: bakuganInDeck[];
     abilities: {
         key: string;
         name: string;
@@ -146,6 +147,7 @@ export type stateType = {
     animations: AnimationDirectivesTypes[],
     InactivePlayerActionRequest: InactivePlayerActionRequestType,
     ActivePlayerActionRequest: ActivePlayerActionRequestType,
+    AbilityAditionalRequest: AbilityCardsActionsRequestsType[]
 } | undefined
 
 export type roomStateType = {

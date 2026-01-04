@@ -26,6 +26,7 @@ export const FortressGateCard: gateCardType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'fortress-gate-card')
         console.log('gateCardFortress')
         CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Fortress' })
+        return null
 
     },
     onCanceled({ roomState, slot }) {

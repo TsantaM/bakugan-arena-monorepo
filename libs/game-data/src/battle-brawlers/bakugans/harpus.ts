@@ -25,6 +25,7 @@ export const HarpusGateCard: gateCardType = {
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'harpus-gate-card')
         CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Harpus' })
+        return null
 
     },
     onCanceled({ roomState, slot }) {

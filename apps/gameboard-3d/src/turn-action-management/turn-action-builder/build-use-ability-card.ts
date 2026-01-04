@@ -12,7 +12,7 @@ export function BuildUseAbilityCard({ action, turnActionContainer }: { action: A
     if (action.type !== 'USE_ABILITY_CARD') return
     const cards = [
         ...new Map(
-            action.data.onBoardBakugans
+            action.data
                 .flatMap(b => b.abilities)
                 .map(card => [card.key, card])
         ).values()
@@ -27,10 +27,13 @@ export function BuildUseAbilityCard({ action, turnActionContainer }: { action: A
     turnActionContainer.appendChild(container)
 
     cards.forEach((card, index) => {
+        const attribut = action.data.find((bakugan) => bakugan.abilities.some((c) => c === card))?.attribut
+
         CreateAbilityCardSelecter({
             card: card,
             index: index,
-            multiSelect: true
+            multiSelect: true,
+            attribut: attribut
         })
     })
 

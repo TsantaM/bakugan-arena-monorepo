@@ -6,6 +6,7 @@ import { BuildSetGateCards } from "./turn-action-builder/build-set-gate-cards";
 import { BuildSetBakugan } from "./turn-action-builder/build-set-bakugan";
 import { BuildUseAbilityCard } from "./turn-action-builder/build-use-ability-card";
 import { clearTurnInterface } from "./turn-actions-resolution/action-scope";
+import { BuildOpenGateCard } from "./turn-action-builder/build-open-gate-card";
 
 export const TurnActionInterfaceBuilder = ({ request }: { request: ActivePlayerActionRequestType | InactivePlayerActionRequestType }) => {
 
@@ -43,10 +44,16 @@ export const TurnActionInterfaceBuilder = ({ request }: { request: ActivePlayerA
         document.body.appendChild(turnActionContainer)
         document.body.appendChild(button)
 
+
+        const abilities = actions.find((action) => action.type === 'USE_ABILITY_CARD')?.data.map((bakugan) => bakugan.abilities).flat().map((card) => card.image)
+        console.log('abilities', abilities ? abilities : 0)
+
+
         actions.forEach((action) => {
             BuildSetGateCards({ action: action, turnActionContainer: turnActionContainer })
             BuildSetBakugan({ action: action, turnActionContainer: turnActionContainer })
             BuildUseAbilityCard({ action: action, turnActionContainer: turnActionContainer })
+            BuildOpenGateCard({ action: action, turnActionContainer: turnActionContainer })
         })
     }
 

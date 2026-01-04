@@ -359,7 +359,11 @@ export function SelectSlotToSetBakugan({ plane, slots, hoveredSlot, event, camer
 
     if (isMouseOverUI(event)) {
         if (hoveredSlot) {
-            hoveredSlot.material.color.set(0xffffff)
+            if (hoveredSlot.userData.isCanceled === true) {
+                hoveredSlot.material.color.set(0.1, 0.1, 0.1)
+            } else {
+                hoveredSlot.material.color.set(0xffffff)
+            }
         }
         return null
     }
@@ -376,7 +380,11 @@ export function SelectSlotToSetBakugan({ plane, slots, hoveredSlot, event, camer
     const intersects = raycaster.intersectObjects(plane.children, true)
     if (intersects.length === 0) {
         if (newHoveredSlot) {
-            newHoveredSlot.material.color.set(0xffffff)
+            if (newHoveredSlot.userData.isCanceled === true) {
+                newHoveredSlot.material.color.set(0.1, 0.1, 0.1)
+            } else {
+                newHoveredSlot.material.color.set(0xffffff)
+            }
             newHoveredSlot = null
         }
     }
@@ -387,7 +395,11 @@ export function SelectSlotToSetBakugan({ plane, slots, hoveredSlot, event, camer
 
         if (newSlot && !slots.includes(newSlot.name as slots_id)) {
             if (newHoveredSlot !== null) {
-                newHoveredSlot.material.color.set(0xffffff)
+                if (newHoveredSlot.userData.isCanceled === true) {
+                    newHoveredSlot.material.color.set(0.1, 0.1, 0.1)
+                } else {
+                    newHoveredSlot.material.color.set(0xffffff)
+                }
                 newHoveredSlot = null
             }
         }
@@ -396,7 +408,11 @@ export function SelectSlotToSetBakugan({ plane, slots, hoveredSlot, event, camer
             const color = new THREE.Color(getAttributColor(attribut))
 
             if (newHoveredSlot !== null && newHoveredSlot !== newSlot && slots.includes(newSlot.name as slots_id)) {
-                newHoveredSlot.material.color.set('white')
+                if (newHoveredSlot.userData.isCanceled === true) {
+                    newHoveredSlot.material.color.set(0.1, 0.1, 0.1)
+                } else {
+                    newHoveredSlot.material.color.set('white')
+                }
                 newHoveredSlot = newSlot as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>
                 newSlot.material.color.set(color)
 
@@ -405,7 +421,11 @@ export function SelectSlotToSetBakugan({ plane, slots, hoveredSlot, event, camer
                 newSlot.material.color.set(color)
 
             } else if (newHoveredSlot && slots.includes(newSlot.name as slots_id) === false) {
-                newSlot.material.color.set('white')
+                if (newHoveredSlot.userData.isCanceled === true) {
+                    newHoveredSlot.material.color.set(0.1, 0.1, 0.1)
+                } else {
+                    newHoveredSlot.material.color.set('white')
+                }
                 newHoveredSlot = null
             }
         }

@@ -1,4 +1,5 @@
-import { portalSlotsTypeElement, slots_id, stateType } from "./room-types"
+import type { AbilityCardsActions, resolutionType } from "./actions-serveur-requests"
+import type { portalSlotsTypeElement, slots_id, stateType } from "./room-types"
 
 export type attribut = 'Pyrus' | 'Subterra' | 'Haos' | 'Darkus' | 'Aquos' | 'Ventus'
 
@@ -40,7 +41,8 @@ export type abilityCardsType = {
     usable_in_neutral: boolean,
     slotLimits?: boolean,
     image?: string,
-    onActivate: ({ roomState, userId, bakuganKey, slot, target_slot, slot_to_move, target, slotToDrag, bakuganToAdd, bakuganToMove, destination }: { roomState: stateType, roomId: string, userId: string, bakuganKey: string, slot: slots_id, target_slot: slots_id | '', slot_to_move: slots_id | '', target?: string | '', slotToDrag?: slots_id | '', bakuganToAdd?: string, bakuganToMove?: bakuganToMoveType, destination: slots_id | '' }) => void
+    onActivate: ({ roomState, userId, bakuganKey, slot }: { roomState: stateType, roomId: string, userId: string, bakuganKey: string, slot: slots_id }) => null | AbilityCardsActions,
+    onAdditionalEffect?: (({ resolution, roomData }: { resolution: resolutionType, roomData: stateType }) => void) | (({ resolution, roomData }: { resolution: resolutionType, roomData: stateType }) => { turnActionLaucher: boolean }),
     onCanceled?: ({ roomState, userId, bakuganKey, slot }: { roomState: stateType, userId: string, bakuganKey: string, slot: slots_id }) => void
     onWin?: ({ roomState, userId, slot }: { roomState: stateType, userId: string, slot: portalSlotsTypeElement }) => void
 }
@@ -55,9 +57,13 @@ export type exclusiveAbilitiesType = {
     slotLimits?: boolean,
     usable_if_user_not_on_domain: boolean,
     image?: string,
-    onActivate: ({ roomState, userId, bakuganKey, slot, target_slot, slot_to_move, target, slotToDrag, bakuganToAdd, bakuganToMove, destination }: { roomState: stateType, roomId: string, userId: string, bakuganKey: string, slot: slots_id, target_slot: slots_id | '', slot_to_move: slots_id | '', target?: string | '', slotToDrag?: slots_id | '', bakuganToAdd?: string, bakuganToMove?: bakuganToMoveType, destination: slots_id | '' }) => void
-    onCanceled?: ({ roomState, userId, bakuganKey, slot }: { roomState: stateType, userId: string, bakuganKey: string, slot: slots_id }) => void
+    onActivate: ({ roomState, userId, bakuganKey, slot }: { roomState: stateType, roomId: string, userId: string, bakuganKey: string, slot: slots_id }) => null | AbilityCardsActions,
+    onAdditionalEffect?: (({ resolution, roomData }: { resolution: resolutionType, roomData: stateType }) => void) | (({ resolution, roomData }: { resolution: resolutionType, roomData: stateType }) => { turnActionLaucher: boolean }), onCanceled?: ({ roomState, userId, bakuganKey, slot }: { roomState: stateType, userId: string, bakuganKey: string, slot: slots_id }) => void
     onWin?: ({ roomState, userId, slot }: { roomState: stateType, userId: string, slot: portalSlotsTypeElement }) => void
+}
+
+export type turnActionLauncher = {
+    turnAction: boolean
 }
 
 export type gateCardType = {
@@ -73,7 +79,7 @@ export type gateCardType = {
         slot: slots_id;
         bakuganKey?: string;
         userId?: string;
-    }) => void,
+    }) => null | turnActionLauncher,
     onCanceled?: ({ roomState, slot }: {
         roomState: stateType;
         slot: slots_id;

@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { SelectAbilityCardForStandardTurn, SelectBakuganOnMouseMove } from '../turn-actions-function/select-slot';
 import type { Socket } from 'socket.io-client';
 import { clearTurnInterface } from './action-scope';
+import gsap from 'gsap';
 
 export function UseAbilityCard({ roomId, scene, SelectedActions, actions, userId, camera, socket }: {
     roomId: string,
@@ -18,7 +19,7 @@ export function UseAbilityCard({ roomId, scene, SelectedActions, actions, userId
 
 
     const useAbilityCard = SelectedActions.find(a => a.type === 'USE_ABILITY_CARD')
-    const onBoardBakugans = actions.find(a => a.type === 'USE_ABILITY_CARD')?.data.onBoardBakugans
+    const onBoardBakugans = actions.find(a => a.type === 'USE_ABILITY_CARD')?.data
     const selectAbilityCard = actions.find(a => a.type === 'USE_ABILITY_CARD')
 
     if (!onBoardBakugans || !useAbilityCard || !selectAbilityCard) return
@@ -35,9 +36,11 @@ export function UseAbilityCard({ roomId, scene, SelectedActions, actions, userId
     const cardClickHandlers = new Map<Element, EventListener>()
     let mouseMoveHandler: ((e: MouseEvent) => void) | null = null
     let clickHandler: (() => void) | null = null
+    let mouseEnter: (() => void) | null = null
+    let mouseLeave: (() => void) | null = null
 
 
-    function cleanup(cleanAll: boolean) {
+    function cleanup(cleanAll: boolean, card: Element) {
         if (mouseMoveHandler)
             window.removeEventListener('mousemove', mouseMoveHandler)
 
@@ -48,19 +51,82 @@ export function UseAbilityCard({ roomId, scene, SelectedActions, actions, userId
             cardClickHandlers.forEach((handler, el) => {
                 el.removeEventListener('click', handler)
             })
+            if (mouseEnter) {
+                card.removeEventListener('mouseenter', mouseEnter)
+            }
+            if (mouseLeave) {
+                card.removeEventListener('mouseleave', mouseLeave)
+            }
         }
 
         cardClickHandlers.clear()
         mouseMoveHandler = null
         clickHandler = null
+        mouseEnter = null
+        mouseLeave = null
     }
 
     cardsToUse.forEach(card => {
+
+        mouseEnter = () => {
+            const data = cards.find(c => c.key === card.getAttribute('data-key'))
+            if (!data) return
+
+            let hoveredCardDescription = document.querySelectorAll('.card-description')
+
+            if (!hoveredCardDescription) return
+
+            hoveredCardDescription.forEach((description) => {
+                if (description.getAttribute('data-key') === data.key) {
+                    gsap.fromTo(description, {
+                        display: 'none',
+                        opacity: 0
+                    }, {
+                        display: 'block',
+                        opacity: 1,
+                        duration: 0.1
+                    })
+                }
+            })
+
+        }
+
+        mouseLeave = () => {
+            const data = cards.find(c => c.key === card.getAttribute('data-key'))
+            if (!data) return
+
+            let hoveredCardDescription = document.querySelectorAll('.card-description')
+
+            if (!hoveredCardDescription) return
+
+            hoveredCardDescription.forEach((description) => {
+                gsap.to(description, {
+                    display: 'none',
+                    opacity: 0,
+                    duration: 0.1
+                })
+            })
+        }
+
         const handler = () => {
             const data = cards.find(c => c.key === card.getAttribute('data-key'))
             if (!data) return
 
-            cleanup(false)
+            SelectedActions.forEach((action) => {
+                if (action.type !== 'USE_ABILITY_CARD' && action.data !== undefined) {
+                    action.data = undefined
+                }
+            })
+
+            document.querySelectorAll('.selected-bakugan').forEach((bakugan) => {
+                bakugan.classList.remove('selected-bakugan')
+            })
+
+            document.querySelectorAll('.selected-card').forEach((c) => {
+                c.classList.remove('selected-card')
+            })
+
+            cleanup(false, card)
 
             console.log(useAbilityCard);
 
@@ -95,7 +161,7 @@ export function UseAbilityCard({ roomId, scene, SelectedActions, actions, userId
             }
 
             clickHandler = () => {
-                
+
                 if (!useAbilityCard.data || bakugan === null) return
                 if (!bakugan.userData.bakuganKey) return
                 if (bakugan === null) return
@@ -112,11 +178,20 @@ export function UseAbilityCard({ roomId, scene, SelectedActions, actions, userId
 
                 bakugan.material.color.set('white')
 
+                bakugans.forEach((bakugan) => {
+                    const mesh = scene.getObjectByName(`${bakugan.bakuganKey}-${userId}`) as THREE.Sprite<THREE.Object3DEventMap>
+                    if (!mesh) return
+
+                    if(mesh.material.opacity !== 1){
+                        mesh.material.opacity = 1
+                    }
+                })
+
                 clearTurnInterface()
 
-                socket.emit('use-ability-card', ({ roomId: roomId, abilityId: useAbilityCard.data.key, slot: useAbilityCard.data.slot, userId, bakuganKey: useAbilityCard.data.key }))
+                socket.emit('use-ability-card', ({ roomId: roomId, abilityId: useAbilityCard.data.key, slot: useAbilityCard.data.slot, userId, bakuganKey: useAbilityCard.data.bakuganId }))
 
-                cleanup(true)
+                cleanup(true, card)
 
             }
 
@@ -124,6 +199,8 @@ export function UseAbilityCard({ roomId, scene, SelectedActions, actions, userId
             window.addEventListener('click', clickHandler)
         }
 
+        card.addEventListener('mouseenter', mouseEnter)
+        card.addEventListener('mouseleave', mouseLeave)
         card.addEventListener('click', handler)
         cardClickHandlers.set(card, handler)
     })

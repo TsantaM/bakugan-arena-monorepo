@@ -1,4 +1,5 @@
 import { type stateType } from '../../src/type/room-types'
+import { CreateActionRequestFunction } from './create-action-request-function';
 import { OnBattleStartAnimationDirectives } from './create-animation-directives/on-battle-start-animation-directives'
 
 
@@ -33,15 +34,48 @@ export const CheckBattle = ({ roomState }: { roomState: stateType }) => {
                 slot: slotWithTwoBakugans
             })
 
-
+            CreateActionRequestFunction({
+                roomState: roomState
+            })
         }
         else {
+
+            const { battleInProcess, paused, slot } = roomState.battleState
+
+            if ((!battleInProcess || !paused) && slot === null) return
             roomState.battleState = {
                 ...roomState.battleState,
                 battleInProcess: false,
                 slot: null,
                 paused: false,
             }
+
+            roomState.animations.push({
+                type: 'BATTLE-END',
+                resolved: false
+            })
+
         }
+
+        if (roomState.battleState.battleInProcess && roomState.battleState.slot !== null) {
+            const slotOfBattle = roomState.protalSlots.find((slot) => slot.id === roomState.battleState.slot)
+            if (!slotOfBattle) return
+
+            if (slotOfBattle.bakugans.length < 2) {
+                roomState.battleState = {
+                    ...roomState.battleState,
+                    battleInProcess: false,
+                    slot: null,
+                    paused: false,
+                }
+
+                roomState.animations.push({
+                    type: 'BATTLE-END',
+                    resolved: false
+                })
+            }
+
+        }
+
     }
 }

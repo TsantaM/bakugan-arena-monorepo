@@ -56,10 +56,11 @@ export const FearReaperGateCard: gateCardType = {
     maxInDeck: 1,
     description: `Lorsque cette carte est activée elle double le niveau de tous les Fear Reaper présent sur elle`,
     family: 'Fear Reaper',
-    image: GateCardImages.caracter,
+    image: 'fear-reaper.png',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'fear-reaper-gate-card')
         CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Fear Reaper' })
+        return null
 
     },
     onCanceled({ roomState, slot }) {

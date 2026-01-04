@@ -1,8 +1,13 @@
 import { AbilityCardsList, ExclusiveAbilitiesList, useAbilityCardProps } from "@bakugan-arena/game-data";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { activateAbilities } from "@bakugan-arena/game-data/src/type/room-types";
+import { AbilityCardsActionsRequestsType, ActivePlayerActionRequestType, InactivePlayerActionRequestType } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
+import { Server } from "socket.io/dist";
+import { removeActionByType } from "@bakugan-arena/game-data/src/function/create-animation-directives/remove-action-by-type";
+import { clearAnimationsInRoom } from "../sockets/clear-animations-socket";
+import { turnActionUpdater } from "../sockets/turn-action";
 
-export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganKey, target_slot, slot_to_move, target, slotToDrag, bakuganToAdd, bakuganToMove, destination }: useAbilityCardProps) => {
+export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganKey, io }: useAbilityCardProps & { io: Server }) => {
     // FR: On récupère les données de la salle en cours avec son roomId
     // ENG: Get the current room data using the roomId
     const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
@@ -31,8 +36,6 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
     // ENG: Check that the player’s Bakugan is on the slot and matches the given key
     const abilityUser = slotObj?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
 
-    console.log(target, slotToDrag)
-
     // --- CONDITIONS D'ACTIVATION ---
     // FR: On exécute l’activation SEULEMENT SI :
     //   1. La salle existe (roomData)
@@ -48,10 +51,10 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
     //   4. The Bakugan is present and belongs to the user (abilityUser)
     //   5. The Bakugan is not blocked from using abilities (abilityUser.abilityBlock === false)
     if (roomData && abilityToUse && playerAbilities && playerAbilities > 0 && abilityUser && !abilityUser.abilityBlock) {
-        
+
         // FR: On exécute l’effet de la capacité en lui passant tout le contexte nécessaire
         // ENG: Execute the ability effect by passing all required context
-        abilityToUse.onActivate({ roomState: roomData, roomId: roomId, bakuganKey: bakuganKey, slot: slot, userId: userId, target_slot: target_slot, slot_to_move: slot_to_move, target: target, slotToDrag: slotToDrag, bakuganToAdd: bakuganToAdd, bakuganToMove: bakuganToMove, destination: destination })
+        const abilityReturn = abilityToUse.onActivate({ roomState: roomData, roomId: roomId, bakuganKey: bakuganKey, slot: slot, userId: userId })
 
         // --- ENREGISTREMENT DE L'ACTIVATION ---
         if (slotObj) {
@@ -111,5 +114,73 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
         // FR: Sauvegarde du nouvel état de la salle dans l'état global
         // ENG: Save the new room state back into the global state
         Battle_Brawlers_Game_State[roomIndex] = state
+
+        if (abilityReturn !== null) {
+            const request: AbilityCardsActionsRequestsType = {
+                roomId: roomId,
+                bakuganKey: bakuganKey,
+                slot: slot,
+                cardKey: abilityId,
+                userId: userId,
+                data: abilityReturn,
+            }
+
+            Battle_Brawlers_Game_State[roomIndex].AbilityAditionalRequest.push(request)
+            const requests = Battle_Brawlers_Game_State[roomIndex].AbilityAditionalRequest
+            if (!requests) return
+            if (requests.length <= 0) return
+            const socket = roomData.connectedsUsers.get(requests[0].userId)
+            if (!socket) return
+            io.to(socket).emit('ability-additional-request', requests[0])
+            console.log(socket, 'ability-additional-request', requests[0])
+
+        } else {
+            const animations = Battle_Brawlers_Game_State[roomIndex].animations
+            console.log('animations', animations)
+            io.to(roomId).emit('update-room-state', state)
+            if (!animations) return
+            io.to(roomId).emit('animations', animations)
+            console.log('emitting animations', animations)
+
+            const activeSocket = state.connectedsUsers.get(state.turnState.turn)
+            const inactiveSocket = state.connectedsUsers.get(state.turnState.previous_turn || '')
+
+            if (state.turnState.turn === userId) {
+                const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
+                if (roomIndex === -1) return
+                if (!activeSocket) return
+                if (!Battle_Brawlers_Game_State[roomIndex]) return
+
+                const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "USE_ABILITY_CARD")
+                Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
+
+                const merged = [Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
+                console.log('merged', merged.map((merge) => merge.type))
+                if (merged.length > 0) {
+                    io.to(activeSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
+                } else {
+                    clearAnimationsInRoom(roomId)
+                    turnActionUpdater({ roomId, userId, io })
+                }
+
+            }
+
+            if (state.turnState.turn !== userId) {
+                const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
+                if (roomIndex === -1) return
+                if (!Battle_Brawlers_Game_State[roomIndex]) return
+                if (!inactiveSocket) return
+
+                const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest, "USE_ABILITY_CARD")
+                Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest = newState as InactivePlayerActionRequestType
+
+
+                const merged = [Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.optional].flat()
+                console.log('merged', merged)
+                if (merged.length <= 0) return
+                io.to(inactiveSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
+            }
+        }
+
     }
 }

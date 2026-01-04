@@ -30,7 +30,7 @@ export function CancelCaracterGateCard({ roomState, slotOfGate, family }: { room
         const bakugansTarget = slotOfGate.bakugans.filter((b) => b.family === family)
         console.log('bakuganTargets', bakugansTarget)
         bakugansTarget.forEach((b) => {
-            const basePower = structuredClone(b.currentPower) / 2
+            const basePower = structuredClone(b.powerLevel)
             if (!basePower) return
             b.currentPower -= basePower
             PowerChangeDirectiveAnumation({

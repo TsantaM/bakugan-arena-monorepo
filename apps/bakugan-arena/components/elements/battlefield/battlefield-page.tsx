@@ -44,9 +44,9 @@ export default function BattleFieldPage({ player, opponent, roomId, userId }: Ba
 
     return (
         <>
-            {
+            {/* {
                 finished && <GameFinishedScreen userId={userId} />
-            }
+            } */}
 
             {
                 roomState && <PlayerCards player={player} opponent={opponent} roomId={roomId} userId={userId} />

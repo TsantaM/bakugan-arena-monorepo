@@ -30,12 +30,13 @@ export const FalconeerGateCard: gateCardType = {
     key: 'falconeer-gate-card',
     name: 'Carte Personnage: Falconeer',
     maxInDeck: 1,
-    image: GateCardImages.caracter,
+    image: 'falconeer.png',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Falconneer présent sur elle`,
     family: 'Falconeer',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'falconeer-gate-card')
         CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Falconeer' })
+        return null
 
     },
     onCanceled({ roomState, slot }) {

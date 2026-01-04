@@ -3,6 +3,7 @@ import { GateCardsList } from "../gate-gards";
 import { CancelGateCardDirectiveAnimation } from '../../function/create-animation-directives/cancel-gate-card'
 import { PowerChangeDirectiveAnumation } from '../../function/create-animation-directives/power-change'
 import type { bakuganOnSlot } from "../../type/room-types";
+import { StandardCardsImages } from "../../store/ability-cards-images";
 
 export const CoupDeGrace: abilityCardsType = {
     key: 'coup-de-grace',
@@ -11,8 +12,9 @@ export const CoupDeGrace: abilityCardsType = {
     description: `Détruit la carte portail et en annule tous les effets, mais ne fonctionne que si la carte portail est ouverte`,
     maxInDeck: 2,
     usable_in_neutral: false,
+    image: StandardCardsImages.darkus,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        if (!roomState) return
+        if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
@@ -31,6 +33,8 @@ export const CoupDeGrace: abilityCardsType = {
 
             }
         }
+
+        return null
     }
 }
 
@@ -41,10 +45,11 @@ export const EpicesMortelles: abilityCardsType = {
     maxInDeck: 1,
     attribut: 'Darkus',
     description: `Ajoute 100 G de puissance à l'utilisateur et en retire autant a les adversaires.`,
+    image: StandardCardsImages.darkus,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (!roomState) return
+        if (!roomState) return null
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
             const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
@@ -66,6 +71,8 @@ export const EpicesMortelles: abilityCardsType = {
                 })
             }
         }
+
+        return null
     },
     onCanceled: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return
@@ -101,9 +108,10 @@ export const BoublierFusion: abilityCardsType = {
     attribut: 'Darkus',
     maxInDeck: 1,
     description: `Vole tous les boost obtenut par l'adversaire pendant le match`,
+    image: StandardCardsImages.darkus,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        if (!roomState) return
+        if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
@@ -124,6 +132,8 @@ export const BoublierFusion: abilityCardsType = {
                 }
             }
         }
+
+        return null
     }
 }
 
@@ -134,9 +144,10 @@ export const VengeanceAlItalienne: abilityCardsType = {
     attribut: 'Darkus',
     maxInDeck: 1,
     description: `Permet de retirer 100 G de puissances à tous les bakugans adverse et augmente le niveau de puissance de l'utilisateur de 100 G`,
+    image: StandardCardsImages.darkus,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        if (!roomState) return
+        if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
@@ -163,6 +174,8 @@ export const VengeanceAlItalienne: abilityCardsType = {
                 })
             }
         }
+
+        return null
     }
 }
 
@@ -173,9 +186,10 @@ export const PoivreDesCayenne: abilityCardsType = {
     attribut: 'Darkus',
     maxInDeck: 2,
     description: `Annule toutes les capacité de l'adversaire et retire 50 G à l'adversaire`,
+    image: StandardCardsImages.darkus,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, slot }) => {
-        if (!roomState) return
+        if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
@@ -190,6 +204,8 @@ export const PoivreDesCayenne: abilityCardsType = {
                 })
             }
         }
+
+        return null
     },
     onCanceled: ({ roomState, userId, slot }) => {
         if (!roomState) return

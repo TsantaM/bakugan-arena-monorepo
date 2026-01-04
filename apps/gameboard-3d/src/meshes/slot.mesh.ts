@@ -42,6 +42,7 @@ function createSlotMesh({ slot, plane }: { slot: portalSlotsTypeElement, plane: 
     const position = getSlotMeshPosition({ index: index})
     mesh.position.set(position.x, position.y, position.z)
     mesh.name = slot.id
+    mesh.userData.isCanceled = false
     plane.add(mesh)
 
 }

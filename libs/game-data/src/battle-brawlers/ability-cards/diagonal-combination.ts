@@ -8,13 +8,16 @@ export const PyrusDarkus: abilityCardsType = {
     description: `Si l'utilisateur est de l'attribut Pyrus, il se verra octroyer un bonus de 100 G si un Bakugan Darkus est présent n'importe où sur le domaine`,
     maxInDeck: 1,
     usable_in_neutral: true,
+    image: "pyrus-darkus.jpg",
     onActivate({ roomState, userId, bakuganKey, slot }) {
-        if(!roomState) return
+        if (!roomState) return null
         const portalSlots = roomState?.protalSlots
         const slotOfGate = portalSlots?.find((p) => p.id === slot)
-        if(slotOfGate && portalSlots) {
-            DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Pyrus', attributWeak: 'Darkus', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId })
-        }
+        if (!slotOfGate && !portalSlots) return null
+        if (!slotOfGate) return null
+        if (!portalSlots) return null
+        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Pyrus', attributWeak: 'Darkus', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId })
+        return null
     },
 }
 
@@ -25,12 +28,15 @@ export const DarkusPyrus: abilityCardsType = {
     description: `Si l'utilisateur est de l'attribut Darkus, il se verra octroyer un bonus de 100 G si un Bakugan Pyrus est présent n'importe où sur le domaine`,
     maxInDeck: 1,
     usable_in_neutral: true,
+    image: "pyrus-darkus.jpg",
     onActivate({ roomState, userId, bakuganKey, slot }) {
         const portalSlots = roomState?.protalSlots
         const slotOfGate = portalSlots?.find((p) => p.id === slot)
-        if(slotOfGate && portalSlots) {
-            DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Darkus', attributWeak: 'Pyrus', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId })
-        }
+        if (!slotOfGate && !portalSlots) return null
+        if (!slotOfGate) return null
+        if (!portalSlots) return null
+        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Darkus', attributWeak: 'Pyrus', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId })
+        return null
     },
 }
 
@@ -44,9 +50,11 @@ export const VentusHaos: abilityCardsType = {
     onActivate({ roomState, userId, bakuganKey, slot }) {
         const portalSlots = roomState?.protalSlots
         const slotOfGate = portalSlots?.find((p) => p.id === slot)
-        if(slotOfGate && portalSlots) {
-            DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Ventus', attributWeak: 'Haos', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId })
-        }
+        if (!slotOfGate && !portalSlots) return null
+        if (!slotOfGate) return null
+        if (!portalSlots) return null
+        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Ventus', attributWeak: 'Haos', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId })
+        return null
     },
 }
 
@@ -60,9 +68,11 @@ export const HaosVentus: abilityCardsType = {
     onActivate({ roomState, userId, bakuganKey, slot }) {
         const portalSlots = roomState?.protalSlots
         const slotOfGate = portalSlots?.find((p) => p.id === slot)
-        if(slotOfGate && portalSlots) {
-            DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Haos', attributWeak: 'Ventus', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId })
-        }
+        if (!slotOfGate && !portalSlots) return null
+        if (!slotOfGate) return null
+        if (!portalSlots) return null
+        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Haos', attributWeak: 'Ventus', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId })
+        return null
     },
 }
 
@@ -76,9 +86,11 @@ export const AquosSubterra: abilityCardsType = {
     onActivate({ roomState, userId, bakuganKey, slot }) {
         const portalSlots = roomState?.protalSlots
         const slotOfGate = portalSlots?.find((p) => p.id === slot)
-        if(slotOfGate && portalSlots) {
-            DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Aquos', attributWeak: 'Subterra', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId })
-        }
+        if (!slotOfGate && !portalSlots) return null
+        if (!slotOfGate) return null
+        if (!portalSlots) return null
+        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Aquos', attributWeak: 'Subterra', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId })
+        return null
     },
 }
 
@@ -92,8 +104,10 @@ export const SubterraAquos: abilityCardsType = {
     onActivate({ roomState, userId, bakuganKey, slot }) {
         const portalSlots = roomState?.protalSlots
         const slotOfGate = portalSlots?.find((p) => p.id === slot)
-        if(slotOfGate && portalSlots) {
-            DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Subterra', attributWeak: 'Aquos', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId })
-        }
+        if (!slotOfGate && !portalSlots) return null
+        if (!slotOfGate) return null
+        if (!portalSlots) return null
+        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Subterra', attributWeak: 'Aquos', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId })
+        return null
     },
 }

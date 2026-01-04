@@ -1,9 +1,10 @@
-import { activeGateCardProps, GateCardsList, slots_id } from "@bakugan-arena/game-data"
+import { activeGateCardProps, AnimationDirectivesTypes, GateCardsList, slots_id } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
+import { turnActionUpdater } from "../sockets/turn-action"
 
 
 
-export const ActiveGateCard = ({ roomId, gateId, slot, userId }: activeGateCardProps) => {
+export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateCardProps): AnimationDirectivesTypes[] | undefined => {
     // FR : On récupère les données de la room correspondante à roomId
     // EN : Get the room data that matches the given roomId
     const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
@@ -47,15 +48,33 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId }: activeGateCardP
             //
             // EN : Trigger the Gate Card's special "onOpen" effect if it exists,
             //      passing the required context (room state, slot, Bakugan, and player)
-            roomData.animations.push({
+
+            const animation: AnimationDirectivesTypes = {
                 type: "OPEN_GATE_CARD",
                 data: {
                     slot: slotOfGate,
                     slotId: slotOfGate.id
                 },
                 resolved: false
-            })
-            gateCard.onOpen?.({ roomState: roomData, slot: slot, bakuganKey: key, userId: userId })
+            }
+
+            roomData.animations.push(animation)
+            const openFunction = gateCard.onOpen?.({ roomState: roomData, slot: slot, bakuganKey: key, userId: userId })
+
+            console.log('active gate animations', roomData.animations.map((a) => a.type))
+
+
+            if(!openFunction) return
+
+            io.to(roomId).emit('animations', roomData.animations)
+            
+            if(openFunction.turnAction) {
+                turnActionUpdater({
+                    io: io,
+                    roomId: roomId,
+                    userId: userId,
+                })
+            }
         }
     }
 }

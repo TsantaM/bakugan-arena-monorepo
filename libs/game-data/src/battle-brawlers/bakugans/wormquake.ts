@@ -36,6 +36,7 @@ export const WormquakeGateCard: gateCardType = {
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'wormquake-gate-card')
         CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Wormquake' })
+        return null
 
     },
     onCanceled({ roomState, slot }) {

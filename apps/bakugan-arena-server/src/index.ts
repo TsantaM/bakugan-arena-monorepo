@@ -5,9 +5,9 @@ import { socketTurn } from "./sockets/turn-action";
 import { socketUpdateGateState } from "./sockets/update-gate-state";
 import { socketUpdateBakuganState } from "./sockets/update-bakugans-state";
 import { socketActiveGateCard } from "./sockets/active-gate-card-socket";
-import { socketOnBattleEnd } from "./sockets/on-battle-end-socket";
 import { socketUseAbilityCard } from "./sockets/use-ability-card-socket";
 import { socketCleanAnimations } from "./sockets/clear-animations-socket";
+import { AbilitiesAdditionalEffectsSocket } from "./sockets/abilities-additional-effect-socket";
 
 
 
@@ -31,6 +31,7 @@ io.on('connection', (socket) => {
     socketUpdateGateState(io, socket)
     socketUpdateBakuganState(io, socket)
     socketUseAbilityCard(io, socket)
+    AbilitiesAdditionalEffectsSocket(io,socket)
     socketActiveGateCard(io, socket)
     socketTurn(io, socket)
 

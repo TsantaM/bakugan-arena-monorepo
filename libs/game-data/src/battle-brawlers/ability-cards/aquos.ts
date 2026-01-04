@@ -1,7 +1,10 @@
-import { CheckBattle } from "../../function/check-battle-in-process";
 import { type abilityCardsType } from "../../type/game-data-types";
-import type { bakuganOnSlot } from "../../type/room-types";
-import { MoveToAnotherSlotDirectiveAnimation } from '../../function/create-animation-directives/move-to-another-slot'
+import type { AbilityCardsActions } from "../../type/actions-serveur-requests";
+import { StandardCardsImages } from '../../store/ability-cards-images'
+import { MoveToAnotherSlotDirectiveAnimation } from "../../function/create-animation-directives/move-to-another-slot";
+import { bakuganOnSlot, slots_id } from "../../type/room-types";
+import { OpenGateCardActionRequest } from "../../function/action-request-functions/open-gate-card-action-request";
+import { CheckBattleStillInProcess } from "../../function/check-battle-still-in-process";
 
 export const MirageAquatique: abilityCardsType = {
     key: 'mirage-aquatique',
@@ -11,40 +14,79 @@ export const MirageAquatique: abilityCardsType = {
     maxInDeck: 2,
     extraInputs: ["move-self"],
     usable_in_neutral: true,
-    onActivate: ({ roomState, userId, bakuganKey, slot_to_move }) => {
-        console.log(slot_to_move)
-        if (roomState && slot_to_move !== '' && roomState) {
-            const slotOfGate = roomState?.protalSlots.find((s) => s.bakugans.find((b) => b.key === bakuganKey && b.userId === userId))
-            console.log(slotOfGate)
-            const slotTarget = roomState?.protalSlots.find((s) => s.id === slot_to_move)
-            console.log(slotTarget)
-            if (slotOfGate && slotTarget && slotTarget.portalCard !== null) {
-                const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
-                const index = slotOfGate.bakugans.findIndex((ba) => ba.key === user?.key && ba.userId === user.userId)
+    image: 'mirage-aquatique.jpg',
+    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
 
-                if (user) {
-                    const newUserState: bakuganOnSlot = {
-                        ...user,
-                        slot_id: slot_to_move
-                    }
-                    slotTarget.bakugans.push(newUserState)
-                    slotTarget.state.blocked = true
-                    slotOfGate.bakugans.splice(index, 1)
-                    MoveToAnotherSlotDirectiveAnimation({
-                        animations: roomState.animations,
-                        bakugan: user,
-                        initialSlot: structuredClone(slotOfGate),
-                        newSlot: structuredClone(slotTarget)
-                    })
-                    roomState.battleState.battleInProcess = false
-                    roomState.battleState.paused = false
-                    roomState.battleState.slot = null
-                    roomState.battleState.turns = 2
+        if (!roomState) return null
 
-                    CheckBattle({ roomState })
+        const opponentsUsableBakugans = roomState.decksState.find((deck) => deck.userId !== userId)?.bakugans.filter((deck) => !deck?.bakuganData.elimined && !deck?.bakuganData.onDomain)
+        const opponentBakugansOnField = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.slot_id !== slot && bakugan.userId !== userId)
+
+        if ((opponentsUsableBakugans && opponentsUsableBakugans.length === 0 && opponentBakugansOnField.length === 0)) return null
+
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        const deck = roomState?.decksState.find((d) => d.userId === userId)
+        const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
+
+        if (!slotOfGate && !deck && !userData) return null
+
+        const slots: slots_id[] = opponentsUsableBakugans && opponentsUsableBakugans.length === 0 && opponentBakugansOnField.length > 0 ? opponentBakugansOnField.map((bakugan) => bakugan.slot_id) : roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot).map((slot) => slot.id)
+
+        if (slots.length <= 0) return null
+
+        const request: AbilityCardsActions = {
+            type: 'SELECT_SLOT',
+            message: 'Mirage Aquatique : Choisissez le slot de déstination',
+            slots: slots
+        }
+
+        return request
+
+    },
+    onAdditionalEffect: ({ resolution, roomData }) => {
+
+        if (!roomData) return
+        if (resolution.data.type !== 'SELECT_SLOT') return
+        const destination = resolution.data.slot
+        const slotOfGate = roomData.protalSlots.find((s) => s.bakugans.find((b) => b.key === resolution.bakuganKey && b.userId === resolution.userId))
+        console.log(slotOfGate)
+        const slotTarget = roomData.protalSlots.find((s) => s.id === destination)
+        console.log(slotTarget)
+        if (slotOfGate && slotTarget && slotTarget.portalCard !== null) {
+            const user = slotOfGate.bakugans.find((b) => b.key === resolution.bakuganKey && b.userId === resolution.userId)
+            const index = slotOfGate.bakugans.findIndex((ba) => ba.key === user?.key && ba.userId === user.userId)
+            if (user) {
+                const newUserState: bakuganOnSlot = {
+                    ...user,
+                    slot_id: destination
                 }
+                slotTarget.bakugans.push(newUserState)
+                slotTarget.state.blocked = true
+                slotOfGate.bakugans.splice(index, 1)
+
+                MoveToAnotherSlotDirectiveAnimation({
+                    animations: roomData.animations,
+                    bakugan: user,
+                    initialSlot: structuredClone(slotOfGate),
+                    newSlot: structuredClone(slotTarget)
+                })
+
+                roomData.battleState.battleInProcess = false
+                roomData.battleState.paused = false
+                roomData.battleState.slot = null
+                roomData.battleState.turns = 2
+
+                CheckBattleStillInProcess(roomData)
+                OpenGateCardActionRequest({ roomState: roomData })
+
+                return {
+                    turnActionLaucher: true
+                }
+
             }
         }
+
+
     }
 }
 
@@ -54,6 +96,7 @@ export const BarrageDeau: abilityCardsType = {
     maxInDeck: 1,
     attribut: 'Aquos',
     usable_in_neutral: true,
+    image: StandardCardsImages.aquos,
     description: `Empêche l'activation de toute capacité sur le domaine pendant 3 tours`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -64,6 +107,7 @@ export const BarrageDeau: abilityCardsType = {
                 user.currentPower += 100
             }
         }
+        return null
     }
 }
 
@@ -73,6 +117,7 @@ export const BouclierAquos: abilityCardsType = {
     description: 'Protège contre toute capacité adverse pendant le tour',
     maxInDeck: 2,
     name: 'Bouclier Aquos',
+    image: StandardCardsImages.aquos,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -83,6 +128,8 @@ export const BouclierAquos: abilityCardsType = {
                 user.currentPower += 100
             }
         }
+
+        return null
     }
 }
 
@@ -92,6 +139,7 @@ export const PlongeeEnEauProfonde: abilityCardsType = {
     attribut: 'Aquos',
     maxInDeck: 1,
     usable_in_neutral: false,
+    image: StandardCardsImages.aquos,
     description: `Transforme le terrain en aquos et empêche l'activation de toute carte maîtrise qui ne sont pas de l'attribut Aquos`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -102,5 +150,7 @@ export const PlongeeEnEauProfonde: abilityCardsType = {
                 user.currentPower += 100
             }
         }
+
+        return null
     }
 }

@@ -19,5 +19,7 @@ export const SetBakuganAndAddRenfortAnimationDirective: AddRenfortAnimationDirec
         resolved: false,
     }
 
+    if(animations.some((a) => a === animation)) return
+
     animations.push(animation)
 }

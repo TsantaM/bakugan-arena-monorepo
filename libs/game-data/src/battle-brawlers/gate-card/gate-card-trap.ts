@@ -6,6 +6,8 @@ import { ElimineBakuganDirectiveAnimation } from "../../function/create-animatio
 import { ComeBackBakuganDirectiveAnimation } from "../../function/create-animation-directives/come-back-bakugan";
 import { RemoveGateCardDirectiveAnimation } from "../../function/create-animation-directives/remove-gate-card";
 import { PowerChangeDirectiveAnumation } from "../../function/create-animation-directives/power-change";
+import { OpenGateCardActionRequest } from "../../function/action-request-functions/open-gate-card-action-request";
+import { CheckBattleStillInProcess } from "../../function/check-battle-still-in-process";
 
 export const MineFantome: gateCardType = {
     key: 'mine-fantome',
@@ -49,13 +51,17 @@ export const MineFantome: gateCardType = {
             })
 
             ResetSlot(slotOfGate)
-            roomState.battleState.battleInProcess = false
-            roomState.battleState.slot = null
-            roomState.battleState.paused = false
-
             roomState.turnState.set_new_bakugan = true
             roomState.turnState.set_new_gate = true
-
+            CheckBattleStillInProcess(roomState)
+            CheckBattle({
+                roomState: roomState
+            })
+            return {
+                turnAction: true
+            }
+        } else {
+            return null
         }
 
     },
@@ -170,13 +176,17 @@ export const Echange: gateCardType = {
             })
 
             ResetSlot(slotOfGate)
+            CheckBattleStillInProcess(roomState)
             CheckBattle({ roomState })
+            OpenGateCardActionRequest({ roomState })
 
             roomState.turnState.set_new_bakugan = true
             roomState.turnState.set_new_gate = true
 
 
         }
+
+        return null
     },
     onCanceled() {
         return
@@ -198,7 +208,7 @@ export const SuperPyrus: gateCardType = {
     image: GateCardImages.command,
     description: `Echange les niveau de puissance des bakugans au combat. Si elle n'est pas activée par le propriétaire, elle s'active automatiquement à la fin du combat.`,
     onOpen: () => {
-        return
+        return null
     }
 }
 
@@ -209,7 +219,7 @@ export const AspirateurDePuissance: gateCardType = {
     description: `Permet au premier Bakugan mit en jeu de voler 100 G de puissance au dernier Bakugan mit en jeu`,
     image: GateCardImages.command,
     onOpen: ({ roomState, slot }) => {
-        if (!roomState) return
+        if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
 
         if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
@@ -231,6 +241,8 @@ export const AspirateurDePuissance: gateCardType = {
             })
             slotOfGate.state.open = true
         }
+
+        return null
     },
     onCanceled: ({ roomState, slot, userId, bakuganKey }) => {
         if (!roomState) return

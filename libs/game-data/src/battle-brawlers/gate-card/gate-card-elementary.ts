@@ -10,10 +10,12 @@ export const ReacteurPyrus: gateCardType = {
     attribut: 'Pyrus',
     description: 'Ajoute 100 G à tous les bakugans Pyrus sur la carte',
     maxInDeck: 3,
-    image: GateCardImages.elementary,
+    image: 'reacteur-pyrus.jpg',
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
 
         ElementaryGateCardOnOpen({ roomState, slot, attribut: 'Pyrus' })
+
+        return null
 
     },
     onCanceled: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -33,11 +35,13 @@ export const ReacteurHaos: gateCardType = {
     name: 'Reacteur Haos',
     attribut: 'Haos',
     description: 'Ajoute 100 G à tous les bakugans Haos sur la carte',
-    image: GateCardImages.elementary,
+    image: 'reacteur-haos.jpg',
     maxInDeck: 3,
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
 
         ElementaryGateCardOnOpen({ roomState, slot, attribut: 'Haos' })
+
+        return null
 
     },
     onCanceled: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -57,11 +61,13 @@ export const ReacteurVentus: gateCardType = {
     name: 'Reacteur Ventus',
     attribut: 'Ventus',
     description: 'Ajoute 100 G à tous les bakugans Ventus sur la carte',
-    image: GateCardImages.elementary,
+    image: 'reacteur-ventus.jpg',
     maxInDeck: 3,
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
 
         ElementaryGateCardOnOpen({ roomState, slot, attribut: 'Ventus' })
+
+        return null
 
     },
     onCanceled: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -81,11 +87,13 @@ export const ReacteurAquos: gateCardType = {
     name: 'Reacteur Aquos',
     attribut: 'Aquos',
     description: 'Ajoute 100 G à tous les bakugans Aquos sur la carte',
-    image: GateCardImages.elementary,
+    image: 'reacteur-aquos.jpg',
     maxInDeck: 3,
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
 
         ElementaryGateCardOnOpen({ roomState, slot, attribut: 'Aquos' })
+
+        return null
 
     },
     onCanceled: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -105,11 +113,13 @@ export const ReacteurSubterra: gateCardType = {
     name: 'Reacteur Subterra',
     attribut: 'Subterra',
     description: 'Ajoute 100 G à tous les bakugans Subterra sur la carte',
-    image: GateCardImages.elementary,
+    image: 'reacteur-subterra.jpg',
     maxInDeck: 3,
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
 
         ElementaryGateCardOnOpen({ roomState, slot, attribut: 'Subterra' })
+
+        return null
 
     },
     onCanceled: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -129,11 +139,13 @@ export const ReacteurDarkus: gateCardType = {
     name: 'Reacteur Darkus',
     attribut: 'Darkus',
     description: 'Ajoute 100 G à tous les bakugans Darkus sur la carte',
-    image: GateCardImages.elementary,
+    image: 'reacteur-darkus.jpg',
     maxInDeck: 3,
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
 
         ElementaryGateCardOnOpen({ roomState, slot, attribut: 'Darkus' })
+
+        return null
 
     },
     onCanceled: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -160,11 +172,14 @@ export const PerilPyrus: gateCardType = {
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        
         if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
             const bakuganOnGate = slotOfGate.bakugans
             slotOfGate.state.open = true
             bakuganOnGate.forEach((b) => b.attribut = 'Pyrus')
         }
+
+        return null
 
     },
     onCanceled({ roomState, slot }) {
@@ -192,11 +207,14 @@ export const PerilAquos: gateCardType = {
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        
         if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
             const bakuganOnGate = slotOfGate.bakugans
             slotOfGate.state.open = true
             bakuganOnGate.forEach((b) => b.attribut = 'Aquos')
         }
+
+        return null
 
     },
     onCanceled({ roomState, slot }) {
@@ -224,11 +242,14 @@ export const PerilVentus: gateCardType = {
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        
         if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
             const bakuganOnGate = slotOfGate.bakugans
             slotOfGate.state.open = true
             bakuganOnGate.forEach((b) => b.attribut = 'Ventus')
         }
+
+        return null
 
     },
     onCanceled({ roomState, slot }) {
@@ -256,11 +277,14 @@ export const PerilSubterra: gateCardType = {
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        
         if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
             const bakuganOnGate = slotOfGate.bakugans
             slotOfGate.state.open = true
             bakuganOnGate.forEach((b) => b.attribut = 'Subterra')
         }
+
+        return null
 
     },
     onCanceled({ roomState, slot }) {
@@ -288,11 +312,14 @@ export const PerilHaos: gateCardType = {
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        
         if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
             const bakuganOnGate = slotOfGate.bakugans
             slotOfGate.state.open = true
             bakuganOnGate.forEach((b) => b.attribut = 'Haos')
         }
+
+        return null
 
     },
     onCanceled({ roomState, slot }) {
@@ -320,11 +347,14 @@ export const PerilDarkus: gateCardType = {
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        
         if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
             const bakuganOnGate = slotOfGate.bakugans
             slotOfGate.state.open = true
             bakuganOnGate.forEach((b) => b.attribut = 'Darkus')
         }
+
+        return null
 
     },
     onCanceled({ roomState, slot }) {
@@ -353,7 +383,10 @@ export const FusionMarine: gateCardType = {
     description: `Transforme l'attribut de tous les Bakugans présents en Aquos sauf les Bakugans Subterra`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
+        
         PerilGateCardOnOpen({ roomState, slot, attribut: "Aquos", exception: "Subterra" })
+
+        return null
 
     },
     onCanceled({ roomState, slot }) {
@@ -370,6 +403,7 @@ export const FusionAerienne: gateCardType = {
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         PerilGateCardOnOpen({ roomState, slot, attribut: "Ventus", exception: "Haos" })
+        return null
 
     },
     onCanceled({ roomState, slot }) {
@@ -386,6 +420,7 @@ export const FusionTenebreuses: gateCardType = {
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         PerilGateCardOnOpen({ roomState, slot, attribut: "Darkus", exception: "Pyrus" })
+        return null
 
     },
     onCanceled({ roomState, slot }) {
@@ -402,6 +437,7 @@ export const FusionTerrestre: gateCardType = {
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         PerilGateCardOnOpen({ roomState, slot, attribut: "Subterra", exception: "Aquos" })
+        return null
 
     },
     onCanceled({ roomState, slot }) {
@@ -418,6 +454,7 @@ export const FusionLumineuse: gateCardType = {
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         PerilGateCardOnOpen({ roomState, slot, attribut: "Haos", exception: "Ventus" })
+        return null
 
     },
     onCanceled({ roomState, slot }) {
@@ -434,6 +471,7 @@ export const FusionEnflammee: gateCardType = {
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         PerilGateCardOnOpen({ roomState, slot, attribut: "Pyrus", exception: "Darkus" })
+        return null
 
     },
     onCanceled({ roomState, slot }) {

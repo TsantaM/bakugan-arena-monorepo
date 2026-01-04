@@ -1,4 +1,5 @@
 import type {
+    AbilityCardsActionsRequestsType,
     ActivePlayerActionRequestType,
     InactivePlayerActionRequestType
 } from "@bakugan-arena/game-data/src/type/actions-serveur-requests"
@@ -21,6 +22,8 @@ import { MoveToAnotherSlotFunctionAnimation } from "../scene-modifications-funct
 import { SetBakuganFunctionAnimation } from "../scene-modifications-functions/set-bakugan-function-animation"
 import { SetGateCardFunctionAndAnimation } from "../scene-modifications-functions/set-gate-card-function-animation"
 import { PowerChangeAnimation, PowerChangeNumberAnimation } from "../animations/power-change-animation"
+import { AdditionalRequestResolution } from "../abiliity-additional-request/additional-request-resolution"
+import type { turnCountSocketProps } from "@bakugan-arena/game-data/src/type/sockets-props-types"
 
 let animationQueue: AnimationDirectivesTypes[] = []
 let isProcessingAnimations = false
@@ -186,6 +189,7 @@ async function processAnimationQueue(userId: string,
         }
 
         if (current.type === 'BATTLE-END') {
+            alert('eh')
             await OnBattleEndAnimation()
         }
 
@@ -272,19 +276,18 @@ export function registerSocketHandlers(
         }
     })
 
-    socket.on("turn-action-request",
-        (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
-            console.log('actions', request.actions)
-            TurnActionBuilder({
-                request,
-                userId: userId,
-                camera: camera,
-                scene: scene,
-                plane: plane,
-                roomId: roomId,
-                socket: socket
-            })
-        }
+    socket.on("turn-action-request", (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
+        console.log('actions', request.actions)
+        TurnActionBuilder({
+            request,
+            userId: userId,
+            camera: camera,
+            scene: scene,
+            plane: plane,
+            roomId: roomId,
+            socket: socket
+        })
+    }
     )
 
     socket.on("animations", (animations: AnimationDirectivesTypes[]) => {
@@ -292,5 +295,21 @@ export function registerSocketHandlers(
         console.log(animations)
         console.log(animationQueue)
         processAnimationQueue(userId, camera, scene, plane)
+    })
+
+    socket.on("ability-additional-request", (request: AbilityCardsActionsRequestsType) => {
+        if (request.userId !== userId) return
+        AdditionalRequestResolution({
+            request: request, camera: camera, plane: plane, socket: socket, scene: scene
+        })
+    })
+
+    socket.on('turn-count-updater', (turnState: turnCountSocketProps) => {
+        const turnCounter = document.getElementById('turn-counter')
+        if (!turnCounter) return
+
+        const data = turnState.battleTurn !== undefined ? `${turnState.turnCount}T (${turnState.battleTurn})` : `${turnState.turnCount}T`
+        turnCounter.textContent = data
+
     })
 }

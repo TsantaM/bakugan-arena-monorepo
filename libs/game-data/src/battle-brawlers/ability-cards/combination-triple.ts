@@ -1,5 +1,5 @@
 import { CombinationTripleEffect } from "../../function/ability-cards-effects/combination-triple-effect";
-import { abilityCardsType } from "../../type/game-data-types";
+import type { abilityCardsType } from "../../type/game-data-types";
 
 export const PyrusAquosHaos: abilityCardsType = {
     key: 'tripple-combination-pyrus-aquos-haos',
@@ -9,8 +9,9 @@ export const PyrusAquosHaos: abilityCardsType = {
     usable_in_neutral: true,
     onActivate({ roomState, userId }) {
         const portalSlots = roomState?.protalSlots
-        if (!portalSlots) return
+        if (!portalSlots) return null
         CombinationTripleEffect({ animations: roomState.animations, attribut_one: 'Pyrus', attribut_two: 'Aquos', attribut_tree: 'Haos', portalSlots: portalSlots, userId: userId })
+        return null
     },
 }
 
@@ -22,7 +23,8 @@ export const VentusSubterraDarkus: abilityCardsType = {
     usable_in_neutral: true,
     onActivate({ roomState, userId }) {
         const portalSlots = roomState?.protalSlots
-        if (!portalSlots) return
+        if (!portalSlots) return null
         CombinationTripleEffect({ animations: roomState.animations, attribut_one: 'Ventus', attribut_two: 'Subterra', attribut_tree: 'Darkus', portalSlots: portalSlots, userId: userId })
+        return null
     },
 }

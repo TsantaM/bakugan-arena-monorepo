@@ -44,12 +44,14 @@ export const DragonoidGateCard: gateCardType = {
     key: 'dragonoid-gate-card',
     name: 'Carte Personnage: Dragonoid',
     maxInDeck: 1,
-    image: GateCardImages.caracter,
+    image: 'dragonoid.png',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Dragonoid présent sur elle`,
     family: 'Dragonoid',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'dragonoid-gate-card')
         CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Dragonoid' })
+        return null
+
 
     },
     onCanceled({ roomState, slot }) {

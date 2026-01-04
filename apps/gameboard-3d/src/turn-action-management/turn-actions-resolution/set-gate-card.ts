@@ -4,6 +4,7 @@ import { type slots_id } from "@bakugan-arena/game-data"
 import { createOverableSlot, SelectCard, SelectSlotOnMouseMove } from "../turn-actions-function/select-slot"
 import { Socket } from "socket.io-client"
 import { clearTurnInterface } from "./action-scope"
+import gsap from "gsap"
 
 
 export function SetGateCard({
@@ -34,10 +35,12 @@ export function SetGateCard({
     if (!cardsToSelect.length) return
 
     const cardClickHandlers = new Map<Element, EventListener>()
+    let mouseEnter: (() => void) | null = null
     let mouseMoveHandler: ((e: MouseEvent) => void) | null = null
     let clickHandler: (() => void) | null = null
+    let mouseLeave: (() => void) | null = null
 
-    function cleanup(cleanAll: boolean) {
+    function cleanup(cleanAll: boolean, card: Element) {
         if (mouseMoveHandler)
             window.removeEventListener('mousemove', mouseMoveHandler)
 
@@ -48,19 +51,68 @@ export function SetGateCard({
             cardClickHandlers.forEach((handler, el) => {
                 el.removeEventListener('click', handler)
             })
+            if (mouseEnter) {
+                card.removeEventListener('mouseenter', mouseEnter)
+            }
+            if (mouseLeave) {
+                card.removeEventListener('mouseleave', mouseLeave)
+            }
         }
 
         cardClickHandlers.clear()
+        mouseEnter = null
+        mouseLeave = null
         mouseMoveHandler = null
         clickHandler = null
     }
 
     cardsToSelect.forEach(card => {
+
+        mouseEnter = () => {
+            const data = cards.find(c => c.key === card.getAttribute('data-key'))
+            if (!data) return
+
+            let hoveredCardDescription = document.querySelectorAll('.card-description')
+
+            if (!hoveredCardDescription) return
+
+            hoveredCardDescription.forEach((description) => {
+                if (description.getAttribute('data-key') === data.key) {
+                    gsap.fromTo(description, {
+                        display: 'none',
+                        opacity: 0
+                    }, {
+                        display: 'block',
+                        opacity: 1,
+                        duration: 0.1
+                    })
+                }
+            })
+
+        }
+
+        mouseLeave = () => {
+            const data = cards.find(c => c.key === card.getAttribute('data-key'))
+            if (!data) return
+
+            let hoveredCardDescription = document.querySelectorAll('.card-description')
+
+            if (!hoveredCardDescription) return
+
+            hoveredCardDescription.forEach((description) => {
+                gsap.to(description, {
+                    opacity: 0,
+                    display: 'none',
+                    duration: 0.1
+                })
+            })
+        }
+
         const handler = () => {
             const data = cards.find(c => c.key === card.getAttribute('data-key'))
             if (!data) return
 
-            cleanup(false) // 🔒 garantit un seul flow actif
+            cleanup(false, card) // 🔒 garantit un seul flow actif
 
             SelectCard({
                 card,
@@ -111,13 +163,14 @@ export function SetGateCard({
                     userId
                 })
 
-                cleanup(true)
+                cleanup(true, card)
             }
 
             window.addEventListener('mousemove', mouseMoveHandler)
             window.addEventListener('click', clickHandler)
         }
-
+        card.addEventListener('mouseenter', mouseEnter)
+        card.addEventListener('mouseleave', mouseLeave)
         card.addEventListener('click', handler)
         cardClickHandlers.set(card, handler)
     })

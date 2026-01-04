@@ -48,6 +48,7 @@ export const ElCondorGateCard: gateCardType = {
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'el-condor-gate-card')
         CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'El Condor' })
+        return null
 
     },
     onCanceled({ roomState, slot }) {

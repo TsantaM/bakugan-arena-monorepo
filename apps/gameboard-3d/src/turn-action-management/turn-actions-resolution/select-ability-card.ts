@@ -9,7 +9,7 @@ export function SelectAbilityCard({ userId, SelectedActions, actions }: {
     const SelectAbilityCardAction = SelectedActions.find((action) => action.type === 'SELECT_ABILITY_CARD')
     const SelectablesAbilityCards = actions.find((action) => action.type === 'SELECT_ABILITY_CARD')?.data
 
-    const onBoardBakugans = actions.find(a => a.type === 'USE_ABILITY_CARD')?.data.onBoardBakugans
+    const onBoardBakugans = actions.find(a => a.type === 'USE_ABILITY_CARD')?.data
     if (!onBoardBakugans) return
 
     const bakugans = onBoardBakugans.map((bakugan) => bakugan)
