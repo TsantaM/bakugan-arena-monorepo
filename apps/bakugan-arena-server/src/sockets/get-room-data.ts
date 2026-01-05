@@ -1,6 +1,7 @@
 import { Server, Socket } from "socket.io/dist"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 import { initRoomState } from "../functions/init-game-room"
+import { Message } from "@bakugan-arena/game-data/src/type/animations-directives"
 // import { CreateActionRequestFunction } from "@bakugan-arena/game-data"
 // import { turnCountSocketProps } from "@bakugan-arena/game-data/src/type/sockets-props-types"
 
@@ -150,6 +151,29 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
                 }
                 return
             }
+
+            if (roomData.status.finished) {
+
+                let message: Message
+
+                if (roomData.status.winner !== null) {
+                    const winner = roomData.players.find((p) => p.userId === roomData.status.winner)?.username ? roomData.players.find((p) => p.userId === roomData.status.winner)?.username : ''
+
+                    message = {
+                        text: `Combat terminé ! Vainceur ${winner}`
+                    }
+
+                } else {
+                    message = {
+                        text: `Combat terminé ! Match Null !`
+                    }
+                }
+
+                socket.emit('game-finished', message)
+
+            }
+
+
         }
     )
 }

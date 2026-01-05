@@ -24,8 +24,10 @@ import { SetGateCardFunctionAndAnimation } from "../scene-modifications-function
 import { PowerChangeAnimation, PowerChangeNumberAnimation } from "../animations/power-change-animation"
 import { AdditionalRequestResolution } from "../abiliity-additional-request/additional-request-resolution"
 import type { turnCountSocketProps } from "@bakugan-arena/game-data/src/type/sockets-props-types"
-import { removePreviousDialogBoxAnimation, ShowMessageAnimation } from "../animations/show-message-animation"
+import { AdditionalEffectMessage, EndGameMessage, removePreviousDialogBoxAnimation, ShowMessageAnimation } from "../animations/show-message-animation"
 import { setEliminatedCircles } from "../functions/set-eliminated-circle"
+import type { Message } from "@bakugan-arena/game-data/src/type/animations-directives"
+import { clearTurnInterface } from "../turn-action-management/turn-actions-resolution/action-scope"
 
 let animationQueue: AnimationDirectivesTypes[] = []
 let isProcessingAnimations = false
@@ -342,6 +344,15 @@ export function registerSocketHandlers(
             isLeft: false
         })
 
+        if (state.finished !== undefined) {
+            clearTurnInterface()
+
+            EndGameMessage({
+                message: state.finished
+            })
+
+        }
+
     })
 
     socket.on("turn-action-request", (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
@@ -373,6 +384,12 @@ export function registerSocketHandlers(
         AdditionalRequestResolution({
             request: request, camera: camera, plane: plane, socket: socket, scene: scene
         })
+        clearTurnInterface()
+
+        AdditionalEffectMessage({
+            message: request.data.message
+        })
+
     })
 
     socket.on('turn-count-updater', (turnState: turnCountSocketProps) => {
@@ -382,6 +399,15 @@ export function registerSocketHandlers(
 
         const data = turnState.battleTurn !== undefined ? `${turnState.turnCount}T (${turnState.battleTurn})` : `${turnState.turnCount}T`
         turnCounter.textContent = data
+
+    })
+
+    socket.on('game-finished', (message: Message) => {
+        clearTurnInterface()
+
+        EndGameMessage({
+            message: message
+        })
 
     })
 }

@@ -55,3 +55,33 @@ export async function ShowMessageAnimation({ messages }: { messages: Message[] |
 
 
 }
+
+export function EndGameMessage({ message }: { message: Message | undefined }) {
+
+    if (!message) return
+
+    const newDialogBox = document.createElement('div')
+    newDialogBox.classList.add('dialog-box')
+    newDialogBox.id = 'end-game-dialog-box'
+    document.body.appendChild(newDialogBox)
+
+    const textContent = `${message.text}`
+    const messageContainer = document.createElement('p')
+    messageContainer.textContent = textContent
+    newDialogBox.appendChild(messageContainer)
+    newDialogBoxAnimation(newDialogBox)
+}
+
+export function AdditionalEffectMessage({ message }: { message: string }) {
+
+    const newDialogBox = document.createElement('div')
+    newDialogBox.classList.add('dialog-box')
+    newDialogBox.id = 'additional-effect-dialog-box'
+    document.body.appendChild(newDialogBox)
+
+    const textContent = `${message}`
+    const messageContainer = document.createElement('p')
+    messageContainer.textContent = textContent
+    newDialogBox.appendChild(messageContainer)
+    newDialogBoxAnimation(newDialogBox)
+}

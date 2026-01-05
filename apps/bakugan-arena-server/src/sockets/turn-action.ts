@@ -6,6 +6,7 @@ import { onBattleEnd } from "../functions/on-battle-end";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { turnCountSocketProps } from "@bakugan-arena/game-data/src/type/sockets-props-types";
 import { ClearDomain } from "../functions/clear-domain";
+import { Message } from "@bakugan-arena/game-data/src/type/animations-directives";
 
 export function turnActionUpdater({ roomId, userId, io, updateBattleState = true }: { roomId: string, userId: string, io: Server, updateBattleState?: boolean }) {
     const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
@@ -76,7 +77,30 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
         battleTurn: roomData.battleState.battleInProcess ? roomData.battleState.turns : undefined
     }
 
+
+
     io.to(roomId).emit('turn-count-updater', turnState)
+    if (roomData.status.finished) {
+
+        let message: Message
+
+        if (roomData.status.winner !== null) {
+            const winner = roomData.players.find((p) => p.userId === roomData.status.winner)?.username ? roomData.players.find((p) => p.userId === roomData.status.winner)?.username : ''
+
+            message = {
+                text: `Combat terminé ! Vainceur ${winner}`
+            }
+
+        } else {
+            message = {
+                text: `Combat terminé ! Match Null !`
+            }
+        }
+
+        io.to(roomId).emit('game-finished', message)
+
+    }
+
 
     clearAnimationsInRoom(roomId)
 

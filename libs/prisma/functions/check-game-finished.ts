@@ -34,6 +34,7 @@ export const CheckGameFinished = async ({ roomId, roomState }: { roomId: string,
             console.log(`Player 1 : ${p1State} && Player 2 : ${p2State}`)
 
             if (p1State === 0 && p2State > 0) {
+
                 roomState.status.finished = true
                 roomState.status.winner = player2
 
@@ -49,6 +50,7 @@ export const CheckGameFinished = async ({ roomId, roomState }: { roomId: string,
                 })
 
             } else if (p1State > 0 && p2State === 0) {
+                
                 roomState.status.finished = true
                 roomState.status.winner = player1
 

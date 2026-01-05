@@ -7,6 +7,7 @@ import { BakuganList, type attribut, type slots_id } from "@bakugan-arena/game-d
 import { getAttributColor } from "../functions/get-attrubut-color";
 import { BuildBakuganSelecterCards } from "../turn-action-management/turn-action-builder/build-select-bakugan";
 import type { bakuganInDeck } from "@bakugan-arena/game-data/src/type/room-types";
+import { removePreviousDialogBoxAnimation } from "../animations/show-message-animation";
 
 
 export function AdditionalRequestResolution({ request, camera, plane, socket, scene }: {
@@ -87,6 +88,8 @@ export function AdditionalRequestResolution({ request, camera, plane, socket, sc
                 })
 
                 clearTurnInterface()
+                const additionalEffectsBox = document.getElementById('additional-effect-dialog-box')
+                removePreviousDialogBoxAnimation(additionalEffectsBox)
                 cleanUp()
             }
 
@@ -183,7 +186,7 @@ export function AdditionalRequestResolution({ request, camera, plane, socket, sc
 
                 const selectedBakuganData = bakugans.find((b) => b.key === bakugan?.userData.bakuganKey)
 
-                if(!selectedBakuganData) return
+                if (!selectedBakuganData) return
 
                 const resolution: resolutionType = {
                     cardKey: request.cardKey,
@@ -199,8 +202,9 @@ export function AdditionalRequestResolution({ request, camera, plane, socket, sc
                 }
 
                 socket.emit('ability-additional-request', resolution)
-
                 slotCleanUp()
+                const additionalEffectsBox = document.getElementById('additional-effect-dialog-box')
+                removePreviousDialogBoxAnimation(additionalEffectsBox)
             }
 
             window.addEventListener('mousemove', slotMouseMove)
@@ -276,6 +280,8 @@ export function AdditionalRequestResolution({ request, camera, plane, socket, sc
 
             socket.emit('ability-additional-request', resolution)
             cleanUp()
+            const additionalEffectsBox = document.getElementById('additional-effect-dialog-box')
+            removePreviousDialogBoxAnimation(additionalEffectsBox)
         }
 
         window.addEventListener('mousemove', mouseMove)
@@ -358,9 +364,9 @@ export function AdditionalRequestResolution({ request, camera, plane, socket, sc
                 }
 
                 socket.emit('ability-additional-request', resolution)
-
                 cleaner(bak)
-
+                const additionalEffectsBox = document.getElementById('additional-effect-dialog-box')
+                removePreviousDialogBoxAnimation(additionalEffectsBox)
             }
 
             bak.addEventListener('mousemove', mouseMove)

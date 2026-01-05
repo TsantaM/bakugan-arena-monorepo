@@ -1,4 +1,4 @@
-import type { AnimationDirectivesTypes } from "./animations-directives";
+import type { AnimationDirectivesTypes, Message } from "./animations-directives";
 import { type attribut } from "./game-data-types"
 import type { AbilityCardsActionsRequestsType, ActivePlayerActionRequestType, InactivePlayerActionRequestType } from './actions-serveur-requests'
 
@@ -159,5 +159,6 @@ export type roomStateType = {
     eliminated: {
         user: number,
         opponnent: number
-    }
+    };
+    finished: Message | undefined
 }
