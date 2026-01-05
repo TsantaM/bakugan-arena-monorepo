@@ -156,4 +156,8 @@ export type roomStateType = {
     deck: deckType[];
     portalSlots: portalSlotsType;
     battleState: battleState;
+    eliminated: {
+        user: number,
+        opponnent: number
+    }
 }

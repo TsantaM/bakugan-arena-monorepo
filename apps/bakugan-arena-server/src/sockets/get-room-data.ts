@@ -93,7 +93,7 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
             roomData.connectedsUsers.set(userId, socket.id)
 
             // Init state UNIQUEMENT pour le demandeur
-            const state = initRoomState({ roomId })
+            const state = initRoomState({ roomId, userId: userId })
             if (!state) return
             socket.emit('init-room-state', state)
 

@@ -83,7 +83,7 @@ if (roomId !== null && userId !== null) {
       userId: userId
     })
 
-    socket.emit("init-room-state", { roomId })
+    socket.emit("init-room-state", { roomId, userId })
 
     loop()
     function loop() {
@@ -93,7 +93,7 @@ if (roomId !== null && userId !== null) {
     }
 
     reload?.addEventListener("click", () => {
-      socket.emit("init-room-state", { roomId })
+      socket.emit("init-room-state", { roomId, userId })
     })
 
     window.addEventListener('resize', () => {

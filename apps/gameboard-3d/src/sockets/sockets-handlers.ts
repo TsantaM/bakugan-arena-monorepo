@@ -25,6 +25,7 @@ import { PowerChangeAnimation, PowerChangeNumberAnimation } from "../animations/
 import { AdditionalRequestResolution } from "../abiliity-additional-request/additional-request-resolution"
 import type { turnCountSocketProps } from "@bakugan-arena/game-data/src/type/sockets-props-types"
 import { removePreviousDialogBoxAnimation, ShowMessageAnimation } from "../animations/show-message-animation"
+import { setEliminatedCircles } from "../functions/set-eliminated-circle"
 
 let animationQueue: AnimationDirectivesTypes[] = []
 let isProcessingAnimations = false
@@ -322,7 +323,6 @@ export function registerSocketHandlers(
 
         }
 
-
         if (state.battleState.battleInProcess && !state.battleState.paused) {
             const slotOfBattle = state.portalSlots.find((s) => s.id === state.battleState.slot)
             if (!slotOfBattle) return
@@ -331,6 +331,17 @@ export function registerSocketHandlers(
                 userId: userId
             })
         }
+
+        setEliminatedCircles({
+            count: state.eliminated.user,
+            isLeft: true
+        })
+
+        setEliminatedCircles({
+            count: state.eliminated.opponnent,
+            isLeft: false
+        })
+
     })
 
     socket.on("turn-action-request", (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
