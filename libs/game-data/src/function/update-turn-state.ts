@@ -22,14 +22,12 @@ export function updateTurnState(roomData: stateType) {
     console.log('updateTurnState - New turn:', turnState)
 
     // Règles selon le nombre de tours
-    if (turnState.turnCount === 2) {
-        protalSlots[4].can_set = true
-        turnState.set_new_bakugan = false
-    } else {
+    if (turnState.turnCount > 0) {
         turnState.set_new_bakugan = true
         turnState.use_ability_card = true
         protalSlots.forEach(p => {
             if (!p.can_set && !p.portalCard) p.can_set = true
         })
     }
+
 }

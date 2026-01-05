@@ -526,8 +526,8 @@ body {
   left: 0;
   width: 100dvw;
   height: 100dvh;
-  background: whitesmoke;
-  opacity: 0.5;
+  background: black;
+  opacity: 0.25;
 }
 
 @keyframes buttonPusle {

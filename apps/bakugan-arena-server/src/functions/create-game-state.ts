@@ -1,6 +1,7 @@
 import { AbilityCardsList, attribut, BakuganList, ExclusiveAbilitiesList, GateCardsList, portalSlotsType, stateType } from "@bakugan-arena/game-data"
 import { getDecksDataPrisma, getRoomPlayers } from "./get-room-data"
 import { turnStateType } from "@bakugan-arena/game-data/src/type/room-types"
+import { SelectableGateCardAction } from "@bakugan-arena/game-data/src/type/actions-serveur-requests"
 
 export const createGameState = async ({ roomId }: { roomId: string }) => {
     const decksData = await getDecksDataPrisma({ roomId })
@@ -179,12 +180,12 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
 
         const turnState: turnStateType = {
             turn: players.player1.player1?.id ? players.player1.player1?.id : '',
-            previous_turn: undefined,
-            turnCount: 1,
+            previous_turn: players.player2.player2?.id ? players.player2.player2?.id : '',
+            turnCount: 0,
             set_new_gate: true,
             set_new_bakugan: false,
             use_ability_card: false,
-            can_change_player_turn: true
+            can_change_player_turn: false
         }
 
         const battleState = {
@@ -194,6 +195,36 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             paused: false
         }
         // Just for checking state type this const state will never be used
+
+        const p1Deck = decksData.find((deck) => deck.userId === players.player1.player1?.id)
+        const p2Deck = decksData.find((deck) => deck.userId === players.player2.player2?.id)
+
+        if (!p1Deck) return
+        if (!p2Deck) return
+
+        const p1Gates: SelectableGateCardAction[] = p1Deck.gateCards.map((card) => {
+            const gate = GateCardsList.find((c) => c.key === card)
+            if (gate) {
+                return {
+                    key: gate.key,
+                    name: gate.name,
+                    description: gate.description,
+                    image: gate.image,
+                }
+            }
+        }).filter((card) => card !== undefined)
+
+        const p2Gates: SelectableGateCardAction[] = p2Deck.gateCards.map((card) => {
+            const gate = GateCardsList.find((c) => c.key === card)
+            if (gate) {
+                return {
+                    key: gate.key,
+                    name: gate.name,
+                    description: gate.description,
+                    image: gate.image,
+                }
+            }
+        }).filter((card) => card !== undefined)
 
         const state: stateType = {
             connectedsUsers: new Map(),
@@ -212,7 +243,10 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             ActivePlayerActionRequest: {
                 target: 'ACTIVE_PLAYER',
                 actions: {
-                    mustDo: [],
+                    mustDo: [{
+                        type: 'SELECT_GATE_CARD',
+                        data: p1Gates
+                    }],
                     mustDoOne: [],
                     optional: []
                 }
@@ -220,7 +254,10 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             InactivePlayerActionRequest: {
                 target: 'INACTIVE_PLAYER',
                 actions: {
-                    mustDo: [],
+                    mustDo: [{
+                        type: 'SELECT_GATE_CARD',
+                        data: p2Gates
+                    }],
                     mustDoOne: [],
                     optional: []
                 }

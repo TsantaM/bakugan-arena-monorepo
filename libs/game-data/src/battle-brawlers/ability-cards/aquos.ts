@@ -71,11 +71,6 @@ export const MirageAquatique: abilityCardsType = {
                     newSlot: structuredClone(slotTarget)
                 })
 
-                roomData.battleState.battleInProcess = false
-                roomData.battleState.paused = false
-                roomData.battleState.slot = null
-                roomData.battleState.turns = 2
-
                 CheckBattleStillInProcess(roomData)
                 OpenGateCardActionRequest({ roomState: roomData })
 

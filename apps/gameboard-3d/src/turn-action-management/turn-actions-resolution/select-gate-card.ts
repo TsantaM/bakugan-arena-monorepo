@@ -1,6 +1,10 @@
 import type { ActionRequestAnswerType, ActionType } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
+import type { Socket } from "socket.io-client";
+import { clearTurnInterface } from "./action-scope";
 
-export function SelectGateCard({ userId, SelectedActions, actions }: {
+export function SelectGateCard({ userId, SelectedActions, actions, socket, roomId }: {
+    roomId: string,
+    socket: Socket,
     userId: string,
     SelectedActions: ActionRequestAnswerType
     actions: ActionType[]
@@ -23,6 +27,13 @@ export function SelectGateCard({ userId, SelectedActions, actions }: {
                 userId: userId
             }
             console.log(SelectGateCardAction)
+            socket.emit('set-gate', {
+                roomId,
+                gateId: SelectGateCardAction.data.key,
+                userId
+            })
+
+            clearTurnInterface()
         })
     })
 

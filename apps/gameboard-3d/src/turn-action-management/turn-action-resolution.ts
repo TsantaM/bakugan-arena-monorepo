@@ -14,7 +14,7 @@ export function TurnActionResolution({ request, SelectedActions, userId, actions
     request: ActivePlayerActionRequestType | InactivePlayerActionRequestType, SelectedActions: ActionRequestAnswerType, userId: string, actions: ActionType[], camera: THREE.PerspectiveCamera,
     scene: THREE.Scene<THREE.Object3DEventMap>, plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>, roomId: string, socket: Socket
 }) {
-    SelectGateCard({ SelectedActions: SelectedActions, userId: userId, actions: actions })
+    SelectGateCard({ SelectedActions: SelectedActions, userId: userId, actions: actions, roomId: roomId, socket: socket })
     SelectBakugan({ SelectedActions: SelectedActions, userId: userId, actions: actions })
     SelectAbilityCard({ SelectedActions: SelectedActions, userId: userId, actions: actions })
 

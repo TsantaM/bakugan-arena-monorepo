@@ -189,7 +189,6 @@ async function processAnimationQueue(userId: string,
         }
 
         if (current.type === 'BATTLE-END') {
-            alert('eh')
             await OnBattleEndAnimation()
         }
 
@@ -228,6 +227,7 @@ export function registerSocketHandlers(
 
     socket.on("init-room-state", (state: roomStateType) => {
         console.log("ROOM INIT")
+        alert('init-room-state')
         // 👉 ton code existant ici (sans socket.on)
 
         plane.clear()
@@ -278,6 +278,7 @@ export function registerSocketHandlers(
 
     socket.on("turn-action-request", (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
         console.log('actions', request.actions)
+        alert('turn-action-request')
         TurnActionBuilder({
             request,
             userId: userId,
@@ -291,6 +292,7 @@ export function registerSocketHandlers(
     )
 
     socket.on("animations", (animations: AnimationDirectivesTypes[]) => {
+        alert('animations')
         animationQueue.push(...animations)
         console.log(animations)
         console.log(animationQueue)
@@ -298,6 +300,7 @@ export function registerSocketHandlers(
     })
 
     socket.on("ability-additional-request", (request: AbilityCardsActionsRequestsType) => {
+        alert('ability-additional-request')
         if (request.userId !== userId) return
         AdditionalRequestResolution({
             request: request, camera: camera, plane: plane, socket: socket, scene: scene
@@ -305,6 +308,7 @@ export function registerSocketHandlers(
     })
 
     socket.on('turn-count-updater', (turnState: turnCountSocketProps) => {
+        alert('turn-count-uptader')
         const turnCounter = document.getElementById('turn-counter')
         if (!turnCounter) return
 

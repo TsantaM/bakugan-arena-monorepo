@@ -29,12 +29,15 @@ export const UpdateGate: ({ roomId, gateId, slot, userId }: setGateCardProps) =>
     // et le joueur ne doit pas être celui qui a joué au tour précédent
     // ENG: Global condition: slot must be free, the turn must allow gate placement,
     // and the player must not be the one who played the previous turn
-    const canPlaceGate = usable_slot && can_set_gate && roomData.turnState.previous_turn !== userId
+    const notTurnAndTurn0 = roomData.turnState.previous_turn !== userId && roomData.turnState.turnCount > 0
+    const canPlaceGate = usable_slot && can_set_gate && notTurnAndTurn0
 
-    // FR: Si les conditions ne sont pas réunies, on stoppe
-    // ENG: If conditions are not met, stop execution
-    if (!canPlaceGate) return
+    // console.log('checker', usable_slot, can_set_gate, roomData.turnState.previous_turn !== userId, roomData.turnState.turnCount > 0, canPlaceGate)
 
+    // // FR: Si les conditions ne sont pas réunies, on stoppe
+    // // ENG: If conditions are not met, stop execution
+    // if (!canPlaceGate) return
+    // console.log('eh-1-gate')
     // FR: Récupère le slot ciblé, le deck du joueur, et l'état du joueur
     // ENG: Retrieve the targeted slot, the player's deck, and the player's state
     const slotToUpdate = roomData.protalSlots.find((s) => s.id === slot)
@@ -44,6 +47,7 @@ export const UpdateGate: ({ roomId, gateId, slot, userId }: setGateCardProps) =>
     // FR: Si une de ces entités est introuvable, on stoppe
     // ENG: If any of these entities are missing, stop execution
     if (!slotToUpdate || !deckToUpdate || !newPlayerState) return
+    console.log('eh-2-gate')
 
     // FR: Nouveau slot : on bloque le placement (can_set = false) et on associe la gate au slot
     // ENG: New slot: disable further placement (can_set = false) and attach the gate to the slot
@@ -77,16 +81,6 @@ export const UpdateGate: ({ roomId, gateId, slot, userId }: setGateCardProps) =>
         decksState: roomData.decksState.map((d) =>
             d.userId === userId ? { ...d, gates: newDeckState.gates } : d
         )
-        // animations: [
-        //     ...roomData.animations,
-        //     {
-        //         type: 'SET_GATE_CARD',
-        //         data: {
-        //             slot: newSlotState,
-        //         },
-        //         resolved: false
-        //     }
-        // ]
     }
 
     // FR: Sauvegarde du nouvel état de la salle dans l'état global

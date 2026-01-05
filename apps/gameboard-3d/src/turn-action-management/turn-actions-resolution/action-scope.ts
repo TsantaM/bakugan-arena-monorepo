@@ -29,4 +29,6 @@ export function clearTurnInterface() {
     turnActionButton?.remove()
     const selecter = document.querySelector('.select-one')
     selecter?.remove()
+    const stackSelecteOne = document.getElementById('stack-selecte-one')
+    stackSelecteOne?.remove()
 }
