@@ -8,6 +8,8 @@ import { OnBattleEndAnimation } from './animations/on-battle-end-animation'
 import { TurnActionBuilder } from './turn-action-management'
 import { TurnActionData } from './test-functions/test-variables/turn-action-test'
 import { io } from 'socket.io-client'
+import { ShowMessageAnimation } from './animations/show-message-animation'
+import type { Message } from '@bakugan-arena/game-data/src/type/animations-directives'
 
 const canvas = document.getElementById('gameboard-canvas')
 const userId = 'user-1';
@@ -134,12 +136,24 @@ if (canvas) {
     })
 
     document.getElementById('add-bakugan')?.addEventListener('click', () => {
+
+        const messages: Message[] = [{
+            text: 'Bakugan au combat',
+            userName: 'Gland'
+        }, {
+            text: 'Bakugan transformation',
+            userName: 'Gland'
+        }]
+
         AddBakugan({
             scene: scene,
             userId: userId,
             camera: camera,
             slots: slots,
 
+        })
+        ShowMessageAnimation({
+            messages: messages
         })
     })
 

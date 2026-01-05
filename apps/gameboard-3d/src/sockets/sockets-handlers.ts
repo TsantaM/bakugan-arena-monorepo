@@ -24,6 +24,7 @@ import { SetGateCardFunctionAndAnimation } from "../scene-modifications-function
 import { PowerChangeAnimation, PowerChangeNumberAnimation } from "../animations/power-change-animation"
 import { AdditionalRequestResolution } from "../abiliity-additional-request/additional-request-resolution"
 import type { turnCountSocketProps } from "@bakugan-arena/game-data/src/type/sockets-props-types"
+import { removePreviousDialogBoxAnimation, ShowMessageAnimation } from "../animations/show-message-animation"
 
 let animationQueue: AnimationDirectivesTypes[] = []
 let isProcessingAnimations = false
@@ -62,6 +63,7 @@ async function processAnimationQueue(userId: string,
                                 malus: anim.data.malus
                             })
                         )
+
                     );
                 })
 
@@ -78,6 +80,9 @@ async function processAnimationQueue(userId: string,
                     const delta = anim.data.malus ? -anim.data.powerChange : anim.data.powerChange;
                     combinedPowerChanges.set(key, old + delta);
                 }
+                await ShowMessageAnimation({
+                    messages: anim.message
+                })
             }
 
             await Promise.all(
@@ -112,6 +117,10 @@ async function processAnimationQueue(userId: string,
                 plane,
                 slot: current.data.slot
             });
+
+            await ShowMessageAnimation({
+                messages: current.message
+            })
         }
 
         if (current.type === 'SET_BAKUGAN') {
@@ -122,6 +131,10 @@ async function processAnimationQueue(userId: string,
                 scene,
                 userId
             });
+
+            await ShowMessageAnimation({
+                messages: current.message
+            })
         }
 
         if (current.type === 'MOVE_TO_ANOTHER_SLOT') {
@@ -132,6 +145,10 @@ async function processAnimationQueue(userId: string,
                 scene,
                 userId
             });
+
+            await ShowMessageAnimation({
+                messages: current.message
+            })
         }
 
         if (current.type === 'OPEN_GATE_CARD') {
@@ -140,6 +157,10 @@ async function processAnimationQueue(userId: string,
                 slot: current.data.slot,
                 slotId: current.data.slotId
             });
+
+            await ShowMessageAnimation({
+                messages: current.message
+            })
         }
 
         if (current.type === 'CANCEL_GATE_CARD') {
@@ -149,6 +170,10 @@ async function processAnimationQueue(userId: string,
                     mesh: mesh as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>,
                     slot: current.data.slot
                 });
+
+                await ShowMessageAnimation({
+                    messages: current.message
+                })
             }
         }
 
@@ -160,6 +185,10 @@ async function processAnimationQueue(userId: string,
                 scene,
                 userId
             });
+
+            await ShowMessageAnimation({
+                messages: current.message
+            })
         }
 
         if (current.type === 'ELIMINE_BAKUGAN') {
@@ -169,6 +198,10 @@ async function processAnimationQueue(userId: string,
                 slot: current.data.slot,
                 userId
             });
+
+            await ShowMessageAnimation({
+                messages: current.message
+            })
         }
 
         if (current.type === 'REMOVE_GATE_CARD') {
@@ -179,6 +212,10 @@ async function processAnimationQueue(userId: string,
                 scene,
                 userId
             });
+
+            await ShowMessageAnimation({
+                messages: current.message
+            })
         }
 
         if (current.type === 'BATTLE_START') {
@@ -186,10 +223,18 @@ async function processAnimationQueue(userId: string,
                 slot: current.data.slot,
                 userId: userId
             })
+
+            await ShowMessageAnimation({
+                messages: current.message
+            })
         }
 
         if (current.type === 'BATTLE-END') {
             await OnBattleEndAnimation()
+
+            await ShowMessageAnimation({
+                messages: current.message
+            })
         }
 
         if (current.type === 'SET_BAKUGAN_AND_ADD_RENFORT') {
@@ -200,6 +245,16 @@ async function processAnimationQueue(userId: string,
                 slot: current.data.slot,
                 userId: userId
             })
+
+            await ShowMessageAnimation({
+                messages: current.message
+            })
+        }
+
+        if (current.type === 'ACTIVE_ABILITY_CARD') {
+            await ShowMessageAnimation({
+                messages: current.message
+            })
         }
 
         i++; // avancer à l'animation suivante
@@ -208,6 +263,8 @@ async function processAnimationQueue(userId: string,
     animationQueue = []
     console.log(animationQueue)
     isProcessingAnimations = false
+    const dialog = document.getElementById('dialog-box')
+    removePreviousDialogBoxAnimation(dialog, 2)
 }
 
 export function registerSocketHandlers(
@@ -226,8 +283,8 @@ export function registerSocketHandlers(
     socket.off() // 💣 purge TOTALE des anciens listeners
 
     socket.on("init-room-state", (state: roomStateType) => {
-        console.log("ROOM INIT")
-        alert('init-room-state')
+        // console.log("ROOM INIT")
+        // alert('init-room-state')
         // 👉 ton code existant ici (sans socket.on)
 
         plane.clear()
@@ -277,8 +334,8 @@ export function registerSocketHandlers(
     })
 
     socket.on("turn-action-request", (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
-        console.log('actions', request.actions)
-        alert('turn-action-request')
+        // console.log('actions', request.actions)
+        // alert('turn-action-request')
         TurnActionBuilder({
             request,
             userId: userId,
@@ -292,15 +349,15 @@ export function registerSocketHandlers(
     )
 
     socket.on("animations", (animations: AnimationDirectivesTypes[]) => {
-        alert('animations')
+        // alert('animations')
         animationQueue.push(...animations)
-        console.log(animations)
-        console.log(animationQueue)
+        // console.log(animations)
+        // console.log(animationQueue)
         processAnimationQueue(userId, camera, scene, plane)
     })
 
     socket.on("ability-additional-request", (request: AbilityCardsActionsRequestsType) => {
-        alert('ability-additional-request')
+        // alert('ability-additional-request')
         if (request.userId !== userId) return
         AdditionalRequestResolution({
             request: request, camera: camera, plane: plane, socket: socket, scene: scene
@@ -308,7 +365,7 @@ export function registerSocketHandlers(
     })
 
     socket.on('turn-count-updater', (turnState: turnCountSocketProps) => {
-        alert('turn-count-uptader')
+        // alert('turn-count-uptader')
         const turnCounter = document.getElementById('turn-counter')
         if (!turnCounter) return
 

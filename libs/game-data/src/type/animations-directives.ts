@@ -1,7 +1,7 @@
 import type { portalSlotsTypeElement, bakuganOnSlot, slots_id } from '../type/room-types'
 
 export type Message = {
-    userId: string,
+    userName?: string,
     text: string
 }
 
@@ -105,4 +105,11 @@ export type AnimationDirectivesTypes =
         },
         message?: Message[],
         resolved: boolean
+    } | {
+        type: 'ACTIVE_ABILITY_CARD',
+        resolve: false,
+        data: {
+            card: string,
+        },
+        message: Message[]
     }

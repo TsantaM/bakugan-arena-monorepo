@@ -1,5 +1,6 @@
+import { BakuganList } from '../../battle-brawlers/bakugans';
 import type { AnimationDirectivesTypes } from '../../type/animations-directives'
-import { bakuganOnSlot, portalSlotsTypeElement } from '../../type/room-types';
+import type { bakuganOnSlot, portalSlotsTypeElement } from '../../type/room-types';
 
 
 type Props = {
@@ -18,6 +19,9 @@ export const ElimineBakuganDirectiveAnimation: ElimineBakuganDirectiveAnimationT
             slot: slot
         },
         resolved: false,
+        message: [{
+            text: `${BakuganList.find((b) => bakugan.key === b.key )?.name || ''} a été éliminé`
+        }]
     }
 
     animations.push(comeBackBakuganDirective)

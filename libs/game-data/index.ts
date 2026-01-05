@@ -35,6 +35,7 @@ import { RemoveGateCardDirectiveAnimation } from './src/function/create-animatio
 import { OnBattleStartAnimationDirectives } from './src/function/create-animation-directives/on-battle-start-animation-directives'
 import { CreateActionRequestFunction } from './src/function/create-action-request-function'
 import { CheckBattleStillInProcess } from "./src/function/check-battle-still-in-process"
+import { GetUserName } from './src/function/get-user-name'
 
 export {
     Bakugans,
@@ -71,6 +72,7 @@ export {
     MoveOpponentAbilityFilter,
     DragBakuganAbilityFilter,
     AddBakuganAbilityFilter,
+    GetUserName,
 
     GetGateCardImage,
 

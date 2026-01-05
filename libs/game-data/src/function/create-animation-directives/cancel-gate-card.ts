@@ -16,6 +16,9 @@ export const CancelGateCardDirectiveAnimation: CancelGateCardDirectiveAnimationT
             slot: slot
         },
         resolved: false,
+        message: [{
+            text: `Carte Portail annulée`
+        }]
     }
 
     animations.push(comeBackBakuganDirective)

@@ -169,12 +169,14 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             {
                 userId: players.player1.player1.id,
                 usable_gates: 3,
-                usable_abilitys: 3
+                usable_abilitys: 3,
+                username: players.player1.player1.displayUsername || ''
             },
             {
                 userId: players.player2.player2.id,
                 usable_gates: 3,
-                usable_abilitys: 3
+                usable_abilitys: 3,
+                username: players.player2.player2.displayUsername || ''
             }
         ]
 

@@ -1,3 +1,4 @@
+import { BakuganList } from "../../battle-brawlers/bakugans";
 import type { AnimationDirectivesTypes } from "../../type/animations-directives";
 import type { bakuganOnSlot, portalSlotsTypeElement } from "../../type/room-types";
 
@@ -21,6 +22,9 @@ export const MoveToAnotherSlotDirectiveAnimation: MoveToAnotherSlotType = ({ ani
             newSlot: newSlot
         },
         resolved: false,
+        message: [{
+            text: `${BakuganList.find((b) => bakugan.key === b.key )?.name || ''} a été déplacé vers ${newSlot.id}`
+        }]
     }
 
     animations.push(animation)

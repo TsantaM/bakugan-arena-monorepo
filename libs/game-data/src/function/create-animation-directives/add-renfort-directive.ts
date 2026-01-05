@@ -1,3 +1,4 @@
+import { BakuganList } from '../../battle-brawlers/bakugans';
 import type { AnimationDirectivesTypes } from '../../type/animations-directives'
 import type { bakuganOnSlot, portalSlotsTypeElement } from '../../type/room-types';
 
@@ -17,6 +18,9 @@ export const SetBakuganAndAddRenfortAnimationDirective: AddRenfortAnimationDirec
             slot: slot
         },
         resolved: false,
+        message: [{
+            text: `${BakuganList.find((b) => bakugan.key === b.key )?.name || ''} s'engage au combat !`
+        }]
     }
 
     if(animations.some((a) => a === animation)) return

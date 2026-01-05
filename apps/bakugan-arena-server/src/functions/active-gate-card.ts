@@ -1,4 +1,4 @@
-import { activeGateCardProps, AnimationDirectivesTypes, GateCardsList, slots_id } from "@bakugan-arena/game-data"
+import { activeGateCardProps, AnimationDirectivesTypes, GateCardsList, GetUserName, slots_id } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 import { turnActionUpdater } from "../sockets/turn-action"
 
@@ -55,7 +55,11 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
                     slot: slotOfGate,
                     slotId: slotOfGate.id
                 },
-                resolved: false
+                resolved: false,
+                message: [{
+                    text: `Carte Portail ouvre toi ! ${gateCard.name}`,
+                    userName: GetUserName({ roomData: roomData, userId: userId })
+                }]
             }
 
             roomData.animations.push(animation)
@@ -64,11 +68,11 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
             console.log('active gate animations', roomData.animations.map((a) => a.type))
 
 
-            if(!openFunction) return
+            if (!openFunction) return
 
             io.to(roomId).emit('animations', roomData.animations)
-            
-            if(openFunction.turnAction) {
+
+            if (openFunction.turnAction) {
                 turnActionUpdater({
                     io: io,
                     roomId: roomId,

@@ -1,3 +1,4 @@
+import { BakuganList } from '../../battle-brawlers/bakugans';
 import type { AnimationDirectivesTypes } from '../../type/animations-directives'
 import type { bakuganOnSlot } from '../../type/room-types';
 
@@ -20,6 +21,9 @@ export const PowerChangeDirectiveAnumation: PowerChangeDirectiveAnumationType = 
             malus: malus
         },
         resolved: false,
+        message: bakugans.map((b) => ({
+            text: malus ? `Baisse du niveau de puissance de ${BakuganList.find((bakugan) => bakugan.key === b.key )?.name || ''} de ${powerChange} G !` : `Hausse du niveau de puissance de ${BakuganList.find((bakugan) => bakugan.key === b.key )?.name || ''} de ${powerChange} G !`
+        }))
     }
 
     animations.push(powerChangeDirective)

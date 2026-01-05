@@ -1,4 +1,4 @@
-import { AbilityCardsList, ExclusiveAbilitiesList, useAbilityCardProps } from "@bakugan-arena/game-data";
+import { AbilityCardsList, AnimationDirectivesTypes, ExclusiveAbilitiesList, GetUserName, useAbilityCardProps } from "@bakugan-arena/game-data";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { activateAbilities } from "@bakugan-arena/game-data/src/type/room-types";
 import { AbilityCardsActionsRequestsType, ActivePlayerActionRequestType, InactivePlayerActionRequestType } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
@@ -51,6 +51,23 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
     //   4. The Bakugan is present and belongs to the user (abilityUser)
     //   5. The Bakugan is not blocked from using abilities (abilityUser.abilityBlock === false)
     if (roomData && abilityToUse && playerAbilities && playerAbilities > 0 && abilityUser && !abilityUser.abilityBlock) {
+
+        const activeCardAnimation: AnimationDirectivesTypes = {
+            type: 'ACTIVE_ABILITY_CARD',
+            data: {
+                card: abilityToUse.key
+            },
+            resolve: false,
+            message: [{
+                text: `Carte Maitrise Activée : ${abilityToUse.name}`,
+                userName: GetUserName({
+                    roomData: roomData,
+                    userId: userId
+                })
+            }]
+        }
+
+        roomData.animations.push(activeCardAnimation)
 
         // FR: On exécute l’effet de la capacité en lui passant tout le contexte nécessaire
         // ENG: Execute the ability effect by passing all required context

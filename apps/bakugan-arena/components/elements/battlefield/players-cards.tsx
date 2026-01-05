@@ -1,11 +1,11 @@
 'use client'
 
-import TurnInterface from "./turn-interface"
+// import TurnInterface from "./turn-interface"
 // import TurnCounter from "./game-board/turn-counter"
 // import { ProfilePictureLeft, ProfilePictureRigth } from "./game-board/profile-picture-zone"
 // import { BakuganPreviewOnFocused, BattleBakuganPreview } from "./game-board/bakugan-preview"
 // import { AliveCounterLeft, AliveCounterRight } from "./game-board/alive-counter"
-import { useFocusedBakugan } from "@/src/store/focused-bakugan-store"
+// import { useFocusedBakugan } from "@/src/store/focused-bakugan-store"
 import { useGlobalGameState } from "@/src/store/global-game-state-store"
 import { useRef } from "react"
 import { useSocket } from "@/src/providers/socket-provider"
@@ -36,8 +36,8 @@ export default function PlayerCards({ player, opponent, roomId, userId }: { play
     const playerData = player?.player
     const opponentData = opponent?.player
 
-    const slotOfBattle = slots?.find((p) => p.id === battleState?.slot)
-    const battleConditions = slotOfBattle && battleState && battleState.battleInProcess && battleState.paused === false ? true : false
+    // const slotOfBattle = slots?.find((p) => p.id === battleState?.slot)
+    // const battleConditions = slotOfBattle && battleState && battleState.battleInProcess && battleState.paused === false ? true : false
     const iframeRef = useRef<HTMLIFrameElement>(null)
     const link = `http://localhost:5173/?roomId=${roomId}&userId=${userId}&userImage=${playerData?.image ? playerData?.image : undefined}&opponentImage=${opponentData?.image ? opponentData?.image : undefined}`
 
@@ -77,7 +77,7 @@ export default function PlayerCards({ player, opponent, roomId, userId }: { play
             </div> */}
 
         </div>
-        <TurnInterface roomId={roomId} userId={userId} />
+        {/* <TurnInterface roomId={roomId} userId={userId} /> */}
 
 
     </>

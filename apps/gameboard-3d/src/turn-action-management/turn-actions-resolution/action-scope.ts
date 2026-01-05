@@ -1,3 +1,5 @@
+import { removePreviousDialogBoxAnimation } from "../../animations/show-message-animation"
+
 // action-scope.ts
 class ActionScope {
     private cleaners: (() => void)[] = []
@@ -31,4 +33,6 @@ export function clearTurnInterface() {
     selecter?.remove()
     const stackSelecteOne = document.getElementById('stack-selecte-one')
     stackSelecteOne?.remove()
+    const previousDialogBox = document.getElementById('dialog-box')
+    removePreviousDialogBoxAnimation(previousDialogBox)
 }

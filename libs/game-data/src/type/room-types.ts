@@ -133,7 +133,8 @@ export type stateType = {
     players: {
         userId: string,
         usable_gates: number,
-        usable_abilitys: number
+        usable_abilitys: number,
+        username: string
     }[];
     turnState: turnStateType,
     persistantAbilities: activateAbilities[],

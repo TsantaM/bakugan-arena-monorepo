@@ -60,7 +60,8 @@ export const getRoomPlayers = async ({ roomId }: { roomId: string }) => {
                 id: room.player1Id
             },
             select: {
-                id: true
+                id: true,
+                displayUsername: true
             }
         })
 
@@ -69,15 +70,16 @@ export const getRoomPlayers = async ({ roomId }: { roomId: string }) => {
                 id: room.player2Id
             },
             select: {
-                id: true
+                id: true,
+                displayUsername: true
             }
         })
 
         return {
             "player1": {
                 player1
-            }, 
-            
+            },
+
             "player2": {
                 player2
             }

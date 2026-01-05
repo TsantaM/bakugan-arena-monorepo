@@ -2,10 +2,11 @@ import { OpenGateCardActionRequest } from "../../function/action-request-functio
 import { CancelAbilityCard } from "../../function/cancel-ability-card"
 import { CheckBattle } from "../../function/check-battle-in-process"
 import { CheckBattleStillInProcess } from "../../function/check-battle-still-in-process"
+import { SetBakuganAndAddRenfortAnimationDirective } from "../../function/create-animation-directives/add-renfort-directive"
 import { CancelGateCardDirectiveAnimation } from "../../function/create-animation-directives/cancel-gate-card"
 import { MoveToAnotherSlotDirectiveAnimation } from "../../function/create-animation-directives/move-to-another-slot"
 import { PowerChangeDirectiveAnumation } from "../../function/create-animation-directives/power-change"
-import { SetBakuganDirectiveAnimation } from "../../function/create-animation-directives/set-bakugan-animation-directives"
+// import { SetBakuganDirectiveAnimation } from "../../function/create-animation-directives/set-bakugan-animation-directives"
 import type { AbilityCardsActions, bakuganToMoveType } from "../../type/actions-serveur-requests"
 import { type exclusiveAbilitiesType } from "../../type/game-data-types"
 import type { slots_id, bakuganOnSlot } from "../../type/room-types"
@@ -159,7 +160,8 @@ export const SabreDeLaMort: exclusiveAbilitiesType = {
                     slotOfGate.bakugans.push(usersBakugan)
                     tigrerra.bakuganData.onDomain = true
                     ability.used = true
-                    SetBakuganDirectiveAnimation({
+                    
+                    SetBakuganAndAddRenfortAnimationDirective({
                         animations: roomState.animations,
                         bakugan: usersBakugan,
                         slot: structuredClone(slotOfGate)

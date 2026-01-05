@@ -1,4 +1,4 @@
-import { addBakuganToSlot, AnimationDirectivesTypes, BakuganList, setBakuganProps, Slots, slots_id } from "@bakugan-arena/game-data"
+import { addBakuganToSlot, AnimationDirectivesTypes, BakuganList, GetUserName, setBakuganProps, Slots, slots_id } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
 export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuganProps): AnimationDirectivesTypes[] | undefined => {
@@ -122,6 +122,13 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuga
             slot: structuredClone(slots[Slots.indexOf(slot as slots_id)]),
         },
         resolved: false,
+        message: [{
+            text: `Bakugan au combat !`,
+            userName: GetUserName({roomData: Battle_Brawlers_Game_State[roomIndex], userId: userId})
+        }, {
+            text: `${bakuganToAdd.name} transformation !`,
+            userName: GetUserName({roomData: Battle_Brawlers_Game_State[roomIndex], userId: userId})
+        }]
     }
     // Battle_Brawlers_Game_State[roomIndex]?.animations.push(animation)
 
