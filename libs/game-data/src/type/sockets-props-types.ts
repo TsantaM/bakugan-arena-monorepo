@@ -14,3 +14,15 @@ export type turnCountSocketProps = {
     turnCount: number,
     battleTurn?: number
 }
+export type chalengeSomeoneSocketProps = {
+    userId: string;
+    deckId: string;
+    targetId: string;
+    chalengerName: string;
+}
+
+export type chalengeAcceptSocketProps = {
+    userId: string | undefined;
+    deckId: string;
+    chalengerId: string;
+}

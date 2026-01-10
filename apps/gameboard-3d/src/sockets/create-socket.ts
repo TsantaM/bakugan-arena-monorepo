@@ -6,7 +6,7 @@ export function createSocket(userId: string, roomId: string) {
   if (socket) return socket // ⛔ jamais 2 sockets
 
   socket = io("http://localhost:3005", {
-    auth: { userId, roomId }
+    auth: { userId, roomId, socketType: 'game' }
   })
 
   socket.on("connect", () => {

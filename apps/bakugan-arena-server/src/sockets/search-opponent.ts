@@ -2,6 +2,7 @@ import { Server, Socket } from "socket.io";
 import { CreateRoom } from "../functions/create-room";
 import { createGameState } from "../functions/create-game-state";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
+import { GetUsersRooms } from "../functions/get-rooms-of-user";
 
 export type waitingListElements = {
     socketId: string,
@@ -58,8 +59,8 @@ const matchmaking = async ({ io, socket, socketId, userId }: { io: Server, socke
                 removeToWaitingList({ userId: player1.userId })
                 removeToWaitingList({ userId: player2.userId })
 
-                const newRoomState = await createGameState({roomId: room.id})
-                if(newRoomState) {
+                const newRoomState = await createGameState({ roomId: room.id })
+                if (newRoomState) {
                     Battle_Brawlers_Game_State.push(newRoomState)
                 }
 
@@ -80,10 +81,16 @@ const matchmaking = async ({ io, socket, socketId, userId }: { io: Server, socke
                 players.forEach((p) => io.to(p.socketId).emit('match-found', room.id))
                 players.forEach((p) => removeToWaitingList({ userId: p.userId }))
 
-                const newRoomState = await createGameState({roomId: room.id})
-                if(newRoomState) {
+                const newRoomState = await createGameState({ roomId: room.id })
+                if (newRoomState) {
                     Battle_Brawlers_Game_State.push(newRoomState)
+                    players.forEach((p) => {
+                        const rooms = GetUsersRooms(p.userId)
+                        console.log('eh rooms', rooms)
+                        io.to(p.socketId).emit('get-rooms-user-id', rooms)
+                    })
                 }
+
             }
         }
     }

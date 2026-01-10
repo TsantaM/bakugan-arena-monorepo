@@ -8,6 +8,9 @@ import { socketActiveGateCard } from "./sockets/active-gate-card-socket";
 import { socketUseAbilityCard } from "./sockets/use-ability-card-socket";
 import { socketCleanAnimations } from "./sockets/clear-animations-socket";
 import { AbilitiesAdditionalEffectsSocket } from "./sockets/abilities-additional-effect-socket";
+import { addOrUpdateConnectedUser, addRoomSocket, removeConnectedUserBySocket, removeRoomSocket } from "./functions/connected-users-management";
+import { ChalengeAcceptSocket, ChalengeSomeoneSocket } from "./sockets/chalenge-someone-socket";
+import { getUsersRooms } from "./sockets/get-users-rooms";
 
 
 
@@ -21,9 +24,17 @@ const io = new Server({
 
 
 io.on('connection', (socket) => {
-    const userId = socket.handshake.auth.userId
+    const { userId, roomId, socketType } = socket.handshake.auth
+    console.log('A user connected:', 'socketId : ', socket.id, 'userId : ', userId);
+    if (!roomId && (!socketType || socketType === 'game')) {
+        addOrUpdateConnectedUser(userId, socket.id);
+    } else {
 
-    console.log('A user connected:', 'socketId : ', socket.id, 'userId : ', userId );
+    }
+
+    getUsersRooms(io, socket),
+    ChalengeSomeoneSocket(io, socket),
+    ChalengeAcceptSocket(io, socket),
     setupSearchOpponentSocket(io, socket)
     socketGetRoomState(io, socket)
     socketCleanAnimations(io, socket)
@@ -31,13 +42,16 @@ io.on('connection', (socket) => {
     socketUpdateGateState(io, socket)
     socketUpdateBakuganState(io, socket)
     socketUseAbilityCard(io, socket)
-    AbilitiesAdditionalEffectsSocket(io,socket)
+    AbilitiesAdditionalEffectsSocket(io, socket)
     socketActiveGateCard(io, socket)
     socketTurn(io, socket)
 
     socket.on('disconnect', (reason) => {
         console.log('A user disconnected:', 'socketId : ', socket.id, 'userId : ', userId, reason);
         removeToWaitingList({ userId: userId })
+        removeConnectedUserBySocket(socket.id);
+        addRoomSocket(userId, socket.id, roomId)
+        removeRoomSocket(socket.id, userId)
     })
 
 });

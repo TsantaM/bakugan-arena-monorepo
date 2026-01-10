@@ -267,7 +267,7 @@ async function processAnimationQueue(userId: string,
     console.log(animationQueue)
     isProcessingAnimations = false
     const dialog = document.getElementById('dialog-box')
-    removePreviousDialogBoxAnimation(dialog, 2)
+    removePreviousDialogBoxAnimation(dialog, 3)
 }
 
 export function registerSocketHandlers(

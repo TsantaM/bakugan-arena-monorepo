@@ -13,9 +13,12 @@ import {
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { RoleType } from "@/src/actions/getUserSession"
+import { authClient } from "@/src/lib/auth-client"
+import { useSocket } from "@/src/providers/socket-provider"
 import { BookOpenText, ChartSpline, Home, KeyRound, SwatchBook } from "lucide-react"
 import Link from "next/link"
-import { ReactNode } from "react"
+import { useRouter } from "next/navigation"
+import { ReactNode, useEffect, useState } from "react"
 
 type LinksDashboardType = {
     icone: ReactNode,
@@ -46,7 +49,31 @@ const LinksDashboard: LinksDashboardType[] = [
     }
 ]
 
+
 export default function AppSidebar({ role }: { role: RoleType | undefined }) {
+
+    const router = useRouter()
+    const socket = useSocket()
+    const [Rooms, setRooms] = useState<{ p1: string, p2: string, roomId: string }[]>([])
+    const user = authClient.useSession()
+
+    useEffect(() => {
+        if (!socket) return
+        if (!user.data?.user.id) return
+        const userId = user.data.user.id
+        socket.emit('get-rooms-user-id', userId)
+
+    }, [socket, router])
+
+    useEffect(() => {
+        if (!socket) return
+        socket.on('get-rooms-user-id', (rooms: { p1: string, p2: string, roomId: string }[]) => {
+            if(rooms === Rooms) return
+            setRooms(rooms)
+        })
+
+    }, [socket])
+
     return (
         <Sidebar variant="inset">
             <SidebarHeader>
@@ -87,6 +114,27 @@ export default function AppSidebar({ role }: { role: RoleType | undefined }) {
                             </SidebarMenu>
                         }
 
+                    </SidebarGroupContent>
+                </SidebarGroup>
+                <SidebarGroup>
+                    <SidebarGroupLabel>
+                        Battles in process ({Rooms.length})
+                    </SidebarGroupLabel>
+                    <SidebarGroupContent>
+                        {
+                            Rooms.length > 0 && Rooms.map((room, index) =>
+                                <SidebarMenu key={index}>
+                                    <SidebarMenuItem>
+                                        <SidebarMenuButton asChild>
+                                            <Link href={`/dashboard/battlefield?id=${room.roomId}`}>
+                                                <KeyRound />
+                                                <span>{`${room.p1} VS ${room.p2}`}</span>
+                                            </Link>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                </SidebarMenu>
+                            )
+                        }
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
