@@ -7,6 +7,7 @@ import { turnActionUpdater } from "./turn-action";
 
 export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
     socket.on('ability-additional-request', (resolution: resolutionType) => {
+        clearAnimationsInRoom(resolution.roomId)
         const roomData = Battle_Brawlers_Game_State.find((room) => room && room.roomId === resolution.roomId)
         const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room && room.roomId === resolution.roomId)
         if (!roomData) return
@@ -96,8 +97,8 @@ export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
 
         }
 
-        if(!result) return
-        if(result.turnActionLaucher) {
+        if (!result) return
+        if (result.turnActionLaucher) {
             turnActionUpdater({
                 io: io,
                 roomId: roomId,

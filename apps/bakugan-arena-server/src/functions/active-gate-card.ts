@@ -49,11 +49,13 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
             // EN : Trigger the Gate Card's special "onOpen" effect if it exists,
             //      passing the required context (room state, slot, Bakugan, and player)
 
+            const clone = structuredClone(slotOfGate)
+
             const animation: AnimationDirectivesTypes = {
                 type: "OPEN_GATE_CARD",
                 data: {
-                    slot: slotOfGate,
-                    slotId: slotOfGate.id
+                    slot: clone,
+                    slotId: clone.id
                 },
                 resolved: false,
                 message: [{

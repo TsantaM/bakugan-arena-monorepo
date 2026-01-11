@@ -2,10 +2,11 @@ import type { useAbilityCardProps } from "@bakugan-arena/game-data";
 import { Server, Socket } from "socket.io/dist";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { useAbilityCardServer } from "../functions/use-abiliy-card";
+import { clearAnimationsInRoom } from "./clear-animations-socket";
 
 export const socketUseAbilityCard = (io: Server, socket: Socket) => {
     socket.on('use-ability-card', ({ roomId, abilityId, slot, userId, bakuganKey }: useAbilityCardProps) => {
-
+        clearAnimationsInRoom(roomId)
         const data = {
             roomId: roomId,
             abilityId: abilityId,

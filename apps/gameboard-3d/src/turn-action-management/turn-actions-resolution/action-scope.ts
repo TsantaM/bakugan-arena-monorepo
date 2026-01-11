@@ -35,4 +35,6 @@ export function clearTurnInterface() {
     stackSelecteOne?.remove()
     const previousDialogBox = document.getElementById('dialog-box')
     removePreviousDialogBoxAnimation(previousDialogBox)
+    const existingDescription = document.querySelector('.hovered-card-description');
+    existingDescription?.remove();
 }

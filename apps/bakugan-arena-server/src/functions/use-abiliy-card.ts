@@ -125,12 +125,18 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
             players: roomData.players.map((p) => p.userId === userId ? {
                 ...p,
                 usable_abilitys: p.usable_abilitys - 1
-            } : p),
+            } : p)
         }
 
         // FR: Sauvegarde du nouvel état de la salle dans l'état global
         // ENG: Save the new room state back into the global state
         Battle_Brawlers_Game_State[roomIndex] = state
+        const animations = Battle_Brawlers_Game_State[roomIndex].animations
+        console.log('animations', animations)
+        io.to(roomId).emit('update-room-state', state)
+        if (!animations) return
+        io.to(roomId).emit('animations', animations)
+        console.log('emitting animations', animations)
 
         if (abilityReturn !== null) {
             const request: AbilityCardsActionsRequestsType = {
@@ -152,13 +158,6 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
             console.log(socket, 'ability-additional-request', requests[0])
 
         } else {
-            const animations = Battle_Brawlers_Game_State[roomIndex].animations
-            console.log('animations', animations)
-            io.to(roomId).emit('update-room-state', state)
-            if (!animations) return
-            io.to(roomId).emit('animations', animations)
-            console.log('emitting animations', animations)
-
             const activeSocket = state.connectedsUsers.get(state.turnState.turn)
             const inactiveSocket = state.connectedsUsers.get(state.turnState.previous_turn || '')
 

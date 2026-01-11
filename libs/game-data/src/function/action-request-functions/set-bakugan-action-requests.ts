@@ -24,6 +24,9 @@ export function SetBakuganActionRequest({ roomState }: { roomState: stateType })
     const SlotsWithBakugans = roomState.protalSlots.filter((slot) => slot.bakugans.length > 0)
 
     if (!bankugansAndSlots?.usableBakugans) return
+    if (bankugansAndSlots?.usableBakugans.length <= 0) return
+    if (!bankugansAndSlots.usableSlots) return
+    if (bankugansAndSlots.usableSlots.length <= 0) return
 
     const setBakuganRequest: ActionType = {
         type: 'SET_BAKUGAN',

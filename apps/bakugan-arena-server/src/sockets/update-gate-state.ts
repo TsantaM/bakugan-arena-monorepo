@@ -5,12 +5,13 @@ import { setGateCardProps, slots_id } from "@bakugan-arena/game-data";
 import { addSlotToSetBakugan, removeActionByType } from "@bakugan-arena/game-data/src/function/create-animation-directives/remove-action-by-type";
 import { ActivePlayerActionRequestType, InactivePlayerActionRequestType } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
 import { turnActionUpdater } from "./turn-action";
+import { clearAnimationsInRoom } from "./clear-animations-socket";
 
 export const socketUpdateGateState = (io: Server, socket: Socket) => {
     socket.on('set-gate', ({ roomId, gateId, slot, userId }: setGateCardProps) => {
         const state = Battle_Brawlers_Game_State.find((s) => s?.roomId === roomId)
         if (!state) return
-        state.animations = [];
+        clearAnimationsInRoom(roomId)
 
         if (!slot) {
             const slot: slots_id = state.turnState.turn === userId ? 'slot-2' : 'slot-5'

@@ -1,10 +1,10 @@
+import { CheckBattleStillInProcess } from "../../function/check-battle-still-in-process";
 import { SetBakuganAndAddRenfortAnimationDirective } from "../../function/create-animation-directives/add-renfort-directive";
 import { ComeBackBakuganDirectiveAnimation } from "../../function/create-animation-directives/come-back-bakugan";
 import { PowerChangeDirectiveAnumation } from "../../function/create-animation-directives/power-change";
 import { RemoveGateCardDirectiveAnimation } from "../../function/create-animation-directives/remove-gate-card";
 import { ResetSlot } from "../../function/reset-slot";
 import { GateCardImages } from "../../store/gate-card-images";
-import { AnimationDirectivesTypes } from "../../type/animations-directives";
 import { type gateCardType } from "../../type/game-data-types";
 import { type bakuganOnSlot, type stateType } from "../../type/room-types";
 
@@ -387,11 +387,6 @@ export const Armistice: gateCardType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const bakugansOnGate = slotOfGate.bakugans.map((b) => b.key)
-            RemoveGateCardDirectiveAnimation({
-                animations: roomState.animations,
-                slot: slotOfGate
-            })
-            ResetSlot(slotOfGate)
 
             if (roomState && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
                 roomState.decksState.forEach((d) => {
@@ -403,16 +398,14 @@ export const Armistice: gateCardType = {
 
                 })
 
-                roomState.battleState.battleInProcess = false
-                roomState.battleState.slot = null
-                roomState.battleState.paused = false
 
-                const animation: AnimationDirectivesTypes = {
-                    type: 'BATTLE-END',
-                    resolved: false,
-                }
+                RemoveGateCardDirectiveAnimation({
+                    animations: roomState.animations,
+                    slot: slotOfGate
+                })
+                ResetSlot(slotOfGate)
 
-                roomState.animations.push(animation)
+                CheckBattleStillInProcess(roomState)
 
             }
 

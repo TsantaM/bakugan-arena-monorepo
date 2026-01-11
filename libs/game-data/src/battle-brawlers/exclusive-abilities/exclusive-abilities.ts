@@ -160,7 +160,7 @@ export const SabreDeLaMort: exclusiveAbilitiesType = {
                     slotOfGate.bakugans.push(usersBakugan)
                     tigrerra.bakuganData.onDomain = true
                     ability.used = true
-                    
+
                     SetBakuganAndAddRenfortAnimationDirective({
                         animations: roomState.animations,
                         bakugan: usersBakugan,
@@ -396,7 +396,8 @@ export const VisageDeJoie: exclusiveAbilitiesType = {
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
-        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (!roomState) return null
+        const slotOfGate = roomState.protalSlots.find((s) => s.id === slot)
         const gate = GateCardsList.find((g) => g.key === slotOfGate?.portalCard?.key)
 
         if (slotOfGate && gate) {
@@ -405,6 +406,10 @@ export const VisageDeJoie: exclusiveAbilitiesType = {
                     gate.onCanceled({ roomState, slot, userId, bakuganKey })
                 }
                 slotOfGate.state.canceled = true
+                CancelGateCardDirectiveAnimation({
+                    animations: roomState.animations,
+                    slot: slotOfGate
+                })
             } else {
                 slotOfGate.state.blocked = true
             }

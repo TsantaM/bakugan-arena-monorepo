@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io/dist";
 import { ActiveGateCard } from "../functions/active-gate-card";
-import { activeGateCardProps, slots_id } from "@bakugan-arena/game-data";
+import { activeGateCardProps } from "@bakugan-arena/game-data";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { removeActionByType } from "@bakugan-arena/game-data/src/function/create-animation-directives/remove-action-by-type";
 import { ActivePlayerActionRequestType } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
@@ -11,6 +11,8 @@ export const socketActiveGateCard = (io: Server, socket: Socket) => {
     socket.on('active-gate-card', ({ roomId, gateId, slot, userId }: activeGateCardProps) => {
         const state = Battle_Brawlers_Game_State.find((s) => s?.roomId === roomId)
         if (!state) return
+        clearAnimationsInRoom(roomId)
+
         ActiveGateCard({ roomId, gateId, slot, userId, io })
 
         console.log('active-gate-in-socket', state.animations.map((a) => a.type))

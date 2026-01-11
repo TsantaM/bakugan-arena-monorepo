@@ -59,7 +59,7 @@ export function AddAbilities({ roomState, request, bakugan, slot, userId, attrib
         request.actions.optional.push({
             type: "USE_ABILITY_CARD",
             data: [abilitieRequest]
-            
+
         })
     }
 
@@ -67,9 +67,11 @@ export function AddAbilities({ roomState, request, bakugan, slot, userId, attrib
 
 export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
     socket.on('set-bakugan', ({ roomId, bakuganKey, slot, userId }: setBakuganProps) => {
+        clearAnimationsInRoom(roomId)
+
         const bakugan = BakuganList.find((b) => b.key === bakuganKey)
 
-        if(!bakugan) return
+        if (!bakugan) return
 
         const animation = SetBakuganOnGate({ roomId, bakuganKey, slot, userId })
         const state = Battle_Brawlers_Game_State.find((s) => s?.roomId === roomId)
