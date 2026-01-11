@@ -3,8 +3,10 @@ import gsap from 'gsap'
 
 function RemoveGateCardAnimation({
   mesh,
+  gateCardMeshs
 }: {
-  mesh: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>
+  mesh: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>,
+  gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[]
 }): Promise<void> {
   return new Promise((resolve) => {
     const color = new THREE.Color('white')
@@ -39,6 +41,11 @@ function RemoveGateCardAnimation({
       b: 0,
       duration: 0.3,
     })
+
+    const index = gateCardMeshs.findIndex((card) => card === mesh)
+    if(index === -1) return
+    gateCardMeshs.splice(index, 1)
+
   })
 }
 

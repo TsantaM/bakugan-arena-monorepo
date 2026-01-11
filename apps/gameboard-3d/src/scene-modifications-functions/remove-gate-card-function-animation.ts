@@ -8,16 +8,19 @@ type RemoveGateCardFunctionAnimationProps = {
     slot: portalSlotsTypeElement,
     userId: string,
     scene: THREE.Scene,
-    camera: THREE.PerspectiveCamera
+    camera: THREE.PerspectiveCamera,
+    gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[],
+    bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[]
 }
 
-async function RemoveGateCardFunctionAnimation({ plane, slot, userId, scene, camera, }: RemoveGateCardFunctionAnimationProps) {
+async function RemoveGateCardFunctionAnimation({ plane, slot, userId, scene, camera, gateCardMeshs, bakugansMeshs }: RemoveGateCardFunctionAnimationProps) {
 
     async function gateCardRemover() {
         const mesh = plane.getObjectByName(slot.id)
         if (!mesh) return
         RemoveGateCardAnimation({
-            mesh: mesh as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>
+            mesh: mesh as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>,
+            gateCardMeshs
         })
     }
 
@@ -29,7 +32,8 @@ async function RemoveGateCardFunctionAnimation({ plane, slot, userId, scene, cam
                 slot: slot,
                 userId: userId,
                 camera: camera,
-                onCompleteFunction: gateCardRemover
+                onCompleteFunction: gateCardRemover,
+                bakugansMeshs
             }
             )
         })

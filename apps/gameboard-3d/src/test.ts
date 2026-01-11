@@ -94,6 +94,7 @@ if (canvas) {
     renderer.setPixelRatio(window.devicePixelRatio)
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
     const controls = new OrbitControls(camera, renderer.domElement)
+    const bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[] = []
     const light = new THREE.AmbientLight('white', 3)
     const plane = PlaneMesh.clone()
     plane.material.transparent = true
@@ -168,6 +169,38 @@ if (canvas) {
             roomId: roomId,
             socket: socket
         })
+    })
+
+    // Show bakugan data
+    const raycaster = new THREE.Raycaster()
+    const mouse = new THREE.Vector2()
+    let hoveredMesh: THREE.Sprite<THREE.Object3DEventMap> | null = null
+
+    window.addEventListener('mousemove', (event: MouseEvent) => {
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+
+        raycaster.setFromCamera(mouse, camera)
+
+        const intersects = raycaster.intersectObjects(bakugansMeshs, false)
+
+        if (intersects.length > 0) {
+            const currentMesh = intersects[0].object as THREE.Sprite<THREE.Object3DEventMap>
+
+            if (hoveredMesh !== currentMesh) {
+                if (hoveredMesh) {
+                    console.log('mouseleave:', hoveredMesh.name)
+                }
+
+                hoveredMesh = currentMesh
+                console.log('mouseenter:', hoveredMesh.name)
+            }
+        } else {
+            if (hoveredMesh) {
+                console.log('mouseleave:', hoveredMesh.name)
+                hoveredMesh = null
+            }
+        }
     })
 
     loop()

@@ -35,7 +35,10 @@ let isProcessingAnimations = false
 async function processAnimationQueue(userId: string,
     camera: THREE.PerspectiveCamera,
     scene: THREE.Scene,
-    plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>,) {
+    plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>,
+    bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[],
+    gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[]
+) {
     if (isProcessingAnimations) return
 
     isProcessingAnimations = true
@@ -69,8 +72,6 @@ async function processAnimationQueue(userId: string,
 
                     );
                 })
-
-
             );
 
             const combinedPowerChanges = new Map<string, number>();
@@ -108,6 +109,13 @@ async function processAnimationQueue(userId: string,
                 })
             );
 
+            current.data.bakugan.forEach((b) => {
+                const name = `${b.key}-${b.userId}`
+                const mesh = scene.getObjectByName(name)
+                if(!mesh) return
+                mesh.userData.powerLevel = b.currentPower
+            })
+
             continue;
         }
 
@@ -118,7 +126,9 @@ async function processAnimationQueue(userId: string,
         if (current.type === 'SET_GATE_CARD') {
             await SetGateCardFunctionAndAnimation({
                 plane,
-                slot: current.data.slot
+                slot: current.data.slot,
+                userId: userId,
+                gateCardMeshs
             });
 
             await ShowMessageAnimation({
@@ -132,7 +142,8 @@ async function processAnimationQueue(userId: string,
                 slot: current.data.slot,
                 camera,
                 scene,
-                userId
+                userId,
+                bakugansMeshs
             });
 
             await ShowMessageAnimation({
@@ -186,7 +197,8 @@ async function processAnimationQueue(userId: string,
                 slot: current.data.slot,
                 camera,
                 scene,
-                userId
+                userId,
+                bakugansMeshs
             });
 
             await ShowMessageAnimation({
@@ -199,7 +211,8 @@ async function processAnimationQueue(userId: string,
                 bakugan: current.data.bakugan,
                 scene,
                 slot: current.data.slot,
-                userId
+                userId,
+                bakugansMeshs
             });
 
             await ShowMessageAnimation({
@@ -213,7 +226,9 @@ async function processAnimationQueue(userId: string,
                 slot: current.data.slot,
                 camera,
                 scene,
-                userId
+                userId,
+                gateCardMeshs,
+                bakugansMeshs
             });
 
             await ShowMessageAnimation({
@@ -246,7 +261,8 @@ async function processAnimationQueue(userId: string,
                 camera: camera,
                 scene: scene,
                 slot: current.data.slot,
-                userId: userId
+                userId: userId,
+                bakugansMeshs
             })
 
             await ShowMessageAnimation({
@@ -278,10 +294,12 @@ export function registerSocketHandlers(
         camera: THREE.PerspectiveCamera
         scene: THREE.Scene
         plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>
-        light: THREE.AmbientLight
+        light: THREE.AmbientLight,
+        bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[],
+        gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[]
     }
 ) {
-    const { camera, plane, roomId, scene, userId, light } = ctx
+    const { camera, plane, roomId, scene, userId, light, bakugansMeshs, gateCardMeshs } = ctx
 
     socket.off() // 💣 purge TOTALE des anciens listeners
 
@@ -306,7 +324,9 @@ export function registerSocketHandlers(
             if (slot.portalCard !== null) {
                 createSlotMesh({
                     plane: plane,
-                    slot: slot
+                    slot: slot,
+                    gateCardMeshs,
+                    userId
                 })
 
                 if (slot.bakugans.length > 0) {
@@ -317,7 +337,8 @@ export function registerSocketHandlers(
                             scene: scene,
                             slot: slot,
                             slotIndex: Slots.indexOf(bakugan.slot_id),
-                            userId: userId
+                            userId: userId,
+                            bakugansMeshs
                         })
                     }
                 }
@@ -375,7 +396,7 @@ export function registerSocketHandlers(
         animationQueue.push(...animations)
         // console.log(animations)
         // console.log(animationQueue)
-        processAnimationQueue(userId, camera, scene, plane)
+        processAnimationQueue(userId, camera, scene, plane, bakugansMeshs, gateCardMeshs)
     })
 
     socket.on("ability-additional-request", (request: AbilityCardsActionsRequestsType) => {

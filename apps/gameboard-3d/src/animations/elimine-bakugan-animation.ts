@@ -8,14 +8,15 @@ type ElimineBakuganAnimationProps = {
     userId: string
     slot: portalSlotsTypeElement
     scene: THREE.Scene,
+    bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[],
     onCompleteFunction?: () => void
-
 }
 
 export function ElimineBakuganAnimation({
     bakugan,
     scene,
     slot,
+    bakugansMeshs
 }: ElimineBakuganAnimationProps): Promise<void> {
     return new Promise((resolve) => {
         const bakuganMesh = scene.getObjectByName(
@@ -52,5 +53,10 @@ export function ElimineBakuganAnimation({
             { x: 2, y: 2, z: 1 },
             { x: 0, y: 0, z: 0, duration: 1, ease: 'power2.in' }
         )
+
+        const meshsIndex = bakugansMeshs.findIndex((b) => b === bakuganMesh)
+        if (meshsIndex === -1) return
+        bakugansMeshs.splice(meshsIndex, 1)
+
     })
 }

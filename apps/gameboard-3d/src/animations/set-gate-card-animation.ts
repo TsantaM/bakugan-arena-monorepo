@@ -7,10 +7,14 @@ export function SetGateCardAnimation({
     cardMesh,
     index,
     card,
+    userId,
+    gateCardMeshs
 }: {
     cardMesh: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>
     index: number
-    card: { key: string; userId: string }
+    card: { key: string; userId: string },
+    userId: string,
+    gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[]
 }): Promise<void> {
 
     return new Promise((resolve) => {
@@ -20,6 +24,12 @@ export function SetGateCardAnimation({
         const color = new THREE.Color('white')
         const position = getSlotMeshPosition({ index })
         if (!position) return resolve()
+
+        if(card.userId === userId) {
+            cardMesh.userData.cardName = cardData.name
+        }
+
+        gateCardMeshs.push(cardMesh)
 
         const timeline = gsap.timeline({
             onComplete: () => {

@@ -4,6 +4,8 @@ import * as THREE from 'three'
 import { PlaneMesh } from './meshes/plane.mesh'
 import { createSocket } from './sockets/create-socket'
 import { registerSocketHandlers } from './sockets/sockets-handlers'
+import { CreateBakuganHoverPreview, RemoveBakuganHoverPreview, type BakuganPreviewData } from './functions/create-bakugan-preview-hover'
+import { OnHoverGateCard } from './animations/show-message-animation'
 
 const canvas = document.getElementById('gameboard-canvas')
 const params = new URLSearchParams(window.location.search)
@@ -25,14 +27,39 @@ if (!roomId || !userId) {
 
 const socket = createSocket(userId, roomId)
 
-if (userImage) {
-  const left_profile_picture = document.getElementById('left-profile-picture-img')
-  if (left_profile_picture) left_profile_picture.setAttribute('src', userImage)
+function setImageWithFallback(imgElement: HTMLImageElement | null, src: string, fallbackSrc: string, fallbackAlt: string) {
+  if (!imgElement) return;
+
+  imgElement.src = src;
+  imgElement.alt = src;
+
+  // Si l'image ne se charge pas, on met le fallback
+  imgElement.onerror = () => {
+    imgElement.src = fallbackSrc;
+    imgElement.alt = fallbackAlt;
+  };
 }
 
+// Pour l'utilisateur
+if (userImage) {
+  const left_profile_picture = document.getElementById('left-profile-picture-img');
+  setImageWithFallback(
+    left_profile_picture as HTMLImageElement,
+    userImage,
+    '/images/default-profil-picture.png',
+    'default profile picture'
+  );
+}
+
+// Pour l’adversaire
 if (opponentImage) {
-  const right_profile_picture = document.getElementById('right-profile-picture-img')
-  if (right_profile_picture) right_profile_picture.setAttribute('src', opponentImage)
+  const right_profile_picture = document.getElementById('right-profile-picture-img');
+  setImageWithFallback(
+    right_profile_picture as HTMLImageElement,
+    opponentImage,
+    '/images/default-profil-picture.png',
+    'default profile picture'
+  );
 }
 
 
@@ -74,13 +101,78 @@ if (roomId !== null && userId !== null) {
     scene.add(light)
     scene.add(camera)
 
+    // Show bakugan and gate cards data
+    const bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[] = []
+    const gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[] = []
+    const raycaster = new THREE.Raycaster()
+    const mouse = new THREE.Vector2()
+    let hoveredMesh: THREE.Sprite<THREE.Object3DEventMap> | null = null
+    let hoveredSlot: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap> | null = null
+
+    window.addEventListener('mousemove', (event: MouseEvent) => {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+
+      raycaster.setFromCamera(mouse, camera)
+
+      const intersects = raycaster.intersectObjects(bakugansMeshs, false)
+      const gatesIntersects = raycaster.intersectObjects(gateCardMeshs, false)
+
+      if (intersects.length > 0) {
+        const currentMesh = intersects[0].object as THREE.Sprite<THREE.Object3DEventMap>
+
+        if (hoveredMesh !== currentMesh) {
+          if (hoveredMesh) {
+            RemoveBakuganHoverPreview()
+          }
+
+          hoveredMesh = currentMesh
+          console.log('mouseenter:', hoveredMesh.name)
+          CreateBakuganHoverPreview(currentMesh.userData as BakuganPreviewData, { x: mouse.x, y: mouse.y })
+        }
+
+      } else {
+        if (hoveredMesh) {
+          console.log('mouseleave:', hoveredMesh.name)
+          RemoveBakuganHoverPreview()
+          hoveredMesh = null
+        }
+      }
+
+      if (gatesIntersects.length > 0) {
+        const currentMesh = gatesIntersects[0].object as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>
+
+        if (hoveredSlot !== currentMesh) {
+          if (hoveredSlot) {
+            document.getElementById('on-hover-gate-card')?.remove()
+          }
+
+          hoveredSlot = currentMesh
+          if (hoveredSlot.userData.cardName) {
+            console.log('mouseenter:', hoveredSlot.userData.cardName)
+            const message: string = hoveredSlot.userData.cardName
+            OnHoverGateCard({ message: message })
+          }
+        }
+
+      } else {
+        if (hoveredSlot) {
+          console.log('mouseleave:', hoveredSlot.userData.cardName)
+          document.getElementById('on-hover-gate-card')?.remove()
+        }
+      }
+
+    })
+
     registerSocketHandlers(socket, {
       camera: camera,
       light: light,
       plane: plane,
       roomId: roomId,
       scene: scene,
-      userId: userId
+      userId: userId,
+      bakugansMeshs: bakugansMeshs,
+      gateCardMeshs: gateCardMeshs
     })
 
     socket.emit("init-room-state", { roomId, userId })

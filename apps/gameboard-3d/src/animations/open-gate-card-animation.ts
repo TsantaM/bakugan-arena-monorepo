@@ -27,6 +27,7 @@ export function OpenGateCardAnimation({
     overlay.material.emissiveIntensity = 10;
     mesh.parent?.add(overlay);
     overlay.position.copy(mesh.position);
+    mesh.userData.cardName = cardData.name
 
     const timeline = gsap.timeline({
       onComplete: () => {

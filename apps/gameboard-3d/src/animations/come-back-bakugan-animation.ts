@@ -9,6 +9,7 @@ type ComeBackBakuganAnimationProps = {
   userId: string
   slot: portalSlotsTypeElement
   scene: THREE.Scene,
+  bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[]
   onCompleteFunction?: () => void
 }
 
@@ -17,7 +18,8 @@ export function ComeBackBakuganAnimation({
   camera,
   scene,
   slot,
-  userId
+  userId,
+  bakugansMeshs
 }: ComeBackBakuganAnimationProps): Promise<void> {
   return new Promise((resolve) => {
     const bakuganMesh = scene.getObjectByName(
@@ -90,5 +92,10 @@ export function ComeBackBakuganAnimation({
         ease: 'power2.inOut'
       }
     )
+
+    const meshsIndex = bakugansMeshs.findIndex((b) => b === bakuganMesh)
+    if(meshsIndex === -1) return
+    bakugansMeshs.splice(meshsIndex, 1)
+
   })
 }

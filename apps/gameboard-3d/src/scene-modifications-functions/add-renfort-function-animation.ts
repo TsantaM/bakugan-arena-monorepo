@@ -7,7 +7,7 @@ export function AddRenfortAnimationAndFunction({ }: {}) {
 
 }
 
-export async function SetBakuganAndAddRenfortAnimationAndFunction({ bakugan, scene, slot, camera, userId }: { scene: THREE.Scene, bakugan: bakuganOnSlot, slot: portalSlotsTypeElement, camera: THREE.PerspectiveCamera, userId: string }) {
+export async function SetBakuganAndAddRenfortAnimationAndFunction({ bakugan, scene, slot, camera, userId, bakugansMeshs }: { scene: THREE.Scene, bakugan: bakuganOnSlot, slot: portalSlotsTypeElement, camera: THREE.PerspectiveCamera, userId: string, bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[] }) {
     
     const powerContainer = document.getElementById(`${bakugan.userId}-${bakugan.slot_id}`)
     
@@ -19,7 +19,8 @@ export async function SetBakuganAndAddRenfortAnimationAndFunction({ bakugan, sce
         camera: camera,
         scene: scene,
         slot: slot,
-        userId: userId
+        userId: userId,
+        bakugansMeshs
     })
 
     AddRenfortToBattleField({

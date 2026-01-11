@@ -3,7 +3,7 @@ import { type bakuganOnSlot, type portalSlotsTypeElement } from '@bakugan-arena/
 import { getAttributColor } from '../functions/get-attrubut-color'
 import { GetSpritePosition } from '../functions/get-sprite-position'
 
-function createSprite({ bakugan, scene, slot, slotIndex, userId }: { bakugan: bakuganOnSlot, scene: THREE.Scene, slot: portalSlotsTypeElement, slotIndex: number, userId: string }) {
+function createSprite({ bakugan, scene, slot, slotIndex, userId, bakugansMeshs }: { bakugan: bakuganOnSlot, scene: THREE.Scene, slot: portalSlotsTypeElement, slotIndex: number, userId: string, bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[] }) {
     const bakuganTexture = new THREE.TextureLoader().load(`./../images/bakugans/sphere/${bakugan.image}/${bakugan.attribut.toUpperCase()}.png`)
 
     const bakuganMesh = new THREE.Sprite(
@@ -16,6 +16,10 @@ function createSprite({ bakugan, scene, slot, slotIndex, userId }: { bakugan: ba
     bakuganMesh.userData = {
         attribut: bakugan.attribut,
         bakuganKey: bakugan.key,
+        powerLevel: bakugan.currentPower,
+        image: bakugan.image,
+        userId: userId,
+        slot: slot.id
     }
 
     const position = GetSpritePosition({
@@ -28,6 +32,7 @@ function createSprite({ bakugan, scene, slot, slotIndex, userId }: { bakugan: ba
     if(!position) return
 
     bakuganMesh.position.set(position.x, 0.75, position.z)
+    bakugansMeshs.push(bakuganMesh as THREE.Sprite<THREE.Object3DEventMap>)
     scene.add(bakuganMesh)
 }
 

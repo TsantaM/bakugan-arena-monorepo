@@ -8,10 +8,11 @@ type ComeBackBakuganFunctionAnimationProps = {
     camera: THREE.PerspectiveCamera,
     scene: THREE.Scene<THREE.Object3DEventMap>,
     slot: portalSlotsTypeElement,
-    userId: string
+    userId: string,
+    bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[]
 }
 
-async function ComeBackBakuganFunctionAnimation({ bakugan, camera, scene, slot, userId }: ComeBackBakuganFunctionAnimationProps) {
+async function ComeBackBakuganFunctionAnimation({ bakugan, camera, scene, slot, userId, bakugansMeshs }: ComeBackBakuganFunctionAnimationProps) {
     const reajustSpritesPositions = () => {
         slot.bakugans.splice(slot.bakugans.indexOf(bakugan), 1)
         slot.bakugans.filter((b) => b.userId === bakugan.userId && b.key !== bakugan.key).forEach((b) => {
@@ -30,7 +31,8 @@ async function ComeBackBakuganFunctionAnimation({ bakugan, camera, scene, slot, 
         scene: scene,
         slot: slot,
         userId: userId,
-        onCompleteFunction: reajustSpritesPositions
+        onCompleteFunction: reajustSpritesPositions,
+        bakugansMeshs
     })
 
 }

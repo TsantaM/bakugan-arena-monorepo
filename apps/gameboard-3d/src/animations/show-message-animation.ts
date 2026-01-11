@@ -85,3 +85,17 @@ export function AdditionalEffectMessage({ message }: { message: string }) {
     newDialogBox.appendChild(messageContainer)
     newDialogBoxAnimation(newDialogBox)
 }
+
+export function OnHoverGateCard({ message }: { message: string }) {
+
+    const newDialogBox = document.createElement('div')
+    newDialogBox.classList.add('dialog-box')
+    newDialogBox.id = 'on-hover-gate-card'
+    document.body.appendChild(newDialogBox)
+
+    const textContent = `${message}`
+    const messageContainer = document.createElement('p')
+    messageContainer.textContent = textContent
+    newDialogBox.appendChild(messageContainer)
+    newDialogBoxAnimation(newDialogBox)
+}

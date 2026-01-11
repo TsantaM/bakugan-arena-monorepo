@@ -189,6 +189,44 @@ body {
 
 }
 
+.bakugan-previews-container-hover {
+  position: relative;
+  width: 15vw;
+  aspect-ratio: 3/4;
+  padding: 0.25rem;
+  background: oklch(82.8% 0.189 84.429);
+
+  .sprites-preview {
+    width: 100%;
+    height: 100%;
+    background: red;
+    display: flex;
+
+    .sprite-container {
+      position: relative;
+      width: 100%;
+
+      .attribut-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .sprite {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+      }
+
+    }
+
+  }
+
+}
+
 .power-container {
   display: flex;
   justify-content: end;
@@ -711,7 +749,7 @@ body {
     background: #7b3306;
     opacity: 0.5;
   }
- 
+
   .open-gate-card-button:hover::before {
     opacity: 1;
     transition: 0.75;
@@ -726,6 +764,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
+
   .card-title {
     font-size: 5vw;
   }
@@ -751,6 +790,7 @@ body {
     display: flex;
     flex-direction: row !important;
     flex-wrap: wrap;
+
     .open-gate-card-button {
       width: 15dvw;
     }
@@ -775,6 +815,7 @@ body {
   min-height: 5vh;
   border-radius: 1vw 1vw 0 0;
   overflow: hidden;
+
   p {
     font-size: 1.25rem;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
