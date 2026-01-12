@@ -28,7 +28,6 @@ const addToWaitingList = ({ userId, deckId, socketId }: { userId: string, deckId
     if (!ckeckExist) {
         waitingList.push(newEntry)
         console.log(`User ${userId} added to waiting list.`)
-        console.log(waitingList)
 
     } else {
         console.log(`User ${userId} is already in the waiting list.`)
@@ -86,7 +85,6 @@ const matchmaking = async ({ io, socket, socketId, userId }: { io: Server, socke
                     Battle_Brawlers_Game_State.push(newRoomState)
                     players.forEach((p) => {
                         const rooms = GetUsersRooms(p.userId)
-                        console.log('eh rooms', rooms)
                         io.to(p.socketId).emit('get-rooms-user-id', rooms)
                     })
                 }

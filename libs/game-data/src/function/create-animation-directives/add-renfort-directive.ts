@@ -19,11 +19,29 @@ export const SetBakuganAndAddRenfortAnimationDirective: AddRenfortAnimationDirec
         },
         resolved: false,
         message: [{
-            text: `${BakuganList.find((b) => bakugan.key === b.key )?.name || ''} s'engage au combat !`
+            text: `${BakuganList.find((b) => bakugan.key === b.key)?.name || ''} s'engage au combat !`
         }]
     }
 
-    if(animations.some((a) => a === animation)) return
+    if (animations.some((a) => a === animation)) return
+
+    animations.push(animation)
+}
+
+export const AddRenfortAnimationDirective: AddRenfortAnimationDirectiveType = ({ animations, bakugan, slot }) => {
+    const animation: AnimationDirectivesTypes = {
+        type: 'ADD_RENFORT',
+        data: {
+            bakugan: bakugan,
+            slot: slot
+        },
+        resolved: false,
+        message: [{
+            text: `${BakuganList.find((b) => bakugan.key === b.key)?.name || ''} s'engage au combat !`
+        }]
+    }
+
+    if (animations.some((a) => a === animation)) return
 
     animations.push(animation)
 }

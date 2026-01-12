@@ -5,9 +5,7 @@ import { PowerChangeDirectiveAnumation } from "../create-animation-directives/po
 export function CaracterGateCardEffect({ roomState, slotOfGate, family }: { roomState: stateType, slotOfGate: portalSlotsTypeElement | undefined, family: string }) {
     if (!roomState) return
     if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
-        console.log(slotOfGate)
         const bakugansTarget = slotOfGate.bakugans.filter((b) => b.family === family)
-        console.log('bakuganTargets', bakugansTarget)
         bakugansTarget.forEach((b) => {
             const basePower = structuredClone(b.currentPower)
             if (!basePower) return
@@ -26,9 +24,7 @@ export function CaracterGateCardEffect({ roomState, slotOfGate, family }: { room
 export function CancelCaracterGateCard({ roomState, slotOfGate, family }: { roomState: stateType, slotOfGate: portalSlotsTypeElement | undefined, family: string }) {
     if (!roomState) return
     if (slotOfGate && slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
-        console.log(slotOfGate)
         const bakugansTarget = slotOfGate.bakugans.filter((b) => b.family === family)
-        console.log('bakuganTargets', bakugansTarget)
         bakugansTarget.forEach((b) => {
             const basePower = structuredClone(b.powerLevel)
             if (!basePower) return

@@ -1,3 +1,12 @@
+process.on("unhandledRejection", (reason) => {
+    console.error("UNHANDLED REJECTION", reason)
+})
+
+process.on("uncaughtException", (err) => {
+    console.error("UNCAUGHT EXCEPTION", err)
+})
+
+
 import { Server } from "socket.io";
 import { removeToWaitingList, setupSearchOpponentSocket } from "./sockets/search-opponent";
 import { socketGetRoomState, socketInitiRoomState } from "./sockets/get-room-data";

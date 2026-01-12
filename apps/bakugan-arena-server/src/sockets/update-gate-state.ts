@@ -15,12 +15,9 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
 
         if (!slot) {
             const slot: slots_id = state.turnState.turn === userId ? 'slot-2' : 'slot-5'
-            console.log('eh-0-gate', slot)
 
             const animation = UpdateGate({ roomId, gateId, slot, userId })
             if (state) {
-                const animations = state.animations
-                console.log('animations', animations)
                 io.to(roomId).emit('update-room-state', state)
                 if (!animation) return
                 io.to(roomId).emit('animations', animation)
@@ -29,8 +26,6 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
 
             const animation = UpdateGate({ roomId, gateId, slot, userId })
             if (state) {
-                const animations = state.animations
-                console.log('animations', animations)
                 io.to(roomId).emit('update-room-state', state)
                 if (!animation) return
                 io.to(roomId).emit('animations', animation)
@@ -42,15 +37,12 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
         const activeSocket = state.connectedsUsers.get(state.turnState.turn)
         const inactiveSocket = state.connectedsUsers.get(state.turnState.previous_turn || '')
 
-        console.log('sockets', activeSocket, inactiveSocket)
-
         if (state.turnState.turnCount === 0) {
             const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
             if (roomIndex === -1) return
             if (!Battle_Brawlers_Game_State[roomIndex]) return
 
             const gateCardOnFieldCount = Battle_Brawlers_Game_State[roomIndex].protalSlots.filter((slot) => slot.portalCard !== null).length
-            console.log('gateCardOnFieldCount', gateCardOnFieldCount)
             if (state.turnState.turn === userId) {
                 const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "SELECT_GATE_CARD")
                 Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
@@ -78,7 +70,6 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
                 if (!Battle_Brawlers_Game_State[roomIndex]) return
                 const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "SET_GATE_CARD_ACTION")
                 addSlotToSetBakugan(slot as slots_id, newState)
-                console.log('new State:', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
                 Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
                 io.to(activeSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
 
@@ -92,7 +83,6 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
                 const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest, "SET_GATE_CARD_ACTION")
                 addSlotToSetBakugan(slot as slots_id, newState)
                 Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest = newState as InactivePlayerActionRequestType
-                console.log('new State:', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
                 const merged = [Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
                 if (merged.length <= 0) return
                 io.to(inactiveSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)

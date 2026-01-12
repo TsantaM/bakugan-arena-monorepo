@@ -25,6 +25,7 @@ export const GlobalActionScope = new ActionScope()
 
 
 export function clearTurnInterface() {
+
     const turnInterface = document.querySelector('.turn-interface')
     turnInterface?.remove()
     const turnActionButton = document.getElementById('next-turn-button')

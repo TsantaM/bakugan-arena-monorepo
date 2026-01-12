@@ -49,9 +49,7 @@ export const MirageAquatique: abilityCardsType = {
         if (resolution.data.type !== 'SELECT_SLOT') return
         const destination = resolution.data.slot
         const slotOfGate = roomData.protalSlots.find((s) => s.bakugans.find((b) => b.key === resolution.bakuganKey && b.userId === resolution.userId))
-        console.log(slotOfGate)
         const slotTarget = roomData.protalSlots.find((s) => s.id === destination)
-        console.log(slotTarget)
         if (slotOfGate && slotTarget && slotTarget.portalCard !== null) {
             const user = slotOfGate.bakugans.find((b) => b.key === resolution.bakuganKey && b.userId === resolution.userId)
             const index = slotOfGate.bakugans.findIndex((ba) => ba.key === user?.key && ba.userId === user.userId)

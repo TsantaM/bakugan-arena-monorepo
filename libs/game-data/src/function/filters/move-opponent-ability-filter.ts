@@ -9,12 +9,10 @@ export function MoveOpponentAbilityFilter({ slots, zone, bakuganKey, userId, abi
     if (!slots) return
 
     const abilityUserSlots = slots.find((s) => s.bakugans.find((b) => b.key === bakuganKey && b.userId === userId))?.id ? slots.find((s) => s.bakugans.find((b) => b.key === bakuganKey && b.userId === userId))?.id : zone !== '' ? zone : undefined
-    console.log("abilityUserSlots", abilityUserSlots)
 
     const abilityData = AbilityCardsList.find((a) => a.key === ability)
     const exclusiveAbilityData = ExclusiveAbilitiesList.find((a) => a.key === ability)
     const limits = slots_limits.find((s) => s.slot === abilityUserSlots)?.slot_limit
-    console.log("limits", limits)
 
 
     if (abilityData && !exclusiveAbilityData && abilityData.slotLimits) {

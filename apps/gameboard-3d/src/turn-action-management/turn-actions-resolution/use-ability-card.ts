@@ -128,7 +128,6 @@ export function UseAbilityCard({ roomId, scene, SelectedActions, actions, userId
 
             cleanup(false, card)
 
-            console.log(useAbilityCard);
 
             SelectAbilityCardForStandardTurn({
                 card: card,
@@ -140,13 +139,11 @@ export function UseAbilityCard({ roomId, scene, SelectedActions, actions, userId
                 bakugans: bakugans
             })
 
-            console.log('SelectedActions after selecting ability card:', SelectedActions.find((a) => a.type === 'USE_ABILITY_CARD')?.data?.key);
 
             if (useAbilityCard.data !== undefined && useAbilityCard.data.key !== data.key) return
 
             let bakugan: THREE.Sprite<THREE.Object3DEventMap> | null = null
             const names = bakugans.filter((bakugan) => bakugan.abilities.some((ability) => ability.key === useAbilityCard.data?.key)).map((bakugan) => `${bakugan.bakuganKey}-${userId}`)
-            console.log(names)
 
 
             mouseMoveHandler = (event) => {
@@ -166,15 +163,12 @@ export function UseAbilityCard({ roomId, scene, SelectedActions, actions, userId
                 if (!bakugan.userData.bakuganKey) return
                 if (bakugan === null) return
                 const slot = bakugan !== null ? bakugans.find((b) => b.bakuganKey === bakugan?.userData.bakuganKey)?.slot : undefined
-                console.log(slot)
                 if (!slot) return
 
-                console.log(useAbilityCard.data)
 
                 useAbilityCard.data.bakuganId = bakugan.userData.bakuganKey
                 useAbilityCard.data.slot = slot
 
-                console.log(useAbilityCard.data)
 
                 bakugan.material.color.set('white')
 
@@ -182,7 +176,7 @@ export function UseAbilityCard({ roomId, scene, SelectedActions, actions, userId
                     const mesh = scene.getObjectByName(`${bakugan.bakuganKey}-${userId}`) as THREE.Sprite<THREE.Object3DEventMap>
                     if (!mesh) return
 
-                    if(mesh.material.opacity !== 1){
+                    if (mesh.material.opacity !== 1) {
                         mesh.material.opacity = 1
                     }
                 })

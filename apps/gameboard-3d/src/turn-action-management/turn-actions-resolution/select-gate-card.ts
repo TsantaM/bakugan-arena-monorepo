@@ -20,13 +20,11 @@ export function SelectGateCard({ userId, SelectedActions, actions, socket, roomI
     cardsToSelect.forEach(card => {
         card.addEventListener('click', () => {
             const data = SelectablesCards.find(c => c.key === card.getAttribute('data-key'));
-            console.log('Selected Gate Card:', data);
             if (!data) return
             SelectGateCardAction.data = {
                 key: data.key,
                 userId: userId
             }
-            console.log(SelectGateCardAction)
             socket.emit('set-gate', {
                 roomId,
                 gateId: SelectGateCardAction.data.key,

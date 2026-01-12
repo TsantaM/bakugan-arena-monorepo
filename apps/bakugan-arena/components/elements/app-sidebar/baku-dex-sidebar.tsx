@@ -62,12 +62,21 @@ export default function BakuDexSidebar({ user }: { user: UserType | undefined })
                     </SidebarGroupLabel>
                     <SidebarGroupContent>
                         {
-                            user && <SidebarMenu>
+                            user ? <SidebarMenu>
                                 <SidebarMenuItem>
                                     <SidebarMenuButton asChild>
                                         <Link href='/dashboard'>
                                             <Home />
                                             <span>Dashboard</span>
+                                        </Link>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            </SidebarMenu> : <SidebarMenu>
+                                <SidebarMenuItem>
+                                    <SidebarMenuButton asChild>
+                                        <Link href='/'>
+                                            <Home />
+                                            <span>Home</span>
                                         </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>

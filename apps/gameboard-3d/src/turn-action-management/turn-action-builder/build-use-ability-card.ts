@@ -20,8 +20,6 @@ export function BuildUseAbilityCard({ action, turnActionContainer }: { action: A
 
     if (!cards) return
 
-    console.log('USE_ABILITY_CARD', action.data)
-    console.log('USE_ABILITY_CARD', cards)
 
     const container = document.createElement('div')
     container.classList.add('stack-container')

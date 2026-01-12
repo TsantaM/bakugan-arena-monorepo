@@ -7,7 +7,9 @@ export async function SetGateCardFunctionAndAnimation({ slot, plane, userId, gat
 
     createSlotMesh({
         plane: plane,
-        slot: slot
+        slot: slot,
+        gateCardMeshs,
+        userId
     })
 
     if (slot.portalCard !== null) {

@@ -110,6 +110,27 @@ if (roomId !== null && userId !== null) {
     let hoveredSlot: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap> | null = null
 
     window.addEventListener('mousemove', (event: MouseEvent) => {
+
+      const elementUnderMouse = document.elementFromPoint(
+        event.clientX,
+        event.clientY
+      )
+
+      // Si la souris n’est PAS au-dessus du canvas → on annule
+      if (!elementUnderMouse || !canvas.contains(elementUnderMouse)) {
+        if (hoveredMesh) {
+          RemoveBakuganHoverPreview()
+          hoveredMesh = null
+        }
+
+        if (hoveredSlot) {
+          document.getElementById('on-hover-gate-card')?.remove()
+          hoveredSlot = null
+        }
+
+        return
+      }
+
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
 
@@ -127,13 +148,11 @@ if (roomId !== null && userId !== null) {
           }
 
           hoveredMesh = currentMesh
-          console.log('mouseenter:', hoveredMesh.name)
           CreateBakuganHoverPreview(currentMesh.userData as BakuganPreviewData, { x: mouse.x, y: mouse.y })
         }
 
       } else {
         if (hoveredMesh) {
-          console.log('mouseleave:', hoveredMesh.name)
           RemoveBakuganHoverPreview()
           hoveredMesh = null
         }
@@ -149,7 +168,6 @@ if (roomId !== null && userId !== null) {
 
           hoveredSlot = currentMesh
           if (hoveredSlot.userData.cardName) {
-            console.log('mouseenter:', hoveredSlot.userData.cardName)
             const message: string = hoveredSlot.userData.cardName
             OnHoverGateCard({ message: message })
           }
@@ -157,7 +175,6 @@ if (roomId !== null && userId !== null) {
 
       } else {
         if (hoveredSlot) {
-          console.log('mouseleave:', hoveredSlot.userData.cardName)
           document.getElementById('on-hover-gate-card')?.remove()
         }
       }

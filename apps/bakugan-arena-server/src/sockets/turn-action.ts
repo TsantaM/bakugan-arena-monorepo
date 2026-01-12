@@ -18,7 +18,6 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
     // FR: Si la salle n'existe pas ou que l'index est invalide, on arrête
     // ENG: If the room does not exist or index is invalid, exit early
     if (!roomData || roomIndex === -1) return
-    console.log('turnAction', roomData.animations)
 
     // FR: Mise à jour de l'état du tour (joueur actif, compteur, autorisations, etc.)
     // ENG: Update the turn state (active player, counter, available actions, etc.)
@@ -53,11 +52,6 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
     const animations = roomData.animations
     io.to(roomId).emit("turn-action", roomData)
     io.to(roomId).emit('animations', animations)
-
-    console.log('active', roomData.ActivePlayerActionRequest)
-    console.log('inactive', roomData.InactivePlayerActionRequest)
-    console.log('ids', userId, roomData.turnState.turn)
-    console.log(userId === roomData.turnState.turn)
 
     const activeSocket = roomData.connectedsUsers.get(roomData.turnState.turn)
     const inactiveSocket = roomData.connectedsUsers.get(roomData.turnState.previous_turn || '')

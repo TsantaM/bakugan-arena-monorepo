@@ -11,7 +11,7 @@ import { createSlotMesh } from "../meshes/slot.mesh"
 import { createSprite } from "../meshes/bakugan.mesh"
 import { OnBattleStartFunctionAnimation } from "../scene-modifications-functions/on-battle-start-function-animation"
 import type { roomStateType, slots_id } from "@bakugan-arena/game-data/src/type/room-types"
-import { SetBakuganAndAddRenfortAnimationAndFunction } from "../scene-modifications-functions/add-renfort-function-animation"
+import { AddRenfortToBattleAnimationFunction, SetBakuganAndAddRenfortAnimationAndFunction } from "../scene-modifications-functions/add-renfort-function-animation"
 import { OnBattleEndAnimation } from "../animations/on-battle-end-animation"
 import { RemoveGateCardFunctionAnimation } from "../scene-modifications-functions/remove-gate-card-function-animation"
 import { ElimineBakuganFunctionAnimation } from "../scene-modifications-functions/elimine-bakugan-function-animation"
@@ -270,6 +270,13 @@ async function processAnimationQueue(userId: string,
             })
         }
 
+        if(current.type === 'ADD_RENFORT') {
+            await AddRenfortToBattleAnimationFunction({
+                bakugan: current.data.bakugan,
+                userId: userId
+            })
+        }
+
         if (current.type === 'ACTIVE_ABILITY_CARD') {
             await ShowMessageAnimation({
                 messages: current.message
@@ -280,7 +287,6 @@ async function processAnimationQueue(userId: string,
     }
 
     animationQueue = []
-    console.log(animationQueue)
     isProcessingAnimations = false
     const dialog = document.getElementById('dialog-box')
     removePreviousDialogBoxAnimation(dialog, 3)
@@ -304,8 +310,6 @@ export function registerSocketHandlers(
     socket.off() // 💣 purge TOTALE des anciens listeners
 
     socket.on("init-room-state", (state: roomStateType) => {
-        // console.log("ROOM INIT")
-        // alert('init-room-state')
         // 👉 ton code existant ici (sans socket.on)
 
         plane.clear()
@@ -377,8 +381,6 @@ export function registerSocketHandlers(
     })
 
     socket.on("turn-action-request", (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
-        // console.log('actions', request.actions)
-        // alert('turn-action-request')
         TurnActionBuilder({
             request,
             userId: userId,
@@ -392,20 +394,17 @@ export function registerSocketHandlers(
     )
 
     socket.on("animations", (animations: AnimationDirectivesTypes[]) => {
-        // alert('animations')
         animationQueue.push(...animations)
-        // console.log(animations)
-        // console.log(animationQueue)
         processAnimationQueue(userId, camera, scene, plane, bakugansMeshs, gateCardMeshs)
     })
 
     socket.on("ability-additional-request", (request: AbilityCardsActionsRequestsType) => {
         // alert('ability-additional-request')
         if (request.userId !== userId) return
+        clearTurnInterface()
         AdditionalRequestResolution({
             request: request, camera: camera, plane: plane, socket: socket, scene: scene
         })
-        clearTurnInterface()
 
         AdditionalEffectMessage({
             message: request.data.message

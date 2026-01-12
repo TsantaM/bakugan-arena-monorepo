@@ -15,8 +15,6 @@ export const socketUseAbilityCard = (io: Server, socket: Socket) => {
             bakuganKey: bakuganKey
         }
 
-        console.log('Socket use-ability-card received from userId:', userId, 'with data:', data)
-
         useAbilityCardServer({ abilityId: abilityId, bakuganKey: bakuganKey, roomId: roomId, slot: slot, userId: userId, io: io })
         const state = Battle_Brawlers_Game_State.find((s) => s?.roomId === roomId)
 

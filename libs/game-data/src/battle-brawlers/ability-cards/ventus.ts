@@ -52,9 +52,7 @@ export const CombatAerien: abilityCardsType = {
         if (resolution.data.type !== 'SELECT_SLOT') return
         const destination = resolution.data.slot
         const slotOfGate = roomData.protalSlots.find((s) => s.bakugans.find((b) => b.key === resolution.bakuganKey && b.userId === resolution.userId))
-        console.log(slotOfGate)
         const slotTarget = roomData.protalSlots.find((s) => s.id === destination)
-        console.log(slotTarget)
         if (slotOfGate && slotTarget && slotTarget.portalCard !== null) {
             const user = slotOfGate.bakugans.find((b) => b.key === resolution.bakuganKey && b.userId === resolution.userId)
             const index = slotOfGate.bakugans.findIndex((ba) => ba.key === user?.key && ba.userId === user.userId)
@@ -169,8 +167,6 @@ export const SouffleTout: abilityCardsType = {
             const initialSlot = roomState.protalSlots.find((slot) => slot.id === opponent?.slot_id)
             const index = initialSlot?.bakugans.findIndex((ba) => ba.key === opponent?.key && ba.userId === opponent.userId)
             const slotTarget = roomState?.protalSlots.find((s) => s.id === data.slot)
-            console.log('indentifiants', data.bakugan.key, data.bakugan.userId, data.bakugan.slot)
-            console.log('datas', opponent?.key, initialSlot?.id, index, slotTarget)
 
             if (opponent && slotTarget && slotTarget.portalCard !== null && index !== undefined && index >= 0 && initialSlot) {
 
@@ -276,19 +272,11 @@ export const TornadeExtreme: abilityCardsType = {
         const target: string = resolution.data.bakugan
         const slotTarget = roomState?.protalSlots.find((s) => s.id === slotToDrag)
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === resolution.slot);
-        console.log(target, slotToDrag)
-        console.log(slotOfGate)
 
         // const targetToDrag = slotTarget?.bakugans.find((b) => b.key === target)
         if (slotOfGate && slotTarget && target !== '') {
             const BakuganTargetIndex = slotTarget.bakugans.findIndex((b) => b.key === target)
             const bakuganToDrag = slotTarget?.bakugans.find((b) => b.key === target)
-            const condition = slotOfGate && slotTarget && bakuganToDrag && BakuganTargetIndex ? true : false
-
-            console.log(slotTarget)
-            console.log(bakuganToDrag)
-            console.log(BakuganTargetIndex)
-            console.log(condition)
 
             const user = slotOfGate?.bakugans.find((b) => b.key === resolution.bakuganKey && b.userId === resolution.userId)
 

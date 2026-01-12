@@ -12,20 +12,14 @@ import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Logo from "@/components/ui/logo";
 import { AnimatedThemeToggler } from "@/components/magicui/theme-toggler";
+import { SignInModal } from "../sign-in/Sign-in";
+import { SignUpModal } from "../sign-up/Sign-up";
+import { LinksList } from "@/src/store/links-list";
 
 export default async function Header() {
 
     const user = await getUser()
-    const LinksList = [
-        {
-            name: 'Home',
-            href: '/'
-        },
-        {
-            name: 'Baku Dex',
-            href: '/baku-dex'
-        }
-    ]
+
 
 
     return (
@@ -42,8 +36,8 @@ export default async function Header() {
                 </nav>
             </div>
 
-            <div className="flex items-center gap-3">
-                <AnimatedThemeToggler/>
+            <div className="flex items-center gap-2">
+                <AnimatedThemeToggler />
                 {
                     user ?
                         <Suspense fallback={<Skeleton />}>
@@ -74,7 +68,7 @@ export default async function Header() {
                                                     headers: await headers()
                                                 })
 
-                                                redirect('/auth/sign-in')
+                                                redirect('/')
                                             }}>
                                                 <LogOutIcon /> Log out
                                             </button>
@@ -85,12 +79,8 @@ export default async function Header() {
                         </Suspense>
 
                         : <>
-                            <Button asChild variant='outline'>
-                                <Link href='/auth/sign-in'>Log In</Link>
-                            </Button>
-                            <Button asChild>
-                                <Link href='/auth/sign-up'>Register</Link>
-                            </Button>
+                            <SignInModal />
+                            <SignUpModal />
                         </>
                 }
                 <DropdownMenu>

@@ -8,7 +8,6 @@ export function BuildOpenGateCard({ action, turnActionContainer }: { action: Act
     button.classList.add('open-gate-card-button')
     button.id = 'open-gate-card-button'
     button.textContent = `Open Gate Card (${action.slot})`
-    console.log(button.id)
 
     turnActionContainer.appendChild(button)
 }

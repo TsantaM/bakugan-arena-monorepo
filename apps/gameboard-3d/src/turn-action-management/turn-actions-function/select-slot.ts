@@ -44,14 +44,10 @@ export function SelectSlotOnMouseMove({ plane, slots, hoveredSlot, event, camera
                 newHoveredSlot.visible = false
                 newHoveredSlot = newSlot as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>
                 newSlot.visible = true
-                console.log(intersects[0].object.name)
-                console.log(intersects[0].object.userData.classes)
 
             } else if (!newHoveredSlot && slots.includes(newSlot.name as slots_id)) {
                 newHoveredSlot = newSlot as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>
                 newSlot.visible = true
-                console.log(intersects[0].object.name)
-                console.log(intersects[0].object.userData.classes)
 
             } else if (newHoveredSlot && slots.includes(newSlot.name as slots_id) === false) {
                 newHoveredSlot.visible = false
@@ -90,7 +86,6 @@ export function SelectCard({ data, selectGateCard, userId, cardsToSelect, card, 
             c.classList.remove('selected-card')
         })
 
-        console.log(selectGateCard.data)
 
     } else {
         selectGateCard.data = undefined
@@ -108,13 +103,6 @@ export function SelectCard({ data, selectGateCard, userId, cardsToSelect, card, 
             }
         })
 
-        // slots.forEach((slot) => {
-        //     const mesh = plane.getObjectByName(slot)
-        //     if (mesh && mesh.userData && mesh.userData.classes.includes('slot-selecter') && (mesh.userData.classes.includes('overable') || mesh.userData.classes.includes('selected-slot'))) {
-        //         console.log(mesh.userData, mesh.name)
-        //         plane.remove(mesh)
-        //     }
-        // })
     }
 
     if (selectGateCard.data === undefined || selectGateCard.data.slot === '') {
@@ -157,7 +145,6 @@ export function SelectAbilityCardForStandardTurn({ data, useAbilityCard, userId,
 }) {
 
     if (useAbilityCard.type !== "USE_ABILITY_CARD") return
-    console.log('first', useAbilityCard.data?.key, useAbilityCard.type)
 
     if (useAbilityCard.data && useAbilityCard.data.key === data.key) {
         useAbilityCard.data = undefined
@@ -165,7 +152,6 @@ export function SelectAbilityCardForStandardTurn({ data, useAbilityCard, userId,
             c.classList.remove('selected-card')
         })
 
-        console.log(useAbilityCard.data)
 
     } else {
         useAbilityCard.data = undefined
@@ -184,13 +170,6 @@ export function SelectAbilityCardForStandardTurn({ data, useAbilityCard, userId,
             }
         })
 
-        // slots.forEach((slot) => {
-        //     const mesh = plane.getObjectByName(slot)
-        //     if (mesh && mesh.userData && mesh.userData.classes.includes('slot-selecter') && (mesh.userData.classes.includes('overable') || mesh.userData.classes.includes('selected-slot'))) {
-        //         console.log(mesh.userData, mesh.name)
-        //         plane.remove(mesh)
-        //     }
-        // })
     }
 
     if (useAbilityCard.data !== undefined) {
@@ -270,7 +249,6 @@ export function SelectBakuganOnMouseMove({ bakugan, event, camera, scene, names 
         }
     }
 
-    console.log(selecter?.name)
 
     return selecter
 

@@ -7,9 +7,6 @@ export function BuildSelectGateCard({ action }: { action: ActionType }) {
 
         const SelectGateCard: SelectableGateCardAction[] = action.data;
 
-        console.log('SELECT_GATE_CARD', SelectGateCard);
-
-
         const selectOne = document.createElement('div');
         selectOne.classList.add('select-one');
         const stackSelecteOne = document.createElement('div');

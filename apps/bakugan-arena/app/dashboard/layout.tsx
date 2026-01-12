@@ -53,7 +53,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
                                                             headers: await headers()
                                                         })
 
-                                                        redirect('/auth/sign-in')
+                                                        redirect('/')
                                                     }}>
                                                         <LogOutIcon /> Log out
                                                     </button>

@@ -46,7 +46,6 @@ export const TurnActionInterfaceBuilder = ({ request }: { request: ActivePlayerA
 
 
         const abilities = actions.find((action) => action.type === 'USE_ABILITY_CARD')?.data.map((bakugan) => bakugan.abilities).flat().map((card) => card.image)
-        console.log('abilities', abilities ? abilities : 0)
 
 
         actions.forEach((action) => {

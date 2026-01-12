@@ -67,8 +67,6 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
             roomData.animations.push(animation)
             const openFunction = gateCard.onOpen?.({ roomState: roomData, slot: slot, bakuganKey: key, userId: userId })
 
-            console.log('active gate animations', roomData.animations.map((a) => a.type))
-
 
             if (!openFunction) return
 

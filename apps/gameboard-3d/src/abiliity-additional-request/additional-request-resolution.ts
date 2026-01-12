@@ -290,6 +290,7 @@ export function AdditionalRequestResolution({ request, camera, plane, socket, sc
     }
 
     if (request.data.type === 'SELECT_BAKUGAN_TO_SET') {
+        
         BuildBakuganSelecterCards({
             bakugans: request.data.bakugans
         })

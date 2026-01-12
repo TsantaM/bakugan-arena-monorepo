@@ -244,19 +244,11 @@ export const AntiMuse: exclusiveAbilitiesType = {
         const target: string = resolution.data.bakugan
         const slotTarget = roomState?.protalSlots.find((s) => s.id === slotToDrag)
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === resolution.slot);
-        console.log(target, slotToDrag)
-        console.log(slotOfGate)
 
         // const targetToDrag = slotTarget?.bakugans.find((b) => b.key === target)
         if (slotOfGate && slotTarget && target !== '') {
             const BakuganTargetIndex = slotTarget.bakugans.findIndex((b) => b.key === target)
             const bakuganToDrag = slotTarget?.bakugans.find((b) => b.key === target)
-            const condition = slotOfGate && slotTarget && bakuganToDrag && BakuganTargetIndex ? true : false
-
-            console.log(slotTarget)
-            console.log(bakuganToDrag)
-            console.log(BakuganTargetIndex)
-            console.log(condition)
 
             const user = slotOfGate?.bakugans.find((b) => b.key === resolution.bakuganKey && b.userId === resolution.userId)
 
@@ -340,8 +332,6 @@ export const VisageDuChagrin: exclusiveAbilitiesType = {
     },
     onWin: ({ roomState, userId }) => {
         const deckToUpdate = roomState?.decksState.find((d) => d.userId === userId)
-        console.log(userId)
-        console.log('fortress win')
         if (deckToUpdate) {
             deckToUpdate.bakugans.filter((b) => b && b.bakuganData.elimined === true).forEach((b) => {
                 b?.bakuganData.elimined ? b.bakuganData.elimined = false : b?.bakuganData.elimined
@@ -420,8 +410,6 @@ export const VisageDeJoie: exclusiveAbilitiesType = {
     onWin: ({ roomState, userId }) => {
         const deckToUpdate = roomState?.decksState.find((d) => d.userId === userId)
         const player = roomState?.players.find((p) => p.userId === userId)
-        console.log(userId)
-        console.log('fortress win')
         if (deckToUpdate) {
             deckToUpdate.abilities.filter((a) => a.used === true).forEach((a) => {
                 a.used = false
@@ -633,8 +621,6 @@ export const Marionnette: exclusiveAbilitiesType = {
             const initialSlot = roomState.protalSlots.find((slot) => slot.id === opponent?.slot_id)
             const index = initialSlot?.bakugans.findIndex((ba) => ba.key === opponent?.key && ba.userId === opponent.userId)
             const slotTarget = roomState?.protalSlots.find((s) => s.id === data.slot)
-            console.log('indentifiants', data.bakugan.key, data.bakugan.userId, data.bakugan.slot)
-            console.log('datas', opponent?.key, initialSlot?.id, index, slotTarget)
 
             if (opponent && slotTarget && slotTarget.portalCard !== null && index !== undefined && index >= 0 && initialSlot) {
 
@@ -1022,19 +1008,12 @@ export const TrappeDeSable: exclusiveAbilitiesType = {
         const target: string = resolution.data.bakugan
         const slotTarget = roomState?.protalSlots.find((s) => s.id === slotToDrag)
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === resolution.slot);
-        console.log(target, slotToDrag)
-        console.log(slotOfGate)
 
         // const targetToDrag = slotTarget?.bakugans.find((b) => b.key === target)
         if (slotOfGate && slotTarget && target !== '') {
             const BakuganTargetIndex = slotTarget.bakugans.findIndex((b) => b.key === target)
             const bakuganToDrag = slotTarget?.bakugans.find((b) => b.key === target)
             const condition = slotOfGate && slotTarget && bakuganToDrag && BakuganTargetIndex ? true : false
-
-            console.log(slotTarget)
-            console.log(bakuganToDrag)
-            console.log(BakuganTargetIndex)
-            console.log(condition)
 
             const user = slotOfGate?.bakugans.find((b) => b.key === resolution.bakuganKey && b.userId === resolution.userId)
 
@@ -1232,19 +1211,11 @@ export const SouffleInfini: exclusiveAbilitiesType = {
         const target: string = resolution.data.bakugan
         const slotTarget = roomState?.protalSlots.find((s) => s.id === slotToDrag)
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === resolution.slot);
-        console.log(target, slotToDrag)
-        console.log(slotOfGate)
 
         // const targetToDrag = slotTarget?.bakugans.find((b) => b.key === target)
         if (slotOfGate && slotTarget && target !== '') {
             const BakuganTargetIndex = slotTarget.bakugans.findIndex((b) => b.key === target)
             const bakuganToDrag = slotTarget?.bakugans.find((b) => b.key === target)
-            const condition = slotOfGate && slotTarget && bakuganToDrag && BakuganTargetIndex ? true : false
-
-            console.log(slotTarget)
-            console.log(bakuganToDrag)
-            console.log(BakuganTargetIndex)
-            console.log(condition)
 
             const user = slotOfGate?.bakugans.find((b) => b.key === resolution.bakuganKey && b.userId === resolution.userId)
 

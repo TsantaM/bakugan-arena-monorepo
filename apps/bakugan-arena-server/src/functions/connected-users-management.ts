@@ -1,6 +1,7 @@
 import { connectedUsers, roomsSockets } from "../game-state/battle-brawlers-game-state";
 
 export function addOrUpdateConnectedUser(userId: string, socketId: string) {
+    if(userId === '') return
     const index = connectedUsers.findIndex(u => u.userId === userId);
 
     if (index !== -1) {

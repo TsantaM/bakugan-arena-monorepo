@@ -50,7 +50,6 @@ export const ChalengeSomeoneSocket = (io: Server, socket: Socket) => {
 
 export const ChalengeAcceptSocket = (io: Server, socket: Socket) => {
     socket.on('chalenge-accept', async (data: chalengeAcceptSocketProps) => {
-        console.log('chalenge-accept', data)
         const { chalengerId, deckId, userId } = data
 
         const chalenge = chalenges.find((chalenge) => chalenge.chalenger.userId === chalengerId && chalenge.target.userId === userId)
@@ -61,11 +60,8 @@ export const ChalengeAcceptSocket = (io: Server, socket: Socket) => {
 
         chalenges[chalengeIndex].target.deckId = deckId
 
-        console.log('eh chalenge')
 
         const room = await CreateRoom({ player1ID: chalenges[chalengeIndex].chalenger.userId, P1Deck: chalenges[chalengeIndex].chalenger.deckId, Player2ID: chalenges[chalengeIndex].target.userId, P2Deck: chalenges[chalengeIndex].target.deckId })
-        console.log('new room data', room.id)
-        console.log("check", chalenges[chalengeIndex].chalenger.userSocket, chalenges[chalengeIndex].target.userSocket, room.id)
         io.to(chalenges[chalengeIndex].chalenger.userSocket).emit('chalenge-accept-redirect', room.id)
         io.to(chalenges[chalengeIndex].target.userSocket).emit('chalenge-accept-redirect', room.id)
 

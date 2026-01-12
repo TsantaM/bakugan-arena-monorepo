@@ -4,7 +4,6 @@ export function CheckBattleStillInProcess(roomState: stateType) {
     if (!roomState) return
 
     const { battleState, protalSlots, turnState } = roomState
-    console.log('still in battle checker', battleState)
 
     if (!battleState.battleInProcess) return
 
@@ -12,8 +11,6 @@ export function CheckBattleStillInProcess(roomState: stateType) {
 
 
     if (!battleSlot) return
-
-    console.log('still', battleSlot, battleSlot.portalCard, )
 
     const bakugans = battleSlot.bakugans
 

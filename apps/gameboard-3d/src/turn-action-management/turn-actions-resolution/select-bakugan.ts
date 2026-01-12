@@ -18,7 +18,6 @@ export function SelectBakugan({ userId, SelectedActions, actions }: {
             const data = SelectablesBakugans.find(b => b.key === bakugan.getAttribute('data-key'));
 
             if(!data) return
-            console.log('Selected Bakugan:', data);
 
             if( SelectBakuganAction.data && SelectBakuganAction.data.key === data.key) {
                 SelectBakuganAction.data = undefined
@@ -29,7 +28,6 @@ export function SelectBakugan({ userId, SelectedActions, actions }: {
                 }
             }
 
-            console.log(SelectBakuganAction)
 
         })
     })

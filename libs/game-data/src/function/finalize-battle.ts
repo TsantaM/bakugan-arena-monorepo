@@ -8,14 +8,11 @@ export const finalizeBattle = ({ roomData, winnerId, loserId }: { roomData: stat
     if (!battleState || !protalSlots || !turnState) return
 
     const slotToUpdate = protalSlots.find((s) => s.id === battleState.slot)
-    console.log("Winner 1:", winnerId, "Loser 1:", loserId)
 
     if (winnerId && loserId) {
-        console.log("Winner:", winnerId, "Loser:", loserId)
         roomData.turnState.turn = winnerId
         roomData.turnState.previous_turn = loserId
 
-        console.log("Turn set to winner:", roomData.turnState)
     }
 
     if(!slotToUpdate) return

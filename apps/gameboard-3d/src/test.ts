@@ -189,15 +189,12 @@ if (canvas) {
 
             if (hoveredMesh !== currentMesh) {
                 if (hoveredMesh) {
-                    console.log('mouseleave:', hoveredMesh.name)
                 }
 
                 hoveredMesh = currentMesh
-                console.log('mouseenter:', hoveredMesh.name)
             }
         } else {
             if (hoveredMesh) {
-                console.log('mouseleave:', hoveredMesh.name)
                 hoveredMesh = null
             }
         }

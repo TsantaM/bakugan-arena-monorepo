@@ -78,8 +78,6 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
         if (!state) return
 
         if (state) {
-            const animations = state.animations
-            console.log('animations', animations)
             io.to(roomId).emit('update-room-state', state)
             if (!animation) return
             io.to(roomId).emit('animations', animation)
@@ -96,8 +94,6 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
 
             const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "SET_BAKUGAN")
 
-            console.log('new State:', state.ActivePlayerActionRequest)
-
             Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
 
             AddAbilities({
@@ -110,7 +106,6 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
             })
 
             const merged = [Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
-            console.log('merged', merged)
             if (merged.length > 0) {
                 io.to(activeSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
             } else {
@@ -126,7 +121,6 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
             if (!inactiveSocket) return
 
             const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest, "SET_BAKUGAN")
-            console.log('new State:', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
 
             Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest = newState as InactivePlayerActionRequestType
 
@@ -140,7 +134,6 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
             })
 
             const merged = [Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.optional].flat()
-            console.log('merged', merged)
             if (merged.length <= 0) return
             io.to(inactiveSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
         }

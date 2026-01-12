@@ -22,7 +22,6 @@ export function CreateGateCardSelecter({ card, index, multiSelect = false }: { c
 
     const cardImage = document.createElement('img');
     cardImage.src = `/images/cards/${card.image}`
-    console.log(cardImage.src)
     cardImage.classList.add('gate-card-background');
 
     cardElement.appendChild(cardImage);

@@ -13,10 +13,8 @@ export function InitGameRoomMessage({ iframe, slots, userId, token, roomId }: { 
         userId: userId
     }
 
-    console.log(message)
     if(iframe.contentWindow === null) return
     iframe.contentWindow.postMessage(message, 'http://localhost:5173/')
-    console.log(iframe.contentWindow)
 
 }
 

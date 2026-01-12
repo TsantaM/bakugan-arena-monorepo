@@ -50,7 +50,6 @@ export function SelectAbilityCard({ userId, SelectedActions, actions }: {
                 SelectAbilityCardAction.data = newData
             }
 
-            console.log(SelectAbilityCardAction)
         })
     })
 }

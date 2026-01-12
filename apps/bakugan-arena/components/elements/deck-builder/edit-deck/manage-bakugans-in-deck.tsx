@@ -53,7 +53,7 @@ export default function ManageBakugansInDeck({ deckId, bakugans }: { deckId: str
             setValue('')
         },
         onError: (err) => {
-            console.log(err)
+            console.error(err)
         }
     })
 

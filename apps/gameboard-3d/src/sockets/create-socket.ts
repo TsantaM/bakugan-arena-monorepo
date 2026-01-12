@@ -10,11 +10,9 @@ export function createSocket(userId: string, roomId: string) {
   })
 
   socket.on("connect", () => {
-    console.log("🟢 SOCKET CONNECTED:", socket?.id)
   })
 
   socket.on("disconnect", reason => {
-    console.log("🔴 SOCKET DISCONNECTED:", reason)
   })
 
   return socket

@@ -105,7 +105,6 @@ export function SetBakugan({
                 userId
             })
 
-            console.log(selectBakugan.data)
 
             if (!selectBakugan.data || selectBakugan.data.key !== data.key) return
 
@@ -139,7 +138,6 @@ export function SetBakugan({
 
                 socket.emit('set-bakugan', ({ roomId: payload.roomId, bakuganKey: payload.bakuganKey, slot: payload.slot, userId: payload.userId }))
 
-                console.log('actions', actions)
 
                 if (actions.length === 1) {
                     socket.emit('clean-animation-table', ({ roomId }))

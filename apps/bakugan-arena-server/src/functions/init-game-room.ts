@@ -19,8 +19,6 @@ const initRoomState:
 
         const opponentBakugans = deck.find((d) => d.userId !== userId)?.bakugans.map((b) => b?.bakuganData).filter((bakugan) => bakugan !== undefined).filter((b) => b.elimined).length
 
-        console.log('init-state', userId, usersBakugans, opponentBakugans)
-
         let finished: Message | undefined = undefined
 
         if (data.status.finished) {

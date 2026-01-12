@@ -68,7 +68,6 @@ export function addBakuganToSlot({ bakuganFromDeck, bakuganToAdd, roomData, slot
                 : d
         ),
     }
-    console.log(newState)
 
     return newState
 }

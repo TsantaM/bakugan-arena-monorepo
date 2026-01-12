@@ -15,7 +15,6 @@ export const socketActiveGateCard = (io: Server, socket: Socket) => {
 
         ActiveGateCard({ roomId, gateId, slot, userId, io })
 
-        console.log('active-gate-in-socket', state.animations.map((a) => a.type))
 
         io.to(roomId).emit('animations', state.animations)
 
@@ -31,11 +30,9 @@ export const socketActiveGateCard = (io: Server, socket: Socket) => {
 
             const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "OPEN_GATE_CARD")
 
-            console.log('new State:', state.ActivePlayerActionRequest)
 
             Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
             const merged = [Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
-            console.log('merged', merged)
             if (activeSocket) {
                 if (merged.length > 0) {
                     io.to(activeSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
@@ -52,11 +49,9 @@ export const socketActiveGateCard = (io: Server, socket: Socket) => {
         if (state.turnState.turn !== userId) {
             const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest, "OPEN_GATE_CARD")
 
-            console.log('new State:', state.InactivePlayerActionRequest)
 
             Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
             const merged = [Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
-            console.log('merged', merged)
             if (inactiveSocket) {
                 if (merged.length > 0) {
                     io.to(inactiveSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)

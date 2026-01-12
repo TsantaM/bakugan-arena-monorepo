@@ -1,5 +1,6 @@
 import { OpenGateCardActionRequest } from "../../function/action-request-functions/open-gate-card-action-request";
 import { CheckBattle } from "../../function/check-battle-in-process";
+import { AddRenfortAnimationDirective } from "../../function/create-animation-directives/add-renfort-directive";
 import { MoveToAnotherSlotDirectiveAnimation } from "../../function/create-animation-directives/move-to-another-slot";
 import { PowerChangeDirectiveAnumation } from "../../function/create-animation-directives/power-change";
 import { StandardCardsImages } from "../../store/ability-cards-images";
@@ -178,19 +179,11 @@ export const ForceDattraction: abilityCardsType = {
         const target: string = resolution.data.bakugan
         const slotTarget = roomState?.protalSlots.find((s) => s.id === slotToDrag)
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === resolution.slot);
-        console.log(target, slotToDrag)
-        console.log(slotOfGate)
 
         // const targetToDrag = slotTarget?.bakugans.find((b) => b.key === target)
         if (slotOfGate && slotTarget && target !== '') {
             const BakuganTargetIndex = slotTarget.bakugans.findIndex((b) => b.key === target)
             const bakuganToDrag = slotTarget?.bakugans.find((b) => b.key === target)
-            const condition = slotOfGate && slotTarget && bakuganToDrag && BakuganTargetIndex ? true : false
-
-            console.log(slotTarget)
-            console.log(bakuganToDrag)
-            console.log(BakuganTargetIndex)
-            console.log(condition)
 
             const user = slotOfGate?.bakugans.find((b) => b.key === resolution.bakuganKey && b.userId === resolution.userId)
 
@@ -209,6 +202,17 @@ export const ForceDattraction: abilityCardsType = {
                     initialSlot: slotTarget,
                     newSlot: slotOfGate
                 })
+
+                if (roomState.battleState.battleInProcess && roomState.battleState.slot === slotOfGate.id) {
+                    if (slotOfGate.bakugans.some((b) => b.userId === bakuganToDrag.userId)) {
+                        AddRenfortAnimationDirective({
+                            animations: roomState?.animations,
+                            bakugan: bakuganToDrag,
+                            slot: slotOfGate
+                        })
+                    }
+                }
+
                 CheckBattle({ roomState })
                 OpenGateCardActionRequest({ roomState })
 

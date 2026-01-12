@@ -29,6 +29,7 @@ export function BuildSelectBakugan({ action }: { action: ActionType }) {
 
 export function BuildBakuganSelecterCards({ bakugans }: { bakugans: bakuganInDeck[] }) {
 
+
     const selectOne = document.createElement('div');
     selectOne.classList.add('select-one');
     const stackSelecteOne = document.createElement('div');
@@ -44,6 +45,7 @@ export function BuildBakuganSelecterCards({ bakugans }: { bakugans: bakuganInDec
         key: b.key,
         name: b.name
     }))
+
 
     selectables.forEach((bakugan, index) => {
         CreateBakuganSelecter({

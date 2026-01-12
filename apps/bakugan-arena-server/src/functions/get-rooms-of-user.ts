@@ -7,7 +7,5 @@ export function GetUsersRooms(userId: string) {
         roomId: room.roomId
     }))
 
-    console.log('eh rooms')
-
     return rooms
 }

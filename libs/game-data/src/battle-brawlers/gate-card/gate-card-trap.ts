@@ -142,7 +142,6 @@ export const Echange: gateCardType = {
             }
 
             if (totalPowerOpponentsBakugans >= 400) {
-                console.log('elimination')
                 opponentsBakugan.forEach((b) => {
                     ElimineBakuganDirectiveAnimation({
                         animations: roomState.animations,

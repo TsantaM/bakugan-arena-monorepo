@@ -106,6 +106,14 @@ export type AnimationDirectivesTypes =
         message?: Message[],
         resolved: boolean
     } | {
+        type: 'ADD_RENFORT',
+        data: {
+            bakugan: bakuganOnSlot,
+            slot: portalSlotsTypeElement
+        },
+        message?: Message[],
+        resolved: boolean
+    } | {
         type: 'ACTIVE_ABILITY_CARD',
         resolve: false,
         data: {

@@ -32,12 +32,10 @@ export const UpdateGate: ({ roomId, gateId, slot, userId }: setGateCardProps) =>
     const notTurnAndTurn0 = roomData.turnState.previous_turn !== userId && roomData.turnState.turnCount > 0
     const canPlaceGate = usable_slot && can_set_gate && notTurnAndTurn0
 
-    // console.log('checker', usable_slot, can_set_gate, roomData.turnState.previous_turn !== userId, roomData.turnState.turnCount > 0, canPlaceGate)
 
     // // FR: Si les conditions ne sont pas réunies, on stoppe
     // // ENG: If conditions are not met, stop execution
     // if (!canPlaceGate) return
-    // console.log('eh-1-gate')
     // FR: Récupère le slot ciblé, le deck du joueur, et l'état du joueur
     // ENG: Retrieve the targeted slot, the player's deck, and the player's state
     const slotToUpdate = roomData.protalSlots.find((s) => s.id === slot)
@@ -47,7 +45,6 @@ export const UpdateGate: ({ roomId, gateId, slot, userId }: setGateCardProps) =>
     // FR: Si une de ces entités est introuvable, on stoppe
     // ENG: If any of these entities are missing, stop execution
     if (!slotToUpdate || !deckToUpdate || !newPlayerState) return
-    console.log('eh-2-gate')
 
     // FR: Nouveau slot : on bloque le placement (can_set = false) et on associe la gate au slot
     // ENG: New slot: disable further placement (can_set = false) and attach the gate to the slot

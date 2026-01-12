@@ -38,7 +38,6 @@ function createSlotMesh({ slot, plane, userId, gateCardMeshs }: { slot: portalSl
         }
 
         gateCardMeshs.push(mesh)
-        console.log(gateCardMeshs.map((g) => g.name))
 
     } else {
         mesh.material.transparent = true
