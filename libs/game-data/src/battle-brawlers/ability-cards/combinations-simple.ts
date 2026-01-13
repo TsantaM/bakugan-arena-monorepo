@@ -8,6 +8,7 @@ export const SubterraPyrus: abilityCardsType = {
     attribut: 'Pyrus',
     maxInDeck: 1,
     usable_in_neutral: false,
+    image: 'CorrelationPyrusSubterra.png',
     onActivate({ roomState, userId, bakuganKey, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (!roomState) return null

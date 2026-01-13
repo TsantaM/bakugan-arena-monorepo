@@ -34,9 +34,7 @@ export default function OnChalengePopUp() {
 
     const getUserDecksQuery = useQuery({
         queryKey: ['get-user-decks'],
-        queryFn: getUserDecks,
-        refetchOnWindowFocus: false,
-        refetchOnMount: false,
+        queryFn: getUserDecks
     })
 
     const selectedDeckBakugans = getUserDecksQuery.data?.find((d) => d.id === value)?.bakugans

@@ -74,6 +74,7 @@ export const DragonoidPlus: exclusiveAbilitiesType = {
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
+    image: 'boosted-dragonoid.jpg',
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -210,6 +211,7 @@ export const AntiMuse: exclusiveAbilitiesType = {
     usable_in_neutral: true,
     slotLimits: true,
     usable_if_user_not_on_domain: false,
+    image: 'Anthemusa.png',
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
 

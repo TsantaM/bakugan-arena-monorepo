@@ -37,9 +37,7 @@ export default function ChalengeSomeone() {
     }
     const getUserDecksQuery = useQuery({
         queryKey: ['get-user-decks'],
-        queryFn: getUserDecks,
-        refetchOnWindowFocus: false,
-        refetchOnMount: false,
+        queryFn: getUserDecks
     })
 
     const findUser = useQuery({

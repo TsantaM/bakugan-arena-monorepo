@@ -15,7 +15,7 @@ export const MurDeFeu: abilityCardsType = {
     description: "Substract 50 Gs from the opponents",
     maxInDeck: 3,
     usable_in_neutral: false,
-    image: StandardCardsImages.pyrus,
+    image: 'FireWall.png',
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -179,7 +179,7 @@ export const TourbillonDeFeu: abilityCardsType = {
     attribut: 'Pyrus',
     name: 'Fire Tornado',
     maxInDeck: 1,
-    image: StandardCardsImages.pyrus,
+    image: 'FireTornado.png',
     usable_in_neutral: false,
     description: `Adds 100 Gs to the user`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
