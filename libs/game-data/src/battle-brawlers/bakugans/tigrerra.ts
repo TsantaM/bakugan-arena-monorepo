@@ -29,7 +29,7 @@ export const BladeTigrerraHaos: bakuganType = {
 
 export const TigrerraGateCard: gateCardType = {
     key: 'tigrerra-gate-card',
-    name: 'Carte Personnage: Tigrerra',
+    name: 'Charachter: Tigrerra',
     maxInDeck: 1,
     family: 'Tigrerra',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Tigrerra présent sur elle`,

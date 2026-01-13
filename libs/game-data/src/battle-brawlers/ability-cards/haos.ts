@@ -41,10 +41,10 @@ export const RapideHaos: abilityCardsType = {
 
 export const EclatSoudain: abilityCardsType = {
     key: 'eclat-soudain',
-    name: 'Eclat Soudain',
+    name: 'Rapid Haos',
     attribut: 'Haos',
     maxInDeck: 1,
-    description: `Permet d'ajouter un Bakugan Haos en plus dans un combat, mais le bakugan ajouté se retire si Eclat Soudain est annulée`,
+    description: `Adds another Bakugan to the Battle, it work only if there is minimum 2 haos bakugans on field`,
     usable_in_neutral: false,
     image: StandardCardsImages.haos,
     extraInputs: ['add-bakugan'],
@@ -61,7 +61,7 @@ export const EclatSoudain: abilityCardsType = {
         const bakugans = deck.bakugans.filter((bakugan) => bakugan && bakugan.bakuganData.onDomain === false && bakugan.bakuganData.elimined === false).filter((bakugan) => bakugan !== undefined && bakugan !== null)
         const request: AbilityCardsActions = {
             type: 'SELECT_BAKUGAN_TO_SET',
-            message: 'Eclat Soudain: Quel Bakugan ajouter ?',
+            message: 'Rapid Haos: Select a Bakugan to set ?',
             bakugans: bakugans
         }
         return request
@@ -175,8 +175,8 @@ export const LumiereDivine: abilityCardsType = {
 export const ContreMaitrise: abilityCardsType = {
     key: 'contre-maîtrise',
     attribut: 'Haos',
-    name: 'Contre Maîtrise',
-    description: `Annule toute carte maitrise utilisé par l'adversaire`,
+    name: 'Ability Counter',
+    description: `Nullifies the opponent's ability`,
     maxInDeck: 3,
     image: StandardCardsImages.haos,
     usable_in_neutral: false,
@@ -204,10 +204,10 @@ export const ContreMaitrise: abilityCardsType = {
 
 export const HaosImmobilisation: abilityCardsType = {
     key: 'haos-immobilisation',
-    name: 'Haos Immobilisation',
+    name: 'Haos Stasis',
     attribut: 'Haos',
     maxInDeck: 1,
-    description: `Si deux (2) Bakugans Haos sont sur le domaine, ajoute 100 G de puissance à l'utilisateur et permet rendre 3 cartes capacités supplémentaires au joueur`,
+    description: `If two Haos Bakugans are on the field, the user's power get 100 G and allow the player to reuse any of their Ability Cards`,
     image: StandardCardsImages.haos,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {

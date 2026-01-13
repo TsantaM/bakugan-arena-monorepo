@@ -43,28 +43,28 @@ export const GateCards: Record<string, gateCardType> = {
 
     // Péril
 
-    [PerilPyrus.key]: PerilPyrus,
-    [PerilVentus.key]: PerilVentus,
-    [PerilAquos.key]: PerilAquos,
-    [PerilSubterra.key]: PerilSubterra,
-    [PerilHaos.key]: PerilHaos,
-    [PerilDarkus.key]: PerilDarkus,
+    // [PerilPyrus.key]: PerilPyrus,
+    // [PerilVentus.key]: PerilVentus,
+    // [PerilAquos.key]: PerilAquos,
+    // [PerilSubterra.key]: PerilSubterra,
+    // [PerilHaos.key]: PerilHaos,
+    // [PerilDarkus.key]: PerilDarkus,
 
 
     // Fusions
 
-    [FusionEnflammee.key]: FusionEnflammee,
-    [FusionAerienne.key]: FusionAerienne,
-    [FusionMarine.key]: FusionMarine,
-    [FusionTerrestre.key]: FusionTerrestre,
-    [FusionLumineuse.key]: FusionLumineuse,
-    [FusionTenebreuses.key]: FusionTenebreuses,
+    // [FusionEnflammee.key]: FusionEnflammee,
+    // [FusionAerienne.key]: FusionAerienne,
+    // [FusionMarine.key]: FusionMarine,
+    // [FusionTerrestre.key]: FusionTerrestre,
+    // [FusionLumineuse.key]: FusionLumineuse,
+    // [FusionTenebreuses.key]: FusionTenebreuses,
 
     // Piège
 
     [MineFantome.key]: MineFantome,
     [Echange.key]: Echange,
-    [SuperPyrus.key]: SuperPyrus,
+    // [SuperPyrus.key]: SuperPyrus,
     [AspirateurDePuissance.key]: AspirateurDePuissance,
 
     // Commandement
@@ -72,8 +72,8 @@ export const GateCards: Record<string, gateCardType> = {
     [Rechargement.key]: Rechargement,
     [TripleCombat.key]: TripleCombat,
     [QuatuorDeCombat.key]: QuatuorDeCombat,
-    [RetourDAssenceur.key]: RetourDAssenceur,
-    [BoucEmissaire.key]: BoucEmissaire,
+    // [RetourDAssenceur.key]: RetourDAssenceur,
+    // [BoucEmissaire.key]: BoucEmissaire,
     [Armistice.key]: Armistice,
     [GrandEsprit.key]: GrandEsprit,
 

@@ -29,6 +29,12 @@ export function SetGateCardAnimation({
             cardMesh.userData.cardName = cardData.name
         }
 
+        if(gateCardMeshs.some((mesh) => mesh.name === cardMesh.name)) {
+            const index = gateCardMeshs.findIndex((mesh) => mesh.name === cardMesh.name)
+            if(index === -1) return
+            gateCardMeshs.splice(index, 1)
+        }
+
         gateCardMeshs.push(cardMesh)
 
         const timeline = gsap.timeline({

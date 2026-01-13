@@ -20,7 +20,7 @@ export const ElimineBakuganDirectiveAnimation: ElimineBakuganDirectiveAnimationT
         },
         resolved: false,
         message: [{
-            text: `${BakuganList.find((b) => bakugan.key === b.key )?.name || ''} a été éliminé`
+            text: `${BakuganList.find((b) => bakugan.key === b.key )?.name || ''} eliminate`
         }]
     }
 

@@ -1,4 +1,5 @@
 import type { portalSlotsTypeElement, bakuganOnSlot, slots_id } from '../type/room-types'
+import { attribut } from './game-data-types'
 
 export type Message = {
     userName?: string,
@@ -118,6 +119,7 @@ export type AnimationDirectivesTypes =
         resolve: false,
         data: {
             card: string,
+            attribut: attribut
         },
         message: Message[]
     }

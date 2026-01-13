@@ -42,8 +42,15 @@ function RemoveGateCardAnimation({
       duration: 0.3,
     })
 
-    const index = gateCardMeshs.findIndex((card) => card === mesh)
-    if(index === -1) return
+    gateCardMeshs.forEach((m) => {
+      if (m.name !== mesh.name) return
+      const meshsIndex = gateCardMeshs.findIndex((b) => b.name === m.name)
+      if (meshsIndex === -1) return
+      gateCardMeshs.splice(meshsIndex, 1)
+    })
+
+    const index = gateCardMeshs.findIndex((card) => card.name === mesh.name)
+    if (index === -1) return
     gateCardMeshs.splice(index, 1)
 
   })

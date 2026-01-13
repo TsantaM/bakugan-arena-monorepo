@@ -59,7 +59,7 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
                 },
                 resolved: false,
                 message: [{
-                    text: `Carte Portail ouvre toi ! ${gateCard.name}`,
+                    text: `Gate Card Open ! ${gateCard.name}`,
                     userName: GetUserName({ roomData: roomData, userId: userId })
                 }]
             }

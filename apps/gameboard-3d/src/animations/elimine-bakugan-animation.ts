@@ -54,9 +54,12 @@ export function ElimineBakuganAnimation({
             { x: 0, y: 0, z: 0, duration: 1, ease: 'power2.in' }
         )
 
-        const meshsIndex = bakugansMeshs.findIndex((b) => b === bakuganMesh)
-        if (meshsIndex === -1) return
-        bakugansMeshs.splice(meshsIndex, 1)
+    bakugansMeshs.forEach((mesh) => {
+      if(mesh.name !== bakuganMesh.name) return
+      const meshsIndex = bakugansMeshs.findIndex((b) => b.name === mesh.name)
+      if (meshsIndex === -1) return
+      bakugansMeshs.splice(meshsIndex, 1)
+    }) 
 
     })
 }

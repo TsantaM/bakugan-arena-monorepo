@@ -16,7 +16,7 @@ export const LimulusAquos: bakuganType = {
 
 export const LimulusGateCard: gateCardType = {
     key: 'limulus-gate-card',
-    name: 'Carte Personnage: Limulus',
+    name: 'Charachter: Limulus',
     maxInDeck: 1,
     family: 'Limulus',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Limulus présent sur elle`,

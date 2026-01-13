@@ -22,17 +22,17 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     // Aquos
 
     [MirageAquatique.key]: MirageAquatique,
-    [BarrageDeau.key]: BarrageDeau,
-    [BouclierAquos.key]: BouclierAquos,
-    [PlongeeEnEauProfonde.key]: PlongeeEnEauProfonde,
+    // [BarrageDeau.key]: BarrageDeau,
+    // [BouclierAquos.key]: BouclierAquos,
+    // [PlongeeEnEauProfonde.key]: PlongeeEnEauProfonde,
     [AquosSubterra.key]: AquosSubterra,
     [AquosVentus.key]: AquosVentus,
 
     // Subterra
 
     [MagmaSupreme.key]: MagmaSupreme,
-    [ChuteColossale.key]: ChuteColossale,
-    [CopieConforme.key]: CopieConforme,
+    // [ChuteColossale.key]: ChuteColossale,
+    // [CopieConforme.key]: CopieConforme,
     [Obstruction.key]: Obstruction,
     [ForceDattraction.key]: ForceDattraction,
     [SubterraAquos.key]: SubterraAquos,
@@ -40,10 +40,10 @@ export const AbilityCards: Record<string, abilityCardsType> = {
 
     // Haos
 
-    [RapideHaos.key]: RapideHaos,
+    // [RapideHaos.key]: RapideHaos,
     [EclatSoudain.key]: EclatSoudain,
-    [LumiereDivine.key]: LumiereDivine,
-    [ContreMaitrise.key]: ContreMaitrise,
+    // [LumiereDivine.key]: LumiereDivine,
+    // [ContreMaitrise.key]: ContreMaitrise,
     [HaosImmobilisation.key]: HaosImmobilisation,
     [HaosDarkus.key]: HaosDarkus,
     [HaosVentus.key]: HaosVentus,
@@ -51,10 +51,10 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     // Darkus
 
     [CoupDeGrace.key]: CoupDeGrace,
-    [EpicesMortelles.key]: EpicesMortelles,
+    // [EpicesMortelles.key]: EpicesMortelles,
     [BoublierFusion.key]: BoublierFusion,
     [VengeanceAlItalienne.key]: VengeanceAlItalienne,
-    [PoivreDesCayenne.key]: PoivreDesCayenne,
+    // [PoivreDesCayenne.key]: PoivreDesCayenne,
     [DarkusAquos.key]: DarkusAquos,
     [DarkusPyrus.key]: DarkusPyrus,
 

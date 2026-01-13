@@ -55,11 +55,12 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
         const activeCardAnimation: AnimationDirectivesTypes = {
             type: 'ACTIVE_ABILITY_CARD',
             data: {
-                card: abilityToUse.key
+                card: abilityToUse.key,
+                attribut: abilityUser.attribut
             },
             resolve: false,
             message: [{
-                text: `Carte Maitrise Activée : ${abilityToUse.name}`,
+                text: `Ability Card Activate : ${abilityToUse.name}`,
                 userName: GetUserName({
                     roomData: roomData,
                     userId: userId

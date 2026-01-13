@@ -10,9 +10,9 @@ import type { bakuganOnSlot } from "../../type/room-types";
 
 export const MurDeFeu: abilityCardsType = {
     key: "mur-de-feu",
-    name: "Mur de Feu",
+    name: "Fire Wall",
     attribut: "Pyrus",
-    description: "Retire 50 G aux bakugans adverses",
+    description: "Substract 50 Gs from the opponents",
     maxInDeck: 3,
     usable_in_neutral: false,
     image: StandardCardsImages.pyrus,
@@ -43,10 +43,10 @@ export const MurDeFeu: abilityCardsType = {
 
 export const JetEnflamme: abilityCardsType = {
     key: 'jet-enflamme',
-    name: 'Jet Enflammé',
+    name: 'Rapid Fire',
     attribut: 'Pyrus',
     maxInDeck: 1,
-    description: `Permet d'ajouter un bakugan en plus au combat s'il y a déjà au moins un Bakugan Pyrus sur le terrain`,
+    description: `Adds another Bakugan to the battle if there are 2 or more Pyrus bakugan on the field`,
     extraInputs: ['add-bakugan'],
     image: StandardCardsImages.pyrus,
     usable_in_neutral: false,
@@ -63,7 +63,7 @@ export const JetEnflamme: abilityCardsType = {
         const bakugans = deck.bakugans.filter((bakugan) => bakugan && bakugan.bakuganData.onDomain === false && bakugan.bakuganData.elimined === false).filter((bakugan) => bakugan !== undefined && bakugan !== null)
         const request: AbilityCardsActions = {
             type: 'SELECT_BAKUGAN_TO_SET',
-            message: 'Jet Enflammé: Quel Bakugan ajouter ?',
+            message: 'Rapid Fire: Select a Bakugan to set ?',
             bakugans: bakugans
         }
         return request
@@ -148,7 +148,7 @@ export const RetroAction: abilityCardsType = {
     name: 'Retro Action',
     image: StandardCardsImages.pyrus,
     usable_in_neutral: false,
-    description: `Calcine la carte portail de l'adversaire si elle est ouverte et en annule tous les effets`,
+    description: `Nullifies opponent's Gate Card`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -177,11 +177,11 @@ export const RetroAction: abilityCardsType = {
 export const TourbillonDeFeu: abilityCardsType = {
     key: 'tourbillon-de-feu',
     attribut: 'Pyrus',
-    name: 'Tourbillon de Feu',
+    name: 'Fire Tornado',
     maxInDeck: 1,
     image: StandardCardsImages.pyrus,
     usable_in_neutral: false,
-    description: `Protège l'utilisateur contre les effets de la carte portail et ajoute 50 G à l'utilisateur`,
+    description: `Adds 100 Gs to the user`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -189,11 +189,11 @@ export const TourbillonDeFeu: abilityCardsType = {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
 
             if (user) {
-                user.currentPower += 50
+                user.currentPower += 100
                 PowerChangeDirectiveAnumation({
                     animations: roomState.animations,
                     bakugans: [user],
-                    powerChange: 50,
+                    powerChange: 100,
                     malus: false
                 })
             }

@@ -1,6 +1,7 @@
 import type { SelectableBakuganAction, SelectableGateCardAction } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
 import type { AbilityCard } from "../turn-action-management/turn-action-builder/build-use-ability-card";
 import type { attribut } from "@bakugan-arena/game-data";
+import { setImageWithFallback } from "./set-image-with-fallback";
 
 export function CreateGateCardSelecter({ card, index, multiSelect = false }: { card: SelectableGateCardAction, index: number, multiSelect?: boolean }) {
 
@@ -56,8 +57,11 @@ export function CreateAbilityCardSelecter({ card, index, multiSelect = false, at
     document.body.appendChild(cardDescription)
 
     const cardImage = document.createElement('img');
-    cardImage.src = card.image === '' ? `/images/cards/special_ability_card_${attribut?.toUpperCase()}.jpg` : `/images/cards/${card.image}`;
+    // cardImage.src = card.image === '' ? `/images/cards/special_ability_card_${attribut?.toUpperCase()}.jpg` : `/images/cards/${card.image}`;
     cardImage.classList.add('gate-card-background');
+
+    setImageWithFallback(cardImage, `/images/cards/${card.image}`, `/images/cards/ability_card_${attribut ? attribut.toUpperCase() : "DARKUS"}.jpg`, 'ability_card.jpg')
+
 
     cardElement.appendChild(cardImage);
 

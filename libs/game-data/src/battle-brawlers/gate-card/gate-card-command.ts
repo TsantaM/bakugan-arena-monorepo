@@ -10,9 +10,9 @@ import { type bakuganOnSlot, type stateType } from "../../type/room-types";
 
 export const Rechargement: gateCardType = {
     key: 'rechargement',
-    name: 'Rechargement',
+    name: 'Reloaded',
     maxInDeck: 1,
-    description: `Augmente le niveau de puissance du propriétaire de la carte de 100 G par Bakugan présent sur le domaine ayant le même élément`,
+    description: `Adds 100 Gs to your Bakugan for each Bakugan on field with the same attribut`,
     image: GateCardImages.command,
     onOpen: ({ roomState, slot, bakuganKey, userId }) => {
         if (!roomState) return null
@@ -66,9 +66,9 @@ export const Rechargement: gateCardType = {
 
 export const GrandEsprit: gateCardType = {
     key: 'grand-esprit',
-    name: 'Grand Esprit',
+    name: 'Grand Spirit',
     maxInDeck: 1,
-    description: `Augmente le niveau de puissance du propriétaire de la carte de 50 G par cartes portails présentes sur le domaine`,
+    description: `Adds 50 Gs to your Bakugan for every gate card on the field`,
     image: GateCardImages.command,
     onOpen({ roomState, slot, bakuganKey, userId }) {
         if (!roomState) return null
@@ -112,8 +112,8 @@ export const GrandEsprit: gateCardType = {
 
 export const TripleCombat: gateCardType = {
     key: 'triple-combat',
-    name: 'Triple Combat',
-    description: `Permet au propriétaire de la carte d'attirer le bakugan de son deck non éliminé et hors domaine ayant le niveau de puissance le plus faible`,
+    name: 'Tripple Battle',
+    description: `Drag your weakest Bakugan to the battle`,
     image: GateCardImages.command,
     maxInDeck: 1,
     onOpen: ({ roomState, slot, userId }) => {
@@ -197,8 +197,8 @@ export const TripleCombat: gateCardType = {
 
 export const QuatuorDeCombat: gateCardType = {
     key: 'quatuor-de-combat',
-    name: 'Quatuor de Combat',
-    description: `Attire au jeu sur la carte le bakugan le plus puissant encore jouable dans le deck de chaque joueur`,
+    name: 'Quartet Battle',
+    description: `Drag one bakugan from each player to join de battle`,
     image: GateCardImages.command,
     maxInDeck: 1,
     onOpen: ({ roomState, slot, userId }) => {
@@ -377,9 +377,9 @@ export const BoucEmissaire: gateCardType = {
 
 export const Armistice: gateCardType = {
     key: 'armistice',
-    name: 'Armistice',
+    name: 'Peacemaker',
     maxInDeck: 1,
-    description: `Met fin au combat et tous les Bakugans sur la carte quittent le champs de batail. Toutes les cartes maîtrises utilisées seront perdues`,
+    description: `Returns all battling Bakugan on this Gate Card to their player`,
     image: GateCardImages.command,
     onOpen({ roomState, slot }) {
         if (!roomState) return null

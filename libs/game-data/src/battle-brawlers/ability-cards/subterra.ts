@@ -11,8 +11,8 @@ import { GateCardsList } from "../gate-gards";
 
 export const MagmaSupreme: abilityCardsType = {
     key: 'magma-supreme',
-    name: 'Magma Supreme',
-    description: `Transforme l'élément de la carte portail par celui de la terre (Subterra)`,
+    name: 'Magma Prominence',
+    description: `Changes the Gate Card's attribute to Subterra.`,
     attribut: 'Subterra',
     maxInDeck: 1,
     usable_in_neutral: false,
@@ -76,10 +76,10 @@ export const ChuteColossale: abilityCardsType = {
 
 export const CopieConforme: abilityCardsType = {
     key: 'copie-conforme',
-    name: 'Copie Conforme',
+    name: 'Copycat',
     attribut: 'Subterra',
     maxInDeck: 1,
-    description: `Permet de copier une des carte maîtrise déjà utilisée par l'adversaire`,
+    description: `Copies an ability that the opponent used or is using`,
     image: StandardCardsImages.subterra,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -106,10 +106,10 @@ export const CopieConforme: abilityCardsType = {
 
 export const Obstruction: abilityCardsType = {
     key: 'obstruction',
-    name: 'Obstruction',
+    name: 'Dragoon',
     attribut: 'Subterra',
     maxInDeck: 1,
-    description: `L'utilisateur s'empare du niveau de puissance de l'adversaire avant l'utilisation de la maîtrise`,
+    description: `Adds the opponent's G-Power to user`,
     image: StandardCardsImages.subterra,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -137,10 +137,10 @@ export const Obstruction: abilityCardsType = {
 
 export const ForceDattraction: abilityCardsType = {
     key: `force-d'attraction`,
-    name: `Force d'Attraction`,
+    name: `Attractor`,
     maxInDeck: 2,
     attribut: 'Subterra',
-    description: `Permet d'attirer un bakugan alier sur la carte portail où se trouve l'utilisateur`,
+    description: `Attract one Bakugan from another Gate Card to user's Gate Card`,
     image: StandardCardsImages.subterra,
     extraInputs: ['drag-bakugan'],
     usable_in_neutral: false,
@@ -163,7 +163,7 @@ export const ForceDattraction: abilityCardsType = {
 
         const request: AbilityCardsActions = {
             type: 'SELECT_BAKUGAN_ON_DOMAIN',
-            message: "Force d'attraction : Choissez un Bakugan à attirer",
+            message: "Attractor : Select a Bakugan to drag",
             bakugans: bakugans
         }
 

@@ -40,7 +40,7 @@ export const RavenoidHaos: bakuganType = {
 
 export const RavenoidGateCard: gateCardType = {
     key: 'ravenoid-gate-card',
-    name: 'Carte Personnage: Ravenoid',
+    name: 'Charachter: Ravenoid',
     maxInDeck: 1,
     family: 'Ravenoid',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Ravenoid présent sur elle`,

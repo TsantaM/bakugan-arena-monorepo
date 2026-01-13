@@ -30,25 +30,25 @@ import { bakuganType } from "../type/game-data-types";
 
 export const Bakugans: Record<string, bakuganType> = {
     [DragonoidPyrus.key]: DragonoidPyrus,
-    [DragonoidDeltaPyrus.key]: DragonoidDeltaPyrus,
-    [UltimateDragonoid.key]: UltimateDragonoid,
+    // [DragonoidDeltaPyrus.key]: DragonoidDeltaPyrus,
+    // [UltimateDragonoid.key]: UltimateDragonoid,
 
     [SkyressVentus.key]: SkyressVentus,
-    [SkyressStormVentus.key]: SkyressStormVentus,
+    // [SkyressStormVentus.key]: SkyressStormVentus,
 
     [PreyasAquos.key]: PreyasAquos,
-    [DiabloAquos.key]: DiabloAquos,
-    [AngeloAquos.key]: AngeloAquos,
+    // [DiabloAquos.key]: DiabloAquos,
+    // [AngeloAquos.key]: AngeloAquos,
 
     [GoremSubterra.key]: GoremSubterra,
-    [HammerGoremSubterra.key]: HammerGoremSubterra,
+    // [HammerGoremSubterra.key]: HammerGoremSubterra,
 
     [TigrerraHaos.key]: TigrerraHaos,
-    [BladeTigrerraHaos.key]: BladeTigrerraHaos,
+    // [BladeTigrerraHaos.key]: BladeTigrerraHaos,
 
     [HydranoidDarkus.key]: HydranoidDarkus,
-    [DeltaHydranoidDarkus.key]: DeltaHydranoidDarkus,
-    [AlphaHydranoidDarkus.key]: AlphaHydranoidDarkus,
+    // [DeltaHydranoidDarkus.key]: DeltaHydranoidDarkus,
+    // [AlphaHydranoidDarkus.key]: AlphaHydranoidDarkus,
 
     [SirenoidAquos.key]: SirenoidAquos,
     [FourtressPyrus.key]: FourtressPyrus,
@@ -57,9 +57,9 @@ export const Bakugans: Record<string, bakuganType> = {
     [TentaclearHaos.key]: TentaclearHaos,
     [ReaperDarkus.key]: ReaperDarkus,
 
-    [GriffinAquos.key]: GriffinAquos,
+    // [GriffinAquos.key]: GriffinAquos,
     [GriffinPyrus.key]: GriffinPyrus,
-    [GriffinHaos.key]: GriffinHaos,
+    // [GriffinHaos.key]: GriffinHaos,
 
     [MantrisPyrus.key]: MantrisPyrus,
     [MantrisDarkus.key]: MantrisDarkus,
@@ -70,10 +70,10 @@ export const Bakugans: Record<string, bakuganType> = {
     [SaurusHaos.key]: SaurusHaos,
     [SaurusSubterra.key]: SaurusSubterra,
 
-    [RobotallionPyrus.key]: RobotallionPyrus,
-    [RobotallionAquos.key]: RobotallionAquos,
-    [RobotallionDarkus.key]: RobotallionDarkus,
-    [RobotallionHaos.key]: RobotallionHaos,
+    // [RobotallionPyrus.key]: RobotallionPyrus,
+    // [RobotallionAquos.key]: RobotallionAquos,
+    // [RobotallionDarkus.key]: RobotallionDarkus,
+    // [RobotallionHaos.key]: RobotallionHaos,
 
     [ElCondorHaos.key]: ElCondorHaos,
     [ElCondorVentus.key]: ElCondorVentus,
@@ -105,15 +105,15 @@ export const Bakugans: Record<string, bakuganType> = {
     [StinglashDarkus.key]: StinglashDarkus,
     [StinglashSubterra.key]: StinglashSubterra,
 
-    [LimulusAquos.key]: LimulusAquos,
+    // [LimulusAquos.key]: LimulusAquos,
 
     [CentipodDarkus.key]: CentipodDarkus,
     [CentipodHaos.key]: CentipodHaos,
     [CentipodPyrus.key]: CentipodPyrus,
     [CentipodSubterra.key]: CentipodSubterra,
 
-    [GarganoidPyrus.key]: GarganoidPyrus,
-    [GaraganoidAquos.key]: GaraganoidAquos
+    // [GarganoidPyrus.key]: GarganoidPyrus,
+    // [GaraganoidAquos.key]: GaraganoidAquos
 }
 
 export const BakuganList: bakuganType[] = Object.values(Bakugans) 

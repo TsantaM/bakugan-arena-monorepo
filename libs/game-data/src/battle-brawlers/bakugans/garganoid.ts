@@ -28,7 +28,7 @@ export const GaraganoidAquos: bakuganType = {
 
 export const GarganoidGateCard: gateCardType = {
     key: 'garganoid-gate-card',
-    name: 'Carte Personnage: Garganoid',
+    name: 'Charachter: Garganoid',
     maxInDeck: 1,
     description: `Lorsque cette carte est activée elle double le niveau de tous les Garganoid présent sur elle`,
     image: GateCardImages.caracter,

@@ -6,6 +6,7 @@ import { createSocket } from './sockets/create-socket'
 import { registerSocketHandlers } from './sockets/sockets-handlers'
 import { CreateBakuganHoverPreview, RemoveBakuganHoverPreview, type BakuganPreviewData } from './functions/create-bakugan-preview-hover'
 import { OnHoverGateCard } from './animations/show-message-animation'
+import { setImageWithFallback } from './functions/set-image-with-fallback'
 
 const canvas = document.getElementById('gameboard-canvas')
 const params = new URLSearchParams(window.location.search)
@@ -26,19 +27,6 @@ if (!roomId || !userId) {
 }
 
 const socket = createSocket(userId, roomId)
-
-function setImageWithFallback(imgElement: HTMLImageElement | null, src: string, fallbackSrc: string, fallbackAlt: string) {
-  if (!imgElement) return;
-
-  imgElement.src = src;
-  imgElement.alt = src;
-
-  // Si l'image ne se charge pas, on met le fallback
-  imgElement.onerror = () => {
-    imgElement.src = fallbackSrc;
-    imgElement.alt = fallbackAlt;
-  };
-}
 
 // Pour l'utilisateur
 if (userImage) {

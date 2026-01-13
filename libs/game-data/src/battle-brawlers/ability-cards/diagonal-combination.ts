@@ -3,9 +3,9 @@ import type { abilityCardsType } from "../../type/game-data-types";
 
 export const PyrusDarkus: abilityCardsType = {
     key: 'diagonal-combination-pyrus-darkus',
-    name: 'Corrélation Diagonal : Pyrus - Darkus',
+    name: 'Diagonal Correlation : Pyrus - Darkus',
     attribut: 'Pyrus',
-    description: `Si l'utilisateur est de l'attribut Pyrus, il se verra octroyer un bonus de 100 G si un Bakugan Darkus est présent n'importe où sur le domaine`,
+    description: `If the user is of the Pyrus attribut, they gain a 100 Gs bonus if a Darkus Bakugan is present anywhere on the field`,
     maxInDeck: 1,
     usable_in_neutral: true,
     image: "pyrus-darkus.jpg",
@@ -23,9 +23,9 @@ export const PyrusDarkus: abilityCardsType = {
 
 export const DarkusPyrus: abilityCardsType = {
     key: 'diagonal-combination-darkus-pyrus',
-    name: 'Corrélation Diagonal : Pyrus - Darkus',
+    name: 'Diagonal Correlation : Pyrus - Darkus',
     attribut: 'Darkus',
-    description: `Si l'utilisateur est de l'attribut Darkus, il se verra octroyer un bonus de 100 G si un Bakugan Pyrus est présent n'importe où sur le domaine`,
+    description: `If the user is of the Darkus attribut, they gain a 100 Gs bonus if a Pyrus Bakugan is present anywhere on the field`,
     maxInDeck: 1,
     usable_in_neutral: true,
     image: "pyrus-darkus.jpg",
@@ -42,9 +42,9 @@ export const DarkusPyrus: abilityCardsType = {
 
 export const VentusHaos: abilityCardsType = {
     key: 'diagonal-combination-ventus-haos',
-    name: 'Corrélation Diagonal : Ventus - Haos',
+    name: 'Diagonal Correlation : Ventus - Haos',
     attribut: 'Ventus',
-    description: `Si l'utilisateur est de l'attribut Ventus, il se verra octroyer un bonus de 100 G si un Bakugan Haos est présent n'importe où sur le domaine`,
+    description: `If the user is of the Ventus attribut, they gain a 100 Gs bonus if a Haos Bakugan is present anywhere on the field`,
     maxInDeck: 1,
     usable_in_neutral: true,
     onActivate({ roomState, userId, bakuganKey, slot }) {
@@ -60,9 +60,9 @@ export const VentusHaos: abilityCardsType = {
 
 export const HaosVentus: abilityCardsType = {
     key: 'diagonal-combination-haos-ventus',
-    name: 'Corrélation Diagonal : Ventus - Haos',
+    name: 'Diagonal Correlation : Ventus - Haos',
     attribut: 'Haos',
-    description: `Si l'utilisateur est de l'attribut Haos, il se verra octroyer un bonus de 100 G si un Bakugan Ventus est présent n'importe où sur le domaine`,
+    description: `If the user is of the Haos attribut, they gain a 100 Gs bonus if a Ventus Bakugan is present anywhere on the field`,
     maxInDeck: 1,
     usable_in_neutral: true,
     onActivate({ roomState, userId, bakuganKey, slot }) {
@@ -78,9 +78,9 @@ export const HaosVentus: abilityCardsType = {
 
 export const AquosSubterra: abilityCardsType = {
     key: 'diagonal-combination-aquos-subterra',
-    name: 'Corrélation Diagonal : Aquos - Subterra',
+    name: 'Diagonal Correlation : Aquos - Subterra',
     attribut: 'Aquos',
-    description: `Si l'utilisateur est de l'attribut Aquos, il se verra octroyer un bonus de 100 G si un Bakugan Subterra est présent n'importe où sur le domaine`,
+    description: `If the user is of the Aquos attribut, they gain a 100 Gs bonus if a Subterra Bakugan is present anywhere on the field`,
     maxInDeck: 1,
     usable_in_neutral: true,
     onActivate({ roomState, userId, bakuganKey, slot }) {
@@ -96,9 +96,9 @@ export const AquosSubterra: abilityCardsType = {
 
 export const SubterraAquos: abilityCardsType = {
     key: 'diagonal-combination-subterra-aquos',
-    name: 'Corrélation Diagonal : Aquos - Subterra',
+    name: 'Diagonal Correlation : Aquos - Subterra',
     attribut: 'Aquos',
-    description: `Si l'utilisateur est de l'attribut Subterra, il se verra octroyer un bonus de 100 G si un Bakugan Aquos est présent n'importe où sur le domaine`,
+    description: `If the user is of the Subterra attribut, they gain a 100 Gs bonus if a Aquos Bakugan is present anywhere on the field`,
     maxInDeck: 1,
     usable_in_neutral: true,
     onActivate({ roomState, userId, bakuganKey, slot }) {

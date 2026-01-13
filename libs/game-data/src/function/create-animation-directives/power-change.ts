@@ -11,7 +11,7 @@ type Props = {
 
 type PowerChangeDirectiveAnumationType = ({ bakugans, powerChange, malus, animations }: Props) => void
 
-export const PowerChangeDirectiveAnumation: PowerChangeDirectiveAnumationType = ({bakugans, powerChange, malus = false, animations}) => {
+export const PowerChangeDirectiveAnumation: PowerChangeDirectiveAnumationType = ({ bakugans, powerChange, malus = false, animations }) => {
 
     const powerChangeDirective: AnimationDirectivesTypes = {
         type: 'POWER_CHANGE',
@@ -22,7 +22,7 @@ export const PowerChangeDirectiveAnumation: PowerChangeDirectiveAnumationType = 
         },
         resolved: false,
         message: bakugans.map((b) => ({
-            text: malus ? `Baisse du niveau de puissance de ${BakuganList.find((bakugan) => bakugan.key === b.key )?.name || ''} de ${powerChange} G !` : `Hausse du niveau de puissance de ${BakuganList.find((bakugan) => bakugan.key === b.key )?.name || ''} de ${powerChange} G !`
+            text: malus ? `${BakuganList.find((bakugan) => bakugan.key === b.key)?.name || ''} power decreased of ${powerChange} Gs !` : `${BakuganList.find((bakugan) => bakugan.key === b.key)?.name || ''} power increased of ${powerChange} Gs !`
         }))
     }
 

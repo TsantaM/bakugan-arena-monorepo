@@ -32,6 +32,13 @@ function createSprite({ bakugan, scene, slot, slotIndex, userId, bakugansMeshs }
     if(!position) return
 
     bakuganMesh.position.set(position.x, 0.75, position.z)
+
+    if(bakugansMeshs.some((mesh) => mesh.name === bakuganMesh.name)) {
+        const index = bakugansMeshs.findIndex((mesh) => mesh.name === bakuganMesh.name)
+        if(index === -1) return
+        bakugansMeshs.splice(index, 1)
+    }
+
     bakugansMeshs.push(bakuganMesh as THREE.Sprite<THREE.Object3DEventMap>)
     scene.add(bakuganMesh)
 }

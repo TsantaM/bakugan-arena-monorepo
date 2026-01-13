@@ -14,8 +14,8 @@ import { GateCardsList } from "../gate-gards"
 
 export const OmbreBleue: exclusiveAbilitiesType = {
     key: 'ombre-bleue',
-    name: 'Ombre Bleue',
-    description: `Ajoute 50G à l'utilisateur et empêche l'ouverture de la carte portail`,
+    name: 'Blue Stealth',
+    description: `Transfers 50 Gs from opponent Bakugan to the user and prevent the opponent from opening their Gate Card`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
@@ -41,8 +41,8 @@ export const OmbreBleue: exclusiveAbilitiesType = {
 
 export const ChambreDeGravite: exclusiveAbilitiesType = {
     key: 'chambre-de-gravité',
-    name: 'Chambre de Gravité',
-    description: `Permet d'attirer un bakugan sur la carte portail où se trouve l'utilisateur.`,
+    name: 'Gravity Chamber',
+    description: `Move an opponent on the battlefield to the user's Gate Card`,
     maxInDeck: 1,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
@@ -69,8 +69,8 @@ export const ChambreDeGravite: exclusiveAbilitiesType = {
 
 export const DragonoidPlus: exclusiveAbilitiesType = {
     key: 'dragonoid-plus',
-    name: 'Dragonoid Plus',
-    description: `Ajoute 100G à l'utilisateur et l'effet persiste jusqu'à l'annulation de la capacité`,
+    name: 'Boosted Dragon',
+    description: `Adds 100 Gs to the user`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
@@ -97,8 +97,8 @@ export const DragonoidPlus: exclusiveAbilitiesType = {
 
 export const ImpactMajeur: exclusiveAbilitiesType = {
     key: 'impact-majeur',
-    name: 'Impact Majeur',
-    description: `Ajoute 75G à l'utilisateur et baisse celui de l'adversaire de 75G tout en empêchant la carte portail de s'ouvir`,
+    name: 'Mega Impact',
+    description: `Adds 50 Gs to the user.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
@@ -124,8 +124,8 @@ export const ImpactMajeur: exclusiveAbilitiesType = {
 
 export const SabreDeLaMort: exclusiveAbilitiesType = {
     key: 'sabre-de-la-mort',
-    name: 'Sabre de la Mort',
-    description: `Permet à l'utilisateur de se déplacer vers une autre carte portail ou de joindre le combat s'il n'est pas encore sur le domaine`,
+    name: 'Cut in Saber',
+    description: `Adds Tigrerra into a battle`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: true,
@@ -175,8 +175,8 @@ export const SabreDeLaMort: exclusiveAbilitiesType = {
 
 export const VentViolentDeNobelesseVerte: exclusiveAbilitiesType = {
     key: 'vent-violent-de-noblesse-verte',
-    name: 'Vent Violent de Noblesse Verte',
-    description: `Ajoute 100G à l'utilisateur`,
+    name: 'Green Nobility - Soar Violent Winds',
+    description: `Adds 100 Gs to the user`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
@@ -203,8 +203,8 @@ export const VentViolentDeNobelesseVerte: exclusiveAbilitiesType = {
 
 export const AntiMuse: exclusiveAbilitiesType = {
     key: 'anti-muse',
-    name: 'Anti Muse',
-    description: `Attire un Bakugan sur la carte portail où se trouve l'utilisateur`,
+    name: 'Anthemusa',
+    description: `Bring an opponent to Sirenoid Gate Card`,
     maxInDeck: 1,
     extraInputs: ['drag-bakugan'],
     usable_in_neutral: true,
@@ -228,7 +228,7 @@ export const AntiMuse: exclusiveAbilitiesType = {
 
         const request: AbilityCardsActions = {
             type: 'SELECT_BAKUGAN_ON_DOMAIN',
-            message: 'Anti-muse : Choissez un Bakugan à attirer',
+            message: 'Anthemusa : Select a Bakugan to drag',
             bakugans: bakugans
         }
 
@@ -275,10 +275,38 @@ export const AntiMuse: exclusiveAbilitiesType = {
 
 }
 
+export const VentCinglant: exclusiveAbilitiesType = {
+    key: 'vent-cinglant',
+    name: 'Forcing Wave',
+    description: `Adds 100 Gs to the user`,
+    maxInDeck: 1,
+    usable_in_neutral: false,
+    usable_if_user_not_on_domain: false,
+    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        if (!roomState) return null
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate) {
+            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+
+            if (user) {
+                user.currentPower += 100
+                PowerChangeDirectiveAnumation({
+                    animations: roomState?.animations,
+                    bakugans: [user],
+                    powerChange: 100,
+                    malus: false
+                })
+            }
+        }
+
+        return null
+    }
+}
+
 export const AileEnflamee: exclusiveAbilitiesType = {
     key: 'aile-enflammee',
-    name: 'Aile enflammée',
-    description: `Ajoute 50 G à l'utilisateur (effet persistant)`,
+    name: 'Wing Burst',
+    description: `Transfers 50 Gs from the opponent to user`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
@@ -312,8 +340,8 @@ export const AileEnflamee: exclusiveAbilitiesType = {
 
 export const VisageDuChagrin: exclusiveAbilitiesType = {
     key: 'visage-du-chagrin',
-    name: 'Visage du Chagrin',
-    description: `Rend toutes les carte maîtrises de l'adversaire inutiles et si l'utilisateur remporte le duel il redonne vie à tout bakugan alié vaincu au combat`,
+    name: 'Face of Grief',
+    description: `Prevents the opponent from activationg abilities`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
@@ -342,8 +370,8 @@ export const VisageDuChagrin: exclusiveAbilitiesType = {
 
 export const VisageDeLaFureur: exclusiveAbilitiesType = {
     key: 'visage-de-la-fureur',
-    name: 'Visage de la Fureur',
-    description: `Ajoute 100 G à l'utilisateur et en retire autant à tous les adversaires`,
+    name: 'Face of Rage',
+    description: `Transfers 100 Gs from the opponent to user`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
@@ -380,8 +408,8 @@ export const VisageDeLaFureur: exclusiveAbilitiesType = {
 
 export const VisageDeJoie: exclusiveAbilitiesType = {
     key: 'visage-de-joie',
-    name: 'Visage de Joie',
-    description: `Désactive la carte portail si elle est déjà ouverte et l'empêche de s'ouvrir si elle ne l'est pas encore. Si l'utilisateur gagne la batail il peut réutiliser toutes les cartes maîtrises qu'il a déjà utiliser`,
+    name: 'Face of Joy',
+    description: `Nullifies opponent's gate card if it's open and prevent it to open if it doesn't`,
     maxInDeck: 1,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
@@ -392,14 +420,15 @@ export const VisageDeJoie: exclusiveAbilitiesType = {
 
         if (slotOfGate && gate) {
             if (slotOfGate.state.open) {
-                if (gate.onCanceled) {
-                    gate.onCanceled({ roomState, slot, userId, bakuganKey })
-                }
-                slotOfGate.state.canceled = true
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
                     slot: slotOfGate
                 })
+
+                if (gate.onCanceled) {
+                    gate.onCanceled({ roomState, slot, userId, bakuganKey })
+                }
+                slotOfGate.state.canceled = true
             } else {
                 slotOfGate.state.blocked = true
             }
@@ -431,8 +460,8 @@ export const VisageDeJoie: exclusiveAbilitiesType = {
 
 export const GaucheGigantesque: exclusiveAbilitiesType = {
     key: 'gauche-gigantesque',
-    name: 'Gauche Gigantesque',
-    description: `Détruit la carte portail de l'adversaire`,
+    name: 'Left Giganti',
+    description: `Nullifies opponent's Gate Card`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
@@ -468,8 +497,8 @@ export const GaucheGigantesque: exclusiveAbilitiesType = {
 
 export const MassueGigantesque: exclusiveAbilitiesType = {
     key: 'massue-gigantesque',
-    name: 'Massue Gigantesque',
-    description: `Ajoute 100G à l'utilisateur et en retire 50 à l'adversaire`,
+    name: 'Right Giganti',
+    description: `Adds 100 Gs to the user`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
@@ -496,8 +525,8 @@ export const MassueGigantesque: exclusiveAbilitiesType = {
 
 export const TempeteDePlume: exclusiveAbilitiesType = {
     key: 'tempête-de-plume',
-    name: 'Tempête de Plume',
-    description: `Ajoute 100 G à l'utilisateur`,
+    name: 'Feather Storm',
+    description: `Adds 100 Gs to the user`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
@@ -573,7 +602,7 @@ export const Marionnette: exclusiveAbilitiesType = {
     maxInDeck: 1,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
-    description: "Permet de déplacer un Bakugan vers une autre carte portail",
+    description: "Mantris can move any Bakugan to any Gate Card that it's owner chose",
     extraInputs: ['move-bakugan'],
 
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -601,7 +630,7 @@ export const Marionnette: exclusiveAbilitiesType = {
 
         const request: AbilityCardsActions = {
             type: 'MOVE_BAKUGAN_TO_ANOTHER_SLOT',
-            message: 'Marionnette : Selectionnez un bakugan à déplacer et le slot de destination',
+            message: 'Marionnette : Select a Bakugan to move and his destination',
             bakugans: bakugans,
             slots: slots
         }
@@ -655,8 +684,8 @@ export const Marionnette: exclusiveAbilitiesType = {
 
 export const LanceEclair: exclusiveAbilitiesType = {
     key: 'lance-eclair',
-    name: 'Lancé Eclair',
-    description: `Permet à l'utilisateur d'envoyer son adversaire sur une autre carte portail`,
+    name: 'Sling Blazer',
+    description: `Enable Mantris to move any bakugan to any adjacent Gate Card that its owner chooses`,
     maxInDeck: 1,
     extraInputs: ["move-opponent"],
     usable_in_neutral: false,
@@ -683,7 +712,7 @@ export const LanceEclair: exclusiveAbilitiesType = {
 
         const request: AbilityCardsActions = {
             type: 'MOVE_BAKUGAN_TO_ANOTHER_SLOT',
-            message: 'Lancée Eclair : Selectionnez un bakugan à déplacer et le slot de destination',
+            message: 'Sling Blazer : Select a Bakugan to move and his destination',
             bakugans: bakugans,
             slots: slots
         }
@@ -732,9 +761,9 @@ export const LanceEclair: exclusiveAbilitiesType = {
 
 export const MachettesJumelles: exclusiveAbilitiesType = {
     key: 'machettes-jumelles',
-    name: 'Machette Jumelle',
+    name: 'Twin Machete',
     maxInDeck: 1,
-    description: `Ajoute 100 G à l'utilisateur`,
+    description: `Adds 100 Gs to Mantris`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -778,9 +807,9 @@ export const MachettesJumelles: exclusiveAbilitiesType = {
 
 export const RobotallionExecution: exclusiveAbilitiesType = {
     key: "robotalion-execution",
-    name: 'Robotalion Execution',
+    name: 'Robotalion Enforcement',
     maxInDeck: 1,
-    description: `Augmente le niveau de puissance de l'utilisateur de 50 G`,
+    description: `Adds 50 Gs to the user`,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -806,9 +835,9 @@ export const RobotallionExecution: exclusiveAbilitiesType = {
 
 export const PlexusSolaire: exclusiveAbilitiesType = {
     key: 'plexus-solaire',
-    name: 'Plexus Solaire',
+    name: 'Solar Plexus',
     maxInDeck: 1,
-    description: `Annule la carte portail si elle est ouverte et retire 50 G à l'adversaire`,
+    description: `Nullifies opponents Gate Card and substract 50 Gs to opponent`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -846,8 +875,8 @@ export const PlexusSolaire: exclusiveAbilitiesType = {
 
 export const EffecteurdOmbre: exclusiveAbilitiesType = {
     key: `effaceur-d'ombre`,
-    description: `Annule la carte portail si elle est ouverte ainsi que la carte portail de l'adversaire tout en lui retirant 50 G`,
-    name: `Effaceur d'ombre`,
+    description: `Substract 50 Gs to the opponent and nullifies his Gate Card`,
+    name: `Shadow Scratch`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
@@ -884,9 +913,9 @@ export const EffecteurdOmbre: exclusiveAbilitiesType = {
 
 export const LanceDeFeu: exclusiveAbilitiesType = {
     key: 'lance-de-feu',
-    name: 'Lance de Feu',
+    name: 'Fire Sword',
     maxInDeck: 1,
-    description: `Ajoute 100 G à l'utilisateur`,
+    description: `Adds 100 Gs to the user`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -912,9 +941,9 @@ export const LanceDeFeu: exclusiveAbilitiesType = {
 
 export const JavelotAquos: exclusiveAbilitiesType = {
     key: 'javelot-aquos',
-    name: 'Javelot Aquos',
+    name: 'Aquos Javelin',
     maxInDeck: 1,
-    description: `Permet à l'utilisateur d'échanger la place de deux cartes portails juxtaposées`,
+    description: `Switches Gate Card with the one next to it`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -940,9 +969,9 @@ export const JavelotAquos: exclusiveAbilitiesType = {
 
 export const Tsunami: exclusiveAbilitiesType = {
     key: 'tsunami',
-    name: 'Tsunami',
+    name: 'Tsunami Wave',
     maxInDeck: 1,
-    description: `Ne peux être activée que si trois (3) Bakugans aqos aliés sont sur le domaine, et élimine tout Bakuant présent sur le domaine ayant un niveau de puissance inférieur à l'utilisateur`,
+    description: `If you have three Aquos Bakugan on the field, with on of them being Siege, every Bakugan on the field (including yours) besides Siege autoatically loses`,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
     image: 'tsunami.jpg',
@@ -969,7 +998,7 @@ export const Tsunami: exclusiveAbilitiesType = {
 
 export const TrappeDeSable: exclusiveAbilitiesType = {
     key: 'trappe-de-sable',
-    name: 'Trappe de Sable',
+    name: 'Sand Trap',
     description: `Permet d'attaquer un Bakugan se trouvant sur une autre carte portail et baise le niveau de puissance de la cible de 50 G`,
     maxInDeck: 1,
     usable_in_neutral: true,
@@ -992,7 +1021,7 @@ export const TrappeDeSable: exclusiveAbilitiesType = {
 
         const request: AbilityCardsActions = {
             type: 'SELECT_BAKUGAN_ON_DOMAIN',
-            message: 'Trappe de Sable : Choissez un Bakugan à attirer',
+            message: 'Sand Trap : Select a Bakugan to drag',
             bakugans: bakugans
         }
 
@@ -1049,8 +1078,8 @@ export const TrappeDeSable: exclusiveAbilitiesType = {
 
 export const MaitreDesProfondeurs: exclusiveAbilitiesType = {
     key: 'maitre-des-profondeurs',
-    name: 'Maitre des profondeurs',
-    description: `Ajoute 100 G à l'utilisateur`,
+    name: 'Abyss Ruler',
+    description: `Adds 100 Gs to the user`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

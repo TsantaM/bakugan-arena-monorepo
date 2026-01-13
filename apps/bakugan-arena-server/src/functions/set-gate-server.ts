@@ -91,7 +91,7 @@ export const UpdateGate: ({ roomId, gateId, slot, userId }: setGateCardProps) =>
         },
         resolved: false,
         message: [{
-            text: 'Carte Portail position !',
+            text: 'Gate Card Set !',
             userName: GetUserName({roomData: Battle_Brawlers_Game_State[roomIndex], userId: userId})
         }]
     }]

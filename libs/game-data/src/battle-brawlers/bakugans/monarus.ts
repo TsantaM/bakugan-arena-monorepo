@@ -16,7 +16,7 @@ export const MonarusVentus: bakuganType = {
 
 export const MonarusGateCard: gateCardType = {
     key: 'monarus-gate-card',
-    name: 'Carte Personnage: Monarus',
+    name: 'Charachter: Monarus',
     maxInDeck: 1,
     family: 'Monarus',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Monarus présent sur elle`,

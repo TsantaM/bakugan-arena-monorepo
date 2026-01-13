@@ -17,7 +17,7 @@ export const TentaclearHaos: bakuganType = {
 
 export const TentaclearGateCard: gateCardType = {
     key: 'tentaclear-gate-card',
-    name: 'Carte Personnage: Tentaclear',
+    name: 'Charachter: Tentaclear',
     maxInDeck: 1,
     family: 'Tentaclear',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Tentaclear présent sur elle`,

@@ -11,9 +11,9 @@ import { CheckBattleStillInProcess } from "../../function/check-battle-still-in-
 
 export const CombatAerien: abilityCardsType = {
     key: 'combat-aerien',
-    name: 'Combat Aérien',
+    name: 'Air Battle',
     attribut: 'Ventus',
-    description: `Permet à l'utilisateur de se déplacé vers une autre carte portail et l'empêche de s'ouvrir`,
+    description: `Allow Ventus bakugan to fly beyond Gate Cards and nullifies the Gate Card that it land on`,
     maxInDeck: 1,
     extraInputs: ["move-self"],
     usable_in_neutral: true,
@@ -39,7 +39,7 @@ export const CombatAerien: abilityCardsType = {
 
         const request: AbilityCardsActions = {
             type: 'SELECT_SLOT',
-            message: 'Combat Aérien : Choisissez le slot de déstination',
+            message: 'Air Battle : Select a slot',
             slots: slots
         }
 
@@ -87,10 +87,10 @@ export const CombatAerien: abilityCardsType = {
 
 export const TornadeChaosTotal: abilityCardsType = {
     key: 'tornade-chaos-total',
-    name: 'Tornade Chaos Total',
+    name: 'Storm Breaker',
     maxInDeck: 1,
     attribut: 'Ventus',
-    description: `Annule toutes les effets de la carte portail si elle est ouverte avant l'activation de cette capacité`,
+    description: `Nullifies the opponent's Gate Card`,
     image: StandardCardsImages.ventus,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -119,9 +119,9 @@ export const TornadeChaosTotal: abilityCardsType = {
 
 export const SouffleTout: abilityCardsType = {
     key: 'souffle-tout',
-    name: 'Souffle Tout',
+    name: 'Blow Away',
     attribut: 'Ventus',
-    description: `Permet d'envoyer le Bakugan adverse sur une autre carte portail`,
+    description: `Move the opponent to another Gate Card`,
     maxInDeck: 3,
     extraInputs: ["move-opponent"],
     image: StandardCardsImages.ventus,
@@ -148,7 +148,7 @@ export const SouffleTout: abilityCardsType = {
 
         const request: AbilityCardsActions = {
             type: 'MOVE_BAKUGAN_TO_ANOTHER_SLOT',
-            message: 'Souffle Tout : Selectionnez un bakugan à déplacer et le slot de destination',
+            message: 'Blow Away : Select the Bakugan to move and his destination',
             bakugans: bakugans,
             slots: slots
         }
@@ -198,10 +198,10 @@ export const SouffleTout: abilityCardsType = {
 
 export const RetourDair: abilityCardsType = {
     key: 'retour-d-air',
-    name: `Retour d'Air`,
+    name: `Backdraft`,
     attribut: 'Ventus',
     maxInDeck: 1,
-    description: `Permet à l'utilisateur de se retirer du combat`,
+    description: `Remove the user from the field`,
     image: StandardCardsImages.ventus,
     usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -231,9 +231,9 @@ export const RetourDair: abilityCardsType = {
 
 export const TornadeExtreme: abilityCardsType = {
     key: 'tornade-extreme',
-    name: 'Tornade Extreme',
+    name: 'Scarlet Twister',
     attribut: 'Ventus',
-    description: `Permet à l'utilisateur d'attirer un Bakugan sur la carte portail où il se trouve`,
+    description: `Attract one Bakugan from another Gate Card to user's Gate Card`,
     maxInDeck: 1,
     extraInputs: ['drag-bakugan'],
     image: StandardCardsImages.ventus,
@@ -256,7 +256,7 @@ export const TornadeExtreme: abilityCardsType = {
 
         const request: AbilityCardsActions = {
             type: 'SELECT_BAKUGAN_ON_DOMAIN',
-            message: 'Tornade Extreme : Choissez un Bakugan à attirer',
+            message: 'Scarlet Twister : Select a Bakugan to drag',
             bakugans: bakugans
         }
 

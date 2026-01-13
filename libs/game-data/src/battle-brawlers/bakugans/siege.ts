@@ -52,7 +52,7 @@ export const SiegeDarkus: bakuganType = {
 
 export const SiegeGateCard: gateCardType = {
     key: 'siege-gate-card',
-    name: 'Carte Personnage: Siege',
+    name: 'Charachter: Siege',
     maxInDeck: 1,
     family: 'Siege',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Siege présent sur elle`,

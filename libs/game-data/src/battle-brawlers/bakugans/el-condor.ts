@@ -40,7 +40,7 @@ export const ElCondorSubterra: bakuganType = {
 
 export const ElCondorGateCard: gateCardType = {
     key: 'el-condor-gate-card',
-    name: 'Carte Personnage: El Condor',
+    name: 'Charachter: El Condor',
     maxInDeck: 1,
     image: GateCardImages.caracter,
     description: `Lorsque cette carte est activée elle double le niveau de tous les El Condor présent sur elle`,

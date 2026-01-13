@@ -17,7 +17,7 @@ export const HarpusVentus: bakuganType = {
 
 export const HarpusGateCard: gateCardType = {
     key: 'harpus-gate-card',
-    name: 'Carte Personnage: Gorem',
+    name: 'Charachter: Gorem',
     maxInDeck: 1,
     family: 'Harpus',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Harpus présent sur elle`,

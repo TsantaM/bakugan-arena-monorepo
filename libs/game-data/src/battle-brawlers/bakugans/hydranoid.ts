@@ -41,7 +41,7 @@ export const AlphaHydranoidDarkus: bakuganType = {
 
 export const HydranoidGateCard: gateCardType = {
     key: 'hydranoid-gate-card',
-    name: 'Carte Personnage: Hydranoid',
+    name: 'Charachter: Hydranoid',
     maxInDeck: 1,
     family: 'Hydranoid',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Hydranoid présent sur elle`,

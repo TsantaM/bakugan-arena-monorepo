@@ -9,7 +9,7 @@ export function OnBattleStartAnimationDirectives({ animations, slot } : { slot: 
         },
         resolved: false,
         message: [{
-            text: `Début d'un nouveau combat !`
+            text: `New Battle Start !`
         }]
     }
 

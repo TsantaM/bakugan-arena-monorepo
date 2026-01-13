@@ -17,7 +17,7 @@ export const CycloidSubterra: bakuganType = {
 
 export const CycloidGateCard: gateCardType = {
     key: 'cycloid-gate-card',
-    name: 'Carte Personnage: Cycloid',
+    name: 'Charachter: Cycloid',
     maxInDeck: 1,
     family: 'Cycloid',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Cycloid présent sur elle`,

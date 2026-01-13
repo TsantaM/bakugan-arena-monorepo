@@ -28,7 +28,7 @@ export const SkyressStormVentus: bakuganType = {
 
 export const SkyressGateCard: gateCardType = {
     key: 'skyress-gate-card',
-    name: 'Carte Personnage: Skyress',
+    name: 'Charachter: Skyress',
     maxInDeck: 1,
     family: 'Skyress',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Skyress présent sur elle`,

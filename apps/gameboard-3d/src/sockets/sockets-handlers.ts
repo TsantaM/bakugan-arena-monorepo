@@ -28,6 +28,7 @@ import { AdditionalEffectMessage, EndGameMessage, removePreviousDialogBoxAnimati
 import { setEliminatedCircles } from "../functions/set-eliminated-circle"
 import type { Message } from "@bakugan-arena/game-data/src/type/animations-directives"
 import { clearTurnInterface } from "../turn-action-management/turn-actions-resolution/action-scope"
+import { ActiveAbilityCardAnimation } from "../animations/active-ability-card"
 
 let animationQueue: AnimationDirectivesTypes[] = []
 let isProcessingAnimations = false
@@ -112,7 +113,7 @@ async function processAnimationQueue(userId: string,
             current.data.bakugan.forEach((b) => {
                 const name = `${b.key}-${b.userId}`
                 const mesh = scene.getObjectByName(name)
-                if(!mesh) return
+                if (!mesh) return
                 mesh.userData.powerLevel = b.currentPower
             })
 
@@ -270,7 +271,7 @@ async function processAnimationQueue(userId: string,
             })
         }
 
-        if(current.type === 'ADD_RENFORT') {
+        if (current.type === 'ADD_RENFORT') {
             await AddRenfortToBattleAnimationFunction({
                 bakugan: current.data.bakugan,
                 userId: userId
@@ -278,6 +279,7 @@ async function processAnimationQueue(userId: string,
         }
 
         if (current.type === 'ACTIVE_ABILITY_CARD') {
+            await ActiveAbilityCardAnimation(current.data.card, current.data.attribut)
             await ShowMessageAnimation({
                 messages: current.message
             })
@@ -381,15 +383,28 @@ export function registerSocketHandlers(
     })
 
     socket.on("turn-action-request", (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
-        TurnActionBuilder({
-            request,
-            userId: userId,
-            camera: camera,
-            scene: scene,
-            plane: plane,
-            roomId: roomId,
-            socket: socket
-        })
+
+        const actions = [
+            request.actions.mustDo,
+            request.actions.mustDoOne,
+            request.actions.optional
+        ].flat()
+
+        if (actions.length <= 0) {
+            if (request.target === 'INACTIVE_PLAYER') return
+            socket.emit('check-activities', { userId, roomId })
+        } else {
+            TurnActionBuilder({
+                request,
+                userId: userId,
+                camera: camera,
+                scene: scene,
+                plane: plane,
+                roomId: roomId,
+                socket: socket
+            })
+        }
+
     }
     )
 

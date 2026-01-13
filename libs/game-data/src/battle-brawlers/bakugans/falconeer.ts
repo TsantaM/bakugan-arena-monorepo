@@ -28,7 +28,7 @@ export const FalconeerVentus: bakuganType = {
 
 export const FalconeerGateCard: gateCardType = {
     key: 'falconeer-gate-card',
-    name: 'Carte Personnage: Falconeer',
+    name: 'Charachter: Falconeer',
     maxInDeck: 1,
     image: 'falconeer.png',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Falconneer présent sur elle`,

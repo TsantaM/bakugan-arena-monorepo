@@ -17,7 +17,7 @@ export const CancelGateCardDirectiveAnimation: CancelGateCardDirectiveAnimationT
         },
         resolved: false,
         message: [{
-            text: `Carte Portail annulée`
+            text: `Gate Card nullified`
         }]
     }
 

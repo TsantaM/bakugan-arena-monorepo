@@ -29,7 +29,7 @@ export const HammerGoremSubterra: bakuganType = {
 
 export const GoremGateCard: gateCardType = {
     key: 'gorem-gate-card',
-    name: 'Carte Personnage: Gorem',
+    name: 'Charachter: Gorem',
     maxInDeck: 1,
     family: 'Gorem',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Gorem présent sur elle`,

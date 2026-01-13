@@ -8,9 +8,9 @@ import { CheckBattleStillInProcess } from "../../function/check-battle-still-in-
 
 export const MirageAquatique: abilityCardsType = {
     key: 'mirage-aquatique',
-    name: 'Mirage Aquatique',
+    name: 'Dive Mirage',
     attribut: 'Aquos',
-    description: `'Permet à l'utilisateur de se déplacer vers une autre carte portail et l'empêche de s'ouvrir`,
+    description: `Move an Aquos Bakugan from one gate card to another, also it prevents the opponent's gate card from opening`,
     maxInDeck: 2,
     extraInputs: ["move-self"],
     usable_in_neutral: true,
@@ -36,7 +36,7 @@ export const MirageAquatique: abilityCardsType = {
 
         const request: AbilityCardsActions = {
             type: 'SELECT_SLOT',
-            message: 'Mirage Aquatique : Choisissez le slot de déstination',
+            message: 'Dive Mirage : Select a slot',
             slots: slots
         }
 
@@ -59,7 +59,9 @@ export const MirageAquatique: abilityCardsType = {
                     slot_id: destination
                 }
                 slotTarget.bakugans.push(newUserState)
-                slotTarget.state.blocked = true
+                if (slotTarget.portalCard.userId !== user.userId) {
+                    slotTarget.state.blocked = true
+                }
                 slotOfGate.bakugans.splice(index, 1)
 
                 MoveToAnotherSlotDirectiveAnimation({

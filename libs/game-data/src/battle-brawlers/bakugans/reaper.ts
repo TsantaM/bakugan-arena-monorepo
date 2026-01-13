@@ -17,7 +17,7 @@ export const ReaperDarkus: bakuganType = {
 
 export const ReaperGateCard: gateCardType = {
     key: 'reaper-gate-card',
-    name: 'Carte Personnage: Reaper',
+    name: 'Charachter: Reaper',
     maxInDeck: 1,
     family: 'Reaper',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Reaper présent sur elle`,

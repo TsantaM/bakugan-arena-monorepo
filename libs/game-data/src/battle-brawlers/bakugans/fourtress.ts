@@ -17,7 +17,7 @@ export const FourtressPyrus: bakuganType = {
 
 export const FortressGateCard: gateCardType = {
     key: 'fortress-gate-card',
-    name: 'Carte Personnage: Fortress',
+    name: 'Charachter: Fortress',
     maxInDeck: 1,
     description: `Lorsque cette carte est activée elle double le niveau de tous les Fortress présent sur elle`,
     image: GateCardImages.caracter,

@@ -11,9 +11,9 @@ import { CheckBattleStillInProcess } from "../../function/check-battle-still-in-
 
 export const MineFantome: gateCardType = {
     key: 'mine-fantome',
-    name: 'Mine Fantôme',
+    name: 'Mine Ghost',
     maxInDeck: 1,
-    description: `Lorsque deux Bakugans se retrouvent sur cette carte ils sont tous les deux éliminés peu importe à qui ils appartiennent`,
+    description: `When two ore Bakugan stand on the Card, no matter wich side they are on, they both lose`,
     image: GateCardImages.command,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -82,9 +82,9 @@ export const MineFantome: gateCardType = {
 
 export const Echange: gateCardType = {
     key: 'echange',
-    name: 'Echange',
+    name: 'Trade Off',
     maxInDeck: 1,
-    description: `Tout Bakugan ayant un niveau de puissance supérieur ou égale à 400 G perd automatiquement`,
+    description: `If a Bakugan has 400 G-Power or more, it automaticaly lose`,
     image: GateCardImages.command,
     onOpen: ({ roomState, slot, userId }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -213,9 +213,9 @@ export const SuperPyrus: gateCardType = {
 
 export const AspirateurDePuissance: gateCardType = {
     key: 'aspirateur-de-puissance',
-    name: 'Aspirateur de Puissance',
+    name: 'Energy Merge',
     maxInDeck: 1,
-    description: `Permet au premier Bakugan mit en jeu de voler 100 G de puissance au dernier Bakugan mit en jeu`,
+    description: `transfers 100 Gs from the last Bakugan Stand on the card to the first one`,
     image: GateCardImages.command,
     onOpen: ({ roomState, slot }) => {
         if (!roomState) return null

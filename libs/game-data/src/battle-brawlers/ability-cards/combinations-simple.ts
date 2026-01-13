@@ -3,8 +3,8 @@ import { type abilityCardsType } from "../../type/game-data-types";
 
 export const SubterraPyrus: abilityCardsType = {
     key: 'combination-subterra-pyrus',
-    name: 'Corrélation : Subterra - Pyrus',
-    description: `Si un Bakugan Pyrus affronte un bakugan de l'élément Subterra cette carte augmentera sa puissance de 100 G`,
+    name: 'Correlation : Subterra - Pyrus',
+    description: `If a Pyrus Bakugan bettles a Subterra Bakugan, this card increases its power by 100 Gs`,
     attribut: 'Pyrus',
     maxInDeck: 1,
     usable_in_neutral: false,
@@ -19,8 +19,8 @@ export const SubterraPyrus: abilityCardsType = {
 
 export const SubterraHaos: abilityCardsType = {
     key: 'combination-subterra-haos',
-    name: 'Corrélation : Subterra - Haos',
-    description: `Si un Bakugan Subterra affronte un bakugan de l'élément Haos cette carte augmentera sa puissance de 100 G`,
+    name: 'Correlation : Subterra - Haos',
+    description: `If a Subterra Bakugan bettles Haos Bakugan, this card increases its power by 100 Gs`,
     attribut: 'Subterra',
     maxInDeck: 1,
     usable_in_neutral: false,
@@ -35,8 +35,8 @@ export const SubterraHaos: abilityCardsType = {
 
 export const HaosDarkus: abilityCardsType = {
     key: 'combination-haos-darkus',
-    name: 'Corrélation : Haos - Darkus',
-    description: `Si un Bakugan Haos affronte un bakugan de l'élément Darkus cette carte augmentera sa puissance de 100 G`,
+    name: 'Correlation : Haos - Darkus',
+    description: `If a Haos Bakugan bettles a Darkus Bakugan, this card increases its power by 100 Gs`,
     attribut: 'Haos',
     maxInDeck: 1,
     usable_in_neutral: false,
@@ -51,8 +51,8 @@ export const HaosDarkus: abilityCardsType = {
 
 export const DarkusAquos: abilityCardsType = {
     key: 'combination-darkus-aquos',
-    name: 'Corrélation : Darkus - Aquos',
-    description: `Si un Bakugan Darkus affronte un bakugan de l'élément Aquos cette carte augmentera sa puissance de 100 G`,
+    name: 'Correlation : Darkus - Aquos',
+    description: `If a Darkus Bakugan bettles a Aquos Bakugan, this card increases its power by 100 Gs`,
     attribut: 'Darkus',
     maxInDeck: 1,
     usable_in_neutral: false,
@@ -67,8 +67,8 @@ export const DarkusAquos: abilityCardsType = {
 
 export const AquosVentus: abilityCardsType = {
     key: 'combination-aquos-ventus',
-    name: 'Corrélation : Aquos - Ventus',
-    description: `Si un Bakugan Aquos affronte un bakugan de l'élément Ventus cette carte augmentera sa puissance de 100 G`,
+    name: 'Correlation : Aquos - Ventus',
+    description: `If a Aquos Bakugan bettles a Ventus Bakugan, this card increases its power by 100 Gs`,
     attribut: 'Aquos',
     maxInDeck: 1,
     usable_in_neutral: false,
@@ -83,8 +83,8 @@ export const AquosVentus: abilityCardsType = {
 
 export const VentusPyrus: abilityCardsType = {
     key: 'combination-ventus-pyrus',
-    name: 'Corrélation : Ventus - Pyrus',
-    description: `Si un Bakugan Ventus affronte un bakugan de l'élément Pyrus cette carte augmentera sa puissance de 100 G`,
+    name: 'Correlation : Ventus - Pyrus',
+    description: `If a Ventus Bakugan bettles a Pyrus Bakugan, this card increases its power by 100 Gs`,
     attribut: 'Pyrus',
     maxInDeck: 1,
     usable_in_neutral: false,

@@ -20,6 +20,7 @@ import { AbilitiesAdditionalEffectsSocket } from "./sockets/abilities-additional
 import { addOrUpdateConnectedUser, addRoomSocket, removeConnectedUserBySocket, removeRoomSocket } from "./functions/connected-users-management";
 import { ChalengeAcceptSocket, ChalengeSomeoneSocket } from "./sockets/chalenge-someone-socket";
 import { getUsersRooms } from "./sockets/get-users-rooms";
+import { CheckActivitiesSocket } from "./sockets/check-activities-socket";
 
 
 
@@ -54,6 +55,7 @@ io.on('connection', (socket) => {
     AbilitiesAdditionalEffectsSocket(io, socket)
     socketActiveGateCard(io, socket)
     socketTurn(io, socket)
+    CheckActivitiesSocket(io, socket)
 
     socket.on('disconnect', (reason) => {
         console.log('A user disconnected:', 'socketId : ', socket.id, 'userId : ', userId, reason);

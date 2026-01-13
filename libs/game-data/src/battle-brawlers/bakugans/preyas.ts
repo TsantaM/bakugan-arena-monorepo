@@ -17,7 +17,7 @@ export const PreyasAquos: bakuganType = {
 
 export const PreyasGateCard: gateCardType = {
     key: 'preyas-gate-card',
-    name: 'Carte Personnage: Preyas',
+    name: 'Charachter: Preyas',
     maxInDeck: 1,
     family: 'Preyas',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Preyas présent sur elle`,
@@ -57,7 +57,7 @@ export const DiabloAquos: bakuganType = {
 
 export const DiabloGateCard: gateCardType = {
     key: 'diablo-gate-card',
-    name: 'Carte Personnage: Diablo',
+    name: 'Charachter: Diablo',
     maxInDeck: 1,
     family: 'Diablo',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Diablo présent sur elle`,
@@ -99,7 +99,7 @@ export const AngeloAquos: bakuganType = {
 
 export const AngeloGateCard: gateCardType = {
     key: 'angelo-gate-card',
-    name: 'Carte Personnage: Angelo',
+    name: 'Charachter: Angelo',
     maxInDeck: 1,
     family: 'Angelo',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Angelo présent sur elle`,

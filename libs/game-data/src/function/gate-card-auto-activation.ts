@@ -27,7 +27,7 @@ export function handleGateCards(roomData: stateType) {
                     },
                     resolved: false,
                     message: [{
-                        text: `Carte Portail ouvre toi ! ${gate.name}`,
+                        text: `Gate Card Open ! ${gate.name}`,
                         userName: GetUserName({ roomData: roomData, userId: slot.portalCard.userId })
                     }]
                 })

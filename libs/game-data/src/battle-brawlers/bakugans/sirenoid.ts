@@ -8,14 +8,14 @@ export const SirenoidAquos: bakuganType = {
     image: 'sirenoid',
     family: 'sirenoid',
     powerLevel: 370,
-    exclusiveAbilities: ['anti-muse'],
+    exclusiveAbilities: ['anti-muse', 'vent-cinglant'],
     banList: [],
     canChangeAttribut: false
 }
 
 export const SirenoidGateCard: gateCardType = {
     key: 'sirenoid-gate-card',
-    name: 'Carte Personnage: Sirenoid',
+    name: 'Charachter: Sirenoid',
     maxInDeck: 1,
     family: 'sirenoid',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Sirenoid présent sur elle`,

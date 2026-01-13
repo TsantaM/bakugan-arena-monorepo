@@ -42,7 +42,7 @@ export const UltimateDragonoid: bakuganType = {
 
 export const DragonoidGateCard: gateCardType = {
     key: 'dragonoid-gate-card',
-    name: 'Carte Personnage: Dragonoid',
+    name: 'Charachter: Dragonoid',
     maxInDeck: 1,
     image: 'dragonoid.png',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Dragonoid présent sur elle`,

@@ -52,7 +52,7 @@ export const FearReaperAquos: bakuganType = {
 
 export const FearReaperGateCard: gateCardType = {
     key: 'fear-reaper-gate-card',
-    name: 'Carte Personnage: Fear Reaper',
+    name: 'Charachter: Fear Reaper',
     maxInDeck: 1,
     description: `Lorsque cette carte est activée elle double le niveau de tous les Fear Reaper présent sur elle`,
     family: 'Fear Reaper',

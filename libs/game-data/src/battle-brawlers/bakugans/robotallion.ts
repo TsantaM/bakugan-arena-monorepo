@@ -52,7 +52,7 @@ export const RobotallionHaos: bakuganType = {
 
 export const RobotallionGateCard: gateCardType = {
     key: 'robotallion-gate-card',
-    name: 'Carte Personnage: Robotallion',
+    name: 'Charachter: Robotallion',
     maxInDeck: 1,
     family: 'Robotallion',
     description: `Lorsque cette carte est activée elle double le niveau de tous les Robotallion présent sur elle`,

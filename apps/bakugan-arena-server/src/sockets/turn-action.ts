@@ -82,12 +82,12 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
             const winner = roomData.players.find((p) => p.userId === roomData.status.winner)?.username ? roomData.players.find((p) => p.userId === roomData.status.winner)?.username : ''
 
             message = {
-                text: `Combat terminé ! Vainceur ${winner}`
+                text: `Game is over ! The winner is ${winner}`
             }
 
         } else {
             message = {
-                text: `Combat terminé ! Match Null !`
+                text: `Game is over ! Equality !`
             }
         }
 
@@ -95,6 +95,9 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
 
     }
 
+    console.log('turn count', roomData.turnState.turnCount)
+    console.log('active socket', roomData.ActivePlayerActionRequest);
+    console.log('inactive socket', roomData.InactivePlayerActionRequest)
 
     clearAnimationsInRoom(roomId)
 

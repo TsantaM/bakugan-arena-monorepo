@@ -23,7 +23,7 @@ export const MoveToAnotherSlotDirectiveAnimation: MoveToAnotherSlotType = ({ ani
         },
         resolved: false,
         message: [{
-            text: `${BakuganList.find((b) => bakugan.key === b.key )?.name || ''} a été déplacé vers ${newSlot.id}`
+            text: `${BakuganList.find((b) => bakugan.key === b.key )?.name || ''} move to ${newSlot.id}`
         }]
     }
 
