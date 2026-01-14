@@ -383,15 +383,19 @@ export function registerSocketHandlers(
     })
 
     socket.on("turn-action-request", (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
-
+        alert('eh')
         const actions = [
             request.actions.mustDo,
             request.actions.mustDoOne,
             request.actions.optional
         ].flat()
 
+        console.log(actions.length, request.target)
+
         if (actions.length <= 0) {
             if (request.target === 'INACTIVE_PLAYER') return
+            alert('eh')
+            console.log(request)
             socket.emit('check-activities', { userId, roomId })
         } else {
             TurnActionBuilder({

@@ -54,7 +54,9 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
     io.to(roomId).emit('animations', animations)
 
     const activeSocket = roomData.connectedsUsers.get(roomData.turnState.turn)
+    const activeName = roomData.players.find((p) => p.userId === roomData.turnState.turn)?.username
     const inactiveSocket = roomData.connectedsUsers.get(roomData.turnState.previous_turn || '')
+    const inactiveName = roomData.players.find((p) => p.userId === roomData.turnState.previous_turn || '')?.username
 
     if (activeSocket) {
         const request = roomData.ActivePlayerActionRequest
@@ -63,6 +65,14 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
 
     if (inactiveSocket) {
         const request = roomData.InactivePlayerActionRequest
+        const merged = [
+            request.actions.mustDo,
+            request.actions.mustDoOne,
+            request.actions.optional
+        ].flat()
+
+        if(merged.length <= 0) return
+
         io.to(inactiveSocket).emit('turn-action-request', request)
     }
 
@@ -96,8 +106,8 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
     }
 
     console.log('turn count', roomData.turnState.turnCount)
-    console.log('active socket', roomData.ActivePlayerActionRequest);
-    console.log('inactive socket', roomData.InactivePlayerActionRequest)
+    console.log('active socket', roomData.ActivePlayerActionRequest, activeName);
+    console.log('inactive socket', roomData.InactivePlayerActionRequest, inactiveName)
 
     clearAnimationsInRoom(roomId)
 

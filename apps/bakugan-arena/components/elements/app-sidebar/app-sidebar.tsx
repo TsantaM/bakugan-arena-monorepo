@@ -68,7 +68,7 @@ export default function AppSidebar({ role }: { role: RoleType | undefined }) {
     useEffect(() => {
         if (!socket) return
         socket.on('get-rooms-user-id', (rooms: { p1: string, p2: string, roomId: string }[]) => {
-            if(rooms === Rooms) return
+            if (rooms === Rooms) return
             setRooms(rooms)
         })
 
@@ -88,6 +88,16 @@ export default function AppSidebar({ role }: { role: RoleType | undefined }) {
                         Navigation
                     </SidebarGroupLabel>
                     <SidebarGroupContent>
+                        <SidebarMenu>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton asChild>
+                                    <Link href='/'>
+                                        <Home />
+                                        <span>Home</span>
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        </SidebarMenu>
                         {
                             LinksDashboard.map((l, index) => <SidebarMenu key={index}>
                                 <SidebarMenuItem>

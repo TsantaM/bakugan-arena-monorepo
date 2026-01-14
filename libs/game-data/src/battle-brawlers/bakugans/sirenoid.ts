@@ -1,5 +1,6 @@
 import type { bakuganType, gateCardType } from "../../type/game-data-types"
 import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
+import { StarterBanList } from "../../store/starter-banlist"
 
 export const SirenoidAquos: bakuganType = {
     key: 'sirenoid-aquos',
@@ -9,7 +10,7 @@ export const SirenoidAquos: bakuganType = {
     family: 'sirenoid',
     powerLevel: 370,
     exclusiveAbilities: ['anti-muse', 'vent-cinglant'],
-    banList: [],
+    banList: StarterBanList,
     canChangeAttribut: false
 }
 

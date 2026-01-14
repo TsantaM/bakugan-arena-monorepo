@@ -61,22 +61,23 @@ export default function BakuDexSidebar({ user }: { user: UserType | undefined })
                         Baku-Dex Navigation
                     </SidebarGroupLabel>
                     <SidebarGroupContent>
+                        <SidebarMenu>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton asChild>
+                                    <Link href='/'>
+                                        <Home />
+                                        <span>Home</span>
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        </SidebarMenu>
                         {
-                            user ? <SidebarMenu>
+                            user && <SidebarMenu>
                                 <SidebarMenuItem>
                                     <SidebarMenuButton asChild>
                                         <Link href='/dashboard'>
                                             <Home />
                                             <span>Dashboard</span>
-                                        </Link>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            </SidebarMenu> : <SidebarMenu>
-                                <SidebarMenuItem>
-                                    <SidebarMenuButton asChild>
-                                        <Link href='/'>
-                                            <Home />
-                                            <span>Home</span>
                                         </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>

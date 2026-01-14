@@ -37,7 +37,7 @@ export default function ManageGateCardsInDeckEditor({ deckId, gateCards, bakugan
     const firstAttribut = BakuganList.filter((b) => bakugans.includes(b.key)).map((a) => a.attribut)
     const secondAttribut = BakuganList.filter((b) => bakugans.includes(b.key)).map((a) => a.seconaryAttribut)
     const bakugansAttribut = [firstAttribut, secondAttribut].flat()
-    const bakugansFamilies = BakuganList.filter((b) => bakugans.includes(b.key)).map((a) => a.family)
+    const bakugansFamilies = cardInDeck.some((card) => card.family) ? [] : BakuganList.filter((b) => bakugans.includes(b.key)).map((a) => a.family)
     const familiesGateCards = GateCardsList.filter((c) => bakugansFamilies.includes(c.family ? c.family : '')).filter((c) => {
         const exemplary = cardInDeck.filter((a) => c.key === a.key).length
         return c.maxInDeck > exemplary

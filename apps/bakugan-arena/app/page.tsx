@@ -1,12 +1,31 @@
 'use server'
 
 import Header from "@/components/elements/header/Header";
+import { SignInModal } from "@/components/elements/sign-in/Sign-in";
+import { SignUpModal } from "@/components/elements/sign-up/Sign-up";
+import Image from "next/image";
 
 export default async function Home() {
   return (
     <>
-
-    <Header />
+      {/* <Image alt="Bakugan Battle Brawlers Image" src='/images/landing-bg.jpg' fill /> */}
+      <Header />
+      <section className="lg:w-full h-screen absolute z-10 top-0 left-0 flex flex-col items-center md:items-start justify-center bg-background/65 px-10 py-5 ">
+        <div className="flex flex-col items-center md:items-start gap-5">
+          <div>
+            <h1 className="lg:max-w-[65%] text-5xl font-bold text-center md:text-start text-red-500">Bakugan Arena - Online Battle Simulator</h1>
+            <p className="text-neutral-500 text-sm text-center md:text-start">Play Bakugan battles directly in your browser. No install. Fan Made. Multiplayer</p>
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className='md:max-w-[50%] text-center md:text-start'>Welcome to Bakugan Arena (Alpha), a fan made online simulator inspired by Bakugan Battle Brawlers.</p>
+            <p className='md:max-w-[50%] text-center md:text-start'>Create an account, build deck with your favorite Bakugan, and challenge other players in browser based matches - no download requierd.</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <SignInModal triggerContent="Connect to your account !" />
+            <SignUpModal triggerContent="Create an account and Play !" />
+          </div>
+        </div>
+      </section>
 
     </>
 

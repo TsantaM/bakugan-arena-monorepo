@@ -23,7 +23,7 @@ export default async function Header() {
 
 
     return (
-        <header className="w-screen flex justify-between items-center px-5 md:px-10 py-3 sticky top-0 left-0 bg-background">
+        <header className="w-screen flex justify-between items-center px-5 md:px-10 py-3 sticky top-0 left-0 z-20 bg-background/75">
             <div className="flex items-center gap-10">
                 <Logo height={50} width={50} />
 
