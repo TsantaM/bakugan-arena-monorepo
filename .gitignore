@@ -8,3 +8,9 @@ pnpm-lock.yaml
 dist
 .next
 .env
+
+# Env files
+.env
+.env.*
+apps/*/.env
+apps/*/.env.*
