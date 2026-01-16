@@ -21,6 +21,7 @@ import { addOrUpdateConnectedUser, addRoomSocket, removeConnectedUserBySocket, r
 import { ChalengeAcceptSocket, ChalengeSomeoneSocket } from "./sockets/chalenge-someone-socket";
 import { getUsersRooms } from "./sockets/get-users-rooms";
 import { CheckActivitiesSocket } from "./sockets/check-activities-socket";
+import { CancelOpponentResearch } from "./sockets/cancel-opponent-research";
 
 
 
@@ -46,8 +47,10 @@ io.on('connection', (socket) => {
     ChalengeSomeoneSocket(io, socket),
     ChalengeAcceptSocket(io, socket),
     setupSearchOpponentSocket(io, socket)
+    CancelOpponentResearch(io, socket)
     socketGetRoomState(io, socket)
     socketCleanAnimations(io, socket)
+    CheckActivitiesSocket(io, socket)
     socketInitiRoomState(io, socket)
     socketUpdateGateState(io, socket)
     socketUpdateBakuganState(io, socket)
@@ -55,7 +58,6 @@ io.on('connection', (socket) => {
     AbilitiesAdditionalEffectsSocket(io, socket)
     socketActiveGateCard(io, socket)
     socketTurn(io, socket)
-    CheckActivitiesSocket(io, socket)
 
     socket.on('disconnect', (reason) => {
         console.log('A user disconnected:', 'socketId : ', socket.id, 'userId : ', userId, reason);

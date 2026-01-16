@@ -30,7 +30,6 @@ export default function ForgetPassword() {
 
     const onSubmit = async (formData: forgetPassword_type) => {
         const email = formData.email
-        alert(email)
 
         await authClient.requestPasswordReset({
             email: String(email),

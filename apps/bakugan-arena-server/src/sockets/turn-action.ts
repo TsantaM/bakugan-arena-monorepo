@@ -71,9 +71,10 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
             request.actions.optional
         ].flat()
 
-        if(merged.length <= 0) return
+        if (merged.length > 0) {
+            io.to(inactiveSocket).emit('turn-action-request', request)
+        }
 
-        io.to(inactiveSocket).emit('turn-action-request', request)
     }
 
     const turnState: turnCountSocketProps = {
@@ -84,6 +85,7 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
 
 
     io.to(roomId).emit('turn-count-updater', turnState)
+
     if (roomData.status.finished) {
 
         let message: Message

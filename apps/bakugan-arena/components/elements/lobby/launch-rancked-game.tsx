@@ -3,12 +3,10 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command"
-import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import { GetUserDecks } from "@/src/actions/deck-builder/get-deck-data"
 import { authClient } from "@/src/lib/auth-client"
-import { useSocket } from "@/src/providers/socket-provider"
 import UseSearchOpponent from "@/src/sockets/search-opponent"
 import { BakuganList } from "@bakugan-arena/game-data"
 import { useQuery } from "@tanstack/react-query"
@@ -19,8 +17,7 @@ import { useState } from "react"
 
 export default function LauchRanckedGate() {
 
-    const socket = useSocket()
-    const { emitPlayerData, waitingOpponent } = UseSearchOpponent()
+    const { emitPlayerData, waitingOpponent, cancelSearchOpponent } = UseSearchOpponent()
     const [value, setValue] = useState('')
     const [open, setOpen] = useState(false)
     const user = authClient.useSession()
@@ -116,11 +113,20 @@ export default function LauchRanckedGate() {
                     </Card>
                 }
 
-
             </CardContent>
 
-            <CardFooter className="flex">
+            <CardFooter className="flex flex-col gap-3">
                 <Button disabled={!value || value === '' ? true : false} className="w-full text-xl font-bold" onClick={() => emitPlayerData({ data, deck })}>{waitingOpponent ? 'Waiting opponent ...' : !value || value === '' ? 'Chose a deck' : 'Start Battle !'}</Button>
+                <Button variant="destructive" className="w-full text-xl font-bold" onClick={() => {
+                    cancelSearchOpponent(data.userId)
+                    setValue('')
+                    }}>Cancel</Button>
+
+                <div>
+                    <p className="text-destructive font-bold">DESCLAIMER</p>
+                    <p className="text-sm">Random matchmaking may take a long time or fail to find an opponent.</p>
+                    <p className="text-sm">For the best experience, challenge a player you know and coordinate a game while both of you are online.</p>
+                </div>
             </CardFooter>
         </Card>
 

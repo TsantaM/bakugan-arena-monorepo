@@ -107,8 +107,11 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
 
             const merged = [Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
             if (merged.length > 0) {
+                console.log('still his turn')
                 io.to(activeSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
+                return
             } else {
+                console.log('change turn')
                 clearAnimationsInRoom(roomId)
                 turnActionUpdater({ roomId, userId, io })
             }

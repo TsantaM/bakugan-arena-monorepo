@@ -189,6 +189,12 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
                 return
             }
 
+            const activeName = roomData.players.find((p) => p.userId === roomData.turnState.turn)?.username
+            const inactiveName = roomData.players.find((p) => p.userId === roomData.turnState.previous_turn || '')?.username
+            console.log('turn count', roomData.turnState.turnCount)
+            console.log('active socket', roomData.ActivePlayerActionRequest, activeName);
+            console.log('inactive socket', roomData.InactivePlayerActionRequest, inactiveName)
+
             if (roomData.status.finished) {
 
                 let message: Message

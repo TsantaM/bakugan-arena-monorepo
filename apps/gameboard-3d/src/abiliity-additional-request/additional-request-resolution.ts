@@ -14,7 +14,6 @@ export function AdditionalRequestResolution({ request, camera, plane, socket, sc
     request: AbilityCardsActionsRequestsType, plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>, camera: THREE.PerspectiveCamera, socket: Socket, scene: THREE.Scene<THREE.Object3DEventMap>
 }) {
 
-    // alert(`'eh': ${request.data.type}`)
 
     if (request.data.type === 'SELECT_SLOT') {
         const slots = request.data.slots

@@ -13,6 +13,8 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
         if (!state) return
         clearAnimationsInRoom(roomId)
 
+        console.log(state.turnState.turnCount)
+
         if (!slot) {
             const slot: slots_id = state.turnState.turn === userId ? 'slot-2' : 'slot-5'
 
@@ -42,7 +44,6 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
             if (roomIndex === -1) return
             if (!Battle_Brawlers_Game_State[roomIndex]) return
 
-            const gateCardOnFieldCount = Battle_Brawlers_Game_State[roomIndex].protalSlots.filter((slot) => slot.portalCard !== null).length
             if (state.turnState.turn === userId) {
                 const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "SELECT_GATE_CARD")
                 Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
@@ -51,6 +52,11 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
                 Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest = newState as InactivePlayerActionRequestType
             }
 
+            const gateCardOnFieldCount = Battle_Brawlers_Game_State[roomIndex].protalSlots.filter((slot) => slot.portalCard !== null).length
+
+
+            console.log('turn count before update', state.turnState.turnCount)
+            console.log('gate card count', gateCardOnFieldCount)
 
             if (gateCardOnFieldCount === 2) {
                 turnActionUpdater({
@@ -60,6 +66,7 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
                 })
             }
 
+            console.log('turn count after set gate', state.turnState.turnCount)
 
 
         } else {

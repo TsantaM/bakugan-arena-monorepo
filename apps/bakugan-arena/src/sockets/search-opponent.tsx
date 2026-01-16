@@ -35,17 +35,36 @@ export default function UseSearchOpponent() {
         }
     }
 
+
+    const cancelSearchOpponent = (userId: string) => {
+        if(!waitingOpponent) return
+        if (socket && waitingOpponent) {
+            socket.emit('cancel-search-opponent', { userId })
+        }
+    }
+
     useEffect(() => {
         if (!socket) return
 
         socket.on('match-found', (roomId) => {
+            setWaitingOpponent(false)
             redirect(`/dashboard/battlefield?id=${roomId}`)
         })
     }, [socket])
 
+    useEffect(() => {
+        if(!socket) return
+        socket.on('search-cancelled', () => {
+            setWaitingOpponent(false)
+            toast.error('Opponent cancelled the search. You can try again.')
+        })
+    }, [socket])
+
+
     return {
         waitingOpponent,
-        emitPlayerData
+        emitPlayerData,
+        cancelSearchOpponent
     }
 
 }

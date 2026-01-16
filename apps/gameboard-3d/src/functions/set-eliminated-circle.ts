@@ -6,7 +6,6 @@ export function setEliminatedCircles({
     isLeft: boolean
 }) {
 
-    // alert(`eh !, ${count}, ${isLeft}`)
 
     const selector = isLeft
         ? '.left-eliminated .circle.left-circle'

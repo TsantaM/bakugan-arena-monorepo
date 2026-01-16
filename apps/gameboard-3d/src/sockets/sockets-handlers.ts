@@ -383,7 +383,6 @@ export function registerSocketHandlers(
     })
 
     socket.on("turn-action-request", (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
-        alert('eh')
         const actions = [
             request.actions.mustDo,
             request.actions.mustDoOne,
@@ -394,8 +393,6 @@ export function registerSocketHandlers(
 
         if (actions.length <= 0) {
             if (request.target === 'INACTIVE_PLAYER') return
-            alert('eh')
-            console.log(request)
             socket.emit('check-activities', { userId, roomId })
         } else {
             TurnActionBuilder({
@@ -418,7 +415,6 @@ export function registerSocketHandlers(
     })
 
     socket.on("ability-additional-request", (request: AbilityCardsActionsRequestsType) => {
-        // alert('ability-additional-request')
         if (request.userId !== userId) return
         clearTurnInterface()
         AdditionalRequestResolution({
@@ -432,7 +428,6 @@ export function registerSocketHandlers(
     })
 
     socket.on('turn-count-updater', (turnState: turnCountSocketProps) => {
-        // alert('turn-count-uptader')
         const turnCounter = document.getElementById('turn-counter')
         if (!turnCounter) return
 
