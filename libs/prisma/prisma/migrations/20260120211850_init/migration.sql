@@ -1,8 +1,8 @@
 -- CreateEnum
-CREATE TYPE "public"."Roles" AS ENUM ('JOUEUR', 'ADMIN', 'GAMEDESIGNER');
+CREATE TYPE "Roles" AS ENUM ('JOUEUR', 'ADMIN', 'GAMEDESIGNER');
 
 -- CreateTable
-CREATE TABLE "public"."user" (
+CREATE TABLE "user" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE "public"."user" (
     "image" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "role" "public"."Roles" NOT NULL DEFAULT 'JOUEUR',
+    "role" "Roles" NOT NULL DEFAULT 'JOUEUR',
     "username" TEXT,
     "displayUsername" TEXT,
 
@@ -18,7 +18,7 @@ CREATE TABLE "public"."user" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."session" (
+CREATE TABLE "session" (
     "id" TEXT NOT NULL,
     "expiresAt" TIMESTAMP(3) NOT NULL,
     "token" TEXT NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE "public"."session" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."account" (
+CREATE TABLE "account" (
     "id" TEXT NOT NULL,
     "accountId" TEXT NOT NULL,
     "providerId" TEXT NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE "public"."account" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."verification" (
+CREATE TABLE "verification" (
     "id" TEXT NOT NULL,
     "identifier" TEXT NOT NULL,
     "value" TEXT NOT NULL,
@@ -63,7 +63,7 @@ CREATE TABLE "public"."verification" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."Deck" (
+CREATE TABLE "Deck" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
@@ -78,31 +78,34 @@ CREATE TABLE "public"."Deck" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."Rooms" (
+CREATE TABLE "Rooms" (
     "id" TEXT NOT NULL,
     "player1Id" TEXT NOT NULL,
     "p1Deck" TEXT NOT NULL,
     "player2Id" TEXT NOT NULL,
     "p2Deck" TEXT NOT NULL,
+    "finished" BOOLEAN NOT NULL DEFAULT false,
+    "winner" TEXT NOT NULL,
+    "looser" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Rooms_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "user_email_key" ON "public"."user"("email");
+CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "user_username_key" ON "public"."user"("username");
+CREATE UNIQUE INDEX "user_username_key" ON "user"("username");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "session_token_key" ON "public"."session"("token");
+CREATE UNIQUE INDEX "session_token_key" ON "session"("token");
 
 -- AddForeignKey
-ALTER TABLE "public"."session" ADD CONSTRAINT "session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "session" ADD CONSTRAINT "session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."account" ADD CONSTRAINT "account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "account" ADD CONSTRAINT "account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."Deck" ADD CONSTRAINT "Deck_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Deck" ADD CONSTRAINT "Deck_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
