@@ -17,7 +17,6 @@ export const EditDeckNameAction = async ({ id, formData }: { id: string, formDat
         return await prisma.deck.update({
             where: {
                 id: id,
-                userId: user.id
             },
             data: {
                 name: formData.nom
@@ -39,7 +38,6 @@ export const AddBakuganToDeckAction = async ({ bakuganId, deckId }: { bakuganId:
             return await prisma.deck.update({
                 where: {
                     id: deckId,
-                    userId: user.id
                 },
                 data: {
                     bakugans: {
@@ -63,7 +61,6 @@ export const RemoveBakuganInDeckAction = async ({ bakuganId, deckId }: { bakugan
         await prisma.deck.update({
             where: {
                 id: deckId,
-                userId: user.id
             },
             data: {
                 bakugans: newList,
@@ -90,7 +87,6 @@ export const RemoveBakuganInDeckAction = async ({ bakuganId, deckId }: { bakugan
             await prisma.deck.update({
                 where: {
                     id: deckId,
-                    userId: user.id
                 },
                 data: {
                     ability: abilities,
@@ -140,7 +136,6 @@ export const RemoveAbilityCardFromDeck = async ({ cardId, deckId }: { cardId: st
         return prisma.deck.update({
             where: {
                 id: deckId,
-                userId: user.id
             },
             data: {
                 ability: deckData?.ability
@@ -162,7 +157,6 @@ export const AddExclusiveAbilityCardToDeck = async ({ cardId, deckId }: { cardId
             return prisma.deck.update({
                 where: {
                     id: deckId,
-                    userId: user.id
                 },
                 data: {
                     exclusiveAbilities: {
@@ -187,7 +181,6 @@ export const RemoveExclusiveAbilityCardFromDeck = async ({ cardId, deckId }: { c
         return prisma.deck.update({
             where: {
                 id: deckId,
-                userId: user.id
             },
             data: {
                 exclusiveAbilities: deckData.exclusiveAbilities
@@ -214,7 +207,6 @@ export const AddGateCardToDeck = async ({ cardId, deckId }: { cardId: string, de
                 return prisma.deck.update({
                     where: {
                         id: deckId,
-                        userId: user.id
                     },
                     data: {
                         gateCards: {
@@ -240,7 +232,6 @@ export const RemoveGateCardToDeck = async ({ cardId, deckId }: { cardId: string,
         return prisma.deck.update({
             where: {
                 id: deckId,
-                userId: user.id
             },
             data: {
                 gateCards: deckData.gateCards

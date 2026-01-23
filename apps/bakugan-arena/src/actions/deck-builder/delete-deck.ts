@@ -10,8 +10,7 @@ export const DeleteDeck = async (id: string) => {
     if (user) {
         await prisma.deck.delete({
             where: {
-                id: id,
-                userId: user.id
+                id: id
             }
         })
     }

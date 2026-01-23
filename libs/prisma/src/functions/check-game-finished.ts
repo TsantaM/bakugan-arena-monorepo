@@ -1,5 +1,5 @@
 import { stateType } from '@bakugan-arena/game-data'
-import { PrismaClient } from '../../generated/prisma/client.js'
+import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
