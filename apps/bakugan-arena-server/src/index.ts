@@ -25,10 +25,10 @@ import { CancelOpponentResearch } from "./sockets/cancel-opponent-research.js";
 
 
 
-const PORT = 3005;
+const PORT = Number(process.env.PORT) || 3005
 const io = new Server({
     cors: {
-        origin: "*",
+        origin: process.env.SOCKET_CORS_ORIGIN?.split(",") ?? "*",
         methods: ["GET", "POST"]
     }
 });
@@ -44,9 +44,9 @@ io.on('connection', (socket) => {
     }
 
     getUsersRooms(io, socket),
-    ChalengeSomeoneSocket(io, socket),
-    ChalengeAcceptSocket(io, socket),
-    setupSearchOpponentSocket(io, socket)
+        ChalengeSomeoneSocket(io, socket),
+        ChalengeAcceptSocket(io, socket),
+        setupSearchOpponentSocket(io, socket)
     CancelOpponentResearch(io, socket)
     socketGetRoomState(io, socket)
     socketCleanAnimations(io, socket)

@@ -28,9 +28,9 @@ export default function BattleFieldPage({ player, opponent, roomId, userId }: Ba
 
     const playerData = player?.player
     const opponentData = opponent?.player
-
+    const GAMEBOARD_URL = process.env.NEXT_PUBLIC_3D_GAMEBOARD_URL
     const iframeRef = useRef<HTMLIFrameElement>(null)
-    const link = `http://localhost:5173/?roomId=${roomId}&userId=${userId}&userImage=${playerData?.image ? playerData?.image : undefined}&opponentImage=${opponentData?.image ? opponentData?.image : undefined}`
+    const link = `${GAMEBOARD_URL}/?roomId=${roomId}&userId=${userId}&userImage=${playerData?.image ? playerData?.image : undefined}&opponentImage=${opponentData?.image ? opponentData?.image : undefined}`
 
     return (
         <>

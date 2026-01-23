@@ -22,6 +22,16 @@ plane.material.transparent = true
 camera.position.set(3, 5, 8)
 plane.rotateX(-Math.PI / 2)
 
+const referrer = document.referrer
+const allowed = import.meta.env.VITE_ALLOWED_PARENT_URL
+
+if (!referrer.startsWith(allowed)) {
+  console.error("Accès interdit :", referrer)
+  alert("Accès non autorisé")
+  // Optionnel : bloquer le jeu
+  throw new Error("Unauthorized parent")
+}
+
 if (!roomId || !userId) {
   throw new Error("roomId ou userId manquant")
 }

@@ -3,9 +3,15 @@
 import Header from "@/components/elements/header/Header";
 import { SignInModal } from "@/components/elements/sign-in/Sign-in";
 import { SignUpModal } from "@/components/elements/sign-up/Sign-up";
+import { Button } from "@/components/ui/button";
+import { getUser } from "@/src/actions/getUserSession";
 import Image from "next/image";
+import Link from "next/link";
 
 export default async function Home() {
+
+  const user = await getUser()
+
   return (
     <>
       <Header />
@@ -24,13 +30,21 @@ export default async function Home() {
           </div>
 
           <div className="flex items-center gap-2">
-            <SignInModal triggerContent="Connect to your account !" />
-            <SignUpModal triggerContent="Create an account and Play !" />
+
+            {
+              !user ? <>
+                <SignInModal triggerContent="Connect to your account !" />
+                <SignUpModal triggerContent="Create an account and Play !" />
+              </> : <Button asChild>
+                <Link href="/dashboard">{"You're already logged ! Go to dashboard"}</Link>
+              </Button>
+            }
+
           </div>
-          
+
         </div>
 
-        <div className='aspect-[16/10] w-full lg:w-[65dvw] relative'>
+        <div className='aspect-16/10 w-full lg:w-[65dvw] relative'>
           <Image fill src='/images/landing-screenshot.png' alt='battle-screenshot' />
         </div>
 
