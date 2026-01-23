@@ -1,7 +1,7 @@
 import { AddRenfortAnimationDirective, CheckBattle, MoveToAnotherSlotDirectiveAnimation, OpenGateCardActionRequest, PowerChangeDirectiveAnumation } from "../../function/index.js";
 import { StandardCardsImages } from "../../store/store-index.js";
 import type { AbilityCardsActions, abilityCardsType, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, slots_id } from "../../type/type-index.js";
-import { GateCardsList } from "../gate-gards";
+import { GateCardsList } from "../gate-gards.js";
 
 export const MagmaSupreme: abilityCardsType = {
     key: 'magma-supreme',

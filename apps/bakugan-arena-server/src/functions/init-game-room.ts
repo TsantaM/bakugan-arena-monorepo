@@ -1,6 +1,5 @@
-import { roomStateType } from "@bakugan-arena/game-data/src/type/room-types"
+import { Message, roomStateType } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
-import { Message } from "@bakugan-arena/game-data/src/type/animations-directives"
 
 const initRoomState:
     ({ roomId, userId }: { roomId: string, userId: string }) => roomStateType | undefined =

@@ -1,4 +1,4 @@
-import { chalengeAcceptSocketProps, chalengeSomeoneSocketProps } from "@bakugan-arena/game-data/src/type/sockets-props-types";
+import { chalengeAcceptSocketProps, chalengeSomeoneSocketProps } from "@bakugan-arena/game-data";
 import { Server, Socket } from "socket.io/dist";
 import { Battle_Brawlers_Game_State, chalenges, connectedUsers } from "../game-state/battle-brawlers-game-state";
 import { CreateRoom } from "../functions/create-room";

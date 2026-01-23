@@ -1,14 +1,13 @@
 {
   "compilerOptions": {
-    "rootDir": "src",
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "declaration": true,
     "outDir": "dist",
-    "target": "ES2020",
-    "module": "nodenext",
-    "moduleResolution": "NodeNext",
+    "rootDir": "src",
     "strict": true,
+    "esModuleInterop": true,
     "skipLibCheck": true
-  },
-  "include": [
-    "src/**/*"
-  ]
+  }
 }

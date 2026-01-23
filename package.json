@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "pnpm -r dev",
-    "dev:apps" : "pnpm -r --filter \"./apps/**\" dev"
+    "dev:apps": "pnpm -r --filter \"./apps/**\" dev"
   },
   "keywords": [],
   "author": "",
@@ -15,5 +15,8 @@
   "workspaces": [
     "apps/*",
     "libs/*"
-  ]
+  ],
+  "devDependencies": {
+    "@types/ws": "^8.18.1"
+  }
 }

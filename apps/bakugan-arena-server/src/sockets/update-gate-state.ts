@@ -1,9 +1,7 @@
 import { Server, Socket } from "socket.io/dist";
 import { UpdateGate } from "../functions/set-gate-server";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
-import { setGateCardProps, slots_id } from "@bakugan-arena/game-data";
-import { addSlotToSetBakugan, removeActionByType } from "@bakugan-arena/game-data/src/function/create-animation-directives/remove-action-by-type";
-import { ActivePlayerActionRequestType, InactivePlayerActionRequestType } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
+import { ActivePlayerActionRequestType, addSlotToSetBakugan, InactivePlayerActionRequestType, removeActionByType, setGateCardProps, slots_id } from "@bakugan-arena/game-data";
 import { turnActionUpdater } from "./turn-action";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 

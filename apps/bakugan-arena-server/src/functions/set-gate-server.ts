@@ -1,8 +1,5 @@
 import { AnimationDirectivesTypes, GetUserName, setGateCardProps, stateType, updateDeckGates, updateSlot } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
-import { removeActionByType } from '@bakugan-arena/game-data/src/function/create-animation-directives/remove-action-by-type'
-import { ActivePlayerActionRequestType, InactivePlayerActionRequestType } from "@bakugan-arena/game-data/src/type/actions-serveur-requests"
-
 
 export const UpdateGate: ({ roomId, gateId, slot, userId }: setGateCardProps) => AnimationDirectivesTypes[] | undefined = ({ roomId, gateId, slot, userId }: setGateCardProps) => {
     // FR: Récupère l'état de la salle correspondant à l'ID

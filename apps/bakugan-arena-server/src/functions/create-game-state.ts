@@ -1,7 +1,5 @@
-import { AbilityCardsList, BakuganList, ExclusiveAbilitiesList, GateCardsList, portalSlotsType, stateType } from "@bakugan-arena/game-data"
+import { AbilityCardsList, BakuganList, ExclusiveAbilitiesList, GateCardsList, portalSlotsType, SelectableGateCardAction, stateType, turnStateType } from "@bakugan-arena/game-data"
 import { getDecksDataPrisma, getRoomPlayers } from "./get-room-data"
-import { turnStateType } from "@bakugan-arena/game-data/src/type/room-types"
-import { SelectableGateCardAction } from "@bakugan-arena/game-data/src/type/actions-serveur-requests"
 
 export const createGameState = async ({ roomId }: { roomId: string }) => {
     const decksData = await getDecksDataPrisma({ roomId })

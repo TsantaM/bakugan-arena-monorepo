@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js"
   },
@@ -20,16 +21,11 @@
   "license": "ISC",
   "packageManager": "pnpm@10.15.0",
   "dependencies": {
-    "dotenv": "^17.2.3",
-    "@bakugan-arena/game-data": "workspace:*",
-    "prisma": "^7.2.0"
+    "@bakugan-arena/game-data": "workspace:*"
   },
   "devDependencies": {
-    "@prisma/adapter-pg": "^7.2.0",
-    "@types/node": "^20.19.30",
-    "@types/pg": "^8.16.0",
-    "pg": "^8.17.2",
-    "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "@prisma/client": "^6.13.0",
+    "@prisma/extension-accelerate": "^2.0.2",
+    "prisma": "^6.13.0"
   }
 }

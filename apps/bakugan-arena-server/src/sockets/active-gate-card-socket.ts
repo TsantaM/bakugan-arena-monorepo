@@ -1,11 +1,9 @@
 import { Server, Socket } from "socket.io/dist";
 import { ActiveGateCard } from "../functions/active-gate-card";
-import { activeGateCardProps } from "@bakugan-arena/game-data";
-import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
-import { removeActionByType } from "@bakugan-arena/game-data/src/function/create-animation-directives/remove-action-by-type";
-import { ActivePlayerActionRequestType } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
+import { activeGateCardProps, ActivePlayerActionRequestType, removeActionByType } from "@bakugan-arena/game-data";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { turnActionUpdater } from "./turn-action";
+import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 
 export const socketActiveGateCard = (io: Server, socket: Socket) => {
     socket.on('active-gate-card', ({ roomId, gateId, slot, userId }: activeGateCardProps) => {
