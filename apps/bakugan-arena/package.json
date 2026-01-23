@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "pnpm --filter ../../libs/game-data build && pnpm --filter ../../libs/primsa db:deploy && pnpm --filter ../../libs/primsa db:generate && next build"
   },
   "peerDependencies": {
     "next": "15.4.6",
