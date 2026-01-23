@@ -1,6 +1,5 @@
-import { BakuganList } from "../../battle-brawlers/bakugans";
-import type { AnimationDirectivesTypes } from "../../type/animations-directives";
-import type { bakuganOnSlot, portalSlotsTypeElement } from "../../type/room-types";
+import { BakuganList } from "../../battle-brawlers/bakugans.js";
+import type { AnimationDirectivesTypes, bakuganOnSlot, portalSlotsTypeElement } from "../../type/type-index.js";
 
 type Props = {
     initialSlot: portalSlotsTypeElement,

@@ -1,5 +1,5 @@
-import { CheckBattle } from "./check-battle-in-process"
-import { type stateType } from "../type/room-types";
+import { CheckBattle } from "./check-battle-in-process.js"
+import { type stateType } from "../type/type-index.js";
 
 export function handleBattle(roomData: stateType, updateBattleState: boolean = true) {
 

@@ -1,5 +1,4 @@
-import type { AnimationDirectivesTypes } from '../../type/animations-directives';
-import type { portalSlotsTypeElement } from '../../type/room-types'
+import type { AnimationDirectivesTypes, portalSlotsTypeElement } from '../../type/type-index.js'
 
 export function OnBattleStartAnimationDirectives({ animations, slot } : { slot: portalSlotsTypeElement, animations: AnimationDirectivesTypes[];}) {
     const animationDirective: AnimationDirectivesTypes = {

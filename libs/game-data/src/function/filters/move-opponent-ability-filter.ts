@@ -1,7 +1,7 @@
-import { AbilityCardsList } from '../../battle-brawlers/ability-cards'
-import { ExclusiveAbilitiesList } from '../../battle-brawlers/exclusive-abilities'
-import { slots_limits } from '../../store/slots-limits'
-import { type portalSlotsType, type slots_id } from '../../type/room-types'
+import { AbilityCardsList } from '../../battle-brawlers/ability-cards.js'
+import { ExclusiveAbilitiesList } from '../../battle-brawlers/exclusive-abilities.js'
+import { slots_limits } from '../../store/store-index.js'
+import { type portalSlotsType, type slots_id } from '../../type/type-index.js'
 
 
 export function MoveOpponentAbilityFilter({ slots, zone, bakuganKey, userId, ability }: { slots: portalSlotsType | undefined, bakuganKey: string, userId: string, ability: string, zone: "" | slots_id }) {

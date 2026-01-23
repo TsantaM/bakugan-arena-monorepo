@@ -1,8 +1,6 @@
-import { BakuganList } from "../../battle-brawlers/bakugans"
-import type { AnimationDirectivesTypes } from "../../type/animations-directives"
-import { type attribut } from "../../type/game-data-types"
-import { type portalSlotsTypeElement } from "../../type/room-types"
-import { PowerChangeDirectiveAnumation } from "../create-animation-directives/power-change"
+import { BakuganList } from "../../battle-brawlers/bakugans.js"
+import type { AnimationDirectivesTypes, attribut, portalSlotsTypeElement } from "../../type/type-index.js"
+import { PowerChangeDirectiveAnumation } from "../create-animation-directives/power-change.js"
 
 export function CombinationSimpleFunction({ animations, slotOfGate, bakuganKey, userId, attribut, attributWeak} : { animations: AnimationDirectivesTypes[], slotOfGate: portalSlotsTypeElement, bakuganKey: string, userId: string, attribut: attribut, attributWeak: attribut}) {
     const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)

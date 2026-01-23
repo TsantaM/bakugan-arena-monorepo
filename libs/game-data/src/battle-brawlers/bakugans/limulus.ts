@@ -1,6 +1,6 @@
-import { bakuganType, gateCardType } from "../../type/game-data-types"
-import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
-import { GateCardImages } from "../../store/gate-card-images"
+import { CancelCaracterGateCard, CaracterGateCardEffect } from "../../function/index.js"
+import { GateCardImages } from "../../store/gate-card-images.js"
+import { type bakuganType, type gateCardType } from "../../type/game-data-types.js"
 
 export const LimulusAquos: bakuganType = {
     key: 'limulus-aquos',

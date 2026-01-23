@@ -1,6 +1,5 @@
-import { stateType, type portalSlotsTypeElement } from "../../type/room-types";
-import { BakuganList } from '../../battle-brawlers/bakugans'
-import { PowerChangeDirectiveAnumation } from "../create-animation-directives/power-change";
+import { stateType, type portalSlotsTypeElement } from "../../type/type-index.js";
+import { PowerChangeDirectiveAnumation } from "../create-animation-directives/index.js";
 
 export function CaracterGateCardEffect({ roomState, slotOfGate, family }: { roomState: stateType, slotOfGate: portalSlotsTypeElement | undefined, family: string }) {
     if (!roomState) return

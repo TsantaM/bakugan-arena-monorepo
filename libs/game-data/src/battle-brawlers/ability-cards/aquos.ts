@@ -1,10 +1,6 @@
-import { type abilityCardsType } from "../../type/game-data-types";
-import type { AbilityCardsActions } from "../../type/actions-serveur-requests";
-import { StandardCardsImages } from '../../store/ability-cards-images'
-import { MoveToAnotherSlotDirectiveAnimation } from "../../function/create-animation-directives/move-to-another-slot";
-import { bakuganOnSlot, slots_id } from "../../type/room-types";
-import { OpenGateCardActionRequest } from "../../function/action-request-functions/open-gate-card-action-request";
-import { CheckBattleStillInProcess } from "../../function/check-battle-still-in-process";
+import { AbilityCardsActions, bakuganOnSlot, slots_id, type abilityCardsType } from "../../type/type-index.js";
+import { StandardCardsImages } from '../../store/store-index.js'
+import { CheckBattleStillInProcess, MoveToAnotherSlotDirectiveAnimation, OpenGateCardActionRequest } from "../../function/index.js";
 
 export const MirageAquatique: abilityCardsType = {
     key: 'mirage-aquatique',

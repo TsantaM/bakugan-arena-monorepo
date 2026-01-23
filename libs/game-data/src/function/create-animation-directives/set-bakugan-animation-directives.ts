@@ -1,5 +1,4 @@
-import type { AnimationDirectivesTypes } from '../../type/animations-directives'
-import type { bakuganOnSlot, portalSlotsTypeElement } from '../../type/room-types';
+import type { AnimationDirectivesTypes, bakuganOnSlot, portalSlotsTypeElement } from '../../type/type-index.js';
 
 
 type Props = {

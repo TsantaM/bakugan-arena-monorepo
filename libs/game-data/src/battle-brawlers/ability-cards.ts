@@ -1,13 +1,5 @@
-import { JetEnflamme, MurDeFeu, RetroAction, TourbillonDeFeu } from "./ability-cards/pyrus";
-import { BarrageDeau, BouclierAquos, MirageAquatique, PlongeeEnEauProfonde } from "./ability-cards/aquos";
-import { ChuteColossale, CopieConforme, ForceDattraction, MagmaSupreme, Obstruction } from "./ability-cards/subterra";
-import { ContreMaitrise, EclatSoudain, HaosImmobilisation, LumiereDivine, RapideHaos } from "./ability-cards/haos";
-import { BoublierFusion, CoupDeGrace, EpicesMortelles, PoivreDesCayenne, VengeanceAlItalienne } from "./ability-cards/darkus";
-import { CombatAerien, RetourDair, SouffleTout, TornadeChaosTotal, TornadeExtreme } from "./ability-cards/ventus";
-import { abilityCardsType } from "../type/game-data-types";
-import { AquosSubterra, DarkusPyrus, HaosVentus, PyrusDarkus, SubterraAquos, VentusHaos } from "./ability-cards/diagonal-combination";
-import { AquosVentus, DarkusAquos, HaosDarkus, SubterraHaos, SubterraPyrus, VentusPyrus } from "./ability-cards/combinations-simple";
-import { PyrusAquosHaos, VentusSubterraDarkus } from "./ability-cards/combination-triple";
+import { abilityCardsType } from "../index.js";
+import { AquosSubterra, AquosVentus, BoublierFusion, CombatAerien, CoupDeGrace, DarkusAquos, DarkusPyrus, EclatSoudain, ForceDattraction, HaosDarkus, HaosImmobilisation, HaosVentus, JetEnflamme, MagmaSupreme, MirageAquatique, MurDeFeu, Obstruction, PyrusAquosHaos, PyrusDarkus, RetourDair, RetroAction, SouffleTout, SubterraAquos, SubterraHaos, SubterraPyrus, TornadeChaosTotal, TornadeExtreme, TourbillonDeFeu, VengeanceAlItalienne, VentusHaos, VentusPyrus, VentusSubterraDarkus } from "./ability-cards/index.js";
 
 export const AbilityCards: Record<string, abilityCardsType> = {
     // Pyrus

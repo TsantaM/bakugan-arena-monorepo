@@ -1,6 +1,5 @@
-import type { ActionType } from '../../type/actions-serveur-requests'
-import type { stateType } from '../../type/room-types'
-import { SetBakuganFilters } from '../filters/set-bakugan-filters'
+import type { ActionType, stateType } from '../../type/type-index.js'
+import { SetBakuganFilters } from '../filters/set-bakugan-filters.js'
 
 export function SetBakuganActionRequest({ roomState }: { roomState: stateType }) {
     if (!roomState) return

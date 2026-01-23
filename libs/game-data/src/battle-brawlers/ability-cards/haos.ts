@@ -1,12 +1,8 @@
-import { SetBakuganAndAddRenfortAnimationDirective } from "../../function/create-animation-directives/add-renfort-directive";
-import { ComeBackBakuganDirectiveAnimation } from "../../function/create-animation-directives/come-back-bakugan";
-import { PowerChangeDirectiveAnumation } from "../../function/create-animation-directives/power-change";
-import { StandardCardsImages } from "../../store/ability-cards-images";
-import type { AbilityCardsActions } from "../../type/actions-serveur-requests";
-import { type abilityCardsType } from "../../type/game-data-types";
-import type { bakuganOnSlot } from "../../type/room-types";
-import { AbilityCardsList } from "../ability-cards";
-import { ExclusiveAbilitiesList } from "../exclusive-abilities";
+import { ComeBackBakuganDirectiveAnimation, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective } from "../../function/index.js";
+import { StandardCardsImages } from "../../store/store-index.js";
+import type { AbilityCardsActions, abilityCardsType, bakuganOnSlot } from "../../type/type-index.js";
+import { AbilityCardsList } from "../ability-cards.js";
+import { ExclusiveAbilitiesList } from "../exclusive-abilities.js";
 
 export const RapideHaos: abilityCardsType = {
     key: 'rapide-haos',

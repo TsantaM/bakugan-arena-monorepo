@@ -1,5 +1,5 @@
-import type { AbilityCardsActions, resolutionType } from "./actions-serveur-requests"
-import type { portalSlotsTypeElement, slots_id, stateType } from "./room-types"
+import type { AbilityCardsActions, resolutionType } from "./actions-serveur-requests.js"
+import type { portalSlotsTypeElement, slots_id, stateType } from "./room-types.js"
 
 export type attribut = 'Pyrus' | 'Subterra' | 'Haos' | 'Darkus' | 'Aquos' | 'Ventus'
 

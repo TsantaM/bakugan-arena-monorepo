@@ -1,7 +1,4 @@
-import { bakuganType, gateCardType } from "../../type/game-data-types"
-import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
-import { StarterBanList } from "../../store/starter-banlist"
-import { GateCardImages } from "../../store/gate-card-images"
+import { CancelCaracterGateCard, CaracterGateCardEffect, GateCardImages, StarterBanList, type bakuganType, type gateCardType } from "../../index.js"
 
 export const HarpusVentus: bakuganType = {
     key: 'harpus-ventus',

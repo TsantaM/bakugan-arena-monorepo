@@ -1,6 +1,6 @@
-import { type portalSlotsTypeElement, type stateType } from "../type/room-types";
-import { ExclusiveAbilitiesList } from "../battle-brawlers/exclusive-abilities";
-import { AbilityCardsList } from "../battle-brawlers/ability-cards";
+import { type portalSlotsTypeElement, type stateType } from "../type/type-index.js";
+import { ExclusiveAbilitiesList } from "../battle-brawlers/exclusive-abilities.js";
+import { AbilityCardsList } from "../battle-brawlers/ability-cards.js";
 
 export function applyWinAbilitiesEffects({ slot, winner, roomData }: {
     slot: portalSlotsTypeElement, winner: string, roomData: stateType

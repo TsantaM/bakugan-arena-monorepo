@@ -1,5 +1,5 @@
-import { type portalSlotsTypeElement } from '../type/room-types'
-import { GateCardsList } from "../battle-brawlers/gate-gards";
+import { type portalSlotsTypeElement } from '../type/type-index.js'
+import { GateCardsList } from "../battle-brawlers/gate-gards.js";
 
 
 export function GetGateCardImage({slot} : {slot : portalSlotsTypeElement}) {

@@ -1,6 +1,6 @@
-import { type stateType } from '../../src/type/room-types'
-import { CreateActionRequestFunction } from './create-action-request-function';
-import { OnBattleStartAnimationDirectives } from './create-animation-directives/on-battle-start-animation-directives'
+import { type stateType } from '../../src/type/type-index.js'
+import { CreateActionRequestFunction } from './create-action-request-function.js';
+import { OnBattleStartAnimationDirectives } from './create-animation-directives/on-battle-start-animation-directives.js'
 
 
 export const CheckBattle = ({ roomState }: { roomState: stateType }) => {

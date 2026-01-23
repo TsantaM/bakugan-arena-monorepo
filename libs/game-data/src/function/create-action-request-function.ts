@@ -1,8 +1,5 @@
-import type { stateType } from '../type/room-types'
-import { OpenGateCardActionRequest } from './action-request-functions/open-gate-card-action-request'
-import { SetBakuganActionRequest } from './action-request-functions/set-bakugan-action-requests'
-import { SelectGateCardActionRequest, SetGateCardActionRequest } from './action-request-functions/set-gate-gard-action-request'
-import { UseAbilityCardActionRequest } from './action-request-functions/use-ability-card-action-request'
+import type { stateType } from '../type/type-index.js'
+import { OpenGateCardActionRequest, SelectGateCardActionRequest, SetBakuganActionRequest, SetGateCardActionRequest, UseAbilityCardActionRequest } from './action-request-functions/index.js'
 
 export function CreateActionRequestFunction({ roomState }: { roomState: stateType }) {
 

@@ -1,5 +1,4 @@
-import type { ActionType } from "../../type/actions-serveur-requests";
-import type { stateType } from "../../type/room-types";
+import { ActionType, stateType } from "../../type/type-index.js"
 
 export function OpenGateCardActionRequest({ roomState }: { roomState: stateType }) {
 

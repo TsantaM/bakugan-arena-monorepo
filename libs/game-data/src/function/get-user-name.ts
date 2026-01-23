@@ -1,4 +1,4 @@
-import { stateType } from '../type/room-types'
+import { stateType } from '../type/type-index.js'
 
 export function GetUserName({ roomData, userId }: { roomData: stateType, userId: string }) {
     if (!roomData) return ''

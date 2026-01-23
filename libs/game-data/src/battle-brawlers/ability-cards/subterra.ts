@@ -1,12 +1,6 @@
-import { OpenGateCardActionRequest } from "../../function/action-request-functions/open-gate-card-action-request";
-import { CheckBattle } from "../../function/check-battle-in-process";
-import { AddRenfortAnimationDirective } from "../../function/create-animation-directives/add-renfort-directive";
-import { MoveToAnotherSlotDirectiveAnimation } from "../../function/create-animation-directives/move-to-another-slot";
-import { PowerChangeDirectiveAnumation } from "../../function/create-animation-directives/power-change";
-import { StandardCardsImages } from "../../store/ability-cards-images";
-import type { AbilityCardsActions, bakuganToMoveType } from "../../type/actions-serveur-requests";
-import { type abilityCardsType } from "../../type/game-data-types";
-import type { bakuganOnSlot, slots_id } from "../../type/room-types";
+import { AddRenfortAnimationDirective, CheckBattle, MoveToAnotherSlotDirectiveAnimation, OpenGateCardActionRequest, PowerChangeDirectiveAnumation } from "../../function/index.js";
+import { StandardCardsImages } from "../../store/store-index.js";
+import type { AbilityCardsActions, abilityCardsType, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, slots_id } from "../../type/type-index.js";
 import { GateCardsList } from "../gate-gards";
 
 export const MagmaSupreme: abilityCardsType = {

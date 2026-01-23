@@ -1,13 +1,4 @@
-import type { gateCardType } from "../../type/game-data-types";
-import { ResetSlot } from "../../function/reset-slot";
-import { CheckBattle } from "../../function/check-battle-in-process";
-import { GateCardImages } from "../../store/gate-card-images";
-import { ElimineBakuganDirectiveAnimation } from "../../function/create-animation-directives/elimine-bakugan";
-import { ComeBackBakuganDirectiveAnimation } from "../../function/create-animation-directives/come-back-bakugan";
-import { RemoveGateCardDirectiveAnimation } from "../../function/create-animation-directives/remove-gate-card";
-import { PowerChangeDirectiveAnumation } from "../../function/create-animation-directives/power-change";
-import { OpenGateCardActionRequest } from "../../function/action-request-functions/open-gate-card-action-request";
-import { CheckBattleStillInProcess } from "../../function/check-battle-still-in-process";
+import { CheckBattle, CheckBattleStillInProcess, ComeBackBakuganDirectiveAnimation, ElimineBakuganDirectiveAnimation, GateCardImages, OpenGateCardActionRequest, PowerChangeDirectiveAnumation, RemoveGateCardDirectiveAnimation, ResetSlot, type gateCardType } from "../../index.js";
 
 export const MineFantome: gateCardType = {
     key: 'mine-fantome',

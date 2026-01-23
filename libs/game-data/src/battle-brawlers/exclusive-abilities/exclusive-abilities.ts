@@ -1,16 +1,6 @@
-import { OpenGateCardActionRequest } from "../../function/action-request-functions/open-gate-card-action-request"
-import { CancelAbilityCard } from "../../function/cancel-ability-card"
-import { CheckBattle } from "../../function/check-battle-in-process"
-import { CheckBattleStillInProcess } from "../../function/check-battle-still-in-process"
-import { SetBakuganAndAddRenfortAnimationDirective } from "../../function/create-animation-directives/add-renfort-directive"
-import { CancelGateCardDirectiveAnimation } from "../../function/create-animation-directives/cancel-gate-card"
-import { MoveToAnotherSlotDirectiveAnimation } from "../../function/create-animation-directives/move-to-another-slot"
-import { PowerChangeDirectiveAnumation } from "../../function/create-animation-directives/power-change"
-// import { SetBakuganDirectiveAnimation } from "../../function/create-animation-directives/set-bakugan-animation-directives"
-import type { AbilityCardsActions, bakuganToMoveType } from "../../type/actions-serveur-requests"
-import { type exclusiveAbilitiesType } from "../../type/game-data-types"
-import type { slots_id, bakuganOnSlot } from "../../type/room-types"
-import { GateCardsList } from "../gate-gards"
+import { CancelAbilityCard, CancelGateCardDirectiveAnimation, CheckBattle, CheckBattleStillInProcess, MoveToAnotherSlotDirectiveAnimation, OpenGateCardActionRequest, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective } from "../../index.js"
+import type { AbilityCardsActions, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, exclusiveAbilitiesType, slots_id } from "../../type/type-index.js"
+import { GateCardsList } from "../gate-gards.js"
 
 export const OmbreBleue: exclusiveAbilitiesType = {
     key: 'ombre-bleue',

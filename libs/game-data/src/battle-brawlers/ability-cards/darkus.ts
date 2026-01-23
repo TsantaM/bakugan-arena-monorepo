@@ -1,9 +1,7 @@
-import { type abilityCardsType } from "../../type/game-data-types";
-import { GateCardsList } from "../gate-gards";
-import { CancelGateCardDirectiveAnimation } from '../../function/create-animation-directives/cancel-gate-card'
-import { PowerChangeDirectiveAnumation } from '../../function/create-animation-directives/power-change'
-import type { bakuganOnSlot } from "../../type/room-types";
-import { StandardCardsImages } from "../../store/ability-cards-images";
+import { bakuganOnSlot, type abilityCardsType } from "../../type/type-index.js";
+import { GateCardsList } from "../gate-gards.js";
+import { CancelGateCardDirectiveAnimation, PowerChangeDirectiveAnumation } from '../../function/index.js'
+import { StandardCardsImages } from "../../store/store-index.js";
 
 export const CoupDeGrace: abilityCardsType = {
     key: 'coup-de-grace',

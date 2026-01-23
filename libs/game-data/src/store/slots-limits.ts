@@ -1,4 +1,4 @@
-import { slots_id } from "../type/room-types"
+import { slots_id } from "../type/type-index.js"
 
 export type slot_limits = {
     slot: slots_id,

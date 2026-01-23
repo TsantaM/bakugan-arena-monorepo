@@ -1,10 +1,10 @@
-import type { onBoardBakugans, SelectableAbilityCardAction } from '../../type/actions-serveur-requests'
-import { SelectAbilityCardFilters } from '../filters/select-ability-card-filters'
-import type { stateType } from '../../type/room-types'
-import { Slots } from '../../store/slots'
-import { AbilityCardsList } from '../../battle-brawlers/ability-cards'
-import { ExclusiveAbilitiesList } from '../../battle-brawlers/exclusive-abilities'
-import { SelectAbilityCardInNeutralFilters } from '../filters/select-ability-card-in-neutral'
+import type { onBoardBakugans, SelectableAbilityCardAction } from '../../type/type-index.js'
+import { SelectAbilityCardFilters } from '../filters/select-ability-card-filters.js'
+import type { stateType } from '../../type/type-index.js'
+import { Slots } from '../../store/store-index.js'
+import { AbilityCardsList } from '../../battle-brawlers/ability-cards.js'
+import { ExclusiveAbilitiesList } from '../../battle-brawlers/exclusive-abilities.js'
+import { SelectAbilityCardInNeutralFilters } from '../filters/select-ability-card-in-neutral.js'
 
 export function UseAbilityCardActionRequest({ roomState }: { roomState: stateType }) {
 

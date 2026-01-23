@@ -1,5 +1,5 @@
-import { DiagonalCombinationEffect } from "../../function/ability-cards-effects/diagonal-combination-effect";
-import type { abilityCardsType } from "../../type/game-data-types";
+import { DiagonalCombinationEffect } from "../../function/index.js";
+import type { abilityCardsType } from "../../type/type-index.js";
 
 export const PyrusDarkus: abilityCardsType = {
     key: 'diagonal-combination-pyrus-darkus',

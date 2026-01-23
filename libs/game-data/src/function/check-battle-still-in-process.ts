@@ -1,4 +1,4 @@
-import { stateType } from "../type/room-types";
+import { stateType } from "../type/type-index.js";
 
 export function CheckBattleStillInProcess(roomState: stateType) {
     if (!roomState) return

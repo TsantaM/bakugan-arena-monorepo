@@ -1,32 +1,29 @@
 
-import { DragonoidDeltaPyrus, DragonoidPyrus, UltimateDragonoid } from "./bakugans/dragonoid";
-import { SkyressStormVentus, SkyressVentus } from "./bakugans/skyress";
-import { AngeloAquos, DiabloAquos, PreyasAquos } from "./bakugans/preyas";
-import { GoremSubterra, HammerGoremSubterra } from "./bakugans/gorem";
-import { BladeTigrerraHaos, TigrerraHaos } from "./bakugans/tigrerra";
-import { AlphaHydranoidDarkus, DeltaHydranoidDarkus, HydranoidDarkus } from "./bakugans/hydranoid";
-import { SirenoidAquos } from "./bakugans/sirenoid";
-import { GriffinAquos, GriffinHaos, GriffinPyrus } from "./bakugans/griffin";
-import { FourtressPyrus } from "./bakugans/fourtress";
-import { CycloidSubterra } from "./bakugans/cycloid";
-import { HarpusVentus } from "./bakugans/harpus";
-import { TentaclearHaos } from "./bakugans/tentacleer";
-import { ReaperDarkus } from "./bakugans/reaper";
-import { MantrisDarkus, MantrisHaos, MantrisPyrus, MantrisSubterra } from "./bakugans/mantris";
-import { SaurusHaos, SaurusPyrus, SaurusSubterra } from "./bakugans/saurus";
-import { RobotallionAquos, RobotallionDarkus, RobotallionHaos, RobotallionPyrus } from "./bakugans/robotallion";
-import { ElCondorHaos, ElCondorSubterra, ElCondorVentus } from "./bakugans/el-condor";
-import { RavenoidHaos, RavenoidPyrus, RavenoidVentus } from "./bakugans/ravenoid";
-import { FalconeerPyrus, FalconeerVentus } from "./bakugans/falconeer";
-import { MonarusVentus } from "./bakugans/monarus";
-import { SiegeAquos, SiegeDarkus, SiegeHaos, SiegePyrus } from "./bakugans/siege";
-import { FearReaperAquos, FearReaperDarkus, FearReaperHaos, FearReaperPyrus } from "./bakugans/fear-reaper";
-import { WormquakeDarkus, WormquakeSubterra } from "./bakugans/wormquake";
-import { StinglashAquos, StinglashDarkus, StinglashSubterra } from "./bakugans/stinglash";
-import { LimulusAquos } from "./bakugans/limulus";
-import { CentipodDarkus, CentipodHaos, CentipodPyrus, CentipodSubterra } from "./bakugans/centipod";
-import { GaraganoidAquos, GarganoidPyrus } from "./bakugans/garganoid";
-import { bakuganType } from "../type/game-data-types";
+import { DragonoidPyrus } from "./bakugans/dragonoid.js";
+import { SkyressVentus } from "./bakugans/skyress.js";
+import { PreyasAquos } from "./bakugans/preyas.js";
+import { GoremSubterra } from "./bakugans/gorem.js";
+import { TigrerraHaos } from "./bakugans/tigrerra.js";
+import { HydranoidDarkus } from "./bakugans/hydranoid.js";
+import { SirenoidAquos } from "./bakugans/sirenoid.js";
+import { GriffinPyrus } from "./bakugans/griffin.js";
+import { FourtressPyrus } from "./bakugans/fourtress.js";
+import { CycloidSubterra } from "./bakugans/cycloid.js";
+import { HarpusVentus } from "./bakugans/harpus.js";
+import { TentaclearHaos } from "./bakugans/tentacleer.js";
+import { ReaperDarkus } from "./bakugans/reaper.js";
+import { MantrisDarkus, MantrisHaos, MantrisPyrus, MantrisSubterra } from "./bakugans/mantris.js";
+import { SaurusHaos, SaurusPyrus, SaurusSubterra } from "./bakugans/saurus.js";
+import { ElCondorHaos, ElCondorSubterra, ElCondorVentus } from "./bakugans/el-condor.js";
+import { RavenoidHaos, RavenoidPyrus, RavenoidVentus } from "./bakugans/ravenoid.js";
+import { FalconeerPyrus, FalconeerVentus } from "./bakugans/falconeer.js";
+import { MonarusVentus } from "./bakugans/monarus.js";
+import { SiegeAquos, SiegeDarkus, SiegeHaos, SiegePyrus } from "./bakugans/siege.js";
+import { FearReaperAquos, FearReaperDarkus, FearReaperHaos, FearReaperPyrus } from "./bakugans/fear-reaper.js";
+import { WormquakeDarkus, WormquakeSubterra } from "./bakugans/wormquake.js";
+import { StinglashAquos, StinglashDarkus, StinglashSubterra } from "./bakugans/stinglash.js";
+import { CentipodDarkus, CentipodHaos, CentipodPyrus, CentipodSubterra } from "./bakugans/centipod.js";
+import { bakuganType } from "../index.js";
 
 export const Bakugans: Record<string, bakuganType> = {
     [DragonoidPyrus.key]: DragonoidPyrus,

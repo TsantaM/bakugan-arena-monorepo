@@ -1,7 +1,6 @@
-import { BakuganList } from "../../battle-brawlers/bakugans"
-import type { attribut } from "../../type/game-data-types"
-import type { bakuganOnSlot, portalSlotsTypeElement, slots_id, stateType } from "../../type/room-types"
-import { PowerChangeDirectiveAnumation } from "../create-animation-directives/power-change"
+import { BakuganList } from "../../battle-brawlers/bakugans.js"
+import type { attribut, bakuganOnSlot, portalSlotsTypeElement, slots_id, stateType } from "../../type/type-index.js"
+import { PowerChangeDirectiveAnumation } from "../create-animation-directives/index.js"
 
 export function ElementaryGateCardOnOpen({ roomState, slot, attribut }: { roomState: stateType, slot: slots_id, attribut: attribut }) {
     if (!roomState) return

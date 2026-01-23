@@ -1,6 +1,6 @@
-import { type stateType } from "../type/room-types";
-import { RemoveGateCardDirectiveAnimation } from "./create-animation-directives/remove-gate-card";
-import { ResetSlot } from "./reset-slot";
+import { type stateType } from "../type/type-index.js";
+import { RemoveGateCardDirectiveAnimation } from "./create-animation-directives/index.js";
+import { ResetSlot } from "./reset-slot.js";
 
 export const finalizeBattle = ({ roomData, winnerId, loserId }: { roomData: stateType, winnerId?: string, loserId?: string }) => {
     if (!roomData) return

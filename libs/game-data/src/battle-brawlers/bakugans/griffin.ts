@@ -1,6 +1,4 @@
-import { bakuganType, gateCardType } from "../../type/game-data-types"
-import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
-import { GateCardImages } from "../../store/gate-card-images"
+import { CancelCaracterGateCard, CaracterGateCardEffect, GateCardImages, type bakuganType, type gateCardType } from "../../index.js"
 
 export const GriffinPyrus: bakuganType = {
     key: 'griffin-pyrus',

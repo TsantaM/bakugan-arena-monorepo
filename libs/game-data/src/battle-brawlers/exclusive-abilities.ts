@@ -1,6 +1,6 @@
 
-import { exclusiveAbilitiesType } from "../type/game-data-types";
-import { AileEnflamee, AntiMuse, CapeDeFeu, ChambreDeGravite, DimmensionQuatre, DivisionHolographique, DragonoidPlus, EffecteurdOmbre, GaucheGigantesque, ImpactMajeur, JavelotAquos, LanceDeFeu, LanceEclair, MachettesJumelles, MaitreDesProfondeurs, Marionnette, MassueGigantesque, OmbreBleue, PlexusSolaire, RayonGamma, RegainSubit, RobotallionExecution, SabreDeLaMort, SouffleInfini, TempeteDePlume, TrappeDeSable, Tsunami, VentCinglant, VentViolentDeNobelesseVerte, VisageDeJoie, VisageDeLaFureur, VisageDuChagrin } from "./exclusive-abilities/exclusive-abilities";
+import { exclusiveAbilitiesType } from "../index.js";
+import { AileEnflamee, AntiMuse, ChambreDeGravite, DragonoidPlus, EffecteurdOmbre, GaucheGigantesque, ImpactMajeur, LanceDeFeu, LanceEclair, MachettesJumelles, MaitreDesProfondeurs, Marionnette, MassueGigantesque, OmbreBleue, PlexusSolaire, RobotallionExecution, SabreDeLaMort, TempeteDePlume, VentCinglant, VentViolentDeNobelesseVerte, VisageDeJoie, VisageDeLaFureur, VisageDuChagrin } from "./exclusive-abilities/exclusive-abilities.js";
 
 export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [OmbreBleue.key]: OmbreBleue,

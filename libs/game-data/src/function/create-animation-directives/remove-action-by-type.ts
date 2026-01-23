@@ -1,5 +1,4 @@
-import { ActionType, ActivePlayerActionRequestType, InactivePlayerActionRequestType } from "../../type/actions-serveur-requests"
-import { slots_id } from "../../type/room-types"
+import { ActionType, ActivePlayerActionRequestType, InactivePlayerActionRequestType, slots_id } from "../../type/type-index.js"
 
 const removeByType = (actions: ActionType[], typeToRemove: ActionType['type']) => {
   const result: ActionType[] = []

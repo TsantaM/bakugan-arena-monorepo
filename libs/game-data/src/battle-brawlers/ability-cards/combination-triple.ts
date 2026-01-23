@@ -1,5 +1,5 @@
-import { CombinationTripleEffect } from "../../function/ability-cards-effects/combination-triple-effect";
-import type { abilityCardsType } from "../../type/game-data-types";
+import { CombinationTripleEffect } from "../../function/index.js";
+import type { abilityCardsType } from "../../type/type-index.js";
 
 export const PyrusAquosHaos: abilityCardsType = {
     key: 'tripple-combination-pyrus-aquos-haos',

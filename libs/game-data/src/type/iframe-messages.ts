@@ -1,5 +1,5 @@
-import type { portalSlotsType } from '../type/room-types'
-import type { AnimationDirectivesTypes } from './animations-directives'
+import type { portalSlotsType } from '../type/room-types.js'
+import type { AnimationDirectivesTypes } from './animations-directives.js'
 
 export type MessageToIframe =
     {

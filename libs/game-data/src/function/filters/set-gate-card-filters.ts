@@ -1,5 +1,4 @@
-import { type portalSlotsType } from '../../type/room-types'
-import { type attribut } from '../../type/game-data-types'
+import { attribut, type portalSlotsType } from '../../type/type-index.js'
 
 export function FindUsableSlotAndGates({ slots, gates }: {
     slots: portalSlotsType | undefined, gates: {

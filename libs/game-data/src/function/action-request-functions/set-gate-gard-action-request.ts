@@ -1,7 +1,6 @@
-import { stateType } from '../../type/room-types'
-import { FindUsableSlotAndGates } from '../filters/set-gate-card-filters'
-import { ActionType } from '../../type/actions-serveur-requests'
-import { GateCardsList } from '../../battle-brawlers/gate-gards'
+import { ActionType, stateType } from '../../type/type-index.js'
+import { FindUsableSlotAndGates } from '../filters/set-gate-card-filters.js'
+import { GateCardsList } from '../../battle-brawlers/gate-gards.js'
 
 
 export function SetGateCardActionRequest({ roomState }: { roomState: stateType }) {

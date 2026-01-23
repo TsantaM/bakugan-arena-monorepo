@@ -1,6 +1,6 @@
-import { type slots_id, type stateType } from "../type/room-types";
-import { AbilityCardsList } from "../battle-brawlers/ability-cards";
-import { ExclusiveAbilitiesList } from "../battle-brawlers/exclusive-abilities";
+import { type slots_id, type stateType } from "../type/type-index.js";
+import { AbilityCardsList } from "../battle-brawlers/ability-cards.js";
+import { ExclusiveAbilitiesList } from "../battle-brawlers/exclusive-abilities.js";
 
 export const CancelAbilityCard = ({ abilityKey, roomState, userId, bakuganKey, slot}: { roomState: stateType, userId: string, bakuganKey: string, slot: slots_id, abilityKey: string }) => {
     const ability = AbilityCardsList.find((a) => a.key === abilityKey)

@@ -1,5 +1,4 @@
-import { type attribut, type bakuganType } from "../type/game-data-types"
-import { type stateType, type slots_id, type bakuganOnSlot } from "../type/room-types"
+import type { slots_id, stateType, attribut, bakuganType, bakuganOnSlot } from "../type/type-index.js"
 
 type addBakuganToSlotParams = {
     roomData: stateType,

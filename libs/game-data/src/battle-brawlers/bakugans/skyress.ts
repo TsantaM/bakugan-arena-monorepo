@@ -1,6 +1,5 @@
-import type { bakuganType, gateCardType } from "../../type/game-data-types"
-import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
-import { StarterBanList } from "../../store/starter-banlist"
+import { CancelCaracterGateCard, CaracterGateCardEffect, StarterBanList, type bakuganType, type gateCardType } from "../../index.js"
+
 
 export const SkyressVentus: bakuganType = {
     name: 'Skyress',

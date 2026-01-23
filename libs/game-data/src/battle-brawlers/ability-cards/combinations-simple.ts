@@ -1,5 +1,5 @@
-import { CombinationSimpleFunction } from "../../function/ability-cards-effects/combination-simple-effects";
-import { type abilityCardsType } from "../../type/game-data-types";
+import { CombinationSimpleFunction } from "../../function/index.js";
+import { type abilityCardsType } from "../../type/type-index.js";
 
 export const SubterraPyrus: abilityCardsType = {
     key: 'combination-subterra-pyrus',

@@ -1,13 +1,7 @@
-import { CancelGateCardDirectiveAnimation } from "../../function/create-animation-directives/cancel-gate-card";
-import { ComeBackBakuganDirectiveAnimation } from "../../function/create-animation-directives/come-back-bakugan";
+import { CancelGateCardDirectiveAnimation, CheckBattleStillInProcess, ComeBackBakuganDirectiveAnimation, MoveToAnotherSlotDirectiveAnimation, OpenGateCardActionRequest } from "../../function/index.js";
 import { StandardCardsImages } from "../../store/ability-cards-images";
-import type { AbilityCardsActions, bakuganToMoveType } from "../../type/actions-serveur-requests";
-import { type abilityCardsType } from "../../type/game-data-types";
-import type { bakuganOnSlot, slots_id } from "../../type/room-types";
-import { GateCardsList } from "../gate-gards";
-import { MoveToAnotherSlotDirectiveAnimation } from "../../function/create-animation-directives/move-to-another-slot";
-import { OpenGateCardActionRequest } from "../../function/action-request-functions/open-gate-card-action-request";
-import { CheckBattleStillInProcess } from "../../function/check-battle-still-in-process";
+import type { AbilityCardsActions, abilityCardsType, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, slots_id } from "../../type/type-index.js";
+import { GateCardsList } from "../gate-gards.js";
 
 export const CombatAerien: abilityCardsType = {
     key: 'combat-aerien',

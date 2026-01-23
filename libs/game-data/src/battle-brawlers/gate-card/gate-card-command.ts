@@ -1,12 +1,4 @@
-import { CheckBattleStillInProcess } from "../../function/check-battle-still-in-process";
-import { SetBakuganAndAddRenfortAnimationDirective } from "../../function/create-animation-directives/add-renfort-directive";
-import { ComeBackBakuganDirectiveAnimation } from "../../function/create-animation-directives/come-back-bakugan";
-import { PowerChangeDirectiveAnumation } from "../../function/create-animation-directives/power-change";
-import { RemoveGateCardDirectiveAnimation } from "../../function/create-animation-directives/remove-gate-card";
-import { ResetSlot } from "../../function/reset-slot";
-import { GateCardImages } from "../../store/gate-card-images";
-import { type gateCardType } from "../../type/game-data-types";
-import { type bakuganOnSlot, type stateType } from "../../type/room-types";
+import { type gateCardType, type bakuganOnSlot, type stateType, GateCardImages, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective, ComeBackBakuganDirectiveAnimation, RemoveGateCardDirectiveAnimation, ResetSlot, CheckBattleStillInProcess } from "../../index.js";
 
 export const Rechargement: gateCardType = {
     key: 'rechargement',

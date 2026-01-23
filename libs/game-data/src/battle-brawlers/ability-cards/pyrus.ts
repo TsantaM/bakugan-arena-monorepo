@@ -1,12 +1,7 @@
-import { PowerChangeDirectiveAnumation } from "../../function/create-animation-directives/power-change";
-import { type abilityCardsType } from "../../type/game-data-types";
-import { GateCardsList } from "../gate-gards";
-import { ComeBackBakuganDirectiveAnimation } from "../../function/create-animation-directives/come-back-bakugan";
-import { CancelGateCardDirectiveAnimation } from "../../function/create-animation-directives/cancel-gate-card";
-import type { AbilityCardsActions } from "../../type/actions-serveur-requests";
-import { StandardCardsImages } from "../../store/ability-cards-images";
-import { SetBakuganAndAddRenfortAnimationDirective } from "../../function/create-animation-directives/add-renfort-directive";
-import type { bakuganOnSlot } from "../../type/room-types";
+import { CancelGateCardDirectiveAnimation, ComeBackBakuganDirectiveAnimation, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective } from "../../function/index.js";
+import { AbilityCardsActions, bakuganOnSlot, type abilityCardsType } from "../../type/type-index.js";
+import { GateCardsList } from "../gate-gards.js";
+import { StandardCardsImages } from "../../store/store-index.js";
 
 export const MurDeFeu: abilityCardsType = {
     key: "mur-de-feu",

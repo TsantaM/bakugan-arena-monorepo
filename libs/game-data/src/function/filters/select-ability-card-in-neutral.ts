@@ -1,7 +1,7 @@
-import { type deckType, type portalSlotsType } from '../../type/room-types'
-import { BakuganList } from '../../battle-brawlers/bakugans'
-import { AbilityCardsList } from '../../battle-brawlers/ability-cards'
-import { ExclusiveAbilitiesList } from '../../battle-brawlers/exclusive-abilities'
+import { type deckType, type portalSlotsType } from '../../type/type-index.js'
+import { BakuganList } from '../../battle-brawlers/bakugans.js'
+import { AbilityCardsList } from '../../battle-brawlers/ability-cards.js'
+import { ExclusiveAbilitiesList } from '../../battle-brawlers/exclusive-abilities.js'
 
 export function SelectAbilityCardInNeutralFilters({ slots, userId, decksState, bakuganToSet, bakuganKey }: { slots: portalSlotsType | undefined, userId: string, decksState: deckType[] | undefined, bakuganToSet: string, bakuganKey: string }) {
 

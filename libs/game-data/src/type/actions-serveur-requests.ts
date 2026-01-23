@@ -1,5 +1,5 @@
-import type { attribut } from './game-data-types'
-import type { bakuganInDeck, portalSlotsTypeElement, slots_id } from './room-types'
+import type { attribut } from './game-data-types.js'
+import type { bakuganInDeck, portalSlotsTypeElement, slots_id } from './room-types.js'
 
 export type SelectableBakuganAction = {
     key: string,
@@ -162,7 +162,7 @@ export type AbilityCardsActionsRequestsType = {
     data: AbilityCardsActions
 }
 
-export type bakuganToMoveType = {
+export type bakuganToMoveType2 = {
     key: string,
     userId: string,
     slot: slots_id
@@ -179,16 +179,16 @@ export type AbilityCardsActions = {
 } | {
     type: 'MOVE_BAKUGAN_TO_ANOTHER_SLOT',
     message: string,
-    bakugans: bakuganToMoveType[],
+    bakugans: bakuganToMoveType2[],
     slots: slots_id[]
 } | {
     type: 'SELECT_BAKUGAN_ON_DOMAIN',
     message: string,
-    bakugans: bakuganToMoveType[],
+    bakugans: bakuganToMoveType2[],
 } | {
     type: 'ATTRACT_BAKUGAN',
     message: string,
-    bakugans: bakuganToMoveType[]
+    bakugans: bakuganToMoveType2[]
 }
 
 export type resolutionType = {
@@ -206,7 +206,7 @@ export type resolutionDataType = {
     bakugan: bakuganInDeck
 } | {
     type: 'MOVE_BAKUGAN_TO_ANOTHER_SLOT',
-    bakugan: bakuganToMoveType,
+    bakugan: bakuganToMoveType2,
     slot: slots_id
 } | {
     type: 'SELECT_BAKUGAN_ON_DOMAIN',
@@ -214,7 +214,7 @@ export type resolutionDataType = {
     slot: slots_id
 } | {
     type: 'ATTRACT_BAKUGAN',
-    bakugan: bakuganToMoveType
+    bakugan: bakuganToMoveType2
 } | {
     type: 'SELECT_SLOT',
     slot: slots_id

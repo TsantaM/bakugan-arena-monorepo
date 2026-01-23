@@ -1,8 +1,6 @@
-import { BakuganList } from "../../battle-brawlers/bakugans";
-import { AnimationDirectivesTypes } from "../../type/animations-directives";
-import { type attribut } from "../../type/game-data-types";
-import { type portalSlotsType } from "../../type/room-types";
-import { PowerChangeDirectiveAnumation } from "../create-animation-directives/power-change";
+import { BakuganList } from "../../battle-brawlers/bakugans.js";
+import { AnimationDirectivesTypes, attribut, portalSlotsType } from "../../type/type-index.js";
+import { PowerChangeDirectiveAnumation } from "../create-animation-directives/power-change.js";
 
 export function CombinationTripleEffect({ animations, userId, attribut_one, attribut_tree, attribut_two, portalSlots }: { animations: AnimationDirectivesTypes[], userId: string, attribut_one: attribut, attribut_two: attribut, attribut_tree: attribut, portalSlots: portalSlotsType }) {
     const keys = portalSlots.filter((s) => s.bakugans.length > 0 && s.portalCard !== null && !s.can_set).map((b) => b.bakugans).flat().filter((b) => b.userId === userId).map((b) => b.key)

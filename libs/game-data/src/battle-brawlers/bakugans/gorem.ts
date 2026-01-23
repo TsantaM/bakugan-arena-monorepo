@@ -1,7 +1,4 @@
-import { bakuganType, gateCardType } from "../../type/game-data-types"
-import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
-import { StarterBanList } from "../../store/starter-banlist"
-import { GateCardImages } from "../../store/gate-card-images"
+import { bakuganType, CancelCaracterGateCard, CaracterGateCardEffect, gateCardType, StarterBanList } from "../../index.js"
 
 export const GoremSubterra: bakuganType = {
     key: 'gorem-subterra',

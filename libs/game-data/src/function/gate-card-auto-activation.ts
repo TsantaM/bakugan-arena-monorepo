@@ -1,6 +1,6 @@
-import { type stateType } from "../type/room-types";
-import { GateCardsList } from "../battle-brawlers/gate-gards";
-import { GetUserName } from "./get-user-name";
+import { type stateType } from "../type/type-index.js";
+import { GateCardsList } from "../battle-brawlers/gate-gards.js";
+import { GetUserName } from "./get-user-name.js";
 
 
 export function handleGateCards(roomData: stateType) {

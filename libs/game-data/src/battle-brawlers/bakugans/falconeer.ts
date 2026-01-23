@@ -1,6 +1,5 @@
-import { bakuganType, gateCardType } from "../../type/game-data-types"
-import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/gate-card-effects/caracter-gate-card-function'
-import { GateCardImages } from "../../store/gate-card-images"
+import { bakuganType, gateCardType } from "../../type/type-index.js"
+import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/index.js'
 
 export const FalconeerPyrus: bakuganType = {
     key: 'falconeer-pyrus',

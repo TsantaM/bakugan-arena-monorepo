@@ -1,4 +1,4 @@
-import { type deckType, type slots_id, type portalSlotsType, type portalSlotsTypeElement, type bakuganOnSlot, type activateAbilities } from "../type/room-types"
+import { type deckType, type slots_id, type portalSlotsType, type portalSlotsTypeElement, type bakuganOnSlot, type activateAbilities } from "../type/type-index.js"
 
 type newSlotState = {
     can_set: boolean,
