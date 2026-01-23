@@ -11,7 +11,7 @@
   },
   "packageManager": "pnpm@10.15.0",
   "peerDependencies": {
-    "next": "15.4.6",
+    "next": "15.4.8",
     "react": "19.1.0"
   },
   "engines": {
