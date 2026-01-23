@@ -9,6 +9,7 @@
     "lint": "next lint",
     "deploy": "pnpm --filter ../../libs/game-data build && pnpm --filter ../../libs/primsa db:deploy && pnpm --filter ../../libs/primsa db:generate && next build"
   },
+  "packageManager": "pnpm@10.15.0",
   "peerDependencies": {
     "next": "15.4.6",
     "react": "19.1.0"
