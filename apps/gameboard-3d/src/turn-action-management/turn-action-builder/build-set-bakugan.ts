@@ -1,4 +1,4 @@
-import type { ActionType } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
+import type { ActionType } from "@bakugan-arena/game-data";
 
 export function BuildSetBakugan({ action, turnActionContainer }: { action: ActionType, turnActionContainer: HTMLDivElement }) {
     if (action.type !== 'SET_BAKUGAN') return

@@ -1,4 +1,4 @@
-import type { ActionRequestAnswerType, ActionType } from '@bakugan-arena/game-data/src/type/actions-serveur-requests';
+import type { ActionRequestAnswerType, ActionType } from '@bakugan-arena/game-data';
 import * as THREE from 'three';
 import { SelectAbilityCardForStandardTurn, SelectBakuganOnMouseMove } from '../turn-actions-function/select-slot';
 import type { Socket } from 'socket.io-client';

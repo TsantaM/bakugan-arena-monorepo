@@ -1,5 +1,4 @@
-import type { setBakuganProps, slots_id } from "@bakugan-arena/game-data";
-import type { ActionRequestAnswerType, ActionType } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
+import type { setBakuganProps, slots_id, ActionRequestAnswerType, ActionType } from "@bakugan-arena/game-data";
 import { SelectBakugan, SelectSlotToSetBakugan } from "../turn-actions-function/select-slot";
 import * as THREE from 'three';
 import type { Socket } from "socket.io-client";

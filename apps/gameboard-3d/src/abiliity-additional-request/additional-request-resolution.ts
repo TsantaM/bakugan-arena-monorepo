@@ -1,4 +1,4 @@
-import type { AbilityCardsActionsRequestsType, resolutionType } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
+import type { AbilityCardsActionsRequestsType, bakuganInDeck, resolutionType } from "@bakugan-arena/game-data";
 import { SelectBakuganOnMouseMove, SelectSlotToSetBakugan } from "../turn-action-management/turn-actions-function/select-slot";
 import * as THREE from 'three'
 import type { Socket } from "socket.io-client";
@@ -6,7 +6,6 @@ import { clearTurnInterface } from "../turn-action-management/turn-actions-resol
 import { BakuganList, type attribut, type slots_id } from "@bakugan-arena/game-data";
 import { getAttributColor } from "../functions/get-attrubut-color";
 import { BuildBakuganSelecterCards } from "../turn-action-management/turn-action-builder/build-select-bakugan";
-import type { bakuganInDeck } from "@bakugan-arena/game-data/src/type/room-types";
 import { removePreviousDialogBoxAnimation } from "../animations/show-message-animation";
 
 

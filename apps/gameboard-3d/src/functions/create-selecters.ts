@@ -1,4 +1,4 @@
-import type { SelectableBakuganAction, SelectableGateCardAction } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
+import type { SelectableBakuganAction, SelectableGateCardAction } from "@bakugan-arena/game-data";
 import type { AbilityCard } from "../turn-action-management/turn-action-builder/build-use-ability-card";
 import type { attribut } from "@bakugan-arena/game-data";
 import { setImageWithFallback } from "./set-image-with-fallback";

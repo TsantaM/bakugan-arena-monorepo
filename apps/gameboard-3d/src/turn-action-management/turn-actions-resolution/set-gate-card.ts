@@ -1,4 +1,4 @@
-import type { ActionRequestAnswerType, ActionType } from "@bakugan-arena/game-data/src/type/actions-serveur-requests"
+import type { ActionRequestAnswerType, ActionType } from "@bakugan-arena/game-data"
 import * as THREE from 'three'
 import { type slots_id } from "@bakugan-arena/game-data"
 import { createOverableSlot, SelectCard, SelectSlotOnMouseMove } from "../turn-actions-function/select-slot"

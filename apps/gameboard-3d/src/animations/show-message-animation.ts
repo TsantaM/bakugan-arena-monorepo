@@ -1,4 +1,4 @@
-import type { Message } from "@bakugan-arena/game-data/src/type/animations-directives";
+import type { Message } from "@bakugan-arena/game-data";
 import gsap from "gsap";
 
 export const removePreviousDialogBoxAnimation = (target: HTMLElement | null, delay: number = 0) => {

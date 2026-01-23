@@ -1,4 +1,4 @@
-import type { ActionRequestAnswerType, ActivePlayerActionRequestType, InactivePlayerActionRequestType } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
+import type { ActionRequestAnswerType, ActivePlayerActionRequestType, InactivePlayerActionRequestType } from "@bakugan-arena/game-data";
 import { TurnActionInterfaceBuilder } from "./turn-action-management/turn-interface-builder";
 import { TurnActionResolution } from "./turn-action-management/turn-action-resolution";
 import * as THREE from 'three'

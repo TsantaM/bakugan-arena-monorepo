@@ -1,4 +1,4 @@
-import type { ActionType, SelectableAbilityCardAction } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
+import type { ActionType, SelectableAbilityCardAction } from "@bakugan-arena/game-data";
 import { CreateGateCardSelecter } from "../../functions/create-selecters";
 
 export function BuildSelectAbilityCard({ action }: { action: ActionType }) {

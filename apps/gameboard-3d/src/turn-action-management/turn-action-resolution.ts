@@ -1,4 +1,4 @@
-import type { ActionRequestAnswerType, ActionType, ActivePlayerActionRequestType, InactivePlayerActionRequestType } from "@bakugan-arena/game-data/src/type/actions-serveur-requests"
+import type { ActionRequestAnswerType, ActionType, ActivePlayerActionRequestType, InactivePlayerActionRequestType } from "@bakugan-arena/game-data"
 import { SelectGateCard } from "./turn-actions-resolution/select-gate-card"
 import { SelectBakugan } from "./turn-actions-resolution/select-bakugan"
 import { SelectAbilityCard } from "./turn-actions-resolution/select-ability-card"

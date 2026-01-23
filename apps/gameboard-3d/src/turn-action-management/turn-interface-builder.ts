@@ -1,4 +1,4 @@
-import type { ActivePlayerActionRequestType, InactivePlayerActionRequestType } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
+import type { ActivePlayerActionRequestType, InactivePlayerActionRequestType } from "@bakugan-arena/game-data";
 import { BuildSelectGateCard } from "./turn-action-builder/build-select-gate-card";
 import { BuildSelectAbilityCard } from "./turn-action-builder/build-select-ability-card";
 import { BuildSelectBakugan } from "./turn-action-builder/build-select-bakugan";
@@ -43,9 +43,6 @@ export const TurnActionInterfaceBuilder = ({ request }: { request: ActivePlayerA
 
         document.body.appendChild(turnActionContainer)
         document.body.appendChild(button)
-
-
-        const abilities = actions.find((action) => action.type === 'USE_ABILITY_CARD')?.data.map((bakugan) => bakugan.abilities).flat().map((card) => card.image)
 
 
         actions.forEach((action) => {

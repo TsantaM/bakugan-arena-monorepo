@@ -1,8 +1,10 @@
 import type {
     AbilityCardsActionsRequestsType,
     ActivePlayerActionRequestType,
-    InactivePlayerActionRequestType
-} from "@bakugan-arena/game-data/src/type/actions-serveur-requests"
+    InactivePlayerActionRequestType,
+    roomStateType, slots_id,
+    turnCountSocketProps, Message
+} from "@bakugan-arena/game-data"
 import { Slots, type AnimationDirectivesTypes } from "@bakugan-arena/game-data"
 import type * as THREE from "three"
 import { TurnActionBuilder } from "../turn-action-management"
@@ -10,7 +12,6 @@ import type { Socket } from "socket.io-client"
 import { createSlotMesh } from "../meshes/slot.mesh"
 import { createSprite } from "../meshes/bakugan.mesh"
 import { OnBattleStartFunctionAnimation } from "../scene-modifications-functions/on-battle-start-function-animation"
-import type { roomStateType, slots_id } from "@bakugan-arena/game-data/src/type/room-types"
 import { AddRenfortToBattleAnimationFunction, SetBakuganAndAddRenfortAnimationAndFunction } from "../scene-modifications-functions/add-renfort-function-animation"
 import { OnBattleEndAnimation } from "../animations/on-battle-end-animation"
 import { RemoveGateCardFunctionAnimation } from "../scene-modifications-functions/remove-gate-card-function-animation"
@@ -23,10 +24,8 @@ import { SetBakuganFunctionAnimation } from "../scene-modifications-functions/se
 import { SetGateCardFunctionAndAnimation } from "../scene-modifications-functions/set-gate-card-function-animation"
 import { PowerChangeAnimation, PowerChangeNumberAnimation } from "../animations/power-change-animation"
 import { AdditionalRequestResolution } from "../abiliity-additional-request/additional-request-resolution"
-import type { turnCountSocketProps } from "@bakugan-arena/game-data/src/type/sockets-props-types"
 import { AdditionalEffectMessage, EndGameMessage, removePreviousDialogBoxAnimation, ShowMessageAnimation } from "../animations/show-message-animation"
 import { setEliminatedCircles } from "../functions/set-eliminated-circle"
-import type { Message } from "@bakugan-arena/game-data/src/type/animations-directives"
 import { clearTurnInterface } from "../turn-action-management/turn-actions-resolution/action-scope"
 import { ActiveAbilityCardAnimation } from "../animations/active-ability-card"
 

@@ -13,6 +13,9 @@ export function createSocket(userId: string, roomId: string) {
   })
 
   socket.on("disconnect", reason => {
+
+    console.error(reason)
+
   })
 
   return socket

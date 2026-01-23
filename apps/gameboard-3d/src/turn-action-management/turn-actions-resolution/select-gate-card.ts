@@ -1,4 +1,4 @@
-import type { ActionRequestAnswerType, ActionType } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
+import type { ActionRequestAnswerType, ActionType } from "@bakugan-arena/game-data";
 import type { Socket } from "socket.io-client";
 import { clearTurnInterface } from "./action-scope";
 

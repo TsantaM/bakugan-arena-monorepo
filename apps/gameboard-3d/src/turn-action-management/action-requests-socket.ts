@@ -1,4 +1,4 @@
-import type { ActionType, ActivePlayerActionRequestType, InactivePlayerActionRequestType } from '@bakugan-arena/game-data/src/type/actions-serveur-requests'
+import type { ActionType, ActivePlayerActionRequestType, InactivePlayerActionRequestType } from '@bakugan-arena/game-data'
 import { io } from 'socket.io-client'
 
 

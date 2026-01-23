@@ -14,7 +14,6 @@ export function GetSpritePosition({ slotIndex, bakugan, userId, slot }: { slotIn
 
     const first = bakuganIndex === 0 ? true : false
     const second = bakuganIndex === 1 ? true : false
-    const third = bakuganIndex === 2 ? true : false
 
 
 

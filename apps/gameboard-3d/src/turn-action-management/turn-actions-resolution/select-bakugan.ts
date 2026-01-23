@@ -1,4 +1,4 @@
-import type { ActionRequestAnswerType, ActionType } from "@bakugan-arena/game-data/src/type/actions-serveur-requests"
+import type { ActionRequestAnswerType, ActionType } from "@bakugan-arena/game-data"
 
 export function SelectBakugan({ userId, SelectedActions, actions }: {
     userId: string,

@@ -1,4 +1,4 @@
-import type { ActionType } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
+import type { ActionType } from "@bakugan-arena/game-data";
 import { CreateGateCardSelecter } from "../../functions/create-selecters";
 
 export function BuildSetGateCards({ action, turnActionContainer }: { action: ActionType, turnActionContainer: HTMLDivElement }) {

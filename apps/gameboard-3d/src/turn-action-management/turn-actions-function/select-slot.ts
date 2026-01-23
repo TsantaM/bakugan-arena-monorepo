@@ -1,9 +1,9 @@
-import { BakuganList, GateCardsList, Slots, type attribut, type slots_id } from "@bakugan-arena/game-data";
+import { BakuganList, GateCardsList, Slots, type attribut, type slots_id, type onBoardBakugans, type SelectableBakuganAction, type SelectableGateCardAction } from "@bakugan-arena/game-data";
 import { slotMesh } from "../../meshes/slot.mesh";
-import { getSlotMeshPosition } from "../../functions/get-slot-mesh-position";
+
 import * as THREE from 'three'
 import { getAttributColor } from "../../functions/get-attrubut-color";
-import type { onBoardBakugans, SelectableBakuganAction, SelectableGateCardAction } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
+import { getSlotMeshPosition } from "../../functions/get-slot-mesh-position";
 
 export function SelectSlotOnMouseMove({ plane, slots, hoveredSlot, event, camera }: { plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>, slots: slots_id[], hoveredSlot: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap> | null, event: MouseEvent, camera: THREE.PerspectiveCamera }): THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap> | null {
 

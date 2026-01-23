@@ -1,5 +1,5 @@
 import type { portalSlotsTypeElement, bakuganOnSlot, slots_id } from '../type/room-types.js'
-import { attribut } from './game-data-types.js'
+import type { attribut } from './game-data-types.js'
 
 export type Message = {
     userName?: string,

@@ -1,6 +1,5 @@
-import type { ActionType, SelectableBakuganAction } from "@bakugan-arena/game-data/src/type/actions-serveur-requests";
+import type { ActionType, SelectableBakuganAction, bakuganInDeck } from "@bakugan-arena/game-data";
 import { CreateBakuganSelecter } from "../../functions/create-selecters";
-import type { bakuganInDeck } from "@bakugan-arena/game-data/src/type/room-types";
 
 export function BuildSelectBakugan({ action }: { action: ActionType }) {
     if (action.type !== 'SELECT_BAKUGAN') return
