@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "pnpm --filter ../../libs/game-data build && pnpm --filter ../../libs/primsa db:deploy && pnpm --filter ../../libs/primsa db:generate && next build"
+    "deploy": "pnpm --filter ../../libs/game-data build && pnpm --filter ../../libs/primsa build pnpm --filter ../../libs/primsa db:deploy && pnpm --filter ../../libs/primsa db:generate && next build"
   },
   "packageManager": "pnpm@10.15.0",
   "peerDependencies": {
