@@ -3,10 +3,14 @@ import { RoomDataAction } from "@/src/actions/battlefield/get-players-data"
 import { getUser } from "@/src/actions/getUserSession"
 import { unauthorized } from "next/navigation"
 
+type PageProps = {
+    searchParams: Promise<{ id: string }>
+}
 
-export default async function BattleField({ searchParams }: { searchParams: { id: string } }) {
+
+export default async function BattleField({ searchParams }: PageProps) {
     const user = await getUser()
-    const roomId = searchParams.id
+    const {id: roomId} = await searchParams
 
     const RoomData = await RoomDataAction(roomId)
 

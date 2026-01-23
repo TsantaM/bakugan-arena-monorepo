@@ -4,7 +4,7 @@ import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { chalengeAcceptSocketProps } from "@bakugan-arena/game-data/src/type/sockets-props-types";
+import { chalengeAcceptSocketProps } from "@bakugan-arena/game-data";
 import { useSocket } from "@/src/providers/socket-provider";
 import { useEffect, useState } from "react";
 import { authClient } from "@/src/lib/auth-client";

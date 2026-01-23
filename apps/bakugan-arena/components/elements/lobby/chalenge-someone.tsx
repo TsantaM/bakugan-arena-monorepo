@@ -12,7 +12,7 @@ import { FindUser } from "@/src/actions/get-users-data";
 import { authClient } from "@/src/lib/auth-client";
 import { useSocket } from "@/src/providers/socket-provider";
 import { BakuganList } from "@bakugan-arena/game-data";
-import { chalengeSomeoneSocketProps } from "@bakugan-arena/game-data/src/type/sockets-props-types";
+import { chalengeSomeoneSocketProps } from "@bakugan-arena/game-data";
 import { useQuery } from "@tanstack/react-query";
 import { Check, ChevronsUpDown } from "lucide-react";
 import Image from "next/image";

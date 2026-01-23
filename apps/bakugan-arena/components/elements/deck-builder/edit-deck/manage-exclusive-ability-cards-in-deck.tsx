@@ -73,7 +73,7 @@ export default function ManageExclusiveAbilityCardsInDeck({ deckId, bakugans, co
                                         variant="outline"
                                         role="combobox"
                                         aria-expanded={open}
-                                        className="w-[200px] lg:w-[300px] justify-between"
+                                        className="w-50 lg:w-75 justify-between"
                                         disabled={addCardToDeckMutation.isPending || exclusiveAbilities?.length === 3 || countBakugans === 0 ? true : false}
                                     >
                                         {value ? (
@@ -98,7 +98,7 @@ export default function ManageExclusiveAbilityCardsInDeck({ deckId, bakugans, co
                                         <ChevronsUpDown className="opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-[200px] lg:w-[300px] p-0">
+                                <PopoverContent className="w-50 lg:w-75 p-0">
                                     <Command>
                                         <CommandInput placeholder="Search Bakugan..." className="h-9" />
                                         <CommandList>

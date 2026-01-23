@@ -69,6 +69,7 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
 
 
             if (!openFunction) return
+            if (!io) return
 
             io.to(roomId).emit('animations', roomData.animations)
 

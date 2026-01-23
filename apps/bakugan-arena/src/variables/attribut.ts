@@ -1,4 +1,7 @@
-import { values } from "@/components/elements/game-designer/manage-bakugans/add-bakugans/add-bakugan-values";
+type values = {
+    label: string,
+    value: string
+}
 
 export const AttributTable: values[] = [
     {

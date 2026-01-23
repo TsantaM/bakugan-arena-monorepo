@@ -1,9 +1,14 @@
 import EditDeck from "@/components/elements/deck-builder/edit-deck"
 import { notFound } from "next/navigation"
 
-export default async function EditDeckPage({ searchParams }: { searchParams: { id: string } }) {
+type PageProps = {
+    searchParams: Promise<{ id: string }>
+}
 
-    const id = searchParams.id
+
+export default async function EditDeckPage({ searchParams }: PageProps) {
+
+    const { id } = await searchParams
 
     if (!id) {
         notFound()
@@ -12,9 +17,9 @@ export default async function EditDeckPage({ searchParams }: { searchParams: { i
 
     return (
         <>
-        
-            <EditDeck id={id}/>
-        
+
+            <EditDeck id={id} />
+
         </>
     )
 }
