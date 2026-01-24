@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "pnpm install && pnpm --filter @bakugan-arena/game-data build && pnpm --filter @bakugan-arena/prisma db:generate && pnpm --filter @bakugan-arena/prisma db:deploy && pnpm --filter @bakugan-arena/prisma build && next build"
+    "deploy": "pnpm install && pnpm --filter @bakugan-arena/game-data build && pnpm --filter @bakugan-arena/prisma prisma generate && pnpm --filter @bakugan-arena/prisma db:deploy && pnpm --filter @bakugan-arena/prisma build && next build"
   },
   "packageManager": "pnpm@10.15.0",
   "peerDependencies": {
