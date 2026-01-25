@@ -1,5 +1,5 @@
 import * as schema from "@bakugan-arena/drizzle-orm"
-import {drizzle} from "drizzle-orm/neon-serverless"
+import {drizzle} from "drizzle-orm/neon-http"
 import {neon} from "@neondatabase/serverless"
 
 console.log( "dburl", process.env.DATABASE_URL)
