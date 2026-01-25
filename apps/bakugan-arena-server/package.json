@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "tsc",
+    "build": "pnpm --filter @bakugan-arena/game-data build && pnpm --filter @bakugan-arena/drizzle-orm build && tsc",
     "dev": "nodemon src/index.ts --watch src --exec ts-node",
     "start": "node dist/index.js"
   },
