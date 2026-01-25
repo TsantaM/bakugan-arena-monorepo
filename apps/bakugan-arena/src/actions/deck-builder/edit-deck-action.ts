@@ -2,249 +2,302 @@
 
 import { editDeckName_type } from "@/components/elements/deck-builder/edit-deck"
 import { getUser } from "../getUserSession"
-import prisma from "@/src/lib/prisma"
+import { db } from "@/src/lib/db"
+import { deck } from "@bakugan-arena/drizzle-orm"
+import { eq, and } from "drizzle-orm"
 import { GetDeckData } from "./get-deck-data"
-import { AbilityCardsList } from "@bakugan-arena/game-data"
-import { BakuganList } from "@bakugan-arena/game-data"
-import { ExclusiveAbilitiesList } from "@bakugan-arena/game-data"
-import { GateCardsList } from "@bakugan-arena/game-data"
+import { AbilityCardsList, BakuganList, ExclusiveAbilitiesList, GateCardsList } from "@bakugan-arena/game-data"
 
-export const EditDeckNameAction = async ({ id, formData }: { id: string, formData: editDeckName_type }) => {
+export const EditDeckNameAction = async ({
+    id,
+    formData,
+}: {
+    id: string
+    formData: editDeckName_type
+}) => {
+    const currentUser = await getUser()
+    if (!currentUser) return undefined
 
-    const user = await getUser()
+    const updated = await db
+        .update(deck)
+        .set({ name: formData.nom })
+        .where(and(eq(deck.id, id), eq(deck.userId, currentUser.id)))
+        .returning({ id: deck.id, name: deck.name }) // récupère le nom mis à jour
 
-    if (user) {
-        return await prisma.deck.update({
-            where: {
-                id: id,
-                userId: user.id
-            },
-            data: {
-                name: formData.nom
-            }
-        })
-    }
-
+    return updated[0] // retourne l'objet mis à jour
 }
 
-export const AddBakuganToDeckAction = async ({ bakuganId, deckId }: { bakuganId: string, deckId: string }) => {
+export const AddBakuganToDeckAction = async ({
+    bakuganId,
+    deckId,
+}: {
+    bakuganId: string
+    deckId: string
+}) => {
+    const currentUser = await getUser()
     const deckData = await GetDeckData(deckId)
-    const user = await getUser()
 
-    if (user && deckData) {
+    if (!currentUser || !deckData) return undefined
 
-        const banList = BakuganList.filter((b) => deckData.bakugans.includes(b.key)).map((b) => b.banList).flat()
+    // Vérifier la ban list
+    const banList = BakuganList.filter((b) => deckData.bakugans.includes(b.key))
+        .map((b) => b.banList)
+        .flat()
 
-        if (!deckData.bakugans.includes(bakuganId) && deckData.bakugans.length < 3 && !banList.includes(bakuganId)) {
-            return await prisma.deck.update({
-                where: {
-                    id: deckId,
-                    userId: user.id
-                },
-                data: {
-                    bakugans: {
-                        push: bakuganId
-                    }
-                }
-            })
-        }
+    if (
+        !deckData.bakugans.includes(bakuganId) &&
+        deckData.bakugans.length < 3 &&
+        !banList.includes(bakuganId)
+    ) {
+        // Créer le nouveau tableau bakugans
+        const newBakugans = [...deckData.bakugans, bakuganId]
 
+        // Mettre à jour le deck
+        const updated = await db
+            .update(deck)
+            .set({ bakugans: newBakugans })
+            .where(and(eq(deck.id, deckId), eq(deck.userId, currentUser.id)))
+            .returning({ bakugans: deck.bakugans, id: deck.id })
+
+        return updated[0]
     }
+
+    return undefined
 }
 
-export const RemoveBakuganInDeckAction = async ({ bakuganId, deckId }: { bakuganId: string, deckId: string }) => {
+export const RemoveBakuganInDeckAction = async ({
+    bakuganId,
+    deckId,
+}: {
+    bakuganId: string
+    deckId: string
+}) => {
+    const currentUser = await getUser()
+    const deckData = await GetDeckData(deckId)
+    if (!currentUser || !deckData) return undefined
+
     const toRemove = BakuganList.find((b) => b.key === bakuganId)
-    const deckData = await GetDeckData(deckId)
-    const user = await getUser()
-    const newList = deckData?.bakugans.filter((b) => b != bakuganId)
-    const exclusiveAbilities = toRemove?.exclusiveAbilities
-    if (user) {
+    if (!toRemove) return undefined
 
-        await prisma.deck.update({
-            where: {
-                id: deckId,
-                userId: user.id
-            },
-            data: {
-                bakugans: newList,
-                exclusiveAbilities: deckData?.exclusiveAbilities.filter((c) => !exclusiveAbilities?.includes(c))
-            }
+    // 1️⃣ Supprimer le bakugan et ses exclusiveAbilities
+    const newBakugans = deckData.bakugans.filter((b) => b !== bakuganId)
+    const newExclusiveAbilities = deckData.exclusiveAbilities.filter(
+        (c) => !toRemove.exclusiveAbilities?.includes(c)
+    )
+
+    await db
+        .update(deck)
+        .set({
+            bakugans: newBakugans,
+            exclusiveAbilities: newExclusiveAbilities,
         })
+        .where(and(eq(deck.id, deckId), eq(deck.userId, currentUser.id)))
 
-        const attributs = BakuganList.filter((b) => deckData?.bakugans.includes(b.key)).map((a) => a.attribut)
-        const sameAttribut = attributs.filter((a) => a === toRemove?.attribut)
-        const same = sameAttribut.length - 1
+    // 2️⃣ Vérifier les attributs restants
+    const remainingAttributs = BakuganList.filter((b) => newBakugans.includes(b.key)).map(
+        (b) => b.attribut
+    )
+    const sameAttributCount = remainingAttributs.filter((a) => a === toRemove.attribut).length
 
+    // 3️⃣ Si plus aucun Bakugan du même attribut, supprimer abilities et gate cards correspondantes
+    if (sameAttributCount === 0) {
+        const abilities = AbilityCardsList.filter(
+            (c) => deckData.ability.includes(c.key) && c.attribut !== toRemove.attribut
+        ).map((c) => c.key)
 
-        // Remove ability && gate cards with same attribut if same === 0
+        const gateCards = GateCardsList.filter(
+            (c) => deckData.gateCards.includes(c.key) && c.attribut !== toRemove.attribut
+        ).map((c) => c.key)
 
-        if (same === 0) {
-            const attribut = toRemove?.attribut
-
-            const cardList = AbilityCardsList.filter((c) => deckData?.ability.includes(c.key))
-            const abilities = cardList?.filter((c) => c.attribut != attribut).map((c) => c.key)
-
-            const gateCards = GateCardsList.filter((c) => deckData?.gateCards.includes(c.key))
-            const gates = gateCards.filter((c)=> c.attribut && c.attribut != attribut).map((c) => c.key)
-
-            await prisma.deck.update({
-                where: {
-                    id: deckId,
-                    userId: user.id
-                },
-                data: {
-                    ability: abilities,
-                    gateCards: gates
-                }
+        await db
+            .update(deck)
+            .set({
+                ability: abilities,
+                gateCards: gateCards,
             })
-        }
-
-    }
-
-}
-
-export const AddAbilityCardToDeck = async ({ cardId, deckId }: { cardId: string, deckId: string }) => {
-    const deckData = await GetDeckData(deckId)
-    const user = await getUser()
-
-    const numberOfExemplary = deckData?.ability.filter(c => c === cardId) ? deckData?.ability.filter(c => c === cardId).length : 0
-    const maxPerDeck = AbilityCardsList.find((a) => a.key === cardId)?.maxInDeck
-
-    if (user && deckData && deckData.ability.length < 6 && maxPerDeck) {
-        if (maxPerDeck > numberOfExemplary) {
-            return prisma.deck.update({
-                where: {
-                    id: deckId
-                },
-                data: {
-                    ability: {
-                        push: cardId
-                    }
-                }
-            })
-        }
-    }
-
-}
-
-export const RemoveAbilityCardFromDeck = async ({ cardId, deckId }: { cardId: string, deckId: string }) => {
-
-    const deckData = await GetDeckData(deckId)
-    const user = await getUser()
-
-    if (user && deckData) {
-
-        const index = deckData?.ability.indexOf(cardId)
-        deckData?.ability.splice(index, 1)
-
-        return prisma.deck.update({
-            where: {
-                id: deckId,
-                userId: user.id
-            },
-            data: {
-                ability: deckData?.ability
-            }
-        })
+            .where(and(eq(deck.id, deckId), eq(deck.userId, currentUser.id)))
     }
 }
 
-export const AddExclusiveAbilityCardToDeck = async ({ cardId, deckId }: { cardId: string, deckId: string }) => {
+export const AddAbilityCardToDeck = async ({
+    cardId,
+    deckId,
+}: {
+    cardId: string
+    deckId: string
+}) => {
+    const currentUser = await getUser()
     const deckData = await GetDeckData(deckId)
-    const user = await getUser()
+    if (!currentUser || !deckData) return undefined
 
+    // Nombre d'exemplaires déjà présents
+    const currentCount = deckData.ability.filter((c) => c === cardId).length
+    const maxPerDeck = AbilityCardsList.find((a) => a.key === cardId)?.maxInDeck ?? 0
 
-    const numberOfExemplary = deckData?.exclusiveAbilities.filter(c => c === cardId) ? deckData?.exclusiveAbilities.filter(c => c === cardId).length : 0
-    const maxPerDeck = ExclusiveAbilitiesList.find((a) => a.key === cardId)?.maxInDeck
+    // Limites : max 6 cartes dans le deck et maxParCarte
+    if (deckData.ability.length >= 6 || currentCount >= maxPerDeck) return undefined
 
-    if (user && maxPerDeck && deckData?.exclusiveAbilities && deckData.exclusiveAbilities.length < 3) {
-        if (numberOfExemplary < maxPerDeck) {
-            return prisma.deck.update({
-                where: {
-                    id: deckId,
-                    userId: user.id
-                },
-                data: {
-                    exclusiveAbilities: {
-                        push: cardId
-                    }
-                }
-            })
-        }
-    }
+    // Nouveau tableau ability
+    const newAbility = [...deckData.ability, cardId]
 
+    const updated = await db
+        .update(deck)
+        .set({ ability: newAbility })
+        .where(eq(deck.id, deckId))
+        .returning({ ability: deck.ability, id: deck.id })
+
+    return updated[0]
 }
 
-export const RemoveExclusiveAbilityCardFromDeck = async ({ cardId, deckId }: { cardId: string, deckId: string }) => {
+export const RemoveAbilityCardFromDeck = async ({
+    cardId,
+    deckId,
+}: {
+    cardId: string
+    deckId: string
+}) => {
+    const currentUser = await getUser()
     const deckData = await GetDeckData(deckId)
-    const user = await getUser()
+    if (!currentUser || !deckData) return undefined
 
-    if (user && deckData) {
-
-        const index = deckData?.exclusiveAbilities.indexOf(cardId)
-        deckData?.exclusiveAbilities.splice(index, 1)
-
-        return prisma.deck.update({
-            where: {
-                id: deckId,
-                userId: user.id
-            },
-            data: {
-                exclusiveAbilities: deckData.exclusiveAbilities
-            }
-        })
+    // Supprimer seulement **une occurrence** de la carte
+    const newAbility = [...deckData.ability]
+    const index = newAbility.indexOf(cardId)
+    if (index !== -1) {
+        newAbility.splice(index, 1)
     }
+
+    const updated = await db
+        .update(deck)
+        .set({ ability: newAbility })
+        .where(and(eq(deck.id, deckId), eq(deck.userId, currentUser.id)))
+        .returning({ ability: deck.ability, id: deck.id })
+
+    return updated[0]
 }
 
-export const AddGateCardToDeck = async ({ cardId, deckId }: { cardId: string, deckId: string }) => {
+export const AddExclusiveAbilityCardToDeck = async ({
+    cardId,
+    deckId,
+}: {
+    cardId: string
+    deckId: string
+}) => {
+    const currentUser = await getUser()
     const deckData = await GetDeckData(deckId)
-    const user = await getUser()
+    if (!currentUser || !deckData) return undefined
 
-    const cardInDeck = deckData?.gateCards
-    const exemplaries = cardInDeck ? cardInDeck?.filter((c) => c === cardId).length : 0
+    const currentCount = deckData.exclusiveAbilities.filter((c) => c === cardId).length
+    const maxPerDeck = ExclusiveAbilitiesList.find((a) => a.key === cardId)?.maxInDeck ?? 0
+
+    // Vérifie limites
+    if (deckData.exclusiveAbilities.length >= 3 || currentCount >= maxPerDeck) return undefined
+
+    // Nouveau tableau avec la carte ajoutée
+    const newExclusiveAbilities = [...deckData.exclusiveAbilities, cardId]
+
+    const updated = await db
+        .update(deck)
+        .set({ exclusiveAbilities: newExclusiveAbilities })
+        .where(and(eq(deck.id, deckId), eq(deck.userId, currentUser.id)))
+        .returning({ exclusiveAbilities: deck.exclusiveAbilities, id: deck.id })
+
+    return updated[0]
+}
+
+export const RemoveExclusiveAbilityCardFromDeck = async ({
+    cardId,
+    deckId,
+}: {
+    cardId: string
+    deckId: string
+}) => {
+    const currentUser = await getUser()
+    const deckData = await GetDeckData(deckId)
+    if (!currentUser || !deckData) return undefined
+
+    // Supprimer une seule occurrence
+    const newExclusiveAbilities = [...deckData.exclusiveAbilities]
+    const index = newExclusiveAbilities.indexOf(cardId)
+    if (index !== -1) {
+        newExclusiveAbilities.splice(index, 1)
+    }
+
+    const updated = await db
+        .update(deck)
+        .set({ exclusiveAbilities: newExclusiveAbilities })
+        .where(and(eq(deck.id, deckId), eq(deck.userId, currentUser.id)))
+        .returning({ exclusiveAbilities: deck.exclusiveAbilities, id: deck.id })
+
+    return updated[0]
+}
+
+export const AddGateCardToDeck = async ({
+    cardId,
+    deckId,
+}: {
+    cardId: string
+    deckId: string
+}) => {
+    const currentUser = await getUser()
+    const deckData = await GetDeckData(deckId)
+    if (!currentUser || !deckData) return undefined
+
+    const cardInDeck = deckData.gateCards
+    const currentCount = cardInDeck.filter((c) => c === cardId).length
     const card = GateCardsList.find((c) => c.key === cardId)
-    const maxPerDeck = card?.maxInDeck
+    if (!card) return undefined
 
-    const attribut = BakuganList.filter((b) => deckData?.bakugans.includes(b.key)).map((a) => a.attribut)
-    const compatibleAttribut = card?.attribut && attribut.includes(card?.attribut)
+    const maxPerDeck = card.maxInDeck ?? 0
 
-    if (user && cardInDeck && cardInDeck.length < 5 && maxPerDeck && deckData.bakugans.length > 0) {
-        if (exemplaries < maxPerDeck) {
-            if (compatibleAttribut || compatibleAttribut === undefined) {
-                return prisma.deck.update({
-                    where: {
-                        id: deckId,
-                        userId: user.id
-                    },
-                    data: {
-                        gateCards: {
-                            push: cardId
-                        }
-                    }
-                })
-            }
-        }
+    // Vérifier compatibilité attribut
+    const bakuganAttributes = BakuganList.filter((b) => deckData.bakugans.includes(b.key)).map(
+        (b) => b.attribut
+    )
+    const compatibleAttribute = card.attribut ? bakuganAttributes.includes(card.attribut) : true
 
-    }
+    if (
+        cardInDeck.length >= 5 ||
+        currentCount >= maxPerDeck ||
+        deckData.bakugans.length === 0 ||
+        !compatibleAttribute
+    )
+        return undefined
+
+    const newGateCards = [...deckData.gateCards, cardId]
+
+    const updated = await db
+        .update(deck)
+        .set({ gateCards: newGateCards })
+        .where(and(eq(deck.id, deckId), eq(deck.userId, currentUser.id)))
+        .returning({ gateCards: deck.gateCards, id: deck.id })
+
+    return updated[0]
 }
 
-export const RemoveGateCardToDeck = async ({ cardId, deckId }: { cardId: string, deckId: string }) => {
-
+export const RemoveGateCardFromDeck = async ({
+    cardId,
+    deckId,
+}: {
+    cardId: string
+    deckId: string
+}) => {
+    const currentUser = await getUser()
     const deckData = await GetDeckData(deckId)
-    const user = await getUser()
+    if (!currentUser || !deckData) return undefined
 
-    if (user && deckData) {
-        const index = deckData?.gateCards.indexOf(cardId)
-        deckData?.gateCards.splice(index, 1)
-
-        return prisma.deck.update({
-            where: {
-                id: deckId,
-                userId: user.id
-            },
-            data: {
-                gateCards: deckData.gateCards
-            }
-        })
+    // Supprimer une seule occurrence
+    const newGateCards = [...deckData.gateCards]
+    const index = newGateCards.indexOf(cardId)
+    if (index !== -1) {
+        newGateCards.splice(index, 1)
     }
+
+    const updated = await db
+        .update(deck)
+        .set({ gateCards: newGateCards })
+        .where(and(eq(deck.id, deckId), eq(deck.userId, currentUser.id)))
+        .returning({ gateCards: deck.gateCards, id: deck.id })
+
+    return updated[0]
 }

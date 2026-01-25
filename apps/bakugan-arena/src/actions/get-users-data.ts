@@ -1,30 +1,28 @@
 'use server'
 
-
-import prisma from "@bakugan-arena/prisma"
+import { db } from "../lib/db"
+import { user } from "@bakugan-arena/drizzle-orm"
+import { eq, not, like, and } from "drizzle-orm"
 import { getUser } from "./getUserSession"
 
-
 export const FindUser = async ({ displayUserName }: { displayUserName: string }) => {
-    const user = await getUser()
+  const currentUser = await getUser()
 
-    if(displayUserName === '') return []
+  if (!displayUserName) return []
 
-    return await prisma.user.findMany({
-        where: {
-            displayUsername: {
-                startsWith: displayUserName,
-            },
-            id: {
-                not: user ? user.id : undefined
-            }
-        },
-        select: {
-            displayUsername: true,
-            id: true
-        }
-    })
+  const conditions = [like(user.displayUsername, `${displayUserName}%`)]
 
+  if (currentUser) {
+    conditions.push(not(eq(user.id, currentUser.id)))
+  }
+
+  return await db.query.user.findMany({
+    where: and(...conditions), // ✅ combine toutes les conditions
+    columns: {
+      displayUsername: true,
+      id: true
+    }
+  })
 }
 
 export type findUserType = Exclude<Awaited<ReturnType<typeof FindUser>>, undefined>

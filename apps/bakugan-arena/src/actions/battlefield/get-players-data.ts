@@ -1,80 +1,79 @@
 'use server'
 
-import prisma from "@bakugan-arena/prisma"
+import { db } from "@/src/lib/db"
+import { rooms, deck, user } from "@bakugan-arena/drizzle-orm"
+import { eq } from "drizzle-orm"
 
 export const RoomDataAction = async (roomId: string) => {
-    const room = await prisma.rooms.findUnique({
-        where: {
-            id: roomId
-        },
-        select: {
-            player1Id: true,
-            p1Deck: true,
-            player2Id: true,
-            p2Deck: true
-        }
-    })
+  // 1️⃣ Récupérer la room
+  const roomData = await db.query.rooms.findFirst({
+    where: (r, { eq }) => eq(r.id, roomId),
+    columns: {
+      player1Id: true,
+      p1Deck: true,
+      player2Id: true,
+      p2Deck: true,
+    },
+  })
 
-    if (room != null) {
-        const player1 = await prisma.user.findUnique({
-            where: {
-                id: room.player1Id
-            },
-            select: {
-                image: true,
-                displayUsername: true,
-                id: true
-            }
-        })
+  if (!roomData) return undefined
 
-        const deckP1 = await prisma.deck.findUnique({
-            where: {
-                id: room.p1Deck
-            },
-            select: {
-                bakugans: true,
-                ability: true,
-                exclusiveAbilities: true,
-                gateCards: true
-            }
-        })
+  const { player1Id, player2Id, p1Deck, p2Deck } = roomData
 
-        const player2 = await prisma.user.findUnique({
-            where: {
-                id: room.player2Id
-            },
-            select: {
-                image: true,
-                displayUsername: true,
-                id: true
-            }
-        })
+  // 2️⃣ Récupérer les joueurs
+  const [player1, player2] = await Promise.all([
+    db.query.user.findFirst({
+      where: (u, { eq }) => eq(u.id, player1Id),
+      columns: {
+        id: true,
+        image: true,
+        displayUsername: true,
+      },
+    }),
+    db.query.user.findFirst({
+      where: (u, { eq }) => eq(u.id, player2Id),
+      columns: {
+        id: true,
+        image: true,
+        displayUsername: true,
+      },
+    }),
+  ])
 
-        const deckP2 = await prisma.deck.findUnique({
-            where: {
-                id: room.p2Deck
-            },
-            select: {
-                bakugans: true,
-                ability: true,
-                exclusiveAbilities: true,
-                gateCards: true
-            }
-        })
+  if (!player1 || !player2) return undefined
 
-        if (player1 && player2 && deckP1 && deckP2) {
-            const roomData = [{
-                player: player1,
-                deck: deckP1
-            },
-            {
-                player: player2,
-                deck: deckP2
-            }]
+  // 3️⃣ Récupérer les decks
+  const [deckP1, deckP2] = await Promise.all([
+    db.query.deck.findFirst({
+      where: (d, { eq }) => eq(d.id, p1Deck),
+      columns: {
+        bakugans: true,
+        ability: true,
+        exclusiveAbilities: true,
+        gateCards: true,
+      },
+    }),
+    db.query.deck.findFirst({
+      where: (d, { eq }) => eq(d.id, p2Deck),
+      columns: {
+        bakugans: true,
+        ability: true,
+        exclusiveAbilities: true,
+        gateCards: true,
+      },
+    }),
+  ])
 
-            return roomData
-        }
-    }
+  if (!deckP1 || !deckP2) return undefined
+
+  // 4️⃣ Construire la structure finale
+  return [
+    { player: player1, deck: deckP1 },
+    { player: player2, deck: deckP2 },
+  ]
 }
 
-export type RoomDataActionType = Exclude<Awaited<ReturnType<typeof RoomDataAction>>, undefined>
+export type RoomDataActionType = Exclude<
+  Awaited<ReturnType<typeof RoomDataAction>>,
+  undefined
+>

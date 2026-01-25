@@ -1,22 +1,25 @@
 'use server'
 
-import prisma from "@/src/lib/prisma"
+import { db } from "@/src/lib/db"
+import { deck } from "@bakugan-arena/drizzle-orm"
 import { getUser } from "../getUserSession"
 
 export const CreateDeckAction = async () => {
+  const currentUser = await getUser()
 
-    const user = await getUser()
+  if (!currentUser) return undefined
 
-    if (user) {
+  const result = await db
+    .insert(deck)
+    .values({
+      name: "New Deck",
+      userId: currentUser.id,
+      bakugans: [],
+      ability: [],
+      exclusiveAbilities: [],
+      gateCards: [],
+    })
+    .returning({ id: deck.id }) // ✅ récupérer l'id généré
 
-        const newDeck = await prisma.deck.create({
-            data: {
-                name: "New Deck",
-                userId: user.id
-            }
-        })
-
-        const id = newDeck.id
-        return id
-    }
-} 
+  return result[0]?.id
+}

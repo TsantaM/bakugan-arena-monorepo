@@ -75,7 +75,7 @@ export default function ManageBakugansInDeck({ deckId, bakugans }: { deckId: str
                                         variant="outline"
                                         role="combobox"
                                         aria-expanded={open}
-                                        className="w-[200px] lg:w-[300px] justify-between"
+                                        className="w-50 lg:w-75 justify-between"
                                         disabled={addBakuganToDeckMutation.isPending || bakugans?.length === 3 ? true : false}
                                     >
                                         {value ? (
@@ -102,7 +102,7 @@ export default function ManageBakugansInDeck({ deckId, bakugans }: { deckId: str
                                         <ChevronsUpDown className="opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-[200px] lg:w-[300px] p-0">
+                                <PopoverContent className="w-50 lg:w-75 p-0">
                                     <Command>
                                         <CommandInput placeholder="Search Bakugan..." className="h-9" />
                                         <CommandList>
