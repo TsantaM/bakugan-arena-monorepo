@@ -1,8 +1,6 @@
 'use server'
 
 import { db } from "@/src/lib/db"
-import { rooms, deck, user } from "@bakugan-arena/drizzle-orm"
-import { eq } from "drizzle-orm"
 
 export const RoomDataAction = async (roomId: string) => {
   // 1️⃣ Récupérer la room

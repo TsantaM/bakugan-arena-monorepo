@@ -1,9 +1,11 @@
 'use server'
 
 import { db } from "../lib/db"
-import { user } from "@bakugan-arena/drizzle-orm"
+import { schema } from "@bakugan-arena/drizzle-orm"
 import { eq, not, like, and } from "drizzle-orm"
 import { getUser } from "./getUserSession"
+
+const user = schema.user
 
 export const FindUser = async ({ displayUserName }: { displayUserName: string }) => {
   const currentUser = await getUser()

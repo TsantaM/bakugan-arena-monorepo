@@ -1,8 +1,10 @@
 'use server'
 
 import { db } from "@/src/lib/db"
-import { deck } from "@bakugan-arena/drizzle-orm"
+import { schema } from "@bakugan-arena/drizzle-orm"
 import { getUser } from "../getUserSession"
+
+const deck = schema.deck
 
 export const CreateDeckAction = async () => {
   const currentUser = await getUser()

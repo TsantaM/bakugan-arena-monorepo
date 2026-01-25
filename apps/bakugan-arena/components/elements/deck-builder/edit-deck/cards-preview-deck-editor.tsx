@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Toaster } from "@/components/ui/sonner";
-import { RemoveAbilityCardFromDeck, RemoveExclusiveAbilityCardFromDeck, RemoveGateCardToDeck } from "@/src/actions/deck-builder/edit-deck-action";
+import { RemoveAbilityCardFromDeck, RemoveExclusiveAbilityCardFromDeck, RemoveGateCardFromDeck } from "@/src/actions/deck-builder/edit-deck-action";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Trash } from "lucide-react";
 import Image from "next/image";
@@ -103,7 +103,7 @@ export function GateCardPreviewDeckEditor({ id, deckId, nom, description }: { id
     const queryClient = useQueryClient()
 
     const RemoveGateCardFromDeckFunction = async () => {
-        return await RemoveGateCardToDeck({ cardId: id, deckId })
+        return await RemoveGateCardFromDeck({ cardId: id, deckId })
     }
 
     const RemoveGateCardDeckMutation = useMutation({

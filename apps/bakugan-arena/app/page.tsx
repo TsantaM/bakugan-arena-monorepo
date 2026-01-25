@@ -16,7 +16,7 @@ export default async function Home() {
     <>
       <Header />
 
-      <section className="flex-1 min-h-0 lg:w-full flex flex-col lg:flex-row items-center md:items-start justify-center lg:items-center bg-background px-10 py-5 gap-5">
+      <section className="flex-1 min-h-0 w-[75%] lg:w-full flex flex-col lg:flex-row items-center md:items-start justify-center lg:items-center bg-background px-10 py-5 gap-5">
 
         <div className="flex flex-col items-center md:items-start gap-5">
           <div>

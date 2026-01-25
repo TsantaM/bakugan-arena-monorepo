@@ -3,10 +3,12 @@
 import { editDeckName_type } from "@/components/elements/deck-builder/edit-deck"
 import { getUser } from "../getUserSession"
 import { db } from "@/src/lib/db"
-import { deck } from "@bakugan-arena/drizzle-orm"
+import { schema } from "@bakugan-arena/drizzle-orm"
 import { eq, and } from "drizzle-orm"
 import { GetDeckData } from "./get-deck-data"
 import { AbilityCardsList, BakuganList, ExclusiveAbilitiesList, GateCardsList } from "@bakugan-arena/game-data"
+
+const deck = schema.deck
 
 export const EditDeckNameAction = async ({
     id,
