@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io/dist";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { CheckBattleStillInProcess, CreateActionRequestFunction, handleBattle, handleGateCards, Message, turnCountSocketProps, updateTurnState } from "@bakugan-arena/game-data";
-import { CheckGameFinished } from "@bakugan-arena/prisma";
+import { CheckGameFinished } from "../functions/CheckGameFinished";
 import { onBattleEnd } from "../functions/on-battle-end";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { ClearDomain } from "../functions/clear-domain";

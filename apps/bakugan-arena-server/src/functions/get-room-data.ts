@@ -1,91 +1,80 @@
-import prisma from "@bakugan-arena/prisma"
 
-export const getDecksDataPrisma = async ({ roomId }: { roomId: string }) => {
-    const roomData = await prisma.rooms.findUnique({
-        where: {
-            id: roomId
-        },
-        select: {
-            player1Id: true,
-            p1Deck: true,
-            player2Id: true,
-            p2Deck: true
-        }
-    })
+import { schema } from "@bakugan-arena/drizzle-orm"
+import { eq, inArray } from "drizzle-orm"
+import { db } from "../lib/db"
 
-    if (roomData) {
-        const players = [roomData.player1Id, roomData.player2Id]
-        const decksIds = [roomData.p1Deck, roomData.p2Deck]
-        const getDecksData = await prisma.deck.findMany({
-            where: {
-                id: {
-                    in: decksIds
-                },
-                userId: {
-                    in: players
-                }
-            },
-            select: {
-                id: true,
-                userId: true,
-                bakugans: true,
-                ability: true,
-                exclusiveAbilities: true,
-                gateCards: true
-            }
-        })
+const rooms = schema.rooms
 
-        return getDecksData
-    }
+export const getDecksData = async ({ roomId }: { roomId: string }) => {
+  const roomData = await db.query.rooms.findFirst({
+    where: (r) => eq(r.id, roomId),
+    columns: {
+      player1Id: true,
+      player2Id: true,
+      p1Deck: true,
+      p2Deck: true,
+    },
+  })
 
+  if (!roomData) return undefined
+
+  const players = [roomData.player1Id, roomData.player2Id]
+  const decksIds = [roomData.p1Deck, roomData.p2Deck]
+
+  return db.query.deck.findMany({
+    where: (d) =>
+      inArray(d.id, decksIds) &&
+      inArray(d.userId, players),
+    columns: {
+      id: true,
+      userId: true,
+      bakugans: true,
+      ability: true,
+      exclusiveAbilities: true,
+      gateCards: true,
+    },
+  })
 }
 
-export type getDecksDataPrismaType = Exclude<Awaited<ReturnType<typeof getDecksDataPrisma>>, undefined>
-
+export type GetDecksDataType = Exclude<
+  Awaited<ReturnType<typeof getDecksData>>,
+  undefined
+>
 
 export const getRoomPlayers = async ({ roomId }: { roomId: string }) => {
-    const room = await prisma.rooms.findUnique({
-        where: {
-            id: roomId
-        },
-        select: {
-            player1Id: true,
-            player2Id: true
-        }
-    })
+  const room = await db.query.rooms.findFirst({
+    where: (r) => eq(r.id, roomId),
+    columns: {
+      player1Id: true,
+      player2Id: true,
+    },
+  })
 
-    if (room && room != null) {
-        const player1 = await prisma.user.findUnique({
-            where: {
-                id: room.player1Id
-            },
-            select: {
-                id: true,
-                displayUsername: true
-            }
-        })
+  if (!room) return undefined
 
-        const player2 = await prisma.user.findUnique({
-            where: {
-                id: room.player2Id
-            },
-            select: {
-                id: true,
-                displayUsername: true
-            }
-        })
+  const player1 = await db.query.user.findFirst({
+    where: (u) => eq(u.id, room.player1Id),
+    columns: {
+      id: true,
+      displayUsername: true,
+    },
+  })
 
-        return {
-            "player1": {
-                player1
-            },
+  const player2 = await db.query.user.findFirst({
+    where: (u) => eq(u.id, room.player2Id),
+    columns: {
+      id: true,
+      displayUsername: true,
+    },
+  })
 
-            "player2": {
-                player2
-            }
-        }
-    }
-
+  return {
+    player1,
+    player2,
+  }
 }
 
-export type getRoomPlayersType = Exclude<Awaited<ReturnType<typeof getRoomPlayers>>, undefined>
+export type GetRoomPlayersType = Exclude<
+  Awaited<ReturnType<typeof getRoomPlayers>>,
+  undefined
+>

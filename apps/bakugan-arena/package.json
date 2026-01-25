@@ -14,9 +14,6 @@
     "next": "15.4.8",
     "react": "19.1.0"
   },
-  "engines": {
-    "node": "20.x"
-  },
   "dependencies": {
     "@bakugan-arena/drizzle-orm": "workspace:*",
     "@bakugan-arena/game-data": "workspace:*",

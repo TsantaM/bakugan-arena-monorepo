@@ -1,11 +1,11 @@
 import { AbilityCardsList, BakuganList, ExclusiveAbilitiesList, GateCardsList, portalSlotsType, SelectableGateCardAction, stateType, turnStateType } from "@bakugan-arena/game-data"
-import { getDecksDataPrisma, getRoomPlayers } from "./get-room-data"
+import { getDecksData, getRoomPlayers } from "./get-room-data"
 
 export const createGameState = async ({ roomId }: { roomId: string }) => {
-    const decksData = await getDecksDataPrisma({ roomId })
+    const decksData = await getDecksData({ roomId })
     const players = await getRoomPlayers({ roomId })
 
-    if (decksData && players && players.player1.player1 && players.player2.player2) {
+    if (decksData && players && players.player1 && players.player2) {
         const decksState = decksData.map((deck) => {
             const bakugans = deck.bakugans.map((b) => {
 
@@ -165,22 +165,22 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
 
         const playersState = [
             {
-                userId: players.player1.player1.id,
+                userId: players.player1.id,
                 usable_gates: 3,
                 usable_abilitys: 3,
-                username: players.player1.player1.displayUsername || ''
+                username: players.player1.displayUsername || ''
             },
             {
-                userId: players.player2.player2.id,
+                userId: players.player2.id,
                 usable_gates: 3,
                 usable_abilitys: 3,
-                username: players.player2.player2.displayUsername || ''
+                username: players.player2.displayUsername || ''
             }
         ]
 
         const turnState: turnStateType = {
-            turn: players.player1.player1?.id ? players.player1.player1?.id : '',
-            previous_turn: players.player2.player2?.id ? players.player2.player2?.id : '',
+            turn: players.player1.id ? players.player1.id : '',
+            previous_turn: players.player2.id ? players.player2.id : '',
             turnCount: 0,
             set_new_gate: true,
             set_new_bakugan: false,
@@ -196,8 +196,8 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
         }
         // Just for checking state type this const state will never be used
 
-        const p1Deck = decksData.find((deck) => deck.userId === players.player1.player1?.id)
-        const p2Deck = decksData.find((deck) => deck.userId === players.player2.player2?.id)
+        const p1Deck = decksData.find((deck) => deck.userId === players.player1?.id)
+        const p2Deck = decksData.find((deck) => deck.userId === players.player2?.id)
 
         if (!p1Deck) return
         if (!p2Deck) return
