@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "pnpm --filter @bakugan-arena/game-data build && tsc && vite build",
     "preview": "vite preview"
   },
   "packageManager": "pnpm@10.15.0",
