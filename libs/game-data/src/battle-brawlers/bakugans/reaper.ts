@@ -19,7 +19,7 @@ export const ReaperGateCard: gateCardType = {
     name: 'Charachter: Reaper',
     maxInDeck: 1,
     family: 'Reaper',
-    description: `Lorsque cette carte est activée elle double le niveau de tous les Reaper présent sur elle`,
+    description: `When this card is activated, it doubles the level of all Reaper on it.`,
     image: 'reaper.png',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'reaper-gate-card')

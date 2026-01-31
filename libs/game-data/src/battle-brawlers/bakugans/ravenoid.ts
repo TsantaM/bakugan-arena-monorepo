@@ -42,7 +42,7 @@ export const RavenoidGateCard: gateCardType = {
     name: 'Charachter: Ravenoid',
     maxInDeck: 1,
     family: 'Ravenoid',
-    description: `Lorsque cette carte est activée elle double le niveau de tous les Ravenoid présent sur elle`,
+    description: `When this card is activated, it doubles the level of all Ravenoid on it.`,
     image: 'ravenoid.png',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'ravenoid-gate-card')

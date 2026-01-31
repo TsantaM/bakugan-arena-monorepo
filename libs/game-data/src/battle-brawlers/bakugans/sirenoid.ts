@@ -19,7 +19,7 @@ export const SirenoidGateCard: gateCardType = {
     name: 'Charachter: Sirenoid',
     maxInDeck: 1,
     family: 'sirenoid',
-    description: `Lorsque cette carte est activée elle double le niveau de tous les Sirenoid présent sur elle`,
+    description: `When this card is activated, it doubles the level of all Sirenoid on it.`,
     image: 'sirenoid.png',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'sirenoid-gate-card')

@@ -17,7 +17,7 @@ export const FortressGateCard: gateCardType = {
     key: 'fortress-gate-card',
     name: 'Charachter: Fortress',
     maxInDeck: 1,
-    description: `Lorsque cette carte est activée elle double le niveau de tous les Fortress présent sur elle`,
+    description: `When this card is activated, it doubles the level of all Fortress on it.`,
     image: GateCardImages.caracter,
     family: 'Fortress',
     onOpen({ roomState, slot }) {

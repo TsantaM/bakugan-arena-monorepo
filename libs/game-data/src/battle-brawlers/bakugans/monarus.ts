@@ -18,7 +18,7 @@ export const MonarusGateCard: gateCardType = {
     name: 'Charachter: Monarus',
     maxInDeck: 1,
     family: 'Monarus',
-    description: `Lorsque cette carte est activée elle double le niveau de tous les Monarus présent sur elle`,
+    description: `When this card is activated, it doubles the level of all Monarus on it.`,
     image: 'monarus.png',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'monarus-gate-card')

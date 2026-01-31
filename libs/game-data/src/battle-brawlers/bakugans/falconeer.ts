@@ -30,7 +30,7 @@ export const FalconeerGateCard: gateCardType = {
     name: 'Charachter: Falconeer',
     maxInDeck: 1,
     image: 'falconeer.png',
-    description: `Lorsque cette carte est activée elle double le niveau de tous les Falconneer présent sur elle`,
+    description: `When this card is activated, it doubles the level of all Falconeer on it.`,
     family: 'Falconeer',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'falconeer-gate-card')

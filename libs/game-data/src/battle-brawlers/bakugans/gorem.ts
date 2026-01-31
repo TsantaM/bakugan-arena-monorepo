@@ -30,7 +30,7 @@ export const GoremGateCard: gateCardType = {
     name: 'Charachter: Gorem',
     maxInDeck: 1,
     family: 'Gorem',
-    description: `Lorsque cette carte est activée elle double le niveau de tous les Gorem présent sur elle`,
+    description: `When this card is activated, it doubles the level of all Gorem on it.`,
     image: 'gorem.jpg',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'gorem-gate-card')

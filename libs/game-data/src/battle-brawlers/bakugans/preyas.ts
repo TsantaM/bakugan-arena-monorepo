@@ -19,7 +19,7 @@ export const PreyasGateCard: gateCardType = {
     name: 'Charachter: Preyas',
     maxInDeck: 1,
     family: 'Preyas',
-    description: `Lorsque cette carte est activée elle double le niveau de tous les Preyas présent sur elle`,
+    description: `When this card is activated, it doubles the level of all Preyas on it.`,
     image: 'preyas.png',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'preyas-gate-card')
@@ -59,7 +59,7 @@ export const DiabloGateCard: gateCardType = {
     name: 'Charachter: Diablo',
     maxInDeck: 1,
     family: 'Diablo',
-    description: `Lorsque cette carte est activée elle double le niveau de tous les Diablo présent sur elle`,
+    description: `When this card is activated, it doubles the level of all Diablo on it.`,
     image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'diablo-gate-card')
@@ -101,7 +101,7 @@ export const AngeloGateCard: gateCardType = {
     name: 'Charachter: Angelo',
     maxInDeck: 1,
     family: 'Angelo',
-    description: `Lorsque cette carte est activée elle double le niveau de tous les Angelo présent sur elle`,
+    description: `When this card is activated, it doubles the level of all Angelo on it.`,
     image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'angelo-gate-card')

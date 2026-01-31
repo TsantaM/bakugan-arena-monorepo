@@ -19,7 +19,7 @@ export const LimulusGateCard: gateCardType = {
     name: 'Charachter: Limulus',
     maxInDeck: 1,
     family: 'Limulus',
-    description: `Lorsque cette carte est activée elle double le niveau de tous les Limulus présent sur elle`,
+    description: `When this card is activated, it doubles the level of all Limulus on it.`,
     image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'limulus-gate-card')

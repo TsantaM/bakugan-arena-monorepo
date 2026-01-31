@@ -44,7 +44,7 @@ export const DragonoidGateCard: gateCardType = {
     name: 'Charachter: Dragonoid',
     maxInDeck: 1,
     image: 'dragonoid.png',
-    description: `Lorsque cette carte est activée elle double le niveau de tous les Dragonoid présent sur elle`,
+    description: `When this card is activated, it doubles the level of all Dragonoid on it.`,
     family: 'Dragonoid',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'dragonoid-gate-card')

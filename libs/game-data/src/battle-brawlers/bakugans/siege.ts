@@ -54,7 +54,7 @@ export const SiegeGateCard: gateCardType = {
     name: 'Charachter: Siege',
     maxInDeck: 1,
     family: 'Siege',
-    description: `Lorsque cette carte est activée elle double le niveau de tous les Siege présent sur elle`,
+    description: `When this card is activated, it doubles the level of all Siege on it.`,
     image: 'siege.png',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'siege-gate-card')

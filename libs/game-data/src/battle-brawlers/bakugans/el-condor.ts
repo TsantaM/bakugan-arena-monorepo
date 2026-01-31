@@ -43,7 +43,7 @@ export const ElCondorGateCard: gateCardType = {
     name: 'Charachter: El Condor',
     maxInDeck: 1,
     image: GateCardImages.caracter,
-    description: `Lorsque cette carte est activée elle double le niveau de tous les El Condor présent sur elle`,
+    description: `When this card is activated, it doubles the level of all El Condor on it.`,
     family: 'El Condor',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'el-condor-gate-card')

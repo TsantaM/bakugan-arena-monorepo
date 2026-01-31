@@ -29,7 +29,7 @@ export const GarganoidGateCard: gateCardType = {
     key: 'garganoid-gate-card',
     name: 'Charachter: Garganoid',
     maxInDeck: 1,
-    description: `Lorsque cette carte est activée elle double le niveau de tous les Garganoid présent sur elle`,
+    description: `When this card is activated, it doubles the level of all Garganoid on it.`,
     image: GateCardImages.caracter,
     family: 'Garganoid',
     onOpen({ roomState, slot }) {

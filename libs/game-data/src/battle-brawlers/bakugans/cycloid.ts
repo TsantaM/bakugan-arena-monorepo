@@ -19,7 +19,7 @@ export const CycloidGateCard: gateCardType = {
     name: 'Charachter: Cycloid',
     maxInDeck: 1,
     family: 'Cycloid',
-    description: `Lorsque cette carte est activée elle double le niveau de tous les Cycloid présent sur elle`,
+    description: `When this card is activated, it doubles the level of all Cycloid on it.`,
     image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'cycloid-gate-card')

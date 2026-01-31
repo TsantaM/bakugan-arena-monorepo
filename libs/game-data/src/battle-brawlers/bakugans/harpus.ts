@@ -18,7 +18,7 @@ export const HarpusGateCard: gateCardType = {
     name: 'Charachter: Gorem',
     maxInDeck: 1,
     family: 'Harpus',
-    description: `Lorsque cette carte est activée elle double le niveau de tous les Harpus présent sur elle`,
+    description: `When this card is activated, it doubles the level of all Harpus on it.`,
     image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'harpus-gate-card')

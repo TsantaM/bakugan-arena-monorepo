@@ -19,7 +19,7 @@ export const TentaclearGateCard: gateCardType = {
     name: 'Charachter: Tentaclear',
     maxInDeck: 1,
     family: 'Tentaclear',
-    description: `Lorsque cette carte est activée elle double le niveau de tous les Tentaclear présent sur elle`,
+    description: `When this card is activated, it doubles the level of all Tentaclear on it.`,
     image: 'tentaclear.png',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'tentaclear-gate-card')

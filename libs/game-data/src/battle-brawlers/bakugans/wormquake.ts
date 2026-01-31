@@ -31,7 +31,7 @@ export const WormquakeGateCard: gateCardType = {
     name: 'Charachter: Wormquake',
     maxInDeck: 1,
     family: 'Wormquake',
-    description: `Lorsque cette carte est activée elle double le niveau de tous les Wormquake présent sur elle`,
+    description: `When this card is activated, it doubles the level of all Wormquake on it.`,
     image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'wormquake-gate-card')

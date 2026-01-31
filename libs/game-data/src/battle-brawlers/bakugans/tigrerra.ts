@@ -30,7 +30,7 @@ export const TigrerraGateCard: gateCardType = {
     name: 'Charachter: Tigrerra',
     maxInDeck: 1,
     family: 'Tigrerra',
-    description: `Lorsque cette carte est activée elle double le niveau de tous les Tigrerra présent sur elle`,
+    description: `When this card is activated, it doubles the level of all Tigrerra on it.`,
     image: 'tigrerra.png',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'tigrerra-gate-card')

@@ -53,7 +53,7 @@ export const FearReaperGateCard: gateCardType = {
     key: 'fear-reaper-gate-card',
     name: 'Charachter: Fear Reaper',
     maxInDeck: 1,
-    description: `Lorsque cette carte est activée elle double le niveau de tous les Fear Reaper présent sur elle`,
+    description: `When this card is activated, it doubles the level of all Fear Reaper on it.`,
     family: 'Fear Reaper',
     image: 'fear-reaper.png',
     onOpen({ roomState, slot }) {
