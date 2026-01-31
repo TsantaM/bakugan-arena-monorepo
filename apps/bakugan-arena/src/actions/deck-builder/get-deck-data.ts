@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from "@/src/lib/db"
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 import { getUser } from "../getUserSession"
 
 export const GetDeckData = async (id: string) => {
@@ -9,7 +9,7 @@ export const GetDeckData = async (id: string) => {
   if (!currentUser) return undefined
 
   return db.query.deck.findFirst({
-    where: (d) => eq(d.id, id),
+    where: (d) => and(eq(d.id, id), eq(d.userId, currentUser.id)),
     columns: {
       id: true,
       name: true,

@@ -63,72 +63,69 @@ export default function ManageExclusiveAbilityCardsInDeck({ deckId, bakugans, co
 
             <Card>
                 <CardHeader>
-                    <div className="flex items-center justify-between">
-                        <CardTitle>Exclu. Cards</CardTitle>
-                        <div className="flex items-center gap-3">
-                            <p>{exclusiveAbilities ? exclusiveAbilities.length : 0} / 3</p>
-                            <Popover open={open} onOpenChange={setOpen}>
-                                <PopoverTrigger asChild>
-                                    <Button
-                                        variant="outline"
-                                        role="combobox"
-                                        aria-expanded={open}
-                                        className="w-50 lg:w-75 justify-between"
-                                        disabled={addCardToDeckMutation.isPending || exclusiveAbilities?.length === 3 || countBakugans === 0 ? true : false}
-                                    >
-                                        {value ? (
-                                            (() => {
-                                                const selectedCard = notInDeckExclusiveAbilities.find(
-                                                    (b) => b.name === value
-                                                )
+                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+                        <CardTitle>Exclu. Cards {exclusiveAbilities ? exclusiveAbilities.length : 0} / 3</CardTitle>
+                        <Popover open={open} onOpenChange={setOpen}>
+                            <PopoverTrigger asChild>
+                                <Button
+                                    variant="outline"
+                                    role="combobox"
+                                    aria-expanded={open}
+                                    className="w-full lg:w-75 justify-between"
+                                    disabled={addCardToDeckMutation.isPending || exclusiveAbilities?.length === 3 || countBakugans === 0 ? true : false}
+                                >
+                                    {value ? (
+                                        (() => {
+                                            const selectedCard = notInDeckExclusiveAbilities.find(
+                                                (b) => b.name === value
+                                            )
 
-                                                if (!selectedCard) return "Select Ability Cards..."
+                                            if (!selectedCard) return "Select Ability Cards..."
 
-                                                const { name } = selectedCard
+                                            const { name } = selectedCard
 
-                                                return (
-                                                    <>
-                                                        {`${name}`}
-                                                    </>
-                                                )
-                                            })()
-                                        ) : (
-                                            "Select Ability Card..."
-                                        )}
-                                        <ChevronsUpDown className="opacity-50" />
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-50 lg:w-75 p-0">
-                                    <Command>
-                                        <CommandInput placeholder="Search Bakugan..." className="h-9" />
-                                        <CommandList>
-                                            <CommandEmpty>No card found.</CommandEmpty>
-                                            <CommandGroup>
-                                                {notInDeckExclusiveAbilities.map((b, index) => (
-                                                    <CommandItem
-                                                        key={index}
-                                                        value={b.name}
-                                                        onSelect={(currentValue) => {
-                                                            setValue(currentValue === value ? "" : currentValue)
-                                                            setOpen(false)
-                                                            addCardToDeckMutation.mutate(b.key)
-                                                        }}
-                                                    >
-                                                        {b.name}
-                                                        <Check
-                                                            className={cn(
-                                                                "ml-auto",
-                                                                value === b.key ? "opacity-100" : "opacity-0"
-                                                            )}
-                                                        />
-                                                    </CommandItem>
-                                                ))}
-                                            </CommandGroup>
-                                        </CommandList>
-                                    </Command>
-                                </PopoverContent>
-                            </Popover>
-                        </div>
+                                            return (
+                                                <>
+                                                    {`${name}`}
+                                                </>
+                                            )
+                                        })()
+                                    ) : (
+                                        "Select Ability Card..."
+                                    )}
+                                    <ChevronsUpDown className="opacity-50" />
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-50 lg:w-75 p-0">
+                                <Command>
+                                    <CommandInput placeholder="Search Bakugan..." className="h-9" />
+                                    <CommandList>
+                                        <CommandEmpty>No card found.</CommandEmpty>
+                                        <CommandGroup>
+                                            {notInDeckExclusiveAbilities.map((b, index) => (
+                                                <CommandItem
+                                                    key={index}
+                                                    value={b.name}
+                                                    onSelect={(currentValue) => {
+                                                        setValue(currentValue === value ? "" : currentValue)
+                                                        setOpen(false)
+                                                        addCardToDeckMutation.mutate(b.key)
+                                                    }}
+                                                >
+                                                    {b.name}
+                                                    <Check
+                                                        className={cn(
+                                                            "ml-auto",
+                                                            value === b.key ? "opacity-100" : "opacity-0"
+                                                        )}
+                                                    />
+                                                </CommandItem>
+                                            ))}
+                                        </CommandGroup>
+                                    </CommandList>
+                                </Command>
+                            </PopoverContent>
+                        </Popover>
                     </div>
                 </CardHeader>
                 <CardContent className={exclusiveAbilities && exclusiveAbilities?.length > 0 ? "grid grid-cols-1 md:grid-cols-2 gap-3" : ""}>

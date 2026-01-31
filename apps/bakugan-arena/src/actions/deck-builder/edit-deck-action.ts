@@ -24,7 +24,7 @@ export const EditDeckNameAction = async ({
         .update(deck)
         .set({ name: formData.nom })
         .where(and(eq(deck.id, id), eq(deck.userId, currentUser.id)))
-        .returning({ id: deck.id, name: deck.name }) // récupère le nom mis à jour
+        .returning() // récupère le nom mis à jour
 
     return updated[0] // retourne l'objet mis à jour
 }
@@ -59,7 +59,7 @@ export const AddBakuganToDeckAction = async ({
             .update(deck)
             .set({ bakugans: newBakugans })
             .where(and(eq(deck.id, deckId), eq(deck.userId, currentUser.id)))
-            .returning({ bakugans: deck.bakugans, id: deck.id })
+            .returning()
 
         return updated[0]
     }
@@ -146,7 +146,7 @@ export const AddAbilityCardToDeck = async ({
         .update(deck)
         .set({ ability: newAbility })
         .where(eq(deck.id, deckId))
-        .returning({ ability: deck.ability, id: deck.id })
+        .returning()
 
     return updated[0]
 }
@@ -173,7 +173,7 @@ export const RemoveAbilityCardFromDeck = async ({
         .update(deck)
         .set({ ability: newAbility })
         .where(and(eq(deck.id, deckId), eq(deck.userId, currentUser.id)))
-        .returning({ ability: deck.ability, id: deck.id })
+        .returning()
 
     return updated[0]
 }
@@ -202,7 +202,7 @@ export const AddExclusiveAbilityCardToDeck = async ({
         .update(deck)
         .set({ exclusiveAbilities: newExclusiveAbilities })
         .where(and(eq(deck.id, deckId), eq(deck.userId, currentUser.id)))
-        .returning({ exclusiveAbilities: deck.exclusiveAbilities, id: deck.id })
+        .returning()
 
     return updated[0]
 }
@@ -229,7 +229,7 @@ export const RemoveExclusiveAbilityCardFromDeck = async ({
         .update(deck)
         .set({ exclusiveAbilities: newExclusiveAbilities })
         .where(and(eq(deck.id, deckId), eq(deck.userId, currentUser.id)))
-        .returning({ exclusiveAbilities: deck.exclusiveAbilities, id: deck.id })
+        .returning()
 
     return updated[0]
 }
@@ -272,7 +272,7 @@ export const AddGateCardToDeck = async ({
         .update(deck)
         .set({ gateCards: newGateCards })
         .where(and(eq(deck.id, deckId), eq(deck.userId, currentUser.id)))
-        .returning({ gateCards: deck.gateCards, id: deck.id })
+        .returning()
 
     return updated[0]
 }
@@ -299,7 +299,7 @@ export const RemoveGateCardFromDeck = async ({
         .update(deck)
         .set({ gateCards: newGateCards })
         .where(and(eq(deck.id, deckId), eq(deck.userId, currentUser.id)))
-        .returning({ gateCards: deck.gateCards, id: deck.id })
+        .returning()
 
     return updated[0]
 }

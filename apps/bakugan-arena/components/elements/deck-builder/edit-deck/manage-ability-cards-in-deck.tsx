@@ -73,77 +73,74 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
 
             <Card>
                 <CardHeader>
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
                         <CardTitle>
-                            Ability Cards
+                            Ability Cards {abilityCards ? abilityCards?.length : 0} / 6
                         </CardTitle>
-                        <div className="flex items-center gap-3">
-                            <p>{abilityCards ? abilityCards?.length : 0} / 6</p>
-                            <Popover open={open} onOpenChange={setOpen}>
-                                <PopoverTrigger asChild>
-                                    <Button
-                                        variant="outline"
-                                        role="combobox"
-                                        aria-expanded={open}
-                                        className="w-[200px] lg:w-[300px] justify-between"
-                                        disabled={addCardToDeckMutation.isPending || abilityCards?.length === 6 || countBakugans === 0 ? true : false}
-                                    >
-                                        {notInDeckAbilities && value ? (
-                                            (() => {
-                                                const selectedCard = notInDeckAbilities.find(
-                                                    (b) => b.name === value
-                                                )
+                        <Popover open={open} onOpenChange={setOpen}>
+                            <PopoverTrigger asChild>
+                                <Button
+                                    variant="outline"
+                                    role="combobox"
+                                    aria-expanded={open}
+                                    className="w-full lg:w-75 justify-between"
+                                    disabled={addCardToDeckMutation.isPending || abilityCards?.length === 6 || countBakugans === 0 ? true : false}
+                                >
+                                    {notInDeckAbilities && value ? (
+                                        (() => {
+                                            const selectedCard = notInDeckAbilities.find(
+                                                (b) => b.name === value
+                                            )
 
-                                                if (!selectedCard) return "Select Ability Cards..."
+                                            if (!selectedCard) return "Select Ability Cards..."
 
-                                                const { name, attribut } = selectedCard
-                                                const imageUrl = `/images/attribut/${attribut?.toUpperCase()}.png`
+                                            const { name, attribut } = selectedCard
+                                            const imageUrl = `/images/attribut/${attribut?.toUpperCase()}.png`
 
-                                                return (
-                                                    <>
-                                                        <Image src={imageUrl} alt={`${attribut}`} width={20} height={20} />
-                                                        {`${name}`}
-                                                    </>
-                                                )
-                                            })()
-                                        ) : (
-                                            "Select Ability Card..."
-                                        )}
-                                        <ChevronsUpDown className="opacity-50" />
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-[200px] lg:w-[300px] p-0">
-                                    <Command>
-                                        <CommandInput placeholder="Search Ability Card..." className="h-9" />
-                                        <CommandList>
-                                            <CommandEmpty>No card found.</CommandEmpty>
-                                            <CommandGroup>
-                                                {notInDeckAbilities.map((b, index) => (
-                                                    <CommandItem
-                                                        key={index}
-                                                        value={b.name}
-                                                        onSelect={(currentValue) => {
-                                                            setValue(currentValue === value ? "" : currentValue)
-                                                            setOpen(false)
-                                                            addCardToDeckMutation.mutate(b.key)
-                                                        }}
-                                                    >
-                                                        {b.attribut && <Image src={`/images/attributs/${b.attribut?.toUpperCase()}.png`} alt={b.attribut} width={20} height={20} />
-                                                        }                                                        {b.name}
-                                                        <Check
-                                                            className={cn(
-                                                                "ml-auto",
-                                                                value === b.key ? "opacity-100" : "opacity-0"
-                                                            )}
-                                                        />
-                                                    </CommandItem>
-                                                ))}
-                                            </CommandGroup>
-                                        </CommandList>
-                                    </Command>
-                                </PopoverContent>
-                            </Popover>
-                        </div>
+                                            return (
+                                                <>
+                                                    <Image src={imageUrl} alt={`${attribut}`} width={20} height={20} />
+                                                    {`${name}`}
+                                                </>
+                                            )
+                                        })()
+                                    ) : (
+                                        "Select Ability Card..."
+                                    )}
+                                    <ChevronsUpDown className="opacity-50" />
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-full lg:w-75 p-0">
+                                <Command>
+                                    <CommandInput placeholder="Search Ability Card..." className="h-9" />
+                                    <CommandList>
+                                        <CommandEmpty>No card found.</CommandEmpty>
+                                        <CommandGroup>
+                                            {notInDeckAbilities.map((b, index) => (
+                                                <CommandItem
+                                                    key={index}
+                                                    value={b.name}
+                                                    onSelect={(currentValue) => {
+                                                        setValue(currentValue === value ? "" : currentValue)
+                                                        setOpen(false)
+                                                        addCardToDeckMutation.mutate(b.key)
+                                                    }}
+                                                >
+                                                    {b.attribut && <Image src={`/images/attributs/${b.attribut?.toUpperCase()}.png`} alt={b.attribut} width={20} height={20} />
+                                                    }                                                        {b.name}
+                                                    <Check
+                                                        className={cn(
+                                                            "ml-auto",
+                                                            value === b.key ? "opacity-100" : "opacity-0"
+                                                        )}
+                                                    />
+                                                </CommandItem>
+                                            ))}
+                                        </CommandGroup>
+                                    </CommandList>
+                                </Command>
+                            </PopoverContent>
+                        </Popover>
                     </div>
                 </CardHeader>
 

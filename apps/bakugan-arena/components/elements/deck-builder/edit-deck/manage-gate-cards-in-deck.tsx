@@ -69,75 +69,71 @@ export default function ManageGateCardsInDeckEditor({ deckId, gateCards, bakugan
 
             <Card>
                 <CardHeader>
-                    <div className='flex items-center justify-between'>
+                    <div className='flex flex-col md:flex-row items-start md:items-center justify-between gap-3'>
                         <CardTitle>
-                            Gate Cards
+                            Gate Cards {gateCards.length} / 5
                         </CardTitle>
-                        <div className="flex items-center gap-3">
-                            <p>{gateCards.length} / 5</p>
-                            <Popover open={open} onOpenChange={setOpen}>
-                                <PopoverTrigger asChild>
-                                    <Button
-                                        variant="outline"
-                                        role="combobox"
-                                        aria-expanded={open}
-                                        className="w-50 lg:w-75 justify-between"
-                                        disabled={addGateToDeckMutation.isPending || gateCards.length === 5 ? true : false}
-                                    >
-                                        {value ? (
-                                            (() => {
-                                                const selectedCard = notInDeckCards.find(
-                                                    (b) => b.name === value
-                                                )
+                        <Popover open={open} onOpenChange={setOpen}>
+                            <PopoverTrigger asChild>
+                                <Button
+                                    variant="outline"
+                                    role="combobox"
+                                    aria-expanded={open}
+                                    className="w-full lg:w-75 justify-between"
+                                    disabled={addGateToDeckMutation.isPending || gateCards.length === 5 ? true : false}
+                                >
+                                    {value ? (
+                                        (() => {
+                                            const selectedCard = notInDeckCards.find(
+                                                (b) => b.name === value
+                                            )
 
-                                                if (!selectedCard) return "Select gate Cards..."
+                                            if (!selectedCard) return "Select gate Cards..."
 
-                                                const { name } = selectedCard
+                                            const { name } = selectedCard
 
-                                                return (
-                                                    <>
-                                                        {`${name}`}
-                                                    </>
-                                                )
-                                            })()
-                                        ) : (
-                                            "Select Gate Card..."
-                                        )}
-                                        <ChevronsUpDown className="opacity-50" />
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-50 lg:w-75 p-0">
-                                    <Command>
-                                        <CommandInput placeholder="Search Bakugan..." className="h-9" />
-                                        <CommandList>
-                                            <CommandEmpty>No card found.</CommandEmpty>
-                                            <CommandGroup>
-                                                {notInDeckCards.map((b, index) => (
-                                                    <CommandItem
-                                                        key={index}
-                                                        value={b.name}
-                                                        onSelect={(currentValue) => {
-                                                            setValue(currentValue === value ? "" : currentValue)
-                                                            setOpen(false)
-                                                            addGateToDeckMutation.mutate(b.key)
-                                                        }}
-                                                    >
-                                                        {b.name}
-                                                        <Check
-                                                            className={cn(
-                                                                "ml-auto",
-                                                                value === b.key ? "opacity-100" : "opacity-0"
-                                                            )}
-                                                        />
-                                                    </CommandItem>
-                                                ))}
-                                            </CommandGroup>
-                                        </CommandList>
-                                    </Command>
-                                </PopoverContent>
-                            </Popover>
-                        </div>
-
+                                            return (
+                                                <>
+                                                    {`${name}`}
+                                                </>
+                                            )
+                                        })()
+                                    ) : (
+                                        "Select Gate Card..."
+                                    )}
+                                    <ChevronsUpDown className="opacity-50" />
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-50 lg:w-75 p-0">
+                                <Command>
+                                    <CommandInput placeholder="Search Bakugan..." className="h-9" />
+                                    <CommandList>
+                                        <CommandEmpty>No card found.</CommandEmpty>
+                                        <CommandGroup>
+                                            {notInDeckCards.map((b, index) => (
+                                                <CommandItem
+                                                    key={index}
+                                                    value={b.name}
+                                                    onSelect={(currentValue) => {
+                                                        setValue(currentValue === value ? "" : currentValue)
+                                                        setOpen(false)
+                                                        addGateToDeckMutation.mutate(b.key)
+                                                    }}
+                                                >
+                                                    {b.name}
+                                                    <Check
+                                                        className={cn(
+                                                            "ml-auto",
+                                                            value === b.key ? "opacity-100" : "opacity-0"
+                                                        )}
+                                                    />
+                                                </CommandItem>
+                                            ))}
+                                        </CommandGroup>
+                                    </CommandList>
+                                </Command>
+                            </PopoverContent>
+                        </Popover>
                     </div>
 
                 </CardHeader>

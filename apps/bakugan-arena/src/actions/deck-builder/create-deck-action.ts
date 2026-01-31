@@ -21,7 +21,7 @@ export const CreateDeckAction = async () => {
       exclusiveAbilities: [],
       gateCards: [],
     })
-    .returning({ id: deck.id }) // ✅ récupérer l'id généré
+    .returning() // ✅ récupérer l'id généré
 
   return result[0]?.id
 }

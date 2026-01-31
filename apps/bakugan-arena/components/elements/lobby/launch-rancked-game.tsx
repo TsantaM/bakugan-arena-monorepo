@@ -42,7 +42,7 @@ export default function LauchRanckedGate() {
 
     return (<>
 
-        <Card>
+        <Card className="w-full">
             <CardHeader>
                 <CardTitle className="text-center text-lg lg:text-2xl">
                     Choice a deck and launch a game
