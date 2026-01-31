@@ -1,5 +1,5 @@
-import { CancelCaracterGateCard, CaracterGateCardEffect, StarterBanList, type bakuganType, type gateCardType } from "../../index.js"
-
+import { CancelCaracterGateCard, CaracterGateCardEffect, type bakuganType, type gateCardType } from "../../index.js"
+import { StarterBanList } from "../../store/starter-banlist.js"
 
 export const SkyressVentus: bakuganType = {
     name: 'Skyress',

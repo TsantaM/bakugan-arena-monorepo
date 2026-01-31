@@ -1,4 +1,5 @@
-import { bakuganType, CancelCaracterGateCard, CaracterGateCardEffect, gateCardType, StarterBanList } from "../../index.js"
+import { bakuganType, CancelCaracterGateCard, CaracterGateCardEffect, gateCardType } from "../../index.js"
+import { StarterBanList } from "../../store/store-index.js"
 
 export const GoremSubterra: bakuganType = {
     key: 'gorem-subterra',

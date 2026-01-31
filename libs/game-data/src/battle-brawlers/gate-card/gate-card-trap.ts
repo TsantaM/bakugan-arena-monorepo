@@ -1,4 +1,5 @@
-import { CheckBattle, CheckBattleStillInProcess, ComeBackBakuganDirectiveAnimation, ElimineBakuganDirectiveAnimation, GateCardImages, OpenGateCardActionRequest, PowerChangeDirectiveAnumation, RemoveGateCardDirectiveAnimation, ResetSlot, type gateCardType } from "../../index.js";
+import { CheckBattle, CheckBattleStillInProcess, ComeBackBakuganDirectiveAnimation, ElimineBakuganDirectiveAnimation,OpenGateCardActionRequest, PowerChangeDirectiveAnumation, RemoveGateCardDirectiveAnimation, ResetSlot, type gateCardType } from "../../index.js";
+import { GateCardImages } from "../../store/gate-card-images.js";
 
 export const MineFantome: gateCardType = {
     key: 'mine-fantome',

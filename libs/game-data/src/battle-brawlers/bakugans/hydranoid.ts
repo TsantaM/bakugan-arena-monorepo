@@ -1,4 +1,5 @@
-import { CancelCaracterGateCard, CaracterGateCardEffect, StarterBanList, type bakuganType, type gateCardType } from "../../index.js"
+import { CancelCaracterGateCard, CaracterGateCardEffect, type bakuganType, type gateCardType } from "../../index.js"
+import { StarterBanList } from "../../store/store-index.js"
 
 export const HydranoidDarkus: bakuganType = {
     key: 'hydranoid-darkus',

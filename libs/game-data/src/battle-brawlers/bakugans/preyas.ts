@@ -1,4 +1,5 @@
-import { CancelCaracterGateCard, CaracterGateCardEffect, GateCardImages, StarterBanList, type bakuganType, type gateCardType } from "../../index.js"
+import { CancelCaracterGateCard, CaracterGateCardEffect, type bakuganType, type gateCardType } from "../../index.js"
+import { GateCardImages, StarterBanList } from "../../store/store-index.js"
 
 
 export const PreyasAquos: bakuganType = {

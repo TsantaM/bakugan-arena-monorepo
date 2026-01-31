@@ -1,4 +1,5 @@
-import { type gateCardType, type bakuganOnSlot, type stateType, GateCardImages, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective, ComeBackBakuganDirectiveAnimation, RemoveGateCardDirectiveAnimation, ResetSlot, CheckBattleStillInProcess } from "../../index.js";
+import { type gateCardType, type bakuganOnSlot, type stateType, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective, ComeBackBakuganDirectiveAnimation, RemoveGateCardDirectiveAnimation, ResetSlot, CheckBattleStillInProcess } from "../../index.js";
+import { GateCardImages } from "../../store/gate-card-images.js";
 
 export const Rechargement: gateCardType = {
     key: 'rechargement',

@@ -1,4 +1,5 @@
-import { CancelCaracterGateCard, CaracterGateCardEffect, GateCardImages, type bakuganType, type gateCardType } from "../../index.js"
+import { CancelCaracterGateCard, CaracterGateCardEffect, type bakuganType, type gateCardType } from "../../index.js"
+import { GateCardImages } from "../../store/gate-card-images.js"
 
 
 export const SaurusPyrus: bakuganType = {

@@ -9,7 +9,7 @@ export const GetDeckData = async (id: string) => {
   if (!currentUser) return undefined
 
   return db.query.deck.findFirst({
-    where: (d) => eq(d.id, id) && eq(d.userId, currentUser.id),
+    where: (d) => eq(d.id, id),
     columns: {
       id: true,
       name: true,

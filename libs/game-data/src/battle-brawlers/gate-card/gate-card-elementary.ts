@@ -1,5 +1,6 @@
-import { GateCardImages, DoubleBakuganCheck, ElementaryGateCardOnCancel, ElementaryGateCardOnOpen, PerilGateCardOnCanel, PerilGateCardOnOpen, type gateCardType, type stateType, type slots_id,  } from "../../index.js"
+import { DoubleBakuganCheck, ElementaryGateCardOnCancel, ElementaryGateCardOnOpen, PerilGateCardOnCanel, PerilGateCardOnOpen, type gateCardType, type stateType, type slots_id,  } from "../../index.js"
 import { BakuganList } from "../bakugans.js"
+import { GateCardImages } from "../../store/gate-card-images.js";
 
 export const ReacteurPyrus: gateCardType = {
     key: 'reacteur-pyrus',
