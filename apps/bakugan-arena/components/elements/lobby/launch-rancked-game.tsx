@@ -42,7 +42,7 @@ export default function LauchRanckedGate() {
 
     return (<>
 
-        <Card className="w-full">
+        <Card>
             <CardHeader>
                 <CardTitle className="text-center text-lg lg:text-2xl">
                     Choice a deck and launch a game
@@ -57,7 +57,7 @@ export default function LauchRanckedGate() {
                             variant="outline"
                             role="combobox"
                             aria-expanded={open}
-                            className="w-[300px] justify-between"
+                            className="w-full justify-between"
                         >
                             {getUserDecksQuery.data && value
                                 ? getUserDecksQuery.data.find((d) => d.id === value)?.name
@@ -65,7 +65,7 @@ export default function LauchRanckedGate() {
                             <ChevronsUpDown className="opacity-50" />
                         </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="p-0 w-[300px]">
+                    <PopoverContent className="p-0 w-75">
                         <Command>
                             <CommandList>
                                 <CommandEmpty>

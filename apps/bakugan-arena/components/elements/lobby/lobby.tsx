@@ -8,6 +8,9 @@ import { redirect } from "next/navigation"
 import LauchRanckedGate from "./launch-rancked-game"
 import ChalengeSomeone from "./chalenge-someone"
 import OnChalengePopUp from "./on-chalenge-pop-up"
+import Section from "@/components/ui/section"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 
 export default function Lobby() {
@@ -24,7 +27,7 @@ export default function Lobby() {
 
     return (
         <>
-            <div className="grid lg:grid-cols-2 gap-3">
+            <Section className="md:p-0 grid lg:grid-cols-2 gap-3">
                 <LauchRanckedGate />
                 <Card>
                     <CardHeader>
@@ -32,15 +35,16 @@ export default function Lobby() {
                             Other actions
                         </CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="flex flex-col gap-3">
+                        <Button asChild className="w-full" variant="outline" ><Link href={"/dashboard/deck-builder"}>Deck Builder</Link></Button>
                         <ChalengeSomeone />
                         <OnChalengePopUp />
                     </CardContent>
                 </Card>
-            </div>
+            </Section>
 
             <Toaster />
         </>
     )
-    
+
 }

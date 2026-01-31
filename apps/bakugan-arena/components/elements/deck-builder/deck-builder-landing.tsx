@@ -22,7 +22,6 @@ export default function DeckBuilerLanding() {
     return (
         <>
 
-
             <Section className="md:p-0">
                 <Card>
                     <CardHeader>
@@ -37,7 +36,6 @@ export default function DeckBuilerLanding() {
                     </CardContent>
                 </Card>
             </Section>
-
 
         </>
     )
