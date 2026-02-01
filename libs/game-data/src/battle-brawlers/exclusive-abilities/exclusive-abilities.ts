@@ -664,9 +664,6 @@ export const Marionnette: exclusiveAbilitiesType = {
                 // CheckBattle({ roomState: roomState })
                 OpenGateCardActionRequest({ roomState })
 
-                return {
-                    turnActionLaucher: true
-                }
 
             }
         }
