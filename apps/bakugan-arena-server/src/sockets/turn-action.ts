@@ -6,17 +6,6 @@ import { onBattleEnd } from "../functions/on-battle-end";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { ClearDomain } from "../functions/clear-domain";
 
-function checkActions(request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) {
-    const mustDo = request.actions.mustDo
-    const mustDoOne = request.actions.mustDoOne
-    const optional = request.actions.optional
-
-    const merged = [mustDo, mustDoOne, optional]
-
-    return merged.length
-
-}
-
 export function turnActionUpdater({ roomId, userId, io, updateBattleState = true }: { roomId: string, userId: string, io: Server, updateBattleState?: boolean }) {
     const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
 
@@ -101,35 +90,23 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
 
     clearAnimationsInRoom(roomId)
 
-    const activeActionsCount = checkActions(roomData.ActivePlayerActionRequest)
-    const inactiveActionsCount = checkActions(roomData.InactivePlayerActionRequest)
+    if (activeSocket) {
+        const request = roomData.ActivePlayerActionRequest
+        io.to(activeSocket).emit('turn-action-request', request)
+    }
 
-    if (activeActionsCount > 0 || inactiveActionsCount > 0) {
-        if (activeSocket) {
-            const request = roomData.ActivePlayerActionRequest
-            io.to(activeSocket).emit('turn-action-request', request)
+    if (inactiveSocket) {
+        const request = roomData.InactivePlayerActionRequest
+        const merged = [
+            request.actions.mustDo,
+            request.actions.mustDoOne,
+            request.actions.optional
+        ].flat()
+
+        if (merged.length > 0) {
+            io.to(inactiveSocket).emit('turn-action-request', request)
         }
 
-        if (inactiveSocket) {
-            const request = roomData.InactivePlayerActionRequest
-            const merged = [
-                request.actions.mustDo,
-                request.actions.mustDoOne,
-                request.actions.optional
-            ].flat()
-
-            if (merged.length > 0) {
-                io.to(inactiveSocket).emit('turn-action-request', request)
-            }
-
-        }
-    } else {
-        return turnActionUpdater({
-            roomId: roomId,
-            userId: userId,
-            io: io,
-            updateBattleState: true
-        })
     }
 
 }

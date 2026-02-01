@@ -27,7 +27,7 @@ export const TurnActionInterfaceBuilder = ({ request }: { request: ActivePlayerA
         BuildSelectBakugan({ action: actions[0] })
     } else {
         clearTurnInterface()
-        if(actions.length === 0) return
+
         const turnActionContainer = document.createElement('div')
         turnActionContainer.classList.add('turn-interface')
 
@@ -44,13 +44,20 @@ export const TurnActionInterfaceBuilder = ({ request }: { request: ActivePlayerA
         document.body.appendChild(turnActionContainer)
         document.body.appendChild(button)
 
+        if (actions.length === 0) {
+            const message = document.createElement('p');
+            message.textContent = `You can't do anything ! Just pass your turn`
+            turnActionContainer.appendChild(message)
+        } else {
+            actions.forEach((action) => {
+                BuildSetGateCards({ action: action, turnActionContainer: turnActionContainer })
+                BuildSetBakugan({ action: action, turnActionContainer: turnActionContainer })
+                BuildUseAbilityCard({ action: action, turnActionContainer: turnActionContainer })
+                BuildOpenGateCard({ action: action, turnActionContainer: turnActionContainer })
+            })
+        }
 
-        actions.forEach((action) => {
-            BuildSetGateCards({ action: action, turnActionContainer: turnActionContainer })
-            BuildSetBakugan({ action: action, turnActionContainer: turnActionContainer })
-            BuildUseAbilityCard({ action: action, turnActionContainer: turnActionContainer })
-            BuildOpenGateCard({ action: action, turnActionContainer: turnActionContainer })
-        })
+
     }
 
 }

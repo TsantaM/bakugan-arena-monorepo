@@ -1,4 +1,4 @@
-import { applyWinAbilitiesEffects, ComeBackBakuganDirectiveAnimation, determineWinner, ElimineBakuganDirectiveAnimation, finalizeBattle, getPlayerDecksAndBakugans, updateDeckBakugans } from "@bakugan-arena/game-data"
+import { applyWinAbilitiesEffects, CheckBattle, ComeBackBakuganDirectiveAnimation, determineWinner, ElimineBakuganDirectiveAnimation, finalizeBattle, getPlayerDecksAndBakugans, updateDeckBakugans } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
 
@@ -115,4 +115,5 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
     // FR: Finaliser la bataille ===
     //ENG: Finalize battle: reset slot, battle state, etc. ===
     finalizeBattle({ roomData, winnerId: winnerId, loserId: loserId })
+    CheckBattle({roomState: roomData})
 }

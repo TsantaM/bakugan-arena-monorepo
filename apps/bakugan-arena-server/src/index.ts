@@ -44,9 +44,9 @@ io.on('connection', (socket) => {
     }
 
     getUsersRooms(io, socket),
-        ChalengeSomeoneSocket(io, socket),
-        ChalengeAcceptSocket(io, socket),
-        setupSearchOpponentSocket(io, socket)
+    ChalengeSomeoneSocket(io, socket),
+    ChalengeAcceptSocket(io, socket),
+    setupSearchOpponentSocket(io, socket)
     CancelOpponentResearch(io, socket)
     socketGetRoomState(io, socket)
     socketCleanAnimations(io, socket)
