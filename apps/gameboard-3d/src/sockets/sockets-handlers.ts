@@ -390,20 +390,16 @@ export function registerSocketHandlers(
 
         console.log(actions.length, request.target)
 
-        if (actions.length <= 0) {
-            if (request.target === 'INACTIVE_PLAYER') return
-            socket.emit('check-activities', { userId, roomId })
-        } else {
-            TurnActionBuilder({
-                request,
-                userId: userId,
-                camera: camera,
-                scene: scene,
-                plane: plane,
-                roomId: roomId,
-                socket: socket
-            })
-        }
+        TurnActionBuilder({
+            request,
+            userId: userId,
+            camera: camera,
+            scene: scene,
+            plane: plane,
+            roomId: roomId,
+            socket: socket
+        })
+
 
     }
     )

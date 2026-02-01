@@ -45,6 +45,7 @@ export const TurnActionInterfaceBuilder = ({ request }: { request: ActivePlayerA
         document.body.appendChild(button)
 
         if (actions.length === 0) {
+            if (request.target === 'INACTIVE_PLAYER') return
             const message = document.createElement('p');
             message.textContent = `You can't do anything ! Just pass your turn`
             turnActionContainer.appendChild(message)
