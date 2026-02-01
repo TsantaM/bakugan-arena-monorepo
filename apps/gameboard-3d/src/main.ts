@@ -69,6 +69,18 @@ if (roomId !== null && userId !== null) {
     renderer.setSize(window.innerWidth, window.innerHeight)
     renderer.setPixelRatio(window.devicePixelRatio)
     const controls = new OrbitControls(camera, renderer.domElement)
+    
+    controls.mouseButtons = {
+      LEFT: THREE.MOUSE.PAN,
+      MIDDLE: THREE.MOUSE.DOLLY,
+      RIGHT: THREE.MOUSE.ROTATE
+    }
+
+    controls.touches = {
+      ONE: THREE.TOUCH.PAN,
+      TWO: THREE.TOUCH.ROTATE
+    }
+
     const light = new THREE.AmbientLight('white', 3)
     const plane = PlaneMesh.clone()
     plane.material.transparent = true
