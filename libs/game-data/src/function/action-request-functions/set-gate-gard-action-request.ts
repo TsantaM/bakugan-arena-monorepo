@@ -12,6 +12,7 @@ export function SetGateCardActionRequest({ roomState }: { roomState: stateType }
 
     if (!activePlayer) return
     const usableGatesCount: number = roomState.players.find((player) => player.userId === activePlayer?.userId)?.usable_gates || 0
+    const usableBakugans: number = activePlayer.bakugans.filter((b) => !b?.bakuganData.elimined && !b?.bakuganData.onDomain).length || 0
 
     if (usableGatesCount === 0) return
 
@@ -37,7 +38,7 @@ export function SetGateCardActionRequest({ roomState }: { roomState: stateType }
         }
     }
 
-    if (turnCount > 0 && (!battleState.battleInProcess || battleState.paused)) {
+    if (turnCount > 0 && (!battleState.battleInProcess || battleState.paused) && usableBakugans > 0) {
         if (usableSlots.length > 0 && usableGates.length > 0) {
             const request = roomState.ActivePlayerActionRequest
             request.actions.optional.push(setGateCardRequest)
@@ -68,7 +69,7 @@ export function SelectGateCardActionRequest({ roomState }: { roomState: stateTyp
 
     if (usableGatesCount === 0) return
 
-    const { usableGates, usableSlots } = FindUsableSlotAndGates({
+    const { usableGates } = FindUsableSlotAndGates({
         gates: activePlayer.gates,
         slots: roomState.protalSlots
     })

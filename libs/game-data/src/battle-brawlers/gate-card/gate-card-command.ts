@@ -1,4 +1,4 @@
-import { type gateCardType, type bakuganOnSlot, type stateType, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective, ComeBackBakuganDirectiveAnimation, RemoveGateCardDirectiveAnimation, ResetSlot, CheckBattleStillInProcess } from "../../index.js";
+import { type gateCardType, type bakuganOnSlot, type stateType, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective, ComeBackBakuganDirectiveAnimation, RemoveGateCardDirectiveAnimation, ResetSlot, CheckBattleStillInProcess, AutoActivationDuringBattle } from "../../index.js";
 import { GateCardImages } from "../../store/gate-card-images.js";
 
 export const Rechargement: gateCardType = {
@@ -178,12 +178,18 @@ export const TripleCombat: gateCardType = {
         }
         return null
     },
-    autoActivationCheck: ({ portalSlot }) => {
+    autoActivationCheck: ({ portalSlot, roomState }) => {
         const bakugansOnSlot = portalSlot.bakugans.length
-        if (bakugansOnSlot >= 2) {
-            return true
+        const canActiveOnBattle = AutoActivationDuringBattle({ roomState: roomState, canActive: false, slotOfGate: portalSlot.id })
+
+        if (canActiveOnBattle === false) {
+            return canActiveOnBattle
         } else {
-            return false
+            if (bakugansOnSlot >= 2) {
+                return true
+            } else {
+                return false
+            }
         }
     },
 }
@@ -291,12 +297,18 @@ export const QuatuorDeCombat: gateCardType = {
 
         return null
     },
-    autoActivationCheck: ({ portalSlot }) => {
+    autoActivationCheck: ({ portalSlot, roomState }) => {
         const bakugansOnSlot = portalSlot.bakugans.length
-        if (bakugansOnSlot >= 2) {
-            return true
+        const canActiveOnBattle = AutoActivationDuringBattle({ roomState: roomState, canActive: false, slotOfGate: portalSlot.id })
+
+        if (canActiveOnBattle === false) {
+            return canActiveOnBattle
         } else {
-            return false
+            if (bakugansOnSlot >= 2) {
+                return true
+            } else {
+                return false
+            }
         }
     },
 }

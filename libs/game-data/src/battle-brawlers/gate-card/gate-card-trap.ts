@@ -1,4 +1,4 @@
-import { CheckBattle, CheckBattleStillInProcess, ComeBackBakuganDirectiveAnimation, ElimineBakuganDirectiveAnimation,OpenGateCardActionRequest, PowerChangeDirectiveAnumation, RemoveGateCardDirectiveAnimation, ResetSlot, type gateCardType } from "../../index.js";
+import { AutoActivationDuringBattle, CheckBattle, CheckBattleStillInProcess, ComeBackBakuganDirectiveAnimation, ElimineBakuganDirectiveAnimation, OpenGateCardActionRequest, PowerChangeDirectiveAnumation, RemoveGateCardDirectiveAnimation, ResetSlot, type gateCardType } from "../../index.js";
 import { GateCardImages } from "../../store/gate-card-images.js";
 
 export const MineFantome: gateCardType = {
@@ -261,12 +261,18 @@ export const AspirateurDePuissance: gateCardType = {
             slotOfGate.state.canceled = true
         }
     },
-    autoActivationCheck: ({ portalSlot }) => {
+    autoActivationCheck: ({ portalSlot, roomState }) => {
         const bakugansOnSlot = portalSlot.bakugans.length
-        if (bakugansOnSlot >= 2) {
-            return true
+        const canActiveOnBattle = AutoActivationDuringBattle({ roomState: roomState, canActive: false, slotOfGate: portalSlot.id })
+
+        if (canActiveOnBattle === false) {
+            return canActiveOnBattle
         } else {
-            return false
+            if (bakugansOnSlot >= 2) {
+                return true
+            } else {
+                return false
+            }
         }
     },
 }

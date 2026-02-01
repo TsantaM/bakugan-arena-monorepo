@@ -661,7 +661,7 @@ export const Marionnette: exclusiveAbilitiesType = {
                 })
 
                 CheckBattleStillInProcess(roomState)
-                CheckBattle({ roomState: roomState })
+                // CheckBattle({ roomState: roomState })
                 OpenGateCardActionRequest({ roomState })
 
                 return {

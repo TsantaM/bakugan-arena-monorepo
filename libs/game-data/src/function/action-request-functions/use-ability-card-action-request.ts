@@ -79,7 +79,7 @@ export function UseAbilityCardActionRequest({ roomState }: { roomState: stateTyp
 
     if (turnCount > 0) {
         if ((!battleState.battleInProcess || battleState.paused) && bakuganOnFieldCount > 0) {
-            request.actions.mustDoOne.push({
+            request.actions.optional.push({
                 type: 'USE_ABILITY_CARD',
                 data: requestAction
             })
