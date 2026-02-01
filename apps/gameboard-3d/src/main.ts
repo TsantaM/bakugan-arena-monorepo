@@ -78,7 +78,7 @@ if (roomId !== null && userId !== null) {
 
     controls.touches = {
       ONE: THREE.TOUCH.PAN,
-      TWO: THREE.TOUCH.ROTATE
+      TWO: THREE.TOUCH.DOLLY_ROTATE
     }
 
     const light = new THREE.AmbientLight('white', 3)
