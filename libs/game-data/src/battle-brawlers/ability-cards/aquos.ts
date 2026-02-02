@@ -1,6 +1,6 @@
-import { AbilityCardsActions, bakuganOnSlot, slots_id, type abilityCardsType } from "../../type/type-index.js";
+import { AbilityCardsActions, slots_id, type abilityCardsType } from "../../type/type-index.js";
 import { StandardCardsImages } from '../../store/store-index.js'
-import { CheckBattleStillInProcess, MoveToAnotherSlotDirectiveAnimation, OpenGateCardActionRequest } from "../../function/index.js";
+import { moveBakuganToSelectedSlot } from "../../function/index.js";
 
 export const MirageAquatique: abilityCardsType = {
     key: 'mirage-aquatique',
@@ -41,42 +41,7 @@ export const MirageAquatique: abilityCardsType = {
     },
     onAdditionalEffect: ({ resolution, roomData }) => {
 
-        if (!roomData) return
-        if (resolution.data.type !== 'SELECT_SLOT') return
-        const destination = resolution.data.slot
-        const slotOfGate = roomData.protalSlots.find((s) => s.bakugans.find((b) => b.key === resolution.bakuganKey && b.userId === resolution.userId))
-        const slotTarget = roomData.protalSlots.find((s) => s.id === destination)
-        if (slotOfGate && slotTarget && slotTarget.portalCard !== null) {
-            const user = slotOfGate.bakugans.find((b) => b.key === resolution.bakuganKey && b.userId === resolution.userId)
-            const index = slotOfGate.bakugans.findIndex((ba) => ba.key === user?.key && ba.userId === user.userId)
-            if (user) {
-                const newUserState: bakuganOnSlot = {
-                    ...user,
-                    slot_id: destination
-                }
-                slotTarget.bakugans.push(newUserState)
-                if (slotTarget.portalCard.userId !== user.userId) {
-                    slotTarget.state.blocked = true
-                }
-                slotOfGate.bakugans.splice(index, 1)
-
-                MoveToAnotherSlotDirectiveAnimation({
-                    animations: roomData.animations,
-                    bakugan: user,
-                    initialSlot: structuredClone(slotOfGate),
-                    newSlot: structuredClone(slotTarget)
-                })
-
-                CheckBattleStillInProcess(roomData)
-                OpenGateCardActionRequest({ roomState: roomData })
-
-                return {
-                    turnActionLaucher: true
-                }
-
-            }
-        }
-
+        moveBakuganToSelectedSlot({ resolution: resolution, roomData: roomData, shouldBlockAlways: true})
 
     }
 }

@@ -1,6 +1,6 @@
 
 import { schema } from "@bakugan-arena/drizzle-orm"
-import { eq, inArray } from "drizzle-orm"
+import { and, eq, inArray } from "drizzle-orm"
 import { db } from "../lib/db"
 
 const rooms = schema.rooms
@@ -22,9 +22,7 @@ export const getDecksData = async ({ roomId }: { roomId: string }) => {
   const decksIds = [roomData.p1Deck, roomData.p2Deck]
 
   return db.query.deck.findMany({
-    where: (d) =>
-      inArray(d.id, decksIds) &&
-      inArray(d.userId, players),
+    where: (d) => and(inArray(d.id, decksIds), inArray(d.userId, players)),
     columns: {
       id: true,
       userId: true,

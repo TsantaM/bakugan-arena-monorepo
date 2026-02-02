@@ -1,31 +1,34 @@
 import { stateType } from "../type/type-index.js";
 
 export function CheckBattleStillInProcess(roomState: stateType) {
-    if (!roomState) return
+    if (!roomState) return;
 
-    const { battleState, protalSlots, turnState } = roomState
+    const { battleState, protalSlots, turnState } = roomState;
 
-    if (!battleState.battleInProcess) return
+    if (!battleState.battleInProcess) return;
 
-    const battleSlot = protalSlots.find((slot) => slot.id === battleState.slot)
+    const battleSlot = protalSlots.find((slot) => slot.id === battleState.slot);
+    if (!battleSlot) return;
 
+    const bakugans = battleSlot.bakugans;
 
-    if (!battleSlot) return
+    // --- NEW LOGIC: verify that at least two DIFFERENT PLAYERS are still on the slot ---
+    const distinctPlayers = new Set(bakugans.map((b) => b.userId)).size;
 
-    const bakugans = battleSlot.bakugans
+    const battleStillValid = bakugans.length >= 2 && distinctPlayers >= 2;
 
-    if (bakugans.length > 1) return
+    if (battleStillValid) return; // Battle continues
 
-    battleState.battleInProcess = false
-    battleState.slot = null
-    battleState.turns = 2
-    battleState.paused = false
-    turnState.set_new_gate = true
-    turnState.set_new_bakugan = true
+    // --- Otherwise: END THE BATTLE ---
+    battleState.battleInProcess = false;
+    battleState.slot = null;
+    battleState.turns = 2;
+    battleState.paused = false;
+    turnState.set_new_gate = true;
+    turnState.set_new_bakugan = true;
 
     roomState.animations.push({
-        type: 'BATTLE-END',
+        type: "BATTLE-END",
         resolved: false
-    })
-
+    });
 }

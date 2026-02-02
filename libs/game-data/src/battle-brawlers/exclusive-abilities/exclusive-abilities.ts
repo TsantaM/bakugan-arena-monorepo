@@ -1,4 +1,4 @@
-import { CancelAbilityCard, CancelGateCardDirectiveAnimation, CheckBattle, CheckBattleStillInProcess, MoveToAnotherSlotDirectiveAnimation, OpenGateCardActionRequest, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective } from "../../index.js"
+import { CancelAbilityCard, CancelGateCardDirectiveAnimation, CheckBattle, CheckBattleStillInProcess, dragBakuganToUserSlot, moveSelectedBakugan, MoveToAnotherSlotDirectiveAnimation, OpenGateCardActionRequest, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective } from "../../index.js"
 import type { AbilityCardsActions, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, exclusiveAbilitiesType, slots_id } from "../../type/type-index.js"
 import { GateCardsList } from "../gate-gards.js"
 
@@ -229,40 +229,7 @@ export const AntiMuse: exclusiveAbilitiesType = {
 
     },
     onAdditionalEffect: ({ resolution, roomData: roomState }) => {
-        if (!roomState) return
-        if (resolution.data.type !== 'SELECT_BAKUGAN_ON_DOMAIN') return
-
-        const slotToDrag: slots_id = resolution.data.slot
-        const target: string = resolution.data.bakugan
-        const slotTarget = roomState?.protalSlots.find((s) => s.id === slotToDrag)
-        const slotOfGate = roomState?.protalSlots.find((s) => s.id === resolution.slot);
-
-        // const targetToDrag = slotTarget?.bakugans.find((b) => b.key === target)
-        if (slotOfGate && slotTarget && target !== '') {
-            const BakuganTargetIndex = slotTarget.bakugans.findIndex((b) => b.key === target)
-            const bakuganToDrag = slotTarget?.bakugans.find((b) => b.key === target)
-
-            const user = slotOfGate?.bakugans.find((b) => b.key === resolution.bakuganKey && b.userId === resolution.userId)
-
-            if (user && bakuganToDrag) {
-
-                const newState: bakuganOnSlot = {
-                    ...bakuganToDrag,
-                    slot_id: slotOfGate.id
-                }
-
-                slotOfGate.bakugans.push(newState)
-                slotTarget.bakugans.splice(BakuganTargetIndex, 1)
-                MoveToAnotherSlotDirectiveAnimation({
-                    animations: roomState?.animations,
-                    bakugan: bakuganToDrag,
-                    initialSlot: slotTarget,
-                    newSlot: slotOfGate
-                })
-                CheckBattleStillInProcess(roomState)
-
-            }
-        }
+        dragBakuganToUserSlot({resolution: resolution, roomState:roomState})
     }
 
 }
@@ -631,42 +598,7 @@ export const Marionnette: exclusiveAbilitiesType = {
 
     },
     onAdditionalEffect: ({ resolution, roomData: roomState }) => {
-
-        if (resolution.data.type !== 'MOVE_BAKUGAN_TO_ANOTHER_SLOT') return
-        const slotOfGate = roomState?.protalSlots.find((s) => s.id === resolution.slot)
-        const { data } = resolution
-
-        if (slotOfGate && roomState) {
-            const bakugans = roomState.protalSlots.map((b) => b.bakugans).flat()
-            const opponent = bakugans.find((b) => b.userId === data.bakugan.userId && b.key === data.bakugan.key)
-            const initialSlot = roomState.protalSlots.find((slot) => slot.id === opponent?.slot_id)
-            const index = initialSlot?.bakugans.findIndex((ba) => ba.key === opponent?.key && ba.userId === opponent.userId)
-            const slotTarget = roomState?.protalSlots.find((s) => s.id === data.slot)
-
-            if (opponent && slotTarget && slotTarget.portalCard !== null && index !== undefined && index >= 0 && initialSlot) {
-
-                const newOpponentState: bakuganOnSlot = {
-                    ...opponent,
-                    slot_id: data.slot
-                }
-
-                slotTarget.bakugans.push(newOpponentState)
-                initialSlot.bakugans.splice(index, 1)
-
-                MoveToAnotherSlotDirectiveAnimation({
-                    animations: roomState?.animations,
-                    bakugan: opponent,
-                    initialSlot: structuredClone(initialSlot),
-                    newSlot: structuredClone(slotTarget)
-                })
-
-                CheckBattleStillInProcess(roomState)
-                // CheckBattle({ roomState: roomState })
-                OpenGateCardActionRequest({ roomState })
-
-
-            }
-        }
+        moveSelectedBakugan({ resolution: resolution, roomState: roomState, requireUserOnSlot: false })
     }
 
 }
@@ -710,41 +642,7 @@ export const LanceEclair: exclusiveAbilitiesType = {
 
     },
     onAdditionalEffect: ({ resolution, roomData: roomState }) => {
-
-        if (resolution.data.type !== 'MOVE_BAKUGAN_TO_ANOTHER_SLOT') return
-        const slotOfGate = roomState?.protalSlots.find((s) => s.id === resolution.slot)
-        const { data, userId } = resolution
-
-        if (slotOfGate && roomState) {
-            const user = slotOfGate.bakugans.find((b) => b.key === resolution.bakuganKey && b.userId === resolution.userId)
-            const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
-            const index = slotOfGate.bakugans.findIndex((ba) => ba.key === opponent?.key && ba.userId === opponent.userId)
-            const slotTarget = roomState?.protalSlots.find((s) => s.id === data.slot)
-            if (user && opponent && slotTarget && slotTarget.portalCard !== null) {
-
-                const newOpponentState: bakuganOnSlot = {
-                    ...opponent,
-                    slot_id: data.slot
-                }
-
-                slotTarget.bakugans.push(newOpponentState)
-                slotOfGate.bakugans.splice(index, 1)
-
-                MoveToAnotherSlotDirectiveAnimation({
-                    animations: roomState?.animations,
-                    bakugan: opponent,
-                    initialSlot: structuredClone(slotTarget),
-                    newSlot: structuredClone(slotTarget)
-                })
-
-                CheckBattleStillInProcess(roomState)
-                OpenGateCardActionRequest({ roomState })
-
-                return {
-                    turnActionLaucher: true
-                }
-            }
-        }
+        moveSelectedBakugan({ resolution: resolution, roomState: roomState, requireUserOnSlot: true })
     }
 }
 
