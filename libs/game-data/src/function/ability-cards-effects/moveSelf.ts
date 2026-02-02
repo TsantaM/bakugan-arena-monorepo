@@ -1,8 +1,8 @@
-import { resolutionType } from "../../type/actions-serveur-requests";
+import { resolutionType } from "../../type/actions-serveur-requests.js";
 import { bakuganOnSlot, stateType } from "../../type/room-types.js";
-import { OpenGateCardActionRequest } from "../action-request-functions";
-import { CheckBattleStillInProcess } from "../check-battle-still-in-process";
-import { AddRenfortAnimationDirective, MoveToAnotherSlotDirectiveAnimation } from "../create-animation-directives";
+import { OpenGateCardActionRequest } from "../action-request-functions/index.js";
+import { CheckBattleStillInProcess } from "../check-battle-still-in-process.js";
+import { AddRenfortAnimationDirective, MoveToAnotherSlotDirectiveAnimation } from "../create-animation-directives/index.js";
 
 export function moveBakuganToSelectedSlot({
     resolution,
