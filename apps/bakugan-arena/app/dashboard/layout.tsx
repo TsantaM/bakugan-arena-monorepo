@@ -1,6 +1,7 @@
 import AppSidebar from "@/components/elements/app-sidebar/app-sidebar"
 import { AnimatedThemeToggler } from "@/components/magicui/theme-toggler"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { SidebarInset, SidebarMenuSkeleton, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { getUser, getUserRole } from "@/src/actions/getUserSession"
@@ -30,12 +31,14 @@ export default async function Layout({ children }: { children: React.ReactNode }
                                 <Suspense fallback={<SidebarMenuSkeleton />}>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger>
-                                            <Avatar>
-                                                {
-                                                    user?.image != undefined && <AvatarImage src={user?.image} className="size-5" alt={user.name} />
-                                                }
-                                                <AvatarFallback>{user?.name[0].toUpperCase()}</AvatarFallback>
-                                            </Avatar>
+                                            <Button variant='outline' asChild className="p-0">
+                                                <Avatar>
+                                                    {
+                                                        user?.image != undefined && <AvatarImage src={user.image} className="size-5" alt={user.name} />
+                                                    }
+                                                    <AvatarFallback>{user?.name[0].toUpperCase()}</AvatarFallback>
+                                                </Avatar>
+                                            </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
                                             <DropdownMenuItem asChild>
