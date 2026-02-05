@@ -64,7 +64,8 @@ export default function UseSearchOpponent() {
     return {
         waitingOpponent,
         emitPlayerData,
-        cancelSearchOpponent
+        cancelSearchOpponent,
+        setWaitingOpponent
     }
 
 }

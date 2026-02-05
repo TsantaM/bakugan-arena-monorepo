@@ -7,10 +7,15 @@ import { Button } from "@/components/ui/button";
 import { getUser } from "@/src/actions/getUserSession";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
 
   const user = await getUser()
+
+  if(user) {
+    redirect("/dashboard")
+  }
 
   return (
     <>
