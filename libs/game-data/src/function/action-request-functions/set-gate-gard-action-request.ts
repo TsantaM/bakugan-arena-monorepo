@@ -103,6 +103,7 @@ export function SelectGateCardActionRequest({ roomState }: { roomState: stateTyp
         }))
     }
 
+    
     if (turnCount === 0) {
         if (usableGates.length > 0) {
             active.actions.mustDo.push(selectGateCardRequest)

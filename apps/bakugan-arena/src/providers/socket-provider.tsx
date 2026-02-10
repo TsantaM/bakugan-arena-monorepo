@@ -3,8 +3,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { authClient } from '../lib/auth-client';
-import { redirect } from 'next/navigation';
-import UseSearchOpponent from '../sockets/search-opponent';
 
 interface SocketContextType {
   socket: Socket | null;
@@ -18,7 +16,6 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const userId = user.data ? user.data?.user.id : ''
   const [socket, setSocket] = useState<Socket | null>(null);
   const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL
-  const { setWaitingOpponent } = UseSearchOpponent()
 
   useEffect(() => {
     const socketInstance = io(SOCKET_URL || "http://localhost:3005", {
@@ -30,20 +27,6 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       socketInstance.disconnect();
     };
   }, [userId]);
-
-  // Listener Globals :
-  useEffect(() => {
-    if (!socket) return
-
-    socket.on('match-found', (roomId) => {
-      setWaitingOpponent(false)
-      redirect(`/dashboard/battlefield?id=${roomId}`)
-    })
-
-    socket.off('match-found')
-    
-  }, [socket])
-
 
   return (
     <SocketContext.Provider value={{ socket }}>

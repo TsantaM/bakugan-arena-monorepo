@@ -8,20 +8,20 @@ process.on("uncaughtException", (err) => {
 
 
 import { Server } from "socket.io";
-import { removeToWaitingList, setupSearchOpponentSocket } from "./sockets/search-opponent.js";
-import { socketGetRoomState, socketInitiRoomState } from "./sockets/get-room-data.js";
-import { socketTurn } from "./sockets/turn-action.js";
-import { socketUpdateGateState } from "./sockets/update-gate-state.js";
-import { socketUpdateBakuganState } from "./sockets/update-bakugans-state.js";
-import { socketActiveGateCard } from "./sockets/active-gate-card-socket.js";
-import { socketUseAbilityCard } from "./sockets/use-ability-card-socket.js";
-import { socketCleanAnimations } from "./sockets/clear-animations-socket.js";
-import { AbilitiesAdditionalEffectsSocket } from "./sockets/abilities-additional-effect-socket.js";
-import { addOrUpdateConnectedUser, addRoomSocket, removeConnectedUserBySocket, removeRoomSocket } from "./functions/connected-users-management.js";
-import { ChalengeAcceptSocket, ChalengeSomeoneSocket } from "./sockets/chalenge-someone-socket.js";
-import { getUsersRooms } from "./sockets/get-users-rooms.js";
-import { CheckActivitiesSocket } from "./sockets/check-activities-socket.js";
-import { CancelOpponentResearch } from "./sockets/cancel-opponent-research.js";
+import { removeToWaitingList, setupSearchOpponentSocket } from "./sockets/search-opponent";
+import { socketGetRoomState, socketInitiRoomState } from "./sockets/get-room-data";
+import { socketTurn } from "./sockets/turn-action";
+import { socketUpdateGateState } from "./sockets/update-gate-state";
+import { socketUpdateBakuganState } from "./sockets/update-bakugans-state";
+import { socketActiveGateCard } from "./sockets/active-gate-card-socket";
+import { socketUseAbilityCard } from "./sockets/use-ability-card-socket";
+import { socketCleanAnimations } from "./sockets/clear-animations-socket";
+import { AbilitiesAdditionalEffectsSocket } from "./sockets/abilities-additional-effect-socket";
+import { addOrUpdateConnectedUser, addRoomSocket, removeConnectedUserBySocket, removeRoomSocket } from "./functions/connected-users-management";
+import { ChalengeAcceptSocket, ChalengeSomeoneSocket } from "./sockets/chalenge-someone-socket";
+import { getUsersRooms } from "./sockets/get-users-rooms";
+import { CheckActivitiesSocket } from "./sockets/check-activities-socket";
+import { CancelOpponentResearch } from "./sockets/cancel-opponent-research";
 
 
 

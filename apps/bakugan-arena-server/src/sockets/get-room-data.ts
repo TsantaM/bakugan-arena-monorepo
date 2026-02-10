@@ -121,7 +121,7 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
             const isActivePlayer = roomData.turnState.turn === userId
             const isInactivePlayer =
                 roomData.turnState.previous_turn === userId
-
+            const turn = roomData.turnState.turnCount
             if (isActivePlayer) {
                 const request = roomData.ActivePlayerActionRequest
                 const merged = [
@@ -140,7 +140,7 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
                         activeRequest.actions.optional
                     ].flat()
 
-                    if (activeMerged.length <= 0) {
+                    if (activeMerged.length <= 0 && turn > 0) {
                         CreateActionRequestFunction({ roomState: roomData })
                         const activeSocket = roomData.connectedsUsers.get(roomData.turnState.turn)
                         const inactiveSocket = roomData.connectedsUsers.get(roomData.turnState.previous_turn || '')
@@ -172,7 +172,7 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
                         activeRequest.actions.optional
                     ].flat()
 
-                    if (activeMerged.length <= 0) {
+                    if (activeMerged.length <= 0 && turn > 0) {
                         CreateActionRequestFunction({ roomState: roomData })
                         const activeSocket = roomData.connectedsUsers.get(roomData.turnState.turn)
                         const inactiveSocket = roomData.connectedsUsers.get(roomData.turnState.previous_turn || '')

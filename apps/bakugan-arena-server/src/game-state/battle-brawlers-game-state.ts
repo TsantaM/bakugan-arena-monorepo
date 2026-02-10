@@ -20,3 +20,12 @@ export const roomsSockets: {
     socketId: string,
     roomId: string
 }[] = []
+
+
+export const intervalIds: {
+    roomId: string,
+    players: {
+        userId: string,
+        intervalId: NodeJS.Timeout | null
+    }[]
+}[] = []

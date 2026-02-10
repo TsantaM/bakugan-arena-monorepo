@@ -1,6 +1,6 @@
 import { chalengeAcceptSocketProps, chalengeSomeoneSocketProps } from "@bakugan-arena/game-data";
 import { Server, Socket } from "socket.io/dist";
-import { Battle_Brawlers_Game_State, chalenges, connectedUsers } from "../game-state/battle-brawlers-game-state";
+import { Battle_Brawlers_Game_State, chalenges, connectedUsers, intervalIds } from "../game-state/battle-brawlers-game-state";
 import { CreateRoom } from "../functions/create-room";
 import { createGameState } from "../functions/create-game-state";
 import { GetUsersRooms } from "../functions/get-rooms-of-user";
@@ -68,7 +68,17 @@ export const ChalengeAcceptSocket = (io: Server, socket: Socket) => {
         const newRoomState = await createGameState({ roomId: room.id })
 
         if (newRoomState) {
+            const playersInvervalsId = newRoomState.players.map((player) => ({
+                userId: player.userId,
+                intervalId: null
+            }))
+            const interval = {
+                roomId: newRoomState.roomId,
+                players: playersInvervalsId
+            }
             Battle_Brawlers_Game_State.push(newRoomState)
+
+            intervalIds.push(interval)
             const p1rooms = GetUsersRooms(chalenges[chalengeIndex].chalenger.userId)
             io.to(chalenges[chalengeIndex].chalenger.userSocket).emit('get-rooms-user-id', p1rooms)
             const p2rooms = GetUsersRooms(chalenges[chalengeIndex].target.userId)

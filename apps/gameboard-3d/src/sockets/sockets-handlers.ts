@@ -28,6 +28,9 @@ import { AdditionalEffectMessage, EndGameMessage, removePreviousDialogBoxAnimati
 import { setEliminatedCircles } from "../functions/set-eliminated-circle"
 import { clearTurnInterface } from "../turn-action-management/turn-actions-resolution/action-scope"
 import { ActiveAbilityCardAnimation } from "../animations/active-ability-card"
+import dayjs from "dayjs"
+import duration from "dayjs/plugin/duration";
+import relativeTime from "dayjs/plugin/relativeTime";
 
 let animationQueue: AnimationDirectivesTypes[] = []
 let isProcessingAnimations = false
@@ -431,9 +434,30 @@ export function registerSocketHandlers(
 
     })
 
+    socket.on('player-timer', (timer: { userId: string, remaining: number }) => {
+        const { userId: user, remaining } = timer
+        // console.log(`${user}: ${remaining}`)
+        dayjs.extend(duration);
+        dayjs.extend(relativeTime);
+        const d = dayjs.duration(remaining, 'seconds');
+        const time = `${String(d.minutes()).padStart(2, "0")}:${String(d.seconds()).padStart(2, "0")}`;
+
+        // console.log(`${user} : ${time}`)
+
+        if (user === userId) {
+            const timer = document.getElementById('left-timer')
+            if (!timer) return
+            timer.textContent = time
+        } else {
+            const timer = document.getElementById('right-timer')
+            if (!timer) return
+            timer.textContent = time
+        }
+
+    })
+
     socket.on('game-finished', (message: Message) => {
         clearTurnInterface()
-
         EndGameMessage({
             message: message
         })

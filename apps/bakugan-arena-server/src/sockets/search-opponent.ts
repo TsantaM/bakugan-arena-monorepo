@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { CreateRoom } from "../functions/create-room";
 import { createGameState } from "../functions/create-game-state";
-import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
+import { Battle_Brawlers_Game_State, intervalIds } from "../game-state/battle-brawlers-game-state";
 import { GetUsersRooms } from "../functions/get-rooms-of-user";
 
 export type waitingListElements = {
@@ -60,7 +60,17 @@ const matchmaking = async ({ io, socket, socketId, userId }: { io: Server, socke
 
                 const newRoomState = await createGameState({ roomId: room.id })
                 if (newRoomState) {
+                    const playersInvervalsId = newRoomState.players.map((player) => ({
+                        userId: player.userId,
+                        intervalId: null
+                    }))
+                    const interval = {
+                        roomId: newRoomState.roomId,
+                        players: playersInvervalsId
+                    }
                     Battle_Brawlers_Game_State.push(newRoomState)
+
+                    intervalIds.push(interval)
                 }
 
 
@@ -81,8 +91,20 @@ const matchmaking = async ({ io, socket, socketId, userId }: { io: Server, socke
                 players.forEach((p) => removeToWaitingList({ userId: p.userId }))
 
                 const newRoomState = await createGameState({ roomId: room.id })
+
                 if (newRoomState) {
+                    const playersInvervalsId = newRoomState.players.map((player) => ({
+                        userId: player.userId,
+                        intervalId: null
+                    }))
+                    const interval = {
+                        roomId: newRoomState.roomId,
+                        players: playersInvervalsId
+                    }
                     Battle_Brawlers_Game_State.push(newRoomState)
+
+                    intervalIds.push(interval)
+
                     players.forEach((p) => {
                         const rooms = GetUsersRooms(p.userId)
                         io.to(p.socketId).emit('get-rooms-user-id', rooms)

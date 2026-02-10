@@ -4,8 +4,6 @@ import { OpenGateCardActionRequest, SelectGateCardActionRequest, SetBakuganActio
 export function CreateActionRequestFunction({ roomState }: { roomState: stateType }) {
 
     if (!roomState) return
-    const turnState = roomState.turnState
-    const players = roomState.players
 
     const active = roomState.ActivePlayerActionRequest
     const inactive = roomState.InactivePlayerActionRequest

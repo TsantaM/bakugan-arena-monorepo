@@ -134,7 +134,8 @@ export type stateType = {
         userId: string,
         usable_gates: number,
         usable_abilitys: number,
-        username: string
+        username: string,
+        timer: number
     }[];
     turnState: turnStateType,
     persistantAbilities: activateAbilities[],
@@ -156,6 +157,10 @@ export type roomStateType = {
     deck: deckType[];
     portalSlots: portalSlotsType;
     battleState: battleState;
+    timers: {
+        userId: string,
+        timer: number
+    }[]
     eliminated: {
         user: number,
         opponnent: number

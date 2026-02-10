@@ -14,6 +14,11 @@ const initRoomState:
         const portalSlots = data.protalSlots
         const battleState = data.battleState
 
+        const timers = data.players.map((player) => ({
+            userId: player.userId,
+            timer: player.timer
+        }))
+
         const usersBakugans = deck.find((d) => d.userId === userId)?.bakugans.map((b) => b?.bakuganData).filter((bakugan) => bakugan !== undefined).filter((b) => b.elimined).length
 
         const opponentBakugans = deck.find((d) => d.userId !== userId)?.bakugans.map((b) => b?.bakuganData).filter((bakugan) => bakugan !== undefined).filter((b) => b.elimined).length
@@ -45,6 +50,7 @@ const initRoomState:
             deck,
             portalSlots,
             battleState,
+            timers,
             eliminated: {
                 user: usersBakugans ? usersBakugans : 0,
                 opponnent: opponentBakugans ? opponentBakugans : 0

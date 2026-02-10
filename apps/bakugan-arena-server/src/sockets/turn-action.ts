@@ -1,10 +1,11 @@
 import { Server, Socket } from "socket.io/dist";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
-import { ActivePlayerActionRequestType, CheckBattleStillInProcess, CreateActionRequestFunction, handleBattle, handleGateCards, InactivePlayerActionRequestType, Message, turnCountSocketProps, updateTurnState } from "@bakugan-arena/game-data";
+import { CheckBattleStillInProcess, CreateActionRequestFunction, handleBattle, handleGateCards, Message, turnCountSocketProps, updateTurnState } from "@bakugan-arena/game-data";
 import { CheckGameFinished } from "../functions/CheckGameFinished";
 import { onBattleEnd } from "../functions/on-battle-end";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { ClearDomain } from "../functions/clear-domain";
+import { UpdatePlayerTimer } from "../functions/start-player-timer";
 
 export function turnActionUpdater({ roomId, userId, io, updateBattleState = true }: { roomId: string, userId: string, io: Server, updateBattleState?: boolean }) {
     const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
@@ -108,6 +109,11 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
         }
 
     }
+
+    UpdatePlayerTimer({
+        io: io,
+        roomState: roomData
+    })
 
 }
 
