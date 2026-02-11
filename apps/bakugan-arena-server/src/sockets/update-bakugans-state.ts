@@ -17,7 +17,8 @@ export function AddAbilities({ roomState, request, bakugan, slot, userId, attrib
             bakuganKey: bakugan,
             playersDeck: activePlayer,
             slotOfBattle: roomState.protalSlots[Slots.indexOf(roomState.battleState.slot)],
-            userId: userId
+            userId: userId,
+            roomState: roomState
         })
     } else {
         selectAbilitiesResult = SelectAbilityCardInNeutralFilters({
@@ -25,7 +26,8 @@ export function AddAbilities({ roomState, request, bakugan, slot, userId, attrib
             bakuganToSet: bakugan,
             slots: roomState.protalSlots,
             decksState: roomState.decksState,
-            userId: userId
+            userId: userId,
+            roomState: roomState
         })
     }
     const abilities = [

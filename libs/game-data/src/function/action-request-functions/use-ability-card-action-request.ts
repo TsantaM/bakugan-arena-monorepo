@@ -36,7 +36,8 @@ export function UseAbilityCardActionRequest({ roomState }: { roomState: stateTyp
                 bakuganKey: bakugan.key,
                 playersDeck: activePlayer,
                 slotOfBattle: roomState.protalSlots[Slots.indexOf(battleState.slot)],
-                userId: activePlayer.userId
+                userId: activePlayer.userId,
+                roomState: roomState
             })
         } else {
             selectAbilitiesResult = SelectAbilityCardInNeutralFilters({
@@ -44,7 +45,8 @@ export function UseAbilityCardActionRequest({ roomState }: { roomState: stateTyp
                 bakuganToSet: bakugan.key,
                 slots: roomState.protalSlots,
                 decksState: roomState.decksState,
-                userId: activePlayer.userId
+                userId: activePlayer.userId,
+                roomState: roomState
             })
         }
         const abilities = [
