@@ -1,4 +1,4 @@
-import { AddRenfortAnimationDirective, CheckBattle, dragBakuganToUserSlot, MoveToAnotherSlotDirectiveAnimation, OpenGateCardActionRequest, PowerChangeDirectiveAnumation } from "../../function/index.js";
+import { AbilityCardFailed, AddRenfortAnimationDirective, CheckBattle, dragBakuganToUserSlot, MoveToAnotherSlotDirectiveAnimation, OpenGateCardActionRequest, PowerChangeDirectiveAnumation } from "../../function/index.js";
 import { StandardCardsImages } from "../../store/store-index.js";
 import type { AbilityCardsActions, abilityCardsType, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, slots_id } from "../../type/type-index.js";
 import { GateCardsList } from "../gate-gards.js";
@@ -140,13 +140,22 @@ export const ForceDattraction: abilityCardsType = {
     usable_in_neutral: false,
 
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        if (!roomState) return null
+        const animation = AbilityCardFailed({ card: ForceDattraction.name })
+
+        if (!roomState) return animation
+
+        if (ForceDattraction.activationConditions) {
+            const checker = ForceDattraction.activationConditions({ roomState, userId })
+            if (checker === false) return animation
+        }
+
+        if (!roomState) return animation
 
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const deck = roomState?.decksState.find((d) => d.userId === userId)
         const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
 
-        if (!slotOfGate && !deck && !userData) return null
+        if (!slotOfGate && !deck && !userData) return animation
 
         const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot && s.bakugans.length > 0).map((slot) => slot.bakugans).flat()
         const bakugans: bakuganToMoveType[] = slots.map((bakugan) => ({
@@ -166,7 +175,12 @@ export const ForceDattraction: abilityCardsType = {
 
     },
     onAdditionalEffect: ({ resolution, roomData: roomState }) => {
-        dragBakuganToUserSlot({resolution: resolution, roomState: roomState})
+        dragBakuganToUserSlot({ resolution: resolution, roomState: roomState })
+    },
+    activationConditions: ({ roomState, userId }) => {
+        if (!roomState) return false
+        const bakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().length
+        if (bakugans < 2) return false
+        return true
     }
-
 }

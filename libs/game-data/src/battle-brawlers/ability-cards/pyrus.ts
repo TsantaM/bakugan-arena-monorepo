@@ -1,4 +1,4 @@
-import { CancelGateCardDirectiveAnimation, ComeBackBakuganDirectiveAnimation, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective } from "../../function/index.js";
+import { AbilityCardFailed, CancelGateCardDirectiveAnimation, ComeBackBakuganDirectiveAnimation, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective } from "../../function/index.js";
 import { AbilityCardsActions, bakuganOnSlot, type abilityCardsType } from "../../type/type-index.js";
 import { GateCardsList } from "../gate-gards.js";
 import { StandardCardsImages } from "../../store/store-index.js";
@@ -46,15 +46,25 @@ export const JetEnflamme: abilityCardsType = {
     image: StandardCardsImages.pyrus,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        if (!roomState) return null
+
+        const animation = AbilityCardFailed({ card: JetEnflamme.name })
+
+        if (!roomState) return animation
+
+        if (JetEnflamme.activationConditions) {
+            const checker = JetEnflamme.activationConditions({ roomState, userId })
+            if (checker === false) return animation
+        }
+
+        if (!roomState) return animation
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const deck = roomState?.decksState.find((d) => d.userId === userId)
         const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
 
-        if (!slotOfGate && !deck && !userData) return null
+        if (!slotOfGate && !deck && !userData) return animation
         if (!deck) return null
         const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Pyrus').map((b) => b.key)).flat()
-        if (haosOnDomain.length < 2) return null
+        if (haosOnDomain.length < 2) return animation
         const bakugans = deck.bakugans.filter((bakugan) => bakugan && bakugan.bakuganData.onDomain === false && bakugan.bakuganData.elimined === false).filter((bakugan) => bakugan !== undefined && bakugan !== null)
         const request: AbilityCardsActions = {
             type: 'SELECT_BAKUGAN_TO_SET',
@@ -134,6 +144,16 @@ export const JetEnflamme: abilityCardsType = {
 
         }
     },
+    activationConditions({ roomState, userId }) {
+        if (!roomState) return false
+        const deck = roomState?.decksState.find((d) => d.userId === userId)
+        if (!deck) return false
+        const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Pyrus').map((b) => b.key)).flat()
+        if (haosOnDomain.length < 2) return false
+        const bakugans = deck.bakugans.filter((bakugan) => bakugan && bakugan.bakuganData.onDomain === false && bakugan.bakuganData.elimined === false).filter((bakugan) => bakugan !== undefined && bakugan !== null)
+        if (bakugans.length === 0) return false
+        return true
+    }
 }
 
 export const RetroAction: abilityCardsType = {

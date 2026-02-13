@@ -189,6 +189,9 @@ export type AbilityCardsActions = {
     type: 'ATTRACT_BAKUGAN',
     message: string,
     bakugans: bakuganToMoveType2[]
+} | {
+    type: 'CARD_FAILED',
+    message: string
 }
 
 export type resolutionType = {

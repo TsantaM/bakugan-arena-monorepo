@@ -287,6 +287,12 @@ async function processAnimationQueue(userId: string,
             })
         }
 
+        if (current.type === 'ABILITY_CARD_FAILED') {
+            await ShowMessageAnimation({
+                messages: current.message
+            })
+        }
+
         i++; // avancer à l'animation suivante
     }
 
