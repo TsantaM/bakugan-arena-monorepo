@@ -165,7 +165,7 @@ export const EclatSoudain: abilityCardsType = {
         if (bakugans.length === 0) return false
         return true
     },
-    
+
     canUse({ bakugan, roomState }) {
         if (!roomState) return false
 
@@ -215,12 +215,19 @@ export const ContreMaitrise: abilityCardsType = {
     image: StandardCardsImages.haos,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, slot }) => {
+        const lists = [AbilityCardsList, ExclusiveAbilitiesList].flat()
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             // const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
-            const lastAbility = slotOfGate.activateAbilities.find((a) => a.userId !== userId)
+            const abilities = slotOfGate.activateAbilities.filter((ability) => {
+                return (
+                    !ability.canceled &&
+                    ability.userId !== userId &&
+                    lists.some((a) => a.key === ability.key && a.onCanceled)
+                );
+            });
 
-            if (lastAbility && !lastAbility.canceled) {
+            abilities.forEach((lastAbility) => {
                 const ability = AbilityCardsList.find((a) => a.key === lastAbility.key)
                 const exclusive = ExclusiveAbilitiesList.find((a) => a.key === lastAbility.key)
 
@@ -228,11 +235,49 @@ export const ContreMaitrise: abilityCardsType = {
                 if (exclusive && exclusive.onCanceled) exclusive.onCanceled({ roomState, bakuganKey: lastAbility.bakuganKey, slot: slot, userId: lastAbility.userId })
 
                 lastAbility.canceled = true
-            }
+            })
         }
 
         return null
-    }
+    },
+    activationConditions({ roomState, userId }) {
+
+        if (!roomState) return false
+
+        const { battleInProcess, paused, slot, turns } = roomState.battleState
+
+        if (!battleInProcess || paused) return false
+
+        return true
+
+    },
+    canUse({ roomState, bakugan }) {
+
+        if (!roomState) return false
+
+        const { battleInProcess, paused, slot, turns } = roomState.battleState
+
+        if (!battleInProcess || paused) return false
+
+        if (bakugan.slot_id !== slot) return false
+
+        const slotOfBattle = roomState.protalSlots.find((s) => s.id === slot)
+        if (!slotOfBattle) return false
+
+        const lists = [AbilityCardsList, ExclusiveAbilitiesList].flat()
+
+        const abilities = slotOfBattle.activateAbilities.filter((ability) => {
+            return (
+                !ability.canceled &&
+                ability.userId !== bakugan.userId &&
+                lists.some((a) => a.key === ability.key && a.onCanceled)
+            );
+        });
+
+        if (abilities.length < 1) return false
+
+        return true
+    },
 }
 
 

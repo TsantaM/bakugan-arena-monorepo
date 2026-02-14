@@ -34,6 +34,29 @@ export const MurDeFeu: abilityCardsType = {
 
         return null
     },
+    onCanceled({ roomState, userId, bakuganKey, slot }) {
+        if (!roomState) return null
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+
+        if (slotOfGate) {
+            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const opponents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
+            if (user) {
+                opponents.forEach((b) => {
+                    b.currentPower += 50
+                }
+                )
+            }
+            PowerChangeDirectiveAnumation({
+                animations: roomState.animations,
+                bakugans: opponents,
+                powerChange: 50,
+                malus: false
+            })
+        }
+
+        return null
+    },
 }
 
 export const JetEnflamme: abilityCardsType = {
@@ -146,7 +169,7 @@ export const JetEnflamme: abilityCardsType = {
     },
     activationConditions({ roomState, userId }) {
         if (!roomState) return false
-        if(!roomState.battleState.battleInProcess || roomState.battleState.paused) return false
+        if (!roomState.battleState.battleInProcess || roomState.battleState.paused) return false
         const deck = roomState?.decksState.find((d) => d.userId === userId)
         if (!deck) return false
         const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Pyrus').map((b) => b.key)).flat()
@@ -155,10 +178,10 @@ export const JetEnflamme: abilityCardsType = {
         if (bakugans.length === 0) return false
         return true
     },
-    canUse({bakugan, roomState}) {
-        if(!roomState) return false
+    canUse({ bakugan, roomState }) {
+        if (!roomState) return false
 
-        if(bakugan.slot_id !== roomState.battleState.slot) return false
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }
@@ -223,5 +246,24 @@ export const TourbillonDeFeu: abilityCardsType = {
         }
 
         return null
-    }
+    },
+    onCanceled({ roomState, userId, bakuganKey, slot }) {
+        if (!roomState) return null
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate) {
+            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+
+            if (user) {
+                user.currentPower -= 100
+                PowerChangeDirectiveAnumation({
+                    animations: roomState.animations,
+                    bakugans: [user],
+                    powerChange: 100,
+                    malus: true
+                })
+            }
+        }
+
+        return null
+    },
 }

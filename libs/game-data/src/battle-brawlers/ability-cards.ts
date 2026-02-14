@@ -1,5 +1,5 @@
 import { abilityCardsType } from "../index.js";
-import { AquosSubterra, AquosVentus, BoublierFusion, CombatAerien, CoupDeGrace, DarkusAquos, DarkusPyrus, EclatSoudain, ForceDattraction, HaosDarkus, HaosImmobilisation, HaosVentus, JetEnflamme, MagmaSupreme, MirageAquatique, MurDeFeu, Obstruction, PyrusAquosHaos, PyrusDarkus, RetourDair, RetroAction, SouffleTout, SubterraAquos, SubterraHaos, SubterraPyrus, TornadeChaosTotal, TornadeExtreme, TourbillonDeFeu, VengeanceAlItalienne, VentusHaos, VentusPyrus, VentusSubterraDarkus } from "./ability-cards/index.js";
+import { AquosSubterra, AquosVentus, BoublierFusion, CombatAerien, ContreMaitrise, CoupDeGrace, DarkusAquos, DarkusPyrus, EclatSoudain, ForceDattraction, HaosDarkus, HaosImmobilisation, HaosVentus, JetEnflamme, MagmaSupreme, MirageAquatique, MurDeFeu, Obstruction, PyrusAquosHaos, PyrusDarkus, RetourDair, RetroAction, SouffleTout, SubterraAquos, SubterraHaos, SubterraPyrus, TornadeChaosTotal, TornadeExtreme, TourbillonDeFeu, VengeanceAlItalienne, VentusHaos, VentusPyrus, VentusSubterraDarkus } from "./ability-cards/index.js";
 
 export const AbilityCards: Record<string, abilityCardsType> = {
     // Pyrus
@@ -35,7 +35,7 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     // [RapideHaos.key]: RapideHaos,
     [EclatSoudain.key]: EclatSoudain,
     // [LumiereDivine.key]: LumiereDivine,
-    // [ContreMaitrise.key]: ContreMaitrise,
+    [ContreMaitrise.key]: ContreMaitrise,
     [HaosImmobilisation.key]: HaosImmobilisation,
     [HaosDarkus.key]: HaosDarkus,
     [HaosVentus.key]: HaosVentus,
