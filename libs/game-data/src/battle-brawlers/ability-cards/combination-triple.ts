@@ -22,11 +22,29 @@ export const PyrusAquosHaos: abilityCardsType = {
     },
     activationConditions({ roomState, userId }) {
         if (!roomState) return false
-        const { battleInProcess, paused, slot, turns } = roomState.battleState
-        const attributs: attribut[] = ['Pyrus', 'Aquos', 'Haos']
-        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && attributs.includes(bakugan.attribut))
+        const { battleInProcess, paused } = roomState.battleState
 
-        if ((!battleInProcess || (battleInProcess && paused)) && usersBakugans.length < 3) return false
+        const requiredAttributs: attribut[] = ['Pyrus', 'Aquos', 'Haos']
+
+        const usersBakugans = roomState.protalSlots
+            .map((slot) => slot.bakugans)
+            .flat()
+            .filter((bakugan) => bakugan.userId === userId)
+
+        // On vérifie la présence de chaque attribut obligatoire
+        const hasAllAttributs = requiredAttributs.every(attr =>
+            usersBakugans.some(b => b.attribut === attr)
+        )
+
+        if (!battleInProcess || paused) return false
+        if (!hasAllAttributs) return false
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }
@@ -52,12 +70,31 @@ export const VentusSubterraDarkus: abilityCardsType = {
     },
     activationConditions({ roomState, userId }) {
         if (!roomState) return false
-        const { battleInProcess, paused, slot, turns } = roomState.battleState
-        const attributs: attribut[] = ['Darkus', 'Ventus', 'Subterra']
-        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && attributs.includes(bakugan.attribut))
+        const { battleInProcess, paused } = roomState.battleState
 
-        if ((!battleInProcess || (battleInProcess && paused)) && usersBakugans.length < 3) return false
+        const requiredAttributs: attribut[] = ['Ventus', 'Darkus', 'Subterra']
+
+        const usersBakugans = roomState.protalSlots
+            .map((slot) => slot.bakugans)
+            .flat()
+            .filter((bakugan) => bakugan.userId === userId)
+
+        // On vérifie la présence de chaque attribut obligatoire
+        const hasAllAttributs = requiredAttributs.every(attr =>
+            usersBakugans.some(b => b.attribut === attr)
+        )
+
+        if (!battleInProcess || paused) return false
+        if (!hasAllAttributs) return false
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }
+
 }

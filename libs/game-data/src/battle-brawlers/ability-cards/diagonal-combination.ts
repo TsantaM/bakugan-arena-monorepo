@@ -31,9 +31,24 @@ export const PyrusDarkus: abilityCardsType = {
         if (!roomState) return false
         const { battleInProcess, paused, slot, turns } = roomState.battleState
         const attributs: attribut[] = ['Pyrus', 'Darkus']
-        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && attributs.includes(bakugan.attribut))
+        const usersBakugans = roomState.protalSlots
+            .flatMap((slot) => slot.bakugans)
+            .filter((bakugan) => bakugan.userId === userId)
 
-        if ((!battleInProcess || (battleInProcess && paused)) && usersBakugans.length < 2) return false
+        // On vérifie la présence de chaque attribut obligatoire
+        const hasAllAttributs = attributs.every(attr =>
+            usersBakugans.some(b => b.attribut === attr)
+        )
+
+        if (!battleInProcess || paused) return false
+        if (!hasAllAttributs) return false
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }
@@ -68,9 +83,25 @@ export const DarkusPyrus: abilityCardsType = {
         if (!roomState) return false
         const { battleInProcess, paused, slot, turns } = roomState.battleState
         const attributs: attribut[] = ['Pyrus', 'Darkus']
-        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && attributs.includes(bakugan.attribut))
+        const usersBakugans = roomState.protalSlots
+            .flatMap((slot) => slot.bakugans)
+            .filter((bakugan) => bakugan.userId === userId)
 
-        if ((!battleInProcess || (battleInProcess && paused)) && usersBakugans.length < 2) return false
+        // On vérifie la présence de chaque attribut obligatoire
+        const hasAllAttributs = attributs.every(attr =>
+            usersBakugans.some(b => b.attribut === attr)
+        )
+
+        if (!battleInProcess || paused) return false
+        if (!hasAllAttributs) return false
+
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }
@@ -104,9 +135,25 @@ export const VentusHaos: abilityCardsType = {
         if (!roomState) return false
         const { battleInProcess, paused, slot, turns } = roomState.battleState
         const attributs: attribut[] = ['Ventus', 'Haos']
-        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && attributs.includes(bakugan.attribut))
+        const usersBakugans = roomState.protalSlots
+            .flatMap((slot) => slot.bakugans)
+            .filter((bakugan) => bakugan.userId === userId)
 
-        if ((!battleInProcess || (battleInProcess && paused)) && usersBakugans.length < 2) return false
+        // On vérifie la présence de chaque attribut obligatoire
+        const hasAllAttributs = attributs.every(attr =>
+            usersBakugans.some(b => b.attribut === attr)
+        )
+
+        if (!battleInProcess || paused) return false
+        if (!hasAllAttributs) return false
+
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }
@@ -140,9 +187,24 @@ export const HaosVentus: abilityCardsType = {
         if (!roomState) return false
         const { battleInProcess, paused, slot, turns } = roomState.battleState
         const attributs: attribut[] = ['Haos', 'Ventus']
-        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && attributs.includes(bakugan.attribut))
+        const usersBakugans = roomState.protalSlots
+            .flatMap((slot) => slot.bakugans)
+            .filter((bakugan) => bakugan.userId === userId)
 
-        if ((!battleInProcess || (battleInProcess && paused)) && usersBakugans.length < 2) return false
+        // On vérifie la présence de chaque attribut obligatoire
+        const hasAllAttributs = attributs.every(attr =>
+            usersBakugans.some(b => b.attribut === attr)
+        )
+
+        if (!battleInProcess || paused) return false
+        if (!hasAllAttributs) return false
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }
@@ -176,9 +238,25 @@ export const AquosSubterra: abilityCardsType = {
         if (!roomState) return false
         const { battleInProcess, paused, slot, turns } = roomState.battleState
         const attributs: attribut[] = ['Aquos', 'Subterra']
-        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && attributs.includes(bakugan.attribut))
+        const usersBakugans = roomState.protalSlots
+            .flatMap((slot) => slot.bakugans)
+            .filter((bakugan) => bakugan.userId === userId)
 
-        if ((!battleInProcess || (battleInProcess && paused)) && usersBakugans.length < 2) return false
+        // On vérifie la présence de chaque attribut obligatoire
+        const hasAllAttributs = attributs.every(attr =>
+            usersBakugans.some(b => b.attribut === attr)
+        )
+
+        if (!battleInProcess || paused) return false
+        if (!hasAllAttributs) return false
+
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }
@@ -212,9 +290,25 @@ export const SubterraAquos: abilityCardsType = {
         if (!roomState) return false
         const { battleInProcess, paused, slot, turns } = roomState.battleState
         const attributs: attribut[] = ['Subterra', 'Aquos']
-        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && attributs.includes(bakugan.attribut))
+        const usersBakugans = roomState.protalSlots
+            .flatMap((slot) => slot.bakugans)
+            .filter((bakugan) => bakugan.userId === userId)
 
-        if ((!battleInProcess || (battleInProcess && paused)) && usersBakugans.length < 2) return false
+        // On vérifie la présence de chaque attribut obligatoire
+        const hasAllAttributs = attributs.every(attr =>
+            usersBakugans.some(b => b.attribut === attr)
+        )
+
+        if (!battleInProcess || paused) return false
+        if (!hasAllAttributs) return false
+
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }

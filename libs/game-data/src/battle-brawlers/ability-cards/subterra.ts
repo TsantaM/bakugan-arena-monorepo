@@ -182,5 +182,13 @@ export const ForceDattraction: abilityCardsType = {
         const bakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().length
         if (bakugans < 2) return false
         return true
+    },
+    canUse({ bakugan, roomState }) {
+
+        if (!roomState) return false
+        const bakugansOnOtherSlots = roomState.protalSlots.filter((slot) => slot.id !== bakugan.slot_id).map((slot) => slot.bakugans).flat().length
+        if (bakugansOnOtherSlots < 1) return false
+
+        return true
     }
 }

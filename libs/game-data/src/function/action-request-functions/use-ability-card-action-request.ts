@@ -50,13 +50,29 @@ export function UseAbilityCardActionRequest({ roomState }: { roomState: stateTyp
             })
         }
         const abilities = [
-            selectAbilitiesResult && selectAbilitiesResult.usableAbilities && selectAbilitiesResult.usableAbilities.map((ability) => ({
+            selectAbilitiesResult && selectAbilitiesResult.usableAbilities && selectAbilitiesResult.usableAbilities.filter((ability) => {
+                const card = AbilityCardsList.find((card) => card.key === ability.key)
+                if (!card) return false
+
+                const canUse = card.canUse ? card.canUse({ roomState, bakugan }) : true
+
+                return canUse
+
+            }).map((ability) => ({
                 key: ability!.key,
                 name: ability!.name,
                 description: ability!.description,
                 image: AbilityCardsList.find((card) => card.key === ability.key)?.image || `special_ability_card_${bakugan.attribut.toUpperCase()}.jpg`
             })),
-            selectAbilitiesResult && selectAbilitiesResult.usableExclusives && selectAbilitiesResult.usableExclusives.filter((ability) => ability !== undefined).map((ability) => ({
+            selectAbilitiesResult && selectAbilitiesResult.usableExclusives && selectAbilitiesResult.usableExclusives.filter((ability) => ability !== undefined).filter((ability) => {
+                const card = ExclusiveAbilitiesList.find((card) => card.key === ability.key)
+                if (!card) return false
+
+                const canUse = card.canUse ? card.canUse({ roomState, bakugan }) : true
+
+                return canUse
+
+            }).map((ability) => ({
                 key: ability.key,
                 name: ability.name,
                 description: ability!.description,
@@ -92,5 +108,7 @@ export function UseAbilityCardActionRequest({ roomState }: { roomState: stateTyp
             })
         }
     }
+
+
 
 }

@@ -156,12 +156,21 @@ export const EclatSoudain: abilityCardsType = {
 
     activationConditions({ roomState, userId }) {
         if (!roomState) return false
+        if (!roomState.battleState.battleInProcess || roomState.battleState.paused) return false
         const deck = roomState?.decksState.find((d) => d.userId === userId)
         if (!deck) return false
         const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Haos').map((b) => b.key)).flat()
         if (haosOnDomain.length < 2) return false
         const bakugans = deck.bakugans.filter((bakugan) => bakugan && bakugan.bakuganData.onDomain === false && bakugan.bakuganData.elimined === false).filter((bakugan) => bakugan !== undefined && bakugan !== null)
         if (bakugans.length === 0) return false
+        return true
+    },
+    
+    canUse({ bakugan, roomState }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
+
         return true
     }
 }

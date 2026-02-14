@@ -1,6 +1,6 @@
 import { AbilityCardsActions, slots_id, type abilityCardsType } from "../../type/type-index.js";
 import { StandardCardsImages } from '../../store/store-index.js'
-import { moveBakuganToSelectedSlot } from "../../function/index.js";
+import { AbilityCardFailed, moveBakuganToSelectedSlot } from "../../function/index.js";
 
 export const MirageAquatique: abilityCardsType = {
     key: 'mirage-aquatique',
@@ -12,23 +12,30 @@ export const MirageAquatique: abilityCardsType = {
     usable_in_neutral: true,
     image: 'mirage-aquatique.jpg',
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        const animation = AbilityCardFailed({ card: MirageAquatique.name })
 
-        if (!roomState) return null
+        if (!roomState) return animation
+
+        if (MirageAquatique.activationConditions) {
+            const checker = MirageAquatique.activationConditions({ roomState, userId })
+            if (checker === false) return animation
+        }
+
 
         const opponentsUsableBakugans = roomState.decksState.find((deck) => deck.userId !== userId)?.bakugans.filter((deck) => !deck?.bakuganData.elimined && !deck?.bakuganData.onDomain)
         const opponentBakugansOnField = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.slot_id !== slot && bakugan.userId !== userId)
 
-        if ((opponentsUsableBakugans && opponentsUsableBakugans.length === 0 && opponentBakugansOnField.length === 0)) return null
+        if ((opponentsUsableBakugans && opponentsUsableBakugans.length === 0 && opponentBakugansOnField.length === 0)) return animation
 
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const deck = roomState?.decksState.find((d) => d.userId === userId)
         const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
 
-        if (!slotOfGate && !deck && !userData) return null
+        if (!slotOfGate && !deck && !userData) return animation
 
         const slots: slots_id[] = opponentsUsableBakugans && opponentsUsableBakugans.length === 0 && opponentBakugansOnField.length > 0 ? opponentBakugansOnField.map((bakugan) => bakugan.slot_id) : roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot).map((slot) => slot.id)
 
-        if (slots.length <= 0) return null
+        if (slots.length <= 0) return animation
 
         const request: AbilityCardsActions = {
             type: 'SELECT_SLOT',
@@ -43,6 +50,19 @@ export const MirageAquatique: abilityCardsType = {
 
         moveBakuganToSelectedSlot({ resolution: resolution, roomData: roomData, shouldBlockAlways: true})
 
+    },
+    activationConditions({roomState, userId}) {
+        if(!roomState) return false
+        const slotWithGate = roomState.protalSlots.filter((slot) => slot.portalCard !== null)
+        const opponentDeck = roomState.decksState.find((deck) => deck.userId !== userId)?.bakugans
+        if(!opponentDeck) return false
+
+        const opponentsBakugans = opponentDeck.filter((bakugan) => bakugan !== undefined && !bakugan?.bakuganData.onDomain && !bakugan?.bakuganData.elimined).length
+
+        if(opponentsBakugans < 1) return false
+
+        if(slotWithGate.length < 2) return false
+        return true
     }
 }
 

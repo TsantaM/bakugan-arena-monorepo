@@ -243,6 +243,15 @@ export const AntiMuse: exclusiveAbilitiesType = {
         const bakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().length
         if (bakugans < 2) return false
         return true
+    },
+    canUse({ roomState, bakugan }) {
+        if(!roomState) return false
+
+        const bakugansOnOtherSlots = roomState.protalSlots.filter((slot) => slot.id === bakugan.userId).map((slot) => slot.bakugans).flat().length
+
+        if(bakugansOnOtherSlots < 1) return false
+
+        return true
     }
 
 }
@@ -618,16 +627,21 @@ export const Marionnette: exclusiveAbilitiesType = {
     onAdditionalEffect: ({ resolution, roomData: roomState }) => {
         moveSelectedBakugan({ resolution: resolution, roomState: roomState, requireUserOnSlot: false })
     },
-    activationConditions: ({ roomState, userId }) => {
+    activationConditions: ({ roomState }) => {
         if (!roomState) return false
 
         const { battleInProcess, paused } = roomState.battleState
+
+        const slotsWithCard = roomState.protalSlots.map((slot) => slot).filter((slot) => slot.portalCard !== null)
+
+        if(slotsWithCard.length < 3) return false
+        const bakugans = slotsWithCard.map((slot) => slot.bakugans).flat()
+        if(bakugans.length < 2) return false
 
         if (battleInProcess && !paused) return false
 
         return true
     }
-
 }
 
 export const LanceEclair: exclusiveAbilitiesType = {
@@ -655,7 +669,7 @@ export const LanceEclair: exclusiveAbilitiesType = {
 
         if (!slotOfGate && !deck && !userData) return animation
         if (!slotOfGate) return animation
-
+        if (slotOfGate.bakugans.length < 2) return animation
         const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot).map((slot) => slot.id)
         const bakugans: bakuganToMoveType[] = slotOfGate.bakugans.filter((b) => b.userId !== userId).map((b) => ({
             key: b.key,
@@ -685,6 +699,14 @@ export const LanceEclair: exclusiveAbilitiesType = {
 
         if (!battleInProcess || (battleInProcess && paused)) return false
 
+        return true
+    },
+    canUse({ bakugan, roomState }) {
+        if (!roomState) return false
+        const slotOfBakugan = roomState.protalSlots.find((slot) => slot.id === bakugan.slot_id)
+        if (!slotOfBakugan) return false
+        if (slotOfBakugan.id !== roomState.battleState.slot) return false
+        if (slotOfBakugan.bakugans.length < 2) return false
         return true
     }
 }
@@ -1219,6 +1241,14 @@ export const SouffleInfini: exclusiveAbilitiesType = {
         if (!roomState) return false
         const bakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().length
         if (bakugans < 2) return false
+        return true
+    },
+    canUse({ bakugan, roomState }) {
+
+        if (!roomState) return false
+        const bakugansOnOtherSlots = roomState.protalSlots.filter((slot) => slot.id !== bakugan.slot_id).map((slot) => slot.bakugans).flat().length
+        if (bakugansOnOtherSlots < 1) return false
+
         return true
     }
 }

@@ -32,7 +32,15 @@ export const SubterraPyrus: abilityCardsType = {
         const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Pyrus')
         const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Subterra')
 
-        if ((!battleInProcess || (battleInProcess && paused)) && usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
+        if (!battleInProcess || paused) return false
+        if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }
@@ -65,7 +73,15 @@ export const SubterraHaos: abilityCardsType = {
         const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Subterra')
         const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Haos')
 
-        if ((!battleInProcess || (battleInProcess && paused)) && usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
+        if (!battleInProcess || paused) return false
+        if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }
@@ -98,7 +114,15 @@ export const HaosDarkus: abilityCardsType = {
         const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Haos')
         const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Darkus')
 
-        if ((!battleInProcess || (battleInProcess && paused)) && usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
+        if (!battleInProcess || paused) return false
+        if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }
@@ -131,7 +155,15 @@ export const DarkusAquos: abilityCardsType = {
         const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Darkus')
         const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Aquos')
 
-        if ((!battleInProcess || (battleInProcess && paused)) && usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
+        if (!battleInProcess || paused) return false
+        if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }
@@ -164,7 +196,15 @@ export const AquosVentus: abilityCardsType = {
         const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Aquos')
         const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Ventus')
 
-        if ((!battleInProcess || (battleInProcess && paused)) && usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
+        if (!battleInProcess || paused) return false
+        if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }
@@ -197,7 +237,15 @@ export const VentusPyrus: abilityCardsType = {
         const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Ventus')
         const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Pyrus')
 
-        if ((!battleInProcess || (battleInProcess && paused)) && usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
+        if (!battleInProcess || paused) return false
+        if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }
