@@ -12,8 +12,6 @@ export default function UnauthorizedPage() {
             <p>Please log in to access this page.</p>
             <div className="flex flex-col gap-2">
                 <Button asChild variant='outline' className="w-full"><Link href='/'>Return to Home page</Link></Button>
-                <SignInModal triggerContent="Sign in to your account" />
-                <SignUpModal triggerContent="Don't have an account ? Create one !" />
             </div>
         </Section>
     )
