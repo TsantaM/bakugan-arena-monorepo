@@ -130,7 +130,7 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
         // ENG: Save the new room state back into the global state
         Battle_Brawlers_Game_State[roomIndex] = state
 
-        if (abilityReturn !== null) {
+        if (abilityReturn !== null && abilityReturn.type !== 'CARD_FAILED') {
             const request: AbilityCardsActionsRequestsType = {
                 roomId: roomId,
                 bakuganKey: bakuganKey,
@@ -154,6 +154,57 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
 
             io.to(socket).emit('ability-additional-request', requests[0])
 
+        } else if (abilityReturn !== null && abilityReturn.type === 'CARD_FAILED') {
+            const animation: AnimationDirectivesTypes = {
+                type: 'ABILITY_CARD_FAILED',
+                resolve: false,
+                message: [{
+                    text: abilityReturn.message
+                }]
+            }
+
+            const activeSocket = state.connectedsUsers.get(state.turnState.turn)
+            const inactiveSocket = state.connectedsUsers.get(state.turnState.previous_turn || '')
+
+            const animations = Battle_Brawlers_Game_State[roomIndex].animations
+            animations.push(animation)
+            io.to(roomId).emit('update-room-state', state)
+            if (!animations) return
+            io.to(roomId).emit('animations', animations)
+
+            if (state.turnState.turn === userId) {
+                const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
+                if (roomIndex === -1) return
+                if (!activeSocket) return
+                if (!Battle_Brawlers_Game_State[roomIndex]) return
+
+                const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "USE_ABILITY_CARD")
+                Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
+
+                const merged = [Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
+                if (merged.length > 0) {
+                    io.to(activeSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
+                } else {
+                    clearAnimationsInRoom(roomId)
+                    turnActionUpdater({ roomId, userId, io })
+                }
+
+            }
+
+            if (state.turnState.turn !== userId) {
+                const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
+                if (roomIndex === -1) return
+                if (!Battle_Brawlers_Game_State[roomIndex]) return
+                if (!inactiveSocket) return
+
+                const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest, "USE_ABILITY_CARD")
+                Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest = newState as InactivePlayerActionRequestType
+
+
+                const merged = [Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.optional].flat()
+                if (merged.length <= 0) return
+                io.to(inactiveSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
+            }
         } else {
             const activeSocket = state.connectedsUsers.get(state.turnState.turn)
             const inactiveSocket = state.connectedsUsers.get(state.turnState.previous_turn || '')

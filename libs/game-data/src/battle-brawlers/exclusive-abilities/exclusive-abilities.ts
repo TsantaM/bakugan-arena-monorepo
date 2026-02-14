@@ -1,4 +1,4 @@
-import { CancelAbilityCard, CancelGateCardDirectiveAnimation, CheckBattle, CheckBattleStillInProcess, dragBakuganToUserSlot, moveSelectedBakugan, MoveToAnotherSlotDirectiveAnimation, OpenGateCardActionRequest, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective } from "../../index.js"
+import { AbilityCardFailed, CancelAbilityCard, CancelGateCardDirectiveAnimation, CheckBattle, CheckBattleStillInProcess, dragBakuganToUserSlot, moveSelectedBakugan, MoveToAnotherSlotDirectiveAnimation, OpenGateCardActionRequest, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective } from "../../index.js"
 import type { AbilityCardsActions, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, exclusiveAbilitiesType, slots_id } from "../../type/type-index.js"
 import { GateCardsList } from "../gate-gards.js"
 
@@ -203,13 +203,20 @@ export const AntiMuse: exclusiveAbilitiesType = {
     usable_if_user_not_on_domain: false,
     image: 'Anthemusa.png',
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        if (!roomState) return null
+        const animation = AbilityCardFailed({ card: AntiMuse.name })
+
+        if (AntiMuse.activationConditions) {
+            const checker = AntiMuse.activationConditions({ roomState, userId })
+            if (checker === false) return animation
+        }
+
+        if (!roomState) return animation
 
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const deck = roomState?.decksState.find((d) => d.userId === userId)
         const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
 
-        if (!slotOfGate && !deck && !userData) return null
+        if (!slotOfGate && !deck && !userData) return animation
 
         const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot && s.bakugans.length > 0).map((slot) => slot.bakugans).flat()
         const bakugans: bakuganToMoveType[] = slots.map((bakugan) => ({
@@ -229,7 +236,22 @@ export const AntiMuse: exclusiveAbilitiesType = {
 
     },
     onAdditionalEffect: ({ resolution, roomData: roomState }) => {
-        dragBakuganToUserSlot({resolution: resolution, roomState:roomState})
+        dragBakuganToUserSlot({ resolution: resolution, roomState: roomState })
+    },
+    activationConditions: ({ roomState, userId }) => {
+        if (!roomState) return false
+        const bakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().length
+        if (bakugans < 2) return false
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if(!roomState) return false
+
+        const bakugansOnOtherSlots = roomState.protalSlots.filter((slot) => slot.id === bakugan.userId).map((slot) => slot.bakugans).flat().length
+
+        if(bakugansOnOtherSlots < 1) return false
+
+        return true
     }
 
 }
@@ -568,6 +590,11 @@ export const Marionnette: exclusiveAbilitiesType = {
 
         if (!roomState) return null
 
+        if (Marionnette.activationConditions) {
+            const checker = Marionnette.activationConditions({ roomState, userId })
+            if (checker === false) return null
+        }
+
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const deck = roomState?.decksState.find((d) => d.userId === userId)
         const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
@@ -599,8 +626,22 @@ export const Marionnette: exclusiveAbilitiesType = {
     },
     onAdditionalEffect: ({ resolution, roomData: roomState }) => {
         moveSelectedBakugan({ resolution: resolution, roomState: roomState, requireUserOnSlot: false })
-    }
+    },
+    activationConditions: ({ roomState }) => {
+        if (!roomState) return false
 
+        const { battleInProcess, paused } = roomState.battleState
+
+        const slotsWithCard = roomState.protalSlots.map((slot) => slot).filter((slot) => slot.portalCard !== null)
+
+        if(slotsWithCard.length < 3) return false
+        const bakugans = slotsWithCard.map((slot) => slot.bakugans).flat()
+        if(bakugans.length < 2) return false
+
+        if (battleInProcess && !paused) return false
+
+        return true
+    }
 }
 
 export const LanceEclair: exclusiveAbilitiesType = {
@@ -613,15 +654,22 @@ export const LanceEclair: exclusiveAbilitiesType = {
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
 
-        if (!roomState) return null
+        const animation = AbilityCardFailed({ card: LanceEclair.name })
+
+        if (!roomState) return animation
+
+        if (LanceEclair.activationConditions) {
+            const checker = LanceEclair.activationConditions({ roomState, userId })
+            if (checker === false) return animation
+        }
 
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const deck = roomState?.decksState.find((d) => d.userId === userId)
         const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
 
-        if (!slotOfGate && !deck && !userData) return null
-        if (!slotOfGate) return null
-
+        if (!slotOfGate && !deck && !userData) return animation
+        if (!slotOfGate) return animation
+        if (slotOfGate.bakugans.length < 2) return animation
         const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot).map((slot) => slot.id)
         const bakugans: bakuganToMoveType[] = slotOfGate.bakugans.filter((b) => b.userId !== userId).map((b) => ({
             key: b.key,
@@ -629,7 +677,7 @@ export const LanceEclair: exclusiveAbilitiesType = {
             slot: slotOfGate.id
         }))
 
-        if (slots.length <= 0) return null
+        if (slots.length <= 0) return animation
 
         const request: AbilityCardsActions = {
             type: 'MOVE_BAKUGAN_TO_ANOTHER_SLOT',
@@ -643,6 +691,23 @@ export const LanceEclair: exclusiveAbilitiesType = {
     },
     onAdditionalEffect: ({ resolution, roomData: roomState }) => {
         moveSelectedBakugan({ resolution: resolution, roomState: roomState, requireUserOnSlot: true })
+    },
+    activationConditions: ({ roomState, userId }) => {
+        if (!roomState) return false
+
+        const { battleInProcess, paused } = roomState.battleState
+
+        if (!battleInProcess || (battleInProcess && paused)) return false
+
+        return true
+    },
+    canUse({ bakugan, roomState }) {
+        if (!roomState) return false
+        const slotOfBakugan = roomState.protalSlots.find((slot) => slot.id === bakugan.slot_id)
+        if (!slotOfBakugan) return false
+        if (slotOfBakugan.id !== roomState.battleState.slot) return false
+        if (slotOfBakugan.bakugans.length < 2) return false
+        return true
     }
 }
 
@@ -1094,13 +1159,22 @@ export const SouffleInfini: exclusiveAbilitiesType = {
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        if (!roomState) return null
+        const animation = AbilityCardFailed({ card: SouffleInfini.name })
+
+        if (!roomState) return animation
+
+        if (SouffleInfini.activationConditions) {
+            const checker = SouffleInfini.activationConditions({ roomState, userId })
+            if (checker === false) return animation
+        }
+
+        if (!roomState) return animation
 
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         const deck = roomState?.decksState.find((d) => d.userId === userId)
         const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
 
-        if (!slotOfGate && !deck && !userData) return null
+        if (!slotOfGate && !deck && !userData) return animation
 
         const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot && s.bakugans.length > 0).map((slot) => slot.bakugans).flat()
         const bakugans: bakuganToMoveType[] = slots.map((bakugan) => ({
@@ -1162,5 +1236,19 @@ export const SouffleInfini: exclusiveAbilitiesType = {
                 CheckBattleStillInProcess(roomState)
             }
         }
+    },
+    activationConditions: ({ roomState, userId }) => {
+        if (!roomState) return false
+        const bakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().length
+        if (bakugans < 2) return false
+        return true
+    },
+    canUse({ bakugan, roomState }) {
+
+        if (!roomState) return false
+        const bakugansOnOtherSlots = roomState.protalSlots.filter((slot) => slot.id !== bakugan.slot_id).map((slot) => slot.bakugans).flat().length
+        if (bakugansOnOtherSlots < 1) return false
+
+        return true
     }
 }

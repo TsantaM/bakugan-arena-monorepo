@@ -1,4 +1,4 @@
-import { CombinationSimpleFunction } from "../../function/index.js";
+import { AbilityCardFailed, CombinationSimpleFunction } from "../../function/index.js";
 import { type abilityCardsType } from "../../type/type-index.js";
 
 export const SubterraPyrus: abilityCardsType = {
@@ -10,12 +10,40 @@ export const SubterraPyrus: abilityCardsType = {
     usable_in_neutral: false,
     image: 'CorrelationPyrusSubterra.png',
     onActivate({ roomState, userId, bakuganKey, slot }) {
+
+        const failed = AbilityCardFailed({ card: SubterraPyrus.name })
+
+        if (SubterraPyrus.activationConditions) {
+            const checker = SubterraPyrus.activationConditions({ roomState, userId })
+            if (checker === false) return failed
+        }
+
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (!roomState) return null
-        if (!slotOfGate) return null
+        if (!roomState) return failed
+        if (!slotOfGate) return failed
+
         CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Pyrus', attributWeak: 'Subterra', bakuganKey: bakuganKey, userId: userId })
         return null
+
     },
+    activationConditions({ roomState, userId }) {
+        if (!roomState) return false
+        const { battleInProcess, paused, slot, turns } = roomState.battleState
+        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Pyrus')
+        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Subterra')
+
+        if (!battleInProcess || paused) return false
+        if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
+
+        return true
+    }
 }
 
 export const SubterraHaos: abilityCardsType = {
@@ -26,12 +54,37 @@ export const SubterraHaos: abilityCardsType = {
     maxInDeck: 1,
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
+        const failed = AbilityCardFailed({ card: SubterraHaos.name })
+
+        if (SubterraHaos.activationConditions) {
+            const checker = SubterraHaos.activationConditions({ roomState, userId })
+            if (checker === false) return failed
+        }
+
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (!roomState) return null
-        if (!slotOfGate) return null
+        if (!roomState) return failed
+        if (!slotOfGate) return failed
         CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Subterra', attributWeak: 'Haos', bakuganKey: bakuganKey, userId: userId })
         return null
     },
+    activationConditions({ roomState, userId }) {
+        if (!roomState) return false
+        const { battleInProcess, paused, slot, turns } = roomState.battleState
+        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Subterra')
+        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Haos')
+
+        if (!battleInProcess || paused) return false
+        if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
+
+        return true
+    }
 }
 
 export const HaosDarkus: abilityCardsType = {
@@ -42,12 +95,37 @@ export const HaosDarkus: abilityCardsType = {
     maxInDeck: 1,
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
+        const failed = AbilityCardFailed({ card: HaosDarkus.name })
+
+        if (HaosDarkus.activationConditions) {
+            const checker = HaosDarkus.activationConditions({ roomState, userId })
+            if (checker === false) return failed
+        }
+
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (!roomState) return null
-        if (!slotOfGate) return null
+        if (!roomState) return failed
+        if (!slotOfGate) return failed
         CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Haos', attributWeak: 'Darkus', bakuganKey: bakuganKey, userId: userId })
         return null
     },
+    activationConditions({ roomState, userId }) {
+        if (!roomState) return false
+        const { battleInProcess, paused, slot, turns } = roomState.battleState
+        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Haos')
+        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Darkus')
+
+        if (!battleInProcess || paused) return false
+        if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
+
+        return true
+    }
 }
 
 export const DarkusAquos: abilityCardsType = {
@@ -58,12 +136,37 @@ export const DarkusAquos: abilityCardsType = {
     maxInDeck: 1,
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
+        const failed = AbilityCardFailed({ card: DarkusAquos.name })
+
+        if (DarkusAquos.activationConditions) {
+            const checker = DarkusAquos.activationConditions({ roomState, userId })
+            if (checker === false) return failed
+        }
+
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (!roomState) return null
-        if (!slotOfGate) return null
+        if (!roomState) return failed
+        if (!slotOfGate) return failed
         CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Darkus', attributWeak: 'Aquos', bakuganKey: bakuganKey, userId: userId })
         return null
     },
+    activationConditions({ roomState, userId }) {
+        if (!roomState) return false
+        const { battleInProcess, paused, slot, turns } = roomState.battleState
+        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Darkus')
+        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Aquos')
+
+        if (!battleInProcess || paused) return false
+        if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
+
+        return true
+    }
 }
 
 export const AquosVentus: abilityCardsType = {
@@ -74,12 +177,37 @@ export const AquosVentus: abilityCardsType = {
     maxInDeck: 1,
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
+        const failed = AbilityCardFailed({ card: AquosVentus.name })
+
+        if (AquosVentus.activationConditions) {
+            const checker = AquosVentus.activationConditions({ roomState, userId })
+            if (checker === false) return failed
+        }
+
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (!roomState) return null
-        if (!slotOfGate) return null
+        if (!roomState) return failed
+        if (!slotOfGate) return failed
         CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Aquos', attributWeak: 'Ventus', bakuganKey: bakuganKey, userId: userId })
         return null
     },
+    activationConditions({ roomState, userId }) {
+        if (!roomState) return false
+        const { battleInProcess, paused, slot, turns } = roomState.battleState
+        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Aquos')
+        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Ventus')
+
+        if (!battleInProcess || paused) return false
+        if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
+
+        return true
+    }
 }
 
 export const VentusPyrus: abilityCardsType = {
@@ -90,10 +218,35 @@ export const VentusPyrus: abilityCardsType = {
     maxInDeck: 1,
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
+        const failed = AbilityCardFailed({ card: VentusPyrus.name })
+
+        if (VentusPyrus.activationConditions) {
+            const checker = VentusPyrus.activationConditions({ roomState, userId })
+            if (checker === false) return failed
+        }
+
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (!roomState) return null
-        if (!slotOfGate) return null
+        if (!roomState) return failed
+        if (!slotOfGate) return failed
         CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Ventus', attributWeak: 'Pyrus', bakuganKey: bakuganKey, userId: userId })
         return null
     },
+    activationConditions({ roomState, userId }) {
+        if (!roomState) return false
+        const { battleInProcess, paused, slot, turns } = roomState.battleState
+        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Ventus')
+        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Pyrus')
+
+        if (!battleInProcess || paused) return false
+        if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
+
+        return true
+    }
 }

@@ -1,5 +1,5 @@
 import type { AbilityCardsActions, resolutionType } from "./actions-serveur-requests.js"
-import type { portalSlotsTypeElement, slots_id, stateType } from "./room-types.js"
+import type { bakuganOnSlot, portalSlotsTypeElement, slots_id, stateType } from "./room-types.js"
 
 export type attribut = 'Pyrus' | 'Subterra' | 'Haos' | 'Darkus' | 'Aquos' | 'Ventus'
 
@@ -41,10 +41,12 @@ export type abilityCardsType = {
     usable_in_neutral: boolean,
     slotLimits?: boolean,
     image?: string,
+    activationConditions?: ({roomState, userId} : {roomState: stateType, userId: string}) => boolean,
     onActivate: ({ roomState, userId, bakuganKey, slot }: { roomState: stateType, roomId: string, userId: string, bakuganKey: string, slot: slots_id }) => null | AbilityCardsActions,
     onAdditionalEffect?: (({ resolution, roomData }: { resolution: resolutionType, roomData: stateType }) => void) | (({ resolution, roomData }: { resolution: resolutionType, roomData: stateType }) => { turnActionLaucher: boolean }),
     onCanceled?: ({ roomState, userId, bakuganKey, slot }: { roomState: stateType, userId: string, bakuganKey: string, slot: slots_id }) => void
-    onWin?: ({ roomState, userId, slot }: { roomState: stateType, userId: string, slot: portalSlotsTypeElement }) => void
+    onWin?: ({ roomState, userId, slot }: { roomState: stateType, userId: string, slot: portalSlotsTypeElement }) => void,
+    canUse?: ({roomState, bakugan} : {roomState: stateType, bakugan: bakuganOnSlot}) => boolean
 }
 
 export type exclusiveAbilitiesType = {
@@ -57,9 +59,11 @@ export type exclusiveAbilitiesType = {
     slotLimits?: boolean,
     usable_if_user_not_on_domain: boolean,
     image?: string,
+    activationConditions?: ({roomState, userId} : {roomState: stateType, userId: string}) => boolean,
     onActivate: ({ roomState, userId, bakuganKey, slot }: { roomState: stateType, roomId: string, userId: string, bakuganKey: string, slot: slots_id }) => null | AbilityCardsActions,
     onAdditionalEffect?: (({ resolution, roomData }: { resolution: resolutionType, roomData: stateType }) => void) | (({ resolution, roomData }: { resolution: resolutionType, roomData: stateType }) => { turnActionLaucher: boolean }), onCanceled?: ({ roomState, userId, bakuganKey, slot }: { roomState: stateType, userId: string, bakuganKey: string, slot: slots_id }) => void
-    onWin?: ({ roomState, userId, slot }: { roomState: stateType, userId: string, slot: portalSlotsTypeElement }) => void
+    canUse?: ({roomState, bakugan} : {roomState: stateType, bakugan: bakuganOnSlot}) => boolean
+    onWin?: ({ roomState, userId, slot }: { roomState: stateType, userId: string, slot: portalSlotsTypeElement }) => void,
 }
 
 export type turnActionLauncher = {

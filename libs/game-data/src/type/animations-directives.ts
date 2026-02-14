@@ -122,4 +122,8 @@ export type AnimationDirectivesTypes =
             attribut: attribut
         },
         message: Message[]
-    }
+    } | {
+    type: 'ABILITY_CARD_FAILED';
+    resolve: false;
+    message: Message[];
+}
