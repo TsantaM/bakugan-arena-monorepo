@@ -1,5 +1,3 @@
-import { SignInModal } from "@/components/elements/sign-in/Sign-in"
-import { SignUpModal } from "@/components/elements/sign-up/Sign-up"
 import { Button } from "@/components/ui/button"
 import Section from "@/components/ui/section"
 import Link from "next/link"
