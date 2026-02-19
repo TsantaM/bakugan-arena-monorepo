@@ -38,7 +38,7 @@ export function SetGateCardActionRequest({ roomState }: { roomState: stateType }
         }
     }
 
-    if (turnCount > 0 && (!battleState.battleInProcess || battleState.paused) && usableBakugans > 0) {
+    if (turnCount > 0 && usableGatesCount > 0 && (!battleState.battleInProcess || battleState.paused) && usableBakugans > 0) {
         if (usableSlots.length > 0 && usableGates.length > 0) {
             const request = roomState.ActivePlayerActionRequest
             request.actions.optional.push(setGateCardRequest)
@@ -110,13 +110,6 @@ export function SelectGateCardActionRequest({ roomState }: { roomState: stateTyp
         }
         if (inactivesPlayerGates.length > 0) {
             inactive.actions.mustDo.push(inactivePlayerSelectGateCardRequest)
-        }
-    } else {
-        if (!battleState.battleInProcess || battleState.paused) {
-            const cardOnBoard = roomState.protalSlots.filter((slot) => slot.portalCard !== null && !slot.can_set)
-            if (cardOnBoard.length === 0 && usableGates.length > 0) {
-                active.actions.mustDo.push(selectGateCardRequest)
-            }
         }
     }
 

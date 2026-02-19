@@ -13,6 +13,7 @@ export function CheckActivitiesSocket(io: Server, socket: Socket) {
         // FR: Si la salle n'existe pas ou que l'index est invalide, on arrête
         // ENG: If the room does not exist or index is invalid, exit early
         if (!roomData || roomIndex === -1) return
+        if (roomData.status.finished === true) return
 
         if (roomData.AbilityAditionalRequest.length > 0) {
             if (!roomData.AbilityAditionalRequest.some((action) => action.userId === userId)) return
@@ -43,9 +44,9 @@ export function CheckActivitiesSocket(io: Server, socket: Socket) {
                 const activeSocket = roomData.connectedsUsers.get(roomData.turnState.turn)
                 const inactiveSocket = roomData.connectedsUsers.get(roomData.turnState.previous_turn || '')
                 if (!activeSocket) return
-                io.to(activeSocket).emit('turn-action-request', activeRequest)
+                io.to(activeSocket.gameboardSocket).emit('turn-action-request', activeRequest)
                 if (!inactiveSocket) return
-                io.to(inactiveSocket).emit('turn-action-request', inactiveMerged)
+                io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', inactiveMerged)
             }
 
         }

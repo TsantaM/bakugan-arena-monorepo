@@ -6,17 +6,13 @@ import { clearAnimationsInRoom } from "./clear-animations-socket";
 
 export const socketUseAbilityCard = (io: Server, socket: Socket) => {
     socket.on('use-ability-card', ({ roomId, abilityId, slot, userId, bakuganKey }: useAbilityCardProps) => {
+        const state = Battle_Brawlers_Game_State.find((s) => s?.roomId === roomId)
+        if(!state) return
+        if(state.status.finished === true) return
+        
         clearAnimationsInRoom(roomId)
-        const data = {
-            roomId: roomId,
-            abilityId: abilityId,
-            slot: slot,
-            userId: userId,
-            bakuganKey: bakuganKey
-        }
 
         useAbilityCardServer({ abilityId: abilityId, bakuganKey: bakuganKey, roomId: roomId, slot: slot, userId: userId, io: io })
-        const state = Battle_Brawlers_Game_State.find((s) => s?.roomId === roomId)
 
         if (state) {
             io.to(roomId).emit('update-room-state', state)

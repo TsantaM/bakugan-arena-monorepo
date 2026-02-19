@@ -10,6 +10,7 @@ import { setImageWithFallback } from './functions/set-image-with-fallback'
 
 const canvas = document.getElementById('gameboard-canvas')
 const params = new URLSearchParams(window.location.search)
+const parentSocket = params.get('parentSocket')
 const roomId = params.get('roomId')
 const userId = params.get('userId')
 const userImage = params.get('userImage')
@@ -61,7 +62,7 @@ if (opponentImage) {
 }
 
 
-socket.emit('init-room-state', ({ roomId, userId }))
+socket.emit('init-room-state', ({ roomId, userId, parentSocket }))
 
 if (roomId !== null && userId !== null) {
   if (canvas) {
@@ -69,7 +70,7 @@ if (roomId !== null && userId !== null) {
     renderer.setSize(window.innerWidth, window.innerHeight)
     renderer.setPixelRatio(window.devicePixelRatio)
     const controls = new OrbitControls(camera, renderer.domElement)
-    
+
     controls.mouseButtons = {
       LEFT: THREE.MOUSE.PAN,
       MIDDLE: THREE.MOUSE.DOLLY,
@@ -202,7 +203,7 @@ if (roomId !== null && userId !== null) {
       gateCardMeshs: gateCardMeshs
     })
 
-    socket.emit("init-room-state", { roomId, userId })
+    socket.emit('init-room-state', ({ roomId, userId, parentSocket }))
 
     loop()
     function loop() {
@@ -212,7 +213,7 @@ if (roomId !== null && userId !== null) {
     }
 
     reload?.addEventListener("click", () => {
-      socket.emit("init-room-state", { roomId, userId })
+      socket.emit('init-room-state', ({ roomId, userId, parentSocket }))
     })
 
     window.addEventListener('resize', () => {

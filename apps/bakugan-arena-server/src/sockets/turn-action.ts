@@ -6,6 +6,7 @@ import { onBattleEnd } from "../functions/on-battle-end";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { ClearDomain } from "../functions/clear-domain";
 import { UpdatePlayerTimer } from "../functions/start-player-timer";
+import { EmitMessage } from "../functions/emit-messages";
 
 export function turnActionUpdater({ roomId, userId, io, updateBattleState = true }: { roomId: string, userId: string, io: Server, updateBattleState?: boolean }) {
     const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
@@ -17,7 +18,7 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
     // FR: Si la salle n'existe pas ou que l'index est invalide, on arrête
     // ENG: If the room does not exist or index is invalid, exit early
     if (!roomData || roomIndex === -1) return
-
+    if (roomData.status.finished === true) return
     // FR: Mise à jour de l'état du tour (joueur actif, compteur, autorisations, etc.)
     // ENG: Update the turn state (active player, counter, available actions, etc.)
     updateTurnState(roomData)
@@ -51,6 +52,7 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
     const animations = roomData.animations
     io.to(roomId).emit("turn-action", roomData)
     io.to(roomId).emit('animations', animations)
+    roomData.animations.forEach((animation) => EmitMessage({ roomState: roomData, animation, io }))
 
     const activeSocket = roomData.connectedsUsers.get(roomData.turnState.turn)
     const activeName = roomData.players.find((p) => p.userId === roomData.turnState.turn)?.username
@@ -82,7 +84,12 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
         }
 
         io.to(roomId).emit('game-finished', message)
-
+        const sockets = roomData.connectedsUsers
+        sockets.forEach((s) => {
+            console.log('parent-socket', s.nextjsSocket)
+            io.to(s.nextjsSocket).emit('game-messages', [message])
+        })
+        roomData.messages.push(message)
     }
 
     console.log('turn count', roomData.turnState.turnCount)
@@ -93,7 +100,7 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
 
     if (activeSocket) {
         const request = roomData.ActivePlayerActionRequest
-        io.to(activeSocket).emit('turn-action-request', request)
+        io.to(activeSocket.gameboardSocket).emit('turn-action-request', request)
     }
 
     if (inactiveSocket) {
@@ -105,7 +112,7 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
         ].flat()
 
         if (merged.length > 0) {
-            io.to(inactiveSocket).emit('turn-action-request', request)
+            io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', request)
         }
 
     }
