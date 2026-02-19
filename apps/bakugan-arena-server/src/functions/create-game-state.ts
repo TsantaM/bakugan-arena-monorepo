@@ -163,20 +163,22 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             },
         ];
 
+        const timer: number = 5*60
+
         const playersState = [
             {
                 userId: players.player1.id,
                 usable_gates: 3,
                 usable_abilitys: 3,
                 username: players.player1.displayUsername || '',
-                timer: 120,
+                timer: timer,
             },
             {
                 userId: players.player2.id,
                 usable_gates: 3,
                 usable_abilitys: 3,
                 username: players.player2.displayUsername || '',
-                timer: 120,
+                timer: timer,
             }
         ]
 
@@ -230,6 +232,7 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
 
         const state: stateType = {
             connectedsUsers: new Map(),
+            messages: [],
             roomId: roomId,
             players: playersState,
             battleState,
@@ -270,6 +273,7 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
         return state
 
     }
+    
 }
 
 export type createGameStateType = Exclude<Awaited<ReturnType<typeof createGameState>>, undefined>

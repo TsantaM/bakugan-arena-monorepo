@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { authClient } from '../lib/auth-client';
+import { useSocketStore } from '../store/socket-id-store';
 
 interface SocketContextType {
   socket: Socket | null;
@@ -17,14 +18,20 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [socket, setSocket] = useState<Socket | null>(null);
   const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL
 
+  const setInSocketStore = useSocketStore((state) => state.setSocket)
+  const clearScoketStore = useSocketStore((state) => state.clearSocket)
+
   useEffect(() => {
     const socketInstance = io(SOCKET_URL || "http://localhost:3005", {
       auth: { userId }
     });
+
     setSocket(socketInstance);
+    setInSocketStore(socketInstance)
 
     return () => {
       socketInstance.disconnect();
+      clearScoketStore()
     };
   }, [userId]);
 

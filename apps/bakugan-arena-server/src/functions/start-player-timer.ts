@@ -82,7 +82,12 @@ export function UpdatePlayerTimer({ roomState, io }: { roomState: stateType, io:
                         text: `Game is over ! The winner is ${winnerName}`
                     }
                     io.to(roomId).emit('game-finished', message)
-
+                    const sockets = roomState.connectedsUsers
+                    sockets.forEach((s) => {
+                        console.log('parent-socket', s.nextjsSocket)
+                        io.to(s.nextjsSocket).emit('game-messages', [message])
+                    })
+                    roomState.messages.push(message)
 
                     return
 
@@ -145,7 +150,12 @@ export function UpdatePlayerTimer({ roomState, io }: { roomState: stateType, io:
                         text: `Game is over ! The winner is ${winnerName}`
                     }
                     io.to(roomId).emit('game-finished', message)
-
+                    const sockets = roomState.connectedsUsers
+                    sockets.forEach((s) => {
+                        console.log('parent-socket', s.nextjsSocket)
+                        io.to(s.nextjsSocket).emit('game-messages', [message])
+                    })
+                    roomState.messages.push(message)
                     return
 
                 }

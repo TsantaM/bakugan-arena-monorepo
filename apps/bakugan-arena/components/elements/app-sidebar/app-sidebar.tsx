@@ -15,6 +15,7 @@ import {
 import { RoleType } from "@/src/actions/getUserSession"
 import { authClient } from "@/src/lib/auth-client"
 import { useSocket } from "@/src/providers/socket-provider"
+import { useRoomsStore } from "@/src/store/rooms-store"
 import { BookOpenText, ChartSpline, Home, KeyRound, SwatchBook } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -54,7 +55,8 @@ export default function AppSidebar({ role }: { role: RoleType | undefined }) {
 
     const router = useRouter()
     const socket = useSocket()
-    const [Rooms, setRooms] = useState<{ p1: string, p2: string, roomId: string }[]>([])
+    const Rooms = useRoomsStore((state) => state.rooms)
+    const setRooms = useRoomsStore((state) => state.setRooms)
     const user = authClient.useSession()
 
     useEffect(() => {
@@ -71,7 +73,6 @@ export default function AppSidebar({ role }: { role: RoleType | undefined }) {
             if (rooms === Rooms) return
             setRooms(rooms)
         })
-
     }, [socket])
 
     return (

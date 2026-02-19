@@ -3,6 +3,7 @@ import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-s
 import { AbilityCardsList, ExclusiveAbilitiesList, resolutionType } from "@bakugan-arena/game-data";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { turnActionUpdater } from "./turn-action";
+import { EmitMessage } from "../functions/emit-messages";
 
 export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
     socket.on('ability-additional-request', (resolution: resolutionType) => {
@@ -11,6 +12,7 @@ export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
         const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room && room.roomId === resolution.roomId)
         if (!roomData) return
         if (roomIndex === -1) return
+        if (roomData.status.finished === true) return
 
         const roomId = roomData.roomId
         const request = roomData.AbilityAditionalRequest.find((req) => req.bakuganKey === resolution.bakuganKey && req.cardKey === resolution.cardKey && req.userId === resolution.userId)
@@ -33,6 +35,8 @@ export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
         Battle_Brawlers_Game_State[roomIndex].AbilityAditionalRequest.splice(requestIndex, 1)
 
         io.to(roomData.roomId).emit('animations', Battle_Brawlers_Game_State[roomIndex].animations)
+        Battle_Brawlers_Game_State[roomIndex].animations.forEach((animation) => EmitMessage({ roomState: Battle_Brawlers_Game_State[roomIndex], animation, io }))
+
         Battle_Brawlers_Game_State[roomIndex].animations = []
 
         if (Battle_Brawlers_Game_State[roomIndex].AbilityAditionalRequest.length > 0) {
@@ -41,7 +45,7 @@ export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
             if (requests.length <= 0) return
             const socket = roomData.connectedsUsers.get(requests[0].userId)
             if (!socket) return
-            io.to(socket).emit('ability-additional-request', requests[0])
+            io.to(socket.gameboardSocket).emit('ability-additional-request', requests[0])
         } else {
             // if (roomData.turnState.turn === resolution.userId) {
             //     const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
@@ -82,7 +86,7 @@ export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
                 if (!activePlayer) return
                 const activePlayerSocket = roomData.connectedsUsers.get(activePlayer)
                 if (!activePlayerSocket) return
-                io.to(activePlayerSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
+                io.to(activePlayerSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
             }
 
         }

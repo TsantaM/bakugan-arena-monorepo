@@ -4,11 +4,14 @@ import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-s
 import { ActivePlayerActionRequestType, addSlotToSetBakugan, InactivePlayerActionRequestType, removeActionByType, setGateCardProps, slots_id } from "@bakugan-arena/game-data";
 import { turnActionUpdater } from "./turn-action";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
+import { EmitMessage } from "../functions/emit-messages";
 
 export const socketUpdateGateState = (io: Server, socket: Socket) => {
     socket.on('set-gate', ({ roomId, gateId, slot, userId }: setGateCardProps) => {
         const state = Battle_Brawlers_Game_State.find((s) => s?.roomId === roomId)
         if (!state) return
+        if (state.status.finished === true) return
+        
         clearAnimationsInRoom(roomId)
 
         console.log(state.turnState.turnCount)
@@ -21,6 +24,8 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
                 io.to(roomId).emit('update-room-state', state)
                 if (!animation) return
                 io.to(roomId).emit('animations', animation)
+                animation.forEach((a) => EmitMessage({ roomState: state, animation: a, io }))
+
             }
         } else {
 
@@ -29,6 +34,8 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
                 io.to(roomId).emit('update-room-state', state)
                 if (!animation) return
                 io.to(roomId).emit('animations', animation)
+                animation.forEach((a) => EmitMessage({ roomState: state, animation: a, io }))
+
             }
 
         }
@@ -76,7 +83,7 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
                 const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "SET_GATE_CARD_ACTION")
                 addSlotToSetBakugan(slot as slots_id, newState)
                 Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
-                io.to(activeSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
+                io.to(activeSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
 
             }
 
@@ -90,7 +97,7 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
                 Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest = newState as InactivePlayerActionRequestType
                 const merged = [Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
                 if (merged.length <= 0) return
-                io.to(inactiveSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
+                io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
             }
         }
 

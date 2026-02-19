@@ -4,6 +4,7 @@ import { SetBakuganOnGate } from "../functions/set-bakugan-server";
 import { AbilityCardsList, ActivePlayerActionRequestType, attribut, BakuganList, ExclusiveAbilitiesList, InactivePlayerActionRequestType, onBoardBakugans, removeActionByType, SelectAbilityCardFilters, SelectAbilityCardInNeutralFilters, setBakuganProps, Slots, slots_id, stateType } from "@bakugan-arena/game-data";
 import { turnActionUpdater } from "./turn-action";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
+import { EmitMessage } from "../functions/emit-messages";
 
 
 export function AddAbilities({ roomState, request, bakugan, slot, userId, attribut }: { roomState: stateType, request: ActivePlayerActionRequestType | InactivePlayerActionRequestType, bakugan: string, slot: slots_id, userId: string, attribut: attribut }) {
@@ -67,6 +68,11 @@ export function AddAbilities({ roomState, request, bakugan, slot, userId, attrib
 
 export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
     socket.on('set-bakugan', ({ roomId, bakuganKey, slot, userId }: setBakuganProps) => {
+
+        const state = Battle_Brawlers_Game_State.find((s) => s?.roomId === roomId)
+        if (!state) return
+        if (state.status.finished === true) return
+
         clearAnimationsInRoom(roomId)
 
         const bakugan = BakuganList.find((b) => b.key === bakuganKey)
@@ -74,13 +80,13 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
         if (!bakugan) return
 
         const animation = SetBakuganOnGate({ roomId, bakuganKey, slot, userId })
-        const state = Battle_Brawlers_Game_State.find((s) => s?.roomId === roomId)
-        if (!state) return
 
         if (state) {
             io.to(roomId).emit('update-room-state', state)
             if (!animation) return
             io.to(roomId).emit('animations', animation)
+            animation.forEach((a) => EmitMessage({ roomState: state, animation: a, io }))
+
         }
 
         const activeSocket = state.connectedsUsers.get(state.turnState.turn)
@@ -108,7 +114,7 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
             const merged = [Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
             if (merged.length > 0) {
                 console.log('still his turn')
-                io.to(activeSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
+                io.to(activeSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
                 return
             } else {
                 console.log('change turn')
@@ -138,7 +144,7 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
 
             const merged = [Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.optional].flat()
             if (merged.length <= 0) return
-            io.to(inactiveSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
+            io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
         }
     })
 }

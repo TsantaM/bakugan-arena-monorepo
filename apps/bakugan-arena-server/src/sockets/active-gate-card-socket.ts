@@ -4,17 +4,21 @@ import { activeGateCardProps, ActivePlayerActionRequestType, removeActionByType 
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { turnActionUpdater } from "./turn-action";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
+import { EmitMessage } from "../functions/emit-messages";
 
 export const socketActiveGateCard = (io: Server, socket: Socket) => {
     socket.on('active-gate-card', ({ roomId, gateId, slot, userId }: activeGateCardProps) => {
         const state = Battle_Brawlers_Game_State.find((s) => s?.roomId === roomId)
         if (!state) return
+        if (state.status.finished === true) return
+
         clearAnimationsInRoom(roomId)
 
         ActiveGateCard({ roomId, gateId, slot, userId, io })
 
 
         io.to(roomId).emit('animations', state.animations)
+        state.animations.forEach((animation) => EmitMessage({ roomState: state, animation, io }))
 
 
         const activeSocket = state.connectedsUsers.get(state.turnState.turn)
@@ -33,7 +37,7 @@ export const socketActiveGateCard = (io: Server, socket: Socket) => {
             const merged = [Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
             if (activeSocket) {
                 if (merged.length > 0) {
-                    io.to(activeSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
+                    io.to(activeSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
                 } else {
                     clearAnimationsInRoom(roomId)
                     turnActionUpdater({ roomId, userId, io })
@@ -52,7 +56,7 @@ export const socketActiveGateCard = (io: Server, socket: Socket) => {
             const merged = [Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
             if (inactiveSocket) {
                 if (merged.length > 0) {
-                    io.to(inactiveSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
+                    io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
                 } else {
                     clearAnimationsInRoom(roomId)
                     turnActionUpdater({ roomId, userId, io })

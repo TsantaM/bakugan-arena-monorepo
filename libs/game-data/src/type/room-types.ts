@@ -128,7 +128,11 @@ export type deckType = {
 }
 
 export type stateType = {
-    connectedsUsers: Map<string, string>
+    connectedsUsers: Map<string,  {
+        gameboardSocket: string,
+        nextjsSocket: string
+    }>,
+    messages: Message[]
     roomId: string;
     players: {
         userId: string,

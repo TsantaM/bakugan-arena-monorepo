@@ -2,6 +2,7 @@ import { Server, Socket } from "socket.io/dist"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 import { initRoomState } from "../functions/init-game-room"
 import { CreateActionRequestFunction, Message } from "@bakugan-arena/game-data"
+import { SendAllMessages } from "../functions/emit-messages"
 
 
 const roomState = ({ roomId }: { roomId: string }) => {
@@ -12,20 +13,24 @@ const roomState = ({ roomId }: { roomId: string }) => {
 export const socketGetRoomState = (io: Server, socket: Socket) => {
     socket.on(
         'get-room-state',
-        ({ roomId, userId }: { roomId: string; userId: string }) => {
-
+        ({ roomId, userId, parentSocket }: { roomId: string; userId: string, parentSocket: string }) => {
+            console.log('get-room parent socket', parentSocket)
             const state = roomState({ roomId })
             if (!state) return
 
             // On rattache / met à jour le socket du user
             socket.join(roomId)
-            state.connectedsUsers.set(userId, socket.id)
+            state.connectedsUsers.set(userId, {
+                gameboardSocket: socket.id,
+                nextjsSocket: parentSocket
+            })
 
             /**
              * 1️⃣ Etat global de la room
              * -> UNIQUEMENT pour le demandeur
              */
             socket.emit('room-state', state)
+            SendAllMessages({ roomState: state, io: io, socketNext: parentSocket })
 
             /**
              * 2️⃣ Ability additional request
@@ -79,8 +84,8 @@ export const socketGetRoomState = (io: Server, socket: Socket) => {
 export const socketInitiRoomState = (io: Server, socket: Socket) => {
     socket.on(
         'init-room-state',
-        ({ roomId, userId }: { roomId: string; userId: string }) => {
-
+        ({ roomId, userId, parentSocket }: { roomId: string; userId: string, parentSocket: string }) => {
+            console.log('init-room parent socket', parentSocket)
             socket.join(roomId)
 
             const roomData = Battle_Brawlers_Game_State.find(
@@ -89,13 +94,18 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
             if (!roomData) return
 
             // Associer (ou réassocier) le socket au user
-            roomData.connectedsUsers.set(userId, socket.id)
+            roomData.connectedsUsers.set(userId, {
+                gameboardSocket: socket.id,
+                nextjsSocket: parentSocket
+            })
+
+            console.log('parent', parentSocket)
 
             // Init state UNIQUEMENT pour le demandeur
             const state = initRoomState({ roomId, userId: userId })
             if (!state) return
             socket.emit('init-room-state', state)
-
+            SendAllMessages({ roomState: roomData, io: io, socketNext: parentSocket })
             // Turn state (info neutre, ok à renvoyer)
             socket.emit('turn-count-updater', {
                 turnCount: roomData.turnState.turnCount,
@@ -104,95 +114,96 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
                     : undefined
             })
 
-            /**
-             * 1️⃣ Ability additional request
-             * -> seulement si CE user est concerné
-             */
-            const abilityRequest = roomData.AbilityAditionalRequest[0]
-            if (abilityRequest && abilityRequest.userId === userId) {
-                socket.emit('ability-additional-request', abilityRequest)
-                return
-            }
-
+            if (!roomData.status.finished) {
+                /**
+                 * 1️⃣ Ability additional request
+                 * -> seulement si CE user est concerné
+                 */
+                const abilityRequest = roomData.AbilityAditionalRequest[0]
+                if (abilityRequest && abilityRequest.userId === userId) {
+                    socket.emit('ability-additional-request', abilityRequest)
+                    return
+                }
             /**
              * 2️⃣ Turn action request
              * -> déterminer si le joueur est actif ou non
              */
-            const isActivePlayer = roomData.turnState.turn === userId
-            const isInactivePlayer =
-                roomData.turnState.previous_turn === userId
-            const turn = roomData.turnState.turnCount
-            if (isActivePlayer) {
-                const request = roomData.ActivePlayerActionRequest
-                const merged = [
-                    request.actions.mustDo,
-                    request.actions.mustDoOne,
-                    request.actions.optional
-                ].flat()
+                const isActivePlayer = roomData.turnState.turn === userId
+                const isInactivePlayer =
+                    roomData.turnState.previous_turn === userId
+                const turn = roomData.turnState.turnCount
 
-                if (merged.length > 0) {
-                    socket.emit('turn-action-request', request)
-                } else {
-                    const activeRequest = roomData.ActivePlayerActionRequest
-                    const activeMerged = [
-                        activeRequest.actions.mustDo,
-                        activeRequest.actions.mustDoOne,
-                        activeRequest.actions.optional
+                if (isActivePlayer) {
+                    const request = roomData.ActivePlayerActionRequest
+                    const merged = [
+                        request.actions.mustDo,
+                        request.actions.mustDoOne,
+                        request.actions.optional
                     ].flat()
 
-                    if (activeMerged.length <= 0 && turn > 0) {
-                        CreateActionRequestFunction({ roomState: roomData })
-                        const activeSocket = roomData.connectedsUsers.get(roomData.turnState.turn)
-                        const inactiveSocket = roomData.connectedsUsers.get(roomData.turnState.previous_turn || '')
-                        if (!activeSocket) return
-                        io.to(activeSocket).emit('turn-action-request', activeRequest)
-                        if (!inactiveSocket) return
-                        io.to(inactiveSocket).emit('turn-action-request', request)
+                    if (merged.length > 0) {
+                        socket.emit('turn-action-request', request)
+                    } else {
+                        const activeRequest = roomData.ActivePlayerActionRequest
+                        const activeMerged = [
+                            activeRequest.actions.mustDo,
+                            activeRequest.actions.mustDoOne,
+                            activeRequest.actions.optional
+                        ].flat()
+
+                        if (activeMerged.length <= 0 && turn > 0) {
+                            CreateActionRequestFunction({ roomState: roomData })
+                            const activeSocket = roomData.connectedsUsers.get(roomData.turnState.turn)
+                            const inactiveSocket = roomData.connectedsUsers.get(roomData.turnState.previous_turn || '')
+                            if (!activeSocket) return
+                            io.to(activeSocket.gameboardSocket).emit('turn-action-request', activeRequest)
+                            if (!inactiveSocket) return
+                            io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', request)
+                        }
                     }
+                    return
                 }
-                return
-            }
 
-            if (isInactivePlayer) {
-                const request = roomData.InactivePlayerActionRequest
-                const merged = [
-                    request.actions.mustDo,
-                    request.actions.mustDoOne,
-                    request.actions.optional
-                ].flat()
-
-                if (merged.length > 0) {
-                    socket.emit('turn-action-request', request)
-                } else {
-
-                    const activeRequest = roomData.ActivePlayerActionRequest
-                    const activeMerged = [
-                        activeRequest.actions.mustDo,
-                        activeRequest.actions.mustDoOne,
-                        activeRequest.actions.optional
+                if (isInactivePlayer) {
+                    const request = roomData.InactivePlayerActionRequest
+                    const merged = [
+                        request.actions.mustDo,
+                        request.actions.mustDoOne,
+                        request.actions.optional
                     ].flat()
 
-                    if (activeMerged.length <= 0 && turn > 0) {
-                        CreateActionRequestFunction({ roomState: roomData })
-                        const activeSocket = roomData.connectedsUsers.get(roomData.turnState.turn)
-                        const inactiveSocket = roomData.connectedsUsers.get(roomData.turnState.previous_turn || '')
-                        if (!activeSocket) return
-                        io.to(activeSocket).emit('turn-action-request', activeRequest)
-                        if (!inactiveSocket) return
-                        io.to(inactiveSocket).emit('turn-action-request', request)
+                    if (merged.length > 0) {
+                        socket.emit('turn-action-request', request)
+                    } else {
+
+                        const activeRequest = roomData.ActivePlayerActionRequest
+                        const activeMerged = [
+                            activeRequest.actions.mustDo,
+                            activeRequest.actions.mustDoOne,
+                            activeRequest.actions.optional
+                        ].flat()
+
+                        if (activeMerged.length <= 0 && turn > 0) {
+                            CreateActionRequestFunction({ roomState: roomData })
+                            const activeSocket = roomData.connectedsUsers.get(roomData.turnState.turn)
+                            const inactiveSocket = roomData.connectedsUsers.get(roomData.turnState.previous_turn || '')
+                            if (!activeSocket) return
+                            io.to(activeSocket.gameboardSocket).emit('turn-action-request', activeRequest)
+                            if (!inactiveSocket) return
+                            io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', request)
+                        }
+
                     }
-
+                    return
                 }
-                return
-            }
 
-            const activeName = roomData.players.find((p) => p.userId === roomData.turnState.turn)?.username
-            const inactiveName = roomData.players.find((p) => p.userId === roomData.turnState.previous_turn || '')?.username
-            console.log('turn count', roomData.turnState.turnCount)
-            console.log('active socket', roomData.ActivePlayerActionRequest, activeName);
-            console.log('inactive socket', roomData.InactivePlayerActionRequest, inactiveName)
+                const activeName = roomData.players.find((p) => p.userId === roomData.turnState.turn)?.username
+                const inactiveName = roomData.players.find((p) => p.userId === roomData.turnState.previous_turn || '')?.username
+                console.log('turn count', roomData.turnState.turnCount)
+                console.log('active socket', roomData.ActivePlayerActionRequest, activeName);
+                console.log('inactive socket', roomData.InactivePlayerActionRequest, inactiveName)
 
-            if (roomData.status.finished) {
+            } else {
 
                 let message: Message
 
@@ -210,8 +221,16 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
                 }
 
                 socket.emit('game-finished', message)
+                const sockets = roomData.connectedsUsers
+                sockets.forEach((s) => {
+                    console.log('parent-socket', s.nextjsSocket)
+                    io.to(s.nextjsSocket).emit('game-messages', [message])
+                })
+                roomData.messages.push(message)
 
             }
+
+
 
 
         }

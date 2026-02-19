@@ -1,6 +1,7 @@
 import { activeGateCardProps, AnimationDirectivesTypes, GateCardsList, GetUserName, slots_id } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 import { turnActionUpdater } from "../sockets/turn-action"
+import { EmitMessage } from "./emit-messages"
 
 
 
@@ -72,6 +73,7 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
             if (!io) return
 
             io.to(roomId).emit('animations', roomData.animations)
+            roomData.animations.forEach((animation) => EmitMessage({ roomState: roomData, animation, io }))
 
             if (openFunction.turnAction) {
                 turnActionUpdater({
