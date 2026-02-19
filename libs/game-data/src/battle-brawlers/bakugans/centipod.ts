@@ -11,7 +11,7 @@ export const CentipodDarkus: bakuganType = {
     attribut: 'Darkus',
     image: 'centipod',
     family: 'Centipod',
-    exclusiveAbilities: ['regain-subit'],
+    exclusiveAbilities: ['regain-subit', `force-d'attraction`],
     powerLevel: powerLevel,
     banList: [],
     canChangeAttribut: false
@@ -23,7 +23,7 @@ export const CentipodPyrus: bakuganType = {
     attribut: 'Pyrus',
     image: 'centipod',
     family: 'Centipod',
-    exclusiveAbilities: [],
+    exclusiveAbilities: [`force-d'attraction`],
     powerLevel: powerLevel,
     banList: [],
     canChangeAttribut: false
@@ -35,7 +35,7 @@ export const CentipodHaos: bakuganType = {
     attribut: 'Haos',
     image: 'centipod',
     family: 'Centipod',
-    exclusiveAbilities: [],
+    exclusiveAbilities: [`force-d'attraction`],
     powerLevel: powerLevel,
     banList: [],
     canChangeAttribut: false
@@ -47,7 +47,7 @@ export const CentipodSubterra: bakuganType = {
     attribut: 'Subterra',
     image: 'centipod',
     family: 'Centipod',
-    exclusiveAbilities: [],
+    exclusiveAbilities: [`force-d'attraction`],
     powerLevel: powerLevel,
     banList: [],
     canChangeAttribut: false

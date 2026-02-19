@@ -1,6 +1,6 @@
 
 import { exclusiveAbilitiesType } from "../index.js";
-import { AileEnflamee, AntiMuse, ChambreDeGravite, DragonoidPlus, EffecteurdOmbre, GaucheGigantesque, ImpactMajeur, LanceDeFeu, LanceEclair, MachettesJumelles, MaitreDesProfondeurs, Marionnette, MassueGigantesque, OmbreBleue, PlexusSolaire, RobotallionExecution, SabreDeLaMort, TempeteDePlume, VentCinglant, VentViolentDeNobelesseVerte, VisageDeJoie, VisageDeLaFureur, VisageDuChagrin } from "./exclusive-abilities/exclusive-abilities.js";
+import { AileEnflamee, AntiMuse, ChambreDeGravite, DragonoidPlus, EffecteurdOmbre, ForceDattraction, GaucheGigantesque, ImpactMajeur, LanceDeFeu, LanceEclair, MachettesJumelles, MaitreDesProfondeurs, Marionnette, MassueGigantesque, OmbreBleue, PlexusSolaire, RobotallionExecution, SabreDeLaMort, TempeteDePlume, VentCinglant, VentViolentDeNobelesseVerte, VisageDeJoie, VisageDeLaFureur, VisageDuChagrin } from "./exclusive-abilities/exclusive-abilities.js";
 
 export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [OmbreBleue.key]: OmbreBleue,
@@ -35,6 +35,7 @@ export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     // [RegainSubit.key]: RegainSubit,
     // [CapeDeFeu.key]: CapeDeFeu,
     // [SouffleInfini.key]: SouffleInfini
+    [ForceDattraction.key]: ForceDattraction
 }
 
 export const ExclusiveAbilitiesList: exclusiveAbilitiesType[] = Object.values(ExclusiveAbilities) 

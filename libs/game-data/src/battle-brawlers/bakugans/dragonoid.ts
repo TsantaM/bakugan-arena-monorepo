@@ -6,7 +6,7 @@ import { StarterBanList } from "../../store/store-index.js"
 export const DragonoidPyrus: bakuganType = {
     name: 'Dragonoid',
     attribut: 'Pyrus',
-    powerLevel: 340,
+    powerLevel: 370,
     image: 'dragonoid',
     key: 'dragonoid-pyrus',
     family: 'Dragonoid',

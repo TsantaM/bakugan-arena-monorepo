@@ -6,7 +6,7 @@ export const HydranoidDarkus: bakuganType = {
     name: 'Hydranoid',
     attribut: 'Darkus',
     image: 'hydranoid',
-    powerLevel: 340,
+    powerLevel: 370,
     family: 'Hydranoid',
     exclusiveAbilities: ['chambre-de-gravité'],
     banList: StarterBanList,

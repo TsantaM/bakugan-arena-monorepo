@@ -8,7 +8,7 @@ export const SaurusPyrus: bakuganType = {
     image: 'saurus',
     attribut: 'Pyrus',
     family: 'Saurus',
-    powerLevel: 290,
+    powerLevel: 320,
     exclusiveAbilities: [],
     banList: [],
     canChangeAttribut: false
@@ -20,7 +20,7 @@ export const SaurusSubterra: bakuganType = {
     image: 'saurus',
     attribut: 'Subterra',
     family: 'Saurus',
-    powerLevel: 290,
+    powerLevel: 320,
     exclusiveAbilities: [],
     banList: [],
     canChangeAttribut: false
@@ -32,7 +32,7 @@ export const SaurusHaos: bakuganType = {
     image: 'saurus',
     attribut: 'Haos',
     family: 'Saurus',
-    powerLevel: 290,
+    powerLevel: 320,
     exclusiveAbilities: [],
     banList: [],
     canChangeAttribut: false
