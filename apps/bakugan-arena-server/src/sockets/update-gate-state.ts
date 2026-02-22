@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io/dist";
 import { UpdateGate } from "../functions/set-gate-server";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
-import { ActivePlayerActionRequestType, addSlotToSetBakugan, InactivePlayerActionRequestType, removeActionByType, setGateCardProps, slots_id } from "@bakugan-arena/game-data";
+import { ActivePlayerActionRequestType, addSlotToSetBakugan, InactivePlayerActionRequestType, removeActionByType, SetBakuganActionRequest, setGateCardProps, slots_id } from "@bakugan-arena/game-data";
 import { turnActionUpdater } from "./turn-action";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { EmitMessage } from "../functions/emit-messages";
@@ -11,10 +11,11 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
         const state = Battle_Brawlers_Game_State.find((s) => s?.roomId === roomId)
         if (!state) return
         if (state.status.finished === true) return
-        
+
         clearAnimationsInRoom(roomId)
 
         console.log(state.turnState.turnCount)
+
 
         if (!slot) {
             const slot: slots_id = state.turnState.turn === userId ? 'slot-2' : 'slot-5'
@@ -39,7 +40,6 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
             }
 
         }
-
 
         const activeSocket = state.connectedsUsers.get(state.turnState.turn)
         const inactiveSocket = state.connectedsUsers.get(state.turnState.previous_turn || '')
@@ -82,6 +82,7 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
                 if (!Battle_Brawlers_Game_State[roomIndex]) return
                 const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "SET_GATE_CARD_ACTION")
                 addSlotToSetBakugan(slot as slots_id, newState)
+                SetBakuganActionRequest({ roomState: state })
                 Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
                 io.to(activeSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
 

@@ -26,6 +26,12 @@ export function OpenGateCardActionRequest({ roomState }: { roomState: stateType 
             gateId: portalCard.key
         }
 
+        const merged = [ActivePlayerActionRequest.actions.mustDo, ActivePlayerActionRequest.actions.mustDoOne, ActivePlayerActionRequest.actions.optional].flat().map((r) => r.type)
+
+        if (merged.includes(request.type)) {
+            return
+        }
+
         ActivePlayerActionRequest.actions.optional.push(request)
 
     }

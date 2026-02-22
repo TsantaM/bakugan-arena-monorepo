@@ -41,6 +41,12 @@ export function SetBakuganActionRequest({ roomState }: { roomState: stateType })
         }
     }
 
+    const merged = [request.actions.mustDo, request.actions.mustDoOne, request.actions.optional].flat().map((r) => r.type)
+    
+    if (merged.includes(setBakuganRequest.type)) {
+        return
+    }
+    
     if (turnCount > 0 && (!battleState.battleInProcess || battleState.paused)) {
         if (SlotsWithUsersBakugan.length === 0 || SlotsWithBakugans.length === 0) {
             request.actions.mustDo.push(setBakuganRequest)

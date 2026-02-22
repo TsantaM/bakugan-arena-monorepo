@@ -9,6 +9,7 @@ export function SetGateCardActionRequest({ roomState }: { roomState: stateType }
     const activePlayer = roomState.decksState.find((deck) => deck.userId === roomState.turnState.turn)
     const battleState = roomState.battleState
     const turnCount = roomState.turnState.turnCount
+    const request = roomState.ActivePlayerActionRequest
 
     if (!activePlayer) return
     const usableGatesCount: number = roomState.players.find((player) => player.userId === activePlayer?.userId)?.usable_gates || 0
@@ -38,9 +39,14 @@ export function SetGateCardActionRequest({ roomState }: { roomState: stateType }
         }
     }
 
+    const merged = [request.actions.mustDo, request.actions.mustDoOne, request.actions.optional].flat().map((r) => r.type)
+
+    if (merged.includes(setGateCardRequest.type)) {
+        return
+    }
+
     if (turnCount > 0 && usableGatesCount > 0 && (!battleState.battleInProcess || battleState.paused) && usableBakugans > 0) {
         if (usableSlots.length > 0 && usableGates.length > 0) {
-            const request = roomState.ActivePlayerActionRequest
             request.actions.optional.push(setGateCardRequest)
         } else {
             return
@@ -103,7 +109,7 @@ export function SelectGateCardActionRequest({ roomState }: { roomState: stateTyp
         }))
     }
 
-    
+
     if (turnCount === 0) {
         if (usableGates.length > 0) {
             active.actions.mustDo.push(selectGateCardRequest)

@@ -1,8 +1,9 @@
 import type { setBakuganProps, slots_id, ActionRequestAnswerType, ActionType } from "@bakugan-arena/game-data";
-import { SelectBakugan, SelectSlotToSetBakugan } from "../turn-actions-function/select-slot";
 import * as THREE from 'three';
 import type { Socket } from "socket.io-client";
 import { clearTurnInterface } from "./action-scope";
+import { SelectBakugan } from "../turn-actions-function/select-bakugan";
+import { SelectSlotToSetBakugan } from "../turn-actions-function/select-slot-to-set-bakugan";
 
 export function SetBakugan({
     socket,
@@ -132,7 +133,6 @@ export function SetBakugan({
 
                 cleanup(slots, true)
                 hoveredSlot = null
-
                 clearTurnInterface()
 
                 socket.emit('set-bakugan', ({ roomId: payload.roomId, bakuganKey: payload.bakuganKey, slot: payload.slot, userId: payload.userId }))

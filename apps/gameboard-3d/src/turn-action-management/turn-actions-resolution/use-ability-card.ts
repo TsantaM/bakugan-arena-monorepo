@@ -1,9 +1,10 @@
 import type { ActionRequestAnswerType, ActionType } from '@bakugan-arena/game-data';
 import * as THREE from 'three';
-import { SelectAbilityCardForStandardTurn, SelectBakuganOnMouseMove } from '../turn-actions-function/select-slot';
 import type { Socket } from 'socket.io-client';
 import { clearTurnInterface } from './action-scope';
 import gsap from 'gsap';
+import { SelectAbilityCardForStandardTurn } from '../turn-actions-function/select-ability-card-for-standard-turn';
+import { SelectBakuganOnMouseMove } from '../turn-actions-function/select-bakugan-on-mouse-move';
 
 export function UseAbilityCard({ roomId, scene, SelectedActions, actions, userId, camera, socket }: {
     roomId: string,

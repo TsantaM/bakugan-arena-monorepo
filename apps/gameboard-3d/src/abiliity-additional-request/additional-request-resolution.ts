@@ -1,5 +1,4 @@
 import type { AbilityCardsActionsRequestsType, bakuganInDeck, resolutionType } from "@bakugan-arena/game-data";
-import { SelectBakuganOnMouseMove, SelectSlotToSetBakugan } from "../turn-action-management/turn-actions-function/select-slot";
 import * as THREE from 'three'
 import type { Socket } from "socket.io-client";
 import { clearTurnInterface } from "../turn-action-management/turn-actions-resolution/action-scope";
@@ -7,12 +6,13 @@ import { BakuganList, type attribut, type slots_id } from "@bakugan-arena/game-d
 import { getAttributColor } from "../functions/get-attrubut-color";
 import { BuildBakuganSelecterCards } from "../turn-action-management/turn-action-builder/build-select-bakugan";
 import { removePreviousDialogBoxAnimation } from "../animations/show-message-animation";
+import { SelectSlotToSetBakugan } from "../turn-action-management/turn-actions-function/select-slot-to-set-bakugan";
+import { SelectBakuganOnMouseMove } from "../turn-action-management/turn-actions-function/select-bakugan-on-mouse-move";
 
 
 export function AdditionalRequestResolution({ request, camera, plane, socket, scene }: {
     request: AbilityCardsActionsRequestsType, plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>, camera: THREE.PerspectiveCamera, socket: Socket, scene: THREE.Scene<THREE.Object3DEventMap>
 }) {
-
 
     if (request.data.type === 'SELECT_SLOT') {
         const slots = request.data.slots

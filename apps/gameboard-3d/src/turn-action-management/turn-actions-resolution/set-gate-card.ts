@@ -1,10 +1,12 @@
 import type { ActionRequestAnswerType, ActionType } from "@bakugan-arena/game-data"
 import * as THREE from 'three'
 import { type slots_id } from "@bakugan-arena/game-data"
-import { createOverableSlot, SelectCard, SelectSlotOnMouseMove } from "../turn-actions-function/select-slot"
+import { SelectSlotOnMouseMove } from "../turn-actions-function/select-slot"
 import { Socket } from "socket.io-client"
 import { clearTurnInterface } from "./action-scope"
 import gsap from "gsap"
+import { SelectCard } from "../turn-actions-function/select-card"
+import { createOverableSlot } from "../turn-actions-function/create-overable-slot"
 
 
 export function SetGateCard({
@@ -169,6 +171,7 @@ export function SetGateCard({
             window.addEventListener('mousemove', mouseMoveHandler)
             window.addEventListener('click', clickHandler)
         }
+        
         card.addEventListener('mouseenter', mouseEnter)
         card.addEventListener('mouseleave', mouseLeave)
         card.addEventListener('click', handler)
@@ -176,5 +179,7 @@ export function SetGateCard({
     })
 
     // 🔑 option pro : retour d’un destroy explicite
-    return cleanup
+    return () => {
+        cleanup
+    }
 }
