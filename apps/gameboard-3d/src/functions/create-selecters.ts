@@ -6,26 +6,49 @@ import { setImageWithFallback } from "./set-image-with-fallback";
 export function CreateGateCardSelecter({ card, index, multiSelect = false }: { card: SelectableGateCardAction, index: number, multiSelect?: boolean }) {
 
     const cardElement = document.createElement('div');
-    cardElement.classList.add('card-selecter');
+    cardElement.classList.add('card-selecter', 'gate-card-selecter');
     cardElement.style.transform = `translateX(${index * 50}%)`;
-    cardElement.classList.add('gate-card-selecter');
-    cardElement.id = `${card.key}-${index}`
+    cardElement.id = `${card.key}-${index}`;
     cardElement.setAttribute('data-key', card.key);
 
-    const cardDescription = document.createElement('div')
-    cardDescription.classList.add('card-description');
-    const cardTitle = document.createElement('p')
-    cardTitle.classList.add('card-title')
-    cardTitle.textContent = card.name
-    cardDescription.appendChild(cardTitle)
-    cardDescription.setAttribute('data-key', card.key)
-    document.body.appendChild(cardDescription)
+    // Description container
+    const cardDescription = document.createElement('div');
+    cardDescription.classList.add(
+        'card-description',
+        'px-5', 'py-4',
+        'w-[65vw]', 'lg:w-[25vw]',
+        'min-h-[25vh]', 'max-h-[35vh]',
+        'rounded-lg', 'bg-neutral-800',
+        'flex', 'flex-col', 'gap-2',
+        'fixed', 'top-[35%]', 'left-[50%]'
+    );
+    cardDescription.setAttribute('data-key', card.key);
 
+    // Title
+    const cardTitle = document.createElement('p');
+    cardTitle.classList.add('font-bold', 'text-slate-200', 'text-xl');
+    cardTitle.textContent = card.name;
+
+    // Image
     const cardImage = document.createElement('img');
-    cardImage.src = `/images/cards/${card.image}`
+    cardImage.src = `/images/cards/${card.image}`;
     cardImage.classList.add('gate-card-background');
 
+    // Text description
+    const cardText = document.createElement('p');
+    cardText.classList.add('text-slate-200');
+    cardText.textContent = card.description; // Place ton texte (ex: lorem ipsum)
+
+    // Assemble
+    cardDescription.appendChild(cardTitle);
+    cardDescription.appendChild(cardText);
+
+    // Final structure
+    cardElement.appendChild(cardDescription);
     cardElement.appendChild(cardImage);
+
+    // Ajout au DOM
+    document.body.appendChild(cardElement);
 
     if (multiSelect) {
         const stackContainer = document.getElementById('gate-cards')
@@ -48,13 +71,29 @@ export function CreateAbilityCardSelecter({ card, index, multiSelect = false, at
     cardElement.setAttribute('data-key', card.key);
 
     const cardDescription = document.createElement('div')
-    cardDescription.classList.add('card-description');
+    cardDescription.classList.add(
+        'card-description',
+        'px-5', 'py-4',
+        'w-[65vw]', 'lg:w-[25vw]',
+        'min-h-[25vh]', 'max-h-[35vh]',
+        'rounded-lg', 'bg-neutral-800',
+        'flex', 'flex-col', 'gap-2',
+        'fixed', 'top-[35%]', 'left-[50%]'
+    );
     const cardTitle = document.createElement('p')
     cardTitle.classList.add('card-title')
     cardTitle.textContent = card.name
+    cardTitle.classList.add('font-bold', 'text-slate-200', 'text-xl');
+
+    // Text description
+    const cardText = document.createElement('p');
+    cardText.classList.add('text-slate-200');
+    cardText.textContent = card.description; // Place ton texte (ex: lorem ipsum)
+
     cardDescription.appendChild(cardTitle)
+    cardDescription.appendChild(cardText)
     cardDescription.setAttribute('data-key', card.key)
-    document.body.appendChild(cardDescription)
+    cardElement.appendChild(cardDescription)
 
     const cardImage = document.createElement('img');
     // cardImage.src = card.image === '' ? `/images/cards/special_ability_card_${attribut?.toUpperCase()}.jpg` : `/images/cards/${card.image}`;
@@ -75,7 +114,6 @@ export function CreateAbilityCardSelecter({ card, index, multiSelect = false, at
         stackContainer.appendChild(cardElement);
     }
 }
-
 
 export function CreateBakuganSelecter({ bakugan, index }: { bakugan: SelectableBakuganAction, index: number }) {
     const bakuganElement = document.createElement('div');

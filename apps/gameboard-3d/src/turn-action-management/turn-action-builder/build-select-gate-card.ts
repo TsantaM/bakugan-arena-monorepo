@@ -22,38 +22,4 @@ export function BuildSelectGateCard({ action }: { action: ActionType }) {
             })
         })
 
-        const cardsToSelect = document.querySelectorAll('.card-selecter');
-        cardsToSelect.forEach(card => {
-            card.addEventListener('mouseenter', () => {
-
-                const existingDescription = document.querySelector('.hovered-card-description');
-                if (existingDescription) {
-                    existingDescription.remove();
-                }
-
-                const description = document.createElement('div');
-                description.classList.add('hovered-card-description');
-                const cardName = document.createElement('p');
-                cardName.textContent = SelectGateCard.find(c => c.key === card.getAttribute('data-key'))?.name || '';
-                cardName.classList.add('card-name')
-                description.appendChild(cardName);
-
-                const cardDescription = document.createElement('p');
-                cardDescription.textContent = SelectGateCard.find(c => c.key === card.getAttribute('data-key'))?.description || '';
-                cardDescription.classList.add('card-description')
-                description.appendChild(cardDescription);
-
-
-                selectOne.appendChild(description);
-            })
-
-            card.addEventListener('mouseleave', () => {
-                const existingDescription = document.querySelector('.hovered-card-description');
-                if (existingDescription) {
-                    existingDescription.remove();
-                }
-            })
-        })
-    
-
 }

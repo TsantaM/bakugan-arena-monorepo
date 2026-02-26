@@ -16,13 +16,13 @@ body {
   overflow: hidden;
 }
 
-* {
+/* * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   cursor: default;
   list-style: none;
-}
+} */
 
 #gameboard {
   display: flex;
@@ -366,6 +366,7 @@ body {
   .skip-or-confirm-button {
     width: 5vw !important;
   }
+
 }
 
 .buttons {
@@ -410,8 +411,18 @@ body {
     height: 100%;
     aspect-ratio: 2/3;
 
+    .card-description {
+      z-index: 2;
+      position: fixed;
+      transition: 0.2s;
+      display: none;
+      opacity: 0;
+      transform: translateX(-50%) translateY(-50%);
+    }
+
     .gate-card-background {
       transition: 0.2s;
+      z-index: 1;
       position: absolute;
       width: 100%;
       height: 100%;
@@ -422,6 +433,13 @@ body {
   }
 
   .card-selecter:hover {
+
+    .card-description {
+      display: block;
+      opacity: 1;
+      transform: translateY(-150%);
+    }
+
     .gate-card-background {
       transform: translateY(-25%);
     }
@@ -606,6 +624,7 @@ body {
 }
 
 .turn-interface {
+  z-index: 1000;
   padding-left: 2vw;
   position: absolute;
   bottom: 1vh;
@@ -678,8 +697,18 @@ body {
     height: 100%;
     aspect-ratio: 2/3;
 
+    .card-description {
+      transition: 0.2s;
+      z-index: 2;
+      position: fixed;
+      display: none;
+      opacity: 0;
+      transform: translateX(-50%) translateY(-50%);
+    }
+
     .gate-card-background {
       transition: 0.2s;
+      z-index: 1;
       position: absolute;
       width: 100%;
       height: 100%;
@@ -694,10 +723,33 @@ body {
     }
   }
 
+  .card-selecter::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 0;
+  }
+
   .card-selecter:hover {
+
     .gate-card-background {
       transform: translateY(-25%);
     }
+
+    .card-description {
+      display: block;
+      opacity: 1;
+      transform: translateY(-150%);
+    }
+
+  }
+
+  .card-selecter:hover::before {
+    transform: translateY(-25%);
   }
 
   .card-selecter.active {
@@ -706,7 +758,7 @@ body {
     }
   }
 
-  .card-selecter:nth-child(2) {
+  /* .card-selecter:nth-child(2) {
     transform: translateX(50%);
   }
 
@@ -724,7 +776,7 @@ body {
 
   .card-selecter:nth-child(6) {
     transform: translateX(250%);
-  }
+  } */
 
   .open-gate-card-button {
     padding: 1vw;
@@ -755,19 +807,6 @@ body {
     transition: 0.75;
   }
 
-}
-
-.card-description {
-  display: none;
-  position: absolute;
-  z-index: 10;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-
-  .card-title {
-    font-size: 5vw;
-  }
 }
 
 @media (width >=48rem
@@ -849,6 +888,6 @@ body {
     height: 100%;
     top: 0;
     left: 0;
-  }  
+  }
 
 }

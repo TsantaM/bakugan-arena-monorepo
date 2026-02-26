@@ -1,8 +1,8 @@
 import type { ActionRequestAnswerType, ActivePlayerActionRequestType, InactivePlayerActionRequestType } from "@bakugan-arena/game-data";
 import { TurnActionInterfaceBuilder } from "./turn-action-management/turn-interface-builder";
-import { TurnActionResolution } from "./turn-action-management/turn-action-resolution";
 import * as THREE from 'three'
 import type { Socket } from "socket.io-client";
+import { TurnInteractionController } from "./turn-action-management/turn-actions-resolution/turn-action-controllers";
 
 export function TurnActionBuilder({ request, userId, camera, scene, plane, roomId, socket }: {
     request: ActivePlayerActionRequestType | InactivePlayerActionRequestType, userId: string, camera: THREE.PerspectiveCamera,
@@ -49,7 +49,7 @@ export function TurnActionBuilder({ request, userId, camera, scene, plane, roomI
 
     TurnActionInterfaceBuilder({ request: request })
     
-    TurnActionResolution({
+    TurnInteractionController({
         socket: socket,
         SelectedActions: SelectedActions,
         userId: userId,

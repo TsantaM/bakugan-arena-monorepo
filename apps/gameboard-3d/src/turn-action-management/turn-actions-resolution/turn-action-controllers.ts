@@ -1,4 +1,4 @@
-import type { ActionRequestAnswerType, ActionType, setBakuganProps, slots_id } from "@bakugan-arena/game-data"
+import type { ActionRequestAnswerType, ActionType, ActivePlayerActionRequestType, InactivePlayerActionRequestType, setBakuganProps, slots_id } from "@bakugan-arena/game-data"
 import type { Socket } from "socket.io-client"
 import * as THREE from 'three'
 import { SelectCard } from "../turn-actions-function/select-card"
@@ -9,6 +9,11 @@ import { SelectSlotToSetBakugan } from "../turn-actions-function/select-slot-to-
 import { SelectBakugan } from "../turn-actions-function/select-bakugan"
 import { SelectBakuganOnMouseMove } from "../turn-actions-function/select-bakugan-on-mouse-move"
 import { SelectAbilityCardForStandardTurn } from "../turn-actions-function/select-ability-card-for-standard-turn"
+import { NextTurnButtonAction } from "./next-turn-button"
+import { OpenGateCardResolution } from "./open-gate-card-resolution"
+import { SelectGateCard } from "./select-gate-card"
+import { SelectAbilityCard } from "./select-ability-card"
+import { SelectBakugan as sB } from "../turn-actions-resolution/select-bakugan"
 
 export function TurnInteractionController({
     socket,
@@ -18,7 +23,8 @@ export function TurnInteractionController({
     camera,
     plane,
     scene,
-    roomId
+    roomId,
+    request
 }: {
     socket: Socket
     userId: string
@@ -27,7 +33,9 @@ export function TurnInteractionController({
     camera: THREE.PerspectiveCamera
     plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>
     scene: THREE.Scene
-    roomId: string
+    roomId: string,
+    request: ActivePlayerActionRequestType | InactivePlayerActionRequestType,
+
 }) {
 
     const cardClickHandlers = new Map<Element, EventListener>()
@@ -39,7 +47,22 @@ export function TurnInteractionController({
 
     let hoveredSlot: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial> | null = null
 
-    function cleanup(cleanAll: boolean, card: Element) {
+    function resetSlotsColor(
+        plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>,
+        slots: slots_id[]
+    ) {
+        slots.forEach((slot) => {
+            const mesh = plane.getObjectByName(slot) as THREE.Mesh<
+                THREE.PlaneGeometry,
+                THREE.MeshBasicMaterial
+            >
+            if (mesh) {
+                mesh.material.color.set('white')
+            }
+        })
+    }
+
+    function cleanup({ clearBakugans = false, clearCards = false, card, slots }: { card?: Element, clearBakugans?: boolean, clearCards?: boolean, slots?: slots_id[] }) {
 
         if (mouseMoveHandler)
             window.removeEventListener('mousemove', mouseMoveHandler)
@@ -47,7 +70,7 @@ export function TurnInteractionController({
         if (clickHandler)
             window.removeEventListener('click', clickHandler)
 
-        if (cleanAll) {
+        if (card && clearCards) {
             cardClickHandlers.forEach((handler, el) => {
                 el.removeEventListener('click', handler)
             })
@@ -59,12 +82,25 @@ export function TurnInteractionController({
             }
         }
 
+        if (clearBakugans) {
+            bakuganClickHandlers.forEach((handler, el) => {
+                el.removeEventListener('click', handler)
+            })
+
+            bakuganClickHandlers.clear()
+
+        }
+
+        if (slots) {
+            resetSlotsColor(plane, slots)
+        }
+
         cardClickHandlers.clear()
-        bakuganClickHandlers.clear()
-        mouseEnter = null
-        mouseLeave = null
-        mouseMoveHandler = null
+        // mouseEnter = null
+        // mouseLeave = null
+        // mouseMoveHandler = null
         clickHandler = null
+
     }
 
     // SET GATE CARD 
@@ -75,28 +111,15 @@ export function TurnInteractionController({
 
     cardsToSelect.forEach(card => {
 
+        if (!card) return
         if (!selectGateCard || !Gcards || !slots) return
 
         mouseEnter = () => {
             const data = Gcards.find(c => c.key === card.getAttribute('data-key'))
             if (!data) return
-
             let hoveredCardDescription = document.querySelectorAll('.card-description')
 
             if (!hoveredCardDescription) return
-
-            hoveredCardDescription.forEach((description) => {
-                if (description.getAttribute('data-key') === data.key) {
-                    gsap.fromTo(description, {
-                        display: 'none',
-                        opacity: 0
-                    }, {
-                        display: 'block',
-                        opacity: 1,
-                        duration: 0.1
-                    })
-                }
-            })
 
         }
 
@@ -108,20 +131,16 @@ export function TurnInteractionController({
 
             if (!hoveredCardDescription) return
 
-            hoveredCardDescription.forEach((description) => {
-                gsap.to(description, {
-                    opacity: 0,
-                    display: 'none',
-                    duration: 0.1
-                })
-            })
         }
 
         const handler = () => {
             const data = Gcards.find(c => c.key === card.getAttribute('data-key'))
             if (!data) return
 
-            cleanup(false, card) // 🔒 garantit un seul flow actif
+            cleanup({ card: card, clearCards: false }) // 🔒 garantit un seul flow actif
+
+            bakuganToSelect.forEach((b) => b.classList.remove('selected-bakugan'))
+            cardsToUse.forEach(c => c.classList.remove('selected-card'))
 
             SelectCard({
                 card,
@@ -170,7 +189,7 @@ export function TurnInteractionController({
                     userId
                 })
 
-                cleanup(true, card)
+                cleanup({ card: card, clearCards: true })
             }
 
             window.addEventListener('mousemove', mouseMoveHandler)
@@ -208,7 +227,9 @@ export function TurnInteractionController({
                 ? [...actionsSlots, gateSlot]
                 : actionsSlots
 
-            // cleanup(slots, false)
+            cardsToSelect.forEach(c => c.classList.remove('selected-card'))
+            cardsToUse.forEach(c => c.classList.remove('selected-card'))
+            cleanup({ slots, clearBakugans: false })
 
             SelectBakugan({
                 bakuganToSelect,
@@ -245,7 +266,7 @@ export function TurnInteractionController({
                     userId: userId
                 }
 
-                // cleanup(slots, true)
+                cleanup({ slots, clearBakugans: true })
 
                 hoveredSlot = null
                 clearTurnInterface()
@@ -291,19 +312,6 @@ export function TurnInteractionController({
 
             if (!hoveredCardDescription) return
 
-            hoveredCardDescription.forEach((description) => {
-                if (description.getAttribute('data-key') === data.key) {
-                    gsap.fromTo(description, {
-                        display: 'none',
-                        opacity: 0
-                    }, {
-                        display: 'block',
-                        opacity: 1,
-                        duration: 0.1
-                    })
-                }
-            })
-
         }
 
         mouseLeave = () => {
@@ -314,13 +322,6 @@ export function TurnInteractionController({
 
             if (!hoveredCardDescription) return
 
-            hoveredCardDescription.forEach((description) => {
-                gsap.to(description, {
-                    display: 'none',
-                    opacity: 0,
-                    duration: 0.1
-                })
-            })
         }
 
         const handler = () => {
@@ -341,7 +342,10 @@ export function TurnInteractionController({
                 c.classList.remove('selected-card')
             })
 
-            // cleanup(false, card)
+            bakuganToSelect.forEach((b) => b.classList.remove('selected-bakugan'))
+            cardsToSelect.forEach(c => c.classList.remove('selected-card'))
+
+            cleanup({ card })
 
 
             SelectAbilityCardForStandardTurn({
@@ -400,7 +404,7 @@ export function TurnInteractionController({
 
                 socket.emit('use-ability-card', ({ roomId: roomId, abilityId: useAbilityCard.data.key, slot: useAbilityCard.data.slot, userId, bakuganKey: useAbilityCard.data.bakuganId }))
 
-                cleanup(true, card)
+                cleanup({ card: card })
 
             }
 
@@ -413,5 +417,11 @@ export function TurnInteractionController({
         card.addEventListener('click', handler)
         cardClickHandlers.set(card, handler)
     })
+
+    SelectGateCard({ SelectedActions: SelectedActions, userId: userId, actions: actions, roomId: roomId, socket: socket })
+    sB({ SelectedActions: SelectedActions, userId: userId, actions: actions })
+    SelectAbilityCard({ SelectedActions: SelectedActions, userId: userId, actions: actions })
+    NextTurnButtonAction({ request: request, socket: socket, userId: userId, roomId: roomId })
+    OpenGateCardResolution({ actions: actions, socket: socket, userId: userId, roomId: roomId })
 
 }
