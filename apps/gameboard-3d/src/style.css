@@ -613,6 +613,7 @@ body {
 
 #next-turn-button {
   position: absolute;
+  z-index: 2000;
   right: 5vw;
   bottom: 1vw;
   cursor: pointer;
@@ -846,6 +847,7 @@ body {
 .dialog-box {
   padding: 2vw 3vw;
   position: absolute;
+  z-index: 3000;
   z-index: 10;
   bottom: 0;
   left: 50%;
