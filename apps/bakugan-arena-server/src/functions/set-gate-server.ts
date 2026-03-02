@@ -89,7 +89,8 @@ export const UpdateGate: ({ roomId, gateId, slot, userId }: setGateCardProps) =>
         resolved: false,
         message: [{
             text: 'Gate Card Set !',
-            userName: GetUserName({roomData: Battle_Brawlers_Game_State[roomIndex], userId: userId})
+            userName: GetUserName({roomData: Battle_Brawlers_Game_State[roomIndex], userId: userId}),
+            turn: roomData.turnState.turnCount
         }]
     }]
 }

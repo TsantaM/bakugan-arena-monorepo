@@ -124,10 +124,12 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuga
         resolved: false,
         message: [{
             text: `Bakugan brawl !`,
-            userName: GetUserName({roomData: Battle_Brawlers_Game_State[roomIndex], userId: userId})
+            userName: GetUserName({roomData: Battle_Brawlers_Game_State[roomIndex], userId: userId}),
+            turn: roomData.turnState.turnCount
         }, {
             text: `${bakuganToAdd.name} stand !`,
-            userName: GetUserName({roomData: Battle_Brawlers_Game_State[roomIndex], userId: userId})
+            userName: GetUserName({roomData: Battle_Brawlers_Game_State[roomIndex], userId: userId}),
+            turn: roomData.turnState.turnCount
         }]
     }
     // Battle_Brawlers_Game_State[roomIndex]?.animations.push(animation)

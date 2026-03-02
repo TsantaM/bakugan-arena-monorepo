@@ -68,7 +68,8 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
                     ElimineBakuganDirectiveAnimation({
                         animations: roomData.animations,
                         bakugan: bakugan,
-                        slot: slot
+                        slot: slot,
+                        turn: roomData.turnState.turnCount - 1
                     })
                 }
             })

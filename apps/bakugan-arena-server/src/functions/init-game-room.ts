@@ -32,12 +32,14 @@ const initRoomState:
                 const winner = data.players.find((p) => p.userId === data.status.winner)?.username ? data.players.find((p) => p.userId === data.status.winner)?.username : ''
 
                 finished = {
-                    text: `Combat terminé ! Vainceur ${winner}`
+                    text: `Combat terminé ! Vainceur ${winner}`,
+                    turn: data.turnState.turnCount
                 }
 
             } else {
                 finished = {
-                    text: `Combat terminé ! Match Null !`
+                    text: `Combat terminé ! Match Null !`,
+                    turn: data.turnState.turnCount
                 }
             }
 

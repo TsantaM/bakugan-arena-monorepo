@@ -6,13 +6,14 @@ type Props = {
     newSlot: portalSlotsTypeElement,
     bakugan: bakuganOnSlot,
     animations: AnimationDirectivesTypes[];
+    turn:number
 }
 
-type MoveToAnotherSlotType = ({ animations, bakugan, initialSlot, newSlot }: Props) => void
+type MoveToAnotherSlotType = ({ animations, bakugan, initialSlot, newSlot, turn }: Props) => void
 
 
 
-export const MoveToAnotherSlotDirectiveAnimation: MoveToAnotherSlotType = ({ animations, bakugan, initialSlot, newSlot }) => {
+export const MoveToAnotherSlotDirectiveAnimation: MoveToAnotherSlotType = ({ animations, bakugan, initialSlot, newSlot, turn }) => {
     const animation: AnimationDirectivesTypes = {
         type: 'MOVE_TO_ANOTHER_SLOT',
         data: {
@@ -22,7 +23,8 @@ export const MoveToAnotherSlotDirectiveAnimation: MoveToAnotherSlotType = ({ ani
         },
         resolved: false,
         message: [{
-            text: `${BakuganList.find((b) => bakugan.key === b.key )?.name || ''} move to ${newSlot.id}`
+            text: `${BakuganList.find((b) => bakugan.key === b.key )?.name || ''} move to ${newSlot.id}`,
+            turn: turn
         }]
     }
 

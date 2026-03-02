@@ -24,7 +24,9 @@ export const Rechargement: gateCardType = {
                     animations: roomState?.animations,
                     bakugans: [bakuganUser],
                     powerChange: bonus,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -50,7 +52,9 @@ export const Rechargement: gateCardType = {
                     animations: roomState?.animations,
                     bakugans: [bakuganUser],
                     powerChange: malus,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -77,7 +81,9 @@ export const GrandEsprit: gateCardType = {
                 animations: roomState?.animations,
                 bakugans: [bakuganUser],
                 powerChange: bonus,
-                malus: false
+                malus: false,
+                turn: roomState.turnState.turnCount
+
             })
         }
 
@@ -97,7 +103,9 @@ export const GrandEsprit: gateCardType = {
                 animations: roomState?.animations,
                 bakugans: [bakuganUser],
                 powerChange: malus,
-                malus: false
+                malus: false,
+                turn: roomState.turnState.turnCount
+
             })
         }
     },
@@ -169,7 +177,9 @@ export const TripleCombat: gateCardType = {
                     SetBakuganAndAddRenfortAnimationDirective({
                         animations: roomState.animations,
                         bakugan: usersBakugan,
-                        slot: slotToUpdate
+                        slot: slotToUpdate,
+                        turn: roomState.turnState.turnCount
+
                     })
 
                 }
@@ -261,7 +271,9 @@ export const QuatuorDeCombat: gateCardType = {
                     SetBakuganAndAddRenfortAnimationDirective({
                         animations: roomState.animations,
                         bakugan: usersBakugan,
-                        slot: slotToUpdate
+                        slot: slotToUpdate,
+                        turn: roomState.turnState.turnCount
+
                     })
                 }
 
@@ -288,7 +300,9 @@ export const QuatuorDeCombat: gateCardType = {
                     SetBakuganAndAddRenfortAnimationDirective({
                         animations: roomState.animations,
                         bakugan: opponentBakugan,
-                        slot: slotToUpdate
+                        slot: slotToUpdate,
+                        turn: roomState.turnState.turnCount
+
                     })
                 }
             }

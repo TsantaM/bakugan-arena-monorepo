@@ -21,7 +21,8 @@ export const CoupDeGrace: abilityCardsType = {
                 const gateToCancel = GateCardsList.find((g) => g.key === gate)
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
-                    slot: slotOfGate
+                    slot: slotOfGate,
+                    turn: roomState.turnState.turnCount
                 })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
@@ -58,14 +59,16 @@ export const EpicesMortelles: abilityCardsType = {
                     animations: roomState.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
                 })
                 opponent.currentPower -= 100
                 PowerChangeDirectiveAnumation({
                     animations: roomState.animations,
                     bakugans: [opponent],
                     powerChange: 100,
-                    malus: true
+                    malus: true,
+                    turn: roomState.turnState.turnCount
                 })
             }
         }
@@ -85,14 +88,17 @@ export const EpicesMortelles: abilityCardsType = {
                     animations: roomState.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: true
+                    malus: true,
+                    turn: roomState.turnState.turnCount
+
                 })
                 opponent.currentPower += 100
                 PowerChangeDirectiveAnumation({
                     animations: roomState.animations,
                     bakugans: [opponent],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
                 })
             }
         }
@@ -125,7 +131,8 @@ export const BoublierFusion: abilityCardsType = {
                         animations: roomState.animations,
                         bakugans: [user],
                         powerChange: opponentBoost,
-                        malus: false
+                        malus: false,
+                        turn: roomState.turnState.turnCount
                     })
                 }
             }
@@ -157,7 +164,9 @@ export const VengeanceAlItalienne: abilityCardsType = {
                     animations: roomState.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
                 let oppo: bakuganOnSlot[] = []
                 opponents.forEach((opponent) => {
@@ -168,7 +177,9 @@ export const VengeanceAlItalienne: abilityCardsType = {
                     animations: roomState.animations,
                     bakugans: oppo,
                     powerChange: 100,
-                    malus: true
+                    malus: true,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -198,7 +209,9 @@ export const PoivreDesCayenne: abilityCardsType = {
                     animations: roomState.animations,
                     bakugans: [opponent],
                     powerChange: 50,
-                    malus: true
+                    malus: true,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -217,7 +230,9 @@ export const PoivreDesCayenne: abilityCardsType = {
                     animations: roomState.animations,
                     bakugans: [opponent],
                     powerChange: 50,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }

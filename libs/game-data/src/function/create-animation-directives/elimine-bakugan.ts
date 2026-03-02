@@ -6,11 +6,12 @@ type Props = {
     bakugan: bakuganOnSlot,
     slot: portalSlotsTypeElement
     animations: AnimationDirectivesTypes[];
+    turn: number
 }
 
-type ElimineBakuganDirectiveAnimationType = ({ animations, bakugan, slot }: Props) => void
+type ElimineBakuganDirectiveAnimationType = ({ animations, bakugan, slot, turn }: Props) => void
 
-export const ElimineBakuganDirectiveAnimation: ElimineBakuganDirectiveAnimationType = ({ animations, bakugan, slot }) => {
+export const ElimineBakuganDirectiveAnimation: ElimineBakuganDirectiveAnimationType = ({ animations, bakugan, slot, turn }) => {
     const comeBackBakuganDirective: AnimationDirectivesTypes = {
         type: 'ELIMINE_BAKUGAN',
         data: {
@@ -19,7 +20,8 @@ export const ElimineBakuganDirectiveAnimation: ElimineBakuganDirectiveAnimationT
         },
         resolved: false,
         message: [{
-            text: `${BakuganList.find((b) => bakugan.key === b.key )?.name || ''} eliminate`
+            text: `${BakuganList.find((b) => bakugan.key === b.key )?.name || ''} eliminate`,
+            turn: turn
         }]
     }
 

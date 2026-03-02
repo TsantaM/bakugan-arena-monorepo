@@ -13,7 +13,8 @@ export function CaracterGateCardEffect({ roomState, slotOfGate, family }: { room
                 animations: roomState.animations,
                 bakugans: [b],
                 powerChange: basePower,
-                malus: false
+                malus: false,
+                turn: roomState.turnState.turnCount
             })
         })
         slotOfGate.state.open = true
@@ -32,7 +33,8 @@ export function CancelCaracterGateCard({ roomState, slotOfGate, family }: { room
                 animations: roomState.animations,
                 bakugans: [b],
                 powerChange: basePower,
-                malus: true
+                malus: true,
+                turn: roomState.turnState.turnCount
             })
         })
         slotOfGate.state.canceled = true

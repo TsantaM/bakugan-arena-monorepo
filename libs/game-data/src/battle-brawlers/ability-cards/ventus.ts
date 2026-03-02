@@ -84,7 +84,9 @@ export const TornadeChaosTotal: abilityCardsType = {
                 const gateToCancel = GateCardsList.find((g) => g.key === gate)
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
-                    slot: slotOfGate
+                    slot: slotOfGate,
+                    turn: roomState.turnState.turnCount
+                    
                 })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })

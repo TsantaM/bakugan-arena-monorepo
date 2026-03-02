@@ -22,7 +22,7 @@ export const SubterraPyrus: abilityCardsType = {
         if (!roomState) return failed
         if (!slotOfGate) return failed
 
-        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Pyrus', attributWeak: 'Subterra', bakuganKey: bakuganKey, userId: userId })
+        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Pyrus', attributWeak: 'Subterra', bakuganKey: bakuganKey, userId: userId, turn: roomState.turnState.turnCount })
         return null
 
     },
@@ -64,7 +64,7 @@ export const SubterraHaos: abilityCardsType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (!roomState) return failed
         if (!slotOfGate) return failed
-        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Subterra', attributWeak: 'Haos', bakuganKey: bakuganKey, userId: userId })
+        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Subterra', attributWeak: 'Haos', bakuganKey: bakuganKey, userId: userId, turn: roomState.turnState.turnCount })
         return null
     },
     activationConditions({ roomState, userId }) {
@@ -105,7 +105,7 @@ export const HaosDarkus: abilityCardsType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (!roomState) return failed
         if (!slotOfGate) return failed
-        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Haos', attributWeak: 'Darkus', bakuganKey: bakuganKey, userId: userId })
+        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Haos', attributWeak: 'Darkus', bakuganKey: bakuganKey, userId: userId, turn: roomState.turnState.turnCount })
         return null
     },
     activationConditions({ roomState, userId }) {
@@ -146,7 +146,7 @@ export const DarkusAquos: abilityCardsType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (!roomState) return failed
         if (!slotOfGate) return failed
-        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Darkus', attributWeak: 'Aquos', bakuganKey: bakuganKey, userId: userId })
+        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Darkus', attributWeak: 'Aquos', bakuganKey: bakuganKey, userId: userId, turn: roomState.turnState.turnCount })
         return null
     },
     activationConditions({ roomState, userId }) {
@@ -187,7 +187,7 @@ export const AquosVentus: abilityCardsType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (!roomState) return failed
         if (!slotOfGate) return failed
-        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Aquos', attributWeak: 'Ventus', bakuganKey: bakuganKey, userId: userId })
+        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Aquos', attributWeak: 'Ventus', bakuganKey: bakuganKey, userId: userId, turn: roomState.turnState.turnCount })
         return null
     },
     activationConditions({ roomState, userId }) {
@@ -228,7 +228,7 @@ export const VentusPyrus: abilityCardsType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (!roomState) return failed
         if (!slotOfGate) return failed
-        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Ventus', attributWeak: 'Pyrus', bakuganKey: bakuganKey, userId: userId })
+        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Ventus', attributWeak: 'Pyrus', bakuganKey: bakuganKey, userId: userId, turn: roomState.turnState.turnCount })
         return null
     },
     activationConditions({ roomState, userId }) {

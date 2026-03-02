@@ -88,7 +88,9 @@ export const CopieConforme: abilityCardsType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -119,7 +121,9 @@ export const Obstruction: abilityCardsType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: opponentPower,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }

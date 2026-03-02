@@ -34,7 +34,8 @@ export const RapideHaos: abilityCardsType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
                 })
             }
         }
@@ -121,7 +122,8 @@ export const EclatSoudain: abilityCardsType = {
                 SetBakuganAndAddRenfortAnimationDirective({
                     animations: roomState.animations,
                     bakugan: newBakugan,
-                    slot: slotOfGate
+                    slot: slotOfGate,
+                    turn: roomState.turnState.turnCount
                 })
             }
         }
@@ -196,7 +198,9 @@ export const LumiereDivine: abilityCardsType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -307,7 +311,9 @@ export const HaosImmobilisation: abilityCardsType = {
                         animations: roomState?.animations,
                         bakugans: [user],
                         powerChange: 100,
-                        malus: false
+                        malus: false,
+                        turn: roomState.turnState.turnCount
+
                     })
                 }
             }
@@ -327,7 +333,9 @@ export const HaosImmobilisation: abilityCardsType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: true
+                    malus: true,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }

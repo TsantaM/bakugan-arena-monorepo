@@ -61,7 +61,13 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
                 resolved: false,
                 message: [{
                     text: `Gate Card Open ! ${gateCard.name}`,
-                    userName: GetUserName({ roomData: roomData, userId: userId })
+                    userName: GetUserName({ roomData: roomData, userId: userId }),
+                    turn: roomData.turnState.turnCount
+                },
+                {
+                    text: `${gateCard.description}`,
+                    turn: roomData.turnState.turnCount,
+                    description: true
                 }]
             }
 

@@ -57,7 +57,9 @@ export function moveBakuganToSelectedSlot({
         animations: roomData.animations,
         bakugan: user,
         initialSlot: structuredClone(slotOfGate),
-        newSlot: structuredClone(slotTarget)
+        newSlot: structuredClone(slotTarget),
+        turn: roomData.turnState.turnCount
+
     });
 
     // --- Battles + Gate open ---
@@ -76,6 +78,8 @@ export function moveBakuganToSelectedSlot({
                 animations: roomData.animations,
                 bakugan: user,
                 slot: slotTarget,
+                turn: roomData.turnState.turnCount
+
             });
         }
     }

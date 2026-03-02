@@ -24,10 +24,6 @@ export const CheckGameFinished = async ({
   const p1Gates = roomState.players.find((p) => p.userId === player1)?.usable_gates
   const p2Gates = roomState.players.find((p) => p.userId === player2)?.usable_gates
 
-  console.log("gate on domain", gateOnDomain.length)
-  console.log("p1Gates", p1Gates)
-  console.log("p2Gates", p2Gates)
-
   if (!p1Decks || !p2Decks) return
 
   const p1State = p1Decks.bakugans.reduce((count, b) => {

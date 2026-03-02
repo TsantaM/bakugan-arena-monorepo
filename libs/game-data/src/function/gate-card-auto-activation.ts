@@ -28,7 +28,8 @@ export function handleGateCards(roomData: stateType) {
                     resolved: false,
                     message: [{
                         text: `Gate Card Open ! ${gate.name}`,
-                        userName: GetUserName({ roomData: roomData, userId: slot.portalCard.userId })
+                        userName: GetUserName({ roomData: roomData, userId: slot.portalCard.userId }),
+                        turn: roomData.turnState.turnCount
                     }]
                 })
                 gate.onOpen({

@@ -18,7 +18,9 @@ export const MineFantome: gateCardType = {
                 ElimineBakuganDirectiveAnimation({
                     animations: roomState.animations,
                     bakugan: b,
-                    slot: structuredClone(slotOfGate)
+                    slot: structuredClone(slotOfGate),
+                    turn: roomState.turnState.turnCount
+
                 })
             })
 
@@ -110,7 +112,9 @@ export const Echange: gateCardType = {
                     ElimineBakuganDirectiveAnimation({
                         animations: roomState.animations,
                         bakugan: b,
-                        slot: slotOfGate
+                        slot: slotOfGate,
+                        turn: roomState.turnState.turnCount
+
                     })
                 })
                 usersBakuganDeck?.forEach((b) => {
@@ -138,7 +142,9 @@ export const Echange: gateCardType = {
                     ElimineBakuganDirectiveAnimation({
                         animations: roomState.animations,
                         bakugan: b,
-                        slot: slotOfGate
+                        slot: slotOfGate,
+                        turn: roomState.turnState.turnCount
+
                     })
                 })
                 opponentsBakuganDeck?.forEach((b) => {
@@ -221,14 +227,18 @@ export const AspirateurDePuissance: gateCardType = {
                 animations: roomState.animations,
                 bakugans: [firstBakugan],
                 powerChange: 100,
-                malus: false
+                malus: false,
+                turn: roomState.turnState.turnCount
+
             })
             lastBakugan.currentPower = lastBakugan.currentPower - 100
             PowerChangeDirectiveAnumation({
                 animations: roomState.animations,
                 bakugans: [lastBakugan],
                 powerChange: 100,
-                malus: true
+                malus: true,
+                turn: roomState.turnState.turnCount
+
             })
             slotOfGate.state.open = true
         }
@@ -249,14 +259,18 @@ export const AspirateurDePuissance: gateCardType = {
                 animations: roomState.animations,
                 bakugans: [firstBakugan],
                 powerChange: 100,
-                malus: true
+                malus: true,
+                turn: roomState.turnState.turnCount
+
             })
             lastBakugan.currentPower = lastBakugan.currentPower + 100
             PowerChangeDirectiveAnumation({
                 animations: roomState.animations,
                 bakugans: [lastBakugan],
                 powerChange: 100,
-                malus: false
+                malus: false,
+                turn: roomState.turnState.turnCount
+
             })
             slotOfGate.state.canceled = true
         }

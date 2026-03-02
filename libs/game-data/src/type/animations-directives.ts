@@ -3,7 +3,9 @@ import type { attribut } from './game-data-types.js'
 
 export type Message = {
     userName?: string,
-    text: string
+    text: string,
+    turn: number,
+    description?: boolean
 }
 
 export type AnimationDirectivesTypes =

@@ -24,7 +24,7 @@ export const PyrusDarkus: abilityCardsType = {
         if (!slotOfGate && !portalSlots) return failed
         if (!slotOfGate) return failed
         if (!portalSlots) return failed
-        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Pyrus', attributWeak: 'Darkus', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId })
+        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Pyrus', attributWeak: 'Darkus', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId, turn: roomState.turnState.turnCount })
         return null
     },
     activationConditions({ roomState, userId }) {
@@ -76,7 +76,7 @@ export const DarkusPyrus: abilityCardsType = {
         if (!slotOfGate && !portalSlots) return failed
         if (!slotOfGate) return failed
         if (!portalSlots) return failed
-        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Darkus', attributWeak: 'Pyrus', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId })
+        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Darkus', attributWeak: 'Pyrus', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId, turn: roomState.turnState.turnCount })
         return null
     },
     activationConditions({ roomState, userId }) {
@@ -128,7 +128,7 @@ export const VentusHaos: abilityCardsType = {
         if (!slotOfGate && !portalSlots) return failed
         if (!slotOfGate) return failed
         if (!portalSlots) return failed
-        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Ventus', attributWeak: 'Haos', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId })
+        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Ventus', attributWeak: 'Haos', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId, turn: roomState.turnState.turnCount })
         return null
     },
     activationConditions({ roomState, userId }) {
@@ -180,7 +180,7 @@ export const HaosVentus: abilityCardsType = {
         if (!slotOfGate && !portalSlots) return failed
         if (!slotOfGate) return failed
         if (!portalSlots) return failed
-        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Haos', attributWeak: 'Ventus', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId })
+        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Haos', attributWeak: 'Ventus', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId, turn: roomState.turnState.turnCount })
         return null
     },
     activationConditions({ roomState, userId }) {
@@ -231,7 +231,7 @@ export const AquosSubterra: abilityCardsType = {
         if (!slotOfGate && !portalSlots) return failed
         if (!slotOfGate) return failed
         if (!portalSlots) return failed
-        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Aquos', attributWeak: 'Subterra', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId })
+        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Aquos', attributWeak: 'Subterra', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId, turn: roomState.turnState.turnCount })
         return null
     },
     activationConditions({ roomState, userId }) {
@@ -283,7 +283,7 @@ export const SubterraAquos: abilityCardsType = {
         if (!slotOfGate && !portalSlots) return failed
         if (!slotOfGate) return failed
         if (!portalSlots) return failed
-        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Subterra', attributWeak: 'Aquos', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId })
+        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Subterra', attributWeak: 'Aquos', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId, turn: roomState.turnState.turnCount })
         return null
     },
     activationConditions({ roomState, userId }) {

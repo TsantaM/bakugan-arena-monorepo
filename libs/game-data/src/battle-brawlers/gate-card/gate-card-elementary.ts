@@ -6,7 +6,7 @@ export const ReacteurPyrus: gateCardType = {
     key: 'reacteur-pyrus',
     name: 'Reacteur Pyrus',
     attribut: 'Pyrus',
-    description: 'Ajoute 100 G à tous les bakugans Pyrus sur la carte',
+    description: 'Add 100 G to all Pyrus bakugans on the card',
     maxInDeck: 3,
     image: 'reacteur-pyrus.jpg',
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -32,7 +32,7 @@ export const ReacteurHaos: gateCardType = {
     key: 'reacteur-haos',
     name: 'Reacteur Haos',
     attribut: 'Haos',
-    description: 'Ajoute 100 G à tous les bakugans Haos sur la carte',
+    description: 'Add 100 G to all Haos bakugans on the card',
     image: 'reacteur-haos.jpg',
     maxInDeck: 3,
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -58,7 +58,7 @@ export const ReacteurVentus: gateCardType = {
     key: 'reacteur-ventus',
     name: 'Reacteur Ventus',
     attribut: 'Ventus',
-    description: 'Ajoute 100 G à tous les bakugans Ventus sur la carte',
+    description: 'Add 100 G to all Ventus bakugans on the card',
     image: 'reacteur-ventus.jpg',
     maxInDeck: 3,
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -84,7 +84,7 @@ export const ReacteurAquos: gateCardType = {
     key: 'reacteur-aquos',
     name: 'Reacteur Aquos',
     attribut: 'Aquos',
-    description: 'Ajoute 100 G à tous les bakugans Aquos sur la carte',
+    description: 'Add 100 G to all Aquos bakugans on the card',
     image: 'reacteur-aquos.jpg',
     maxInDeck: 3,
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -99,7 +99,6 @@ export const ReacteurAquos: gateCardType = {
         ElementaryGateCardOnCancel({ roomState, slot, attribut: 'Aquos' })
 
     },
-
     autoActivationCheck: ({ portalSlot }) => {
         const check = DoubleBakuganCheck({ portalSlot })
         return check
@@ -110,7 +109,7 @@ export const ReacteurSubterra: gateCardType = {
     key: 'reacteur-subterra',
     name: 'Reacteur Subterra',
     attribut: 'Subterra',
-    description: 'Ajoute 100 G à tous les bakugans Subterra sur la carte',
+    description: 'Add 100 G to all Subterra bakugans on the card',
     image: 'reacteur-subterra.jpg',
     maxInDeck: 3,
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -125,7 +124,6 @@ export const ReacteurSubterra: gateCardType = {
         ElementaryGateCardOnCancel({ roomState, slot, attribut: 'Subterra' })
 
     },
-
     autoActivationCheck: ({ portalSlot }) => {
         const check = DoubleBakuganCheck({ portalSlot })
         return check
@@ -136,7 +134,7 @@ export const ReacteurDarkus: gateCardType = {
     key: 'reacteur-darkus',
     name: 'Reacteur Darkus',
     attribut: 'Darkus',
-    description: 'Ajoute 100 G à tous les bakugans Darkus sur la carte',
+    description: 'Add 100 G to all Darkus bakugans on the card',
     image: 'reacteur-darkus.jpg',
     maxInDeck: 3,
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -151,7 +149,6 @@ export const ReacteurDarkus: gateCardType = {
         ElementaryGateCardOnCancel({ roomState, slot, attribut: 'Darkus' })
 
     },
-
     autoActivationCheck: ({ portalSlot }) => {
         const check = DoubleBakuganCheck({ portalSlot })
         return check

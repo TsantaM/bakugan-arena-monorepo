@@ -31,7 +31,8 @@ export const CheckBattle = ({ roomState }: { roomState: stateType }) => {
 
             OnBattleStartAnimationDirectives({
                 animations: roomState.animations,
-                slot: slotWithTwoBakugans
+                slot: slotWithTwoBakugans,
+                turn: roomState.turnState.turnCount
             })
 
             CreateActionRequestFunction({

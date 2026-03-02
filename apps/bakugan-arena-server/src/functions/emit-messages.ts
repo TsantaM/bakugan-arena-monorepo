@@ -10,11 +10,11 @@ export function EmitMessage({ roomState, animation, io }: { roomState: stateType
     const sockets = roomState.connectedsUsers
 
     messages.forEach((message) => {
+        roomState.messages.push(message)
         sockets.forEach((s) => {
             console.log('parent-socket', s.nextjsSocket)
             io.to(s.nextjsSocket).emit('game-messages', message)
         })
-        roomState.messages.push(message)
     })
 
 }

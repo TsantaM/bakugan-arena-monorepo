@@ -211,12 +211,14 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
                     const winner = roomData.players.find((p) => p.userId === roomData.status.winner)?.username ? roomData.players.find((p) => p.userId === roomData.status.winner)?.username : ''
 
                     message = {
-                        text: `Game is over ! The winner is ${winner}`
+                        text: `Game is over ! The winner is ${winner}`,
+                        turn: roomData.turnState.turnCount
                     }
 
                 } else {
                     message = {
-                        text: `Game is over ! Equality !`
+                        text: `Game is over ! Equality !`,
+                        turn: roomData.turnState.turnCount
                     }
                 }
 
@@ -226,7 +228,6 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
                     console.log('parent-socket', s.nextjsSocket)
                     io.to(s.nextjsSocket).emit('game-messages', [message])
                 })
-                roomData.messages.push(message)
 
             }
 

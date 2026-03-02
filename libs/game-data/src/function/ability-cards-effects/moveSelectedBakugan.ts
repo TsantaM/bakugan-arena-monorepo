@@ -61,14 +61,16 @@ export function moveSelectedBakugan({
         animations: roomState.animations,
         bakugan,
         initialSlot: structuredClone(initialSlot),
-        newSlot: structuredClone(slotTarget)
+        newSlot: structuredClone(slotTarget),
+        turn: roomState.turnState.turnCount
+
     });
 
     // Check combats
     CheckBattleStillInProcess(roomState);
 
     // --- Gestion du renfort ---
-    
+
     if (
         roomState.battleState.battleInProcess &&
         roomState.battleState.slot === slotTarget.id
@@ -82,6 +84,8 @@ export function moveSelectedBakugan({
                 animations: roomState.animations,
                 bakugan: bakugan,
                 slot: slotTarget,
+                turn: roomState.turnState.turnCount
+
             });
         }
     }

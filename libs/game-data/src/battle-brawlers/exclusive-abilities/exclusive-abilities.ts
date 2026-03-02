@@ -20,7 +20,9 @@ export const OmbreBleue: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 50,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
             slotOfGate.state.blocked = true
@@ -48,7 +50,9 @@ export const ChambreDeGravite: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -77,7 +81,9 @@ export const DragonoidPlus: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -105,7 +111,9 @@ export const ImpactMajeur: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 50,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -155,7 +163,9 @@ export const SabreDeLaMort: exclusiveAbilitiesType = {
                     SetBakuganAndAddRenfortAnimationDirective({
                         animations: roomState.animations,
                         bakugan: usersBakugan,
-                        slot: structuredClone(slotOfGate)
+                        slot: structuredClone(slotOfGate),
+                        turn: roomState.turnState.turnCount
+
                     })
                 }
             }
@@ -183,7 +193,9 @@ export const VentViolentDeNobelesseVerte: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -245,11 +257,11 @@ export const AntiMuse: exclusiveAbilitiesType = {
         return true
     },
     canUse({ roomState, bakugan }) {
-        if(!roomState) return false
+        if (!roomState) return false
 
         const bakugansOnOtherSlots = roomState.protalSlots.filter((slot) => slot.id === bakugan.userId).map((slot) => slot.bakugans).flat().length
 
-        if(bakugansOnOtherSlots < 1) return false
+        if (bakugansOnOtherSlots < 1) return false
 
         return true
     }
@@ -275,7 +287,9 @@ export const VentCinglant: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -304,13 +318,17 @@ export const AileEnflamee: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 50,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
                 PowerChangeDirectiveAnumation({
                     animations: roomState?.animations,
                     bakugans: opponents,
                     powerChange: 50,
-                    malus: true
+                    malus: true,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -369,7 +387,9 @@ export const VisageDeLaFureur: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
                 opponents.forEach((opponent) => {
                     opponent.currentPower -= 100
@@ -378,7 +398,9 @@ export const VisageDeLaFureur: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: opponents,
                     powerChange: 100,
-                    malus: true
+                    malus: true,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -403,7 +425,9 @@ export const VisageDeJoie: exclusiveAbilitiesType = {
             if (slotOfGate.state.open) {
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
-                    slot: slotOfGate
+                    slot: slotOfGate,
+                    turn: roomState.turnState.turnCount
+
                 })
 
                 if (gate.onCanceled) {
@@ -457,7 +481,9 @@ export const GaucheGigantesque: exclusiveAbilitiesType = {
                     slotOfGate.state.canceled = true
                     CancelGateCardDirectiveAnimation({
                         animations: roomState?.animations,
-                        slot: structuredClone(slotOfGate)
+                        slot: structuredClone(slotOfGate),
+                        turn: roomState.turnState.turnCount
+
                     })
 
                     const gate = GateCardsList.find((gate) => gate.key === slotOfGate.portalCard?.key)
@@ -495,7 +521,9 @@ export const MassueGigantesque: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -523,7 +551,9 @@ export const TempeteDePlume: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -634,9 +664,9 @@ export const Marionnette: exclusiveAbilitiesType = {
 
         const slotsWithCard = roomState.protalSlots.map((slot) => slot).filter((slot) => slot.portalCard !== null)
 
-        if(slotsWithCard.length < 3) return false
+        if (slotsWithCard.length < 3) return false
         const bakugans = slotsWithCard.map((slot) => slot.bakugans).flat()
-        if(bakugans.length < 2) return false
+        if (bakugans.length < 2) return false
 
         if (battleInProcess && !paused) return false
 
@@ -730,7 +760,9 @@ export const MachettesJumelles: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -750,7 +782,9 @@ export const MachettesJumelles: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: true
+                    malus: true,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -776,7 +810,9 @@ export const RobotallionExecution: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 50,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -806,12 +842,16 @@ export const PlexusSolaire: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [opponent],
                     powerChange: 50,
-                    malus: true
+                    malus: true,
+                    turn: roomState.turnState.turnCount
+
                 })
                 if (gate && gate.onCanceled && slotOfGate.state.open && !slotOfGate.state.canceled) {
                     CancelGateCardDirectiveAnimation({
                         animations: roomState.animations,
-                        slot: structuredClone(slotOfGate)
+                        slot: structuredClone(slotOfGate),
+                        turn: roomState.turnState.turnCount
+
                     })
                     gate.onCanceled({ roomState: roomState, slot: slot, userId: userId, bakuganKey: bakuganKey })
                     slotOfGate.state.canceled = true
@@ -842,7 +882,9 @@ export const EffecteurdOmbre: exclusiveAbilitiesType = {
             if (slotOfGate.state.open && !slotOfGate.state.canceled && gateCard && gateCard.onCanceled) {
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
-                    slot: structuredClone(slotOfGate)
+                    slot: structuredClone(slotOfGate),
+                    turn: roomState.turnState.turnCount
+
                 })
                 gateCard.onCanceled({ roomState: roomState, slot: slot, userId: userId, bakuganKey: bakuganKey })
             }
@@ -854,7 +896,9 @@ export const EffecteurdOmbre: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [opponent],
                     powerChange: 50,
-                    malus: true
+                    malus: true,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -882,7 +926,9 @@ export const LanceDeFeu: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -910,7 +956,9 @@ export const JavelotAquos: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -939,7 +987,9 @@ export const Tsunami: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -1005,7 +1055,9 @@ export const TrappeDeSable: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [bakuganToDrag],
                     powerChange: 50,
-                    malus: true
+                    malus: true,
+                    turn: roomState.turnState.turnCount
+
                 })
 
                 const newState: bakuganOnSlot = {
@@ -1019,7 +1071,9 @@ export const TrappeDeSable: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugan: bakuganToDrag,
                     initialSlot: slotTarget,
-                    newSlot: slotOfGate
+                    newSlot: slotOfGate,
+                    turn: roomState.turnState.turnCount
+
                 })
                 CheckBattle({ roomState })
                 CheckBattleStillInProcess(roomState)
@@ -1047,7 +1101,9 @@ export const MaitreDesProfondeurs: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -1075,7 +1131,9 @@ export const DivisionHolographique: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -1104,7 +1162,9 @@ export const RegainSubit: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
                 opponents.forEach((opponent) => {
                     opponent.currentPower -= 100
@@ -1113,7 +1173,9 @@ export const RegainSubit: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: opponents,
                     powerChange: 100,
-                    malus: true
+                    malus: true,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -1141,7 +1203,9 @@ export const CapeDeFeu: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -1216,7 +1280,9 @@ export const SouffleInfini: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugans: [bakuganToDrag],
                     powerChange: 50,
-                    malus: true
+                    malus: true,
+                    turn: roomState.turnState.turnCount
+
                 })
 
                 const newState: bakuganOnSlot = {
@@ -1230,7 +1296,9 @@ export const SouffleInfini: exclusiveAbilitiesType = {
                     animations: roomState?.animations,
                     bakugan: bakuganToDrag,
                     initialSlot: slotTarget,
-                    newSlot: slotOfGate
+                    newSlot: slotOfGate,
+                    turn: roomState.turnState.turnCount
+
                 })
                 CheckBattle({ roomState: roomState })
                 CheckBattleStillInProcess(roomState)

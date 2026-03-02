@@ -102,6 +102,10 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
 
             Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
 
+            const removeSetGateCard = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "SET_GATE_CARD_ACTION")
+
+            Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = removeSetGateCard as ActivePlayerActionRequestType
+
             AddAbilities({
                 bakugan: bakuganKey,
                 request: Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest,
@@ -113,11 +117,9 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
 
             const merged = [Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
             if (merged.length > 0) {
-                console.log('still his turn')
                 io.to(activeSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
                 return
             } else {
-                console.log('change turn')
                 clearAnimationsInRoom(roomId)
                 turnActionUpdater({ roomId, userId, io })
             }

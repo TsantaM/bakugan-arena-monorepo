@@ -61,8 +61,13 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
                 text: `Ability Card Activate : ${abilityToUse.name}`,
                 userName: GetUserName({
                     roomData: roomData,
-                    userId: userId
-                })
+                    userId: userId,
+                }),
+                turn: roomData.turnState.turnCount
+            }, {
+                text: `${abilityToUse.description}`,
+                turn: roomData.turnState.turnCount,
+                description: true
             }]
         }
 
@@ -161,7 +166,8 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
                 type: 'ABILITY_CARD_FAILED',
                 resolve: false,
                 message: [{
-                    text: abilityReturn.message
+                    text: abilityReturn.message,
+                    turn: roomData.turnState.turnCount
                 }]
             }
 

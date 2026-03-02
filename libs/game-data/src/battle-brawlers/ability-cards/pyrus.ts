@@ -28,7 +28,9 @@ export const MurDeFeu: abilityCardsType = {
                 animations: roomState.animations,
                 bakugans: opponents,
                 powerChange: 50,
-                malus: true
+                malus: true,
+                turn: roomState.turnState.turnCount
+
             })
         }
 
@@ -51,7 +53,9 @@ export const MurDeFeu: abilityCardsType = {
                 animations: roomState.animations,
                 bakugans: opponents,
                 powerChange: 50,
-                malus: false
+                malus: false,
+                turn: roomState.turnState.turnCount
+
             })
         }
 
@@ -137,7 +141,9 @@ export const JetEnflamme: abilityCardsType = {
                 SetBakuganAndAddRenfortAnimationDirective({
                     animations: roomState.animations,
                     bakugan: newBakugan,
-                    slot: slotOfGate
+                    slot: slotOfGate,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -205,7 +211,9 @@ export const RetroAction: abilityCardsType = {
                 const gateToCancel = GateCardsList.find((g) => g.key === gate)
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
-                    slot: slotOfGate
+                    slot: slotOfGate,
+                    turn: roomState.turnState.turnCount
+
                 })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
@@ -240,7 +248,9 @@ export const TourbillonDeFeu: abilityCardsType = {
                     animations: roomState.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: false
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }
@@ -259,7 +269,9 @@ export const TourbillonDeFeu: abilityCardsType = {
                     animations: roomState.animations,
                     bakugans: [user],
                     powerChange: 100,
-                    malus: true
+                    malus: true,
+                    turn: roomState.turnState.turnCount
+
                 })
             }
         }

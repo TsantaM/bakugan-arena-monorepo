@@ -20,7 +20,8 @@ export function ElementaryGateCardOnOpen({ roomState, slot, attribut }: { roomSt
             animations: roomState.animations,
             bakugans: bakugans,
             powerChange: 100,
-            malus: false
+            malus: false,
+            turn: roomState.turnState.turnCount
         })
     }
 
@@ -43,7 +44,8 @@ export function ElementaryGateCardOnCancel({ roomState, slot, attribut }: { room
             animations: roomState.animations,
             bakugans: bakugans,
             powerChange: 100,
-            malus: true
+            malus: true,
+            turn: roomState.turnState.turnCount
         })
     }
 }

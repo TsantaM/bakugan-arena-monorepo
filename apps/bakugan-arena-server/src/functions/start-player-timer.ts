@@ -79,7 +79,8 @@ export function UpdatePlayerTimer({ roomState, io }: { roomState: stateType, io:
                     )?.username || ''
 
                     const message: Message = {
-                        text: `Game is over ! The winner is ${winnerName}`
+                        text: `Game is over ! The winner is ${winnerName}`,
+                        turn: roomState.turnState.turnCount
                     }
                     io.to(roomId).emit('game-finished', message)
                     const sockets = roomState.connectedsUsers
@@ -147,7 +148,8 @@ export function UpdatePlayerTimer({ roomState, io }: { roomState: stateType, io:
                     )?.username || ''
 
                     const message: Message = {
-                        text: `Game is over ! The winner is ${winnerName}`
+                        text: `Game is over ! The winner is ${winnerName}`,
+                        turn: roomState.turnState.turnCount
                     }
                     io.to(roomId).emit('game-finished', message)
                     const sockets = roomState.connectedsUsers

@@ -50,6 +50,7 @@ export function dragBakuganToUserSlot({
         bakugan: bakuganToDrag,
         initialSlot: structuredClone(slotTarget),
         newSlot: structuredClone(slotOfGate),
+        turn: roomState.turnState.turnCount
     });
 
     // --- Combat + Gate ---
@@ -70,6 +71,8 @@ export function dragBakuganToUserSlot({
                 animations: roomState.animations,
                 bakugan: bakuganToDrag,
                 slot: slotOfGate,
+                turn: roomState.turnState.turnCount
+
             });
         }
     }

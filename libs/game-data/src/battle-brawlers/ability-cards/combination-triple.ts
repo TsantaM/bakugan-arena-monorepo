@@ -17,7 +17,7 @@ export const PyrusAquosHaos: abilityCardsType = {
         const portalSlots = roomState?.protalSlots
         if (!portalSlots) return failed
 
-        CombinationTripleEffect({ animations: roomState.animations, attribut_one: 'Pyrus', attribut_two: 'Aquos', attribut_tree: 'Haos', portalSlots: portalSlots, userId: userId })
+        CombinationTripleEffect({ animations: roomState.animations, attribut_one: 'Pyrus', attribut_two: 'Aquos', attribut_tree: 'Haos', portalSlots: portalSlots, userId: userId, turn: roomState.turnState.turnCount })
         return null
     },
     activationConditions({ roomState, userId }) {
@@ -65,7 +65,7 @@ export const VentusSubterraDarkus: abilityCardsType = {
         }
         const portalSlots = roomState?.protalSlots
         if (!portalSlots) return failed
-        CombinationTripleEffect({ animations: roomState.animations, attribut_one: 'Ventus', attribut_two: 'Subterra', attribut_tree: 'Darkus', portalSlots: portalSlots, userId: userId })
+        CombinationTripleEffect({ animations: roomState.animations, attribut_one: 'Ventus', attribut_two: 'Subterra', attribut_tree: 'Darkus', portalSlots: portalSlots, userId: userId, turn: roomState.turnState.turnCount })
         return null
     },
     activationConditions({ roomState, userId }) {
