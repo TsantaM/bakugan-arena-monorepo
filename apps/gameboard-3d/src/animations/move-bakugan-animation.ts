@@ -7,14 +7,16 @@ type MoveBakuganProps = {
   scene: THREE.Scene
   slot: portalSlotsTypeElement
   bakugan: bakuganOnSlot
-  userId: string
+  userId: string,
+  duration?: number
 }
 
 export function MoveBakugan({
   scene,
   bakugan,
   slot,
-  userId
+  userId,
+  duration= 0.8
 }: MoveBakuganProps): Promise<void> {
   return new Promise((resolve) => {
     const newPosition = GetSpritePosition({
@@ -23,7 +25,6 @@ export function MoveBakugan({
       bakugan,
       slotIndex: Slots.indexOf(slot.id)
     })
-
     const bakuganMesh = scene.getObjectByName(`${bakugan.key}-${bakugan.userId}`)
     if (!bakuganMesh || !newPosition) return resolve()
 
@@ -42,7 +43,7 @@ export function MoveBakugan({
       {
         x: newPosition.x,
         z: newPosition.z,
-        duration: 0.8,
+        duration: duration,
         ease: 'power2.inOut'
       }
     )

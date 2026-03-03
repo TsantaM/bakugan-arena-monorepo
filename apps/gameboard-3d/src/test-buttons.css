@@ -1,0 +1,13 @@
+.buttons {
+    position: absolute;
+    top: 75%;
+    left: 75%;
+    transform: translateX(-75%) translateY(-75%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* background: red; */
+    gap: 0.5vw;
+    background: white;
+    padding: 1vw;
+}

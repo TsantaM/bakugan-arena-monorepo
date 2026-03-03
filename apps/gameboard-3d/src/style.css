@@ -369,18 +369,6 @@ body {
 
 }
 
-.buttons {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  display: flex;
-  justify-content: space-between;
-  /* background: red; */
-  gap: 2vw;
-
-}
-
 /* SELECT ONE */
 .select-one {
   padding: 5vw 5vw;

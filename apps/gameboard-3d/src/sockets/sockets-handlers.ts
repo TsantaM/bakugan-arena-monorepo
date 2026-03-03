@@ -5,12 +5,10 @@ import type {
     roomStateType, slots_id,
     turnCountSocketProps, Message
 } from "@bakugan-arena/game-data"
-import { Slots, type AnimationDirectivesTypes } from "@bakugan-arena/game-data"
+import { type AnimationDirectivesTypes } from "@bakugan-arena/game-data"
 import type * as THREE from "three"
 import { TurnActionBuilder } from "../turn-action-management"
 import type { Socket } from "socket.io-client"
-import { createSlotMesh } from "../meshes/slot.mesh"
-import { createSprite } from "../meshes/bakugan.mesh"
 import { OnBattleStartFunctionAnimation } from "../scene-modifications-functions/on-battle-start-function-animation"
 import { AddRenfortToBattleAnimationFunction, SetBakuganAndAddRenfortAnimationAndFunction } from "../scene-modifications-functions/add-renfort-function-animation"
 import { OnBattleEndAnimation } from "../animations/on-battle-end-animation"
@@ -25,12 +23,12 @@ import { SetGateCardFunctionAndAnimation } from "../scene-modifications-function
 import { PowerChangeAnimation, PowerChangeNumberAnimation } from "../animations/power-change-animation"
 import { AdditionalRequestResolution } from "../abiliity-additional-request/additional-request-resolution"
 import { AdditionalEffectMessage, EndGameMessage, removePreviousDialogBoxAnimation, ShowMessageAnimation } from "../animations/show-message-animation"
-import { setEliminatedCircles } from "../functions/set-eliminated-circle"
 import { clearTurnInterface } from "../turn-action-management/turn-actions-resolution/action-scope"
 import { ActiveAbilityCardAnimation } from "../animations/active-ability-card"
 import dayjs from "dayjs"
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { InitGameState } from "../functions/init-game-state"
 
 let animationQueue: AnimationDirectivesTypes[] = []
 let isProcessingAnimations = false
@@ -332,72 +330,18 @@ export function registerSocketHandlers(
         document.getElementById('right-bakugan-previews-container')?.remove()
 
         camera.position.set(3, 5, 8)
-        const slots = state.portalSlots
-        for (let i = 0; i < slots.length; i++) {
-            const slot = slots[i]
-            if (slot.portalCard !== null) {
-                createSlotMesh({
-                    plane: plane,
-                    slot: slot,
-                    gateCardMeshs,
-                    userId
-                })
-
-                if (slot.bakugans.length > 0) {
-                    for (let b = 0; b < slot.bakugans.length; b++) {
-                        const bakugan = slot.bakugans[b]
-                        createSprite({
-                            bakugan: bakugan,
-                            scene: scene,
-                            slot: slot,
-                            slotIndex: Slots.indexOf(bakugan.slot_id),
-                            userId: userId,
-                            bakugansMeshs
-                        })
-                    }
-                }
-            }
-
-        }
-
-        if (state.battleState.battleInProcess && !state.battleState.paused) {
-            const slotOfBattle = state.portalSlots.find((s) => s.id === state.battleState.slot)
-            if (!slotOfBattle) return
-            OnBattleStartFunctionAnimation({
-                slot: slotOfBattle,
-                userId: userId
-            })
-        }
-
-        setEliminatedCircles({
-            count: state.eliminated.user,
-            isLeft: true
-        })
-
-        setEliminatedCircles({
-            count: state.eliminated.opponnent,
-            isLeft: false
-        })
-
-        if (state.finished !== undefined) {
-            clearTurnInterface()
-
-            EndGameMessage({
-                message: state.finished
-            })
-
-        }
+        InitGameState({ state: state, bakugansMeshs, gateCardMeshs, plane, scene, userId })
 
     })
 
     socket.on("turn-action-request", (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
-        const actions = [
-            request.actions.mustDo,
-            request.actions.mustDoOne,
-            request.actions.optional
-        ].flat()
+        // const actions = [
+        //     request.actions.mustDo,
+        //     request.actions.mustDoOne,
+        //     request.actions.optional
+        // ].flat()
 
-        console.log(actions.length, request.target)
+        // console.log(actions.length, request.target)
 
         TurnActionBuilder({
             request,
