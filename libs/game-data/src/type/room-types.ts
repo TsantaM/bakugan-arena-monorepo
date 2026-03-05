@@ -12,6 +12,17 @@ export type turnStateType = {
     set_new_gate: boolean;
     set_new_bakugan: boolean;
     use_ability_card: boolean;
+    ability_card_block: {
+        blocked: boolean;
+        turn: number;
+        reason: {
+            key: string;
+            attribut: attribut;
+            bakugan: bakuganOnSlot;
+            slot: slots_id;
+
+        } | null;
+    }
 }
 
 export type playersType = {
@@ -128,7 +139,7 @@ export type deckType = {
 }
 
 export type stateType = {
-    connectedsUsers: Map<string,  {
+    connectedsUsers: Map<string, {
         gameboardSocket: string,
         nextjsSocket: string
     }>,

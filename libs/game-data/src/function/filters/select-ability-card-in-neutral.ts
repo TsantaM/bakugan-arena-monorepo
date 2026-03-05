@@ -7,6 +7,9 @@ export function SelectAbilityCardInNeutralFilters({ slots, userId, decksState, b
 
     if (!slots) return
     if (!decksState) return
+    if (!roomState?.turnState.use_ability_card) return
+    if (roomState.turnState.ability_card_block.blocked) return
+
     const bakuganOnDomain = slots.flatMap((s) => s.bakugans).filter((b) => b.userId === userId)
 
     const usersBakuganKeys = [bakuganOnDomain.filter((b) => b.userId === userId && !b.abilityBlock).map((b) => b.key), bakuganToSet].flat()

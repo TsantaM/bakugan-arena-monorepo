@@ -4,8 +4,12 @@ import { AbilityCardsList } from '../../battle-brawlers/ability-cards.js'
 import { ExclusiveAbilitiesList } from '../../battle-brawlers/exclusive-abilities.js'
 
 export function SelectAbilityCardFilters({ slotOfBattle, userId, bakuganKey, playersDeck, roomState }: { slotOfBattle?: portalSlotsTypeElement | undefined, userId: string, bakuganKey: string, playersDeck: deckType | undefined, roomState: stateType }) {
+    
     if (!slotOfBattle) return
     if (!playersDeck) return
+    if (!roomState?.turnState.use_ability_card) return
+    if (roomState.turnState.ability_card_block.blocked) return
+
     const usersBakugan = slotOfBattle?.bakugans.filter((b) => b.userId === userId)
     const usersBakuganKeys = slotOfBattle?.bakugans.filter((b) => b.userId === userId && !b.abilityBlock).map((b) => b.key)
 

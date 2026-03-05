@@ -9,6 +9,8 @@ import { SelectAbilityCardInNeutralFilters } from '../filters/select-ability-car
 export function UseAbilityCardActionRequest({ roomState }: { roomState: stateType }) {
 
     if (!roomState) return
+    if (!roomState.turnState.use_ability_card) return
+    if (roomState.turnState.ability_card_block.blocked) return
 
     const activePlayer = roomState.decksState.find((deck) => deck.userId === roomState.turnState.turn)
     const battleState = roomState.battleState

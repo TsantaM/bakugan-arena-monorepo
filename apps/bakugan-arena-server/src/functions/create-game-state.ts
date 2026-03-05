@@ -189,7 +189,12 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             set_new_gate: true,
             set_new_bakugan: false,
             use_ability_card: false,
-            can_change_player_turn: false
+            can_change_player_turn: false,
+            ability_card_block: {
+                blocked: false,
+                reason: null,
+                turn: 0
+            }
         }
 
         const battleState = {

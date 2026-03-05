@@ -29,6 +29,10 @@ import dayjs from "dayjs"
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { InitGameState } from "../functions/init-game-state"
+import { RemoveRenforAnimation } from "../animations/remove-renfort-animation"
+import { MoveGateCard } from "../animations/move-gate-card-animation"
+import { SwipeGateCards } from "../animations/swipe-gate-cards"
+import { CancelAbilityCardAnimation } from "../animations/cancel-ability-card-animation"
 
 let animationQueue: AnimationDirectivesTypes[] = []
 let isProcessingAnimations = false
@@ -289,6 +293,40 @@ async function processAnimationQueue(userId: string,
             await ShowMessageAnimation({
                 messages: current.message
             })
+        }
+
+        if (current.type === 'REMOVE_RENFORT') {
+            await RemoveRenforAnimation({
+                bakugan: current.data.bakugan,
+                userId: userId,
+            })
+        }
+
+        if (current.type === 'MOVE_GATE_CARD') {
+            await MoveGateCard({
+                newSlot: current.data.newSlot,
+                slot: current.data.slot,
+                plane: plane,
+                scene: scene,
+                userId: userId
+            })
+        }
+
+        if (current.type === 'SWIPE_GATE_CARD') {
+            await SwipeGateCards({
+                plane: plane,
+                scene: scene,
+                slot1: current.data.slot1,
+                slot2: current.data.slot2,
+                userId: userId
+            })
+        }
+
+        if(current.type === 'CANCEL_ABILITY_CARD') {
+            await CancelAbilityCardAnimation(
+                current.data.card,
+                current.data.attribut
+            )
         }
 
         i++; // avancer à l'animation suivante

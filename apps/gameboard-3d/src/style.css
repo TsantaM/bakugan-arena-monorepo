@@ -320,6 +320,10 @@ body {
       font-size: 2.25rem !important;
     }
   }
+
+  .active-ability-image {
+    width: 25vw !important;
+  }
 }
 
 @media (width >=64rem
@@ -365,6 +369,10 @@ body {
 
   .skip-or-confirm-button {
     width: 5vw !important;
+  }
+
+  .active-ability-image {
+    width: 25vw !important;
   }
 
 }
@@ -865,8 +873,9 @@ body {
 
 .active-ability-image {
   aspect-ratio: 2/3;
-  width: 25dvw;
+  width: 50dvw;
   position: absolute;
+  z-index: 1000;
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
@@ -879,4 +888,19 @@ body {
     left: 0;
   }
 
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .overlay2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
 }

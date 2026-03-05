@@ -50,6 +50,9 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
     //   5. The Bakugan is not blocked from using abilities (abilityUser.abilityBlock === false)
     if (roomData && abilityToUse && playerAbilities && playerAbilities > 0 && abilityUser && !abilityUser.abilityBlock) {
 
+        if (!roomData.turnState.use_ability_card) return
+        if (roomData.turnState.ability_card_block.blocked) return
+
         const activeCardAnimation: AnimationDirectivesTypes = {
             type: 'ACTIVE_ABILITY_CARD',
             data: {

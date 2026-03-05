@@ -4,6 +4,7 @@ import { OpenGateCardActionRequest } from "../action-request-functions/open-gate
 import { CheckBattleStillInProcess } from "../check-battle-still-in-process.js";
 import { AddRenfortAnimationDirective } from "../create-animation-directives/add-renfort-directive.js";
 import { MoveToAnotherSlotDirectiveAnimation } from "../create-animation-directives/move-to-another-slot.js";
+import RemoveRenfortAnimationDirective from "../create-animation-directives/remove-renfort-animation-directive.js";
 
 export function moveSelectedBakugan({
     resolution,
@@ -47,10 +48,27 @@ export function moveSelectedBakugan({
         if (!userPresent) return;   // Sécurité
     }
 
+    if (roomState.battleState.battleInProcess && !roomState.battleState.paused && roomState.battleState.slot === initialSlot.id) {
+        const sameTeam = initialSlot.bakugans.some(
+            b => b.userId === bakugan.userId
+        );
+
+        if (sameTeam) {
+            RemoveRenfortAnimationDirective({
+                animations: roomState.animations,
+                bakugan: bakugan
+            })
+        }
+    }
+
+
     // Déplacement
+    const lastId = slotTarget && slotTarget?.bakugans.length > 0 ? slotTarget.bakugans[slotTarget.bakugans.length - 1].id : 0
+    const newId = lastId + 1
     const newBakuganState: bakuganOnSlot = {
         ...bakugan,
-        slot_id: data.slot
+        slot_id: data.slot,
+        id: newId
     };
 
     slotTarget.bakugans.push(newBakuganState);
@@ -70,7 +88,6 @@ export function moveSelectedBakugan({
     CheckBattleStillInProcess(roomState);
 
     // --- Gestion du renfort ---
-
     if (
         roomState.battleState.battleInProcess &&
         roomState.battleState.slot === slotTarget.id

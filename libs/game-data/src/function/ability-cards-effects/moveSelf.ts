@@ -3,6 +3,7 @@ import { bakuganOnSlot, stateType } from "../../type/room-types.js";
 import { OpenGateCardActionRequest } from "../action-request-functions/index.js";
 import { CheckBattleStillInProcess } from "../check-battle-still-in-process.js";
 import { AddRenfortAnimationDirective, MoveToAnotherSlotDirectiveAnimation } from "../create-animation-directives/index.js";
+import RemoveRenfortAnimationDirective from "../create-animation-directives/remove-renfort-animation-directive.js";
 
 export function moveBakuganToSelectedSlot({
     resolution,
@@ -37,10 +38,27 @@ export function moveBakuganToSelectedSlot({
         (ba) => ba.key === user.key && ba.userId === user.userId
     );
 
+    if (roomData.battleState.battleInProcess && !roomData.battleState.paused && roomData.battleState.slot === slotOfGate.id) {
+        const sameTeam = slotOfGate.bakugans.some(
+            b => b.userId === user.userId
+        );
+
+        if (sameTeam) {
+            RemoveRenfortAnimationDirective({
+                animations: roomData.animations,
+                bakugan: user
+            })
+        }
+    }
+
+
     // --- Move the bakugan ---
+    const lastId = slotTarget && slotTarget?.bakugans.length > 0 ? slotTarget.bakugans[slotTarget.bakugans.length - 1].id : 0
+    const newId = lastId + 1
     const newUserState: bakuganOnSlot = {
         ...user,
-        slot_id: destination
+        slot_id: destination,
+        id: newId
     };
 
     slotTarget.bakugans.push(newUserState);

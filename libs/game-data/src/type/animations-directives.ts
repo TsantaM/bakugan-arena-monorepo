@@ -125,7 +125,38 @@ export type AnimationDirectivesTypes =
         },
         message: Message[]
     } | {
-    type: 'ABILITY_CARD_FAILED';
-    resolve: false;
-    message: Message[];
-}
+        type: 'ABILITY_CARD_FAILED';
+        resolve: boolean;
+        message: Message[];
+    } | {
+        type: 'REMOVE_RENFORT';
+        data: {
+            bakugan: bakuganOnSlot,
+        },
+        resolve: boolean,
+        message: Message[]
+    } | {
+        type: 'MOVE_GATE_CARD';
+        data: {
+            slot: portalSlotsTypeElement,
+            newSlot: portalSlotsTypeElement
+        };
+        resolve: boolean;
+        message: Message[]
+    } | {
+        type: 'SWIPE_GATE_CARD';
+        data: {
+            slot1: portalSlotsTypeElement,
+            slot2: portalSlotsTypeElement
+        };
+        resolve: boolean;
+        message: Message[]
+    } | {
+        type: 'CANCEL_ABILITY_CARD';
+        resolve: false,
+        data: {
+            card: string,
+            attribut: attribut
+        },
+        message: Message[]
+    }

@@ -6,8 +6,7 @@ import { CreateBakuganHoverPreview, RemoveBakuganHoverPreview, type BakuganPrevi
 import { OnHoverGateCard } from './animations/show-message-animation'
 import { type portalSlotsTypeElement, type roomStateType } from '@bakugan-arena/game-data'
 import { InitGameState } from './functions/init-game-state'
-import { SwipeGateCards } from './animations/swipe-gate-cards'
-import { RemoveRenforAnimation } from './animations/remove-renfort-animation'
+import { CancelAbilityCardAnimation } from './animations/cancel-ability-card-animation'
 
 const canvas = document.getElementById('gameboard-canvas')
 // const reload = document.getElementById("init-room")
@@ -122,6 +121,11 @@ const state: roomStateType = {
         turn: userId,
         turnCount: 5,
         use_ability_card: true,
+        ability_card_block: {
+            blocked: false,
+            reason: null,
+            turn : 0
+        }
     },
     finished: undefined,
     portalSlots: [
@@ -294,22 +298,10 @@ if (canvas) {
         // }
 
 
-        await RemoveRenforAnimation({
-            userId: userId,
-            bakugan: {
-                id: 2,
-                abilityBlock: false,
-                assist: true,
-                attribut: 'Pyrus',
-                currentPower: 500,
-                family: 'dragonoid',
-                image: 'dragonoid',
-                key: 'dragonoid-pyrus',
-                powerLevel: 370,
-                slot_id: 'slot-2',
-                userId: userId
-            }
-        })
+        await CancelAbilityCardAnimation(
+            'anti-muse',
+            'Aquos'
+        )
     })
 
 

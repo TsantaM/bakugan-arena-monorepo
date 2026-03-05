@@ -1,7 +1,9 @@
+import RemoveRenfortAnimationDirective from "../../function/create-animation-directives/remove-renfort-animation-directive.js";
 import { AbilityCardFailed, ComeBackBakuganDirectiveAnimation, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective } from "../../function/index.js";
 import { StandardCardsImages } from "../../store/store-index.js";
-import type { AbilityCardsActions, abilityCardsType, bakuganOnSlot } from "../../type/type-index.js";
+import type { AbilityCardsActions, abilityCardsType, AnimationDirectivesTypes, bakuganOnSlot } from "../../type/type-index.js";
 import { AbilityCardsList } from "../ability-cards.js";
+import { BakuganList } from "../bakugans.js";
 import { ExclusiveAbilitiesList } from "../exclusive-abilities.js";
 
 export const RapideHaos: abilityCardsType = {
@@ -146,6 +148,11 @@ export const EclatSoudain: abilityCardsType = {
                     slot: slotToUpdate
                 })
 
+                RemoveRenfortAnimationDirective({
+                    animations: roomState.animations,
+                    bakugan: a
+                })
+                
                 const deckDataToUpdate = deck.bakugans.find((b) => b?.bakuganData.key === a.key)
                 if (deckDataToUpdate) {
                     deckDataToUpdate.bakuganData.onDomain = false
@@ -219,6 +226,7 @@ export const ContreMaitrise: abilityCardsType = {
     image: StandardCardsImages.haos,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, slot }) => {
+        if(!roomState) return null
         const lists = [AbilityCardsList, ExclusiveAbilitiesList].flat()
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -232,11 +240,27 @@ export const ContreMaitrise: abilityCardsType = {
             });
 
             abilities.forEach((lastAbility) => {
-                const ability = AbilityCardsList.find((a) => a.key === lastAbility.key)
-                const exclusive = ExclusiveAbilitiesList.find((a) => a.key === lastAbility.key)
+                const ability = [...AbilityCardsList, ...ExclusiveAbilitiesList].find((a) => a.key === lastAbility.key)
+                const user = BakuganList.find((b) => b.key === lastAbility.bakuganKey )
+                if(!user) return
+                if(!ability) return
+
+                const animation: AnimationDirectivesTypes = {
+                    type: 'CANCEL_ABILITY_CARD',
+                    data: {
+                        card: ability.key,
+                        attribut: user.attribut
+                    },
+                    message: [{
+                        text: `${ability.name} of ${user.name} as been nullified !`,
+                        turn: roomState?.turnState.turnCount
+                    }],
+                    resolve: false
+                }
+
+                roomState?.animations.push(animation)
 
                 if (ability && ability.onCanceled) ability.onCanceled({ roomState, bakuganKey: lastAbility.bakuganKey, slot: slot, userId: lastAbility.userId })
-                if (exclusive && exclusive.onCanceled) exclusive.onCanceled({ roomState, bakuganKey: lastAbility.bakuganKey, slot: slot, userId: lastAbility.userId })
 
                 lastAbility.canceled = true
             })

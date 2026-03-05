@@ -2,6 +2,7 @@ import { AbilityCardFailed, CancelGateCardDirectiveAnimation, ComeBackBakuganDir
 import { AbilityCardsActions, bakuganOnSlot, type abilityCardsType } from "../../type/type-index.js";
 import { GateCardsList } from "../gate-gards.js";
 import { StandardCardsImages } from "../../store/store-index.js";
+import RemoveRenfortAnimationDirective from "../../function/create-animation-directives/remove-renfort-animation-directive.js";
 
 export const MurDeFeu: abilityCardsType = {
     key: "mur-de-feu",
@@ -166,6 +167,10 @@ export const JetEnflamme: abilityCardsType = {
                         animations: roomState.animations,
                         bakugan: a,
                         slot: slotToUpdate
+                    })
+                    RemoveRenfortAnimationDirective({
+                        animations: roomState.animations,
+                        bakugan: a
                     })
                 }
 
