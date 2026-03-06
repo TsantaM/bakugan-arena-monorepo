@@ -1,9 +1,12 @@
 'use client'
 
 import { useSocketStore } from "@/src/store/socket-id-store";
-import { useRef } from "react"
+import ReactHowler from 'react-howler'
+import { useEffect, useRef } from "react"
 import MessagesModal from "./messages-modal";
 import { redirect } from "next/navigation";
+import { useAudioStore } from "@/src/store/sounds-store";
+import { OSTLists } from "@/src/variables/OST";
 
 type player = {
     player: {
@@ -31,24 +34,41 @@ export default function BattleFieldPage({ player, opponent, roomId, userId }: Ba
 
     const socket = useSocketStore((state) => state.socket)
 
-    if(!socket) return null
+    if (!socket) return null
     const socketId = socket.id
 
-    if(socketId === undefined) {
+    if (socketId === undefined) {
         redirect('/dashboard')
     }
 
+    const playRandomOST = () => {
+        const randomIndex = Math.floor(Math.random() * OSTLists.length)
+        const randomTrack = OSTLists[randomIndex]
+
+        useAudioStore.getState().setTrack(randomTrack.src)
+    }
+
+    const { volume, track } = useAudioStore()
     const playerData = player?.player
     const opponentData = opponent?.player
     const GAMEBOARD_URL = process.env.NEXT_PUBLIC_3D_GAMEBOARD_URL
     const iframeRef = useRef<HTMLIFrameElement>(null)
     const link = `${GAMEBOARD_URL}/?roomId=${roomId}&userId=${userId}&parentSocket=${socketId}&userImage=${playerData?.image ? playerData?.image : undefined}&opponentImage=${opponentData?.image ? opponentData?.image : undefined}`
 
+    useEffect(() => {
+        playRandomOST()
+    }, [])
 
 
     return (
         <>
-            <MessagesModal player={playerData?.displayUsername} opponent={opponentData?.displayUsername}/>
+            <ReactHowler
+                src={[`/sounds/OST/${track}`]}
+                loop={true}
+                volume={volume[0]}
+                playing={true}
+            />
+            <MessagesModal player={playerData?.displayUsername} opponent={opponentData?.displayUsername} />
             <iframe ref={iframeRef} src={link} className="w-full h-full border-0"></iframe>
         </>
     )

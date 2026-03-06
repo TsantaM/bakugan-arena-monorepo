@@ -1,4 +1,5 @@
 import AppSidebar from "@/components/elements/app-sidebar/app-sidebar"
+import { SoundPlayerControls } from "@/components/elements/sound-player/sound-player"
 import { AnimatedThemeToggler } from "@/components/magicui/theme-toggler"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -28,6 +29,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
                             <SidebarTrigger />
                             <div className="flex items-center gap-3">
                                 <AnimatedThemeToggler />
+                                <SoundPlayerControls />
                                 <Suspense fallback={<SidebarMenuSkeleton />}>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger>
