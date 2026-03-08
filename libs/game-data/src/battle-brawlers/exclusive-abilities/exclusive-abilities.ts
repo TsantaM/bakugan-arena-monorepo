@@ -1,5 +1,7 @@
-import { AbilityCardFailed, CancelAbilityCard, CancelGateCardDirectiveAnimation, CheckBattle, CheckBattleStillInProcess, dragBakuganToUserSlot, moveSelectedBakugan, MoveToAnotherSlotDirectiveAnimation, OpenGateCardActionRequest, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective } from "../../index.js"
-import type { AbilityCardsActions, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, exclusiveAbilitiesType, slots_id } from "../../type/type-index.js"
+import { AbilityCardFailed, CancelAbilityCard, CancelGateCardDirectiveAnimation, CheckBattle, CheckBattleStillInProcess, ComeBackBakuganEffect, dragBakuganToUserSlot, ElimineBakuganEffect, moveSelectedBakugan, MoveToAnotherSlotDirectiveAnimation, OpenGateCardActionRequest, PowerChangeDirectiveAnumation, RemoveGateCardDirectiveAnimation, ResetSlot, SetBakuganAndAddRenfortAnimationDirective } from "../../index.js"
+import type { AbilityCardsActions, AnimationDirectivesTypes, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, exclusiveAbilitiesType, slots_id } from "../../type/type-index.js"
+import { SiegeAquos } from "../bakugans/siege.js"
+import { SkyressVentus } from "../bakugans/skyress.js"
 import { GateCardsList } from "../gate-gards.js"
 
 export const OmbreBleue: exclusiveAbilitiesType = {
@@ -971,31 +973,54 @@ export const Tsunami: exclusiveAbilitiesType = {
     key: 'tsunami',
     name: 'Tsunami Wave',
     maxInDeck: 1,
-    description: `If you have three Aquos Bakugan on the field, with on of them being Siege, every Bakugan on the field (including yours) besides Siege autoatically loses`,
+    description: `When three allied Aquos Bakugan, including Aquos Siege, are present on the field, this card eliminates all Bakugan on the field except Aquos Siege.`,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
     image: 'tsunami.jpg',
-    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+    onActivate: ({ roomState, userId, slot }) => {
+
         if (!roomState) return null
-        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (slotOfGate) {
-            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+        if (!Tsunami.activationConditions) return null
+        if (!Tsunami.canUse) return null
 
-            if (user) {
-                user.currentPower += 100
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: [user],
-                    powerChange: 100,
-                    malus: false,
-                    turn: roomState.turnState.turnCount
+        const bakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat()
+        const targets = bakugans.filter((bakugan) => bakugan.key !== SiegeAquos.key && bakugan.userId !== userId)
 
-                })
-            }
-        }
+        targets.forEach((bakugan) => {
+            ElimineBakuganEffect({
+                bakugan: bakugan,
+                roomState: roomState,
+            })
+        })
+
+        const slots = roomState.protalSlots.filter((s) => s.id !== slot)
+
+        slots.forEach((s) => {
+            RemoveGateCardDirectiveAnimation({
+                animations: roomState.animations,
+                slot: s
+            })
+            ResetSlot(s)
+        })
 
         return null
-    }
+
+    },
+    activationConditions({ roomState, userId }) {
+        if (!roomState) return false
+        const bakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat()
+        const aquosBakugans = bakugans.filter((bakugan) => bakugan.attribut === "Aquos" && bakugan.userId === userId)
+        const siege = aquosBakugans.find((bakugan) => bakugan.key === SiegeAquos.key)
+
+        if (aquosBakugans.length < 3) return false
+        if (!siege) return false
+
+        return true
+    },
+    canUse({ bakugan }) {
+        if (bakugan.key !== SiegeAquos.key) return false
+        return true
+    },
 }
 
 export const TrappeDeSable: exclusiveAbilitiesType = {
@@ -1381,4 +1406,79 @@ export const ForceDattraction: exclusiveAbilitiesType = {
 
         return true
     }
+}
+
+export const FurryOfWind: exclusiveAbilitiesType = {
+    key: "furry-of-wind",
+    description: "When three allied Ventus Bakugan, including Ventus Skyress, are present on the field, this card eliminates all opposing Bakugan on the battlefield. Additionally, it allows the user to return their own Bakugan to their hand. If this card is activated during a battle, the current Gate Card is removed from play.",
+    maxInDeck: 1,
+    name: "Furry of Wind",
+    image: "furry-of-wind.jpg",
+    usable_in_neutral: false,
+    usable_if_user_not_on_domain: false,
+    onActivate({ roomState, userId, slot }) {
+
+        if (!roomState) return null
+        if (!FurryOfWind.activationConditions) return null
+        if (!FurryOfWind.canUse) return null
+
+        const bakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat()
+        const opponentBakugans = bakugans.filter((bakugan) => bakugan.userId !== userId)
+        const userBakugans = bakugans.filter((bakugan) => bakugan.userId === userId)
+
+        opponentBakugans.forEach((bakugan) => {
+            ElimineBakuganEffect({
+                bakugan: bakugan,
+                roomState: roomState,
+            })
+        })
+
+        userBakugans.forEach((bakugan) => {
+            ComeBackBakuganEffect({
+                bakugan: bakugan,
+                roomState: roomState
+            })
+        })
+
+        const battleState = roomState.battleState
+        if (battleState.battleInProcess && battleState.slot === slot) {
+            const slotOfGate = roomState.protalSlots.find((slot) => slot.id === battleState.slot)
+            if (!slotOfGate) return null
+
+            const removeGateCard: AnimationDirectivesTypes = {
+                type: 'REMOVE_GATE_CARD',
+                data: {
+                    slot: slotOfGate
+                },
+                resolved: false,
+            }
+
+            roomState.animations.push(removeGateCard)
+
+            ResetSlot(slotOfGate)
+
+        }
+
+        CheckBattleStillInProcess(roomState)
+
+        return null
+
+    },
+    activationConditions({ roomState, userId }) {
+        if (!roomState) return false
+
+        const bakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat()
+        const ventusBakugans = bakugans.filter((bakugan) => bakugan.attribut === "Ventus" && bakugan.userId === userId)
+        const skyress = ventusBakugans.find((bakugan) => bakugan.key === SkyressVentus.key)
+
+        if (ventusBakugans.length < 3) return false
+        if (!skyress) return false
+
+        return true
+
+    },
+    canUse({ bakugan }) {
+        if (bakugan.key !== SkyressVentus.key) return false
+        return true
+    },
 }
