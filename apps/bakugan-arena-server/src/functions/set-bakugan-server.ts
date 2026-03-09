@@ -1,4 +1,4 @@
-import { addBakuganToSlot, AnimationDirectivesTypes, BakuganList, GetUserName, setBakuganProps, Slots, slots_id } from "@bakugan-arena/game-data"
+import { addBakuganToSlot, AnimationDirectivesTypes, BakuganList, GateCardsList, GetUserName, setBakuganProps, Slots, slots_id } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
 export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuganProps): AnimationDirectivesTypes[] | undefined => {
@@ -124,14 +124,26 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuga
         resolved: false,
         message: [{
             text: `Bakugan brawl !`,
-            userName: GetUserName({roomData: Battle_Brawlers_Game_State[roomIndex], userId: userId}),
+            userName: GetUserName({ roomData: Battle_Brawlers_Game_State[roomIndex], userId: userId }),
             turn: roomData.turnState.turnCount
         }, {
             text: `${bakuganToAdd.name} stand !`,
-            userName: GetUserName({roomData: Battle_Brawlers_Game_State[roomIndex], userId: userId}),
+            userName: GetUserName({ roomData: Battle_Brawlers_Game_State[roomIndex], userId: userId }),
             turn: roomData.turnState.turnCount
         }]
     }
+
+    const updatedSlot = slots[Slots.indexOf(slot as slots_id)]
+    if (updatedSlot.portalCard === null) return [animation]
+    const { key } = updatedSlot.portalCard
+    const gateCard = GateCardsList.find((card) => card.key === key)
+    if (!gateCard) return [animation]
+    if (!gateCard.onSetBakuganOnSlot) return [animation]
+    gateCard.onSetBakuganOnSlot({
+        bakugan: bakugan,
+        roomState: Battle_Brawlers_Game_State[roomIndex],
+        slot: slots[Slots.indexOf(slot as slots_id)]
+    })
     // Battle_Brawlers_Game_State[roomIndex]?.animations.push(animation)
 
     return [animation]

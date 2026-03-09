@@ -1,4 +1,4 @@
-import { DoubleBakuganCheck, ElementaryGateCardOnCancel, ElementaryGateCardOnOpen, PerilGateCardOnCanel, PerilGateCardOnOpen, type gateCardType, type stateType, type slots_id,  } from "../../index.js"
+import { DoubleBakuganCheck, ElementaryGateCardOnCancel, ElementaryGateCardOnOpen, PerilGateCardOnCanel, PerilGateCardOnOpen, type gateCardType, type stateType, type slots_id, PowerChangeDirectiveAnumation, } from "../../index.js"
 import { BakuganList } from "../bakugans.js"
 import { GateCardImages } from "../../store/gate-card-images.js";
 
@@ -21,7 +21,44 @@ export const ReacteurPyrus: gateCardType = {
         ElementaryGateCardOnCancel({ roomState, slot, attribut: 'Pyrus' })
 
     },
+    onSetBakuganOnSlot({ bakugan, slot, roomState }) {
 
+        if (!roomState) return
+        const { blocked, canceled, open } = slot.state
+        if (blocked) return
+        if (canceled) return
+        if (!open) return
+
+        if (bakugan.attribut !== "Pyrus") return
+        bakugan.currentPower += 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: 100,
+            malus: false,
+            turn: roomState.turnState.turnCount
+        })
+
+    },
+    onRemoveBakugan({ bakugan, slot, roomState }) {
+
+        if (!roomState) return
+        const { blocked, canceled, open } = slot.state
+        if (blocked) return
+        if (canceled) return
+        if (!open) return
+
+        if (bakugan.attribut !== "Pyrus") return
+        bakugan.currentPower -= 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: 100,
+            malus: true,
+            turn: roomState.turnState.turnCount
+        })
+
+    },
     autoActivationCheck: ({ portalSlot }) => {
         const check = DoubleBakuganCheck({ portalSlot })
         return check
@@ -41,6 +78,40 @@ export const ReacteurHaos: gateCardType = {
 
         return null
 
+    },
+    onSetBakuganOnSlot({ bakugan, slot, roomState }) {
+        if (!roomState) return
+        const { blocked, canceled, open } = slot.state
+        if (blocked) return
+        if (canceled) return
+        if (!open) return
+
+        if (bakugan.attribut !== "Haos") return
+        bakugan.currentPower += 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: 100,
+            malus: false,
+            turn: roomState.turnState.turnCount
+        })
+    },
+    onRemoveBakugan({ bakugan, slot, roomState }) {
+        if (!roomState) return
+        const { blocked, canceled, open } = slot.state
+        if (blocked) return
+        if (canceled) return
+        if (!open) return
+
+        if (bakugan.attribut !== "Haos") return
+        bakugan.currentPower -= 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: 100,
+            malus: true,
+            turn: roomState.turnState.turnCount
+        })
     },
     onCanceled: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
 
@@ -73,7 +144,40 @@ export const ReacteurVentus: gateCardType = {
         ElementaryGateCardOnCancel({ roomState, slot, attribut: 'Ventus' })
 
     },
+    onSetBakuganOnSlot({ bakugan, slot, roomState }) {
+        if (!roomState) return
+        const { blocked, canceled, open } = slot.state
+        if (blocked) return
+        if (canceled) return
+        if (!open) return
 
+        if (bakugan.attribut !== "Ventus") return
+        bakugan.currentPower += 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: 100,
+            malus: false,
+            turn: roomState.turnState.turnCount
+        })
+    },
+    onRemoveBakugan({ bakugan, slot, roomState }) {
+        if (!roomState) return
+        const { blocked, canceled, open } = slot.state
+        if (blocked) return
+        if (canceled) return
+        if (!open) return
+
+        if (bakugan.attribut !== "Ventus") return
+        bakugan.currentPower -= 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: 100,
+            malus: true,
+            turn: roomState.turnState.turnCount
+        })
+    },
     autoActivationCheck: ({ portalSlot }) => {
         const check = DoubleBakuganCheck({ portalSlot })
         return check
@@ -98,6 +202,40 @@ export const ReacteurAquos: gateCardType = {
 
         ElementaryGateCardOnCancel({ roomState, slot, attribut: 'Aquos' })
 
+    },
+    onSetBakuganOnSlot({ bakugan, slot, roomState }) {
+        if (!roomState) return
+        const { blocked, canceled, open } = slot.state
+        if (blocked) return
+        if (canceled) return
+        if (!open) return
+
+        if (bakugan.attribut !== "Aquos") return
+        bakugan.currentPower += 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: 100,
+            malus: false,
+            turn: roomState.turnState.turnCount
+        })
+    },
+    onRemoveBakugan({ bakugan, slot, roomState }) {
+        if (!roomState) return
+        const { blocked, canceled, open } = slot.state
+        if (blocked) return
+        if (canceled) return
+        if (!open) return
+
+        if (bakugan.attribut !== "Aquos") return
+        bakugan.currentPower -= 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: 100,
+            malus: true,
+            turn: roomState.turnState.turnCount
+        })
     },
     autoActivationCheck: ({ portalSlot }) => {
         const check = DoubleBakuganCheck({ portalSlot })
@@ -124,6 +262,40 @@ export const ReacteurSubterra: gateCardType = {
         ElementaryGateCardOnCancel({ roomState, slot, attribut: 'Subterra' })
 
     },
+    onSetBakuganOnSlot({ bakugan, slot, roomState }) {
+        if (!roomState) return
+        const { blocked, canceled, open } = slot.state
+        if (blocked) return
+        if (canceled) return
+        if (!open) return
+
+        if (bakugan.attribut !== "Subterra") return
+        bakugan.currentPower += 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: 100,
+            malus: false,
+            turn: roomState.turnState.turnCount
+        })
+    },
+    onRemoveBakugan({ bakugan, slot, roomState }) {
+        if (!roomState) return
+        const { blocked, canceled, open } = slot.state
+        if (blocked) return
+        if (canceled) return
+        if (!open) return
+
+        if (bakugan.attribut !== "Subterra") return
+        bakugan.currentPower -= 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: 100,
+            malus: true,
+            turn: roomState.turnState.turnCount
+        })
+    },
     autoActivationCheck: ({ portalSlot }) => {
         const check = DoubleBakuganCheck({ portalSlot })
         return check
@@ -149,6 +321,40 @@ export const ReacteurDarkus: gateCardType = {
         ElementaryGateCardOnCancel({ roomState, slot, attribut: 'Darkus' })
 
     },
+    onSetBakuganOnSlot({ bakugan, slot, roomState }) {
+        if (!roomState) return
+        const { blocked, canceled, open } = slot.state
+        if (blocked) return
+        if (canceled) return
+        if (!open) return
+
+        if (bakugan.attribut !== "Darkus") return
+        bakugan.currentPower += 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: 100,
+            malus: false,
+            turn: roomState.turnState.turnCount
+        })
+    },
+    onRemoveBakugan({ bakugan, slot, roomState }) {
+        if (!roomState) return
+        const { blocked, canceled, open } = slot.state
+        if (blocked) return
+        if (canceled) return
+        if (!open) return
+
+        if (bakugan.attribut !== "Darkus") return
+        bakugan.currentPower -= 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: 100,
+            malus: true,
+            turn: roomState.turnState.turnCount
+        })
+    },
     autoActivationCheck: ({ portalSlot }) => {
         const check = DoubleBakuganCheck({ portalSlot })
         return check
@@ -167,7 +373,7 @@ export const PerilPyrus: gateCardType = {
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        
+
         if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
             const bakuganOnGate = slotOfGate.bakugans
             slotOfGate.state.open = true
@@ -202,7 +408,7 @@ export const PerilAquos: gateCardType = {
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        
+
         if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
             const bakuganOnGate = slotOfGate.bakugans
             slotOfGate.state.open = true
@@ -237,7 +443,7 @@ export const PerilVentus: gateCardType = {
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        
+
         if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
             const bakuganOnGate = slotOfGate.bakugans
             slotOfGate.state.open = true
@@ -272,7 +478,7 @@ export const PerilSubterra: gateCardType = {
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        
+
         if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
             const bakuganOnGate = slotOfGate.bakugans
             slotOfGate.state.open = true
@@ -307,7 +513,7 @@ export const PerilHaos: gateCardType = {
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        
+
         if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
             const bakuganOnGate = slotOfGate.bakugans
             slotOfGate.state.open = true
@@ -342,7 +548,7 @@ export const PerilDarkus: gateCardType = {
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        
+
         if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
             const bakuganOnGate = slotOfGate.bakugans
             slotOfGate.state.open = true
@@ -378,7 +584,7 @@ export const FusionMarine: gateCardType = {
     description: `Transforme l'attribut de tous les Bakugans présents en Aquos sauf les Bakugans Subterra`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
-        
+
         PerilGateCardOnOpen({ roomState, slot, attribut: "Aquos", exception: "Subterra" })
 
         return null

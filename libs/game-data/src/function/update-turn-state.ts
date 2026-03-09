@@ -56,16 +56,10 @@ export function updateTurnState(roomData: stateType) {
             }
         }
 
+        console.log('block', blocked, turn, reason?.key)
 
         if (turn > 0 && turnState.ability_card_block.blocked) {
-            turnState.ability_card_block.turn = turnState.ability_card_block.turn--
-        } else {
-
-            AddAnimation()
-
-            turnState.ability_card_block.blocked = false
-            turnState.ability_card_block.reason = null
-            turnState.ability_card_block.turn = 0
+            turnState.ability_card_block.turn = turnState.ability_card_block.turn -= 1
         }
 
         if (blocked && turn === 0) {

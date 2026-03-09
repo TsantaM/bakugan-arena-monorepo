@@ -1,5 +1,5 @@
 import { abilityCardsType } from "../index.js";
-import { AquosSubterra, AquosVentus, BoublierFusion, CombatAerien, ContreMaitrise, CoupDeGrace, DarkusAquos, DarkusPyrus, EclatSoudain, HaosDarkus, HaosImmobilisation, HaosVentus, JetEnflamme, MagmaSupreme, MirageAquatique, MurDeFeu, Obstruction, PyrusAquosHaos, PyrusDarkus, RetourDair, RetroAction, SouffleTout, SubterraAquos, SubterraHaos, SubterraPyrus, TornadeChaosTotal, TornadeExtreme, TourbillonDeFeu, VengeanceAlItalienne, VentusHaos, VentusPyrus, VentusSubterraDarkus } from "./ability-cards/index.js";
+import { AquosSubterra, AquosVentus, BarrageDeau, BoublierFusion, CombatAerien, ContreMaitrise, CoupDeGrace, DarkusAquos, DarkusPyrus, EclatSoudain, HaosDarkus, HaosImmobilisation, HaosVentus, JetEnflamme, MagmaSupreme, MirageAquatique, MurDeFeu, Obstruction, PlongeeEnEauProfonde, PyrusAquosHaos, PyrusDarkus, RetourDair, RetroAction, SouffleTout, SubterraAquos, SubterraHaos, SubterraPyrus, TornadeChaosTotal, TornadeExtreme, TourbillonDeFeu, VengeanceAlItalienne, VentusHaos, VentusPyrus, VentusSubterraDarkus } from "./ability-cards/index.js";
 
 export const AbilityCards: Record<string, abilityCardsType> = {
     // Pyrus
@@ -14,9 +14,9 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     // Aquos
 
     [MirageAquatique.key]: MirageAquatique,
-    // [BarrageDeau.key]: BarrageDeau,
+    [BarrageDeau.key]: BarrageDeau,
     // [BouclierAquos.key]: BouclierAquos,
-    // [PlongeeEnEauProfonde.key]: PlongeeEnEauProfonde,
+    [PlongeeEnEauProfonde.key]: PlongeeEnEauProfonde,
     [AquosSubterra.key]: AquosSubterra,
     [AquosVentus.key]: AquosVentus,
 

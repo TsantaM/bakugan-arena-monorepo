@@ -189,6 +189,19 @@ export const TripleCombat: gateCardType = {
         return null
     },
     autoActivationCheck: ({ portalSlot, roomState }) => {
+
+        if (!roomState) return false
+        if (portalSlot.state.blocked) return false
+        if (portalSlot.state.open) return false
+        if (portalSlot.state.canceled) return false
+
+        const playerDeck = roomState?.decksState.find((deck) => deck.userId === portalSlot.portalCard?.userId)
+
+        if (!playerDeck) return false
+        const bakugans = playerDeck.bakugans.map((b) => b?.bakuganData).filter((b) => b !== undefined).filter((b) => b.onDomain === false && b.elimined === false)
+
+        if (bakugans.length === 0) return false
+
         const bakugansOnSlot = portalSlot.bakugans.length
         const canActiveOnBattle = AutoActivationDuringBattle({ roomState: roomState, canActive: false, slotOfGate: portalSlot.id })
 
@@ -245,8 +258,8 @@ export const QuatuorDeCombat: gateCardType = {
             const userWeakest = findWeakest({ userId: userId, roomState: roomState })
             const opponentWeakest = findWeakest({ userId: opponentId, roomState: roomState })
             const slotToUpdate = roomState.protalSlots.find((s) => s.id === slot)
-            if (userWeakest && opponentWeakest && slotToUpdate && slotToUpdate.portalCard !== null && !slotToUpdate.state.canceled && !slotToUpdate.state.blocked) {
 
+            if (userWeakest && slotToUpdate && slotToUpdate.portalCard !== null && !slotToUpdate.state.canceled && !slotToUpdate.state.blocked) {
                 const lastId = slotToUpdate.bakugans.length > 0 ? slotToUpdate.bakugans[slotToUpdate.bakugans.length - 1].id : 0
                 const newId = lastId + 1
 
@@ -276,6 +289,9 @@ export const QuatuorDeCombat: gateCardType = {
 
                     })
                 }
+            }
+
+            if (opponentWeakest && slotToUpdate && slotToUpdate.portalCard !== null && !slotToUpdate.state.canceled && !slotToUpdate.state.blocked) {
 
                 if (opponentWeakest !== null) {
                     const lastId = slotToUpdate.bakugans.length > 0 ? slotToUpdate.bakugans[slotToUpdate.bakugans.length - 1].id : 0
@@ -312,6 +328,12 @@ export const QuatuorDeCombat: gateCardType = {
         return null
     },
     autoActivationCheck: ({ portalSlot, roomState }) => {
+
+        if (!roomState) return false
+        if (portalSlot.state.blocked) return false
+        if (portalSlot.state.open) return false
+        if (portalSlot.state.canceled) return false
+
         const bakugansOnSlot = portalSlot.bakugans.length
         const canActiveOnBattle = AutoActivationDuringBattle({ roomState: roomState, canActive: false, slotOfGate: portalSlot.id })
 
