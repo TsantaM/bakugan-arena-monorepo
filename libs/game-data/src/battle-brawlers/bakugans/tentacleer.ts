@@ -1,7 +1,6 @@
 import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation, type bakuganType, type gateCardType } from "../../index.js"
 import { StarterBanList } from "../../store/store-index.js"
 
-
 export const TentaclearHaos: bakuganType = {
     key: 'tentaclear-haos',
     name: 'Tentaclear',
@@ -9,7 +8,7 @@ export const TentaclearHaos: bakuganType = {
     powerLevel: 370,
     family: 'Tentaclear',
     image: 'tentaclear',
-    exclusiveAbilities: ['rayon-gamma'],
+    exclusiveAbilities: ['rayon-gamma', 'mega-flare-blinder', 'flare-blinder'],
     banList: StarterBanList,
     canChangeAttribut: false
 }

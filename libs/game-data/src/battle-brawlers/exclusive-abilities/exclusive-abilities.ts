@@ -1,7 +1,8 @@
-import { AbilityCardFailed, CancelAbilityCard, CancelGateCardDirectiveAnimation, CheckBattle, CheckBattleStillInProcess, ComeBackBakuganEffect, dragBakuganToUserSlot, ElimineBakuganEffect, moveSelectedBakugan, MoveToAnotherSlotDirectiveAnimation, OpenGateCardActionRequest, PowerChangeDirectiveAnumation, RemoveGateCardDirectiveAnimation, ResetSlot, SetBakuganAndAddRenfortAnimationDirective } from "../../index.js"
+import { AbilityCardFailed, CancelAbilityCard, CancelGateCardDirectiveAnimation, CheckBattle, CheckBattleStillInProcess, ComeBackBakuganEffect, dragBakuganToUserSlot, ElimineBakuganEffect, moveSelectedBakugan, MoveToAnotherSlotDirectiveAnimation, PowerChangeDirectiveAnumation, RemoveGateCardDirectiveAnimation, ResetSlot, SetBakuganAndAddRenfortAnimationDirective } from "../../index.js"
 import type { AbilityCardsActions, AnimationDirectivesTypes, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, exclusiveAbilitiesType, slots_id } from "../../type/type-index.js"
 import { SiegeAquos } from "../bakugans/siege.js"
 import { SkyressVentus } from "../bakugans/skyress.js"
+import { TentaclearHaos } from "../bakugans/tentacleer.js"
 import { GateCardsList } from "../gate-gards.js"
 
 export const OmbreBleue: exclusiveAbilitiesType = {
@@ -565,13 +566,28 @@ export const TempeteDePlume: exclusiveAbilitiesType = {
 
 export const RayonGamma: exclusiveAbilitiesType = {
     key: 'rayon-gamma',
-    name: 'Rayon Gamma',
-    description: `Annule toutes les capacité de l'adversaire et ajoute 50G à l'utilisateur`,
+    name: 'Solar Ray',
+    description: `Add 100 G to Tentaclear and cancel all opponent's abilities on the same Gate Card`,
     maxInDeck: 1,
-    usable_in_neutral: true,
+    usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        if (!roomState) return null
+
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        const user = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+
+        if (!user) return null
+        user.currentPower += 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState?.animations,
+            bakugans: [user],
+            powerChange: 100,
+            malus: false,
+            turn: roomState.turnState.turnCount
+
+        })
+
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
             const abilities = slotOfGate.activateAbilities.filter((a) => a.userId !== userId)
@@ -583,6 +599,29 @@ export const RayonGamma: exclusiveAbilitiesType = {
         }
 
         return null
+    },
+    onCanceled({ roomState, userId, bakuganKey, slot }) {
+        if (!roomState) return null
+
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        const user = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+
+        if (!user) return null
+        user.currentPower -= 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState?.animations,
+            bakugans: [user],
+            powerChange: 100,
+            malus: true,
+            turn: roomState.turnState.turnCount
+
+        })
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+        if (bakugan.key !== TentaclearHaos.key) return false
+
+        return true
     }
 }
 
@@ -1479,6 +1518,134 @@ export const FurryOfWind: exclusiveAbilitiesType = {
     },
     canUse({ bakugan }) {
         if (bakugan.key !== SkyressVentus.key) return false
+        return true
+    },
+}
+
+export const FlareBlinder: exclusiveAbilitiesType = {
+    key: 'flare-blinder',
+    name: 'Flare Blinder',
+    maxInDeck: 1,
+    description: `Prevent the opponent from opening the Gate Card or activating abilities on the same slot as the user.`,
+    usable_in_neutral: true,
+    usable_if_user_not_on_domain: false,
+    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+
+        if (bakuganKey !== TentaclearHaos.key) return null
+        if (!roomState) return null
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (!slotOfGate) return null
+        const opponent = slotOfGate.bakugans.filter((b) => b.userId !== userId)
+
+        const { canceled, open } = slotOfGate.state
+
+        if (!open && !canceled) {
+            slotOfGate.state.blocked = true
+        }
+
+        opponent.forEach((bakugan) => {
+            bakugan.abilityBlock = true
+        })
+
+        return null
+    },
+    onCanceled({ roomState, userId, slot }) {
+
+        if (!roomState) return null
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (!slotOfGate) return null
+        const opponent = slotOfGate.bakugans.filter((b) => b.userId !== userId)
+
+        const { blocked } = slotOfGate.state
+        if (blocked) {
+            slotOfGate.state.blocked = false
+        }
+
+        opponent.forEach((bakugan) => {
+            bakugan.abilityBlock = false
+        })
+
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+        if (bakugan.key !== TentaclearHaos.key) return false
+
+        return true
+    },
+}
+
+export const MegaFlareBlinder: exclusiveAbilitiesType = {
+    key: 'mega-flare-blinder',
+    name: 'Mega Flare Blinder',
+    maxInDeck: 1,
+    description: `Add 100 G to Tentaclear and prevent the opponent from opening the Gate Card or activating abilities on the same slot as the user.`,
+    usable_in_neutral: true,
+    usable_if_user_not_on_domain: false,
+    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+
+        if (bakuganKey !== TentaclearHaos.key) return null
+        if (!roomState) return null
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (!slotOfGate) return null
+        const opponent = slotOfGate.bakugans.filter((b) => b.userId !== userId)
+
+        const { canceled, open } = slotOfGate.state
+
+        if (!open && !canceled) {
+            slotOfGate.state.blocked = true
+        }
+
+        opponent.forEach((bakugan) => {
+            bakugan.abilityBlock = true
+        })
+
+        const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+        if (!user) return null
+
+        user.currentPower += 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [user],
+            powerChange: 100,
+            malus: false,
+            turn: roomState.turnState.turnCount
+        })
+
+        return null
+    },
+    onCanceled({ roomState, userId, slot, bakuganKey }) {
+
+        if (!roomState) return null
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (!slotOfGate) return null
+        const opponent = slotOfGate.bakugans.filter((b) => b.userId !== userId)
+
+        const { blocked } = slotOfGate.state
+        if (blocked) {
+            slotOfGate.state.blocked = false
+        }
+
+        opponent.forEach((bakugan) => {
+            bakugan.abilityBlock = false
+        })
+
+        const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+        if (!user) return null
+
+        user.currentPower -= 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [user],
+            powerChange: 100,
+            malus: true,
+            turn: roomState.turnState.turnCount
+        })
+
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+        if (bakugan.key !== TentaclearHaos.key) return false
+
         return true
     },
 }

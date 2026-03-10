@@ -81,6 +81,9 @@ export function UseAbilityCardActionRequest({ roomState }: { roomState: stateTyp
                 image: ExclusiveAbilitiesList.find((card) => card.key === ability!.key)?.image || `special_ability_card_${bakugan.attribut.toUpperCase()}.jpg`
             }))].flat().filter((ability) => ability !== undefined)
 
+        const slot = roomState.protalSlots.find((slot) => slot.id === bakugan.slot_id)
+        const abilityBlock = slot?.bakugans.find((b) => b.key === bakugan.key && b.userId === bakugan.userId)?.abilityBlock
+
         const abilitieRequest: onBoardBakugans = {
             slot: bakugan.slot_id,
             bakuganKey: bakugan.key,
@@ -88,11 +91,13 @@ export function UseAbilityCardActionRequest({ roomState }: { roomState: stateTyp
             abilities: abilities
         }
 
-        onBoardAbilities.push(abilitieRequest)
+        if (abilityBlock === false) {
+            onBoardAbilities.push(abilitieRequest)
+        }
 
     })
 
-    const requestAction: SelectableAbilityCardAction = onBoardAbilities
+    const requestAction: SelectableAbilityCardAction = onBoardAbilities.filter((b) => b.abilities.length > 0)
 
     const totalCard = requestAction.map((bakugan) => bakugan.abilities).flat().length
     if (totalCard === 0) return
