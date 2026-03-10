@@ -19,6 +19,9 @@ export function SetBakuganActionRequest({ roomState }: { roomState: stateType })
         userId: activePlayer.userId
     })
 
+    console.log('bakugans and slots : bakugans :', bankugansAndSlots?.usableBakugans.map((b) => b?.name))
+    console.log('bakugans and slot : slots :', bankugansAndSlots?.usableSlots.map((b) => b?.id))
+
     const SlotsWithUsersBakugan = roomState.protalSlots.filter((slot) => slot.bakugans.some((bakugan) => bakugan.userId === activePlayer.userId))
     const SlotsWithBakugans = roomState.protalSlots.filter((slot) => slot.bakugans.length > 0)
 
@@ -40,6 +43,8 @@ export function SetBakuganActionRequest({ roomState }: { roomState: stateType })
             setableSlots: bankugansAndSlots.usableSlots.map((slot) => slot.id)
         }
     }
+
+    console.log('set bakugan action request :', setBakuganRequest.data.bakugans.map((b) => b.name))
 
     const merged = [request.actions.mustDo, request.actions.mustDoOne, request.actions.optional].flat().map((r) => r.type)
     

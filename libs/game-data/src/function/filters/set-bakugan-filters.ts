@@ -1,9 +1,9 @@
 import { type deckType, type portalSlotsType, type slots_id } from '../../type/type-index.js'
 
-export function SetBakuganFilters({ playersDeck, opponentDeck, slots, slot, userId }: { playersDeck: deckType | undefined, opponentDeck: deckType | undefined, slots: portalSlotsType | undefined, slot?: "" | slots_id,  userId: string }) {
+export function SetBakuganFilters({ playersDeck, opponentDeck, slots, slot, userId }: { playersDeck: deckType | undefined, opponentDeck: deckType | undefined, slots: portalSlotsType | undefined, slot?: "" | slots_id, userId: string }) {
 
-    if(!playersDeck) return
-    if(!opponentDeck) return
+    if (!playersDeck) return
+    if (!opponentDeck) return
 
     const playersBakugans = playersDeck.bakugans
     const opponentsBakugans = opponentDeck.bakugans
@@ -38,6 +38,14 @@ export function SetBakuganFilters({ playersDeck, opponentDeck, slots, slot, user
             : slots?.
                 filter((s) => s.bakugans.some((b) => b.userId != userId)).
                 filter((s) => s.bakugans.every((b) => b.userId != userId))
+
+    console.log( 'Set Bakugan Filter : ', {
+        usableBakugans: usableBakugans.map((b) => b?.name),
+        usableSlots: usableSlots.map((s) => s.id),
+        usableBakugansCount: usableBakugansCount,
+        opponentsUsableBakugans: opponentsOneBakuganLeft,
+        oneLeftAndOpponentsOnDomain: oneLeftAndOpponentsOnDomain
+    })
 
     const selectedSlot = !oneLeftAndOpponentsOnDomainAddNoGate || noGateOnDomain ? slots?.find((s) => s.id === slot) : undefined
 

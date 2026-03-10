@@ -1,4 +1,4 @@
-import { AnimationDirectivesTypes, GetUserName, setGateCardProps, stateType, updateDeckGates, updateSlot } from "@bakugan-arena/game-data"
+import { AnimationDirectivesTypes, GetUserName, SetBakuganActionRequest, setGateCardProps, stateType, updateDeckGates, updateSlot } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
 export const UpdateGate: ({ roomId, gateId, slot, userId }: setGateCardProps) => AnimationDirectivesTypes[] | undefined = ({ roomId, gateId, slot, userId }: setGateCardProps) => {
@@ -81,6 +81,16 @@ export const UpdateGate: ({ roomId, gateId, slot, userId }: setGateCardProps) =>
     // ENG: Save the new room state back into the global state
     Battle_Brawlers_Game_State[roomIndex] = state
 
+    const action = Battle_Brawlers_Game_State[roomIndex].turnState.turn === userId ? Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest : Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest
+
+    const merged = [...action.actions.mustDo, ...action.actions.mustDoOne, ...action.actions.optional].flat()
+
+    if (!merged.some((a) => a.type === 'SET_BAKUGAN')) {
+        SetBakuganActionRequest({
+            roomState: Battle_Brawlers_Game_State[roomIndex]
+        })
+    }
+
     return [{
         type: 'SET_GATE_CARD',
         data: {
@@ -89,7 +99,7 @@ export const UpdateGate: ({ roomId, gateId, slot, userId }: setGateCardProps) =>
         resolved: false,
         message: [{
             text: 'Gate Card Set !',
-            userName: GetUserName({roomData: Battle_Brawlers_Game_State[roomIndex], userId: userId}),
+            userName: GetUserName({ roomData: Battle_Brawlers_Game_State[roomIndex], userId: userId }),
             turn: roomData.turnState.turnCount
         }]
     }]
