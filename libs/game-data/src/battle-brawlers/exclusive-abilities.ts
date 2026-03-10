@@ -1,6 +1,6 @@
 
 import { exclusiveAbilitiesType } from "../index.js";
-import { AileEnflamee, AntiMuse, ChambreDeGravite, DragonoidPlus, EffecteurdOmbre, ForceDattraction, GaucheGigantesque, ImpactMajeur, LanceDeFeu, LanceEclair, MachettesJumelles, MaitreDesProfondeurs, Marionnette, MassueGigantesque, OmbreBleue, PlexusSolaire, RobotallionExecution, SabreDeLaMort, TempeteDePlume, VentCinglant, VentViolentDeNobelesseVerte, VisageDeJoie, VisageDeLaFureur, VisageDuChagrin } from "./exclusive-abilities/exclusive-abilities.js";
+import { AileEnflamee, AntiMuse, ChambreDeGravite, DragonoidPlus, EffecteurdOmbre, FlareBlinder, ForceDattraction, FurryOfWind, GaucheGigantesque, ImpactMajeur, LanceDeFeu, LanceEclair, MachettesJumelles, MaitreDesProfondeurs, Marionnette, MassueGigantesque, MegaFlareBlinder, OmbreBleue, PlexusSolaire, RobotallionExecution, SabreDeLaMort, TempeteDePlume, Tsunami, VentCinglant, VentViolentDeNobelesseVerte, VisageDeJoie, VisageDeLaFureur, VisageDuChagrin } from "./exclusive-abilities/exclusive-abilities.js";
 
 export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [OmbreBleue.key]: OmbreBleue,
@@ -28,14 +28,17 @@ export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [EffecteurdOmbre.key]: EffecteurdOmbre,
     [LanceDeFeu.key]: LanceDeFeu,
     // [JavelotAquos.key]: JavelotAquos,
-    // [Tsunami.key]: Tsunami,
+    [Tsunami.key]: Tsunami,
     // [TrappeDeSable.key]: TrappeDeSable,
     [MaitreDesProfondeurs.key]: MaitreDesProfondeurs,
     // [DivisionHolographique.key]: DivisionHolographique,
     // [RegainSubit.key]: RegainSubit,
     // [CapeDeFeu.key]: CapeDeFeu,
     // [SouffleInfini.key]: SouffleInfini
-    [ForceDattraction.key]: ForceDattraction
+    [ForceDattraction.key]: ForceDattraction,
+    [FurryOfWind.key]: FurryOfWind,
+    [FlareBlinder.key]: FlareBlinder,
+    [MegaFlareBlinder.key]: MegaFlareBlinder
 }
 
 export const ExclusiveAbilitiesList: exclusiveAbilitiesType[] = Object.values(ExclusiveAbilities) 

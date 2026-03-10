@@ -1,5 +1,5 @@
 import { bakuganType, gateCardType } from "../../type/type-index.js"
-import { CancelCaracterGateCard, CaracterGateCardEffect } from '../../function/index.js'
+import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation } from '../../function/index.js'
 import { GateCardImages } from "../../store/store-index.js"
 
 const powerLevel: number = 330
@@ -68,6 +68,48 @@ export const CentipodGateCard: gateCardType = {
     onCanceled({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'centipod-gate-card')
         CancelCaracterGateCard({ roomState: roomState, slotOfGate: slotOfGate, family: family })
+    },
+    onSetBakuganOnSlot({ bakugan, slot, roomState }) {
+
+        if (!roomState) return
+        const { blocked, canceled, open } = slot.state
+        if (blocked) return
+        if (canceled) return
+        if (!open) return
+        if (bakugan.family !== CentipodDarkus.family) return
+
+        const basePower = structuredClone(bakugan.powerLevel)
+        if (!basePower) return
+        bakugan.currentPower += basePower
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: basePower,
+            malus: false,
+            turn: roomState.turnState.turnCount
+        })
+
+    },
+    onRemoveBakugan({ bakugan, slot, roomState }) {
+
+        if (!roomState) return
+        const { blocked, canceled, open } = slot.state
+        if (blocked) return
+        if (canceled) return
+        if (!open) return
+        if (bakugan.family !== CentipodDarkus.family) return
+
+        const basePower = structuredClone(bakugan.powerLevel)
+        if (!basePower) return
+        bakugan.currentPower -= basePower
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: basePower,
+            malus: true,
+            turn: roomState.turnState.turnCount
+        })
+        
     },
     autoActivationCheck: ({ portalSlot }) => {
         const bakugansOnSlot = portalSlot.bakugans.length

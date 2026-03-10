@@ -1,4 +1,4 @@
-import { ComeBackBakuganDirectiveAnimation, stateType, updateDeckBakugans } from "@bakugan-arena/game-data";
+import { ComeBackBakuganDirectiveAnimation, stateType } from "@bakugan-arena/game-data";
 
 export function ClearDomain(roomData: stateType, userId: string) {
     if (!roomData) return
@@ -14,22 +14,27 @@ export function ClearDomain(roomData: stateType, userId: string) {
     if (setableBakugans.length > 0) return
     if (battleState.battleInProcess) return
 
-    decks.forEach((d) => {
-        updateDeckBakugans({
-            deck: d,
-            keys: setableBakugans,
-            eliminate: false
-        })
-    })
-
     slots.forEach((slot) => {
-        slot.bakugans.forEach((bakugan) => {
+
+        slot.bakugans.forEach((bakugan, index) => {
+
+            const deck = decks.find((d) => d.userId === bakugan.userId)
+            if(!deck) return
+            const bakugansIndex = deck.bakugans.findIndex((b) => b?.bakuganData.key === bakugan.key)
+            if(bakugansIndex !== -1) {
+                if(!deck.bakugans[bakugansIndex]?.bakuganData) return
+                deck.bakugans[bakugansIndex].bakuganData.onDomain = false
+            }
+
             ComeBackBakuganDirectiveAnimation({
                 animations: roomData.animations,
                 bakugan: bakugan,
                 slot: slot
             })
+
+            slot.bakugans.splice(index, 1)
         })
+
     })
 
 }

@@ -1,4 +1,4 @@
-import { CancelCaracterGateCard, CaracterGateCardEffect, type bakuganType, type gateCardType } from "../../index.js"
+import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation, type bakuganType, type gateCardType } from "../../index.js"
 import { StarterBanList } from "../../store/store-index.js"
 
 export const TigrerraHaos: bakuganType = {
@@ -34,7 +34,7 @@ export const TigrerraGateCard: gateCardType = {
     image: 'tigrerra.png',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'tigrerra-gate-card')
-        CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Tigrerra' })
+        CaracterGateCardEffect({ roomState: roomState, slotOfGate: slotOfGate, family: 'Tigrerra' })
         return null
 
     },
@@ -49,5 +49,47 @@ export const TigrerraGateCard: gateCardType = {
         } else {
             return false
         }
+    },
+    onSetBakuganOnSlot({ bakugan, slot, roomState }) {
+
+        if (!roomState) return
+        const { blocked, canceled, open } = slot.state
+        if (blocked) return
+        if (canceled) return
+        if (!open) return
+        if (bakugan.family !== TigrerraGateCard.family) return
+
+        const basePower = structuredClone(bakugan.powerLevel)
+        if (!basePower) return
+        bakugan.currentPower += basePower
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: basePower,
+            malus: false,
+            turn: roomState.turnState.turnCount
+        })
+
+    },
+    onRemoveBakugan({ bakugan, slot, roomState }) {
+
+        if (!roomState) return
+        const { blocked, canceled, open } = slot.state
+        if (blocked) return
+        if (canceled) return
+        if (!open) return
+        if (bakugan.family !== TigrerraGateCard.family) return
+
+        const basePower = structuredClone(bakugan.powerLevel)
+        if (!basePower) return
+        bakugan.currentPower -= basePower
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: basePower,
+            malus: true,
+            turn: roomState.turnState.turnCount
+        })
+
     },
 }

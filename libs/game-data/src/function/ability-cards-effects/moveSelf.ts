@@ -1,3 +1,4 @@
+import { GateCardsList } from "../../battle-brawlers/gate-gards.js";
 import { resolutionType } from "../../type/actions-serveur-requests.js";
 import { bakuganOnSlot, stateType } from "../../type/room-types.js";
 import { OpenGateCardActionRequest } from "../action-request-functions/index.js";
@@ -34,19 +35,31 @@ export function moveBakuganToSelectedSlot({
     );
     if (!user) return;
 
+    // Check Gate Card on Move Bakugan Function
+    const gate = GateCardsList.find((card) => card.key === slotOfGate.portalCard?.key)
+
+    if (gate && gate.onRemoveBakugan) {
+        gate.onRemoveBakugan({
+            bakugan: user,
+            roomState: roomData,
+            slot: slotOfGate
+        })
+    }
+
+
     const index = slotOfGate.bakugans.findIndex(
         (ba) => ba.key === user.key && ba.userId === user.userId
     );
 
     if (roomData.battleState.battleInProcess && !roomData.battleState.paused && roomData.battleState.slot === slotOfGate.id) {
-        const sameTeam = slotOfGate.bakugans.some(
+        const sameTeam = slotOfGate.bakugans.filter((b) => b.key !== user.key && b.userId === user.userId).some(
             b => b.userId === user.userId
         );
 
         if (sameTeam) {
             RemoveRenfortAnimationDirective({
                 animations: roomData.animations,
-                bakugan: user
+                bakugan: structuredClone(user)
             })
         }
     }
@@ -73,12 +86,23 @@ export function moveBakuganToSelectedSlot({
     // --- Animations ---
     MoveToAnotherSlotDirectiveAnimation({
         animations: roomData.animations,
-        bakugan: user,
+        bakugan: structuredClone(user),
         initialSlot: structuredClone(slotOfGate),
         newSlot: structuredClone(slotTarget),
         turn: roomData.turnState.turnCount
 
     });
+
+    // --- Gate Card Effect on Set bakugan
+    const landingGate = GateCardsList.find((card) => card.key === slotTarget.portalCard?.key)
+    if (landingGate && landingGate.onSetBakuganOnSlot) {
+        landingGate.onSetBakuganOnSlot({
+            bakugan: user,
+            roomState: roomData,
+            slot: slotTarget
+        })
+    }
+
 
     // --- Battles + Gate open ---
     CheckBattleStillInProcess(roomData);

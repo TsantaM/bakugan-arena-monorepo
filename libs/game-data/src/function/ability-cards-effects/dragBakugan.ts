@@ -1,3 +1,4 @@
+import { GateCardsList } from "../../battle-brawlers/gate-gards.js";
 import { resolutionType } from "../../type/actions-serveur-requests.js";
 import { bakuganOnSlot, stateType } from "../../type/room-types.js";
 import { OpenGateCardActionRequest } from "../action-request-functions/open-gate-card-action-request.js";
@@ -35,6 +36,18 @@ export function dragBakuganToUserSlot({
     );
     if (!user) return;
 
+    // Check Gate Card on Move Bakugan Function
+    const gate = GateCardsList.find((card) => card.key === slotTarget.portalCard?.key)
+
+    if (gate && gate.onRemoveBakugan) {
+        gate.onRemoveBakugan({
+            bakugan: bakuganToDrag,
+            roomState: roomState,
+            slot: slotTarget
+        })
+    }
+
+
     // --- Déplacement du bakugan ---
     const newState: bakuganOnSlot = {
         ...bakuganToDrag,
@@ -47,11 +60,22 @@ export function dragBakuganToUserSlot({
     // --- Animation ---
     MoveToAnotherSlotDirectiveAnimation({
         animations: roomState.animations,
-        bakugan: bakuganToDrag,
+        bakugan: structuredClone(bakuganToDrag),
         initialSlot: structuredClone(slotTarget),
         newSlot: structuredClone(slotOfGate),
         turn: roomState.turnState.turnCount
     });
+
+    // --- Gate Card Effect on Set bakugan
+    const landingGate = GateCardsList.find((card) => card.key === slotOfGate.portalCard?.key)
+    if (landingGate && landingGate.onSetBakuganOnSlot) {
+        landingGate.onSetBakuganOnSlot({
+            bakugan: bakuganToDrag,
+            roomState: roomState,
+            slot: slotOfGate
+        })
+    }
+
 
     // --- Combat + Gate ---
     CheckBattleStillInProcess(roomState);

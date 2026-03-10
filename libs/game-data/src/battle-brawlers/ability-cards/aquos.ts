@@ -1,6 +1,9 @@
-import { AbilityCardsActions, slots_id, type abilityCardsType } from "../../type/type-index.js";
+import { AbilityCardsActions, AnimationDirectivesTypes, slots_id, type abilityCardsType } from "../../type/type-index.js";
 import { StandardCardsImages } from '../../store/store-index.js'
-import { AbilityCardFailed, moveBakuganToSelectedSlot } from "../../function/index.js";
+import { AbilityCardFailed, moveBakuganToSelectedSlot, PowerChangeDirectiveAnumation } from "../../function/index.js";
+import { AbilityCardsList } from "../ability-cards.js";
+import { ExclusiveAbilitiesList } from "../exclusive-abilities.js";
+import { BakuganList } from "../bakugans.js";
 
 export const MirageAquatique: abilityCardsType = {
     key: 'mirage-aquatique',
@@ -48,43 +51,68 @@ export const MirageAquatique: abilityCardsType = {
     },
     onAdditionalEffect: ({ resolution, roomData }) => {
 
-        moveBakuganToSelectedSlot({ resolution: resolution, roomData: roomData, shouldBlockAlways: true})
+        moveBakuganToSelectedSlot({ resolution: resolution, roomData: roomData, shouldBlockAlways: true })
 
     },
-    activationConditions({roomState, userId}) {
-        if(!roomState) return false
+    activationConditions({ roomState, userId }) {
+        if (!roomState) return false
         const slotWithGate = roomState.protalSlots.filter((slot) => slot.portalCard !== null)
         const opponentDeck = roomState.decksState.find((deck) => deck.userId !== userId)?.bakugans
-        if(!opponentDeck) return false
+        if (!opponentDeck) return false
 
         const opponentsBakugans = opponentDeck.filter((bakugan) => bakugan !== undefined && !bakugan?.bakuganData.onDomain && !bakugan?.bakuganData.elimined).length
 
-        if(opponentsBakugans < 1) return false
+        if (opponentsBakugans < 1) return false
 
-        if(slotWithGate.length < 2) return false
+        if (slotWithGate.length < 2) return false
         return true
     }
 }
 
 export const BarrageDeau: abilityCardsType = {
     key: `barrage-d'eau`,
-    name: `Barrage d'Eau`,
+    name: `Water Refrain`,
     maxInDeck: 1,
     attribut: 'Aquos',
     usable_in_neutral: true,
     image: StandardCardsImages.aquos,
-    description: `Empêche l'activation de toute capacité sur le domaine pendant 3 tours`,
+    description: `This card prevents all players from using any abilities for 3 consecutive turns.`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (slotOfGate) {
-            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+        if (!roomState) return null
 
-            if (user) {
-                user.currentPower += 100
-            }
+        const user = roomState.protalSlots.find((s) => s.id === slot)?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+
+        if (!user) return null
+
+        roomState.turnState.ability_card_block = {
+            blocked: true,
+            reason: {
+                attribut: BarrageDeau.attribut ? BarrageDeau.attribut : "Aquos",
+                bakugan: user,
+                key: BarrageDeau.key,
+                slot: slot
+            },
+            turn: 3
         }
+
         return null
-    }
+    },
+    onCanceled({ roomState }) {
+
+        if (!roomState) return
+        const { blocked, reason } = roomState.turnState.ability_card_block
+        if (!blocked) return
+        if (reason === null) return
+        if (reason.attribut !== BarrageDeau.attribut) return
+        if (reason.key !== BarrageDeau.key) return
+
+        roomState.turnState.ability_card_block = {
+            blocked: false,
+            reason: null,
+            turn: 0
+        }
+
+    },
 }
 
 export const BouclierAquos: abilityCardsType = {
@@ -111,20 +139,76 @@ export const BouclierAquos: abilityCardsType = {
 
 export const PlongeeEnEauProfonde: abilityCardsType = {
     key: 'plongee-en-eau-profonde',
-    name: 'Plongée en Eau Profonde',
+    name: 'Deap Sea Dive',
     attribut: 'Aquos',
     maxInDeck: 1,
     usable_in_neutral: false,
     image: StandardCardsImages.aquos,
     description: `Transforme le terrain en aquos et empêche l'activation de toute carte maîtrise qui ne sont pas de l'attribut Aquos`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
-            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const AquosBakugans = slotOfGate.bakugans.filter((b) => b.attribut === "Aquos")
+            const NotAquosBakugans = slotOfGate.bakugans.filter((b) => b.attribut !== "Aquos")
 
-            if (user) {
-                user.currentPower += 100
-            }
+            AquosBakugans.forEach((bakugan) => {
+                bakugan.currentPower += 100
+                PowerChangeDirectiveAnumation({
+                    animations: roomState.animations,
+                    bakugans: [bakugan],
+                    powerChange: 100,
+                    turn: roomState.turnState.turnCount,
+                    malus: false
+                })
+            })
+
+            NotAquosBakugans.forEach((bakugan) => {
+                bakugan.currentPower -= 100
+                PowerChangeDirectiveAnumation({
+                    animations: roomState.animations,
+                    bakugans: [bakugan],
+                    powerChange: 100,
+                    turn: roomState.turnState.turnCount,
+                    malus: true
+                })
+            })
+
+            slotOfGate.activateAbilities.forEach((ability) => {
+                if (ability.canceled) return
+                const user = slotOfGate.bakugans.find((b) => b.key === ability.bakuganKey && b.userId === ability.userId)
+                if (!user) return
+                if (user.attribut === "Aquos") return
+                const BakuganName = BakuganList.find((b) => b.key === user.key)?.name
+                if(!BakuganName) return
+                const abilityData = [...AbilityCardsList, ...ExclusiveAbilitiesList].find((card) => card.key === ability.key)
+                if (!abilityData) return
+                if (!abilityData.onCanceled) return
+
+                const animation: AnimationDirectivesTypes = {
+                    type: 'CANCEL_ABILITY_CARD',
+                    data: {
+                        card: ability.key,
+                        attribut: user.attribut
+                    },
+                    message: [{
+                        text: `${abilityData.name} of ${BakuganName} as been nullified !`,
+                        turn: roomState?.turnState.turnCount
+                    }],
+                    resolve: false
+                }
+
+                roomState.animations.push(animation)
+
+                abilityData.onCanceled({
+                    bakuganKey: ability.bakuganKey,
+                    roomState: roomState,
+                    slot: slotOfGate.id,
+                    userId: ability.userId
+                })
+
+
+            })
         }
 
         return null

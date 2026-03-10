@@ -1,3 +1,4 @@
+import { GateCardsList } from "../../battle-brawlers/gate-gards.js";
 import { resolutionType } from "../../type/actions-serveur-requests.js";
 import { bakuganOnSlot, stateType } from "../../type/room-types.js";
 import { OpenGateCardActionRequest } from "../action-request-functions/open-gate-card-action-request.js";
@@ -48,15 +49,28 @@ export function moveSelectedBakugan({
         if (!userPresent) return;   // Sécurité
     }
 
+    // Check Gate Card on Move Bakugan Function
+    const gate = GateCardsList.find((card) => card.key === initialSlot.portalCard?.key)
+
+    if (gate && gate.onRemoveBakugan) {
+        gate.onRemoveBakugan({
+            bakugan: bakugan,
+            roomState: roomState,
+            slot: initialSlot
+        })
+    }
+
+
+
     if (roomState.battleState.battleInProcess && !roomState.battleState.paused && roomState.battleState.slot === initialSlot.id) {
-        const sameTeam = initialSlot.bakugans.some(
+        const sameTeam = initialSlot.bakugans.filter((b) => b.key !== bakugan.key && b.userId === bakugan.userId).some(
             b => b.userId === bakugan.userId
         );
 
         if (sameTeam) {
             RemoveRenfortAnimationDirective({
                 animations: roomState.animations,
-                bakugan: bakugan
+                bakugan: structuredClone(bakugan)
             })
         }
     }
@@ -77,12 +91,22 @@ export function moveSelectedBakugan({
     // Animation
     MoveToAnotherSlotDirectiveAnimation({
         animations: roomState.animations,
-        bakugan,
+        bakugan: structuredClone(bakugan),
         initialSlot: structuredClone(initialSlot),
         newSlot: structuredClone(slotTarget),
         turn: roomState.turnState.turnCount
 
     });
+
+    // --- Gate Card Effect on Set bakugan
+    const landingGate = GateCardsList.find((card) => card.key === slotTarget.portalCard?.key)
+    if (landingGate && landingGate.onSetBakuganOnSlot) {
+        landingGate.onSetBakuganOnSlot({
+            bakugan: bakugan,
+            roomState: roomState,
+            slot: initialSlot
+        })
+    }
 
     // Check combats
     CheckBattleStillInProcess(roomState);

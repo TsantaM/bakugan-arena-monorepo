@@ -1,5 +1,6 @@
-import { CancelCaracterGateCard, CaracterGateCardEffect, type bakuganType, type gateCardType } from "../../index.js"
+import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation, type bakuganType, type gateCardType } from "../../index.js"
 import { StarterBanList } from "../../store/starter-banlist.js"
+import { FurryOfWind, VentViolentDeNobelesseVerte } from "../exclusive-abilities/exclusive-abilities.js"
 
 export const SkyressVentus: bakuganType = {
     name: 'Skyress',
@@ -8,7 +9,7 @@ export const SkyressVentus: bakuganType = {
     key: 'skyress-ventus',
     powerLevel: 370,
     family: 'Skyress',
-    exclusiveAbilities: ['vent-violent-de-noblesse-verte'],
+    exclusiveAbilities: [VentViolentDeNobelesseVerte.key, FurryOfWind.key],
     banList: StarterBanList,
     canChangeAttribut: false
 }
@@ -34,7 +35,7 @@ export const SkyressGateCard: gateCardType = {
     image: 'skyress.PNG',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'skyress-gate-card')
-        CaracterGateCardEffect({ roomState: roomState,  slotOfGate: slotOfGate, family: 'Skyress' })
+        CaracterGateCardEffect({ roomState: roomState, slotOfGate: slotOfGate, family: 'Skyress' })
         return null
 
     },
@@ -49,5 +50,47 @@ export const SkyressGateCard: gateCardType = {
         } else {
             return false
         }
+    },
+    onSetBakuganOnSlot({ bakugan, slot, roomState }) {
+
+        if (!roomState) return
+        const { blocked, canceled, open } = slot.state
+        if (blocked) return
+        if (canceled) return
+        if (!open) return
+        if (bakugan.family !== SkyressGateCard.family) return
+
+        const basePower = structuredClone(bakugan.powerLevel)
+        if (!basePower) return
+        bakugan.currentPower += basePower
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: basePower,
+            malus: false,
+            turn: roomState.turnState.turnCount
+        })
+
+    },
+    onRemoveBakugan({ bakugan, slot, roomState }) {
+
+        if (!roomState) return
+        const { blocked, canceled, open } = slot.state
+        if (blocked) return
+        if (canceled) return
+        if (!open) return
+        if (bakugan.family !== SkyressGateCard.family) return
+
+        const basePower = structuredClone(bakugan.powerLevel)
+        if (!basePower) return
+        bakugan.currentPower -= basePower
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: basePower,
+            malus: true,
+            turn: roomState.turnState.turnCount
+        })
+
     },
 }
