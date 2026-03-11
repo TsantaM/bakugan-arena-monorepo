@@ -1,7 +1,7 @@
 import { Slots } from "../../store/slots";
 import { portalSlotsTypeElement, stateType } from "../../type/room-types";
 
-export function getAdjacentSlots({ slot, roomState }: { slot: portalSlotsTypeElement, roomState: stateType }): portalSlotsTypeElement[] {
+export function getAdjacentsSlots({ slot, roomState }: { slot: portalSlotsTypeElement, roomState: stateType }): portalSlotsTypeElement[] {
 
     if (!roomState) return []
 
@@ -27,7 +27,7 @@ export function getAdjacentSlots({ slot, roomState }: { slot: portalSlotsTypeEle
 
 }
 
-export function getJuxtaposableSlots({ slot, roomState }: { slot: portalSlotsTypeElement, roomState: stateType }): portalSlotsTypeElement[] {
+export function getJuxtaposablesSlots({ slot, roomState }: { slot: portalSlotsTypeElement, roomState: stateType }): portalSlotsTypeElement[] {
 
     if (!roomState) return []
 
