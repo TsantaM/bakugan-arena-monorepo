@@ -159,4 +159,13 @@ export type AnimationDirectivesTypes =
             attribut: attribut
         },
         message: Message[]
+    } | {
+        type: 'DRAG_AND_ELIMINE';
+        resolve: false,
+        data: {
+            initialSlot: portalSlotsTypeElement,
+            cardUser: bakuganOnSlot,
+            bakugan: bakuganOnSlot,
+        },
+        message: Message[]
     }

@@ -1,5 +1,5 @@
 import { abilityCardsType } from "../index.js";
-import { AquosSubterra, AquosVentus, BarrageDeau, BoublierFusion, CombatAerien, ContreMaitrise, CoupDeGrace, DarkusAquos, DarkusPyrus, EclatSoudain, HaosDarkus, HaosImmobilisation, HaosVentus, JetEnflamme, MagmaSupreme, MirageAquatique, MurDeFeu, Obstruction, PlongeeEnEauProfonde, PyrusAquosHaos, PyrusDarkus, RetourDair, RetroAction, SouffleTout, SubterraAquos, SubterraHaos, SubterraPyrus, TornadeChaosTotal, TornadeExtreme, TourbillonDeFeu, VengeanceAlItalienne, VentusHaos, VentusPyrus, VentusSubterraDarkus } from "./ability-cards/index.js";
+import { AquosSubterra, AquosVentus, BarrageDeau, CombatAerien, ContreMaitrise, CoupDeGrace, DarkusAquos, DarkusPyrus, EclatSoudain, HaosDarkus, HaosImmobilisation, HaosVentus, JetEnflamme, MagmaSupreme, MirageAquatique, MurDeFeu, PlongeeEnEauProfonde, PyrusAquosHaos, PyrusDarkus, RetourDair, RetroAction, SouffleTout, SubterraAquos, SubterraHaos, SubterraPyrus, TornadeChaosTotal, TornadeExtreme, TourbillonDeFeu, VengeanceAlItalienne, VentusHaos, VentusPyrus, VentusSubterraDarkus } from "./ability-cards/index.js";
 
 export const AbilityCards: Record<string, abilityCardsType> = {
     // Pyrus
@@ -25,7 +25,6 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     [MagmaSupreme.key]: MagmaSupreme,
     // [ChuteColossale.key]: ChuteColossale,
     // [CopieConforme.key]: CopieConforme,
-    [Obstruction.key]: Obstruction,
     [SubterraAquos.key]: SubterraAquos,
     [SubterraHaos.key]: SubterraHaos,
 
@@ -43,7 +42,6 @@ export const AbilityCards: Record<string, abilityCardsType> = {
 
     [CoupDeGrace.key]: CoupDeGrace,
     // [EpicesMortelles.key]: EpicesMortelles,
-    [BoublierFusion.key]: BoublierFusion,
     [VengeanceAlItalienne.key]: VengeanceAlItalienne,
     // [PoivreDesCayenne.key]: PoivreDesCayenne,
     [DarkusAquos.key]: DarkusAquos,

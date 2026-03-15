@@ -234,13 +234,12 @@ export const ContreMaitrise: abilityCardsType = {
             const abilities = slotOfGate.activateAbilities.filter((ability) => {
                 return (
                     !ability.canceled &&
-                    ability.userId !== userId &&
-                    lists.some((a) => a.key === ability.key && a.onCanceled)
+                    ability.userId !== userId
                 );
             });
 
             abilities.forEach((lastAbility) => {
-                const ability = [...AbilityCardsList, ...ExclusiveAbilitiesList].find((a) => a.key === lastAbility.key)
+                const ability = lists.find((a) => a.key === lastAbility.key)
                 const user = BakuganList.find((b) => b.key === lastAbility.bakuganKey )
                 if(!user) return
                 if(!ability) return

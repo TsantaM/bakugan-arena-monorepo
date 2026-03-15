@@ -25,16 +25,19 @@ function createSlotMesh({ slot, plane, userId, gateCardMeshs }: { slot: portalSl
             const texture = new THREE.TextureLoader().load(`./../images/cards/${card.image}`)
             mesh.material.map = texture
             mesh.userData.cardName = card.name
+            mesh.userData.open = true
         } else {
             const texture = new THREE.TextureLoader().load(`./../images/cards/portal_card.png`)
             mesh.material.map = texture
             if (slot.portalCard.userId === userId) {
                 mesh.userData.cardName = card.name
+                mesh.userData.open = false
             }
         }
 
         if (slot.state.canceled === true) {
             mesh.material.color.set(0.1, 0.1, 0.1)
+            mesh.userData.isCanceled = true
         }
 
         gateCardMeshs.push(mesh)
@@ -49,6 +52,7 @@ function createSlotMesh({ slot, plane, userId, gateCardMeshs }: { slot: portalSl
     mesh.position.set(position.x, position.y, position.z)
     mesh.name = slot.id
     mesh.userData.isCanceled = false
+    mesh.userData.open = false
     plane.add(mesh)
 
 }

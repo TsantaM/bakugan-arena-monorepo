@@ -25,6 +25,9 @@ export function SwipeGateCards({ slot2, plane, slot1 }: SwipeGateCardsProps): Pr
         const timeline = gsap.timeline({
             onComplete: () => {
                 slot1Mesh.name = slot2.id
+                slot1Mesh.userData.open = slot2Mesh.userData.open
+                slot1Mesh.userData.cardName = slot2Mesh.userData.cardName
+                slot1Mesh.userData.isCanceled = slot2Mesh.userData.isCanceled
             }
         })
 
@@ -51,6 +54,9 @@ export function SwipeGateCards({ slot2, plane, slot1 }: SwipeGateCardsProps): Pr
             delay: 0.01,
             onComplete: () => {
                 slot2Mesh.name = slot1.id
+                slot2Mesh.userData.open = slot1Mesh.userData.open
+                slot2Mesh.userData.cardName = slot1Mesh.userData.cardName
+                slot2Mesh.userData.isCanceled = slot1Mesh.userData.isCanceled
                 resolve() // ✅ La promesse se résout à la fin du mouvement
             }
         })

@@ -202,7 +202,7 @@ export const RetroAction: abilityCardsType = {
     key: 'retro-action',
     maxInDeck: 2,
     attribut: 'Pyrus',
-    name: 'Retro Action',
+    name: 'Back Fire',
     image: StandardCardsImages.pyrus,
     usable_in_neutral: false,
     description: `Nullifies opponent's Gate Card`,
@@ -240,7 +240,7 @@ export const TourbillonDeFeu: abilityCardsType = {
     maxInDeck: 1,
     image: 'FireTornado.png',
     usable_in_neutral: false,
-    description: `Adds 100 Gs to the user`,
+    description: `Adds 100 Gs to the user and substract 100 Gs from the opponents`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)

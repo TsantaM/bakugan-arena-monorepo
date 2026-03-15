@@ -1,6 +1,9 @@
-import { AbilityCardFailed, CancelAbilityCard, CancelGateCardDirectiveAnimation, CheckBattle, CheckBattleStillInProcess, ComeBackBakuganEffect, dragBakuganToUserSlot, ElimineBakuganEffect, moveSelectedBakugan, MoveToAnotherSlotDirectiveAnimation, PowerChangeDirectiveAnumation, RemoveGateCardDirectiveAnimation, ResetSlot, SetBakuganAndAddRenfortAnimationDirective } from "../../index.js"
+import { DragAndElimineBakuganEffect } from "../../function/index.js"
+import { AbilityCardFailed, CancelAbilityCard, CancelGateCardDirectiveAnimation, CheckBattle, CheckBattleStillInProcess, ComeBackBakuganEffect, dragBakuganToUserSlot, ElimineBakuganEffect, getAdjacentsSlots, getJuxtaposablesSlots, moveSelectedBakugan, MoveToAnotherSlotDirectiveAnimation, PowerChangeDirectiveAnumation, RemoveGateCardDirectiveAnimation, ResetSlot, SetBakuganAndAddRenfortAnimationDirective, Slots } from "../../index.js"
 import type { AbilityCardsActions, AnimationDirectivesTypes, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, exclusiveAbilitiesType, slots_id } from "../../type/type-index.js"
+import { HydranoidDarkus } from "../bakugans/hydranoid.js"
 import { SiegeAquos } from "../bakugans/siege.js"
+import { SirenoidAquos } from "../bakugans/sirenoid.js"
 import { SkyressVentus } from "../bakugans/skyress.js"
 import { TentaclearHaos } from "../bakugans/tentacleer.js"
 import { GateCardsList } from "../gate-gards.js"
@@ -37,31 +40,101 @@ export const OmbreBleue: exclusiveAbilitiesType = {
 export const ChambreDeGravite: exclusiveAbilitiesType = {
     key: 'chambre-de-gravité',
     name: 'Gravity Chamber',
-    description: `Move an opponent on the battlefield to the user's Gate Card`,
+    description: `Attracts all opposing Bakugans on the Gate Cards adjecent to the one where Hydranoid is located that have a lower power level, and eliminates immediately.`,
     maxInDeck: 1,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        if (!roomState) return null
+        const animation = AbilityCardFailed({ card: ChambreDeGravite.name })
+        if (!roomState) return animation
+        if (ChambreDeGravite.activationConditions && !ChambreDeGravite.activationConditions({ roomState, userId })) return animation
+
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
-
             if (user) {
-                user.currentPower += 100
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: [user],
-                    powerChange: 100,
-                    malus: false,
-                    turn: roomState.turnState.turnCount
+                if (ChambreDeGravite.canUse && !ChambreDeGravite.canUse({ bakugan: user, roomState: roomState })) return animation
 
-                })
+                // user.currentPower += 100
+                // PowerChangeDirectiveAnumation({
+                //     animations: roomState?.animations,
+                //     bakugans: [user],
+                //     powerChange: 100,
+                //     malus: false,
+                //     turn: roomState.turnState.turnCount
+
+                // })
+
+                const slot = roomState.protalSlots[Slots.indexOf(user.slot_id)]
+                const adjacentSlots = getAdjacentsSlots({ slot: slot, roomState: roomState })
+                const slotsWithOpponent = adjacentSlots.filter((slot) => slot.bakugans.length > 0)
+
+                if (slotsWithOpponent.length > 0) {
+
+                    const bakugans = slotsWithOpponent.map((slot) => slot.bakugans.filter((b) => b.userId !== user.userId)).flat()
+
+                    bakugans.forEach((b) => {
+
+                        if (b.currentPower < user.currentPower) {
+                            
+                            const targetSlot = roomState.protalSlots[Slots.indexOf(b.slot_id)]
+                            DragAndElimineBakuganEffect({
+                                roomState: roomState,
+                                bakugan: b,
+                                cardUser: user,
+                                initialSlot: targetSlot
+                            })
+
+                        } 
+                        // else {
+
+                        //     const resolution: resolutionType = {
+                        //         bakuganKey: user.key,
+                        //         cardKey: ChambreDeGravite.key,
+                        //         roomId: roomState.roomId,
+                        //         slot: slotOfGate.id,
+                        //         userId: user.userId,
+                        //         data: {
+                        //             slot: b.slot_id,
+                        //             bakugan: b.key,
+                        //             type: 'SELECT_BAKUGAN_ON_DOMAIN'
+                        //         }
+                        //     }
+
+                        //     dragBakuganToUserSlot({
+                        //         roomState: roomState,
+                        //         resolution: resolution
+                        //     })
+                        // }
+                    })
+
+                }
+
+                CheckBattle({roomState})
             }
         }
 
         return null
-    }
+    },
+    activationConditions({ roomState, userId }) {
+        if (!roomState) return false
+        if (roomState.battleState.battleInProcess) return false
+        const bakugans = roomState.protalSlots.filter((slot) => slot.bakugans.length > 0).map((slot) => slot.bakugans).flat()
+        if (bakugans.length < 2) return false
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+
+        if (bakugan.key !== HydranoidDarkus.key) return false
+        const slot = roomState.protalSlots[Slots.indexOf(bakugan.slot_id)]
+        const adjacentSlots = getAdjacentsSlots({ slot: slot, roomState: roomState })
+        const slotsWithOpponent = adjacentSlots.filter((slot) => slot.bakugans.length > 0 && slot.bakugans.some((b) => b.userId !== bakugan.userId))
+
+        if (slotsWithOpponent.length === 0) return false
+
+        return true
+    },
 }
 
 export const DragonoidPlus: exclusiveAbilitiesType = {
@@ -98,7 +171,7 @@ export const DragonoidPlus: exclusiveAbilitiesType = {
 export const ImpactMajeur: exclusiveAbilitiesType = {
     key: 'impact-majeur',
     name: 'Mega Impact',
-    description: `Adds 50 Gs to the user.`,
+    description: `Adds 50 Gs to the user and substract 100 Gs to all opponents Bakugans.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
@@ -107,6 +180,7 @@ export const ImpactMajeur: exclusiveAbilitiesType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const oppoents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
 
             if (user) {
                 user.currentPower += 50
@@ -117,6 +191,18 @@ export const ImpactMajeur: exclusiveAbilitiesType = {
                     malus: false,
                     turn: roomState.turnState.turnCount
 
+                })
+
+                oppoents.forEach((o) => {
+                    o.currentPower -= 100
+                    PowerChangeDirectiveAnumation({
+                        animations: roomState?.animations,
+                        bakugans: [o],
+                        powerChange: 100,
+                        malus: true,
+                        turn: roomState.turnState.turnCount
+
+                    })
                 })
             }
         }
@@ -210,7 +296,7 @@ export const VentViolentDeNobelesseVerte: exclusiveAbilitiesType = {
 export const AntiMuse: exclusiveAbilitiesType = {
     key: 'anti-muse',
     name: 'Anthemusa',
-    description: `Bring an opponent to Sirenoid Gate Card`,
+    description: `Attracts all opposing Bakugans on the Gate Cards adjecent to the one where Sirenoid is located that have a lower power level, and eliminates immediately.`,
     maxInDeck: 1,
     extraInputs: ['drag-bakugan'],
     usable_in_neutral: true,
@@ -219,55 +305,65 @@ export const AntiMuse: exclusiveAbilitiesType = {
     image: 'Anthemusa.png',
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const animation = AbilityCardFailed({ card: AntiMuse.name })
-
-        if (AntiMuse.activationConditions) {
-            const checker = AntiMuse.activationConditions({ roomState, userId })
-            if (checker === false) return animation
-        }
-
         if (!roomState) return animation
+        if (AntiMuse.activationConditions && !AntiMuse.activationConditions({ roomState, userId })) return animation
 
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        const deck = roomState?.decksState.find((d) => d.userId === userId)
-        const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
+        if (slotOfGate) {
+            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            if (user) {
+                if (AntiMuse.canUse && !AntiMuse.canUse({ bakugan: user, roomState: roomState })) return animation
 
-        if (!slotOfGate && !deck && !userData) return animation
+                const slot = roomState.protalSlots[Slots.indexOf(user.slot_id)]
+                const adjacentSlots = getAdjacentsSlots({ slot: slot, roomState: roomState })
+                const slotsWithOpponent = adjacentSlots.filter((slot) => slot.bakugans.length > 0)
 
-        const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot && s.bakugans.length > 0).map((slot) => slot.bakugans).flat()
-        const bakugans: bakuganToMoveType[] = slots.map((bakugan) => ({
-            key: bakugan.key,
-            userId: bakugan.userId,
-            slot: bakugan.slot_id
-        }))
+                if (slotsWithOpponent.length > 0) {
 
-        const request: AbilityCardsActions = {
-            type: 'SELECT_BAKUGAN_ON_DOMAIN',
-            message: 'Anthemusa : Select a Bakugan to drag',
-            bakugans: bakugans
+                    const bakugans = slotsWithOpponent.map((slot) => slot.bakugans.filter((b) => b.userId !== user.userId)).flat()
+
+                    bakugans.forEach((b) => {
+
+                        if (b.currentPower < user.currentPower) {
+                            
+                            const targetSlot = roomState.protalSlots[Slots.indexOf(b.slot_id)]
+                            DragAndElimineBakuganEffect({
+                                roomState: roomState,
+                                bakugan: b,
+                                cardUser: user,
+                                initialSlot: targetSlot
+                            })
+
+                        } 
+                    })
+
+                }
+
+                CheckBattle({roomState})
+            }
         }
 
-        return request
-
-
+        return null
     },
-    onAdditionalEffect: ({ resolution, roomData: roomState }) => {
-        dragBakuganToUserSlot({ resolution: resolution, roomState: roomState })
-    },
-    activationConditions: ({ roomState, userId }) => {
+    activationConditions({ roomState }) {
         if (!roomState) return false
-        const bakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().length
-        if (bakugans < 2) return false
+        if (roomState.battleState.battleInProcess) return false
+        const bakugans = roomState.protalSlots.filter((slot) => slot.bakugans.length > 0).map((slot) => slot.bakugans).flat()
+        if (bakugans.length < 2) return false
         return true
     },
     canUse({ roomState, bakugan }) {
         if (!roomState) return false
 
-        const bakugansOnOtherSlots = roomState.protalSlots.filter((slot) => slot.id === bakugan.userId).map((slot) => slot.bakugans).flat().length
+        if (bakugan.key !== SirenoidAquos.key) return false
+        const slot = roomState.protalSlots[Slots.indexOf(bakugan.slot_id)]
+        const adjacentSlots = getAdjacentsSlots({ slot: slot, roomState: roomState })
+        const slotsWithOpponent = adjacentSlots.filter((slot) => slot.bakugans.length > 0 && slot.bakugans.some((b) => b.userId !== bakugan.userId))
 
-        if (bakugansOnOtherSlots < 1) return false
+        if (slotsWithOpponent.length === 0) return false
 
         return true
-    }
+    },
 
 }
 
@@ -982,30 +1078,102 @@ export const JavelotAquos: exclusiveAbilitiesType = {
     key: 'javelot-aquos',
     name: 'Aquos Javelin',
     maxInDeck: 1,
-    description: `Switches Gate Card with the one next to it`,
+    description: `Cancel Gate card and Switches Gate Card with the one next to it`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
-    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        if (!roomState) return null
+    onActivate: ({ roomState, userId, slot }) => {
+        const animation = AbilityCardFailed({ card: JavelotAquos.name })
+
+        if (!roomState) return animation
+        if (JavelotAquos.activationConditions && !JavelotAquos.activationConditions({ roomState, userId })) return animation
+
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (slotOfGate) {
-            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+        if (!slotOfGate) return animation
 
-            if (user) {
-                user.currentPower += 100
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: [user],
-                    powerChange: 100,
-                    malus: false,
-                    turn: roomState.turnState.turnCount
+        const swipableSlots = getJuxtaposablesSlots({ slot: slotOfGate, roomState: roomState }).filter((slot) => slot.portalCard !== null)
 
-                })
+        if (swipableSlots.length < 1) return animation
+        const slotsIds = swipableSlots.map((slot) => slot.id)
+
+        const request: AbilityCardsActions = {
+            type: 'SELECT_SLOT',
+            message: 'Aquos Javelin : Select a slot',
+            slots: slotsIds
+        }
+
+        return request
+
+    },
+    onAdditionalEffect({ resolution, roomData }) {
+        if (!roomData) return;
+        if (resolution.data.type !== "SELECT_SLOT") return;
+
+        const selectedSlotId = resolution.data.slot
+        const slot = roomData.protalSlots[Slots.indexOf(selectedSlotId)]
+        const userSlot = roomData.protalSlots[Slots.indexOf(resolution.slot)]
+
+        if (userSlot.state.open && !userSlot.state.canceled) {
+            const gate = GateCardsList.find((card) => card.key === userSlot.portalCard?.key)
+            if (gate) {
+                CancelGateCardDirectiveAnimation({ animations: roomData.animations, slot: structuredClone(userSlot), turn: roomData.turnState.turnCount })
+
+                if (gate.onCanceled) gate.onCanceled({ roomState: roomData, slot: userSlot.id, userId: resolution.userId, bakuganKey: resolution.bakuganKey })
+
+                roomData.protalSlots[Slots.indexOf(resolution.slot)].state.canceled = true
             }
         }
 
-        return null
-    }
+        const animation: AnimationDirectivesTypes = {
+            type: "SWIPE_GATE_CARD",
+            data: {
+                slot1: structuredClone(slot),
+                slot2: structuredClone(userSlot)
+            },
+            message: [{
+                text: 'Gate Cards Swiped',
+                turn: roomData.turnState.turnCount
+            }],
+            resolve: false,
+        }
+
+        const slot1Card = structuredClone(slot.portalCard)
+        const slot1State = structuredClone(slot.state)
+        const userSlotCard = structuredClone(userSlot.portalCard)
+        const userSlotState = structuredClone(userSlot.state)
+
+        roomData.protalSlots[Slots.indexOf(selectedSlotId)].portalCard = userSlotCard
+        roomData.protalSlots[Slots.indexOf(selectedSlotId)].state = userSlotState
+        roomData.protalSlots[Slots.indexOf(resolution.slot)].portalCard = slot1Card
+        roomData.protalSlots[Slots.indexOf(resolution.slot)].state = slot1State
+
+
+        roomData.animations.push(animation)
+
+    },
+    activationConditions({ roomState }) {
+        if (!roomState) return false
+
+        const slots = roomState.protalSlots.filter((slot) => slot.portalCard !== null)
+        if (slots.length < 2) return false
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+
+        if (!roomState) return false
+        if (bakugan.key !== SiegeAquos.key) return false
+
+        const slot = roomState.protalSlots.find((slot) => slot.id === bakugan.slot_id)
+        if (!slot) return false
+
+        const juxtaposablesSlots = getJuxtaposablesSlots({ slot: slot, roomState: roomState })
+        if (juxtaposablesSlots.length === 0) return false
+        const swipableSlots = juxtaposablesSlots.filter((slot) => slot.portalCard !== null)
+        if (swipableSlots.length === 0) return false
+
+        return true
+
+    },
 }
 
 export const Tsunami: exclusiveAbilitiesType = {
@@ -1648,4 +1816,70 @@ export const MegaFlareBlinder: exclusiveAbilitiesType = {
 
         return true
     },
+}
+
+export const Obstruction: exclusiveAbilitiesType = {
+    key: 'obstruction',
+    name: 'Dragoon',
+    maxInDeck: 1,
+    description: `Adds the opponent's G-Power to user`,
+    usable_in_neutral: false,
+    usable_if_user_not_on_domain: false,
+    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        if (!roomState) return null
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate) {
+            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
+            if (user && opponent) {
+                const opponentPower = opponent.currentPower
+                user.currentPower += opponentPower
+                PowerChangeDirectiveAnumation({
+                    animations: roomState?.animations,
+                    bakugans: [user],
+                    powerChange: opponentPower,
+                    malus: false,
+                    turn: roomState.turnState.turnCount
+
+                })
+            }
+        }
+
+        return null
+    }
+}
+
+export const BouclierFusion: exclusiveAbilitiesType = {
+    key: 'bouclier-fusion',
+    name: 'Merge Shield',
+    maxInDeck: 1,
+    description: `If opponent Bakugan has gained Gs : the user gains G-Power equal to the amount gained`,
+    usable_in_neutral: false,
+    usable_if_user_not_on_domain: false,
+    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        if (!roomState) return null
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate) {
+            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
+
+            if (user && opponent) {
+                const currentOpponentPower = opponent.currentPower
+                const baseOpponentPower = opponent.powerLevel
+                const opponentBoost = currentOpponentPower - baseOpponentPower
+                if (opponentBoost > 0) {
+                    user.currentPower += opponentBoost
+                    PowerChangeDirectiveAnumation({
+                        animations: roomState.animations,
+                        bakugans: [user],
+                        powerChange: opponentBoost,
+                        malus: false,
+                        turn: roomState.turnState.turnCount
+                    })
+                }
+            }
+        }
+
+        return null
+    }
 }

@@ -144,7 +144,7 @@ export const PlongeeEnEauProfonde: abilityCardsType = {
     maxInDeck: 1,
     usable_in_neutral: false,
     image: StandardCardsImages.aquos,
-    description: `Transforme le terrain en aquos et empêche l'activation de toute carte maîtrise qui ne sont pas de l'attribut Aquos`,
+    description: `Add 100 Gs to all Aquos Bakugans, substract 100 Gs to all not Aquos Bakugans and cancel not Aquos abilities.`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)

@@ -1,4 +1,3 @@
-import { Slots } from "../../store/slots";
 import { portalSlotsTypeElement, stateType } from "../../type/room-types";
 
 export function getAdjacentsSlots({ slot, roomState }: { slot: portalSlotsTypeElement, roomState: stateType }): portalSlotsTypeElement[] {
@@ -16,7 +15,7 @@ export function getAdjacentsSlots({ slot, roomState }: { slot: portalSlotsTypeEl
 
     if (!slot_1 || !slot_2 || !slot_3 || !slot_4 || !slot_5 || !slot_6) return []
 
-    switch (slot.id) {
+    switch (slotId) {
         case "slot-1": return [slot_2, slot_4, slot_5]
         case "slot-2": return [slot_1, slot_3, slot_4, slot_5, slot_6]
         case "slot-3": return [slot_2, slot_5, slot_6]
@@ -44,7 +43,7 @@ export function getJuxtaposablesSlots({ slot, roomState }: { slot: portalSlotsTy
 
     if (!slot_1 || !slot_2 || !slot_3 || !slot_4 || !slot_5 || !slot_6) return []
 
-    switch (slot.id) {
+    switch (slotId) {
         case "slot-1": return [slot_2]
         case "slot-2": return [slot_1, slot_3]
         case "slot-3": return [slot_2]
