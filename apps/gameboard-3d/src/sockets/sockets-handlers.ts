@@ -332,6 +332,7 @@ async function processAnimationQueue(userId: string,
             await DragAndElimineAnimation({
                 bakugan: current.data.bakugan,
                 cardUser: current.data.cardUser,
+                bakugansMeshs: bakugansMeshs,
                 scene,
             })
 

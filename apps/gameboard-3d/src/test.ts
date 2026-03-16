@@ -301,7 +301,7 @@ if (canvas) {
 
         const bakuganToRevive = {
             key: 'siege-pyrus',
-            userId: opponentId
+            userId: userId
         }
 
         await ReviveBakuganAnimation({

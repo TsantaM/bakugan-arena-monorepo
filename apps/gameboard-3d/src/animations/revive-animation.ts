@@ -49,7 +49,6 @@ export function ReviveBakuganAnimation({ bakuganKey, bakuganUserId, scene, userI
         )
 
         bakuganMesh.scale.set(50, 50, 1)
-        bakuganMesh.position.set(0, 0.75, 0)
         bakuganMesh.name = `${bakugan.key}-${bakuganUserId}`
         bakuganMesh.userData = {
             attribut: bakugan.attribut,
@@ -60,7 +59,7 @@ export function ReviveBakuganAnimation({ bakuganKey, bakuganUserId, scene, userI
         }
         bakuganMesh.material.transparent = true
 
-        bakuganMesh.position.set(0, 0.75, 0)
+        bakuganMesh.position.set(1, 2, 3)
 
         scene.add(bakuganMesh)
 
@@ -102,7 +101,7 @@ export function ReviveBakuganAnimation({ bakuganKey, bakuganUserId, scene, userI
         // Étape 2 : le Bakugan disparaît
         timeline.fromTo(
             bakuganMesh.scale,
-            { x: 3, y: 3, z: 1 },
+            { x: 5, y: 5, z: 1 },
             { x: 0, y: 0, z: 0, duration: 1, ease: 'power2.in' }
         )
 
@@ -118,7 +117,7 @@ export function ReviveBakuganAnimation({ bakuganKey, bakuganUserId, scene, userI
             sphere.position,
             {
                 x: bakuganMesh.position.x,
-                y: 0.5,
+                y: bakuganMesh.position.y,
                 z: bakuganMesh.position.z
             },
             {

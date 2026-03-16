@@ -7,10 +7,11 @@ type DragAndElimineBakuganProps = {
     scene: THREE.Scene
     bakugan: bakuganOnSlot
     cardUser: bakuganOnSlot,
+    bakugansMeshs?: THREE.Sprite<THREE.Object3DEventMap>[],
 }
 
 
-export function DragAndElimineAnimation({ scene, bakugan, cardUser }: DragAndElimineBakuganProps): Promise<void> {
+export function DragAndElimineAnimation({ scene, bakugan, cardUser, bakugansMeshs }: DragAndElimineBakuganProps): Promise<void> {
     return new Promise((resolve) => {
 
         const bakuganMesh = scene.getObjectByName(`${bakugan.key}-${bakugan.userId}`) as THREE.Sprite<THREE.Object3DEventMap>
@@ -22,6 +23,7 @@ export function DragAndElimineAnimation({ scene, bakugan, cardUser }: DragAndEli
 
         const timeline = gsap.timeline({
             onComplete: () => {
+                scene.remove(bakuganMesh)
                 resolve() // ✅ La promesse se résout à la fin de l'animation
             }
         })
@@ -53,6 +55,13 @@ export function DragAndElimineAnimation({ scene, bakugan, cardUser }: DragAndEli
             { x: 2, y: 2, z: 1 },
             { x: 0, y: 0, z: 0, duration: 1, ease: 'power2.in' }
         )
+
+        bakugansMeshs?.forEach((mesh) => {
+            if (mesh.name !== bakuganMesh.name) return
+            const meshsIndex = bakugansMeshs.findIndex((b) => b.name === mesh.name)
+            if (meshsIndex === -1) return
+            bakugansMeshs.splice(meshsIndex, 1)
+        })
 
     })
 }
