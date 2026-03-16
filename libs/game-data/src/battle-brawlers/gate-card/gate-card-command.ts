@@ -1,4 +1,4 @@
-import { type gateCardType, type bakuganOnSlot, type stateType, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective, ComeBackBakuganDirectiveAnimation, RemoveGateCardDirectiveAnimation, ResetSlot, CheckBattleStillInProcess, AutoActivationDuringBattle } from "../../index.js";
+import { type gateCardType, type bakuganOnSlot, type stateType, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective, ComeBackBakuganDirectiveAnimation, RemoveGateCardDirectiveAnimation, ResetSlot, CheckBattleStillInProcess, AutoActivationDuringBattle, Slots, ComeBackBakuganEffect } from "../../index.js";
 import { GateCardImages } from "../../store/gate-card-images.js";
 
 export const Rechargement: gateCardType = {
@@ -462,5 +462,47 @@ export const Armistice: gateCardType = {
     },
     onCanceled() {
         return
+    },
+}
+
+export const Magma: gateCardType = {
+    key: 'magma-fuse',
+    name: "Magma Fuse",
+    description: `After the battle is over, every Gate Card is destroyed and all Bakugans on the field are sent back to their owners.`,
+    image: GateCardImages.command,
+    maxInDeck: 1,
+    activeOnBattleEnd: {
+        autoActiveOnEnd: true,
+        canBeActiveBefore: false
+    },
+    onOpen({ roomState, slot }) {
+        if(!roomState) return null
+
+        const slotOfGate = roomState.protalSlots[Slots.indexOf(slot)]
+        if(slotOfGate.portalCard === null || slotOfGate.portalCard.key !== Magma.key) return null
+
+        const slots = roomState.protalSlots.filter((s) => s.id !== slot)
+        slots.forEach((s) => {
+            if(s.portalCard === null) return
+
+            s.bakugans.forEach((bakugan) => {
+
+                ComeBackBakuganEffect({
+                    bakugan: bakugan,
+                    roomState: roomState
+                })
+
+            })
+
+            RemoveGateCardDirectiveAnimation({
+                animations: roomState.animations,
+                slot: s
+            })
+
+            ResetSlot(s)
+
+        })
+
+        return null
     },
 }

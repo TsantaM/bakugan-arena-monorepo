@@ -54,6 +54,27 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
         p2Id
     )
 
+    // FR: Construction des tableaux winners et loosers
+    // ENG: Build winners and losers arrays
+    const winners: { key: string, userId: string }[] = []
+    const loosers: { key: string, userId: string }[] = []
+
+    slot.bakugans.forEach((bakugan) => {
+        if (bakugan.userId === winner) {
+            winners.push({
+                key: bakugan.key,
+                userId: bakugan.userId
+            })
+        }
+
+        if (bakugan.userId === loser) {
+            loosers.push({
+                key: bakugan.key,
+                userId: bakugan.userId
+            })
+        }
+    })
+
     // FR: Récupération du deck du perdant ===
     // ENG Get the loser's deck ===
     const deckToUpdate = decksState.find((d) => d.userId === loser)
@@ -115,6 +136,6 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
     const loserId = loser !== null ? loser : undefined
     // FR: Finaliser la bataille ===
     //ENG: Finalize battle: reset slot, battle state, etc. ===
-    finalizeBattle({ roomData, winnerId: winnerId, loserId: loserId })
-    CheckBattle({roomState: roomData})
+    finalizeBattle({ roomData, winnerId: winnerId, winners: winners, loserId: loserId, loosers: loosers })
+    CheckBattle({ roomState: roomData })
 }

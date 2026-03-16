@@ -78,11 +78,19 @@ export type gateCardType = {
     attribut?: attribut,
     family?: string,
     image: string,
+    activeOnBattleEnd?: {
+        autoActiveOnEnd: boolean,
+        canBeActiveBefore: boolean
+    },
     onOpen: ({ roomState, slot }: {
         roomState: stateType;
         slot: slots_id;
         bakuganKey?: string;
         userId?: string;
+        winnerId?: string;
+        looserId?: string;
+        winners?: { key: string, userId: string }[];
+        loosers?: { key: string, userId: string }[]
     }) => null | turnActionLauncher,
     onSetBakuganOnSlot?: ({ bakugan, slot }: {
         bakugan: bakuganOnSlot
@@ -100,5 +108,5 @@ export type gateCardType = {
         bakuganKey?: string;
         userId: string;
     }) => void,
-    autoActivationCheck?: ({ roomState, portalSlot }: { roomState: stateType, portalSlot: portalSlotsTypeElement }) => boolean
+    autoActivationCheck?: ({ roomState, portalSlot }: { roomState: stateType, portalSlot: portalSlotsTypeElement, winner?: string, looser?: string }) => boolean
 }

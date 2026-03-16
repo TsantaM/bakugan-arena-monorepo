@@ -1,3 +1,4 @@
+import { GateCardsList } from "../../battle-brawlers/gate-gards.js"
 import { ActionType, stateType } from "../../type/type-index.js"
 
 export function OpenGateCardActionRequest({ roomState }: { roomState: stateType }) {
@@ -19,6 +20,9 @@ export function OpenGateCardActionRequest({ roomState }: { roomState: stateType 
         if (portalCard === null) return
         if (state.blocked || state.open || state.canceled) return
         if (portalCard.userId !== turn) return
+        const card = GateCardsList.find((card) => card.key === portalCard.key)
+        if(!card) return
+        if(card.activeOnBattleEnd && card.activeOnBattleEnd.autoActiveOnEnd && !card.activeOnBattleEnd.canBeActiveBefore) return
 
         const request: ActionType = {
             type: 'OPEN_GATE_CARD',

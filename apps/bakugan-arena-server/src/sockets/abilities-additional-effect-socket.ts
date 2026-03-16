@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io/dist";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
-import { AbilityCardsList, ExclusiveAbilitiesList, resolutionType } from "@bakugan-arena/game-data";
+import { AbilityCardsList, ActivePlayerActionRequestType, ExclusiveAbilitiesList, InactivePlayerActionRequestType, removeActionByType, resolutionType } from "@bakugan-arena/game-data";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { turnActionUpdater } from "./turn-action";
 import { EmitMessage } from "../functions/emit-messages";
@@ -57,6 +57,9 @@ export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
                 if (!activeSocket) return
                 if (!Battle_Brawlers_Game_State[roomIndex]) return
 
+                const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "USE_ABILITY_CARD")
+                Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
+
                 const merged = [Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
                 if (merged.length > 0) {
                     io.to(activeSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
@@ -72,6 +75,10 @@ export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
                 if (roomIndex === -1) return
                 if (!Battle_Brawlers_Game_State[roomIndex]) return
                 if (!inactiveSocket) return
+
+                const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest, "USE_ABILITY_CARD")
+                Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest = newState as InactivePlayerActionRequestType
+
 
                 const merged = [Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.optional].flat()
                 if (merged.length <= 0) return

@@ -808,7 +808,16 @@ export const Marionnette: exclusiveAbilitiesType = {
         if (battleInProcess && !paused) return false
 
         return true
-    }
+    },
+    canUse({ roomState, bakugan }) {
+        if(!roomState) return false
+        if(bakugan.family !== 'Mantris') return false
+
+        const slot = roomState.protalSlots[Slots.indexOf(bakugan.slot_id)]
+        if(slot.bakugans.length > 1) return false
+
+        return true
+    },
 }
 
 export const LanceEclair: exclusiveAbilitiesType = {

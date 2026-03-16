@@ -1,4 +1,6 @@
 import { type stateType } from '../../src/type/type-index.js'
+import { GateCardsList } from '../battle-brawlers/gate-gards.js';
+import { Slots } from '../store/slots.js';
 import { CreateActionRequestFunction } from './create-action-request-function.js';
 import { OnBattleStartAnimationDirectives } from './create-animation-directives/on-battle-start-animation-directives.js'
 
