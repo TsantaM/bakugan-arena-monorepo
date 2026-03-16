@@ -168,4 +168,12 @@ export type AnimationDirectivesTypes =
             bakugan: bakuganOnSlot,
         },
         message: Message[]
+    } | {
+        type: 'REVIVE_BAKUGAN';
+        resolve: false,
+        data: {
+            bakuganKey: string,
+            bakuganUserId: string,
+        },
+        message: Message[]
     }

@@ -7,6 +7,7 @@ import { OnHoverGateCard } from './animations/show-message-animation'
 import { type portalSlotsTypeElement, type roomStateType } from '@bakugan-arena/game-data'
 import { InitGameState } from './functions/init-game-state'
 import { DragAndElimineAnimation } from './animations/drag-and-elimine-animation'
+import { ReviveBakuganAnimation } from './animations/revive-animation'
 
 const canvas = document.getElementById('gameboard-canvas')
 // const reload = document.getElementById("init-room")
@@ -298,6 +299,18 @@ if (canvas) {
         console.log(Slot2.bakugans[0])
         console.log(slot3.bakugans[0])
 
+        const bakuganToRevive = {
+            key: 'siege-pyrus',
+            userId: opponentId
+        }
+
+        await ReviveBakuganAnimation({
+            scene: scene,
+            camera: camera,
+            userId: userId,
+            bakuganKey: bakuganToRevive.key,
+            bakuganUserId: bakuganToRevive.userId
+        })
 
         await DragAndElimineAnimation({
             bakugan: Slot2.bakugans[0],

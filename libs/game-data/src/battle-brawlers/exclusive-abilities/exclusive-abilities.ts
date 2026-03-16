@@ -457,10 +457,28 @@ export const VisageDuChagrin: exclusiveAbilitiesType = {
         return null
     },
     onWin: ({ roomState, userId }) => {
+        if(!roomState) return
         const deckToUpdate = roomState?.decksState.find((d) => d.userId === userId)
         if (deckToUpdate) {
             deckToUpdate.bakugans.filter((b) => b && b.bakuganData.elimined === true).forEach((b) => {
+                if(!b) return
                 b?.bakuganData.elimined ? b.bakuganData.elimined = false : b?.bakuganData.elimined
+
+                const animation: AnimationDirectivesTypes = {
+                    type: "REVIVE_BAKUGAN",
+                    resolve: false,
+                    data: {
+                        bakuganKey: b?.bakuganData.key,
+                        bakuganUserId: userId,
+                    },
+                    message: [{
+                        text: `${b.bakuganData.name} revived`,
+                        turn: roomState.turnState.turnCount,
+                    }]
+                } 
+
+                roomState.animations.push(animation)
+
             })
         }
     },

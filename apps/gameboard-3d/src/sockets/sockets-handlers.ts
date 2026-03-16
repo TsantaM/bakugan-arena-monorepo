@@ -30,6 +30,7 @@ import { MoveGateCard } from "../animations/move-gate-card-animation"
 import { SwipeGateCards } from "../animations/swipe-gate-cards"
 import { CancelAbilityCardAnimation } from "../animations/cancel-ability-card-animation"
 import { DragAndElimineAnimation } from "../animations/drag-and-elimine-animation"
+import { ReviveBakuganAnimation } from "../animations/revive-animation"
 
 let animationQueue: AnimationDirectivesTypes[] = []
 let isProcessingAnimations = false
@@ -339,6 +340,16 @@ async function processAnimationQueue(userId: string,
                 currentUserId: userId
             })
 
+        }
+
+        if(current.type === 'REVIVE_BAKUGAN') {
+            await ReviveBakuganAnimation({
+                bakuganKey: current.data.bakuganKey,
+                bakuganUserId: current.data.bakuganUserId,
+                camera: camera,
+                scene: scene,
+                userId: userId
+            })
         }
 
         i++; // avancer à l'animation suivante
