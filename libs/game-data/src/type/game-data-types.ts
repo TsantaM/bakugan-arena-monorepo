@@ -80,7 +80,8 @@ export type gateCardType = {
     image: string,
     activeOnBattleEnd?: {
         autoActiveOnEnd: boolean,
-        canBeActiveBefore: boolean
+        canBeActiveBefore: boolean,
+        activeBeforeElimination: boolean
     },
     onOpen: ({ roomState, slot }: {
         roomState: stateType;

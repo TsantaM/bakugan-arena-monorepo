@@ -106,7 +106,7 @@ async function processAnimationQueue(userId: string,
                         await PowerChangeNumberAnimation({
                             userId,
                             slotId: slotId as slots_id,
-                            newPower
+                            newPower: current.data.finalPower ? current.data.finalPower : newPower
                         });
                     })();
                 })

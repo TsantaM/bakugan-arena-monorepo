@@ -7,3 +7,4 @@ export * from './dragBakugan.js'
 export * from "./elimine-bakugan-effect.js"
 export * from './come-back-bakugan-effect.js'
 export * from "./drag-and-elimine-effect.js"
+export * from './swipe-power-levels-effects.js'

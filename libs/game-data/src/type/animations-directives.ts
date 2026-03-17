@@ -76,7 +76,8 @@ export type AnimationDirectivesTypes =
         data: {
             bakugan: bakuganOnSlot[],
             powerChange: number,
-            malus?: boolean
+            malus?: boolean,
+            finalPower?: number
         },
         message?: Message[]
         resolved: boolean

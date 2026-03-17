@@ -23,7 +23,7 @@ export const finalizeBattle = ({ roomData, winnerId, winners, loserId, loosers }
     const card = GateCardsList.find((c) => c.key === slotToUpdate.portalCard?.key)
     if (!card) return
 
-    if (!slotToUpdate.state.blocked && !slotToUpdate.state.open && card.activeOnBattleEnd && card.activeOnBattleEnd.autoActiveOnEnd) {
+    if (!slotToUpdate.state.blocked && !slotToUpdate.state.open && card.activeOnBattleEnd && card.activeOnBattleEnd.autoActiveOnEnd && !card.activeOnBattleEnd.activeBeforeElimination) {
 
         if(card.autoActivationCheck && !card.autoActivationCheck({portalSlot: slotToUpdate, roomState: roomData, looser: loserId, winner: winnerId})) return
 
