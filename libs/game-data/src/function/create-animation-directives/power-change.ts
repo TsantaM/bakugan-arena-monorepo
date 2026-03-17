@@ -6,19 +6,21 @@ type Props = {
     powerChange: number;
     malus?: boolean;
     animations: AnimationDirectivesTypes[];
-    turn: number
+    turn: number,
+    finalPower?: number
 }
 
-type PowerChangeDirectiveAnumationType = ({ bakugans, powerChange, malus, animations, turn }: Props) => void
+type PowerChangeDirectiveAnumationType = ({ bakugans, powerChange, malus, animations, turn, finalPower }: Props) => void
 
-export const PowerChangeDirectiveAnumation: PowerChangeDirectiveAnumationType = ({ bakugans, powerChange, malus = false, animations, turn }) => {
+export const PowerChangeDirectiveAnumation: PowerChangeDirectiveAnumationType = ({ bakugans, powerChange, malus = false, animations, turn, finalPower }) => {
 
     const powerChangeDirective: AnimationDirectivesTypes = {
         type: 'POWER_CHANGE',
         data: {
             bakugan: bakugans,
             powerChange: powerChange,
-            malus: malus
+            malus: malus,
+            finalPower: finalPower
         },
         resolved: false,
         message: bakugans.map((b) => ({

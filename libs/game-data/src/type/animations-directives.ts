@@ -76,7 +76,8 @@ export type AnimationDirectivesTypes =
         data: {
             bakugan: bakuganOnSlot[],
             powerChange: number,
-            malus?: boolean
+            malus?: boolean,
+            finalPower?: number
         },
         message?: Message[]
         resolved: boolean
@@ -157,6 +158,23 @@ export type AnimationDirectivesTypes =
         data: {
             card: string,
             attribut: attribut
+        },
+        message: Message[]
+    } | {
+        type: 'DRAG_AND_ELIMINE';
+        resolve: false,
+        data: {
+            initialSlot: portalSlotsTypeElement,
+            cardUser: bakuganOnSlot,
+            bakugan: bakuganOnSlot,
+        },
+        message: Message[]
+    } | {
+        type: 'REVIVE_BAKUGAN';
+        resolve: false,
+        data: {
+            bakuganKey: string,
+            bakuganUserId: string,
         },
         message: Message[]
     }

@@ -1,9 +1,5 @@
 import type {
-    AbilityCardsActionsRequestsType,
-    ActivePlayerActionRequestType,
-    InactivePlayerActionRequestType,
-    roomStateType, slots_id,
-    turnCountSocketProps, Message
+    AbilityCardsActionsRequestsType, ActivePlayerActionRequestType, InactivePlayerActionRequestType, roomStateType, slots_id, turnCountSocketProps, Message
 } from "@bakugan-arena/game-data"
 import { type AnimationDirectivesTypes } from "@bakugan-arena/game-data"
 import type * as THREE from "three"
@@ -13,7 +9,7 @@ import { OnBattleStartFunctionAnimation } from "../scene-modifications-functions
 import { AddRenfortToBattleAnimationFunction, SetBakuganAndAddRenfortAnimationAndFunction } from "../scene-modifications-functions/add-renfort-function-animation"
 import { OnBattleEndAnimation } from "../animations/on-battle-end-animation"
 import { RemoveGateCardFunctionAnimation } from "../scene-modifications-functions/remove-gate-card-function-animation"
-import { ElimineBakuganFunctionAnimation } from "../scene-modifications-functions/elimine-bakugan-function-animation"
+import { ElimineBakuganFunctionAnimation, updateEliminatedUI } from "../scene-modifications-functions/elimine-bakugan-function-animation"
 import { CancelGateCardAnimation } from "../animations/cancel-gate-card-animation"
 import { ComeBackBakuganFunctionAnimation } from "../scene-modifications-functions/come-back-bakugan-function-animation"
 import { OpenGateGateCardFunctionAnimation } from "../scene-modifications-functions/open-gate-card-function-animation"
@@ -33,6 +29,8 @@ import { RemoveRenforAnimation } from "../animations/remove-renfort-animation"
 import { MoveGateCard } from "../animations/move-gate-card-animation"
 import { SwipeGateCards } from "../animations/swipe-gate-cards"
 import { CancelAbilityCardAnimation } from "../animations/cancel-ability-card-animation"
+import { DragAndElimineAnimation } from "../animations/drag-and-elimine-animation"
+import { ReviveBakuganAnimation } from "../animations/revive-animation"
 
 let animationQueue: AnimationDirectivesTypes[] = []
 let isProcessingAnimations = false
@@ -108,7 +106,7 @@ async function processAnimationQueue(userId: string,
                         await PowerChangeNumberAnimation({
                             userId,
                             slotId: slotId as slots_id,
-                            newPower
+                            newPower: current.data.finalPower ? current.data.finalPower : newPower
                         });
                     })();
                 })
@@ -322,11 +320,37 @@ async function processAnimationQueue(userId: string,
             })
         }
 
-        if(current.type === 'CANCEL_ABILITY_CARD') {
+        if (current.type === 'CANCEL_ABILITY_CARD') {
             await CancelAbilityCardAnimation(
                 current.data.card,
                 current.data.attribut
             )
+        }
+
+        if (current.type === 'DRAG_AND_ELIMINE') {
+
+            await DragAndElimineAnimation({
+                bakugan: current.data.bakugan,
+                cardUser: current.data.cardUser,
+                bakugansMeshs: bakugansMeshs,
+                scene,
+            })
+
+            updateEliminatedUI({
+                bakuganUserId: current.data.bakugan.userId,
+                currentUserId: userId
+            })
+
+        }
+
+        if(current.type === 'REVIVE_BAKUGAN') {
+            await ReviveBakuganAnimation({
+                bakuganKey: current.data.bakuganKey,
+                bakuganUserId: current.data.bakuganUserId,
+                camera: camera,
+                scene: scene,
+                userId: userId
+            })
         }
 
         i++; // avancer à l'animation suivante

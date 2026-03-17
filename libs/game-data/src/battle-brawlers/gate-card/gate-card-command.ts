@@ -1,4 +1,4 @@
-import { type gateCardType, type bakuganOnSlot, type stateType, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective, ComeBackBakuganDirectiveAnimation, RemoveGateCardDirectiveAnimation, ResetSlot, CheckBattleStillInProcess, AutoActivationDuringBattle } from "../../index.js";
+import { type gateCardType, type bakuganOnSlot, type stateType, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective, ComeBackBakuganDirectiveAnimation, RemoveGateCardDirectiveAnimation, ResetSlot, CheckBattleStillInProcess, AutoActivationDuringBattle, Slots, ComeBackBakuganEffect, AnimationDirectivesTypes } from "../../index.js";
 import { GateCardImages } from "../../store/gate-card-images.js";
 
 export const Rechargement: gateCardType = {
@@ -462,5 +462,166 @@ export const Armistice: gateCardType = {
     },
     onCanceled() {
         return
+    },
+}
+
+export const Magma: gateCardType = {
+    key: 'magma-fuse',
+    name: "Magma Fuse",
+    description: `After the battle is over, every Gate Card is destroyed and all Bakugans on the field are sent back to their owners.`,
+    image: GateCardImages.command,
+    maxInDeck: 1,
+    activeOnBattleEnd: {
+        autoActiveOnEnd: true,
+        canBeActiveBefore: false,
+        activeBeforeElimination: false
+    },
+    onOpen({ roomState, slot }) {
+        if (!roomState) return null
+
+        const slotOfGate = roomState.protalSlots[Slots.indexOf(slot)]
+        if (slotOfGate.portalCard === null || slotOfGate.portalCard.key !== Magma.key) return null
+
+        const slots = roomState.protalSlots.filter((s) => s.id !== slot)
+        slots.forEach((s) => {
+            if (s.portalCard === null) return
+
+            s.bakugans.forEach((bakugan) => {
+
+                ComeBackBakuganEffect({
+                    bakugan: bakugan,
+                    roomState: roomState
+                })
+
+            })
+
+            RemoveGateCardDirectiveAnimation({
+                animations: roomState.animations,
+                slot: s
+            })
+
+            ResetSlot(s)
+
+        })
+
+        return null
+    },
+}
+
+export const Androstasis: gateCardType = {
+    key: 'androstasis',
+    name: 'Androstasis',
+    description: `If the user loses the current battle, their defeated Bakugan remains in the game.`,
+    image: GateCardImages.command,
+    maxInDeck: 1,
+    activeOnBattleEnd: {
+        autoActiveOnEnd: true,
+        canBeActiveBefore: false,
+        activeBeforeElimination: false
+    },
+    onOpen({ roomState, slot, looserId, loosers }) {
+        if (!roomState) return null
+        if (!loosers) return null
+        const slotOfGate = roomState.protalSlots[Slots.indexOf(slot)]
+        const { portalCard } = slotOfGate
+        if (portalCard === null) return null
+
+        if (portalCard.userId !== looserId) return null
+
+        const deckToUpdate = roomState?.decksState.find((d) => d.userId === portalCard.userId)
+        if (deckToUpdate) {
+
+            loosers.forEach((l) => {
+                const bakugan = deckToUpdate.bakugans.find((b) => b?.bakuganData.key === l.key)
+                if (!bakugan) return
+                if (!bakugan.bakuganData.elimined) return
+
+                bakugan.bakuganData.elimined = false
+
+                const animation: AnimationDirectivesTypes = {
+                    type: "REVIVE_BAKUGAN",
+                    resolve: false,
+                    data: {
+                        bakuganKey: bakugan.bakuganData.key,
+                        bakuganUserId: portalCard.userId,
+                    },
+                    message: [{
+                        text: `${bakugan.bakuganData.name} revived`,
+                        turn: roomState.turnState.turnCount,
+                    }]
+                }
+
+                roomState.animations.push(animation)
+            })
+
+        }
+
+        return null
+    },
+    autoActivationCheck({ roomState, portalSlot, looser }) {
+        if (!roomState) return false
+        if (portalSlot.portalCard === null) return false
+        if (looser !== portalSlot.portalCard.userId) return false
+        return true
+    },
+}
+
+export const Revive: gateCardType = {
+    key: 'revive',
+    name: 'Revive',
+    description: `If the user wins, all of their defeated Bakugan can be used again.`,
+    image: GateCardImages.command,
+    maxInDeck: 1,
+    activeOnBattleEnd: {
+        autoActiveOnEnd: true,
+        canBeActiveBefore: false,
+        activeBeforeElimination: false
+    },
+    autoActivationCheck({ roomState, portalSlot, winner }) {
+
+        if (!roomState) return false
+        if (portalSlot.portalCard === null) return false
+        const { userId } = portalSlot.portalCard
+        if (userId !== winner) return false
+
+        return true
+
+    },
+    onOpen({ roomState, slot, winnerId }) {
+
+        if (!roomState) return null
+        const slotOfGate = roomState.protalSlots[Slots.indexOf(slot)]
+        if(slotOfGate.portalCard === null) return null
+        if(slotOfGate.portalCard.key !== Revive.key) return null
+        const userId = slotOfGate.portalCard.userId
+        if(userId !== winnerId) return null
+
+        const deckToUpdate = roomState?.decksState.find((d) => d.userId === userId)
+
+        if (deckToUpdate) {
+            deckToUpdate.bakugans.filter((b) => b && b.bakuganData.elimined === true).forEach((b) => {
+                if (!b) return null
+                b?.bakuganData.elimined ? b.bakuganData.elimined = false : b?.bakuganData.elimined
+
+                const animation: AnimationDirectivesTypes = {
+                    type: "REVIVE_BAKUGAN",
+                    resolve: false,
+                    data: {
+                        bakuganKey: b?.bakuganData.key,
+                        bakuganUserId: userId,
+                    },
+                    message: [{
+                        text: `${b.bakuganData.name} revived`,
+                        turn: roomState.turnState.turnCount,
+                    }]
+                }
+
+                roomState.animations.push(animation)
+
+            })
+        }
+
+        return null
+
     },
 }

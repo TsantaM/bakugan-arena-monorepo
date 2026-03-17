@@ -37,7 +37,6 @@ export const CoupDeGrace: abilityCardsType = {
     }
 }
 
-
 export const EpicesMortelles: abilityCardsType = {
     key: 'epices-mortelles',
     name: 'Epices Mortelles',
@@ -105,44 +104,6 @@ export const EpicesMortelles: abilityCardsType = {
     }
 }
 
-
-export const BoublierFusion: abilityCardsType = {
-    key: 'bouclier-fusion',
-    name: 'Merge Shield',
-    attribut: 'Darkus',
-    maxInDeck: 1,
-    description: `If opponent Bakugan has gained Gs : the user gains G-Power equal to the amount gained`,
-    image: StandardCardsImages.darkus,
-    usable_in_neutral: false,
-    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        if (!roomState) return null
-        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (slotOfGate) {
-            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
-            const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
-
-            if (user && opponent) {
-                const currentOpponentPower = opponent.currentPower
-                const baseOpponentPower = opponent.powerLevel
-                const opponentBoost = currentOpponentPower - baseOpponentPower
-                if (opponentBoost > 0) {
-                    user.currentPower += opponentBoost
-                    PowerChangeDirectiveAnumation({
-                        animations: roomState.animations,
-                        bakugans: [user],
-                        powerChange: opponentBoost,
-                        malus: false,
-                        turn: roomState.turnState.turnCount
-                    })
-                }
-            }
-        }
-
-        return null
-    }
-}
-
-
 export const VengeanceAlItalienne: abilityCardsType = {
     key: `vengeance-a-l'italienne`,
     name: `Auragano Revenge`,
@@ -187,7 +148,6 @@ export const VengeanceAlItalienne: abilityCardsType = {
         return null
     }
 }
-
 
 export const PoivreDesCayenne: abilityCardsType = {
     key: 'poivre-des-cayenne',

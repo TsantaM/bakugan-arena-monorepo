@@ -6,7 +6,8 @@ import { CreateBakuganHoverPreview, RemoveBakuganHoverPreview, type BakuganPrevi
 import { OnHoverGateCard } from './animations/show-message-animation'
 import { type portalSlotsTypeElement, type roomStateType } from '@bakugan-arena/game-data'
 import { InitGameState } from './functions/init-game-state'
-import { CancelAbilityCardAnimation } from './animations/cancel-ability-card-animation'
+import { DragAndElimineAnimation } from './animations/drag-and-elimine-animation'
+import { ReviveBakuganAnimation } from './animations/revive-animation'
 
 const canvas = document.getElementById('gameboard-canvas')
 // const reload = document.getElementById("init-room")
@@ -51,19 +52,6 @@ const Slot2: portalSlotsTypeElement = {
             powerLevel: 370,
             slot_id: 'slot-2',
             userId: opponentId
-        },
-        {
-            id: 2,
-            abilityBlock: false,
-            assist: true,
-            attribut: 'Pyrus',
-            currentPower: 500,
-            family: 'dragonoid',
-            image: 'dragonoid',
-            key: 'dragonoid-pyrus',
-            powerLevel: 370,
-            slot_id: 'slot-2',
-            userId: userId
         }
     ],
     can_set: false,
@@ -81,7 +69,19 @@ const Slot2: portalSlotsTypeElement = {
 const slot3: portalSlotsTypeElement = ({
     id: 'slot-3',
     activateAbilities: [],
-    bakugans: [],
+    bakugans: [{
+        id: 1,
+        abilityBlock: false,
+        assist: true,
+        attribut: 'Pyrus',
+        currentPower: 500,
+        family: 'dragonoid',
+        image: 'dragonoid',
+        key: 'dragonoid-pyrus',
+        powerLevel: 370,
+        slot_id: 'slot-3',
+        userId: userId
+    }],
     can_set: false,
     portalCard: {
         key: 'echange',
@@ -124,7 +124,7 @@ const state: roomStateType = {
         ability_card_block: {
             blocked: false,
             reason: null,
-            turn : 0
+            turn: 0
         }
     },
     finished: undefined,
@@ -296,12 +296,32 @@ if (canvas) {
         //     ...Slot2,
         //     id: 'slot-6'
         // }
+        console.log(Slot2.bakugans[0])
+        console.log(slot3.bakugans[0])
 
+        const bakuganToRevive = {
+            key: 'siege-pyrus',
+            userId: userId
+        }
 
-        await CancelAbilityCardAnimation(
-            'anti-muse',
-            'Aquos'
-        )
+        await ReviveBakuganAnimation({
+            scene: scene,
+            camera: camera,
+            userId: userId,
+            bakuganKey: bakuganToRevive.key,
+            bakuganUserId: bakuganToRevive.userId
+        })
+
+        await DragAndElimineAnimation({
+            bakugan: Slot2.bakugans[0],
+            cardUser: slot3.bakugans[0],
+            scene: scene
+        })
+        await DragAndElimineAnimation({
+            bakugan: Slot2.bakugans[1],
+            cardUser: slot3.bakugans[0],
+            scene: scene
+        })
     })
 
 
@@ -320,5 +340,4 @@ if (canvas) {
         camera.updateProjectionMatrix()
         renderer.setSize(window.innerWidth, window.innerHeight)
     })
-
 }

@@ -32,7 +32,7 @@ export const ElCondorSubterra: bakuganType = {
     attribut: 'Subterra',
     family: 'El Condor',
     image: 'el-condor',
-    exclusiveAbilities: ['plexus-solaire'],
+    exclusiveAbilities: ['plexus-solaire', 'obstruction'],
     powerLevel: 310,
     banList: [],
     canChangeAttribut: false

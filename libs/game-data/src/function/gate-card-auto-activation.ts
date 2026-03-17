@@ -18,7 +18,7 @@ export function handleGateCards(roomData: stateType) {
                 ? gate.autoActivationCheck({ portalSlot: slot, roomState: roomData })
                 : false
 
-            if (canActivate) {
+            if (canActivate && !gate.activeOnBattleEnd) {
                 roomData.animations.push({
                     type: "OPEN_GATE_CARD",
                     data: {

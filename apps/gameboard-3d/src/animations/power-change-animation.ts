@@ -25,7 +25,7 @@ export function PowerChangeAnimation({
     if (!bakuganMesh) return resolve();
 
     const powerChangeMesh = new THREE.Mesh(
-      new TextGeometry(`${malus ? '-' : '+'}${powerChange}`, {
+      new TextGeometry(`${malus ? '-' : '+'}${Math.round(powerChange)}`, {
         font: font,
         size: 0.3,
         depth: 0.1,
@@ -70,14 +70,14 @@ export function PowerChangeNumberAnimation({ userId, slotId, newPower }: { userI
 
   const step = 5
   const interval = setInterval(() => {
-    if (newPower < power) {
+    if (Math.round(newPower) < power) {
       power -= step
     } else {
       power += step
     }
     powerContainer.textContent = power.toString()
 
-    if (power === newPower || power === 0)
+    if (power === Math.round(newPower) || power === 0)
       clearInterval(interval)
   }, 25)
 }

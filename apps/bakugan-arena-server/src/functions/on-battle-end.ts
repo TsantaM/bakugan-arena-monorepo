@@ -1,4 +1,4 @@
-import { applyWinAbilitiesEffects, CheckBattle, ComeBackBakuganDirectiveAnimation, determineWinner, ElimineBakuganDirectiveAnimation, finalizeBattle, getPlayerDecksAndBakugans, updateDeckBakugans } from "@bakugan-arena/game-data"
+import { AnimationDirectivesTypes, applyWinAbilitiesEffects, CheckBattle, ComeBackBakuganDirectiveAnimation, determineWinner, ElimineBakuganDirectiveAnimation, finalizeBattle, GateCardsList, getPlayerDecksAndBakugans, GetUserName, updateDeckBakugans } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
 
@@ -27,6 +27,42 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
     const slot = protalSlots.find((s) => s.id === battleState.slot)
     if (!slot || !Array.isArray(slot.bakugans)) return  // Vérifie que le slot existe et contient des bakugans
 
+    // FR: Activation de la carte portail avant l'élimination
+    // ENG: Gate Card activation before elimination
+    const card = GateCardsList.find((c) => c.key === slot.portalCard?.key)
+    if (!card) return
+
+    if (!slot.state.blocked && !slot.state.open && card.activeOnBattleEnd && card.activeOnBattleEnd.activeBeforeElimination && !card.activeOnBattleEnd.autoActiveOnEnd) {
+        if(!battleState.slot) return
+        if (card.autoActivationCheck && !card.autoActivationCheck({ portalSlot: slot, roomState: roomData })) return
+
+        const animation: AnimationDirectivesTypes = {
+            type: "OPEN_GATE_CARD",
+            data: {
+                slot: structuredClone(slot),
+                slotId: structuredClone(slot).id
+            },
+            resolved: false,
+            message: [{
+                text: `Gate Card Open ! ${card.name}`,
+                userName: GetUserName({ roomData: roomData, userId: slot.portalCard?.userId || '' }),
+                turn: roomData.turnState.turnCount
+            },
+            {
+                text: `${card.description}`,
+                turn: roomData.turnState.turnCount,
+                description: true
+            }]
+        }
+
+        roomData.animations.push(animation)
+
+        card.onOpen({ roomState: roomData, slot: battleState.slot })
+
+        slot.state.open
+
+    }
+
     // FR: Récupération des IDs des joueurs ===
     // ENG Get player IDs ===
     const p1Id = players[0].userId
@@ -53,6 +89,27 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
         p1Id,
         p2Id
     )
+
+    // FR: Construction des tableaux winners et loosers
+    // ENG: Build winners and losers arrays
+    const winners: { key: string, userId: string }[] = []
+    const loosers: { key: string, userId: string }[] = []
+
+    slot.bakugans.forEach((bakugan) => {
+        if (bakugan.userId === winner) {
+            winners.push({
+                key: bakugan.key,
+                userId: bakugan.userId
+            })
+        }
+
+        if (bakugan.userId === loser) {
+            loosers.push({
+                key: bakugan.key,
+                userId: bakugan.userId
+            })
+        }
+    })
 
     // FR: Récupération du deck du perdant ===
     // ENG Get the loser's deck ===
@@ -115,6 +172,6 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
     const loserId = loser !== null ? loser : undefined
     // FR: Finaliser la bataille ===
     //ENG: Finalize battle: reset slot, battle state, etc. ===
-    finalizeBattle({ roomData, winnerId: winnerId, loserId: loserId })
-    CheckBattle({roomState: roomData})
+    finalizeBattle({ roomData, winnerId: winnerId, winners: winners, loserId: loserId, loosers: loosers })
+    CheckBattle({ roomState: roomData })
 }
