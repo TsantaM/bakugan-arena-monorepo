@@ -7,7 +7,7 @@ export function CreateGateCardSelecter({ card, index, multiSelect = false }: { c
 
     const cardElement = document.createElement('div');
     cardElement.classList.add('card-selecter', 'gate-card-selecter');
-    cardElement.style.transform = `translateX(${index * 50}%)`;
+    // cardElement.style.transform = `translateX(${index * 50}%)`;
     cardElement.id = `${card.key}-${index}`;
     cardElement.setAttribute('data-key', card.key);
 
@@ -65,7 +65,7 @@ export function CreateGateCardSelecter({ card, index, multiSelect = false }: { c
 export function CreateAbilityCardSelecter({ card, index, multiSelect = false, attribut }: { card: AbilityCard, index: number, multiSelect?: boolean, attribut: attribut | undefined }) {
     const cardElement = document.createElement('div');
     cardElement.classList.add('card-selecter');
-    cardElement.style.transform = `translateX(${index * 50}%)`;
+    // cardElement.style.transform = `translateX(${index * 50}%)`;
     cardElement.classList.add('ability-card-selecter');
     cardElement.id = `${card.key}-${index}`
     cardElement.setAttribute('data-key', card.key);

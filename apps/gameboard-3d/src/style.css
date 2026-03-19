@@ -359,6 +359,13 @@ body {
     padding: 0 !important;
     align-items: center !important;
 
+    .stack-container {
+      transform: translateX(20%) translateY(50%) !important;
+      display: flex !important;
+      gap: 1;
+      height: 25% !important;
+    }
+
     .bakugan-selecter {
       .image-bakugan-selecter-container {
         height: 30vh !important;
@@ -393,15 +400,19 @@ body {
   flex-wrap: wrap;
 
   .stack-container {
-    transform: translateX(20%) translateY(50%);
+    transform: translateY(50%);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1vw;
     position: relative;
-    height: 30%;
+    height: 45%;
     aspect-ratio: 2/3;
   }
 
   .card-selecter {
     place-self: center;
-    position: absolute;
+    /* position: absolute; */
+    position: relative;
     top: 0;
     left: 0;
     height: 100%;
@@ -409,7 +420,7 @@ body {
 
     .card-description {
       z-index: 2;
-      position: fixed;
+      position: absolute;
       transition: 0.2s;
       display: none;
       opacity: 0;
@@ -424,6 +435,8 @@ body {
       height: 100%;
       top: 0;
       left: 0;
+      -webkit-touch-callout: none;
+      user-select: none;
     }
 
   }
@@ -445,26 +458,6 @@ body {
     .gate-card-background {
       transform: translateY(-25%);
     }
-  }
-
-  .card-selecter:nth-child(2) {
-    transform: translateX(50%);
-  }
-
-  .card-selecter:nth-child(3) {
-    transform: translateX(100%);
-  }
-
-  .card-selecter:nth-child(4) {
-    transform: translateX(150%);
-  }
-
-  .card-selecter:nth-child(5) {
-    transform: translateX(200%);
-  }
-
-  .card-selecter:nth-child(6) {
-    transform: translateX(250%);
   }
 
 
@@ -543,6 +536,8 @@ body {
         width: 100%;
         top: 0;
         left: 0;
+        -webkit-touch-callout: none;
+        user-select: none;
       }
 
       .bakugan-data {
@@ -651,6 +646,8 @@ body {
         width: 100%;
         top: 0;
         left: 0;
+        -webkit-touch-callout: none;
+        user-select: none;
       }
 
       .bakugan-data {
@@ -682,13 +679,16 @@ body {
 
   .stack-container {
     position: relative;
+    display: flex;
+    gap: 1vw;
     height: 15vh;
     aspect-ratio: 2/3;
   }
 
   .card-selecter {
     place-self: center;
-    position: absolute;
+    /* position: absolute; */
+    position: relative;
     top: 0;
     left: 0;
     height: 100%;
@@ -697,7 +697,7 @@ body {
     .card-description {
       transition: 0.2s;
       z-index: 2;
-      position: fixed;
+      position: absolute;
       display: none;
       opacity: 0;
       transform: translateX(-50%) translateY(-50%);
@@ -706,11 +706,13 @@ body {
     .gate-card-background {
       transition: 0.2s;
       z-index: 1;
-      position: absolute;
+      /* position: absolute; */
       width: 100%;
       height: 100%;
       top: 0;
       left: 0;
+      -webkit-touch-callout: none;
+      user-select: none;
     }
   }
 
