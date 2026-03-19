@@ -417,7 +417,7 @@ export function registerSocketHandlers(
         )
 
         bgPlane.rotation.x = -Math.PI / 2
-        // bgPlane.position.y = -0.01
+        bgPlane.position.y = -0.01
         bgPlane.position.z = 2
         bgPlane.position.x = 4
         bgPlane.material.color = color
