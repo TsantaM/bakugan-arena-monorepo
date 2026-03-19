@@ -2,7 +2,7 @@ import type {
     AbilityCardsActionsRequestsType, ActivePlayerActionRequestType, InactivePlayerActionRequestType, roomStateType, slots_id, turnCountSocketProps, Message
 } from "@bakugan-arena/game-data"
 import { type AnimationDirectivesTypes } from "@bakugan-arena/game-data"
-import type * as THREE from "three"
+import * as THREE from "three"
 import { TurnActionBuilder } from "../turn-action-management"
 import type { Socket } from "socket.io-client"
 import { OnBattleStartFunctionAnimation } from "../scene-modifications-functions/on-battle-start-function-animation"
@@ -343,7 +343,7 @@ async function processAnimationQueue(userId: string,
 
         }
 
-        if(current.type === 'REVIVE_BAKUGAN') {
+        if (current.type === 'REVIVE_BAKUGAN') {
             await ReviveBakuganAnimation({
                 bakuganKey: current.data.bakuganKey,
                 bakuganUserId: current.data.bakuganUserId,
@@ -387,6 +387,44 @@ export function registerSocketHandlers(
         scene.add(plane)
         scene.add(light)
         scene.add(camera)
+
+        const texture = new THREE.TextureLoader().load('./images/cards/empty-gate-slot.jpg')
+
+        texture.wrapS = THREE.RepeatWrapping
+        texture.wrapT = THREE.RepeatWrapping
+
+        const planeSize = 500
+
+        texture.repeat.set(
+            planeSize / 4,
+            planeSize / 6
+        )
+
+        // ajustement fin pour alignement parfait
+        texture.offset.set(
+            0,
+            0
+        )
+
+        const color = new THREE.Color(0x226D80)
+
+        const bgPlane = new THREE.Mesh(
+            new THREE.PlaneGeometry(planeSize, planeSize),
+            new THREE.MeshBasicMaterial({
+                map: texture,
+                side: THREE.DoubleSide
+            })
+        )
+
+        bgPlane.rotation.x = -Math.PI / 2
+        // bgPlane.position.y = -0.01
+        bgPlane.position.z = 2
+        bgPlane.position.x = 4
+        bgPlane.material.color = color
+        // bgPlane.material.transparent = true
+        // bgPlane.material.opacity = 0.75
+
+        scene.add(bgPlane)
 
         document.getElementById('left-bakugan-previews-container')?.remove()
         document.getElementById('right-bakugan-previews-container')?.remove()

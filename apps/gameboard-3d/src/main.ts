@@ -112,6 +112,11 @@ if (roomId !== null && userId !== null) {
     scene.add(light)
     scene.add(camera)
 
+    // const bgTexture = new THREE.TextureLoader().load(`./../images/attributs-background/VENTUS.png`)
+    const bgColor = new THREE.Color(0x808080)
+    // scene.background = bgTexture
+    scene.background = bgColor
+
     // Show bakugan and gate cards data
     const bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[] = []
     const gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[] = []

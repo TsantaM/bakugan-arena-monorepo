@@ -15,7 +15,7 @@ const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
 const plane = PlaneMesh.clone()
 plane.material.transparent = true
-camera.position.set(3, 5, 8)
+camera.position.set(3, 5, 1)
 plane.rotateX(-Math.PI / 2)
 
 // TEST PAGE GAME STATE
@@ -195,9 +195,52 @@ if (canvas) {
 
     })
 
+    const texture = new THREE.TextureLoader().load('./images/cards/empty-gate-slot.jpg')
+
+    texture.wrapS = THREE.RepeatWrapping
+    texture.wrapT = THREE.RepeatWrapping
+
+    const planeSize = 500
+
+    texture.repeat.set(
+        planeSize / 4,
+        planeSize / 6
+    )
+
+    // ajustement fin pour alignement parfait
+    texture.offset.set(
+        0,
+        0
+    )
+
+    const color = new THREE.Color(0x226D80)
+
+    const bgPlane = new THREE.Mesh(
+        new THREE.PlaneGeometry(planeSize, planeSize),
+        new THREE.MeshBasicMaterial({
+            map: texture,
+            side: THREE.DoubleSide
+        })
+    )
+
+    bgPlane.rotation.x = -Math.PI / 2
+    bgPlane.position.y = -0.01
+    bgPlane.position.z = 2
+    bgPlane.position.x = 4
+    bgPlane.material.color = color
+    // bgPlane.material.transparent = true
+    // bgPlane.material.opacity = 0.75
+
+    scene.add(bgPlane)
+
     scene.add(plane)
     scene.add(light)
     scene.add(camera)
+
+    // const bgTexture = new THREE.TextureLoader().load(`./../images/attributs-background/VENTUS.png`)
+    const bgColor = new THREE.Color(0x808080)
+    // scene.background = bgTexture
+    scene.background = bgColor
 
     // Show bakugan and gate cards data
     const bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[] = []
