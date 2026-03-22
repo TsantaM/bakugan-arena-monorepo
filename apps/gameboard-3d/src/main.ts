@@ -192,6 +192,7 @@ if (roomId !== null && userId !== null) {
       } else {
         if (hoveredSlot) {
           document.getElementById('on-hover-gate-card')?.remove()
+          hoveredSlot = null
         }
       }
 

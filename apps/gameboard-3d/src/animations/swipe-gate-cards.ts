@@ -2,6 +2,7 @@ import { Slots, type portalSlotsTypeElement } from "@bakugan-arena/game-data"
 import * as THREE from "three"
 import { getSlotMeshPosition } from "../functions/get-slot-mesh-position"
 import gsap from "gsap"
+import { type SlotMeshUsersData } from "../meshes/slot.mesh"
 
 type SwipeGateCardsProps = {
     plane: THREE.Mesh
@@ -22,12 +23,16 @@ export function SwipeGateCards({ slot2, plane, slot1 }: SwipeGateCardsProps): Pr
 
         if (!slot1Mesh || !slot1Position || !slot2Position || !slot2Mesh) return resolve();
 
+        const slot1MeshData = slot1Mesh.userData as SlotMeshUsersData
+        const slot2MeshData = slot2Mesh.userData as SlotMeshUsersData
+
         const timeline = gsap.timeline({
             onComplete: () => {
                 slot1Mesh.name = slot2.id
-                slot1Mesh.userData.open = slot2Mesh.userData.open
-                slot1Mesh.userData.cardName = slot2Mesh.userData.cardName
-                slot1Mesh.userData.isCanceled = slot2Mesh.userData.isCanceled
+                slot1MeshData.state.open = slot2MeshData.state.open
+                slot1MeshData.cardName = slot2MeshData.cardName
+                slot1MeshData.state.canceled = slot2MeshData.state.canceled
+                slot1MeshData.state.blocked = slot2MeshData.state.blocked
             }
         })
 
@@ -54,9 +59,10 @@ export function SwipeGateCards({ slot2, plane, slot1 }: SwipeGateCardsProps): Pr
             delay: 0.01,
             onComplete: () => {
                 slot2Mesh.name = slot1.id
-                slot2Mesh.userData.open = slot1Mesh.userData.open
-                slot2Mesh.userData.cardName = slot1Mesh.userData.cardName
-                slot2Mesh.userData.isCanceled = slot1Mesh.userData.isCanceled
+                slot2MeshData.state.open = slot1MeshData.state.open
+                slot2MeshData.cardName = slot1MeshData.cardName
+                slot2MeshData.state.canceled = slot1MeshData.state.canceled
+                slot2MeshData.state.blocked = slot1MeshData.state.blocked
                 resolve() // ✅ La promesse se résout à la fin du mouvement
             }
         })

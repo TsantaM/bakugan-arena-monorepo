@@ -1,7 +1,8 @@
-import { GateCardsList, type MessageFromIframe, type portalSlotsTypeElement } from "@bakugan-arena/game-data";
+import { GateCardsList, type portalSlotsTypeElement } from "@bakugan-arena/game-data";
 import gsap from "gsap";
 import * as THREE from "three";
 import { getAttributColor } from "../functions/get-attrubut-color";
+import type { SlotMeshUsersData } from "../meshes/slot.mesh";
 
 export function OpenGateCardAnimation({
   mesh,
@@ -27,14 +28,12 @@ export function OpenGateCardAnimation({
     overlay.material.emissiveIntensity = 10;
     mesh.parent?.add(overlay);
     overlay.position.copy(mesh.position);
-    mesh.userData.cardName = cardData.name
+    const data = mesh.userData as SlotMeshUsersData
+    data.cardName = cardData.name
 
     const timeline = gsap.timeline({
       onComplete: () => {
-        const message: MessageFromIframe = {
-          type: "ANIMATION_DONE",
-        };
-        window.parent.postMessage(message, "http://localhost:3000/");
+        data.state.open = true
         resolve(); // ✅ Promesse résolue à la fin de l’animation
       },
     });

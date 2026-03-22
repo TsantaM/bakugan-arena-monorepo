@@ -2,6 +2,15 @@ import { GateCardsList, Slots, type portalSlotsTypeElement } from '@bakugan-aren
 import * as THREE from 'three'
 import { getSlotMeshPosition } from '../functions/get-slot-mesh-position'
 
+type SlotMeshUsersData = {
+    cardName: string | undefined,
+    state: {
+        open: boolean,
+        canceled: boolean,
+        blocked: boolean
+    }
+}
+
 const slotMesh = new THREE.Mesh(
     new THREE.PlaneGeometry(4, 6),
     new THREE.MeshStandardMaterial({
@@ -17,6 +26,15 @@ function createSlotMesh({ slot, plane, userId, gateCardMeshs }: { slot: portalSl
         })
     )
 
+    let data: SlotMeshUsersData = {
+        cardName: undefined,
+        state: {
+            blocked: false,
+            canceled: false,
+            open: false
+        }
+    }
+
     const index = Slots.indexOf(slot.id)
     if (slot.portalCard !== null) {
         const card = GateCardsList.find((card) => card.key === slot.portalCard?.key)
@@ -24,20 +42,20 @@ function createSlotMesh({ slot, plane, userId, gateCardMeshs }: { slot: portalSl
         if (slot.state.open === true) {
             const texture = new THREE.TextureLoader().load(`./../images/cards/${card.image}`)
             mesh.material.map = texture
-            mesh.userData.cardName = card.name
-            mesh.userData.open = true
+            data.cardName = card.name
+            data.state.open = true
         } else {
             const texture = new THREE.TextureLoader().load(`./../images/cards/portal_card.png`)
             mesh.material.map = texture
             if (slot.portalCard.userId === userId) {
-                mesh.userData.cardName = card.name
-                mesh.userData.open = false
+                data.cardName = card.name
+                data.state.open = false
             }
         }
 
         if (slot.state.canceled === true) {
             mesh.material.color.set(0.1, 0.1, 0.1)
-            mesh.userData.isCanceled = true
+            data.state.canceled = true
         }
 
         gateCardMeshs.push(mesh)
@@ -51,10 +69,11 @@ function createSlotMesh({ slot, plane, userId, gateCardMeshs }: { slot: portalSl
     const position = getSlotMeshPosition({ index: index })
     mesh.position.set(position.x, position.y, position.z)
     mesh.name = slot.id
-    mesh.userData.isCanceled = false
-    mesh.userData.open = false
+    data.state.canceled = false
+    data.state.open = false
+    mesh.userData = data
     plane.add(mesh)
 
 }
 
-export { slotMesh, createSlotMesh }
+export { slotMesh, createSlotMesh, type SlotMeshUsersData }

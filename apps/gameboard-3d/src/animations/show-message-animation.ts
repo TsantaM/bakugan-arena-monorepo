@@ -31,7 +31,6 @@ export const newDialogBoxAnimation = (target: HTMLElement | null) => {
 export async function ShowMessageAnimation({ messages }: { messages: Message[] | undefined }) {
 
     if (!messages) return
-
     const previousDialogBox = document.getElementById('dialog-box')
     // removePreviousDialogBoxAnimation(previousDialogBox)
 
@@ -47,6 +46,7 @@ export async function ShowMessageAnimation({ messages }: { messages: Message[] |
     const dialog = document.getElementById('dialog-box')
 
     messages.forEach((message) => {
+        if(message.description) return
         const messageContainer = document.createElement('p')
         const textContent = message.userName ? `${message.userName} : ${message.text}` : `${message.text}`
         messageContainer.textContent = textContent

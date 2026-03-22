@@ -4,11 +4,10 @@ import * as THREE from 'three'
 import { PlaneMesh } from './meshes/plane.mesh'
 import { CreateBakuganHoverPreview, RemoveBakuganHoverPreview, type BakuganPreviewData } from './functions/create-bakugan-preview-hover'
 import { OnHoverGateCard } from './animations/show-message-animation'
-import { type ActivePlayerActionRequestType, type portalSlotsTypeElement, type roomStateType } from '@bakugan-arena/game-data'
+import { type portalSlotsTypeElement, type roomStateType } from '@bakugan-arena/game-data'
 import { InitGameState } from './functions/init-game-state'
 import { DragAndElimineAnimation } from './animations/drag-and-elimine-animation'
 import { ReviveBakuganAnimation } from './animations/revive-animation'
-import { TurnActionInterfaceBuilder } from './turn-action-management/turn-interface-builder'
 
 const canvas = document.getElementById('gameboard-canvas')
 // const reload = document.getElementById("init-room")
@@ -33,7 +32,7 @@ const Slot2: portalSlotsTypeElement = {
             abilityBlock: false,
             assist: false,
             attribut: 'Haos',
-            currentPower: 500,
+            currentPower: 1500,
             family: 'tigrerra',
             image: 'tigrerra',
             key: 'tigrerra-haos',
@@ -46,7 +45,7 @@ const Slot2: portalSlotsTypeElement = {
             abilityBlock: false,
             assist: false,
             attribut: 'Darkus',
-            currentPower: 400,
+            currentPower: 2400,
             family: 'mantris',
             image: 'mantris',
             key: 'mantris-darkus',
@@ -150,98 +149,98 @@ const state: roomStateType = {
     ]
 }
 
-const request: ActivePlayerActionRequestType = {
-    target: 'ACTIVE_PLAYER',
-    actions: {
-        mustDo: [
-            {
-                type: "SELECT_GATE_CARD",
-                data: 
+// const request: ActivePlayerActionRequestType = {
+//     target: 'ACTIVE_PLAYER',
+//     actions: {
+//         mustDo: [
+//             {
+//                 type: "SELECT_GATE_CARD",
+//                 data: 
                     
-                    [{
-                        key: "mine-ghost",
-                        description: "Eh !",
-                        image: 'command-gate-card.png',
-                        name: 'Mine Ghost'
-                    }, {
-                        key: "mine-ghost",
-                        description: "Eh !",
-                        image: 'command-gate-card.png',
-                        name: 'Mine Ghost'
-                    }, {
-                        key: "mine-ghost",
-                        description: "Eh !",
-                        image: 'command-gate-card.png',
-                        name: 'Mine Ghost'
-                    }, {
-                        key: "mine-ghost",
-                        description: "Eh !",
-                        image: 'command-gate-card.png',
-                        name: 'Mine Ghost'
-                    }, {
-                        key: "mine-ghost",
-                        description: "Eh !",
-                        image: 'command-gate-card.png',
-                        name: 'Mine Ghost'
-                    }]
+//                     [{
+//                         key: "mine-ghost",
+//                         description: "Eh !",
+//                         image: 'command-gate-card.png',
+//                         name: 'Mine Ghost'
+//                     }, {
+//                         key: "mine-ghost",
+//                         description: "Eh !",
+//                         image: 'command-gate-card.png',
+//                         name: 'Mine Ghost'
+//                     }, {
+//                         key: "mine-ghost",
+//                         description: "Eh !",
+//                         image: 'command-gate-card.png',
+//                         name: 'Mine Ghost'
+//                     }, {
+//                         key: "mine-ghost",
+//                         description: "Eh !",
+//                         image: 'command-gate-card.png',
+//                         name: 'Mine Ghost'
+//                     }, {
+//                         key: "mine-ghost",
+//                         description: "Eh !",
+//                         image: 'command-gate-card.png',
+//                         name: 'Mine Ghost'
+//                     }]
                 
-            },
-            // {
-            //     type: 'SET_BAKUGAN',
-            //     data: {
-            //         bakugans: [{
-            //             key: 'hyranoid-darkus',
-            //             name: 'Hydranoid',
-            //             currentPower: 450,
-            //             attribut: 'Darkus',
-            //             image: 'hydranoid'
-            //         }],
-            //         setableSlots: ["slot-5"]
-            //     }
-            // },
-            // {
-            //     type: 'USE_ABILITY_CARD',
-            //     data: [
-            //         {
-            //             abilities: [{
-            //                 description: 'eh',
-            //                 key: 'scarlet-twister',
-            //                 image: 'ability_card_VENTUS',
-            //                 name: 'Blow Away'
-            //             }],
-            //             attribut: 'Ventus',
-            //             bakuganKey: 'dragonoid-pyrus',
-            //             slot: 'slot-3'
-            //         },
-            //         {
-            //             abilities: [{
-            //                 description: 'eh',
-            //                 key: 'blow-away',
-            //                 image: 'ability_card_VENTUS',
-            //                 name: 'Blow Away'
-            //             }],
-            //             attribut: 'Ventus',
-            //             bakuganKey: 'dragonoid-pyrus',
-            //             slot: 'slot-3'
-            //         },
-            //                             {
-            //             abilities: [{
-            //                 description: 'eh',
-            //                 key: 'scarlet-twister2',
-            //                 image: 'ability_card_VENTUS',
-            //                 name: 'Blow Away'
-            //             }],
-            //             attribut: 'Ventus',
-            //             bakuganKey: 'dragonoid-pyrus',
-            //             slot: 'slot-3'
-            //         },
-            //     ]
-            // }
-        ],
-        mustDoOne: [],
-        optional: []
-    }
-}
+//             },
+//             // {
+//             //     type: 'SET_BAKUGAN',
+//             //     data: {
+//             //         bakugans: [{
+//             //             key: 'hyranoid-darkus',
+//             //             name: 'Hydranoid',
+//             //             currentPower: 450,
+//             //             attribut: 'Darkus',
+//             //             image: 'hydranoid'
+//             //         }],
+//             //         setableSlots: ["slot-5"]
+//             //     }
+//             // },
+//             // {
+//             //     type: 'USE_ABILITY_CARD',
+//             //     data: [
+//             //         {
+//             //             abilities: [{
+//             //                 description: 'eh',
+//             //                 key: 'scarlet-twister',
+//             //                 image: 'ability_card_VENTUS',
+//             //                 name: 'Blow Away'
+//             //             }],
+//             //             attribut: 'Ventus',
+//             //             bakuganKey: 'dragonoid-pyrus',
+//             //             slot: 'slot-3'
+//             //         },
+//             //         {
+//             //             abilities: [{
+//             //                 description: 'eh',
+//             //                 key: 'blow-away',
+//             //                 image: 'ability_card_VENTUS',
+//             //                 name: 'Blow Away'
+//             //             }],
+//             //             attribut: 'Ventus',
+//             //             bakuganKey: 'dragonoid-pyrus',
+//             //             slot: 'slot-3'
+//             //         },
+//             //                             {
+//             //             abilities: [{
+//             //                 description: 'eh',
+//             //                 key: 'scarlet-twister2',
+//             //                 image: 'ability_card_VENTUS',
+//             //                 name: 'Blow Away'
+//             //             }],
+//             //             attribut: 'Ventus',
+//             //             bakuganKey: 'dragonoid-pyrus',
+//             //             slot: 'slot-3'
+//             //         },
+//             //     ]
+//             // }
+//         ],
+//         mustDoOne: [],
+//         optional: []
+//     }
+// }
 
 console.log(Slot2.bakugans[0])
 
@@ -411,6 +410,7 @@ if (canvas) {
         } else {
             if (hoveredSlot) {
                 document.getElementById('on-hover-gate-card')?.remove()
+                hoveredSlot = null
             }
         }
 
@@ -420,7 +420,7 @@ if (canvas) {
 
     InitGameState({ state: state, bakugansMeshs, gateCardMeshs, plane, scene, userId })
 
-    TurnActionInterfaceBuilder({ request: request })
+    // TurnActionInterfaceBuilder({ request: request })
 
     // ********************************** INIT TEST GAME STATE (END) ********************************** \\
 

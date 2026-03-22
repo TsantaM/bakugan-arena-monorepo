@@ -163,7 +163,7 @@ export function AdditionalRequestResolution({ request, camera, plane, socket, sc
                 }
                 clearTurnInterface()
                 bakugan?.material.color.set('white');
-                hoveredSlot?.userData.isCanceled ? hoveredSlot.material.color.set(0.1, 0.1, 0.1) : hoveredSlot?.material.color.set('white')
+                hoveredSlot?.userData.state.canceled ? hoveredSlot.material.color.set(0.1, 0.1, 0.1) : hoveredSlot?.material.color.set('white')
             }
 
             slotMouseMove = (event: MouseEvent) => {

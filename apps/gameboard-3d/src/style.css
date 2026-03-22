@@ -7,6 +7,11 @@
   src: url('/fonts/square_metall-7.ttf');
 }
 
+img {
+  -webkit-touch-callout: none !important;
+  user-select: none !important;
+}
+
 p {
   font-family: metal;
   color: whitesmoke;
@@ -14,6 +19,8 @@ p {
 
 body {
   overflow: hidden;
+  -webkit-touch-callout: none !important;
+  user-select: none !important;
 }
 
 /* * {
@@ -29,7 +36,9 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
+  -webkit-touch-callout: none !important;
+  user-select: none !important;
+  
   #gameboard-canvas {
     width: 100%;
     height: 100%;
@@ -259,10 +268,16 @@ body {
 
   p {
     color: white;
-    font-size: 2rem;
+    font-size: 1.25rem;
     line-height: 0;
     background: red;
     text-align: right;
+    justify-self: end;
+  }
+
+  .power-on-hover {
+    width: 100%;
+    font-size: 1rem;
   }
 }
 

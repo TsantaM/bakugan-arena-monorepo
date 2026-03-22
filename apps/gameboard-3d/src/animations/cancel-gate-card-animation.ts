@@ -32,7 +32,7 @@ function CancelGateCardAnimation({
         duration: 0.5,
         ease: 'power1.inOut',
         onComplete: () => {
-          mesh.userData.isCanceled = true
+          mesh.userData.state.canceled = true
         }
       }
     )

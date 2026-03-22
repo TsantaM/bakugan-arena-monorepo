@@ -75,6 +75,7 @@ export function CreateBakuganHoverPreview(
     attribut_image_container.appendChild(attribut_image)
 
     const power = document.createElement('p')
+    power.classList.add('power-on-hover')
     power.textContent = data.powerLevel.toString()
 
     power_container.appendChild(attribut_image_container)
