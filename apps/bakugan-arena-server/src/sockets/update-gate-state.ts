@@ -5,12 +5,25 @@ import { ActivePlayerActionRequestType, addSlotToSetBakugan, InactivePlayerActio
 import { turnActionUpdater } from "./turn-action";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { EmitMessage } from "../functions/emit-messages";
+import { CheckTurnPermissions } from "../functions/ckeck-turn-permissions";
 
 export const socketUpdateGateState = (io: Server, socket: Socket) => {
     socket.on('set-gate', ({ roomId, gateId, slot, userId }: setGateCardProps) => {
         const state = Battle_Brawlers_Game_State.find((s) => s?.roomId === roomId)
         if (!state) return
         if (state.status.finished === true) return
+
+        const checker = CheckTurnPermissions({
+            roomState: state,
+            userId: userId,
+            response: {
+                type:  slot ? "SET_GATE_CARD_ACTION" : 'SELECT_GATE_CARD',
+                gateId: gateId,
+                slot: slot as slots_id | undefined
+            }
+        })
+
+        if(!checker) return
 
         clearAnimationsInRoom(roomId)
 
