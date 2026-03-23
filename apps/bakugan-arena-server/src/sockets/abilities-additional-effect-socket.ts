@@ -57,6 +57,14 @@ export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
                 if (!activeSocket) return
                 if (!Battle_Brawlers_Game_State[roomIndex]) return
 
+                if (!roomData.battleState.battleInProcess || roomData.battleState.paused) {
+                    const newState1 = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "SET_BAKUGAN")
+                    Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState1 as ActivePlayerActionRequestType
+
+                    const newState2 = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "SET_GATE_CARD_ACTION")
+                    Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState2 as ActivePlayerActionRequestType
+                }
+
                 const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "USE_ABILITY_CARD")
                 Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
 
@@ -84,23 +92,6 @@ export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
                 if (merged.length <= 0) return
                 io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
             }
-
-
-            // const { battleInProcess, paused, slot } = Battle_Brawlers_Game_State[roomIndex].battleState
-            // if (battleInProcess && !paused && slot !== null) {
-            //     turnActionUpdater({
-            //         io: io,
-            //         roomId: roomId,
-            //         userId: resolution.userId,
-            //         updateBattleState: false
-            //     })
-            // } else {
-            //     const activePlayer = roomData.players.find((player) => player.userId === roomData.turnState.turn)?.userId
-            //     if (!activePlayer) return
-            //     const activePlayerSocket = roomData.connectedsUsers.get(activePlayer)
-            //     if (!activePlayerSocket) return
-            //     io.to(activePlayerSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
-            // }
 
         }
 

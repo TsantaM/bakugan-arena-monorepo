@@ -1,7 +1,7 @@
 import { AbilityCardFailed, CancelGateCardDirectiveAnimation, ComeBackBakuganDirectiveAnimation, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective } from "../../function/index.js";
 import { AbilityCardsActions, bakuganOnSlot, type abilityCardsType } from "../../type/type-index.js";
 import { GateCardsList } from "../gate-gards.js";
-import { StandardCardsImages } from "../../store/store-index.js";
+import { Slots, StandardCardsImages } from "../../store/store-index.js";
 import RemoveRenfortAnimationDirective from "../../function/create-animation-directives/remove-renfort-animation-directive.js";
 
 export const MurDeFeu: abilityCardsType = {
@@ -230,7 +230,34 @@ export const RetroAction: abilityCardsType = {
         }
 
         return null
-    }
+    },
+    activationConditions({ roomState, userId }) {
+        if (!roomState) return false
+        const { battleInProcess, paused } = roomState.battleState
+        if (!battleInProcess) return false
+        if (battleInProcess && paused) return false
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+        const { battleInProcess, paused, slot } = roomState.battleState
+        if (!battleInProcess) return false
+        if (battleInProcess && paused) return false
+        if (slot === null) return false
+
+        const slotOfBakugan = roomState.protalSlots[Slots.indexOf(slot)]
+        if (slotOfBakugan.portalCard === null) return false
+        if (slotOfBakugan.portalCard.userId === bakugan.userId) return false
+        if (!slotOfBakugan.state.open) return false
+        if (slotOfBakugan.state.canceled) return false
+
+        const card = GateCardsList.find((c) => c.key === slotOfBakugan.portalCard?.key)
+        if (!card) return false
+        if (!card.onCanceled) return false
+
+        return true
+    },
 }
 
 export const TourbillonDeFeu: abilityCardsType = {

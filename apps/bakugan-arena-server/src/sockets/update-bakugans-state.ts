@@ -5,10 +5,24 @@ import { AbilityCardsList, ActivePlayerActionRequestType, attribut, BakuganList,
 import { turnActionUpdater } from "./turn-action";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { EmitMessage } from "../functions/emit-messages";
+import { CheckTurnPermissions } from "../functions/ckeck-turn-permissions";
 
 
 export function AddAbilities({ roomState, request, bakugan, slot, userId, attribut }: { roomState: stateType, request: ActivePlayerActionRequestType | InactivePlayerActionRequestType, bakugan: string, slot: slots_id, userId: string, attribut: attribut }) {
     if (!roomState) return
+
+    const checker = CheckTurnPermissions({
+        roomState: roomState,
+        userId: userId,
+        response: {
+            type: "SET_BAKUGAN",
+            bakuganKey: bakugan,
+            slot: slot
+        }
+    })
+
+    if (!checker) return
+
     const activePlayer = roomState.decksState.find((deck) => deck.userId === roomState.turnState.turn)
 
     let selectAbilitiesResult

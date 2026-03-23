@@ -34,6 +34,8 @@ import { ReviveBakuganAnimation } from "../animations/revive-animation"
 
 let animationQueue: AnimationDirectivesTypes[] = []
 let isProcessingAnimations = false
+let currentAnimationPromise: Promise<void> = Promise.resolve();
+
 
 async function processAnimationQueue(userId: string,
     camera: THREE.PerspectiveCamera,
@@ -434,14 +436,10 @@ export function registerSocketHandlers(
 
     })
 
-    socket.on("turn-action-request", (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
-        // const actions = [
-        //     request.actions.mustDo,
-        //     request.actions.mustDoOne,
-        //     request.actions.optional
-        // ].flat()
+    socket.on("turn-action-request", async (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
 
-        // console.log(actions.length, request.target)
+        // attendre que les animations en cours soient terminées
+        await currentAnimationPromise;
 
         TurnActionBuilder({
             request,
@@ -453,13 +451,12 @@ export function registerSocketHandlers(
             socket: socket
         })
 
-
     }
     )
 
     socket.on("animations", (animations: AnimationDirectivesTypes[]) => {
         animationQueue.push(...animations)
-        processAnimationQueue(userId, camera, scene, plane, bakugansMeshs, gateCardMeshs)
+        currentAnimationPromise = processAnimationQueue(userId, camera, scene, plane, bakugansMeshs, gateCardMeshs)
     })
 
     socket.on("ability-additional-request", (request: AbilityCardsActionsRequestsType) => {

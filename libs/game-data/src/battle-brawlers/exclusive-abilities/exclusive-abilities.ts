@@ -6,6 +6,7 @@ import { SiegeAquos } from "../bakugans/siege.js"
 import { SirenoidAquos } from "../bakugans/sirenoid.js"
 import { SkyressVentus } from "../bakugans/skyress.js"
 import { TentaclearHaos } from "../bakugans/tentacleer.js"
+import { TigrerraHaos } from "../bakugans/tigrerra.js"
 import { GateCardsList } from "../gate-gards.js"
 
 export const OmbreBleue: exclusiveAbilitiesType = {
@@ -76,7 +77,7 @@ export const ChambreDeGravite: exclusiveAbilitiesType = {
                     bakugans.forEach((b) => {
 
                         if (b.currentPower < user.currentPower) {
-                            
+
                             const targetSlot = roomState.protalSlots[Slots.indexOf(b.slot_id)]
                             DragAndElimineBakuganEffect({
                                 roomState: roomState,
@@ -85,7 +86,7 @@ export const ChambreDeGravite: exclusiveAbilitiesType = {
                                 initialSlot: targetSlot
                             })
 
-                        } 
+                        }
                         // else {
 
                         //     const resolution: resolutionType = {
@@ -110,7 +111,7 @@ export const ChambreDeGravite: exclusiveAbilitiesType = {
 
                 }
 
-                CheckBattle({roomState})
+                CheckBattle({ roomState })
             }
         }
 
@@ -119,8 +120,11 @@ export const ChambreDeGravite: exclusiveAbilitiesType = {
     activationConditions({ roomState, userId }) {
         if (!roomState) return false
         if (roomState.battleState.battleInProcess) return false
-        const bakugans = roomState.protalSlots.filter((slot) => slot.bakugans.length > 0).map((slot) => slot.bakugans).flat()
-        if (bakugans.length < 2) return false
+        const bakugans = roomState.protalSlots
+            .flatMap((slot) => slot.bakugans)
+            .filter((bakugan) => bakugan.userId !== userId)
+
+        if (bakugans.length === 0) return false
         return true
     },
     canUse({ roomState, bakugan }) {
@@ -129,7 +133,15 @@ export const ChambreDeGravite: exclusiveAbilitiesType = {
         if (bakugan.key !== HydranoidDarkus.key) return false
         const slot = roomState.protalSlots[Slots.indexOf(bakugan.slot_id)]
         const adjacentSlots = getAdjacentsSlots({ slot: slot, roomState: roomState })
-        const slotsWithOpponent = adjacentSlots.filter((slot) => slot.bakugans.length > 0 && slot.bakugans.some((b) => b.userId !== bakugan.userId))
+        const slotsWithOpponent = adjacentSlots.filter(
+            (slot) =>
+                slot.bakugans.length > 0 &&
+                slot.bakugans.some(
+                    (b) =>
+                        b.userId !== bakugan.userId &&
+                        b.currentPower < bakugan.currentPower
+                )
+        )
 
         if (slotsWithOpponent.length === 0) return false
 
@@ -260,7 +272,36 @@ export const SabreDeLaMort: exclusiveAbilitiesType = {
             }
         }
         return null
-    }
+    },
+    activationConditions({ roomState, userId }) {
+        if (!roomState) return false
+        const { battleInProcess, paused } = roomState.battleState
+
+        if (!battleInProcess) return false
+        if (battleInProcess && paused) return false
+
+        const userDeck = roomState.decksState.find((deck) => deck.userId === userId)
+        if (!userDeck) return false
+
+        const tigrerra = userDeck.bakugans.find((bakugan) => bakugan?.bakuganData !== undefined && bakugan.bakuganData.key === TigrerraHaos.key)
+
+        if (!tigrerra) return false
+        if (tigrerra.bakuganData.elimined) return false
+        if (tigrerra.bakuganData.onDomain) return false
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+        const { battleInProcess, paused, slot } = roomState.battleState
+
+        if (!battleInProcess) return false
+        if (battleInProcess && paused) return false
+
+        if (bakugan.slot_id !== slot) return false
+
+        return true
+    },
 }
 
 export const VentViolentDeNobelesseVerte: exclusiveAbilitiesType = {
@@ -325,7 +366,7 @@ export const AntiMuse: exclusiveAbilitiesType = {
                     bakugans.forEach((b) => {
 
                         if (b.currentPower < user.currentPower) {
-                            
+
                             const targetSlot = roomState.protalSlots[Slots.indexOf(b.slot_id)]
                             DragAndElimineBakuganEffect({
                                 roomState: roomState,
@@ -334,12 +375,12 @@ export const AntiMuse: exclusiveAbilitiesType = {
                                 initialSlot: targetSlot
                             })
 
-                        } 
+                        }
                     })
 
                 }
 
-                CheckBattle({roomState})
+                CheckBattle({ roomState })
             }
         }
 
@@ -358,7 +399,17 @@ export const AntiMuse: exclusiveAbilitiesType = {
         if (bakugan.key !== SirenoidAquos.key) return false
         const slot = roomState.protalSlots[Slots.indexOf(bakugan.slot_id)]
         const adjacentSlots = getAdjacentsSlots({ slot: slot, roomState: roomState })
-        const slotsWithOpponent = adjacentSlots.filter((slot) => slot.bakugans.length > 0 && slot.bakugans.some((b) => b.userId !== bakugan.userId))
+        const slotsWithOpponent = adjacentSlots.filter(
+            (slot) =>
+                slot.bakugans.length > 0 &&
+                slot.bakugans.some(
+                    (b) =>
+                        b.userId !== bakugan.userId &&
+                        b.currentPower < bakugan.currentPower
+                )
+        )
+
+        if (slotsWithOpponent.length === 0) return false
 
         if (slotsWithOpponent.length === 0) return false
 
@@ -455,33 +506,7 @@ export const VisageDuChagrin: exclusiveAbilitiesType = {
             }
         }
         return null
-    },
-    onWin: ({ roomState, userId }) => {
-        if(!roomState) return
-        const deckToUpdate = roomState?.decksState.find((d) => d.userId === userId)
-        if (deckToUpdate) {
-            deckToUpdate.bakugans.filter((b) => b && b.bakuganData.elimined === true).forEach((b) => {
-                if(!b) return
-                b?.bakuganData.elimined ? b.bakuganData.elimined = false : b?.bakuganData.elimined
-
-                const animation: AnimationDirectivesTypes = {
-                    type: "REVIVE_BAKUGAN",
-                    resolve: false,
-                    data: {
-                        bakuganKey: b?.bakuganData.key,
-                        bakuganUserId: userId,
-                    },
-                    message: [{
-                        text: `${b.bakuganData.name} revived`,
-                        turn: roomState.turnState.turnCount,
-                    }]
-                } 
-
-                roomState.animations.push(animation)
-
-            })
-        }
-    },
+    }
 }
 
 export const VisageDeLaFureur: exclusiveAbilitiesType = {
@@ -557,27 +582,7 @@ export const VisageDeJoie: exclusiveAbilitiesType = {
         }
 
         return null
-    },
-    onWin: ({ roomState, userId }) => {
-        const deckToUpdate = roomState?.decksState.find((d) => d.userId === userId)
-        const player = roomState?.players.find((p) => p.userId === userId)
-        if (deckToUpdate) {
-            deckToUpdate.abilities.filter((a) => a.used === true).forEach((a) => {
-                a.used = false
-            })
-            deckToUpdate.bakugans.forEach((b) => {
-                const abilities = b?.excluAbilitiesState.filter((a) => a.used === true)
-                if (abilities) {
-                    abilities.forEach((a) => {
-                        a.used = false
-                    })
-                }
-            })
-        }
-        if (player) {
-            player.usable_abilitys = 3
-        }
-    },
+    }
 }
 
 export const GaucheGigantesque: exclusiveAbilitiesType = {
@@ -828,11 +833,11 @@ export const Marionnette: exclusiveAbilitiesType = {
         return true
     },
     canUse({ roomState, bakugan }) {
-        if(!roomState) return false
-        if(bakugan.family !== 'Mantris') return false
+        if (!roomState) return false
+        if (bakugan.family !== 'Mantris') return false
 
         const slot = roomState.protalSlots[Slots.indexOf(bakugan.slot_id)]
-        if(slot.bakugans.length > 1) return false
+        if (slot.bakugans.length > 1) return false
 
         return true
     },
@@ -1586,7 +1591,7 @@ export const ForceDattraction: exclusiveAbilitiesType = {
     maxInDeck: 2,
     description: `Attract one Bakugan from another Gate Card to user's Gate Card`,
     extraInputs: ['drag-bakugan'],
-    usable_in_neutral: false,
+    usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const animation = AbilityCardFailed({ card: ForceDattraction.name })

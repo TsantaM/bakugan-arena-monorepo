@@ -694,7 +694,8 @@ body {
 
   .stack-container {
     position: relative;
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
     gap: 1vw;
     height: 15vh;
     aspect-ratio: 2/3;
@@ -771,26 +772,6 @@ body {
       transform: translateY(-25%);
     }
   }
-
-  /* .card-selecter:nth-child(2) {
-    transform: translateX(50%);
-  }
-
-  .card-selecter:nth-child(3) {
-    transform: translateX(100%);
-  }
-
-  .card-selecter:nth-child(4) {
-    transform: translateX(150%);
-  }
-
-  .card-selecter:nth-child(5) {
-    transform: translateX(200%);
-  }
-
-  .card-selecter:nth-child(6) {
-    transform: translateX(250%);
-  } */
 
   .open-gate-card-button {
     padding: 1vw;

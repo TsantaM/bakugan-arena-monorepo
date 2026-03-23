@@ -12,6 +12,7 @@ import Section from "@/components/ui/section"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import RoomsOfPlayer from "./rooms-of-player"
+import WatchBattle from "./watch-battle"
 
 
 export default function Lobby() {
@@ -40,6 +41,7 @@ export default function Lobby() {
                     </CardHeader>
                     <CardContent className="flex flex-col gap-3">
                         <Button asChild className="w-full" variant="outline" ><Link href={"/dashboard/deck-builder"}>Deck Builder</Link></Button>
+                        <WatchBattle />
                         <ChalengeSomeone />
                         <OnChalengePopUp />
                     </CardContent>

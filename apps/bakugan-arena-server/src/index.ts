@@ -22,6 +22,7 @@ import { ChalengeAcceptSocket, ChalengeSomeoneSocket } from "./sockets/chalenge-
 import { getUsersRooms } from "./sockets/get-users-rooms";
 import { CheckActivitiesSocket } from "./sockets/check-activities-socket";
 import { CancelOpponentResearch } from "./sockets/cancel-opponent-research";
+import { WatchBattleSocket } from "./sockets/watch-battle-socket";
 
 
 
@@ -44,6 +45,7 @@ io.on('connection', (socket) => {
     }
 
     getUsersRooms(io, socket),
+    WatchBattleSocket(io, socket),
     ChalengeSomeoneSocket(io, socket),
     ChalengeAcceptSocket(io, socket),
     setupSearchOpponentSocket(io, socket)

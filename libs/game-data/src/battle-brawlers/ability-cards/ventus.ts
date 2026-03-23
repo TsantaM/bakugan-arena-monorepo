@@ -1,5 +1,6 @@
 import { AbilityCardFailed, CancelGateCardDirectiveAnimation, CheckBattleStillInProcess, ComeBackBakuganDirectiveAnimation, dragBakuganToUserSlot, moveBakuganToSelectedSlot, moveSelectedBakugan, MoveToAnotherSlotDirectiveAnimation, OpenGateCardActionRequest } from "../../function/index.js";
 import { StandardCardsImages } from "../../store/ability-cards-images.js";
+import { Slots } from "../../store/slots.js";
 import type { AbilityCardsActions, abilityCardsType, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, slots_id } from "../../type/type-index.js";
 import { GateCardsList } from "../gate-gards.js";
 
@@ -86,7 +87,7 @@ export const TornadeChaosTotal: abilityCardsType = {
                     animations: roomState.animations,
                     slot: slotOfGate,
                     turn: roomState.turnState.turnCount
-                    
+
                 })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
@@ -97,7 +98,34 @@ export const TornadeChaosTotal: abilityCardsType = {
         }
 
         return null
-    }
+    },
+    activationConditions({ roomState, userId }) {
+        if (!roomState) return false
+        const { battleInProcess, paused } = roomState.battleState
+        if (!battleInProcess) return false
+        if (battleInProcess && paused) return false
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+        const { battleInProcess, paused, slot } = roomState.battleState
+        if (!battleInProcess) return false
+        if (battleInProcess && paused) return false
+        if (slot === null) return false
+
+        const slotOfBakugan = roomState.protalSlots[Slots.indexOf(slot)]
+        if (slotOfBakugan.portalCard === null) return false
+        if (slotOfBakugan.portalCard.userId === bakugan.userId) return false
+        if (!slotOfBakugan.state.open) return false
+        if (slotOfBakugan.state.canceled) return false
+
+        const card = GateCardsList.find((c) => c.key === slotOfBakugan.portalCard?.key)
+        if (!card) return false
+        if (!card.onCanceled) return false
+
+        return true
+    },
 }
 
 export const SouffleTout: abilityCardsType = {
