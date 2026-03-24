@@ -7,6 +7,7 @@ import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { ClearDomain } from "../functions/clear-domain";
 import { UpdatePlayerTimer } from "../functions/start-player-timer";
 import { EmitMessage } from "../functions/emit-messages";
+import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
 
 export function turnActionUpdater({ roomId, userId, io, updateBattleState = true }: { roomId: string, userId: string, io: Server, updateBattleState?: boolean }) {
     const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
@@ -101,11 +102,19 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
     clearAnimationsInRoom(roomId)
 
     if (activeSocket && !roomData.status.finished) {
+
+        const checker = CheckTurnActionRequest({ roomState: roomData, userId: userId })
+        if (!checker) return
+
         const request = roomData.ActivePlayerActionRequest
         io.to(activeSocket.gameboardSocket).emit('turn-action-request', request)
     }
 
     if (inactiveSocket && !roomData.status.finished) {
+
+        const checker = CheckTurnActionRequest({ roomState: roomData, userId: userId })
+        if (!checker) return
+
         const request = roomData.InactivePlayerActionRequest
         const merged = [
             request.actions.mustDo,

@@ -511,3 +511,111 @@ export function registerSocketHandlers(
 
     })
 }
+
+
+export function registerSocketHandlersViewers(socket: Socket,
+    ctx: {
+        player1: string
+        roomId: string
+        camera: THREE.PerspectiveCamera
+        scene: THREE.Scene
+        plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>
+        light: THREE.AmbientLight,
+        bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[],
+        gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[]
+    }) {
+
+    const { camera, plane, scene, light, bakugansMeshs, gateCardMeshs, player1 } = ctx
+
+    socket.off() // 💣 purge TOTALE des anciens listeners
+
+    socket.on("init-room-state", (state: roomStateType) => {
+        // 👉 ton code existant ici (sans socket.on)
+
+        const texture = new THREE.TextureLoader().load('/images/cards/empty-gate-slot.jpg', () => console.log('texture chargée'), undefined, (err) => console.log(err))
+
+        texture.wrapS = THREE.RepeatWrapping
+        texture.wrapT = THREE.RepeatWrapping
+
+        const planeSize = 500
+
+        texture.repeat.set(
+            planeSize / 4,
+            planeSize / 6
+        )
+
+        // ajustement fin pour alignement parfait
+        texture.offset.set(
+            0,
+            0
+        )
+
+        const color = new THREE.Color(0x226D80)
+
+        const bgPlane = new THREE.Mesh(
+            new THREE.PlaneGeometry(planeSize, planeSize),
+            new THREE.MeshBasicMaterial({
+                map: texture,
+                side: THREE.DoubleSide
+            })
+        )
+
+        bgPlane.rotation.x = -Math.PI / 2
+        bgPlane.position.y = -0.01
+        bgPlane.position.z = 2
+        bgPlane.position.x = 4
+        bgPlane.material.color = color
+        // bgPlane.material.transparent = true
+        // bgPlane.material.opacity = 0.75
+
+        plane.clear()
+        scene.clear()
+        scene.add(bgPlane)
+        scene.add(plane)
+        scene.add(light)
+        scene.add(camera)
+
+        document.getElementById('left-bakugan-previews-container')?.remove()
+        document.getElementById('right-bakugan-previews-container')?.remove()
+
+        camera.position.set(3, 5, 8)
+        InitGameState({ state: state, bakugansMeshs, gateCardMeshs, plane, scene, userId: player1 })
+
+        console.log(texture)
+    })
+
+    socket.on("animations", (animations: AnimationDirectivesTypes[]) => {
+        animationQueue.push(...animations)
+        currentAnimationPromise = processAnimationQueue(player1, camera, scene, plane, bakugansMeshs, gateCardMeshs)
+    })
+
+    socket.on('player-timer', (timer: { userId: string, remaining: number }) => {
+        const { userId: user, remaining } = timer
+        // console.log(`${user}: ${remaining}`)
+        dayjs.extend(duration);
+        dayjs.extend(relativeTime);
+        const d = dayjs.duration(remaining, 'seconds');
+        const time = `${String(d.minutes()).padStart(2, "0")}:${String(d.seconds()).padStart(2, "0")}`;
+
+        // console.log(`${user} : ${time}`)
+
+        if (user === player1) {
+            const timer = document.getElementById('left-timer')
+            if (!timer) return
+            timer.textContent = time
+        } else {
+            const timer = document.getElementById('right-timer')
+            if (!timer) return
+            timer.textContent = time
+        }
+
+    })
+
+    socket.on('game-finished', (message: Message) => {
+        clearTurnInterface()
+        EndGameMessage({
+            message: message
+        })
+
+    })
+}

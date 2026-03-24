@@ -3,6 +3,7 @@ import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-s
 import { initRoomState } from "../functions/init-game-room"
 import { CreateActionRequestFunction, Message } from "@bakugan-arena/game-data"
 import { SendAllMessages } from "../functions/emit-messages"
+import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions"
 
 
 const roomState = ({ roomId }: { roomId: string }) => {
@@ -49,6 +50,9 @@ export const socketGetRoomState = (io: Server, socket: Socket) => {
             const isActivePlayer = state.turnState.turn === userId
             const isInactivePlayer =
                 state.turnState.previous_turn === userId
+
+            const checker = CheckTurnActionRequest({ roomState: state, userId: userId })
+            if (!checker) return
 
             if (isActivePlayer) {
                 const request = state.ActivePlayerActionRequest
@@ -124,14 +128,17 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
                     socket.emit('ability-additional-request', abilityRequest)
                     return
                 }
-            /**
-             * 2️⃣ Turn action request
-             * -> déterminer si le joueur est actif ou non
-             */
+                /**
+                 * 2️⃣ Turn action request
+                 * -> déterminer si le joueur est actif ou non
+                 */
                 const isActivePlayer = roomData.turnState.turn === userId
                 const isInactivePlayer =
                     roomData.turnState.previous_turn === userId
                 const turn = roomData.turnState.turnCount
+
+                const checker = CheckTurnActionRequest({ roomState: roomData, userId: userId })
+                if (!checker) return
 
                 if (isActivePlayer) {
                     const request = roomData.ActivePlayerActionRequest

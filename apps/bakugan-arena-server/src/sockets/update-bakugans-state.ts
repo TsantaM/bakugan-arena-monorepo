@@ -6,6 +6,7 @@ import { turnActionUpdater } from "./turn-action";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { EmitMessage } from "../functions/emit-messages";
 import { CheckTurnPermissions } from "../functions/ckeck-turn-permissions";
+import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
 
 
 export function AddAbilities({ roomState, request, bakugan, slot, userId, attribut }: { roomState: stateType, request: ActivePlayerActionRequestType | InactivePlayerActionRequestType, bakugan: string, slot: slots_id, userId: string, attribut: attribut }) {
@@ -129,6 +130,9 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
                 attribut: bakugan.attribut
             })
 
+            const checker = CheckTurnActionRequest({ roomState: state, userId: userId })
+            if (!checker) return
+
             const merged = [Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
             if (merged.length > 0) {
                 io.to(activeSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
@@ -159,6 +163,10 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
             })
 
             const merged = [Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.optional].flat()
+
+            const checker = CheckTurnActionRequest({ roomState: state, userId: userId })
+            if (!checker) return
+
             if (merged.length <= 0) return
             io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
         }

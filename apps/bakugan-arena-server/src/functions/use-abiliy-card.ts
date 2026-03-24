@@ -4,6 +4,7 @@ import { Server } from "socket.io/dist";
 import { clearAnimationsInRoom } from "../sockets/clear-animations-socket";
 import { turnActionUpdater } from "../sockets/turn-action";
 import { EmitMessage } from "./emit-messages";
+import { CheckTurnActionRequest } from "./check-turn-action-request-permissions";
 
 export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganKey, io }: useAbilityCardProps & { io: Server }) => {
     // FR: On récupère les données de la salle en cours avec son roomId
@@ -187,6 +188,10 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
 
 
             if (state.turnState.turn === userId) {
+
+                const checker = CheckTurnActionRequest({ roomState: state, userId: userId })
+                if (!checker) return
+
                 const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
                 if (roomIndex === -1) return
                 if (!activeSocket) return
@@ -214,6 +219,10 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
             }
 
             if (state.turnState.turn !== userId) {
+
+                const checker = CheckTurnActionRequest({ roomState: state, userId: userId })
+                if (!checker) return
+
                 const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
                 if (roomIndex === -1) return
                 if (!Battle_Brawlers_Game_State[roomIndex]) return
@@ -239,6 +248,10 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
             animations.forEach((animation) => EmitMessage({ roomState: state, animation, io }))
 
             if (state.turnState.turn === userId) {
+
+                const checker = CheckTurnActionRequest({ roomState: state, userId: userId })
+                if (!checker) return
+
                 const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
                 if (roomIndex === -1) return
                 if (!activeSocket) return
@@ -258,6 +271,10 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
             }
 
             if (state.turnState.turn !== userId) {
+
+                const checker = CheckTurnActionRequest({ roomState: state, userId: userId })
+                if (!checker) return
+
                 const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
                 if (roomIndex === -1) return
                 if (!Battle_Brawlers_Game_State[roomIndex]) return

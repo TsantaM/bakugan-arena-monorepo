@@ -6,6 +6,7 @@ import { turnActionUpdater } from "./turn-action";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { EmitMessage } from "../functions/emit-messages";
 import { CheckTurnPermissions } from "../functions/ckeck-turn-permissions";
+import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
 
 export const socketUpdateGateState = (io: Server, socket: Socket) => {
     socket.on('set-gate', ({ roomId, gateId, slot, userId }: setGateCardProps) => {
@@ -17,13 +18,13 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
             roomState: state,
             userId: userId,
             response: {
-                type:  slot ? "SET_GATE_CARD_ACTION" : 'SELECT_GATE_CARD',
+                type: slot ? "SET_GATE_CARD_ACTION" : 'SELECT_GATE_CARD',
                 gateId: gateId,
                 slot: slot as slots_id | undefined
             }
         })
 
-        if(!checker) return
+        if (!checker) return
 
         clearAnimationsInRoom(roomId)
 
@@ -96,6 +97,10 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
                 const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "SET_GATE_CARD_ACTION")
                 addSlotToSetBakugan(slot as slots_id, newState)
                 SetBakuganActionRequest({ roomState: state })
+
+                const checker = CheckTurnActionRequest({ roomState: state, userId: userId })
+                if (!checker) return
+
                 Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
                 io.to(activeSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
 
@@ -110,6 +115,10 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
                 addSlotToSetBakugan(slot as slots_id, newState)
                 Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest = newState as InactivePlayerActionRequestType
                 const merged = [Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
+
+                const checker = CheckTurnActionRequest({ roomState: state, userId: userId })
+                if (!checker) return
+
                 if (merged.length <= 0) return
                 io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
             }

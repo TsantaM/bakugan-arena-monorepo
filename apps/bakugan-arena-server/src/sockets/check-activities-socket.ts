@@ -1,6 +1,7 @@
 import { Server, Socket } from "socket.io/dist";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { CreateActionRequestFunction } from "@bakugan-arena/game-data";
+import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
 
 export function CheckActivitiesSocket(io: Server, socket: Socket) {
     socket.on('check-activities', ({ userId, roomId }: { userId: string, roomId: string }) => {
@@ -43,6 +44,10 @@ export function CheckActivitiesSocket(io: Server, socket: Socket) {
                 CreateActionRequestFunction({ roomState: roomData })
                 const activeSocket = roomData.connectedsUsers.get(roomData.turnState.turn)
                 const inactiveSocket = roomData.connectedsUsers.get(roomData.turnState.previous_turn || '')
+
+                const checker = CheckTurnActionRequest({ roomState: roomData, userId: userId })
+                if (!checker) return
+
                 if (!activeSocket) return
                 io.to(activeSocket.gameboardSocket).emit('turn-action-request', activeRequest)
                 if (!inactiveSocket) return

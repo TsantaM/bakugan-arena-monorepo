@@ -4,6 +4,7 @@ import { AbilityCardsList, ActivePlayerActionRequestType, ExclusiveAbilitiesList
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { turnActionUpdater } from "./turn-action";
 import { EmitMessage } from "../functions/emit-messages";
+import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
 
 export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
     socket.on('ability-additional-request', (resolution: resolutionType) => {
@@ -52,6 +53,7 @@ export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
             const inactiveSocket = roomData.connectedsUsers.get(roomData.turnState.previous_turn || '')
 
             if (roomData.turnState.turn === resolution.userId) {
+
                 const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
                 if (roomIndex === -1) return
                 if (!activeSocket) return
@@ -69,6 +71,10 @@ export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
                 Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
 
                 const merged = [Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
+
+                const checker = CheckTurnActionRequest({ roomState: roomData, userId: resolution.userId })
+                if (!checker) return
+
                 if (merged.length > 0) {
                     io.to(activeSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
                 } else {
@@ -87,6 +93,8 @@ export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
                 const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest, "USE_ABILITY_CARD")
                 Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest = newState as InactivePlayerActionRequestType
 
+                const checker = CheckTurnActionRequest({ roomState: roomData, userId: resolution.userId })
+                if (!checker) return
 
                 const merged = [Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.optional].flat()
                 if (merged.length <= 0) return

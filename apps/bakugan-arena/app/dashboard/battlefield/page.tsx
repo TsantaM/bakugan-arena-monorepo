@@ -10,7 +10,7 @@ type PageProps = {
 
 export default async function BattleField({ searchParams }: PageProps) {
     const user = await getUser()
-    const {id: roomId} = await searchParams
+    const { id: roomId } = await searchParams
 
     const RoomData = await RoomDataAction(roomId)
 
@@ -18,11 +18,17 @@ export default async function BattleField({ searchParams }: PageProps) {
         unauthorized()
     }
 
+    if (!RoomData) return
+    const currentPlayer = RoomData.find((d) => d.player.id === user.id)
 
-    const player = RoomData?.find((d) => d.player.id === user.id)
-    const opponent = RoomData?.find((d) => d.player.id != user.id)
+    const isPlayer = !!currentPlayer
 
-    return <BattleFieldPage player={player} opponent={opponent} roomId={roomId} userId={user.id} />
+    const player = isPlayer ? currentPlayer : RoomData[0]
+    const opponent = isPlayer
+        ? RoomData.find((d) => d.player.id !== user.id)
+        : RoomData[1]
+
+    return <BattleFieldPage player={player} opponent={opponent} roomId={roomId} userId={user.id} isPlayer={isPlayer}/>
 
 }
 

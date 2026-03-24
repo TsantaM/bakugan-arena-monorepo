@@ -26,11 +26,12 @@ type BattleFieldPageProps = {
     player: player,
     opponent: player,
     roomId: string,
-    userId: string
+    userId: string,
+    isPlayer: boolean
 }
 
 
-export default function BattleFieldPage({ player, opponent, roomId, userId }: BattleFieldPageProps) {
+export default function BattleFieldPage({ player, opponent, roomId, userId, isPlayer }: BattleFieldPageProps) {
 
     const socket = useSocketStore((state) => state.socket)
 
@@ -53,7 +54,13 @@ export default function BattleFieldPage({ player, opponent, roomId, userId }: Ba
     const opponentData = opponent?.player
     const GAMEBOARD_URL = process.env.NEXT_PUBLIC_3D_GAMEBOARD_URL
     const iframeRef = useRef<HTMLIFrameElement>(null)
-    const link = `${GAMEBOARD_URL}/?roomId=${roomId}&userId=${userId}&parentSocket=${socketId}&userImage=${playerData?.image ? playerData?.image : undefined}&opponentImage=${opponentData?.image ? opponentData?.image : undefined}`
+
+    const playerLink = `${GAMEBOARD_URL}/?roomId=${roomId}&userId=${userId}&parentSocket=${socketId}&userImage=${playerData?.image ? playerData?.image : undefined}&opponentImage=${opponentData?.image ? opponentData?.image : undefined}`
+
+    const viewerLink = `${GAMEBOARD_URL}/viewer.html/?roomId=${roomId}&userId=${userId}&parentSocket=${socketId}&player1Id=${playerData?.id}&player1Image=${playerData?.image ?? undefined}&player2Id=${opponentData?.id}&player2Image=${opponentData?.image ?? undefined}`
+
+    const link = isPlayer ? playerLink : viewerLink
+    console.log(link)
 
     useEffect(() => {
         playRandomOST()
