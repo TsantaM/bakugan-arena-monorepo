@@ -1,6 +1,6 @@
 import { DragAndElimineBakuganEffect } from "../../function/index.js"
 import { AbilityCardFailed, CancelAbilityCard, CancelGateCardDirectiveAnimation, CheckBattle, CheckBattleStillInProcess, ComeBackBakuganEffect, dragBakuganToUserSlot, ElimineBakuganEffect, getAdjacentsSlots, getJuxtaposablesSlots, moveSelectedBakugan, MoveToAnotherSlotDirectiveAnimation, PowerChangeDirectiveAnumation, RemoveGateCardDirectiveAnimation, ResetSlot, SetBakuganAndAddRenfortAnimationDirective, Slots } from "../../index.js"
-import type { AbilityCardsActions, AnimationDirectivesTypes, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, exclusiveAbilitiesType, slots_id } from "../../type/type-index.js"
+import type { AbilityCardsActions, activateAbilities, AnimationDirectivesTypes, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, exclusiveAbilitiesType, slots_id } from "../../type/type-index.js"
 import { HydranoidDarkus } from "../bakugans/hydranoid.js"
 import { SiegeAquos } from "../bakugans/siege.js"
 import { SirenoidAquos } from "../bakugans/sirenoid.js"
@@ -152,7 +152,7 @@ export const ChambreDeGravite: exclusiveAbilitiesType = {
 export const DragonoidPlus: exclusiveAbilitiesType = {
     key: 'dragonoid-plus',
     name: 'Boosted Dragon',
-    description: `Adds 100 Gs to the user`,
+    description: `Adds 100 Gs to the user for the entire duration of the game, as long as the card is not canceled.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
@@ -164,6 +164,22 @@ export const DragonoidPlus: exclusiveAbilitiesType = {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
 
             if (user) {
+
+                const abilities = roomState.persistantAbilities
+                const lastId = abilities.length > 0 ? abilities[abilities.length - 1].id : 0
+                const newId = lastId + 1
+
+                const activateAbility: activateAbilities = {
+                    bakuganKey: bakuganKey,
+                    userId: userId,
+                    canceled: false,
+                    id: newId,
+                    key: DragonoidPlus.key
+                }
+
+                roomState.persistantAbilities.push(activateAbility)
+                console.log('after ability persistant', roomState.persistantAbilities)
+
                 user.currentPower += 100
                 PowerChangeDirectiveAnumation({
                     animations: roomState?.animations,
@@ -173,11 +189,51 @@ export const DragonoidPlus: exclusiveAbilitiesType = {
                     turn: roomState.turnState.turnCount
 
                 })
+
             }
         }
 
         return null
-    }
+    },
+    onUserSet({ roomState, bakuganKey, slot, userId }) {
+        if (!roomState) return
+
+        const slotOfUser = roomState.protalSlots.find((s) => s.id === slot)
+        if (!slotOfUser) return
+
+        const user = slotOfUser.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+        if (!user) return
+
+        user.currentPower += 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState?.animations,
+            bakugans: [user],
+            powerChange: 100,
+            malus: false,
+            turn: roomState.turnState.turnCount
+
+        })
+
+    },
+    onCanceled({ roomState, userId, bakuganKey, slot }) {
+        if (!roomState) return null
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate) {
+            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+
+            if (user) {
+                user.currentPower -= 100
+                PowerChangeDirectiveAnumation({
+                    animations: roomState?.animations,
+                    bakugans: [user],
+                    powerChange: 100,
+                    malus: true,
+                    turn: roomState.turnState.turnCount
+                })
+            }
+
+        }
+    },
 }
 
 export const ImpactMajeur: exclusiveAbilitiesType = {

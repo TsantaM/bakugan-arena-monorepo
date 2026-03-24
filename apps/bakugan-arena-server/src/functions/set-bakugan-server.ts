@@ -1,4 +1,4 @@
-import { addBakuganToSlot, AnimationDirectivesTypes, BakuganList, GateCardsList, GetUserName, setBakuganProps, Slots, slots_id } from "@bakugan-arena/game-data"
+import { AbilityCardsList, activateAbilities, addBakuganToSlot, AnimationDirectivesTypes, BakuganList, ExclusiveAbilitiesList, GateCardsList, GetUserName, setBakuganProps, Slots, slots_id } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
 export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuganProps): AnimationDirectivesTypes[] | undefined => {
@@ -134,6 +134,42 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuga
     }
 
     const updatedSlot = slots[Slots.indexOf(slot as slots_id)]
+
+    // Battle_Brawlers_Game_State[roomIndex]?.animations.push(animation)
+
+    const persistantAbilities = Battle_Brawlers_Game_State[roomIndex]?.persistantAbilities.filter((a) => a.bakuganKey === bakuganKey && a.userId === userId && !a.canceled)
+    if(!persistantAbilities) return [animation]
+    console.log('persistants', Battle_Brawlers_Game_State[roomIndex]?.persistantAbilities)
+    console.log('filtered persistants', persistantAbilities)
+
+    persistantAbilities.forEach((ability) => {
+        const card = [...AbilityCardsList, ...ExclusiveAbilitiesList].find((c) => c.key === ability.key)
+        if (!card) return
+
+        const abilities = updatedSlot.activateAbilities
+        const lastId = abilities.length > 0 ? abilities[abilities.length - 1].id : 0
+        const newId = lastId + 1
+
+        const newAbility: activateAbilities = {
+            bakuganKey: bakuganKey,
+            canceled: false,
+            id: newId,
+            key: ability.key,
+            userId: userId
+        }
+        updatedSlot.activateAbilities.push(newAbility)
+
+        if (card.onUserSet) {
+            card.onUserSet({
+                bakuganKey: bakuganKey,
+                roomState: Battle_Brawlers_Game_State[roomIndex],
+                userId: userId,
+                slot: slot as slots_id
+            })
+        }
+
+    })
+
     if (updatedSlot.portalCard === null) return [animation]
     const { key } = updatedSlot.portalCard
     const gateCard = GateCardsList.find((card) => card.key === key)
@@ -144,7 +180,6 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuga
         roomState: Battle_Brawlers_Game_State[roomIndex],
         slot: slots[Slots.indexOf(slot as slots_id)]
     })
-    // Battle_Brawlers_Game_State[roomIndex]?.animations.push(animation)
-
+    
     return [animation]
 }

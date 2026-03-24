@@ -262,6 +262,10 @@ export const ContreMaitrise: abilityCardsType = {
                 if (ability && ability.onCanceled) ability.onCanceled({ roomState, bakuganKey: lastAbility.bakuganKey, slot: slot, userId: lastAbility.userId })
 
                 lastAbility.canceled = true
+
+                const persistantAbility = roomState.persistantAbilities.find((a) => a.key === lastAbility.key && a.bakuganKey === lastAbility.bakuganKey && a.userId === lastAbility.userId && !a.canceled)
+                if (persistantAbility) persistantAbility.canceled = true
+
             })
         }
 

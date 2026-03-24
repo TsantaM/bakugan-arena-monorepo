@@ -180,7 +180,7 @@ export const PlongeeEnEauProfonde: abilityCardsType = {
                 if (!user) return
                 if (user.attribut === "Aquos") return
                 const BakuganName = BakuganList.find((b) => b.key === user.key)?.name
-                if(!BakuganName) return
+                if (!BakuganName) return
                 const abilityData = [...AbilityCardsList, ...ExclusiveAbilitiesList].find((card) => card.key === ability.key)
                 if (!abilityData) return
                 if (!abilityData.onCanceled) return
@@ -207,7 +207,10 @@ export const PlongeeEnEauProfonde: abilityCardsType = {
                     userId: ability.userId
                 })
 
+                ability.canceled = true
 
+                const persistantAbility = roomState.persistantAbilities.find((a) => a.key === ability.key && a.bakuganKey === ability.bakuganKey && a.userId === ability.userId && !a.canceled)
+                if (persistantAbility) persistantAbility.canceled = true
             })
         }
 
