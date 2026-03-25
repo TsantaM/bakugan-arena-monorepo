@@ -2,6 +2,7 @@ import { stateType } from "@bakugan-arena/game-data"
 import { db } from "../lib/db"
 import { eq } from "drizzle-orm"
 import { schema } from "@bakugan-arena/drizzle-orm"
+import { CalculateAndUpdateElo } from "./ladder-functions/calculate-elo"
 
 const rooms = schema.rooms
 
@@ -50,6 +51,8 @@ export const CheckGameFinished = async ({
       })
       .where(eq(rooms.id, roomId))
 
+    await CalculateAndUpdateElo({ loser: player1, winner: player2, roomData: roomState })
+
     return
   }
 
@@ -66,6 +69,8 @@ export const CheckGameFinished = async ({
         finished: true,
       })
       .where(eq(rooms.id, roomId))
+
+    await CalculateAndUpdateElo({ loser: player2, winner: player1, roomData: roomState })
 
     return
   }

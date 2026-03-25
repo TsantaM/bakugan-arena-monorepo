@@ -247,7 +247,8 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             protalSlots,
             status: {
                 finished: false,
-                winner: null
+                winner: null,
+                elo: null
             },
             animations: [],
             ActivePlayerActionRequest: {

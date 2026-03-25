@@ -159,7 +159,17 @@ export type stateType = {
     protalSlots: portalSlotsType;
     status: {
         finished: boolean,
-        winner: string | null
+        winner: string | null,
+        elo: {
+            winner: {
+                newElo: number,
+                bonus: number
+            },
+            loser: {
+                newElo: number,
+                malus: number
+            }
+        } | null
     },
     animations: AnimationDirectivesTypes[],
     InactivePlayerActionRequest: InactivePlayerActionRequestType,

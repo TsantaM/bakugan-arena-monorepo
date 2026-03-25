@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, index, integer } from "drizzle-orm/pg-core";
 import { deck, rolesEnum } from "./game-schema.js";
 
 export const user = pgTable("user", {
@@ -16,6 +16,7 @@ export const user = pgTable("user", {
   username: text("username").unique(),
   displayUsername: text("display_username"),
   role: rolesEnum("role").default("JOUEUR").notNull(),
+  elo: integer("elo").default(1000).notNull()
 });
 
 export const session = pgTable(
