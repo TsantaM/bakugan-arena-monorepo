@@ -1,17 +1,21 @@
-import { stateType } from "@bakugan-arena/game-data"
+import { Message, stateType } from "@bakugan-arena/game-data"
 import { db } from "../lib/db"
 import { eq } from "drizzle-orm"
 import { schema } from "@bakugan-arena/drizzle-orm"
 import { CalculateAndUpdateElo } from "./ladder-functions/calculate-elo"
+import { Server } from "socket.io/dist"
 
 const rooms = schema.rooms
 
 export const CheckGameFinished = async ({
+  io,
   roomId,
   roomState,
 }: {
   roomId: string
   roomState: stateType
+  
+  io: Server
 }) => {
   if (!roomState || roomState.status.finished) return
 
@@ -35,6 +39,11 @@ export const CheckGameFinished = async ({
     return b?.bakuganData?.elimined === false ? count + 1 : count
   }, 0)
 
+  const EqualityMessage: Message = {
+    text: `Game is over ! Equality !`,
+    turn: roomState.turnState.turnCount
+  }
+
   console.log(`Player 1 : ${p1State} && Player 2 : ${p2State}`)
 
   // 🥇 Player 2 wins
@@ -51,7 +60,7 @@ export const CheckGameFinished = async ({
       })
       .where(eq(rooms.id, roomId))
 
-    await CalculateAndUpdateElo({ loser: player1, winner: player2, roomData: roomState })
+    await CalculateAndUpdateElo({ loser: player1, winner: player2, roomData: roomState, io: io, roomId: roomId })
 
     return
   }
@@ -70,7 +79,7 @@ export const CheckGameFinished = async ({
       })
       .where(eq(rooms.id, roomId))
 
-    await CalculateAndUpdateElo({ loser: player2, winner: player1, roomData: roomState })
+    await CalculateAndUpdateElo({ loser: player2, winner: player1, roomData: roomState, io: io, roomId: roomId })
 
     return
   }
@@ -87,6 +96,14 @@ export const CheckGameFinished = async ({
       })
       .where(eq(rooms.id, roomId))
 
+    io.to(roomId).emit('game-finished', EqualityMessage)
+    const sockets = roomState.connectedsUsers
+    sockets.forEach((s) => {
+      console.log('parent-socket', s.nextjsSocket)
+      io.to(s.nextjsSocket).emit('game-messages', [EqualityMessage])
+    })
+    roomState.messages.push(EqualityMessage)
+
     return
   }
 
@@ -102,7 +119,16 @@ export const CheckGameFinished = async ({
       })
       .where(eq(rooms.id, roomId))
 
+    io.to(roomId).emit('game-finished', EqualityMessage)
+    const sockets = roomState.connectedsUsers
+    sockets.forEach((s) => {
+      console.log('parent-socket', s.nextjsSocket)
+      io.to(s.nextjsSocket).emit('game-messages', [EqualityMessage])
+    })
+    roomState.messages.push(EqualityMessage)
+
     return
+
   }
 
   // Game continues

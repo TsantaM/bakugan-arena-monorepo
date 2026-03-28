@@ -13,7 +13,7 @@ export function UpdatePlayerTimer({ roomState, io }: { roomState: stateType, io:
     if (!roomState) return
 
     const intervals = intervalIds.find((interval) => interval.roomId === roomState?.roomId)
-    console.log(intervals)
+    // console.log(intervals)
 
     if (!intervals) return
 
@@ -35,7 +35,7 @@ export function UpdatePlayerTimer({ roomState, io }: { roomState: stateType, io:
 
         const roomId = roomState.roomId
         const activeMerged = [...active.actions.mustDo, ...active.actions.mustDoOne, ...active.actions.optional].length
-        console.log("active", activeMerged)
+        // console.log("active", activeMerged)
 
         if (activePlayer && activeDeck && activeMerged > 0) {
 
@@ -103,7 +103,7 @@ export function UpdatePlayerTimer({ roomState, io }: { roomState: stateType, io:
         }
 
         const inactiveMerged = [...inactive.actions.mustDo, ...inactive.actions.mustDoOne, ...inactive.actions.optional].length
-        console.log("inactive", inactiveMerged)
+        // console.log("inactive", inactiveMerged)
 
         if (inactivePlayer && inactiveDeck && inactiveMerged > 0) {
 

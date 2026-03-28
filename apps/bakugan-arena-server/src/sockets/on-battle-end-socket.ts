@@ -12,7 +12,7 @@ export const socketOnBattleEnd = (io: Server, socket: Socket) => {
         if (roomData && roomData.battleState.turns === 0 && roomData.battleState.battleInProcess && !roomData.battleState.paused) {
             roomData.animations = []
             onBattleEnd({ roomId })
-            CheckGameFinished({ roomId, roomState: roomData })
+            CheckGameFinished({ roomId, roomState: roomData, io })
         }
 
         const state = Battle_Brawlers_Game_State[roomIndex]

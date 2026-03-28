@@ -28,17 +28,21 @@ const initRoomState:
         if (data.status.finished) {
 
 
-            if (data.status.winner !== null) {
-                const winner = data.players.find((p) => p.userId === data.status.winner)?.username ? data.players.find((p) => p.userId === data.status.winner)?.username : ''
+            if (data.status.winner !== null && data.status.elo !== null) {
+                const winnerName = data.players.find((p) => p.userId === data.status.winner)?.username ? data.players.find((p) => p.userId === data.status.winner)?.username : ''
+                const loserName = data.players.find((p) => p.userId !== data.status.winner)?.username ? data.players.find((p) => p.userId !== data.status.winner)?.username : ''
+
+                const {loser, winner} = data.status.elo
 
                 finished = {
-                    text: `Combat terminé ! Vainceur ${winner}`,
+                    text: `Game is over ! The winner is ${winnerName} : ${winnerName} : ${winner.newElo}(+${winner.bonus}) / ${loserName} : ${loser.newElo}(-${loser.malus})`,
                     turn: data.turnState.turnCount
                 }
 
             } else {
+
                 finished = {
-                    text: `Combat terminé ! Match Null !`,
+                    text: `Game is over ! Equality !`,
                     turn: data.turnState.turnCount
                 }
             }
@@ -58,7 +62,7 @@ const initRoomState:
                 opponnent: opponentBakugans ? opponentBakugans : 0
             },
             finished: finished
-    }
+        }
 
     }
 

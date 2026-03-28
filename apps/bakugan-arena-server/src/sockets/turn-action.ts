@@ -35,12 +35,12 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
 
     if (roomData && roomData.battleState.turns === 0 && roomData.battleState.battleInProcess && !roomData.battleState.paused) {
         onBattleEnd({ roomId })
-        CheckGameFinished({ roomId, roomState: roomData })
+        CheckGameFinished({ roomId, roomState: roomData, io })
     }
 
     // FR: Vérification si la partie est terminée (conditions de victoire/défaite)
     // ENG: Check if the game has ended (victory/defeat conditions)
-    CheckGameFinished({ roomId, roomState: roomData })
+    CheckGameFinished({ roomId, roomState: roomData, io })
 
     CheckBattleStillInProcess(roomData)
 
@@ -67,37 +67,37 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
 
     io.to(roomId).emit('turn-count-updater', turnState)
 
-    if (roomData.status.finished) {
+    // if (roomData.status.finished) {
 
-        let message: Message
+    //     let message: Message
 
-        if (roomData.status.winner !== null) {
-            const winner = roomData.players.find((p) => p.userId === roomData.status.winner)?.username ? roomData.players.find((p) => p.userId === roomData.status.winner)?.username : ''
+    //     if (roomData.status.winner !== null) {
+    //         const winner = roomData.players.find((p) => p.userId === roomData.status.winner)?.username ? roomData.players.find((p) => p.userId === roomData.status.winner)?.username : ''
 
-            message = {
-                text: `Game is over ! The winner is ${winner}`,
-                turn: roomData.turnState.turnCount
-            }
+    //         message = {
+    //             text: `Game is over ! The winner is ${winner}`,
+    //             turn: roomData.turnState.turnCount
+    //         }
 
-        } else {
-            message = {
-                text: `Game is over ! Equality !`,
-                turn: roomData.turnState.turnCount
-            }
-        }
+    //     } else {
+    //         message = {
+    //             text: `Game is over ! Equality !`,
+    //             turn: roomData.turnState.turnCount
+    //         }
+    //     }
 
-        io.to(roomId).emit('game-finished', message)
-        const sockets = roomData.connectedsUsers
-        sockets.forEach((s) => {
-            console.log('parent-socket', s.nextjsSocket)
-            io.to(s.nextjsSocket).emit('game-messages', [message])
-        })
-        roomData.messages.push(message)
-    }
+    //     io.to(roomId).emit('game-finished', message)
+    //     const sockets = roomData.connectedsUsers
+    //     sockets.forEach((s) => {
+    //         console.log('parent-socket', s.nextjsSocket)
+    //         io.to(s.nextjsSocket).emit('game-messages', [message])
+    //     })
+    //     roomData.messages.push(message)
+    // }
 
-    console.log('turn count', roomData.turnState.turnCount)
-    console.log('active socket', roomData.ActivePlayerActionRequest, activeName);
-    console.log('inactive socket', roomData.InactivePlayerActionRequest, inactiveName)
+    // console.log('turn count', roomData.turnState.turnCount)
+    // console.log('active socket', roomData.ActivePlayerActionRequest, activeName);
+    // console.log('inactive socket', roomData.InactivePlayerActionRequest, inactiveName)
 
     clearAnimationsInRoom(roomId)
 
