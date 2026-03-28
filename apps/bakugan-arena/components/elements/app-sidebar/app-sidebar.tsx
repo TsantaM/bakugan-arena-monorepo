@@ -46,7 +46,7 @@ const LinksDashboard: LinksDashboardType[] = [
     {
         icone: <ChartSpline />,
         label: 'Ladder',
-        href: '/dashboard'
+        href: '/dashboard/ladder'
     }
 ]
 
