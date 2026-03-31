@@ -16,7 +16,7 @@ export default function UseSearchOpponent() {
     const socket = useSocket()
     const [waitingOpponent, setWaitingOpponent] = useState(false)
 
-    const emitPlayerData = async ({ data, deck }: { data: PlayerData, deck: GetUserDeckType | undefined }) => {
+    const emitPlayerData = async ({ data, deck, ranked = true }: { data: PlayerData, deck: GetUserDeckType | undefined, ranked: boolean }) => {
         const { deckId, userId } = data
 
         if (socket && !waitingOpponent && data.deckId != '' && deck) {
@@ -24,7 +24,7 @@ export default function UseSearchOpponent() {
             const gateCards = deck.gateCards.length
             if (gateCards >= 3) {
                 if (abilityCards >= 3) {
-                    socket?.emit('search-opponent', ({ userId, deckId }))
+                    socket?.emit('search-opponent', ({ userId, deckId, ranked }))
                     setWaitingOpponent(true)
                 } else {
                     toast.error('You should have minimum 3 Ability Cards in your deck')

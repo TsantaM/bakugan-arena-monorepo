@@ -10,7 +10,7 @@ export function handleGateCards(roomData: stateType) {
     roomData.protalSlots
         .filter(s => s.portalCard && !s.state.open && !s.state.blocked)
         .forEach(slot => {
-            if(!slot.portalCard) return
+            if (!slot.portalCard) return
             const gate = GateCardsList.find(c => c.key === slot.portalCard?.key)
             if (!gate) return
 
@@ -30,6 +30,11 @@ export function handleGateCards(roomData: stateType) {
                         text: `Gate Card Open ! ${gate.name}`,
                         userName: GetUserName({ roomData: roomData, userId: slot.portalCard.userId }),
                         turn: roomData.turnState.turnCount
+                    },
+                    {
+                        text: `${gate.description}`,
+                        turn: roomData.turnState.turnCount,
+                        description: true
                     }]
                 })
                 gate.onOpen({

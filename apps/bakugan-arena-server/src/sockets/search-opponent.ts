@@ -3,11 +3,17 @@ import { CreateRoom } from "../functions/create-room";
 import { createGameState } from "../functions/create-game-state";
 import { Battle_Brawlers_Game_State, intervalIds } from "../game-state/battle-brawlers-game-state";
 import { GetUsersRooms } from "../functions/get-rooms-of-user";
+import { db } from "../lib/db";
+import { eq } from "drizzle-orm";
+import { findOpponent } from "../functions/matchmaking-functions/find-opponent";
 
 export type waitingListElements = {
     socketId: string,
     userId: string,
-    deckId: string
+    deckId: string,
+    joinedAtt: number,
+    ranked: boolean,
+    elo: number
 }
 
 
@@ -16,11 +22,20 @@ let waitingList: waitingListElements[] = []
 
 // ADD TO WAITING LIST FUNCTION
 
-const addToWaitingList = ({ userId, deckId, socketId }: { userId: string, deckId: string, socketId: string }) => {
+const addToWaitingList = async ({ userId, deckId, socketId, ranked }: { userId: string, deckId: string, socketId: string, ranked: boolean }) => {
+    const elo = await db.query.user.findFirst({
+        where: (u) => eq(u.id, userId),
+        columns: {
+            elo: true
+        }
+    })
     const newEntry: waitingListElements = {
         socketId: socketId,
         userId: userId,
-        deckId: deckId
+        deckId: deckId,
+        joinedAtt: Date.now(),
+        ranked: ranked,
+        elo: elo ? elo.elo : 1000
     }
 
     const ckeckExist = waitingList.some(w => w.userId === userId)
@@ -41,86 +56,70 @@ export const removeToWaitingList = ({ userId }: { userId: string }) => {
     console.log(waitingList)
 }
 
-const matchmaking = async ({ io, socket, socketId, userId }: { io: Server, socket: Socket, socketId: string, userId: string }) => {
+export const matchmaking = async (io: Server) => {
+    if (waitingList.length < 2) return
 
-    const player1 = waitingList.find(w => w.socketId === socketId)
+    // 1. Trier par elo (CRUCIAL)
+    waitingList.sort((a, b) => a.elo - b.elo)
 
-    if (player1) {
-        if (waitingList.length > 2) {
-            const player2Candidates = waitingList.filter(w => w.userId !== userId)
-            if (player2Candidates.length > 0) {
-                const player2 = player2Candidates[Math.floor(Math.random() * player2Candidates.length)]
+    const matched = new Set<string>()
 
-                // Requete Prisma qui va inserer la nouvelle room dans la BDD
-                const players = [player1, player2]
-                const room = await CreateRoom({ player1ID: player1.userId, P1Deck: player1.deckId, Player2ID: player2.userId, P2Deck: player2.deckId })
+    for (const player of waitingList) {
+        if (matched.has(player.userId)) continue
 
-                removeToWaitingList({ userId: player1.userId })
-                removeToWaitingList({ userId: player2.userId })
+        const opponent = findOpponent(player, waitingList)
 
-                const newRoomState = await createGameState({ roomId: room.id })
-                if (newRoomState) {
-                    const playersInvervalsId = newRoomState.players.map((player) => ({
-                        userId: player.userId,
-                        intervalId: null
-                    }))
-                    const interval = {
-                        roomId: newRoomState.roomId,
-                        players: playersInvervalsId
-                    }
-                    Battle_Brawlers_Game_State.push(newRoomState)
+        if (!opponent) continue
+        if (matched.has(opponent.userId)) continue
 
-                    intervalIds.push(interval)
-                }
+        // ✅ MATCH TROUVÉ
+        matched.add(player.userId)
+        matched.add(opponent.userId)
 
+        const room = await CreateRoom({
+            player1ID: player.userId,
+            P1Deck: player.deckId,
+            Player2ID: opponent.userId,
+            P2Deck: opponent.deckId
+        })
 
-            } else {
-                console.log(`No suitable opponent found for ${player1.userId}`)
-            }
+        const players = [player, opponent]
 
-        } else {
+        // Emit match
+        players.forEach(p => {
+            io.to(p.socketId).emit('match-found', room.id)
+        })
 
-            const player2 = waitingList.find(w => w.userId !== userId)
-            if (player2) {
-                console.log(`Match found between ${player1.userId} and ${player2.userId}`)
+        // Init game state
+        const newRoomState = await createGameState({ roomId: room.id })
 
-                const players = [player1, player2]
-                const room = await CreateRoom({ player1ID: player1.userId, P1Deck: player1.deckId, Player2ID: player2.userId, P2Deck: player2.deckId })
+        if (newRoomState) {
+            Battle_Brawlers_Game_State.push(newRoomState)
 
-                players.forEach((p) => io.to(p.socketId).emit('match-found', room.id))
-                players.forEach((p) => removeToWaitingList({ userId: p.userId }))
-
-                const newRoomState = await createGameState({ roomId: room.id })
-
-                if (newRoomState) {
-                    const playersInvervalsId = newRoomState.players.map((player) => ({
-                        userId: player.userId,
-                        intervalId: null
-                    }))
-                    const interval = {
-                        roomId: newRoomState.roomId,
-                        players: playersInvervalsId
-                    }
-                    Battle_Brawlers_Game_State.push(newRoomState)
-
-                    intervalIds.push(interval)
-
-                    players.forEach((p) => {
-                        const rooms = GetUsersRooms(p.userId)
-                        io.to(p.socketId).emit('get-rooms-user-id', rooms)
-                    })
-                }
-
-            }
+            intervalIds.push({
+                roomId: newRoomState.roomId,
+                players: newRoomState.players.map(p => ({
+                    userId: p.userId,
+                    intervalId: null
+                }))
+            })
         }
+
+        // Update rooms côté client
+        players.forEach((p) => {
+            const rooms = GetUsersRooms(p.userId)
+            io.to(p.socketId).emit('get-rooms-user-id', rooms)
+        })
     }
 
+    // 2. Supprimer TOUS les joueurs matchés en une fois
+    waitingList = waitingList.filter(p => !matched.has(p.userId))
 }
 // SOCKET ADD TO WAITING LIST
 
 export const setupSearchOpponentSocket = (io: Server, socket: Socket) => {
-    socket.on('search-opponent', ({ userId, deckId }: { userId: string, deckId: string }) => {
-        addToWaitingList({ userId, deckId, socketId: socket.id })
-        matchmaking({ io, socket, socketId: socket.id, userId })
+    socket.on('search-opponent', async ({ userId, deckId, ranked }: { userId: string, deckId: string, ranked: boolean }) => {
+        await addToWaitingList({ userId, deckId, socketId: socket.id, ranked: ranked })
+        matchmaking(io)
     })
 }

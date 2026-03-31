@@ -8,7 +8,7 @@ process.on("uncaughtException", (err) => {
 
 
 import { Server } from "socket.io";
-import { removeToWaitingList, setupSearchOpponentSocket } from "./sockets/search-opponent";
+import { matchmaking, removeToWaitingList, setupSearchOpponentSocket } from "./sockets/search-opponent";
 import { socketGetRoomState, socketInitiRoomState } from "./sockets/get-room-data";
 import { socketTurn } from "./sockets/turn-action";
 import { socketUpdateGateState } from "./sockets/update-gate-state";
@@ -17,7 +17,7 @@ import { socketActiveGateCard } from "./sockets/active-gate-card-socket";
 import { socketUseAbilityCard } from "./sockets/use-ability-card-socket";
 import { socketCleanAnimations } from "./sockets/clear-animations-socket";
 import { AbilitiesAdditionalEffectsSocket } from "./sockets/abilities-additional-effect-socket";
-import { addOrUpdateConnectedUser, addRoomSocket, removeConnectedUserBySocket, removeRoomSocket } from "./functions/connected-users-management";
+import { addOrUpdateConnectedUser, removeConnectedUserBySocket, removeRoomSocket } from "./functions/connected-users-management";
 import { ChalengeAcceptSocket, ChalengeSomeoneSocket } from "./sockets/chalenge-someone-socket";
 import { getUsersRooms } from "./sockets/get-users-rooms";
 import { CheckActivitiesSocket } from "./sockets/check-activities-socket";
@@ -34,20 +34,22 @@ const io = new Server({
     }
 });
 
+// 🔥 MATCHMAKING LOOP GLOBAL
+setInterval(() => {
+    matchmaking(io)
+}, 1000)
 
 io.on('connection', (socket) => {
     const { userId, roomId, socketType } = socket.handshake.auth
     console.log('A user connected:', 'socketId : ', socket.id, 'userId : ', userId);
     if (!roomId && (!socketType || socketType === 'game')) {
         addOrUpdateConnectedUser(userId, socket.id);
-    } else {
-
     }
 
-    getUsersRooms(io, socket),
-    WatchBattleSocket(io, socket),
-    ChalengeSomeoneSocket(io, socket),
-    ChalengeAcceptSocket(io, socket),
+    getUsersRooms(io, socket)
+    WatchBattleSocket(io, socket)
+    ChalengeSomeoneSocket(io, socket)
+    ChalengeAcceptSocket(io, socket)
     setupSearchOpponentSocket(io, socket)
     CancelOpponentResearch(io, socket)
     socketGetRoomState(io, socket)
@@ -65,7 +67,7 @@ io.on('connection', (socket) => {
         console.log('A user disconnected:', 'socketId : ', socket.id, 'userId : ', userId, reason);
         removeToWaitingList({ userId: userId })
         removeConnectedUserBySocket(socket.id);
-        addRoomSocket(userId, socket.id, roomId)
+        // addRoomSocket(userId, socket.id, roomId)
         removeRoomSocket(socket.id, userId)
     })
 

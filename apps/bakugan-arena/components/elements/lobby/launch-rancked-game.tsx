@@ -116,7 +116,7 @@ export default function LauchRanckedGate() {
             </CardContent>
 
             <CardFooter className="flex flex-col gap-3">
-                <Button disabled={!value || value === '' ? true : false} className="w-full text-xl font-bold" onClick={() => emitPlayerData({ data, deck })}>{waitingOpponent ? 'Waiting opponent ...' : !value || value === '' ? 'Chose a deck' : 'Start Battle !'}</Button>
+                <Button disabled={!value || value === '' ? true : false} className="w-full text-xl font-bold" onClick={() => emitPlayerData({ data, deck, ranked: true })}>{waitingOpponent ? 'Waiting opponent ...' : !value || value === '' ? 'Chose a deck' : 'Start Battle !'}</Button>
                 <Button variant="destructive" className="w-full text-xl font-bold" onClick={() => {
                     cancelSearchOpponent(data.userId)
                     setValue('')
