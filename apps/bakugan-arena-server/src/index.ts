@@ -23,6 +23,7 @@ import { getUsersRooms } from "./sockets/get-users-rooms";
 import { CheckActivitiesSocket } from "./sockets/check-activities-socket";
 import { CancelOpponentResearch } from "./sockets/cancel-opponent-research";
 import { WatchBattleSocket } from "./sockets/watch-battle-socket";
+import { ChatMessageSocket } from "./sockets/chat-message-socket";
 
 
 
@@ -46,6 +47,7 @@ io.on('connection', (socket) => {
         addOrUpdateConnectedUser(userId, socket.id);
     }
 
+    ChatMessageSocket(io, socket)
     getUsersRooms(io, socket)
     WatchBattleSocket(io, socket)
     ChalengeSomeoneSocket(io, socket)

@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { authClient } from "@/src/lib/auth-client"
 import { useSocket } from "@/src/providers/socket-provider"
 import { Message } from "@bakugan-arena/game-data"
 import { MessagesSquare } from "lucide-react"
@@ -10,12 +11,21 @@ import { useEffect, useState } from "react"
 
 function MessageParagraph({ message }: { message: Message }) {
 
+    const username = authClient.useSession().data?.user.displayUsername
     const { userName, text, description } = message
+    const textColor: (name: string) => string = (name) => {
+        if (name === username) {
+            return 'text-blue-500'
+        } else {
+            return 'text-emerald-500'
+        }
+    }
+
 
     return (
 
         userName !== undefined ? <p>
-            <span className={`font-bold`}>{userName} :</span> {text}
+            <span className={`font-bold ${textColor(userName)}`}>{userName} :</span> {text}
         </p>
 
             : description ? <p className="mb-1 ml-3 text-xs text-neutral-400">{text}</p> : <p className="ml-3 text-sm">{text}</p>
@@ -24,18 +34,17 @@ function MessageParagraph({ message }: { message: Message }) {
 }
 
 function TurnMessagesContainer({ turn, messages }: { turn: number, messages: Message[] }) {
-    console.log(turn)
-    console.log(messages)
+
     return (
 
         <div className="flex flex-col gap-3 bg-neutral-950 text-neutral-200 p-4">
             <div className="p-4 bg-neutral-500 w-full">
                 <p className="font-bold">Turn {turn}</p>
             </div>
-            
+
 
             {
-                messages.map((message, index) => <  MessageParagraph message={message} key={index}/>)
+                messages.map((message, index) => <  MessageParagraph message={message} key={index} />)
             }
 
         </div>
@@ -151,7 +160,7 @@ export default function MessagesModal({ player, opponent }: { player: string | u
             <DialogHeader>
                 <DialogTitle>{`${player} VS ${opponent}`}</DialogTitle>
             </DialogHeader>
-            <ScrollArea className="h-100">
+            <ScrollArea className="h-100" scroll="bottom">
 
                 {
                     messagesContainer.map(m => < TurnMessagesContainer messages={m.messages} turn={m.turn} key={m.turn} />)

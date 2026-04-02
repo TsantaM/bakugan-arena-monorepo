@@ -22,7 +22,8 @@ export const FindUser = async ({ displayUserName }: { displayUserName: string })
     where: and(...conditions), // ✅ combine toutes les conditions
     columns: {
       displayUsername: true,
-      id: true
+      id: true,
+      image: true
     }
   })
 }
