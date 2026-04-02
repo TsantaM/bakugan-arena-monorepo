@@ -59,12 +59,12 @@ function ChatWindow({ chat }: { chat: ChatWindowType }) {
     }
 
     return (
-        <Card className="flex flex-col h-full w-full">
-            <CardContent className="flex flex-col gap-4 h-full p-4 w-full">
+        <Card className="flex flex-col h-full">
+            <CardContent className="flex flex-col gap-4 h-full p-4">
                 {/* Messages */}
-                <Card className="w-full">
+                <Card>
                     <CardContent>
-                        <ScrollArea scroll="bottom" className="max-h-36 flex flex-col justify-center items-start gap-1 w-full">
+                        <ScrollArea scroll="bottom" className="max-h-36 flex flex-col justify-center items-start gap-1">
                             {messages.length > 0 ? messages.map((message, index) => (
                                 <p key={index} className="text-sm">
                                     <span className={`font-bold ${textColor(message.senderName)}`}>{message.senderName}</span>: {message.text}
@@ -112,7 +112,7 @@ export default function ChatsCard() {
                 </CardTitle>
             </CardHeader>
             <CardContent>
-                <Tabs className="w-100">
+                <Tabs className="w-full">
                     <TabsList>
                         {chats.map((chat) => (
                             <TabsTrigger key={chat.targetId} value={chat.targetId}>
