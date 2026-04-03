@@ -77,7 +77,7 @@ function ChatWindow({ chat }: { chat: ChatWindowType }) {
                 <div className="flex items-end gap-2 border rounded-2xl p-2 shadow-sm bg-background">
                     <Textarea
                         ref={textareaRef}
-                        placeholder="Écris ton message..."
+                        placeholder="Write your message..."
                         className="min-h-10 max-h-30 resize-none border-0 focus-visible:ring-0"
                         onKeyDown={(e) => {
                             if (e.key === "Enter" && !e.shiftKey) {
