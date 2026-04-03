@@ -7,6 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { SidebarInset, SidebarMenuSkeleton, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { getUser, getUserRole } from "@/src/actions/getUserSession"
 import ChatListener from "@/src/global-listener/chat-global-listener"
+import UsersStoreUpdateListener from "@/src/global-listener/users-store-update-listener"
 import { auth } from "@/src/lib/auth"
 import { SocketProvider } from "@/src/providers/socket-provider"
 import { LogOutIcon, User2 } from "lucide-react"
@@ -22,6 +23,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
     return (
         <SocketProvider>
+            <UsersStoreUpdateListener />
             <ChatListener />
             <SidebarProvider>
                 <AppSidebar role={role} />

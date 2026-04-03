@@ -11,6 +11,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 // import { cn } from "@/lib/utils";
 import { FindUser } from "@/src/actions/get-users-data";
 import { useChatStore } from "@/src/store/chat-window-store";
+import { ConnectedUsersStore } from "@/src/store/connected-users-store";
 import { Avatar } from "@radix-ui/react-avatar";
 import { useQuery } from "@tanstack/react-query";
 // import { Check, ChevronsUpDown } from "lucide-react";
@@ -32,6 +33,9 @@ export default function FindUserComponent() {
     })
 
     const addChat = useChatStore((state) => state.upsertChat)
+    const connectedUsers = ConnectedUsersStore((state) => state.users)
+
+
 
     const users = findUser?.data?.map((d) => d)
 
@@ -68,7 +72,7 @@ export default function FindUserComponent() {
                             </TableHeader>
 
                             <TableBody>
-                                {users.map((u: any, index: number) => (
+                                {users.map((u, index: number) => (
                                     <TableRow key={index}>
                                         <TableCell>
                                             <div className="flex items-center gap-3">
@@ -85,6 +89,11 @@ export default function FindUserComponent() {
                                                 <span className="text-sm">
                                                     {u.displayUsername}
                                                 </span>
+                                                <span
+                                                    className={`h-2.5 w-2.5 rounded-full border-2 border-white ${connectedUsers.includes(u.id)
+                                                        ? "bg-green-500"
+                                                        : "bg-gray-400"
+                                                        }`} ></span>
                                             </div>
                                         </TableCell>
 

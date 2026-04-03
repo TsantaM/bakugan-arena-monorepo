@@ -44,7 +44,7 @@ io.on('connection', (socket) => {
     const { userId, roomId, socketType } = socket.handshake.auth
     console.log('A user connected:', 'socketId : ', socket.id, 'userId : ', userId);
     if (!roomId && (!socketType || socketType === 'game')) {
-        addOrUpdateConnectedUser(userId, socket.id);
+        addOrUpdateConnectedUser(userId, socket.id, io);
     }
 
     ChatMessageSocket(io, socket)
@@ -68,8 +68,7 @@ io.on('connection', (socket) => {
     socket.on('disconnect', (reason) => {
         console.log('A user disconnected:', 'socketId : ', socket.id, 'userId : ', userId, reason);
         removeToWaitingList({ userId: userId })
-        removeConnectedUserBySocket(socket.id);
-        // addRoomSocket(userId, socket.id, roomId)
+        removeConnectedUserBySocket(socket.id, io);
         removeRoomSocket(socket.id, userId)
     })
 

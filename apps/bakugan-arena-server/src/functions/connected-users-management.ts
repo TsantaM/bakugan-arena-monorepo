@@ -1,6 +1,7 @@
+import { Server } from "socket.io/dist";
 import { connectedUsers, roomsSockets } from "../game-state/battle-brawlers-game-state";
 
-export function addOrUpdateConnectedUser(userId: string, socketId: string) {
+export function addOrUpdateConnectedUser(userId: string, socketId: string, io: Server) {
     if(userId === '') return
     const index = connectedUsers.findIndex(u => u.userId === userId);
 
@@ -12,18 +13,24 @@ export function addOrUpdateConnectedUser(userId: string, socketId: string) {
         connectedUsers.push({ userId, socketId });
     }
 
+    const users = connectedUsers.map((u) => u.userId)
+    io.emit('update-connected-users', users)
+
     console.log(connectedUsers)
 
 }
 
-export function removeConnectedUserBySocket(socketId: string) {
+export function removeConnectedUserBySocket(socketId: string, io: Server) {
     const index = connectedUsers.findIndex(u => u.socketId === socketId);
 
     if (index !== -1) {
         connectedUsers.splice(index, 1);
     }
 
-    console.log(connectedUsers)
+    const users = connectedUsers.map((u) => u.userId)
+    io.emit('update-connected-users', users)
+
+    // console.log(connectedUsers)
 }
 
 export function addRoomSocket(userId: string, socketId: string, roomId: string) {
@@ -37,7 +44,7 @@ export function addRoomSocket(userId: string, socketId: string, roomId: string) 
         roomsSockets.push({ userId, socketId, roomId });
     }
 
-    console.log(roomsSockets)
+    // console.log(roomsSockets)
 
 }
 
