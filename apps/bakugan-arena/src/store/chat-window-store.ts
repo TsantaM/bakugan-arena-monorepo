@@ -73,7 +73,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
                         ...state.chats,
                         {
                             targetId,
-                            targetName: message.senderName,
+                            targetName: message.senderName || 'Player',
                             messages: [message],
                             chalenge: state.chats[index]?.chalenge || null,
                             isChalenged: state.chats[index]?.isChalenged || null

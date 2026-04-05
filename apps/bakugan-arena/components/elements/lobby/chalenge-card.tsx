@@ -6,7 +6,7 @@ import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import { useChatStore } from "@/src/store/chat-window-store"
-import { BakuganList, chalengeAcceptSocketProps, chalengeSomeoneSocketProps } from "@bakugan-arena/game-data"
+import { BakuganList, CancelChalengeSocketPropsType, chalengeAcceptSocketProps, chalengeSomeoneSocketProps, RejectChalengeSocketPropsType } from "@bakugan-arena/game-data"
 import { Check, ChevronsUpDown } from "lucide-react"
 import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
@@ -34,6 +34,8 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
     const toggleDeck = useChatStore((state) => state.toggleDeck)
     const clearIsChalenged = useChatStore((state) => state.clearIsChalenged)
     const toggleDeckInIsChalenged = useChatStore((state) => state.toggleDeckInIsChalenged)
+    const clearChallenge = useChatStore((state) => state.clearChallenge)
+    const clearIsChallenged = useChatStore((state) => state.clearIsChalenged)
     const setWaiting = useChatStore((state) => state.setWaiting)
     const [open, setOpen] = useState(false)
     const [show, setShow] = useState(false)
@@ -78,6 +80,35 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
         socket.emit('chalenge-accept', data)
         clearIsChalenged(targetId)
 
+    }
+
+    const cancelChalenge: () => void = () => {
+        if (!userId) return
+        if (chalenge === null) return
+        if (!socket) return
+
+        const data: CancelChalengeSocketPropsType = {
+            userId: userId,
+            targetId: targetId
+        }
+
+        clearChallenge(targetId)
+        socket.emit('cancel-chalenge', data)
+
+    }
+
+    const rejectChalgenge: () => void = () => {
+        if (!userId) return
+        if (isChalenged === null) return
+        if (!socket) return
+
+        const data: RejectChalengeSocketPropsType = {
+            chalengerId: targetId,
+            userId: userId
+        }
+
+        clearIsChalenged(targetId)
+        socket.emit('chalenge-rejected', data)
     }
 
     return (
@@ -168,7 +199,7 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
                         <Button disabled={!isChalenged?.deck ? true : false} className="font-bold" onClick={acceptChalenge}>
                             {!isChalenged?.deck ? 'Chose a deck' : 'Accept'}
                         </Button>
-                        <Button variant="destructive" className="font-bold" >Reject</Button>
+                        <Button variant="destructive" className="font-bold" onClick={rejectChalgenge}>Reject</Button>
                     </CardFooter>
                 </Card> :
                     !show ? <Button variant="outline" className="w-full" onClick={() => setShow(true)}>Chalenge</Button> : <Card>
@@ -241,7 +272,10 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
                             <Button disabled={!chalenge?.deck || chalenge?.waitingForResponse ? true : false} className="font-bold" onClick={sendChalenge}>
                                 {chalenge?.waitingForResponse ? 'Waiting response...' : !chalenge?.deck ? 'Chose a deck' : 'Challenge'}
                             </Button>
-                            <Button variant="destructive" className="font-bold" onClick={() => { setShow(false) }} >Cancel</Button>
+                            <Button variant="destructive" className="font-bold" onClick={() => {
+                                cancelChalenge()
+                                setShow(false)
+                            }} >Cancel</Button>
                         </CardFooter>
                     </Card>
             }

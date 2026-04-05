@@ -18,7 +18,7 @@ import { socketUseAbilityCard } from "./sockets/use-ability-card-socket";
 import { socketCleanAnimations } from "./sockets/clear-animations-socket";
 import { AbilitiesAdditionalEffectsSocket } from "./sockets/abilities-additional-effect-socket";
 import { addOrUpdateConnectedUser, removeConnectedUserBySocket, removeRoomSocket } from "./functions/connected-users-management";
-import { ChalengeAcceptSocket, ChalengeSomeoneSocket } from "./sockets/chalenge-someone-socket";
+import { CancelChalengeSocket, ChalengeAcceptSocket, ChalengeSomeoneSocket, RejectChalengeSocket } from "./sockets/chalenge-someone-socket";
 import { getUsersRooms } from "./sockets/get-users-rooms";
 import { CheckActivitiesSocket } from "./sockets/check-activities-socket";
 import { CancelOpponentResearch } from "./sockets/cancel-opponent-research";
@@ -52,6 +52,8 @@ io.on('connection', (socket) => {
     WatchBattleSocket(io, socket)
     ChalengeSomeoneSocket(io, socket)
     ChalengeAcceptSocket(io, socket)
+    CancelChalengeSocket(io, socket)
+    RejectChalengeSocket(io, socket)
     setupSearchOpponentSocket(io, socket)
     CancelOpponentResearch(io, socket)
     socketGetRoomState(io, socket)

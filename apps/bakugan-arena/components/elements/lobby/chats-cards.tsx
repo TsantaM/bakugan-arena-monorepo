@@ -68,7 +68,7 @@ function ChatWindow({ chat }: { chat: ChatWindowType }) {
                         <ScrollArea scroll="bottom" className="max-h-36 flex flex-col justify-center items-start gap-1">
                             {messages.length > 0 ? messages.map((message, index) => (
                                 <p key={index} className="text-sm">
-                                    <span className={`font-bold ${textColor(message.senderName)}`}>{message.senderName}</span>: {message.text}
+                                    <span className={`font-bold ${textColor(message.senderName)}`}>{message.senderName} : </span>{message.text}
                                 </p>
                             )) : <p className="text-sm text-muted-foreground">No messages yet.</p>}
                         </ScrollArea>

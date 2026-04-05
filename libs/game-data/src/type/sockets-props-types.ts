@@ -31,3 +31,13 @@ export type chalengeAcceptRedirectProps = {
     chalengerId: string;
     userId: string;
 }
+
+export type CancelChalengeSocketPropsType = {
+    userId: string,
+    targetId: string
+}
+
+export type RejectChalengeSocketPropsType = {
+    userId: string,
+    chalengerId: string
+}

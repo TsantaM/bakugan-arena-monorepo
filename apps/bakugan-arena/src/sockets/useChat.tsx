@@ -33,7 +33,7 @@ export default function useChat() {
 
             } else {
                 const chat = chats.find((c) => c.targetId === message.senderId)
-                if (!chat) {
+                if (!chat && message.senderName) {
                     upsertChat({ targetId: message.senderId, targetName: message.senderName })
                 }
                 addMessage({ targetId: message.senderId, message })

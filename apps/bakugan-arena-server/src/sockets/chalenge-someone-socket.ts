@@ -1,4 +1,4 @@
-import { chalengeAcceptRedirectProps, chalengeAcceptSocketProps, chalengeSomeoneSocketProps } from "@bakugan-arena/game-data";
+import { CancelChalengeSocketPropsType, chalengeAcceptRedirectProps, chalengeAcceptSocketProps, chalengeSomeoneSocketProps, RejectChalengeSocketPropsType } from "@bakugan-arena/game-data";
 import { Server, Socket } from "socket.io/dist";
 import { Battle_Brawlers_Game_State, chalenges, connectedUsers, intervalIds } from "../game-state/battle-brawlers-game-state";
 import { CreateRoom } from "../functions/create-room";
@@ -95,4 +95,44 @@ export const ChalengeAcceptSocket = (io: Server, socket: Socket) => {
         chalenges.splice(chalengeIndex, 1);
 
     })
+}
+
+export const CancelChalengeSocket = (io: Server, socket: Socket) => {
+
+    const cancelChalenge = ({targetId, userId} : CancelChalengeSocketPropsType) => {
+        const chalenge = chalenges.find((chalenge) => chalenge.chalenger.userId === userId && chalenge.target.userId === targetId)
+        const chalengeIndex = chalenges.findIndex((chalenge) => chalenge.chalenger.userId === userId && chalenge.target.userId === targetId)
+
+        if (!chalenge) return
+        if (!chalenges[chalengeIndex]) return
+
+        const chalengeCanceled = userId
+
+        io.to(chalenges[chalengeIndex].target.userSocket).emit('chalenge-canceled', chalengeCanceled)
+
+        chalenges.splice(chalengeIndex, 1);
+
+    }
+
+    socket.on('cancel-chalenge', cancelChalenge)
+}
+
+export const RejectChalengeSocket = (io: Server, socket: Socket) => {
+
+    const rejectChalenge = ({ chalengerId, userId } : RejectChalengeSocketPropsType) => {
+        const chalenge = chalenges.find((chalenge) => chalenge.chalenger.userId === chalengerId && chalenge.target.userId === userId)
+        const chalengeIndex = chalenges.findIndex((chalenge) => chalenge.chalenger.userId === chalengerId && chalenge.target.userId === userId)
+
+        if (!chalenge) return
+        if (!chalenges[chalengeIndex]) return
+
+        const chalengeRejected = userId
+
+        io.to(chalenge.chalenger.userSocket).emit('chalenge-rejected', chalengeRejected)
+
+        chalenges.splice(chalengeIndex, 1);
+    }
+
+    socket.on('chalenge-rejected', rejectChalenge)
+
 }
