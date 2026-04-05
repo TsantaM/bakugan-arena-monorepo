@@ -2,7 +2,7 @@
 
 import { db } from "../lib/db"
 import { schema } from "@bakugan-arena/drizzle-orm"
-import { eq, not, like, and } from "drizzle-orm"
+import { eq, not, like, and, sql } from "drizzle-orm"
 import { getUser } from "./getUserSession"
 
 const user = schema.user
@@ -12,7 +12,9 @@ export const FindUser = async ({ displayUserName }: { displayUserName: string })
 
   if (!displayUserName) return []
 
-  const conditions = [like(user.displayUsername, `${displayUserName}%`)]
+  // const condSql = `LOWER(${user.displayUsername}) LIKE ${displayUserName.toLowerCase()} + "%"`
+
+  const conditions = [sql`LOWER(${user.displayUsername}) LIKE ${displayUserName.toLowerCase() + "%"}`]
 
   if (currentUser) {
     conditions.push(not(eq(user.id, currentUser.id)))

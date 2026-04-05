@@ -33,6 +33,7 @@ export default function FindUserComponent() {
     })
 
     const addChat = useChatStore((state) => state.upsertChat)
+    const setFocused =  useChatStore((state) => state.setFocused)
     const connectedUsers = ConnectedUsersStore((state) => state.users)
 
 
@@ -99,16 +100,18 @@ export default function FindUserComponent() {
 
                                         <TableCell className="text-right">
                                             <Button
+                                                disabled={connectedUsers.includes(u.id) ? false : true}
                                                 size="sm"
                                                 onClick={() => {
                                                     addChat({
                                                         targetId: u.id,
                                                         targetName: u.displayUsername || 'Unknown Player'
                                                     })
+                                                    setFocused(u.id)
                                                     setOpen(false)
                                                 }}
                                             >
-                                                Open Chat
+                                                {connectedUsers.includes(u.id) ? `Open Chat` : 'Offline'}
                                             </Button>
                                         </TableCell>
                                     </TableRow>

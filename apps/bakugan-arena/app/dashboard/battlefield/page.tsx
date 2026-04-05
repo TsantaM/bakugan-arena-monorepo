@@ -4,7 +4,7 @@ import { getUser } from "@/src/actions/getUserSession"
 import { unauthorized } from "next/navigation"
 
 type PageProps = {
-    searchParams: Promise<{ id: string }>
+    searchParams: Promise<{ [id: string]: string }>
 }
 
 
@@ -12,6 +12,7 @@ export default async function BattleField({ searchParams }: PageProps) {
     const user = await getUser()
     const { id: roomId } = await searchParams
 
+    console.log(roomId)
     const RoomData = await RoomDataAction(roomId)
 
     if (!user) {

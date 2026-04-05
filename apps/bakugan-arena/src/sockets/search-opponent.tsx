@@ -37,7 +37,7 @@ export default function UseSearchOpponent() {
 
 
     const cancelSearchOpponent = (userId: string) => {
-        if(!waitingOpponent) return
+        if (!waitingOpponent) return
         if (socket && waitingOpponent) {
             socket.emit('cancel-search-opponent', { userId })
         }
@@ -46,18 +46,34 @@ export default function UseSearchOpponent() {
     useEffect(() => {
         if (!socket) return
 
-        socket.on('match-found', (roomId) => {
+        const onMatchFound = (roomId: string) => {
             setWaitingOpponent(false)
+            // router.push(`/dashboard/battlefield?id=${roomId}`)
             redirect(`/dashboard/battlefield?id=${roomId}`)
-        })
+        }
+
+        socket.on('match-found', onMatchFound)
+
+        return () => {
+            socket.off('match-found', onMatchFound)
+        }
+
     }, [socket])
 
     useEffect(() => {
-        if(!socket) return
-        socket.on('search-cancelled', () => {
+        if (!socket) return
+
+        const onCancelSearch = () => {
             setWaitingOpponent(false)
             toast.error('Opponent cancelled the search. You can try again.')
-        })
+        }
+
+        socket.on('search-cancelled', onCancelSearch)
+
+        return () => {
+            socket.off('search-cancelled', onCancelSearch)
+        }
+
     }, [socket])
 
 

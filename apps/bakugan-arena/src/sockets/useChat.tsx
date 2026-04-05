@@ -21,7 +21,7 @@ export default function useChat() {
 
         if (!socket) return
 
-        socket.on('receive-message', ({ targetId, targetName, message }: ReceiveMessageSocketType) => {
+        const receiveMessage = ({ targetId, targetName, message }: ReceiveMessageSocketType) => {
 
             if (userId === message.senderId) {
                 const chat = chats.find((c) => c.targetId === message.targetId)
@@ -40,8 +40,12 @@ export default function useChat() {
             }
 
 
-        })
+        }
 
+        socket.on('receive-message', receiveMessage)
+        return () => {
+            socket.off('receive-message', receiveMessage)
+        }
 
     }, [socket])
 

@@ -9,11 +9,17 @@ export default function ConnectedUsersListener() {
     const setUsers = ConnectedUsersStore((state) => state.setUsers)
     const users = ConnectedUsersStore((state) => state.users)
 
+    const updateUsers = (users: string[]) => {
+        setUsers(users)
+    }
+
     useEffect(() => {
         if (!socket) return
-        socket.on('update-connected-users', (users: string[]) => {
-            setUsers(users)
-        })
+        socket.on('update-connected-users', updateUsers)
+
+        return () => {
+            socket.off('update-connected-users', updateUsers)
+        }
 
     }, [socket])
 

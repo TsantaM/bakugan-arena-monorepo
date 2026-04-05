@@ -26,3 +26,8 @@ export type chalengeAcceptSocketProps = {
     deckId: string;
     chalengerId: string;
 }
+
+export type chalengeAcceptRedirectProps = {
+    chalengerId: string;
+    userId: string;
+}

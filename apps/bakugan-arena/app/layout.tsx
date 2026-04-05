@@ -29,11 +29,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden flex flex-col`}
       >
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
-          <TanstackProvider>
-            {children}
-          </TanstackProvider>
-        </ThemeProvider>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
+            <TanstackProvider>
+              {children}
+            </TanstackProvider>
+          </ThemeProvider>
       </body>
     </html>
   );

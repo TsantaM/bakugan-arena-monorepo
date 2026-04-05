@@ -6,8 +6,6 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { SidebarInset, SidebarMenuSkeleton, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { getUser, getUserRole } from "@/src/actions/getUserSession"
-import ChatListener from "@/src/global-listener/chat-global-listener"
-import UsersStoreUpdateListener from "@/src/global-listener/users-store-update-listener"
 import { auth } from "@/src/lib/auth"
 import { SocketProvider } from "@/src/providers/socket-provider"
 import { LogOutIcon, User2 } from "lucide-react"
@@ -15,6 +13,11 @@ import { headers } from "next/headers"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { Suspense } from "react"
+import UsersStoreUpdateListener from "@/src/global-listener/users-store-update-listener";
+import ChatListener from "@/src/global-listener/chat-global-listener";
+import SearchOpponentListener from "@/src/global-listener/search-opponent-listener";
+import ChalengeSomeoneListener from "@/src/global-listener/chalenge-someone-listener"
+
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
 
@@ -25,6 +28,8 @@ export default async function Layout({ children }: { children: React.ReactNode }
         <SocketProvider>
             <UsersStoreUpdateListener />
             <ChatListener />
+            <SearchOpponentListener />
+            <ChalengeSomeoneListener />
             <SidebarProvider>
                 <AppSidebar role={role} />
                 <SidebarInset>

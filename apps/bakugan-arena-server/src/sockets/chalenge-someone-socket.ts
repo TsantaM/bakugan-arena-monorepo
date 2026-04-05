@@ -1,4 +1,4 @@
-import { chalengeAcceptSocketProps, chalengeSomeoneSocketProps } from "@bakugan-arena/game-data";
+import { chalengeAcceptRedirectProps, chalengeAcceptSocketProps, chalengeSomeoneSocketProps } from "@bakugan-arena/game-data";
 import { Server, Socket } from "socket.io/dist";
 import { Battle_Brawlers_Game_State, chalenges, connectedUsers, intervalIds } from "../game-state/battle-brawlers-game-state";
 import { CreateRoom } from "../functions/create-room";
@@ -60,10 +60,16 @@ export const ChalengeAcceptSocket = (io: Server, socket: Socket) => {
 
         chalenges[chalengeIndex].target.deckId = deckId
 
-
         const room = await CreateRoom({ player1ID: chalenges[chalengeIndex].chalenger.userId, P1Deck: chalenges[chalengeIndex].chalenger.deckId, Player2ID: chalenges[chalengeIndex].target.userId, P2Deck: chalenges[chalengeIndex].target.deckId })
-        io.to(chalenges[chalengeIndex].chalenger.userSocket).emit('chalenge-accept-redirect', room.id)
-        io.to(chalenges[chalengeIndex].target.userSocket).emit('chalenge-accept-redirect', room.id)
+
+        if (!userId) return
+
+        const chalengeAcceptData: chalengeAcceptRedirectProps = {
+            chalengerId: chalengerId,
+            userId: userId,
+        }
+
+        io.to(chalenges[chalengeIndex].chalenger.userSocket).emit('chalenge-accept-redirect', chalengeAcceptData)
 
         const newRoomState = await createGameState({ roomId: room.id })
 
@@ -77,7 +83,8 @@ export const ChalengeAcceptSocket = (io: Server, socket: Socket) => {
                 players: playersInvervalsId
             }
             Battle_Brawlers_Game_State.push(newRoomState)
-
+            io.to(chalenges[chalengeIndex].chalenger.userSocket).emit('match-found', newRoomState.roomId)
+            io.to(chalenges[chalengeIndex].target.userSocket).emit('match-found', newRoomState.roomId)
             intervalIds.push(interval)
             const p1rooms = GetUsersRooms(chalenges[chalengeIndex].chalenger.userId)
             io.to(chalenges[chalengeIndex].chalenger.userSocket).emit('get-rooms-user-id', p1rooms)

@@ -4,6 +4,7 @@ import { db } from "@/src/lib/db"
 
 export const RoomDataAction = async (roomId: string) => {
   // 1️⃣ Récupérer la room
+
   const roomData = await db.query.rooms.findFirst({
     where: (r, { eq }) => eq(r.id, roomId),
     columns: {

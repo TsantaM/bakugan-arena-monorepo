@@ -27,22 +27,22 @@ const LinksDashboard: LinksDashboardType[] = [
     {
         icone: <SwatchBook />,
         label: 'Bakugans',
-        href: '/baku-dex'
+        href: '/dashboard/baku-dex'
     },
     {
         icone: <SwatchBook />,
         label: 'Ability Cards',
-        href: '/baku-dex/ability-cards'
+        href: '/dashboard/baku-dex/ability-cards'
     },
     {
         icone: <SwatchBook />,
         label: 'Exclusives Ability Cards',
-        href: '/baku-dex/exclusive-ability-cards'
+        href: '/dashboard/baku-dex/exclusive-ability-cards'
     },
     {
         icone: <SwatchBook />,
         label: 'Gate Cards',
-        href: '/baku-dex/gate-cards'
+        href: '/dashboard/baku-dex/gate-cards'
     }
 ]
 

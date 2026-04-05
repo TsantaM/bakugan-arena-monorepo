@@ -11,7 +11,7 @@ import { ChatWindowType, useChatStore } from "@/src/store/chat-window-store"
 import { MessageType } from "@bakugan-arena/game-data"
 import { Send } from "lucide-react"
 import { useRef } from "react"
-
+import ChalengeCard from "./chalenge-card"
 
 function ChatWindow({ chat }: { chat: ChatWindowType }) {
 
@@ -51,7 +51,7 @@ function ChatWindow({ chat }: { chat: ChatWindowType }) {
     }
 
     const textColor: (name: string) => string = (name) => {
-        if(name === username) {
+        if (name === username) {
             return 'text-blue-500'
         } else {
             return 'text-emerald-500'
@@ -60,7 +60,8 @@ function ChatWindow({ chat }: { chat: ChatWindowType }) {
 
     return (
         <Card className="flex flex-col h-full">
-            <CardContent className="flex flex-col gap-4 h-full p-4">
+            <CardContent className="flex flex-col gap-4 h-full p-1 px-3">
+                <ChalengeCard chalenge={chat.chalenge} targetId={chat.targetId} isChalenged={chat.isChalenged} />
                 {/* Messages */}
                 <Card>
                     <CardContent>
@@ -74,7 +75,7 @@ function ChatWindow({ chat }: { chat: ChatWindowType }) {
                     </CardContent>
                 </Card>
                 {/* Barre d'envoi */}
-                <div className="flex items-end gap-2 border rounded-2xl p-2 shadow-sm bg-background">
+                <div className="flex items-end gap-2 border rounded-2xl p-1 shadow-sm bg-background">
                     <Textarea
                         ref={textareaRef}
                         placeholder="Write your message..."
@@ -112,7 +113,7 @@ export default function ChatsCard() {
                 </CardTitle>
             </CardHeader>
             <CardContent>
-                <Tabs className="w-full">
+                <Tabs className="w-full" defaultValue={chats[0].targetId}>
                     <TabsList>
                         {chats.map((chat) => (
                             <TabsTrigger key={chat.targetId} value={chat.targetId}>

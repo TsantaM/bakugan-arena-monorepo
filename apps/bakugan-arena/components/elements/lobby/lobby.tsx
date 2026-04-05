@@ -6,7 +6,7 @@ import { Toaster } from "@/components/ui/sonner"
 import { useSocket } from "@/src/providers/socket-provider"
 import { redirect } from "next/navigation"
 import LauchRanckedGate from "./launch-rancked-game"
-import OnChalengePopUp from "./on-chalenge-pop-up"
+// import OnChalengePopUp from "./on-chalenge-pop-up"
 import Section from "@/components/ui/section"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
@@ -45,7 +45,7 @@ export default function Lobby() {
                         <Button asChild className="w-full" variant="outline" ><Link href={"/dashboard/deck-builder"}>Deck Builder</Link></Button>
                         <FindUserComponent />
                         <WatchBattle />
-                        <OnChalengePopUp />
+                        {/* <OnChalengePopUp /> */}
                     </CardContent>
                 </Card>
             </Section>

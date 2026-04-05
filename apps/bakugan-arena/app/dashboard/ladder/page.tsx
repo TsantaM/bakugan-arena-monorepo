@@ -7,9 +7,8 @@ export default async function LadderPage() {
 
     return (
         <>
-        
-        <LadderTable players={players}/>     
-        
+            <LadderTable players={players} />
+
         </>
     )
 }
