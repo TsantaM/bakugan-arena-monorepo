@@ -71,7 +71,7 @@ export const ChalengeAcceptSocket = (io: Server, socket: Socket) => {
 
         io.to(chalenges[chalengeIndex].chalenger.userSocket).emit('chalenge-accept-redirect', chalengeAcceptData)
 
-        const newRoomState = await createGameState({ roomId: room.id })
+        const newRoomState = await createGameState({ roomId: room.id, ranked: false })
 
         if (newRoomState) {
             const playersInvervalsId = newRoomState.players.map((player) => ({

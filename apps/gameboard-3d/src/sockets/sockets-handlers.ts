@@ -18,7 +18,7 @@ import { SetBakuganFunctionAnimation } from "../scene-modifications-functions/se
 import { SetGateCardFunctionAndAnimation } from "../scene-modifications-functions/set-gate-card-function-animation"
 import { PowerChangeAnimation, PowerChangeNumberAnimation } from "../animations/power-change-animation"
 import { AdditionalRequestResolution } from "../abiliity-additional-request/additional-request-resolution"
-import { AdditionalEffectMessage, EndGameMessage, removePreviousDialogBoxAnimation, ShowMessageAnimation } from "../animations/show-message-animation"
+import { AdditionalEffectMessage } from "../animations/show-message-animation"
 import { clearTurnInterface } from "../turn-action-management/turn-actions-resolution/action-scope"
 import { ActiveAbilityCardAnimation } from "../animations/active-ability-card"
 import dayjs from "dayjs"
@@ -31,6 +31,7 @@ import { SwipeGateCards } from "../animations/swipe-gate-cards"
 import { CancelAbilityCardAnimation } from "../animations/cancel-ability-card-animation"
 import { DragAndElimineAnimation } from "../animations/drag-and-elimine-animation"
 import { ReviveBakuganAnimation } from "../animations/revive-animation"
+import { sendMessageToParent } from "../functions/send-message-to-parent"
 
 let animationQueue: AnimationDirectivesTypes[] = []
 let isProcessingAnimations = false
@@ -89,9 +90,9 @@ async function processAnimationQueue(userId: string,
                     const delta = anim.data.malus ? -anim.data.powerChange : anim.data.powerChange;
                     combinedPowerChanges.set(key, old + delta);
                 }
-                await ShowMessageAnimation({
-                    messages: anim.message
-                })
+
+                if (anim.message) sendMessageToParent(anim.message)
+
             }
 
             await Promise.all(
@@ -136,9 +137,8 @@ async function processAnimationQueue(userId: string,
                 gateCardMeshs
             });
 
-            await ShowMessageAnimation({
-                messages: current.message
-            })
+            sendMessageToParent(current.message)
+
         }
 
         if (current.type === 'SET_BAKUGAN') {
@@ -151,9 +151,8 @@ async function processAnimationQueue(userId: string,
                 bakugansMeshs
             });
 
-            await ShowMessageAnimation({
-                messages: current.message
-            })
+            sendMessageToParent(current.message)
+
         }
 
         if (current.type === 'MOVE_TO_ANOTHER_SLOT') {
@@ -165,9 +164,8 @@ async function processAnimationQueue(userId: string,
                 userId
             });
 
-            await ShowMessageAnimation({
-                messages: current.message
-            })
+            sendMessageToParent(current.message)
+
         }
 
         if (current.type === 'OPEN_GATE_CARD') {
@@ -177,9 +175,8 @@ async function processAnimationQueue(userId: string,
                 slotId: current.data.slotId
             });
 
-            await ShowMessageAnimation({
-                messages: current.message
-            })
+            sendMessageToParent(current.message)
+
         }
 
         if (current.type === 'CANCEL_GATE_CARD') {
@@ -190,9 +187,7 @@ async function processAnimationQueue(userId: string,
                     slot: current.data.slot
                 });
 
-                await ShowMessageAnimation({
-                    messages: current.message
-                })
+                sendMessageToParent(current.message)
             }
         }
 
@@ -206,9 +201,8 @@ async function processAnimationQueue(userId: string,
                 bakugansMeshs
             });
 
-            await ShowMessageAnimation({
-                messages: current.message
-            })
+            sendMessageToParent(current.message)
+
         }
 
         if (current.type === 'ELIMINE_BAKUGAN') {
@@ -220,9 +214,8 @@ async function processAnimationQueue(userId: string,
                 bakugansMeshs
             });
 
-            await ShowMessageAnimation({
-                messages: current.message
-            })
+            sendMessageToParent(current.message)
+
         }
 
         if (current.type === 'REMOVE_GATE_CARD') {
@@ -236,9 +229,8 @@ async function processAnimationQueue(userId: string,
                 bakugansMeshs
             });
 
-            await ShowMessageAnimation({
-                messages: current.message
-            })
+            sendMessageToParent(current.message)
+
         }
 
         if (current.type === 'BATTLE_START') {
@@ -247,17 +239,15 @@ async function processAnimationQueue(userId: string,
                 userId: userId
             })
 
-            await ShowMessageAnimation({
-                messages: current.message
-            })
+            sendMessageToParent(current.message)
+
         }
 
         if (current.type === 'BATTLE-END') {
             await OnBattleEndAnimation()
 
-            await ShowMessageAnimation({
-                messages: current.message
-            })
+            sendMessageToParent(current.message)
+
         }
 
         if (current.type === 'SET_BAKUGAN_AND_ADD_RENFORT') {
@@ -270,9 +260,8 @@ async function processAnimationQueue(userId: string,
                 bakugansMeshs
             })
 
-            await ShowMessageAnimation({
-                messages: current.message
-            })
+            sendMessageToParent(current.message)
+
         }
 
         if (current.type === 'ADD_RENFORT') {
@@ -280,19 +269,21 @@ async function processAnimationQueue(userId: string,
                 bakugan: current.data.bakugan,
                 userId: userId
             })
+
+            sendMessageToParent(current.message)
+
         }
 
         if (current.type === 'ACTIVE_ABILITY_CARD') {
             await ActiveAbilityCardAnimation(current.data.card, current.data.attribut)
-            await ShowMessageAnimation({
-                messages: current.message
-            })
+            sendMessageToParent(current.message)
+
         }
 
         if (current.type === 'ABILITY_CARD_FAILED') {
-            await ShowMessageAnimation({
-                messages: current.message
-            })
+
+            sendMessageToParent(current.message)
+
         }
 
         if (current.type === 'REMOVE_RENFORT') {
@@ -300,6 +291,9 @@ async function processAnimationQueue(userId: string,
                 bakugan: current.data.bakugan,
                 userId: userId,
             })
+
+            sendMessageToParent(current.message)
+
         }
 
         if (current.type === 'MOVE_GATE_CARD') {
@@ -310,6 +304,9 @@ async function processAnimationQueue(userId: string,
                 scene: scene,
                 userId: userId
             })
+
+            sendMessageToParent(current.message)
+
         }
 
         if (current.type === 'SWIPE_GATE_CARD') {
@@ -320,6 +317,9 @@ async function processAnimationQueue(userId: string,
                 slot2: current.data.slot2,
                 userId: userId
             })
+
+            sendMessageToParent(current.message)
+
         }
 
         if (current.type === 'CANCEL_ABILITY_CARD') {
@@ -327,6 +327,9 @@ async function processAnimationQueue(userId: string,
                 current.data.card,
                 current.data.attribut
             )
+
+            sendMessageToParent(current.message)
+
         }
 
         if (current.type === 'DRAG_AND_ELIMINE') {
@@ -343,6 +346,9 @@ async function processAnimationQueue(userId: string,
                 currentUserId: userId
             })
 
+            sendMessageToParent(current.message)
+
+
         }
 
         if (current.type === 'REVIVE_BAKUGAN') {
@@ -353,6 +359,9 @@ async function processAnimationQueue(userId: string,
                 scene: scene,
                 userId: userId
             })
+
+            sendMessageToParent(current.message)
+
         }
 
         i++; // avancer à l'animation suivante
@@ -360,8 +369,6 @@ async function processAnimationQueue(userId: string,
 
     animationQueue = []
     isProcessingAnimations = false
-    const dialog = document.getElementById('dialog-box')
-    removePreviousDialogBoxAnimation(dialog, 3)
 }
 
 export function registerSocketHandlers(
@@ -505,9 +512,7 @@ export function registerSocketHandlers(
 
     socket.on('game-finished', (message: Message) => {
         clearTurnInterface()
-        EndGameMessage({
-            message: message
-        })
+        sendMessageToParent([message])
 
     })
 }
@@ -613,9 +618,6 @@ export function registerSocketHandlersViewers(socket: Socket,
 
     socket.on('game-finished', (message: Message) => {
         clearTurnInterface()
-        EndGameMessage({
-            message: message
-        })
-
+        sendMessageToParent([message])
     })
 }

@@ -15,6 +15,26 @@ function getK(elo: number): number {
 export async function CalculateAndUpdateElo({ winner, loser, roomData, io, roomId }: { winner: string, loser: string, roomData: stateType, io: Server, roomId: string }) {
 
     if (!roomData) return
+
+    const winnerName = roomData.players.find((p) => p.userId === roomData.status.winner)?.username ? roomData.players.find((p) => p.userId === roomData.status.winner)?.username : ''
+    const loserName = roomData.players.find((p) => p.userId !== roomData.status.winner)?.username ? roomData.players.find((p) => p.userId !== roomData.status.winner)?.username : ''
+    
+    if (!roomData.ranked) {
+        const message: Message = {
+            text: `Game is over ! The winner is ${winnerName}`,
+            turn: roomData.turnState.turnCount
+        }
+
+        io.to(roomId).emit('game-finished', message)
+        const sockets = roomData.connectedsUsers
+        sockets.forEach((s) => {
+            console.log('parent-socket', s.nextjsSocket)
+            io.to(s.nextjsSocket).emit('game-messages', [message])
+        })
+        roomData.messages.push(message)
+    }
+    if (!roomData.ranked) return
+
     const userSchema = schema.user
 
     const winnerElo = await db.query.user.findFirst({
@@ -62,9 +82,6 @@ export async function CalculateAndUpdateElo({ winner, loser, roomData, io, roomI
 
     await db.update(userSchema).set({ elo: newWinnerElo }).where(eq(userSchema.id, winner))
     await db.update(userSchema).set({ elo: newLoserElo }).where(eq(userSchema.id, loser))
-
-    const winnerName = roomData.players.find((p) => p.userId === roomData.status.winner)?.username ? roomData.players.find((p) => p.userId === roomData.status.winner)?.username : ''
-    const loserName = roomData.players.find((p) => p.userId !== roomData.status.winner)?.username ? roomData.players.find((p) => p.userId !== roomData.status.winner)?.username : ''
 
     const message: Message = {
         text: `Game is over ! The winner is ${winnerName} : ${winnerName} : ${newWinnerElo} (+ ${winnerDiffElo}) / ${loserName} : ${newLoserElo} (- ${loserDiffElo})`,

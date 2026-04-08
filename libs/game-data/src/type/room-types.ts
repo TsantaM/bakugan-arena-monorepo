@@ -145,6 +145,7 @@ export type stateType = {
     }>,
     messages: Message[]
     roomId: string;
+    ranked: boolean;
     players: {
         userId: string,
         usable_gates: number,

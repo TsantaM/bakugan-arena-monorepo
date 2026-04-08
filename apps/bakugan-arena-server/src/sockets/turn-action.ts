@@ -22,7 +22,6 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
     if (roomData.status.finished === true) return
     // FR: Mise à jour de l'état du tour (joueur actif, compteur, autorisations, etc.)
     // ENG: Update the turn state (active player, counter, available actions, etc.)
-    updateTurnState(roomData)
 
     // FR: Gestion de la logique des batailles (diminution de tours restants ou lancement de combat)
     // ENG: Handle battle logic (decrease remaining turns or trigger a new battle)
@@ -45,6 +44,8 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
     CheckBattleStillInProcess(roomData)
 
     ClearDomain(roomData, userId)
+
+    updateTurnState(roomData)
 
     CreateActionRequestFunction({ roomState: roomData })
 

@@ -1,7 +1,7 @@
 import { AbilityCardsList, BakuganList, ExclusiveAbilitiesList, GateCardsList, portalSlotsType, SelectableGateCardAction, stateType, turnStateType } from "@bakugan-arena/game-data"
 import { getDecksData, getRoomPlayers } from "./get-room-data"
 
-export const createGameState = async ({ roomId }: { roomId: string }) => {
+export const createGameState = async ({ roomId, ranked }: { roomId: string ; ranked: boolean}) => {
     const decksData = await getDecksData({ roomId })
     const players = await getRoomPlayers({ roomId })
 
@@ -239,6 +239,7 @@ export const createGameState = async ({ roomId }: { roomId: string }) => {
             connectedsUsers: new Map(),
             messages: [],
             roomId: roomId,
+            ranked: ranked,
             players: playersState,
             battleState,
             persistantAbilities: [],

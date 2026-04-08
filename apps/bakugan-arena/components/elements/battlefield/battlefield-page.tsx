@@ -7,6 +7,7 @@ import MessagesModal from "./messages-modal";
 import { redirect } from "next/navigation";
 import { useAudioStore } from "@/src/store/sounds-store";
 import { OSTLists } from "@/src/variables/OST";
+import { Toaster } from "@/components/ui/sonner"
 
 type player = {
     player: {
@@ -65,7 +66,37 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
     useEffect(() => {
         playRandomOST()
     }, [])
+    //     const handleMessage = (event: MessageEvent) => {
+    //         // 🔒 sécurité (IMPORTANT en prod)
+    //         if (!event.data || event.data.type !== "GAME_MESSAGE") return;
 
+    //         const messages: Message[] = event.data.payload;
+
+    //         console.log("Message reçu de l'iframe :", messages);
+
+    //         const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+    //         async function showToasts(messages: Message[]) {
+    //             for (const message of messages) {
+    //                 if(message.description) continue
+    //                 const text = message.userName ? `${message.userName} : ${message.text}` : message.text
+    //                 toast.info(text)
+    //                 await delay(500); // Attendre 3 secondes avant d'afficher le message suivant
+    //             }
+    //         }
+
+    //         showToasts(messages)
+
+    //         // 👉 ici tu peux déclencher ton UI
+    //         // exemple: envoyer au store ou au modal
+    //         // handleIncomingMessage(message);
+    //     };
+
+    //     window.addEventListener("message", handleMessage);
+
+    //     return () => {
+    //         window.removeEventListener("message", handleMessage);
+    //     };
+    // }, []);
 
     return (
         <>
@@ -75,8 +106,10 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
                 volume={volume[0]}
                 playing={true}
             />
-            <MessagesModal player={playerData?.displayUsername} opponent={opponentData?.displayUsername} />
+            <MessagesModal player={playerData?.displayUsername} opponent={opponentData?.displayUsername} roomId={roomId} userId={userId} />
             <iframe ref={iframeRef} src={link} className="w-full h-full border-0"></iframe>
+            <Toaster  />
+
         </>
     )
 }

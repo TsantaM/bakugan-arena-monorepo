@@ -24,6 +24,7 @@ import { CheckActivitiesSocket } from "./sockets/check-activities-socket";
 import { CancelOpponentResearch } from "./sockets/cancel-opponent-research";
 import { WatchBattleSocket } from "./sockets/watch-battle-socket";
 import { ChatMessageSocket } from "./sockets/chat-message-socket";
+import { SendMessageInGame } from "./sockets/messages-in-game";
 
 
 
@@ -60,6 +61,7 @@ io.on('connection', (socket) => {
     socketCleanAnimations(io, socket)
     CheckActivitiesSocket(io, socket)
     socketInitiRoomState(io, socket)
+    SendMessageInGame(io, socket)
     socketUpdateGateState(io, socket)
     socketUpdateBakuganState(io, socket)
     socketUseAbilityCard(io, socket)

@@ -19,3 +19,9 @@ export type ReceiveMessageSocketType = {
     targetName: string;
     message: MessageType;
 }
+
+export type SendMessageInGameType = {
+    roomId: string,
+    text: string,
+    userId: string
+}

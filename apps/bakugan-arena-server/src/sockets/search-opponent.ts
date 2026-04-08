@@ -91,7 +91,7 @@ export const matchmaking = async (io: Server) => {
         })
 
         // Init game state
-        const newRoomState = await createGameState({ roomId: room.id })
+        const newRoomState = await createGameState({ roomId: room.id, ranked: true })
 
         if (newRoomState) {
             Battle_Brawlers_Game_State.push(newRoomState)
