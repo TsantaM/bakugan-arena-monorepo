@@ -1,19 +1,6 @@
 import BakuDexSidebar from "@/components/elements/app-sidebar/baku-dex-sidebar"
-import { SignInModal } from "@/components/elements/sign-in/Sign-in"
-import { SignUpModal } from "@/components/elements/sign-up/Sign-up"
-import { AnimatedThemeToggler } from "@/components/magicui/theme-toggler"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { Skeleton } from "@/components/ui/skeleton"
 import { getUser } from "@/src/actions/getUserSession"
-import { auth } from "@/src/lib/auth"
-import { LogOutIcon, User2 } from "lucide-react"
-import { headers } from "next/headers"
-import Link from "next/link"
-import { redirect } from "next/navigation"
-import { Suspense } from "react"
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
 
@@ -28,7 +15,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
                     <main className="w-full p-3 flex flex-col gap-3">
                         <div className="w-full flex items-center justify-between">
                             <SidebarTrigger />
-                            <div className="flex items-center gap-2">
+                            {/* <div className="flex items-center gap-2">
                                 <AnimatedThemeToggler />
                                 {
                                     user ?
@@ -75,7 +62,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
                                             <SignUpModal />
                                         </>
                                 }
-                            </div>
+                            </div> */}
 
                         </div>
                         {children}

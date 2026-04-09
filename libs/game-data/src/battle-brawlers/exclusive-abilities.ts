@@ -1,6 +1,6 @@
 
 import { exclusiveAbilitiesType } from "../index.js";
-import { AileEnflamee, AntiMuse, BouclierFusion, ChambreDeGravite, DragonoidPlus, EffecteurdOmbre, FlareBlinder, ForceDattraction, FurryOfWind, GaucheGigantesque, ImpactMajeur, JavelotAquos, LanceDeFeu, LanceEclair, MachettesJumelles, MaitreDesProfondeurs, Marionnette, MassueGigantesque, MegaFlareBlinder, Obstruction, OmbreBleue, PlexusSolaire, RobotallionExecution, SabreDeLaMort, TempeteDePlume, Tsunami, VentCinglant, VentViolentDeNobelesseVerte, VisageDeJoie, VisageDeLaFureur, VisageDuChagrin } from "./exclusive-abilities/exclusive-abilities.js";
+import { AileEnflamee, AntiMuse, BouclierFusion, ChambreDeGravite, DragonoidPlus, EffecteurdOmbre, FlareBlinder, ForceDattraction, FurryOfWind, GaucheGigantesque, ImpactMajeur, JavelotAquos, LanceDeFeu, LanceEclair, MachettesJumelles, MaitreDesProfondeurs, Marionnette, MassueGigantesque, MegaFlareBlinder, Obstruction, OmbreBleue, PlexusSolaire, RobotallionExecution, SabreDeLaMort, SpiritHole, TempeteDePlume, TrappeDeSable, Tsunami, VentCinglant, VentViolentDeNobelesseVerte, VisageDeJoie, VisageDeLaFureur, VisageDuChagrin } from "./exclusive-abilities/exclusive-abilities.js";
 
 export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [OmbreBleue.key]: OmbreBleue,
@@ -29,7 +29,7 @@ export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [LanceDeFeu.key]: LanceDeFeu,
     [JavelotAquos.key]: JavelotAquos,
     [Tsunami.key]: Tsunami,
-    // [TrappeDeSable.key]: TrappeDeSable,
+    [TrappeDeSable.key]: TrappeDeSable,
     [MaitreDesProfondeurs.key]: MaitreDesProfondeurs,
     // [DivisionHolographique.key]: DivisionHolographique,
     // [RegainSubit.key]: RegainSubit,
@@ -40,7 +40,8 @@ export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [FlareBlinder.key]: FlareBlinder,
     [MegaFlareBlinder.key]: MegaFlareBlinder,
     [Obstruction.key]: Obstruction,
-    [BouclierFusion.key]: BouclierFusion
+    [BouclierFusion.key]: BouclierFusion,
+    [SpiritHole.key]: SpiritHole
 }
 
 export const ExclusiveAbilitiesList: exclusiveAbilitiesType[] = Object.values(ExclusiveAbilities) 

@@ -5,7 +5,7 @@ import { Slots, StandardCardsImages } from "../../store/store-index.js";
 
 export const CoupDeGrace: abilityCardsType = {
     key: 'coup-de-grace',
-    name: 'Great Down',
+    name: 'Grand Down',
     attribut: 'Darkus',
     description: `Nullifies the opponent's Gate Card`,
     maxInDeck: 2,

@@ -476,7 +476,7 @@ export const AntiMuse: exclusiveAbilitiesType = {
 
 export const VentCinglant: exclusiveAbilitiesType = {
     key: 'vent-cinglant',
-    name: 'Forcing Wave',
+    name: 'Forcement Wave',
     description: `Adds 100 Gs to the user`,
     maxInDeck: 1,
     usable_in_neutral: false,
@@ -568,7 +568,7 @@ export const VisageDuChagrin: exclusiveAbilitiesType = {
 export const VisageDeLaFureur: exclusiveAbilitiesType = {
     key: 'visage-de-la-fureur',
     name: 'Face of Rage',
-    description: `Transfers 100 Gs from the opponent to user`,
+    description: `Add 100 Gs to the user and take 100 to each opponent`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
@@ -580,11 +580,11 @@ export const VisageDeLaFureur: exclusiveAbilitiesType = {
             const opponents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
 
             if (user && opponents.length > 0) {
-                user.currentPower += 100
+                user.currentPower += 50
                 PowerChangeDirectiveAnumation({
                     animations: roomState?.animations,
                     bakugans: [user],
-                    powerChange: 100,
+                    powerChange: 50,
                     malus: false,
                     turn: roomState.turnState.turnCount
 
@@ -1321,8 +1321,9 @@ export const Tsunami: exclusiveAbilitiesType = {
 export const TrappeDeSable: exclusiveAbilitiesType = {
     key: 'trappe-de-sable',
     name: 'Sand Trap',
-    description: `Permet d'attaquer un Bakugan se trouvant sur une autre carte portail et baise le niveau de puissance de la cible de 50 G`,
+    description: `Attract one Bakugan from another Gate Card to user's Gate Card and decrease his power by 50 Gs`,
     maxInDeck: 1,
+    extraInputs: ['drag-bakugan'],
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -1399,6 +1400,20 @@ export const TrappeDeSable: exclusiveAbilitiesType = {
                 CheckBattleStillInProcess(roomState)
             }
         }
+    },
+    // activationConditions: ({ roomState, userId }) => {
+    //     if (!roomState) return false
+    //     const bakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().length
+    //     if (bakugans < 2) return false
+    //     return true
+    // },
+    canUse({ bakugan, roomState }) {
+
+        if (!roomState) return false
+        const bakugansOnOtherSlots = roomState.protalSlots.filter((slot) => slot.id !== bakugan.slot_id).map((slot) => slot.bakugans).flat().length
+        if (bakugansOnOtherSlots < 1) return false
+
+        return true
     }
 }
 
@@ -1687,12 +1702,12 @@ export const ForceDattraction: exclusiveAbilitiesType = {
     onAdditionalEffect: ({ resolution, roomData: roomState }) => {
         dragBakuganToUserSlot({ resolution: resolution, roomState: roomState })
     },
-    activationConditions: ({ roomState, userId }) => {
-        if (!roomState) return false
-        const bakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().length
-        if (bakugans < 2) return false
-        return true
-    },
+    // activationConditions: ({ roomState, userId }) => {
+    //     if (!roomState) return false
+    //     const bakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().length
+    //     if (bakugans < 2) return false
+    //     return true
+    // },
     canUse({ bakugan, roomState }) {
 
         if (!roomState) return false
@@ -1970,4 +1985,57 @@ export const BouclierFusion: exclusiveAbilitiesType = {
 
         return null
     }
+}
+
+export const SpiritHole: exclusiveAbilitiesType = {
+    key: 'spirit-hole',
+    name: 'Spirit Hole',
+    maxInDeck: 1,
+    description: `Adds 50 Gs to your Bakugan for every gate card on the field`,
+    usable_in_neutral: false,
+    usable_if_user_not_on_domain: false,
+    onActivate({ roomState, userId, bakuganKey, slot }) {
+        if (!roomState) return null
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        const bakuganUser = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+        const gateCount = roomState?.protalSlots.filter((s) => s.portalCard !== null)
+
+        if (slotOfGate && bakuganUser && gateCount) {
+            const bonus = 50 * gateCount.length
+            bakuganUser.currentPower = bakuganUser.currentPower + bonus
+            slotOfGate.state.open = true
+            PowerChangeDirectiveAnumation({
+                animations: roomState?.animations,
+                bakugans: [bakuganUser],
+                powerChange: bonus,
+                malus: false,
+                turn: roomState.turnState.turnCount
+
+            })
+        }
+
+        return null
+    },
+    onCanceled({ roomState, userId, bakuganKey, slot }) {
+        if (!roomState) return null
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        const bakuganUser = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+        const gateCount = roomState?.protalSlots.filter((s) => s.portalCard !== null)
+
+        if (slotOfGate && bakuganUser && gateCount) {
+            const malus = 50 * gateCount.length
+            bakuganUser.currentPower = bakuganUser.currentPower - malus
+            slotOfGate.state.open = true
+            PowerChangeDirectiveAnumation({
+                animations: roomState?.animations,
+                bakugans: [bakuganUser],
+                powerChange: malus,
+                malus: true,
+                turn: roomState.turnState.turnCount
+
+            })
+        }
+
+        return null
+    },
 }

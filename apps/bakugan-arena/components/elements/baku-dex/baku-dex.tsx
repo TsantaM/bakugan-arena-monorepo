@@ -26,7 +26,7 @@ export default function BakuDex() {
                     filtered.length > 0 ? <CardContent className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
                         {
                             filtered.map((d, index) =>
-                                <Link key={index} href={`/baku-dex/bakugan?id=${d.key}`}>
+                                <Link key={index} href={`/dashboard/baku-dex/bakugan?id=${d.key}`}>
                                     <BakuganPreview data={d} />
                                 </Link>
                             )
