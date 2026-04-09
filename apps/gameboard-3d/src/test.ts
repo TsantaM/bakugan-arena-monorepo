@@ -2,13 +2,13 @@ import { OrbitControls } from 'three/examples/jsm/Addons.js'
 import './style.css'
 import * as THREE from 'three'
 import { PlaneMesh } from './meshes/plane.mesh'
-import { CreateBakuganHoverPreview, RemoveBakuganHoverPreview, type BakuganPreviewData } from './functions/create-bakugan-preview-hover'
-import { OnHoverGateCard } from './animations/show-message-animation'
-import { type ActivePlayerActionRequestType, type portalSlotsTypeElement, type roomStateType } from '@bakugan-arena/game-data'
+import { type BakuganPreviewData } from './functions/create-bakugan-preview-hover'
+import { Bakugans, type ActivePlayerActionRequestType, type portalSlotsTypeElement, type roomStateType } from '@bakugan-arena/game-data'
 import { InitGameState } from './functions/init-game-state'
 import { DragAndElimineAnimation } from './animations/drag-and-elimine-animation'
 import { ReviveBakuganAnimation } from './animations/revive-animation'
 import { TurnActionInterfaceBuilder } from './turn-action-management/turn-interface-builder'
+import { hideTooltip, initTooltip, showTooltip, tooltip } from './functions/tooltips-functions'
 
 const canvas = document.getElementById('gameboard-canvas')
 // const reload = document.getElementById("init-room")
@@ -235,7 +235,7 @@ const request: ActivePlayerActionRequestType = {
                         bakuganKey: 'dragonoid-pyrus',
                         slot: 'slot-3'
                     },
-                                        {
+                    {
                         abilities: [{
                             description: 'eh',
                             key: 'scarlet-twister4',
@@ -268,7 +268,7 @@ const request: ActivePlayerActionRequestType = {
                         bakuganKey: 'dragonoid-pyrus',
                         slot: 'slot-3'
                     },
-                                        {
+                    {
                         abilities: [{
                             description: 'eh',
                             key: 'scarlet-twister7',
@@ -388,6 +388,95 @@ if (canvas) {
     let hoveredMesh: THREE.Sprite<THREE.Object3DEventMap> | null = null
     let hoveredSlot: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap> | null = null
 
+    // window.addEventListener('mousemove', (event: MouseEvent) => {
+
+    //     const elementUnderMouse = document.elementFromPoint(
+    //         event.clientX,
+    //         event.clientY
+    //     )
+
+    //     // Si la souris n’est PAS au-dessus du canvas → on annule
+    //     if (!elementUnderMouse || !canvas.contains(elementUnderMouse)) {
+    //         if (hoveredMesh) {
+    //             RemoveBakuganHoverPreview()
+    //             hoveredMesh = null
+    //         }
+
+    //         if (hoveredSlot) {
+    //             document.getElementById('on-hover-gate-card')?.remove()
+    //             hoveredSlot = null
+    //         }
+
+    //         return
+    //     }
+
+    //     mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+    //     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+
+    //     raycaster.setFromCamera(mouse, camera)
+
+    //     const intersects = raycaster.intersectObjects(bakugansMeshs, false)
+    //     const gatesIntersects = raycaster.intersectObjects(gateCardMeshs, false)
+
+    //     if (intersects.length > 0) {
+    //         const currentMesh = intersects[0].object as THREE.Sprite<THREE.Object3DEventMap>
+
+    //         if (hoveredMesh !== currentMesh) {
+    //             const data = currentMesh.userData as BakuganPreviewData
+
+    //             showTooltip(`
+    //                 <strong>${data.powerLevel}</strong><br/>
+    //                 Power: ${data.powerLevel}
+    //             `)
+    //         }
+
+    //     } else {
+    //         if (hoveredMesh) {
+    //             RemoveBakuganHoverPreview()
+    //             hoveredMesh = null
+    //         }
+    //     }
+
+    //     if (gatesIntersects.length > 0) {
+    //         const currentMesh = gatesIntersects[0].object as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>
+
+    //         if (hoveredSlot !== currentMesh) {
+    //             if (hoveredSlot) {
+    //                 document.getElementById('on-hover-gate-card')?.remove()
+    //             }
+
+    //             hoveredSlot = currentMesh
+    //             if (hoveredSlot.userData.cardName) {
+
+    //                 hoveredSlot = currentMesh
+
+    //                 if (hoveredSlot.userData.cardName) {
+    //                     showTooltip(hoveredSlot.userData.cardName)
+    //                 }
+    //             }
+    //         }
+
+    //     } else {
+    //         if (hoveredSlot) {
+    //             document.getElementById('on-hover-gate-card')?.remove()
+    //             hoveredSlot = null
+    //         }
+    //     }
+
+    //     if (!intersects.length && hoveredMesh) {
+    //         hideTooltip()
+    //         hoveredMesh = null
+    //     }
+
+    //     if (!gatesIntersects.length && hoveredSlot) {
+    //         hideTooltip()
+    //         hoveredSlot = null
+    //     }
+
+    // })
+
+    initTooltip()
+
     window.addEventListener('mousemove', (event: MouseEvent) => {
 
         const elementUnderMouse = document.elementFromPoint(
@@ -395,70 +484,89 @@ if (canvas) {
             event.clientY
         )
 
-        // Si la souris n’est PAS au-dessus du canvas → on annule
+        // ❌ Hors canvas → reset propre
         if (!elementUnderMouse || !canvas.contains(elementUnderMouse)) {
-            if (hoveredMesh) {
-                RemoveBakuganHoverPreview()
-                hoveredMesh = null
+            if (hoveredMesh || hoveredSlot) {
+                hideTooltip()
             }
 
-            if (hoveredSlot) {
-                document.getElementById('on-hover-gate-card')?.remove()
-                hoveredSlot = null
-            }
-
+            hoveredMesh = null
+            hoveredSlot = null
             return
         }
 
+        // ✅ Position souris (IMPORTANT)
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1
         mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
 
         raycaster.setFromCamera(mouse, camera)
 
+        // ✅ Update position tooltip (CRITIQUE)
+        tooltip?.setProps({
+            getReferenceClientRect: () =>
+                new DOMRect(
+                    event.clientX,
+                    event.clientY,
+                    0,
+                    0
+                ),
+        })
+
         const intersects = raycaster.intersectObjects(bakugansMeshs, false)
         const gatesIntersects = raycaster.intersectObjects(gateCardMeshs, false)
 
+        // =========================
+        // 🎯 BAKUGAN
+        // =========================
         if (intersects.length > 0) {
-            const currentMesh = intersects[0].object as THREE.Sprite<THREE.Object3DEventMap>
+            const currentMesh = intersects[0].object as THREE.Sprite
 
             if (hoveredMesh !== currentMesh) {
-                if (hoveredMesh) {
-                    RemoveBakuganHoverPreview()
-                }
-
                 hoveredMesh = currentMesh
-                CreateBakuganHoverPreview(currentMesh.userData as BakuganPreviewData, { x: mouse.x, y: mouse.y })
+
+                const data = currentMesh.userData as BakuganPreviewData
+                const bakuganName = Bakugans[data.bakuganKey].name
+
+                showTooltip(`
+                <strong>${bakuganName}</strong><br/>
+                Power: ${data.powerLevel}
+                `)
             }
 
-        } else {
-            if (hoveredMesh) {
-                RemoveBakuganHoverPreview()
-                hoveredMesh = null
-            }
+            // ⚠️ IMPORTANT → empêcher le gate card de overwrite
+            hoveredSlot = null
+            return
         }
 
+        // =========================
+        // 🎯 GATE CARD
+        // =========================
         if (gatesIntersects.length > 0) {
-            const currentMesh = gatesIntersects[0].object as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>
+            const currentMesh = gatesIntersects[0].object as THREE.Mesh
 
             if (hoveredSlot !== currentMesh) {
-                if (hoveredSlot) {
-                    document.getElementById('on-hover-gate-card')?.remove()
-                }
+                hoveredSlot = currentMesh as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>
 
-                hoveredSlot = currentMesh
-                if (hoveredSlot.userData.cardName) {
-                    const message: string = hoveredSlot.userData.cardName
-                    OnHoverGateCard({ message: message })
+                if (currentMesh.userData.cardName) {
+                    showTooltip(`<strong>${currentMesh.userData.cardName}</strong>`)
+                } else {
+                    hideTooltip()
                 }
             }
 
-        } else {
-            if (hoveredSlot) {
-                document.getElementById('on-hover-gate-card')?.remove()
-                hoveredSlot = null
-            }
+            hoveredMesh = null
+            return
         }
 
+        // =========================
+        // ❌ RIEN HOVER
+        // =========================
+        if (hoveredMesh || hoveredSlot) {
+            hideTooltip()
+        }
+
+        hoveredMesh = null
+        hoveredSlot = null
     })
 
     // ********************************** INIT TEST GAME STATE ********************************** \\
