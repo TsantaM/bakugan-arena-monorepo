@@ -224,6 +224,7 @@ export const QuatuorDeCombat: gateCardType = {
     image: GateCardImages.command,
     maxInDeck: 1,
     onOpen: ({ roomState, slot, userId }) => {
+        if(!roomState) return null
         const opponentId = roomState?.players.find((p) => p.userId !== userId)?.userId
         const findWeakest = ({ userId, roomState }: { userId: string, roomState: stateType }) => {
             const deck = roomState?.decksState.find((d) => d.userId === userId)
@@ -324,6 +325,11 @@ export const QuatuorDeCombat: gateCardType = {
             }
 
         }
+
+        const slotToUpdate = roomState.protalSlots.find((s) => s.id === slot)
+        if (!slotToUpdate) return null
+        slotToUpdate.state.open = true
+
 
         return null
     },
@@ -591,10 +597,10 @@ export const Revive: gateCardType = {
 
         if (!roomState) return null
         const slotOfGate = roomState.protalSlots[Slots.indexOf(slot)]
-        if(slotOfGate.portalCard === null) return null
-        if(slotOfGate.portalCard.key !== Revive.key) return null
+        if (slotOfGate.portalCard === null) return null
+        if (slotOfGate.portalCard.key !== Revive.key) return null
         const userId = slotOfGate.portalCard.userId
-        if(userId !== winnerId) return null
+        if (userId !== winnerId) return null
 
         const deckToUpdate = roomState?.decksState.find((d) => d.userId === userId)
 

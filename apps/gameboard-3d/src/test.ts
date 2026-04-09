@@ -199,12 +199,13 @@ const request: ActivePlayerActionRequestType = {
                     setableSlots: ["slot-5"]
                 }
             },
+
             {
                 type: 'USE_ABILITY_CARD',
                 data: [
                     {
                         abilities: [{
-                            description: 'eh',
+                            description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem numquam, molestiae magni harum cupiditate, cum beatae quisquam natus quae voluptas porro obcaecati, pariatur qui tenetur',
                             key: 'scarlet-twister',
                             image: 'ability_card_VENTUS',
                             name: 'Blow Away'

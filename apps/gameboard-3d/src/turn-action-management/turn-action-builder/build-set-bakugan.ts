@@ -1,4 +1,5 @@
 import type { ActionType } from "@bakugan-arena/game-data";
+import tippy from "tippy.js";
 
 export function BuildSetBakugan({ action, turnActionContainer }: { action: ActionType, turnActionContainer: HTMLDivElement }) {
     if (action.type !== 'SET_BAKUGAN') return
@@ -21,11 +22,20 @@ export function BuildSetBakugan({ action, turnActionContainer }: { action: Actio
         bakuganImage.classList.add('bakugan-image-selecter');
         bakuganElement.appendChild(bakuganImage);
 
-        const bakuganData = document.createElement('p');
-        bakuganData.classList.add('bakugan-data');
-        bakuganData.textContent = `${bakugan.name} (${bakugan.currentPower})`;
-        bakuganElement.appendChild(bakuganData);
+        // 🔥 Tooltip content
+        const tooltipContent = `
+        <strong class="text-lg">${bakugan.name}</strong><br/>
+        Power: ${bakugan.currentPower}
+    `
 
+        // ✅ Tippy attaché
+        tippy(bakuganElement, {
+            content: tooltipContent,
+            allowHTML: true,
+            placement: 'top',
+            // mobile safe
+            trigger: 'mouseenter focus',
+        })
         container.appendChild(bakuganElement)
 
     })
