@@ -14,7 +14,7 @@ type SetBakuganAnimationProps = {
     scene: THREE.Scene;
 };
 
-export function SetBakuganAnimation({
+export async function SetBakuganAnimation({
     bakuganMesh,
     camera,
     sphere,

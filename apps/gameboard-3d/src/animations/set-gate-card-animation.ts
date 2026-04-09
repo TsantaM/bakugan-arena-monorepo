@@ -3,7 +3,7 @@ import gsap from 'gsap'
 import { GateCardsList } from '@bakugan-arena/game-data'
 import { getSlotMeshPosition } from '../functions/get-slot-mesh-position'
 
-export function SetGateCardAnimation({
+export async function SetGateCardAnimation({
     cardMesh,
     index,
     card,

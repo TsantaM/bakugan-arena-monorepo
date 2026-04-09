@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm"
 import { schema } from "@bakugan-arena/drizzle-orm"
 import { CalculateAndUpdateElo } from "./ladder-functions/calculate-elo"
 import { Server } from "socket.io/dist"
+import { SendUserRooms } from "./send-user-rooms"
 
 const rooms = schema.rooms
 
@@ -14,7 +15,7 @@ export const CheckGameFinished = async ({
 }: {
   roomId: string
   roomState: stateType
-  
+
   io: Server
 }) => {
   if (!roomState || roomState.status.finished) return
@@ -62,6 +63,9 @@ export const CheckGameFinished = async ({
 
     await CalculateAndUpdateElo({ loser: player1, winner: player2, roomData: roomState, io: io, roomId: roomId })
 
+    SendUserRooms({ userId: player1, io: io })
+    SendUserRooms({ userId: player2, io: io })
+
     return
   }
 
@@ -80,6 +84,9 @@ export const CheckGameFinished = async ({
       .where(eq(rooms.id, roomId))
 
     await CalculateAndUpdateElo({ loser: player2, winner: player1, roomData: roomState, io: io, roomId: roomId })
+
+    SendUserRooms({ userId: player1, io: io })
+    SendUserRooms({ userId: player2, io: io })
 
     return
   }
@@ -104,6 +111,9 @@ export const CheckGameFinished = async ({
     })
     roomState.messages.push(EqualityMessage)
 
+    SendUserRooms({ userId: player1, io: io })
+    SendUserRooms({ userId: player2, io: io })
+
     return
   }
 
@@ -126,6 +136,9 @@ export const CheckGameFinished = async ({
       io.to(s.nextjsSocket).emit('game-messages', [EqualityMessage])
     })
     roomState.messages.push(EqualityMessage)
+
+    SendUserRooms({ userId: player1, io: io })
+    SendUserRooms({ userId: player2, io: io })
 
     return
 

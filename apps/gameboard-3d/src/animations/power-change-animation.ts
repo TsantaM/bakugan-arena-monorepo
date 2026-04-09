@@ -8,7 +8,7 @@ import type { SpriteUserData } from '../meshes/bakugan.mesh';
 const loader = new FontLoader();
 const font = await loader.loadAsync('./../fonts/Square Metal-7_Regular.json');
 
-export function PowerChangeAnimation({
+export async function PowerChangeAnimation({
   scene,
   bakugan,
   powerChange,

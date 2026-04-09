@@ -19,7 +19,7 @@ import { useRoomsStore } from "@/src/store/rooms-store"
 import { BookOpenText, ChartSpline, Home, KeyRound, SwatchBook } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { ReactNode, useEffect, useState } from "react"
+import { ReactNode, useEffect } from "react"
 
 type LinksDashboardType = {
     icone: ReactNode,
@@ -69,7 +69,7 @@ export default function AppSidebar({ role }: { role: RoleType | undefined }) {
 
     useEffect(() => {
         if (!socket) return
-        socket.on('get-rooms-user-id', (rooms: { p1: string, p2: string, roomId: string }[]) => {
+        socket.on('get-rooms-user-id', (rooms: { p1: string, p2: string, roomId: string, finished: boolean }[]) => {
             if (rooms === Rooms) return
             setRooms(rooms)
         })

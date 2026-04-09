@@ -3,7 +3,7 @@ import gsap from "gsap";
 import { PowerChangeNumberAnimation } from "./power-change-animation";
 import { getAttributColor } from "../functions/get-attrubut-color";
 
-export function RemoveRenforAnimation({ bakugan, userId }: { bakugan: bakuganOnSlot, userId: string, final_power?: number }): Promise<void> {
+export async function RemoveRenforAnimation({ bakugan, userId }: { bakugan: bakuganOnSlot, userId: string, final_power?: number }): Promise<void> {
 
     return new Promise((resolve) => {
 

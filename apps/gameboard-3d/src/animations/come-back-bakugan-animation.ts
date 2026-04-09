@@ -13,7 +13,7 @@ type ComeBackBakuganAnimationProps = {
   onCompleteFunction?: () => void
 }
 
-export function ComeBackBakuganAnimation({
+export async function ComeBackBakuganAnimation({
   bakugan,
   camera,
   scene,

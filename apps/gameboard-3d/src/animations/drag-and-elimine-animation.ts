@@ -11,7 +11,7 @@ type DragAndElimineBakuganProps = {
 }
 
 
-export function DragAndElimineAnimation({ scene, bakugan, cardUser, bakugansMeshs }: DragAndElimineBakuganProps): Promise<void> {
+export async function DragAndElimineAnimation({ scene, bakugan, cardUser, bakugansMeshs }: DragAndElimineBakuganProps): Promise<void> {
     return new Promise((resolve) => {
 
         const bakuganMesh = scene.getObjectByName(`${bakugan.key}-${bakugan.userId}`) as THREE.Sprite<THREE.Object3DEventMap>

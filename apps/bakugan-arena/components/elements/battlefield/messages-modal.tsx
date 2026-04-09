@@ -11,6 +11,11 @@ import { MessagesSquare, Send } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
 
+type messagesContainerType = {
+    turn: number,
+    messages: Message[]
+}
+
 function MessageParagraph({ message }: { message: Message }) {
     const username = authClient.useSession().data?.user.displayUsername
     const { userName, text, description } = message
@@ -62,11 +67,6 @@ function TurnMessagesContainer({ turn, messages }: { turn: number, messages: Mes
             </div>
         </div>
     )
-}
-
-type messagesContainerType = {
-    turn: number,
-    messages: Message[]
 }
 
 export default function MessagesModal({ player, opponent, roomId, userId }: { player: string | undefined | null, opponent: string | undefined | null, roomId: string, userId: string }) {
@@ -244,6 +244,7 @@ export default function MessagesModal({ player, opponent, roomId, userId }: { pl
                 {
                     [...messagesContainer].sort((a, b) => a.turn - b.turn).map(m => < TurnMessagesContainer messages={m.messages} turn={m.turn} key={m.turn} />)
                 }
+                
             </ScrollArea>
 
             {/* Barre d'envoi */}

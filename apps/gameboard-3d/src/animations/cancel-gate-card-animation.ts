@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import gsap from 'gsap'
 import type { portalSlotsTypeElement } from '@bakugan-arena/game-data'
 
-function CancelGateCardAnimation({
+async function CancelGateCardAnimation({
   slot,
   mesh
 }: {

@@ -8,10 +8,11 @@ import { Textarea } from "@/components/ui/textarea"
 import { authClient } from "@/src/lib/auth-client"
 import useChat from "@/src/sockets/useChat"
 import { ChatWindowType, useChatStore } from "@/src/store/chat-window-store"
-import { MessageType } from "@bakugan-arena/game-data"
-import { Send } from "lucide-react"
+import { CancelChalengeSocketPropsType, MessageType, RejectChalengeSocketPropsType } from "@bakugan-arena/game-data"
+import { Send, X } from "lucide-react"
 import { useRef } from "react"
 import ChalengeCard from "./chalenge-card"
+import { useSocket } from "@/src/providers/socket-provider"
 
 function ChatWindow({ chat }: { chat: ChatWindowType }) {
 
@@ -105,6 +106,46 @@ function ChatWindow({ chat }: { chat: ChatWindowType }) {
 export default function ChatsCard() {
 
     const chats = useChatStore((state) => state.chats)
+    const userId = authClient.useSession().data?.user.id
+    const socket = useSocket()
+    const clearIsChalenged = useChatStore((state) => state.clearIsChalenged)
+    const clearChallenge = useChatStore((state) => state.clearChallenge)
+    const removeChat = useChatStore((state) => state.removeChat)
+    const setFocused = useChatStore((state) => state.setFocused)
+ 
+    function closeTab(chat: ChatWindowType) {
+
+        if (chat.chalenge !== null) {
+            if (!userId) return
+            if (!socket) return
+
+            const data: CancelChalengeSocketPropsType = {
+                userId: userId,
+                targetId: chat.targetId
+            }
+
+            clearChallenge(chat.targetId)
+            socket.emit('cancel-chalenge', data)
+        }
+
+        if (chat.isChalenged !== null) {
+            if (!userId) return
+            if (!socket) return
+
+            const data: RejectChalengeSocketPropsType = {
+                chalengerId: chat.targetId,
+                userId: userId
+            }
+
+            clearIsChalenged(chat.targetId)
+            socket.emit('chalenge-rejected', data)
+        }
+
+        removeChat(chat.targetId)
+        setFocused(chats[0].targetId)
+
+    }
+
     if (chats.length > 0) return (
         <Card>
             <CardHeader>
@@ -116,8 +157,22 @@ export default function ChatsCard() {
                 <Tabs className="w-full" defaultValue={chats[0].targetId}>
                     <TabsList>
                         {chats.map((chat) => (
-                            <TabsTrigger key={chat.targetId} value={chat.targetId}>
-                                {chat.targetName}
+                            <TabsTrigger
+                                key={chat.targetId}
+                                value={chat.targetId}
+                                className="flex items-center gap-2 pr-2"
+                            >
+                                <span className="truncate">{chat.targetName}</span>
+
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        closeTab(chat)
+                                    }}
+                                    className="rounded-sm p-1 hover:bg-muted"
+                                >
+                                    <X className="h-2 w-2" />
+                                </button>
                             </TabsTrigger>
                         ))}
                     </TabsList>

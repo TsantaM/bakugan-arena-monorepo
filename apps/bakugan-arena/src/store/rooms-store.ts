@@ -1,7 +1,7 @@
 // src/store/roomsStore.ts
 import { create } from 'zustand'
 
-export type Room = { p1: string, p2: string, roomId: string }
+export type Room = { p1: string, p2: string, roomId: string, finished: boolean }
 
 interface RoomsStore {
   rooms: Room[]

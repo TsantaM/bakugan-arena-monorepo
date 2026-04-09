@@ -13,7 +13,7 @@ type SwipeGateCardsProps = {
 }
 
 
-export function SwipeGateCards({ slot2, plane, slot1 }: SwipeGateCardsProps): Promise<void> {
+export async function SwipeGateCards({ slot2, plane, slot1 }: SwipeGateCardsProps): Promise<void> {
 
     return new Promise((resolve) => {
         const slot1Mesh = plane.getObjectByName(slot1.id)

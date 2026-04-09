@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import TanstackProvider from "../src/providers/queryClientProvider";
+import { TouchProvider } from "@/components/ui/hybrid-tooltip";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,11 +30,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden flex flex-col`}
       >
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
-            <TanstackProvider>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
+          <TanstackProvider>
+            <TouchProvider>
               {children}
-            </TanstackProvider>
-          </ThemeProvider>
+            </TouchProvider>
+          </TanstackProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

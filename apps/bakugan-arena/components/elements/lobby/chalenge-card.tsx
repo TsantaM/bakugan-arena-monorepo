@@ -35,7 +35,6 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
     const clearIsChalenged = useChatStore((state) => state.clearIsChalenged)
     const toggleDeckInIsChalenged = useChatStore((state) => state.toggleDeckInIsChalenged)
     const clearChallenge = useChatStore((state) => state.clearChallenge)
-    const clearIsChallenged = useChatStore((state) => state.clearIsChalenged)
     const setWaiting = useChatStore((state) => state.setWaiting)
     const [open, setOpen] = useState(false)
     const [show, setShow] = useState(false)

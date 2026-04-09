@@ -25,6 +25,7 @@ import { CancelOpponentResearch } from "./sockets/cancel-opponent-research";
 import { WatchBattleSocket } from "./sockets/watch-battle-socket";
 import { ChatMessageSocket } from "./sockets/chat-message-socket";
 import { SendMessageInGame } from "./sockets/messages-in-game";
+import { forfeitSocket } from "./sockets/forfeit-socket";
 
 
 
@@ -68,6 +69,7 @@ io.on('connection', (socket) => {
     AbilitiesAdditionalEffectsSocket(io, socket)
     socketActiveGateCard(io, socket)
     socketTurn(io, socket)
+    forfeitSocket(io, socket)
 
     socket.on('disconnect', (reason) => {
         console.log('A user disconnected:', 'socketId : ', socket.id, 'userId : ', userId, reason);

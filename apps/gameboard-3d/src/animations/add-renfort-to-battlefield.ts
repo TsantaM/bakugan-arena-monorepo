@@ -4,7 +4,7 @@ import { getAttributColor } from '../functions/get-attrubut-color';
 import { PowerChangeNumberAnimation } from './power-change-animation';
 import { CreateSpritePreviewContainer } from '../functions/create-bakugan-preview-container';
 
-function AddRenfortToBattleField({ bakugan, userId }: { bakugan: bakuganOnSlot, userId: string, final_power: number }): Promise<void> {
+async function AddRenfortToBattleField({ bakugan, userId }: { bakugan: bakuganOnSlot, userId: string, final_power: number }): Promise<void> {
 
     return new Promise((resolve) => {
         const containerId = bakugan.userId === userId ? 'left-bakugan-previews-container' : 'right-bakugan-previews-container'

@@ -36,7 +36,7 @@ function updateRevivedUI({
 }
 
 
-export function ReviveBakuganAnimation({ bakuganKey, bakuganUserId, scene, userId, camera }: { bakuganKey: string, bakuganUserId: string, scene: THREE.Scene, userId: string, camera: THREE.PerspectiveCamera }): Promise<void> {
+export async function ReviveBakuganAnimation({ bakuganKey, bakuganUserId, scene, userId, camera }: { bakuganKey: string, bakuganUserId: string, scene: THREE.Scene, userId: string, camera: THREE.PerspectiveCamera }): Promise<void> {
     return new Promise((resolve) => {
 
         const bakugan = BakuganList.find((b) => b.key === bakuganKey)

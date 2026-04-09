@@ -45,7 +45,7 @@ async function processAnimationQueue(userId: string,
     bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[],
     gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[]
 ) {
-    if (isProcessingAnimations) return
+    if (isProcessingAnimations) return currentAnimationPromise;
 
     isProcessingAnimations = true
 
@@ -130,6 +130,9 @@ async function processAnimationQueue(userId: string,
         // --------------------------
 
         if (current.type === 'SET_GATE_CARD') {
+
+            sendMessageToParent(current.message)
+
             await SetGateCardFunctionAndAnimation({
                 plane,
                 slot: current.data.slot,
@@ -137,11 +140,12 @@ async function processAnimationQueue(userId: string,
                 gateCardMeshs
             });
 
-            sendMessageToParent(current.message)
-
         }
 
         if (current.type === 'SET_BAKUGAN') {
+
+            sendMessageToParent(current.message)
+
             await SetBakuganFunctionAnimation({
                 bakugan: current.data.bakugan,
                 slot: current.data.slot,
@@ -151,11 +155,12 @@ async function processAnimationQueue(userId: string,
                 bakugansMeshs
             });
 
-            sendMessageToParent(current.message)
-
         }
 
         if (current.type === 'MOVE_TO_ANOTHER_SLOT') {
+
+            sendMessageToParent(current.message)
+
             await MoveToAnotherSlotFunctionAnimation({
                 bakugan: current.data.bakugan,
                 initialSlot: current.data.initialSlot,
@@ -164,34 +169,38 @@ async function processAnimationQueue(userId: string,
                 userId
             });
 
-            sendMessageToParent(current.message)
-
         }
 
         if (current.type === 'OPEN_GATE_CARD') {
+
+            sendMessageToParent(current.message)
+
             await OpenGateGateCardFunctionAnimation({
                 plane,
                 slot: current.data.slot,
                 slotId: current.data.slotId
             });
 
-            sendMessageToParent(current.message)
-
         }
 
         if (current.type === 'CANCEL_GATE_CARD') {
             const mesh = plane.getObjectByName(current.data.slot.id)
             if (mesh) {
+
+                sendMessageToParent(current.message)
+
                 await CancelGateCardAnimation({
                     mesh: mesh as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>,
                     slot: current.data.slot
                 });
 
-                sendMessageToParent(current.message)
             }
         }
 
         if (current.type === 'COME_BACK_BAKUGAN') {
+
+            sendMessageToParent(current.message)
+
             await ComeBackBakuganFunctionAnimation({
                 bakugan: current.data.bakugan,
                 slot: current.data.slot,
@@ -201,11 +210,12 @@ async function processAnimationQueue(userId: string,
                 bakugansMeshs
             });
 
-            sendMessageToParent(current.message)
-
         }
 
         if (current.type === 'ELIMINE_BAKUGAN') {
+
+            sendMessageToParent(current.message)
+
             await ElimineBakuganFunctionAnimation({
                 bakugan: current.data.bakugan,
                 scene,
@@ -214,11 +224,12 @@ async function processAnimationQueue(userId: string,
                 bakugansMeshs
             });
 
-            sendMessageToParent(current.message)
-
         }
 
         if (current.type === 'REMOVE_GATE_CARD') {
+
+            sendMessageToParent(current.message)
+
             await RemoveGateCardFunctionAnimation({
                 plane,
                 slot: current.data.slot,
@@ -229,28 +240,29 @@ async function processAnimationQueue(userId: string,
                 bakugansMeshs
             });
 
-            sendMessageToParent(current.message)
-
         }
 
         if (current.type === 'BATTLE_START') {
+
+            sendMessageToParent(current.message)
+
             await OnBattleStartFunctionAnimation({
                 slot: current.data.slot,
                 userId: userId
             })
 
-            sendMessageToParent(current.message)
-
         }
 
         if (current.type === 'BATTLE-END') {
-            await OnBattleEndAnimation()
-
             sendMessageToParent(current.message)
 
+            await OnBattleEndAnimation()
         }
 
         if (current.type === 'SET_BAKUGAN_AND_ADD_RENFORT') {
+
+            sendMessageToParent(current.message)
+
             await SetBakuganAndAddRenfortAnimationAndFunction({
                 bakugan: current.data.bakugan,
                 camera: camera,
@@ -260,24 +272,22 @@ async function processAnimationQueue(userId: string,
                 bakugansMeshs
             })
 
-            sendMessageToParent(current.message)
-
         }
 
         if (current.type === 'ADD_RENFORT') {
+
+            sendMessageToParent(current.message)
+
             await AddRenfortToBattleAnimationFunction({
                 bakugan: current.data.bakugan,
                 userId: userId
             })
 
-            sendMessageToParent(current.message)
-
         }
 
         if (current.type === 'ACTIVE_ABILITY_CARD') {
-            await ActiveAbilityCardAnimation(current.data.card, current.data.attribut)
             sendMessageToParent(current.message)
-
+            await ActiveAbilityCardAnimation(current.data.card, current.data.attribut)
         }
 
         if (current.type === 'ABILITY_CARD_FAILED') {
@@ -287,16 +297,20 @@ async function processAnimationQueue(userId: string,
         }
 
         if (current.type === 'REMOVE_RENFORT') {
+
+            sendMessageToParent(current.message)
+
             await RemoveRenforAnimation({
                 bakugan: current.data.bakugan,
                 userId: userId,
             })
 
-            sendMessageToParent(current.message)
-
         }
 
         if (current.type === 'MOVE_GATE_CARD') {
+            
+            sendMessageToParent(current.message)
+            
             await MoveGateCard({
                 newSlot: current.data.newSlot,
                 slot: current.data.slot,
@@ -305,11 +319,11 @@ async function processAnimationQueue(userId: string,
                 userId: userId
             })
 
-            sendMessageToParent(current.message)
-
         }
 
         if (current.type === 'SWIPE_GATE_CARD') {
+            sendMessageToParent(current.message)
+            
             await SwipeGateCards({
                 plane: plane,
                 scene: scene,
@@ -318,21 +332,22 @@ async function processAnimationQueue(userId: string,
                 userId: userId
             })
 
-            sendMessageToParent(current.message)
-
         }
 
         if (current.type === 'CANCEL_ABILITY_CARD') {
+
+            sendMessageToParent(current.message)
+
             await CancelAbilityCardAnimation(
                 current.data.card,
                 current.data.attribut
             )
 
-            sendMessageToParent(current.message)
-
         }
 
         if (current.type === 'DRAG_AND_ELIMINE') {
+
+            sendMessageToParent(current.message)
 
             await DragAndElimineAnimation({
                 bakugan: current.data.bakugan,
@@ -346,12 +361,12 @@ async function processAnimationQueue(userId: string,
                 currentUserId: userId
             })
 
-            sendMessageToParent(current.message)
-
-
         }
 
         if (current.type === 'REVIVE_BAKUGAN') {
+            
+            sendMessageToParent(current.message)
+
             await ReviveBakuganAnimation({
                 bakuganKey: current.data.bakuganKey,
                 bakuganUserId: current.data.bakuganUserId,
@@ -359,8 +374,6 @@ async function processAnimationQueue(userId: string,
                 scene: scene,
                 userId: userId
             })
-
-            sendMessageToParent(current.message)
 
         }
 
@@ -463,11 +476,18 @@ export function registerSocketHandlers(
 
     socket.on("animations", (animations: AnimationDirectivesTypes[]) => {
         animationQueue.push(...animations)
-        currentAnimationPromise = processAnimationQueue(userId, camera, scene, plane, bakugansMeshs, gateCardMeshs)
+        if (!isProcessingAnimations) {
+            currentAnimationPromise = processAnimationQueue(
+                userId, camera, scene, plane, bakugansMeshs, gateCardMeshs
+            )
+        }
     })
 
-    socket.on("ability-additional-request", (request: AbilityCardsActionsRequestsType) => {
+    socket.on("ability-additional-request", async (request: AbilityCardsActionsRequestsType) => {
         if (request.userId !== userId) return
+
+        await currentAnimationPromise;
+        
         clearTurnInterface()
         AdditionalRequestResolution({
             request: request, camera: camera, plane: plane, socket: socket, scene: scene

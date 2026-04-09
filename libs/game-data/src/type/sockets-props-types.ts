@@ -41,3 +41,8 @@ export type RejectChalengeSocketPropsType = {
     userId: string,
     chalengerId: string
 }
+
+export type forfeitSocketProps = {
+    roomId: string,
+    userId: string
+}

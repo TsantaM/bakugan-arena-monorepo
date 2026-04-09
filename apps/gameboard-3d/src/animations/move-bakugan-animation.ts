@@ -12,7 +12,7 @@ type MoveBakuganProps = {
   duration?: number
 }
 
-export function MoveBakugan({
+export async function MoveBakugan({
   scene,
   bakugan,
   slot,

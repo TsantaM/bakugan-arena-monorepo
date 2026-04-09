@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import gsap from 'gsap'
 
-function RemoveGateCardAnimation({
+async function RemoveGateCardAnimation({
   mesh,
   gateCardMeshs
 }: {

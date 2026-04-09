@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useSocket } from "@/src/providers/socket-provider";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type RoomsToWatchType = {
     roomId: string,
@@ -11,56 +14,102 @@ type RoomsToWatchType = {
 }
 
 export default function WatchBattle() {
-
     const [open, setOpen] = useState(false)
     const [rooms, setRooms] = useState<RoomsToWatchType[]>([])
+    const [search, setSearch] = useState("")
+
     const socket = useSocket()
 
+    // 📡 Fetch rooms
     useEffect(() => {
-        if (!socket) return
-        if (!open) return
+        if (!socket || !open) return
 
-        socket.emit('get-battle-to-watch', );
-
-
+        socket.emit("get-battle-to-watch")
     }, [open, socket])
 
+    // 📡 Listen rooms
     useEffect(() => {
-        if (!socket) return
-        if (!open) return
+        if (!socket || !open) return
 
-        socket.on('battle-to-watch', (rooms: RoomsToWatchType[]) => {
+        const handler = (rooms: RoomsToWatchType[]) => {
             setRooms(rooms)
-        })
+        }
 
+        socket.on("battle-to-watch", handler)
+
+        return () => {
+            socket.off("battle-to-watch", handler)
+        }
     }, [open, socket])
+
+    // 🔍 Filter function
+    const filteredRooms = useMemo(() => {
+        if (!search) return rooms
+
+        const lower = search.toLowerCase()
+
+        return rooms.filter(
+            (r) =>
+                r.p1.toLowerCase().includes(lower) ||
+                r.p2.toLowerCase().includes(lower)
+        )
+    }, [rooms, search])
 
     return (
-
         <Dialog open={open} onOpenChange={setOpen}>
-
             <DialogTrigger asChild>
                 <Button className="w-full">Watch Battle</Button>
             </DialogTrigger>
-            <DialogContent>
-                <DialogTitle>Watch Battle</DialogTitle>
 
-                <div className='flex flex-col justify-center items-center gap-2 '>
-                    {
-                        rooms && rooms.length > 0 && rooms.map((r, index) => (
-                            <Button key={index} className="w-full" variant={'outline'}>
-                                <Link href={`/dashboard/battlefield?id=${r.roomId}`} className="italic">
-                                    {r.p1} VS {r.p2}
-                                </Link>
-                            </Button>
-                        ))
-                    }
+            <DialogContent className="max-w-md">
+                <DialogTitle className="text-center text-xl">
+                    Watch Battle
+                </DialogTitle>
+
+                <div className="flex flex-col gap-4 mt-4 w-full">
+                    {/* 🔍 Search */}
+                    <SearchPlayer value={search} onChange={setSearch} />
+
+                    {/* 📜 Scrollable list */}
+                    <ScrollArea className="max-h-75 w-full">
+                        <div className="flex justify-center items-center flex-col gap-3 w-full">
+                            {filteredRooms.length > 0 ? (
+                                filteredRooms.map((r, index) => (
+                                    <Button key={index} className="w-full" variant={'outline'} asChild>
+                                        <Link href={`/dashboard/battlefield?id=${r.roomId}`} className="italic w-full">
+                                            {r.p1} VS {r.p2}
+                                        </Link>
+                                    </Button>
+                                ))
+                            ) : (
+                                <p className="text-center text-muted-foreground text-sm">
+                                    Aucun match trouvé
+                                </p>
+                            )}
+                        </div>
+                    </ScrollArea>
                 </div>
-
             </DialogContent>
         </Dialog>
+    )
+}
 
-
-
+//
+// 🔍 Search Component
+//
+function SearchPlayer({
+    value,
+    onChange,
+}: {
+    value: string
+    onChange: (v: string) => void
+}) {
+    return (
+        <Input
+            placeholder="Rechercher un joueur..."
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            className="w-full"
+        />
     )
 }

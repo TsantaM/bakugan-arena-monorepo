@@ -12,7 +12,7 @@ type ElimineBakuganAnimationProps = {
     onCompleteFunction?: () => void
 }
 
-export function ElimineBakuganAnimation({
+export async function ElimineBakuganAnimation({
     bakugan,
     scene,
     slot,

@@ -13,7 +13,7 @@ type MoveGateCardProps = {
 }
 
 
-export function MoveGateCard({ plane, slot, newSlot, scene, userId }: MoveGateCardProps): Promise<void> {
+export async function MoveGateCard({ plane, slot, newSlot, scene, userId }: MoveGateCardProps): Promise<void> {
     return new Promise((resolve) => {
         const initialSlotMesh = plane.getObjectByName(slot.id)
 

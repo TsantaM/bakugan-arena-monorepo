@@ -17,6 +17,7 @@ import UsersStoreUpdateListener from "@/src/global-listener/users-store-update-l
 import ChatListener from "@/src/global-listener/chat-global-listener";
 import SearchOpponentListener from "@/src/global-listener/search-opponent-listener";
 import ChalengeSomeoneListener from "@/src/global-listener/chalenge-someone-listener"
+import ForfeitButton from "@/components/elements/battlefield/forfeit-button"
 
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
@@ -37,6 +38,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
                         <div className="w-full flex items-center justify-between">
                             <SidebarTrigger />
                             <div className="flex items-center gap-3">
+                                <ForfeitButton />
                                 <AnimatedThemeToggler />
                                 <SoundPlayerControls />
                                 <Suspense fallback={<SidebarMenuSkeleton />}>

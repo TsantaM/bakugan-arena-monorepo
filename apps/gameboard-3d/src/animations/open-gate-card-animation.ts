@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { getAttributColor } from "../functions/get-attrubut-color";
 import type { SlotMeshUsersData } from "../meshes/slot.mesh";
 
-export function OpenGateCardAnimation({
+export async function OpenGateCardAnimation({
   mesh,
   slot,
 }: {
