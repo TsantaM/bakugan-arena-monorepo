@@ -179,9 +179,10 @@ export const Echange: gateCardType = {
 
             roomState.turnState.set_new_bakugan = true
             roomState.turnState.set_new_gate = true
-
+            slotOfGate.state.open = true
 
         }
+
 
         return null
     },
@@ -210,11 +211,11 @@ export const SuperPyrus: gateCardType = {
         activeBeforeElimination: true
     },
     onOpen({ roomState, slot }) {
-      
-        if(!roomState) return null
+
+        if (!roomState) return null
         const slotOfGate = roomState.protalSlots[Slots.indexOf(slot)]
         const userId = slotOfGate.portalCard?.userId
-        if(!userId) return null
+        if (!userId) return null
 
         SwipePowerLevelsEffects({
             roomState: roomState,

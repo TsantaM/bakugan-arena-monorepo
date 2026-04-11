@@ -1,6 +1,6 @@
 import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation, type bakuganType, type gateCardType } from "../../index.js"
 import { GateCardImages } from "../../store/gate-card-images.js"
-import { SpiritHole } from "../exclusive-abilities/exclusive-abilities.js"
+import { SpiritHole } from "../exclusive-abilities/spirit-hole.js"
 
 
 export const WormquakeSubterra: bakuganType = {

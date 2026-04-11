@@ -24,8 +24,6 @@ type addBakuganToSlotParams = {
 }
 
 export function addBakuganToSlot({ bakuganFromDeck, bakuganToAdd, roomData, slotId, userId, assist }: addBakuganToSlotParams) {
-    if (!roomData) return
-    if (!bakuganToAdd) return
 
     const slot = roomData.protalSlots.find((s) => s.id === slotId)
 

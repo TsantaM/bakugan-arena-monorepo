@@ -1,7 +1,7 @@
 import { AbilityCardFailed, AddRenfortAnimationDirective, CancelGateCardDirectiveAnimation, CheckBattle, dragBakuganToUserSlot, getJuxtaposablesSlots, MoveToAnotherSlotDirectiveAnimation, OpenGateCardActionRequest, PowerChangeDirectiveAnumation } from "../../function/index.js";
 import { Slots, StandardCardsImages } from "../../store/store-index.js";
-import type { AbilityCardsActions, abilityCardsType, AnimationDirectivesTypes, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, slots_id } from "../../type/type-index.js";
-import { GateCardsList } from "../gate-gards.js";
+import type { AbilityCardsActions, abilityCardsType, ActionType, AnimationDirectivesTypes, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, slots_id } from "../../type/type-index.js";
+import { GateCards, GateCardsList } from "../gate-gards.js";
 
 export const MagmaSupreme: abilityCardsType = {
     key: 'magma-supreme',
@@ -120,6 +120,25 @@ export const TectonicSwipe: abilityCardsType = {
 
         roomData.animations.push(animation)
 
+        const newCard = roomData.protalSlots[Slots.indexOf(resolution.slot)].portalCard?.key
+        if (!newCard) return
+        const card = GateCards[newCard]
+        if (card.autoActivationCheck && card.autoActivationCheck({ portalSlot: roomData.protalSlots[Slots.indexOf(resolution.slot)], roomState: roomData })) return
+
+        const newAction: ActionType = {
+            type: 'OPEN_GATE_CARD',
+            slot: resolution.slot,
+            gateId: newCard
+        }
+
+        const turn = roomData.turnState.turn
+
+        const userActions = turn === resolution.userId ? roomData.ActivePlayerActionRequest : roomData.InactivePlayerActionRequest
+        const actions = [...userActions.actions.mustDo, ...userActions.actions.mustDoOne, ...userActions.actions.optional].flat()
+
+        if (actions.some((action) => action.type === newAction.type)) return
+        userActions.actions.optional.push(newAction)
+
     },
     activationConditions({ roomState }) {
         if (!roomState) return false
@@ -155,12 +174,12 @@ export const EarthPower: abilityCardsType = {
     image: StandardCardsImages.subterra,
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
-        if(!roomState) return null
+        if (!roomState) return null
 
         const slotOfGate = roomState.protalSlots.find((s) => s.id === slot)
-        if(!slotOfGate) return null
+        if (!slotOfGate) return null
         const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
-        if(!user) return null
+        if (!user) return null
 
         const SubterraBakugans = slotOfGate.bakugans.filter((b) => b.attribut === "Subterra" && b.userId === userId)
 
@@ -178,12 +197,12 @@ export const EarthPower: abilityCardsType = {
         return null
     },
     onCanceled({ roomState, userId, bakuganKey, slot }) {
-        if(!roomState) return null
-        
+        if (!roomState) return null
+
         const slotOfGate = roomState.protalSlots.find((s) => s.id === slot)
-        if(!slotOfGate) return null
+        if (!slotOfGate) return null
         const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
-        if(!user) return null
+        if (!user) return null
 
         const SubterraBakugans = slotOfGate.bakugans.filter((b) => b.attribut === "Subterra" && b.userId === userId)
 
@@ -201,14 +220,14 @@ export const EarthPower: abilityCardsType = {
         return null
     },
     canUse({ roomState, bakugan }) {
-        if(!roomState) return false
+        if (!roomState) return false
 
         const slotOfGate = roomState.protalSlots.find((s) => s.id === bakugan.slot_id)
-        if(!slotOfGate) return false
+        if (!slotOfGate) return false
 
         const { battleInProcess, paused, slot } = roomState.battleState
-        if(!battleInProcess || paused) return false
-        if(bakugan.slot_id !== slot) return false
+        if (!battleInProcess || paused) return false
+        if (bakugan.slot_id !== slot) return false
 
         return true
     },

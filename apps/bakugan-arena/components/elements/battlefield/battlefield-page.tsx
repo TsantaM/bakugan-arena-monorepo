@@ -61,43 +61,11 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
     const viewerLink = `${GAMEBOARD_URL}/viewer.html/?roomId=${roomId}&userId=${userId}&parentSocket=${socketId}&player1Id=${playerData?.id}&player1Image=${playerData?.image ?? undefined}&player2Id=${opponentData?.id}&player2Image=${opponentData?.image ?? undefined}`
 
     const link = isPlayer ? playerLink : viewerLink
-    console.log(link)
 
     useEffect(() => {
         playRandomOST()
     }, [])
-    //     const handleMessage = (event: MessageEvent) => {
-    //         // 🔒 sécurité (IMPORTANT en prod)
-    //         if (!event.data || event.data.type !== "GAME_MESSAGE") return;
-
-    //         const messages: Message[] = event.data.payload;
-
-    //         console.log("Message reçu de l'iframe :", messages);
-
-    //         const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-    //         async function showToasts(messages: Message[]) {
-    //             for (const message of messages) {
-    //                 if(message.description) continue
-    //                 const text = message.userName ? `${message.userName} : ${message.text}` : message.text
-    //                 toast.info(text)
-    //                 await delay(500); // Attendre 3 secondes avant d'afficher le message suivant
-    //             }
-    //         }
-
-    //         showToasts(messages)
-
-    //         // 👉 ici tu peux déclencher ton UI
-    //         // exemple: envoyer au store ou au modal
-    //         // handleIncomingMessage(message);
-    //     };
-
-    //     window.addEventListener("message", handleMessage);
-
-    //     return () => {
-    //         window.removeEventListener("message", handleMessage);
-    //     };
-    // }, []);
-
+ 
     return (
         <>
             <ReactHowler

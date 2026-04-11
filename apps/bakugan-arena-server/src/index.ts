@@ -8,7 +8,7 @@ process.on("uncaughtException", (err) => {
 
 
 import { Server } from "socket.io";
-import { matchmaking, removeToWaitingList, setupSearchOpponentSocket } from "./sockets/search-opponent";
+import { processMatchmaking, setupSearchOpponentSocket, waitingMap } from "./sockets/search-opponent";
 import { socketGetRoomState, socketInitiRoomState } from "./sockets/get-room-data";
 import { socketTurn } from "./sockets/turn-action";
 import { socketUpdateGateState } from "./sockets/update-gate-state";
@@ -39,7 +39,7 @@ const io = new Server({
 
 // 🔥 MATCHMAKING LOOP GLOBAL
 setInterval(() => {
-    matchmaking(io)
+    processMatchmaking(io)
 }, 1000)
 
 io.on('connection', (socket) => {
@@ -73,7 +73,12 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', (reason) => {
         console.log('A user disconnected:', 'socketId : ', socket.id, 'userId : ', userId, reason);
-        removeToWaitingList({ userId: userId })
+        // clean auto
+        for (const [userId, p] of waitingMap.entries()) {
+            if (p.socketId === socket.id) {
+                waitingMap.delete(userId)
+            }
+        }
         removeConnectedUserBySocket(socket.id, io);
         removeRoomSocket(socket.id, userId)
     })

@@ -12,7 +12,6 @@ export default async function BattleField({ searchParams }: PageProps) {
     const user = await getUser()
     const { id: roomId } = await searchParams
 
-    console.log(roomId)
     const RoomData = await RoomDataAction(roomId)
 
     if (!user) {

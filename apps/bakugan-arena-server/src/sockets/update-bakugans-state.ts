@@ -12,18 +12,6 @@ import { CheckTurnActionRequest } from "../functions/check-turn-action-request-p
 export function AddAbilities({ roomState, request, bakugan, slot, userId, attribut }: { roomState: stateType, request: ActivePlayerActionRequestType | InactivePlayerActionRequestType, bakugan: string, slot: slots_id, userId: string, attribut: attribut }) {
     if (!roomState) return
 
-    const checker = CheckTurnPermissions({
-        roomState: roomState,
-        userId: userId,
-        response: {
-            type: "SET_BAKUGAN",
-            bakuganKey: bakugan,
-            slot: slot
-        }
-    })
-
-    if (!checker) return
-
     const activePlayer = roomState.decksState.find((deck) => deck.userId === roomState.turnState.turn)
 
     let selectAbilitiesResult
@@ -66,6 +54,9 @@ export function AddAbilities({ roomState, request, bakugan, slot, userId, attrib
         abilities: abilities,
         attribut: attribut
     }
+
+    const abilitiesList = abilitieRequest.abilities.map((a) => a)
+    if(abilitiesList.length === 0) return
 
     let requests = [...request.actions.mustDo, ...request.actions.mustDoOne, ...request.actions.optional].find((action) => action.type === 'USE_ABILITY_CARD')
 
@@ -120,6 +111,7 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
             const removeSetGateCard = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "SET_GATE_CARD_ACTION")
 
             Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = removeSetGateCard as ActivePlayerActionRequestType
+
 
             AddAbilities({
                 bakugan: bakuganKey,

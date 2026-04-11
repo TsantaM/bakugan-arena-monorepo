@@ -90,7 +90,7 @@ export type portalSlotsTypeElement = {
 
 export type portalSlotsType = portalSlotsTypeElement[]
 
-export type bakuganInDeck = ({
+export type bakuganInDeck = {
     bakuganData: {
         key: string;
         name: string;
@@ -113,7 +113,7 @@ export type bakuganInDeck = ({
         used: boolean;
         dead: boolean;
     }[];
-} | null | undefined);
+};
 
 export type deckType = {
     deckId: string;
@@ -176,7 +176,7 @@ export type stateType = {
     InactivePlayerActionRequest: InactivePlayerActionRequestType,
     ActivePlayerActionRequest: ActivePlayerActionRequestType,
     AbilityAditionalRequest: AbilityCardsActionsRequestsType[]
-} | undefined
+}
 
 export type roomStateType = {
     turnState: turnStateType;

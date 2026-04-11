@@ -1,6 +1,7 @@
 import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation, type bakuganType, type gateCardType } from "../../index.js"
 import { StarterBanList } from "../../store/starter-banlist.js"
-import { FurryOfWind, VentViolentDeNobelesseVerte } from "../exclusive-abilities/exclusive-abilities.js"
+import { FurryOfWind } from "../exclusive-abilities/furry-of-wind.js"
+import { VentViolentDeNobelesseVerte } from "../exclusive-abilities/vent-violent.js"
 
 export const SkyressVentus: bakuganType = {
     name: 'Skyress',
