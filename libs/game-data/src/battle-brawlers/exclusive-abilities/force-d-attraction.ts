@@ -50,12 +50,12 @@ export const ForceDattraction: exclusiveAbilitiesType = {
     onAdditionalEffect: ({ resolution, roomData: roomState }) => {
         dragBakuganToUserSlot({ resolution: resolution, roomState: roomState })
     },
-    // activationConditions: ({ roomState, userId }) => {
-    //     if (!roomState) return false
-    //     const bakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().length
-    //     if (bakugans < 2) return false
-    //     return true
-    // },
+    activationConditions: ({ roomState, userId }) => {
+        if (!roomState) return false
+        const bakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().length
+        if (bakugans < 2) return false
+        return true
+    },
     canUse({ bakugan, roomState }) {
 
         if (!roomState) return false
