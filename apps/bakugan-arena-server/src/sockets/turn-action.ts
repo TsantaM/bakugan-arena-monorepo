@@ -57,9 +57,7 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
     roomData.animations.forEach((animation) => EmitMessage({ roomState: roomData, animation, io }))
 
     const activeSocket = roomData.connectedsUsers.get(roomData.turnState.turn)
-    const activeName = roomData.players.find((p) => p.userId === roomData.turnState.turn)?.username
     const inactiveSocket = roomData.connectedsUsers.get(roomData.turnState.previous_turn || '')
-    const inactiveName = roomData.players.find((p) => p.userId === roomData.turnState.previous_turn || '')?.username
 
     const turnState: turnCountSocketProps = {
         turnCount: roomData.turnState.turnCount,

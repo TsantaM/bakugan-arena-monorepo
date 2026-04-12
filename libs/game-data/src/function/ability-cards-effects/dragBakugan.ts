@@ -78,8 +78,8 @@ export function dragBakuganToUserSlot({
 
 
     // --- Combat + Gate ---
-    CheckBattleStillInProcess(roomState);
-    CheckBattle({ roomState });
+    // CheckBattleStillInProcess(roomState);
+    // CheckBattle({ roomState });
 
     // --- Gestion du renfort ---
     if (

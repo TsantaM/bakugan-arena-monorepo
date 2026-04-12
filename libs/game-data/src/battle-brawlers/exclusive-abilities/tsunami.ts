@@ -17,9 +17,9 @@ export const Tsunami: exclusiveAbilitiesType = {
         if (!Tsunami.canUse) return null
 
         const bakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat()
-        const targets = bakugans.filter((bakugan) => bakugan.key !== SiegeAquos.key && bakugan.userId !== userId)
 
-        targets.forEach((bakugan) => {
+        bakugans.forEach((bakugan) => {
+            if(bakugan.key === SiegeAquos.key && bakugan.userId === userId) return
             ElimineBakuganEffect({
                 bakugan: bakugan,
                 roomState: roomState,

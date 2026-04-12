@@ -5,6 +5,7 @@ import { clearAnimationsInRoom } from "../sockets/clear-animations-socket";
 import { turnActionUpdater } from "../sockets/turn-action";
 import { EmitMessage } from "./emit-messages";
 import { CheckTurnActionRequest } from "./check-turn-action-request-permissions";
+import { CheckGameFinished } from "./CheckGameFinished";
 
 export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganKey, io }: useAbilityCardProps & { io: Server }) => {
     // FR: On récupère les données de la salle en cours avec son roomId
@@ -186,7 +187,6 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
             io.to(roomId).emit('animations', animations)
             animations.forEach((animation) => EmitMessage({ roomState: state, animation, io }))
 
-
             if (state.turnState.turn === userId) {
 
                 const checker = CheckTurnActionRequest({ roomState: state, userId: userId })
@@ -247,6 +247,7 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
             io.to(roomId).emit('animations', animations)
             animations.forEach((animation) => EmitMessage({ roomState: state, animation, io }))
 
+
             if (state.turnState.turn === userId) {
 
                 const checker = CheckTurnActionRequest({ roomState: state, userId: userId })
@@ -288,6 +289,7 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
                 if (merged.length <= 0) return
                 io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
             }
+
         }
 
     }

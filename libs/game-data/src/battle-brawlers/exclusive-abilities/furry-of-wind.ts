@@ -54,8 +54,6 @@ export const FurryOfWind: exclusiveAbilitiesType = {
 
         }
 
-        CheckBattleStillInProcess(roomState)
-
         return null
 
     },

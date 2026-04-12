@@ -1,11 +1,9 @@
 import { type stateType } from '../../src/type/type-index.js'
-import { GateCardsList } from '../battle-brawlers/gate-gards.js';
-import { Slots } from '../store/slots.js';
 import { CreateActionRequestFunction } from './create-action-request-function.js';
 import { OnBattleStartAnimationDirectives } from './create-animation-directives/on-battle-start-animation-directives.js'
 
 
-export const CheckBattle = ({ roomState }: { roomState: stateType }) => {
+export const CheckBattle = ({ roomState, updateActions = false }: { roomState: stateType, updateActions?: boolean }) => {
 
     if (roomState) {
         const slotWithTwoBakugans = structuredClone(roomState.protalSlots.find((s) => s.bakugans.length >= 2 && new Set(s.bakugans.map((b) => b.userId)).size >= 2));
@@ -78,6 +76,10 @@ export const CheckBattle = ({ roomState }: { roomState: stateType }) => {
                 })
             }
 
+        }
+
+        if(updateActions) {
+            CreateActionRequestFunction({roomState: roomState})
         }
 
     }

@@ -77,34 +77,47 @@ export const processMatchmaking = async (io: Server) => {
         players.sort((a, b) => a.elo - b.elo)
 
         const used = new Set<string>()
+        const BASE_RANGE = 50
+        const EXPANSION_PER_SEC = 5
 
-        for (let i = 0; i < players.length; i++) {
+        for (let i = 0; i < players.length - 1; i++) {
             const p1 = players[i]
+            const p2 = players[i + 1]
 
-            if (used.has(p1.userId)) continue
-            if (!waitingMap.has(p1.userId)) continue // sécurité
+            if (used.has(p1.userId) || used.has(p2.userId)) continue
 
-            const opponent = findBestOpponent(p1, players, used)
+            if (!waitingMap.has(p1.userId) || !waitingMap.has(p2.userId)) continue
 
-            if (!opponent) continue
+            if (p1.ranked !== p2.ranked) continue
 
-            // 🔒 LOCK LOCAL
+            const now = Date.now()
+
+            const wait1 = (now - p1.joinedAt) / 1000
+            const wait2 = (now - p2.joinedAt) / 1000
+
+            const range1 = BASE_RANGE + wait1 * EXPANSION_PER_SEC
+            const range2 = BASE_RANGE + wait2 * EXPANSION_PER_SEC
+
+            const diff = Math.abs(p1.elo - p2.elo)
+
+            if (diff > range1 || diff > range2) continue
+
+            // 🔒 LOCK
             used.add(p1.userId)
-            used.add(opponent.userId)
+            used.add(p2.userId)
 
-            // 🔒 REMOVE AVANT ASYNC → CRUCIAL
             waitingMap.delete(p1.userId)
-            waitingMap.delete(opponent.userId)
+            waitingMap.delete(p2.userId)
 
-            // 🎮 CREATE MATCH
+            // 🎮 MATCH CREATION
             const room = await CreateRoom({
                 player1ID: p1.userId,
                 P1Deck: p1.deckId,
-                Player2ID: opponent.userId,
-                P2Deck: opponent.deckId
+                Player2ID: p2.userId,
+                P2Deck: p2.deckId
             })
 
-            const matchedPlayers = [p1, opponent]
+            const matchedPlayers = [p1, p2]
 
             matchedPlayers.forEach(p => {
                 io.to(p.socketId).emit('match-found', room.id)

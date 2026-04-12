@@ -1,6 +1,7 @@
 import { stateType } from "../type/type-index.js";
+import { CreateActionRequestFunction } from "./create-action-request-function.js";
 
-export function CheckBattleStillInProcess(roomState: stateType) {
+export function CheckBattleStillInProcess(roomState: stateType, updateActions?: boolean) {
     if (!roomState) return;
 
     const { battleState, protalSlots, turnState } = roomState;
@@ -31,4 +32,8 @@ export function CheckBattleStillInProcess(roomState: stateType) {
         type: "BATTLE-END",
         resolved: false
     });
+
+    if(updateActions) {
+        CreateActionRequestFunction({roomState: roomState})
+    }
 }
