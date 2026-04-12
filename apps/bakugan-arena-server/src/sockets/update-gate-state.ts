@@ -7,6 +7,7 @@ import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { EmitMessage } from "../functions/emit-messages";
 import { CheckTurnPermissions } from "../functions/ckeck-turn-permissions";
 import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
+import { StopPlayerTimer } from "../functions/start-player-timer";
 
 export const socketUpdateGateState = (io: Server, socket: Socket) => {
     socket.on('set-gate', ({ roomId, gateId, slot, userId }: setGateCardProps) => {
@@ -73,9 +74,7 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
 
             const gateCardOnFieldCount = Battle_Brawlers_Game_State[roomIndex].protalSlots.filter((slot) => slot.portalCard !== null).length
 
-
-            console.log('turn count before update', state.turnState.turnCount)
-            console.log('gate card count', gateCardOnFieldCount)
+            StopPlayerTimer({roomState: state, userId: userId})
 
             if (gateCardOnFieldCount === 2) {
                 turnActionUpdater({
@@ -86,7 +85,6 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
             }
 
             console.log('turn count after set gate', state.turnState.turnCount)
-
 
         } else {
             if (state.turnState.turn === userId) {

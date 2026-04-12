@@ -4,7 +4,29 @@ import { db } from "../lib/db"
 import { eq } from "drizzle-orm"
 import { schema } from "@bakugan-arena/drizzle-orm"
 import { intervalIds } from "../game-state/battle-brawlers-game-state";
+import { CalculateAndUpdateElo } from "./ladder-functions/calculate-elo";
+import { SendUserRooms } from "./send-user-rooms";
 
+const rooms = schema.rooms
+
+export function StopPlayerTimer({
+    roomState,
+    userId
+}: {
+    roomState: stateType,
+    userId: string
+}) {
+    const intervals = intervalIds.find(i => i.roomId === roomState.roomId)
+    if (!intervals) return
+
+    const playerInterval = intervals.players.find(p => p.userId === userId)
+    if (!playerInterval) return
+
+    if (playerInterval.intervalId !== null) {
+        clearInterval(playerInterval.intervalId)
+        playerInterval.intervalId = null
+    }
+}
 
 export function UpdatePlayerTimer({ roomState, io }: { roomState: stateType, io: Server }) {
 
@@ -74,27 +96,27 @@ export function UpdatePlayerTimer({ roomState, io }: { roomState: stateType, io:
                         })
                         .where(eq(rooms.id, roomId))
 
-                    const winnerName = roomState.players.find((player) =>
-                        player.userId !== userId
-                    )?.username || ''
+                    roomState.status.finished = true
+                    roomState.status.winner = winner
 
-                    const message: Message = {
-                        text: `Game is over ! The winner is ${winnerName}`,
-                        turn: roomState.turnState.turnCount
-                    }
-                    io.to(roomId).emit('game-finished', message)
-                    const sockets = roomState.connectedsUsers
-                    sockets.forEach((s) => {
-                        console.log('parent-socket', s.nextjsSocket)
-                        io.to(s.nextjsSocket).emit('game-messages', [message])
+                    await CalculateAndUpdateElo({
+                        loser: looser,
+                        winner: winner,
+                        roomData: roomState,
+                        io,
+                        roomId,
                     })
-                    roomState.messages.push(message)
+
+                    roomState.players.forEach((user) => {
+                        SendUserRooms({ userId: user.userId, io })
+                    })
 
                     return
 
                 }
 
             }, 1000)
+
         } else {
             if (activePlayer && activePlayer.intervalId !== null) {
                 clearInterval(activePlayer.intervalId)
@@ -143,21 +165,21 @@ export function UpdatePlayerTimer({ roomState, io }: { roomState: stateType, io:
                         })
                         .where(eq(rooms.id, roomId))
 
-                    const winnerName = roomState.players.find((player) =>
-                        player.userId !== userId
-                    )?.username || ''
+                    roomState.status.finished = true
+                    roomState.status.winner = winner
 
-                    const message: Message = {
-                        text: `Game is over ! The winner is ${winnerName}`,
-                        turn: roomState.turnState.turnCount
-                    }
-                    io.to(roomId).emit('game-finished', message)
-                    const sockets = roomState.connectedsUsers
-                    sockets.forEach((s) => {
-                        console.log('parent-socket', s.nextjsSocket)
-                        io.to(s.nextjsSocket).emit('game-messages', [message])
+                    await CalculateAndUpdateElo({
+                        loser: looser,
+                        winner: winner,
+                        roomData: roomState,
+                        io,
+                        roomId,
                     })
-                    roomState.messages.push(message)
+
+                    roomState.players.forEach((user) => {
+                        SendUserRooms({ userId: user.userId, io })
+                    })
+
                     return
 
                 }
@@ -170,5 +192,70 @@ export function UpdatePlayerTimer({ roomState, io }: { roomState: stateType, io:
             }
         }
     }
+
+}
+
+export function StartTwoTimers({ roomState, io, roomId }: { roomState: stateType, io: Server, roomId: string }) {
+
+    const turnCount = roomState.turnState.turnCount
+    const players = roomState.players
+
+    if (turnCount > 0) return
+    const intervals = intervalIds.find((interval) => interval.roomId === roomState?.roomId)
+    // console.log(intervals)
+
+    if (!intervals) return
+
+
+    players.forEach((player) => {
+
+        const interval = intervals.players.find((p) => p.userId === player.userId)
+        if (!interval) return
+        if (interval.intervalId !== null) return
+
+        interval.intervalId = setInterval(async () => {
+
+            const player = roomState.players.find((player) => player.userId === interval.userId)
+            if (!player) return
+            const userId = player.userId
+            player.timer -= 1
+
+            const timer: { userId: string, remaining: number } = {
+                userId,
+                remaining: player.timer
+            }
+
+            io.to(roomId).emit("player-timer", timer);
+
+            if (players.some((pl) => pl.timer === 0)) {
+                roomState.status.finished = true
+                roomState.status.winner = null
+
+                roomState.players.forEach((user) => {
+                    StopPlayerTimer({ roomState: roomState, userId: user.userId })
+                })
+
+                await db
+                    .update(rooms)
+                    .set({
+                        finished: true,
+                    })
+                    .where(eq(rooms.id, roomId))
+
+                const message: Message = {
+                    text: 'Game is over ! Equality !',
+                    turn: roomState.turnState.turnCount
+                }
+
+                io.to(roomId).emit('game-finished', message)
+
+                roomState.players.forEach((user) => {
+                    SendUserRooms({ userId: user.userId, io })
+                })
+            }
+
+        }, 1000)
+
+    })
 
 }

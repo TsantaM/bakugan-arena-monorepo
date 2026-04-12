@@ -11,11 +11,12 @@ const rooms = schema.rooms
 type GameResult = {
   finished: boolean
   winner: string | null
+  loser: string | null
   reason?: 'NO_BAKUGAN' | 'NO_GATES' | 'DRAW'
 }
 
 export const getGameResult = (roomState: stateType): GameResult => {
-  if (!roomState) return { finished: false, winner: null }
+  if (!roomState) return { finished: false, winner: null, loser: null }
 
   const [p1, p2] = roomState.players
 
@@ -26,7 +27,7 @@ export const getGameResult = (roomState: stateType): GameResult => {
   const p2Deck = decksMap.get(p2.userId)
 
   if (!p1Deck || !p2Deck) {
-    return { finished: false, winner: null }
+    return { finished: false, winner: null, loser: null }
   }
 
   const isAlive = (b: any) => b?.bakuganData?.elimined !== true
@@ -36,16 +37,16 @@ export const getGameResult = (roomState: stateType): GameResult => {
 
   // 🥇 victoire classique
   if (p1Alive === 0 && p2Alive > 0) {
-    return { finished: true, winner: p2.userId, reason: 'NO_BAKUGAN' }
+    return { finished: true, winner: p2.userId, loser: p1.userId, reason: 'NO_BAKUGAN' }
   }
 
   if (p2Alive === 0 && p1Alive > 0) {
-    return { finished: true, winner: p1.userId, reason: 'NO_BAKUGAN' }
+    return { finished: true, winner: p1.userId, loser: p2.userId, reason: 'NO_BAKUGAN' }
   }
 
   // ⚖️ draw bakugan
   if (p1Alive === 0 && p2Alive === 0) {
-    return { finished: true, winner: null, reason: 'DRAW' }
+    return { finished: true, winner: null, loser: null, reason: 'DRAW' }
   }
 
   // ⚖️ draw gates
@@ -54,10 +55,10 @@ export const getGameResult = (roomState: stateType): GameResult => {
   const p2Gates = playersMap.get(p2.userId)?.usable_gates ?? 0
 
   if (!gatesOnBoard && p1Gates === 0 && p2Gates === 0) {
-    return { finished: true, winner: null, reason: 'NO_GATES' }
+    return { finished: true, winner: null, loser: null, reason: 'NO_GATES' }
   }
 
-  return { finished: false, winner: null }
+  return { finished: false, winner: null, loser: null }
 }
 
 
@@ -91,24 +92,40 @@ export const CheckGameFinished = async ({
     roomState.status.finished = true
     roomState.status.winner = result.winner
 
-    // 💬 message
-    // const message: Message = {
-    //   text:
-    //     result.winner
-    //       ? `Game over! Winner: ${result.winner}`
-    //       : `Game over! Draw`,
-    //   turn: roomState.turnState.turnCount,
-    // }
-
     // 💾 DB
-    await db
-      .update(rooms)
-      .set({
-        winner: result.winner,
-        looser: result.winner === p1.userId ? p2.userId : p1.userId,
-        finished: true,
-      })
-      .where(eq(rooms.id, roomId))
+
+    if (result.winner && result.loser) {
+      await db
+        .update(rooms)
+        .set({
+          winner: result.winner,
+          looser: result.loser,
+          finished: true,
+        })
+        .where(eq(rooms.id, roomId))
+    } else {
+      await db
+        .update(rooms)
+        .set({
+          finished: true,
+        })
+        .where(eq(rooms.id, roomId))
+    }
+
+    if (result.reason === 'DRAW' || result.reason === 'NO_GATES') {
+      const message: Message = {
+        text: 'Game is over ! Equality !',
+        turn: roomState.turnState.turnCount
+      }
+
+      io.to(roomId).emit('game-finished', message)
+      for (const user of roomState.connectedsUsers.values()) {
+        io.to(user.nextjsSocket).emit('game-messages', [message])
+      }
+
+      roomState.messages.push(message)
+
+    }
 
     // ⚡ ELO
     if (result.winner) {
@@ -123,18 +140,12 @@ export const CheckGameFinished = async ({
       })
     }
 
-    // // 📡 SOCKET
-    // io.to(roomId).emit('game-finished', message)
-
-    // for (const user of roomState.connectedsUsers.values()) {
-    //   io.to(user.nextjsSocket).emit('game-messages', [message])
-    // }
-
-    // roomState.messages.push(message)
-
     // 🔄 refresh rooms
-    SendUserRooms({ userId: p1.userId, io })
-    SendUserRooms({ userId: p2.userId, io })
+
+    roomState.players.forEach((user) => {
+      SendUserRooms({ userId: user.userId, io })
+    })
+
 
   } catch (err) {
     console.error("CheckGameFinished error", err)

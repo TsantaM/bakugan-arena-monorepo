@@ -26,6 +26,7 @@ import { WatchBattleSocket } from "./sockets/watch-battle-socket";
 import { ChatMessageSocket } from "./sockets/chat-message-socket";
 import { SendMessageInGame } from "./sockets/messages-in-game";
 import { forfeitSocket } from "./sockets/forfeit-socket";
+import { cleanGameStates } from "./functions/clear-game-state";
 
 
 
@@ -41,6 +42,10 @@ const io = new Server({
 setInterval(() => {
     processMatchmaking(io)
 }, 1000)
+
+setInterval(() => {
+    cleanGameStates()
+}, 60000)
 
 io.on('connection', (socket) => {
     const { userId, roomId, socketType } = socket.handshake.auth

@@ -6,6 +6,7 @@ import { GetUsersRooms } from "../functions/get-rooms-of-user";
 import { db } from "../lib/db";
 import { eq } from "drizzle-orm";
 import { findOpponent } from "../functions/matchmaking-functions/find-opponent";
+import { StartTwoTimers, UpdatePlayerTimer } from "../functions/start-player-timer";
 
 export type waitingListElements = {
     socketId: string,
@@ -144,6 +145,11 @@ export const processMatchmaking = async (io: Server) => {
                 const rooms = GetUsersRooms(p.userId)
                 io.to(p.socketId).emit('get-rooms-user-id', rooms)
             })
+
+            const roomState = Battle_Brawlers_Game_State[Battle_Brawlers_Game_State.indexOf(state)]
+
+            StartTwoTimers({io: io, roomState: roomState, roomId: roomState.roomId})
+
         }
 
     } finally {

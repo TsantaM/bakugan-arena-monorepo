@@ -175,7 +175,8 @@ export type stateType = {
     animations: AnimationDirectivesTypes[],
     InactivePlayerActionRequest: InactivePlayerActionRequestType,
     ActivePlayerActionRequest: ActivePlayerActionRequestType,
-    AbilityAditionalRequest: AbilityCardsActionsRequestsType[]
+    AbilityAditionalRequest: AbilityCardsActionsRequestsType[],
+    createdAt: number
 }
 
 export type roomStateType = {
