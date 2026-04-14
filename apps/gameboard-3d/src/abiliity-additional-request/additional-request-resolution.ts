@@ -259,7 +259,7 @@ export function AdditionalRequestResolution({ request, camera, plane, socket, sc
 
             // On stoppe la phase 
 
-            const slot = bakugans.find((b) => b.key === bakugan?.userData.bakuganKey && b.userId === bakugan.userData.userId)?.slot
+            const slot = bakugans.find((b) => b.key === bakugan?.userData.bakuganKey)?.slot
 
             if (!slot) return
             const resolution: resolutionType = {
