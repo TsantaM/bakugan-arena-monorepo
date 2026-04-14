@@ -22,8 +22,10 @@ export const MagmaSupreme: abilityCardsType = {
                 if (slotOfGate.state.open === true && slotOfGate.state.canceled === false) {
                     const initialGate = GateCardsList.find((g) => g.key === gate)
                     const newGate = GateCardsList.find((g) => g.key === 'reacteur-subterra')
-                    if (initialGate && initialGate.onCanceled && newGate && newGate.onOpen) {
-                        initialGate.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
+                    if (initialGate && newGate && newGate.onOpen) {
+                        if (initialGate.onCanceled) {
+                            initialGate.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
+                        }
                         slotOfGate.state.open = false
                         slotOfGate.state.canceled = false
                         roomState?.animations.push({

@@ -108,6 +108,7 @@ export function AdditionalRequestResolution({ request, camera, plane, socket, sc
         let clickHandler: (() => void) | null = null
 
         const bakuganNames = bakugans.map(b => `${b.key}-${b.userId}`)
+        console.log(bakuganNames)
 
         const cleanUp = () => {
             if (mouseMove) {
@@ -258,7 +259,7 @@ export function AdditionalRequestResolution({ request, camera, plane, socket, sc
 
             // On stoppe la phase 
 
-            const slot = bakugans.find((b) => b.key === bakugan?.userData.bakuganKey)?.slot
+            const slot = bakugans.find((b) => b.key === bakugan?.userData.bakuganKey && b.userId === bakugan.userData.userId)?.slot
 
             if (!slot) return
             const resolution: resolutionType = {

@@ -226,6 +226,20 @@ export const SuperPyrus: gateCardType = {
         return null
 
     },
+    onCanceled({ roomState, slot }) {
+        if (!roomState) return null
+        const slotOfGate = roomState.protalSlots[Slots.indexOf(slot)]
+        const userId = slotOfGate.portalCard?.userId
+        if (!userId) return null
+
+        SwipePowerLevelsEffects({
+            roomState: roomState,
+            slot: slotOfGate,
+            userId: userId
+        })
+
+        return null
+    },
 }
 
 export const AspirateurDePuissance: gateCardType = {
@@ -270,7 +284,7 @@ export const AspirateurDePuissance: gateCardType = {
         const bakuganUser = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
         const bakuganOpponent = slotOfGate?.bakugans.find((b) => b.userId !== userId)
 
-        if (slotOfGate && bakuganUser && bakuganOpponent && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
+        if (slotOfGate && bakuganUser && bakuganOpponent && slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
             const firstBakugan = slotOfGate.bakugans[0]
             const lastBakugan = slotOfGate.bakugans[slotOfGate.bakugans.length - 1]
             firstBakugan.currentPower = firstBakugan.currentPower - 100

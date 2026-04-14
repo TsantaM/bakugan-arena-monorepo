@@ -79,7 +79,7 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
 
     // FR: Récupération des clés des bakugans impliqués dans la bataille ===
     // ENG Get keys of all bakugans in this battle ===
-    const keys = [...player1Bakugans.map((b) => b.key), ...player2Bakugans.map((b) => b.key)]
+    const keys = [...player1Bakugans.map((b) => ({key: b.key, userId: b.userId})), ...player2Bakugans.map((b) => ({key: b.key, userId: b.userId}))]
 
     // FR: Détermination du gagnant et du perdant ===
     // ENG Determine winner and loser ===
@@ -147,9 +147,9 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
 
             // FR Mettre à jour les bakugans : éliminer ceux du perdant et désactiver la présence sur le terrain ===
             // ENG: Update decks: eliminate loser's bakugans and remove onDomain flag from all involved bakugans ===
-            updateDeckBakugans({ deck: deckToUpdate, keys: keys, eliminate: true })
-            updateDeckBakugans({ deck: p1Deck, keys: keys })
-            updateDeckBakugans({ deck: p2Deck, keys: keys })
+            updateDeckBakugans({ deck: deckToUpdate, bakugans: keys, eliminate: true })
+            updateDeckBakugans({ deck: p1Deck, bakugans: keys })
+            updateDeckBakugans({ deck: p2Deck, bakugans: keys })
 
 
 
@@ -163,8 +163,8 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
                     slot: slot
                 })
             })
-            updateDeckBakugans({ deck: p1Deck, keys: keys })
-            updateDeckBakugans({ deck: p2Deck, keys: keys })
+            updateDeckBakugans({ deck: p1Deck, bakugans: keys })
+            updateDeckBakugans({ deck: p2Deck, bakugans: keys })
         }
     }
 

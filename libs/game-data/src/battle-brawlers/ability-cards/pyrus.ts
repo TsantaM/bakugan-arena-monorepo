@@ -267,7 +267,7 @@ export const TourbillonDeFeu: abilityCardsType = {
     maxInDeck: 1,
     image: 'FireTornado.png',
     usable_in_neutral: false,
-    description: `Adds 100 Gs to the user and substract 100 Gs from the opponents`,
+    description: `Adds 100 Gs to the user`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)

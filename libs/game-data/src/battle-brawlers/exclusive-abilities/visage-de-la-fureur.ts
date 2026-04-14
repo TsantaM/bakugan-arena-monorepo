@@ -4,7 +4,7 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 export const VisageDeLaFureur: exclusiveAbilitiesType = {
     key: 'visage-de-la-fureur',
     name: 'Face of Rage',
-    description: `Add 100 Gs to the user and take 100 to each opponent`,
+    description: `Add 50 Gs to the user and take 100 to each opponent`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

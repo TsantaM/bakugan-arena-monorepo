@@ -6,7 +6,7 @@ export const MegaFlareBlinder: exclusiveAbilitiesType = {
     key: 'mega-flare-blinder',
     name: 'Mega Flare Blinder',
     maxInDeck: 1,
-    description: `Add 100 G to Tentaclear and prevent the opponent from opening the Gate Card or activating abilities on the same slot as the user.`,
+    description: `Add 100 G to Tentaclear and prevent the opponent from opening the Gate Card on the same slot as the user.`,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -15,7 +15,7 @@ export const MegaFlareBlinder: exclusiveAbilitiesType = {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (!slotOfGate) return null
-        const opponent = slotOfGate.bakugans.filter((b) => b.userId !== userId)
+        // const opponent = slotOfGate.bakugans.filter((b) => b.userId !== userId)
 
         const { canceled, open } = slotOfGate.state
 
@@ -23,9 +23,9 @@ export const MegaFlareBlinder: exclusiveAbilitiesType = {
             slotOfGate.state.blocked = true
         }
 
-        opponent.forEach((bakugan) => {
-            bakugan.abilityBlock = true
-        })
+        // opponent.forEach((bakugan) => {
+        //     bakugan.abilityBlock = true
+        // })
 
         const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
         if (!user) return null

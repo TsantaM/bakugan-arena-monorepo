@@ -5,7 +5,7 @@ export const FlareBlinder: exclusiveAbilitiesType = {
     key: 'flare-blinder',
     name: 'Flare Blinder',
     maxInDeck: 1,
-    description: `Prevent the opponent from opening the Gate Card or activating abilities on the same slot as the user.`,
+    description: `Prevent the opponent from activating abilities on the same slot as the user.`,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -16,11 +16,11 @@ export const FlareBlinder: exclusiveAbilitiesType = {
         if (!slotOfGate) return null
         const opponent = slotOfGate.bakugans.filter((b) => b.userId !== userId)
 
-        const { canceled, open } = slotOfGate.state
+        // const { canceled, open } = slotOfGate.state
 
-        if (!open && !canceled) {
-            slotOfGate.state.blocked = true
-        }
+        // if (!open && !canceled) {
+        //     slotOfGate.state.blocked = true
+        // }
 
         opponent.forEach((bakugan) => {
             bakugan.abilityBlock = true
