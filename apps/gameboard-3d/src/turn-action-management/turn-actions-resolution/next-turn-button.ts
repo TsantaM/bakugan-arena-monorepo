@@ -2,11 +2,12 @@ import type { ActionType, ActivePlayerActionRequestType, InactivePlayerActionReq
 import type { Socket } from "socket.io-client";
 import { clearTurnInterface } from "./action-scope";
 
-export function NextTurnButtonAction({ request, socket, userId, roomId }: {
+export function NextTurnButtonAction({ request, socket, userId, roomId, globalCleanUp }: {
     socket: Socket,
     request: ActivePlayerActionRequestType | InactivePlayerActionRequestType,
     userId: string,
-    roomId: string
+    roomId: string,
+    globalCleanUp?: () => void
 }) {
 
     let clickHandler: (() => void) | null = null
@@ -27,6 +28,8 @@ export function NextTurnButtonAction({ request, socket, userId, roomId }: {
 
         if (mustDo.length > 0) return
         if (mustDoOne.length > 0) return
+
+        if(globalCleanUp) globalCleanUp()
 
         socket.emit('clean-animation-table', ({ roomId }))
         socket.emit('turn-action', ({ roomId, userId }))

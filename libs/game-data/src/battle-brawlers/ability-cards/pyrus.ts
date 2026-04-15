@@ -267,20 +267,31 @@ export const TourbillonDeFeu: abilityCardsType = {
     maxInDeck: 1,
     image: 'FireTornado.png',
     usable_in_neutral: false,
-    description: `Adds 100 Gs to the user`,
+    description: `Adds 100 Gs to the user and decrease opponent power by 100 Gs`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
-
-            if (user) {
+            const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
+            if (user && opponent) {
                 user.currentPower += 100
                 PowerChangeDirectiveAnumation({
                     animations: roomState.animations,
                     bakugans: [user],
                     powerChange: 100,
                     malus: false,
+                    turn: roomState.turnState.turnCount
+
+                })
+
+                opponent.currentPower -= 100
+
+                PowerChangeDirectiveAnumation({
+                    animations: roomState.animations,
+                    bakugans: [opponent],
+                    powerChange: 100,
+                    malus: true,
                     turn: roomState.turnState.turnCount
 
                 })
@@ -294,14 +305,26 @@ export const TourbillonDeFeu: abilityCardsType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
 
-            if (user) {
+            if (user && opponent) {
                 user.currentPower -= 100
                 PowerChangeDirectiveAnumation({
                     animations: roomState.animations,
                     bakugans: [user],
                     powerChange: 100,
                     malus: true,
+                    turn: roomState.turnState.turnCount
+
+                })
+
+                opponent.currentPower += 100
+
+                PowerChangeDirectiveAnumation({
+                    animations: roomState.animations,
+                    bakugans: [opponent],
+                    powerChange: 100,
+                    malus: false,
                     turn: roomState.turnState.turnCount
 
                 })

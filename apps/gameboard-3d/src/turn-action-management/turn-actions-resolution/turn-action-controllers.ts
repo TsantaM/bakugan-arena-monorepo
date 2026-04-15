@@ -47,6 +47,28 @@ export function TurnInteractionController({
 
     let hoveredSlot: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial> | null = null
 
+    function globalCleanup () {
+    window.removeEventListener('mousemove', mouseMoveHandler!)
+    window.removeEventListener('click', clickHandler!)
+
+    cardClickHandlers.forEach((handler, el) => {
+        el.removeEventListener('click', handler)
+    })
+
+    bakuganClickHandlers.forEach((handler, el) => {
+        el.removeEventListener('click', handler)
+    })
+
+    SelectedActions.forEach((action) => {
+        action.data = undefined
+    })
+
+    cardClickHandlers.clear()
+    bakuganClickHandlers.clear()
+
+    hoveredSlot = null
+}
+
     function resetSlotsColor(
         plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>,
         slots: slots_id[]
@@ -421,7 +443,7 @@ export function TurnInteractionController({
     SelectGateCard({ SelectedActions: SelectedActions, userId: userId, actions: actions, roomId: roomId, socket: socket })
     sB({ SelectedActions: SelectedActions, userId: userId, actions: actions })
     SelectAbilityCard({ SelectedActions: SelectedActions, userId: userId, actions: actions })
-    NextTurnButtonAction({ request: request, socket: socket, userId: userId, roomId: roomId })
+    NextTurnButtonAction({ request: request, socket: socket, userId: userId, roomId: roomId, globalCleanUp: globalCleanup })
     OpenGateCardResolution({ actions: actions, socket: socket, userId: userId, roomId: roomId })
 
 }

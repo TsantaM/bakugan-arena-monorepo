@@ -1,4 +1,4 @@
-import { AutoActivationDuringBattle, CheckBattle, CheckBattleStillInProcess, ComeBackBakuganDirectiveAnimation, ElimineBakuganDirectiveAnimation, OpenGateCardActionRequest, PowerChangeDirectiveAnumation, RemoveGateCardDirectiveAnimation, ResetSlot, Slots, SwipePowerLevelsEffects, type gateCardType } from "../../index.js";
+import { AutoActivationDuringBattle, CheckBattle, CheckBattleStillInProcess, ComeBackBakuganDirectiveAnimation, ElimineBakuganDirectiveAnimation, ElimineBakuganEffect, OpenGateCardActionRequest, PowerChangeDirectiveAnumation, RemoveGateCardDirectiveAnimation, ResetSlot, Slots, SwipePowerLevelsEffects, type gateCardType } from "../../index.js";
 import { GateCardImages } from "../../store/gate-card-images.js";
 
 export const MineFantome: gateCardType = {
@@ -24,17 +24,22 @@ export const MineFantome: gateCardType = {
                 })
             })
 
-            const bakuganOnSlotDeckState = roomState.decksState
-                .flatMap(deck => deck.bakugans)           // On prend tous les bakugans de tous les decks
-                .filter((b): b is NonNullable<typeof b> => b !== null && b !== undefined) // on retire null/undefined
-                .map(b => b.bakuganData)                  // On prend les données réelles du bakugan
-                .filter(bd => bakuganOnSlot.includes(bd.key))               // On garde uniquement ceux sur la carte
-                .map(bd => bd)
-
-            bakuganOnSlotDeckState.forEach((b) => {
-                b.onDomain = false
-                b.elimined = true
+            const bakugans = slotOfGate.bakugans
+            bakugans.forEach((bakugan) => {
+                ElimineBakuganEffect({bakugan: bakugan, roomState: roomState})
             })
+
+
+            // const bakuganOnSlotDeckState = roomState.decksState
+            //     .flatMap(deck => deck.bakugans)           // On prend tous les bakugans de tous les decks
+            //     .map(b => b.bakuganData)                  // On prend les données réelles du bakugan
+            //     .filter(bd => bakuganOnSlot.includes(bd.key))               // On garde uniquement ceux sur la carte
+            //     .map(bd => bd)
+
+            // bakuganOnSlotDeckState.forEach((b) => {
+            //     b.onDomain = false
+            //     b.elimined = true
+            // })
 
             roomState.turnState.turn = slotOfGate.portalCard.userId
             roomState.turnState.previous_turn = otherPlayerId
