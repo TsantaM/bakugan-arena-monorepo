@@ -34,7 +34,7 @@ export function forfeitSocket(io: Server, socket: Socket) {
             })
             .where(eq(rooms.id, roomId))
 
-        await CalculateAndUpdateElo({ loser: loser.userId, winner: winner.userId, roomData: roomData, io: io, roomId: roomId })
+        await CalculateAndUpdateElo({ loser: loser.userId, winner: winner.userId, roomData: roomData, io: io, roomId: roomId, forfeit: true })
         SendUserRooms({ userId: winner.userId, io: io })
         SendUserRooms({ userId: loser.userId, io: io })
     }

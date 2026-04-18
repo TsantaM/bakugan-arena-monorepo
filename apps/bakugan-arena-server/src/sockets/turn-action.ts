@@ -66,38 +66,6 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
 
     io.to(roomId).emit('turn-count-updater', turnState)
 
-    // if (roomData.status.finished) {
-
-    //     let message: Message
-
-    //     if (roomData.status.winner !== null) {
-    //         const winner = roomData.players.find((p) => p.userId === roomData.status.winner)?.username ? roomData.players.find((p) => p.userId === roomData.status.winner)?.username : ''
-
-    //         message = {
-    //             text: `Game is over ! The winner is ${winner}`,
-    //             turn: roomData.turnState.turnCount
-    //         }
-
-    //     } else {
-    //         message = {
-    //             text: `Game is over ! Equality !`,
-    //             turn: roomData.turnState.turnCount
-    //         }
-    //     }
-
-    //     io.to(roomId).emit('game-finished', message)
-    //     const sockets = roomData.connectedsUsers
-    //     sockets.forEach((s) => {
-    //         console.log('parent-socket', s.nextjsSocket)
-    //         io.to(s.nextjsSocket).emit('game-messages', [message])
-    //     })
-    //     roomData.messages.push(message)
-    // }
-
-    // console.log('turn count', roomData.turnState.turnCount)
-    // console.log('active socket', roomData.ActivePlayerActionRequest, activeName);
-    // console.log('inactive socket', roomData.InactivePlayerActionRequest, inactiveName)
-
     clearAnimationsInRoom(roomId)
 
     if (activeSocket && !roomData.status.finished) {
@@ -131,7 +99,7 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
         io: io,
         roomState: roomData
     })
-
+    
 }
 
 export const socketTurn = (io: Server, socket: Socket) => {

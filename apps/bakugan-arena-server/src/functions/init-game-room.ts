@@ -32,7 +32,7 @@ const initRoomState:
                 const winnerName = data.players.find((p) => p.userId === data.status.winner)?.username ? data.players.find((p) => p.userId === data.status.winner)?.username : ''
                 const loserName = data.players.find((p) => p.userId !== data.status.winner)?.username ? data.players.find((p) => p.userId !== data.status.winner)?.username : ''
 
-                const {loser, winner} = data.status.elo
+                const { loser, winner } = data.status.elo
 
                 finished = {
                     text: `Game is over ! The winner is ${winnerName} : ${winnerName} : ${winner.newElo}(+${winner.bonus}) / ${loserName} : ${loser.newElo}(-${loser.malus})`,
@@ -49,8 +49,6 @@ const initRoomState:
 
         }
 
-
-
         return {
             turnState,
             deck,
@@ -61,7 +59,7 @@ const initRoomState:
                 user: usersBakugans ? usersBakugans : 0,
                 opponnent: opponentBakugans ? opponentBakugans : 0
             },
-            finished: finished
+            finished: finished,
         }
 
     }

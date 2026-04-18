@@ -1,5 +1,5 @@
 import type {
-    AbilityCardsActionsRequestsType, ActivePlayerActionRequestType, InactivePlayerActionRequestType, roomStateType, slots_id, turnCountSocketProps, Message
+    AbilityCardsActionsRequestsType, ActivePlayerActionRequestType, InactivePlayerActionRequestType, roomStateType, slots_id, turnCountSocketProps, Message,
 } from "@bakugan-arena/game-data"
 import { type AnimationDirectivesTypes } from "@bakugan-arena/game-data"
 import * as THREE from "three"
@@ -308,9 +308,9 @@ async function processAnimationQueue(userId: string,
         }
 
         if (current.type === 'MOVE_GATE_CARD') {
-            
+
             sendMessageToParent(current.message)
-            
+
             await MoveGateCard({
                 newSlot: current.data.newSlot,
                 slot: current.data.slot,
@@ -323,7 +323,7 @@ async function processAnimationQueue(userId: string,
 
         if (current.type === 'SWIPE_GATE_CARD') {
             sendMessageToParent(current.message)
-            
+
             await SwipeGateCards({
                 plane: plane,
                 scene: scene,
@@ -364,7 +364,7 @@ async function processAnimationQueue(userId: string,
         }
 
         if (current.type === 'REVIVE_BAKUGAN') {
-            
+
             sendMessageToParent(current.message)
 
             await ReviveBakuganAnimation({
@@ -394,7 +394,7 @@ export function registerSocketHandlers(
         plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>
         light: THREE.AmbientLight,
         bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[],
-        gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[]
+        gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[],
     }
 ) {
     const { camera, plane, roomId, scene, userId, light, bakugansMeshs, gateCardMeshs } = ctx
@@ -487,7 +487,7 @@ export function registerSocketHandlers(
         if (request.userId !== userId) return
 
         await currentAnimationPromise;
-        
+
         clearTurnInterface()
         AdditionalRequestResolution({
             request: request, camera: camera, plane: plane, socket: socket, scene: scene
@@ -535,6 +535,7 @@ export function registerSocketHandlers(
         sendMessageToParent([message])
 
     })
+
 }
 
 

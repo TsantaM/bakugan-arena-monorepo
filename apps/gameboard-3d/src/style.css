@@ -31,6 +31,25 @@ body {
   list-style: none;
 } */
 
+.info-icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: #444;
+    color: white;
+    font-size: 1.25;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-top: 4px;
+    transition: background 0.2s ease;
+}
+
+.info-icon:hover {
+    background-color: #666;
+}
+
 #gameboard {
   display: flex;
   flex-direction: column;

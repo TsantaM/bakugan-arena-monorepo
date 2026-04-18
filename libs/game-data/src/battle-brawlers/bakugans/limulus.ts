@@ -42,8 +42,8 @@ export const LimulusGateCard: gateCardType = {
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
 
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
         if (bakugan.family !== LimulusGateCard.family) return
@@ -63,8 +63,8 @@ export const LimulusGateCard: gateCardType = {
     onRemoveBakugan({ bakugan, slot, roomState }) {
 
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
         if (bakugan.family !== LimulusAquos.family) return

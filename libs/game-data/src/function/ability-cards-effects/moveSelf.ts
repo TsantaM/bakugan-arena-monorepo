@@ -77,7 +77,7 @@ export function moveBakuganToSelectedSlot({
     slotTarget.bakugans.push(newUserState);
 
     // --- Blocking logic ---
-    if (shouldBlockAlways && slotTarget.portalCard.userId !== user.userId) {
+    if (shouldBlockAlways && slotTarget.portalCard.userId !== user.userId && !slotTarget.state.open) {
         slotTarget.state.blocked = true;
     }
 

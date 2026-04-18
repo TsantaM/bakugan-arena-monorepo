@@ -1,4 +1,4 @@
-import { AbilityCardFailed, CheckBattle, DragAndElimineBakuganEffect, getAdjacentsSlots } from "../../function/index.js"
+import { AbilityCardFailed, CheckBattle, ComeBackBakuganEffect, DragAndElimineBakuganEffect, getAdjacentsSlots } from "../../function/index.js"
 import { Slots } from "../../store/slots.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 import { SirenoidAquos } from "../bakugans/sirenoid.js"
@@ -47,9 +47,11 @@ export const AntiMuse: exclusiveAbilitiesType = {
                         }
                     })
 
+                    ComeBackBakuganEffect({ bakugan: user, roomState: roomState })
+
                 }
 
-                CheckBattle({ roomState })
+                // CheckBattle({ roomState })
             }
         }
 

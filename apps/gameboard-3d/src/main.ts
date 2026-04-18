@@ -20,6 +20,7 @@ const reload = document.getElementById("init-room")
 const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
 const plane = PlaneMesh.clone()
+
 plane.material.transparent = true
 camera.position.set(3, 5, 8)
 plane.rotateX(-Math.PI / 2)
@@ -66,6 +67,7 @@ if (opponentImage) {
 socket.emit('init-room-state', ({ roomId, userId, parentSocket }))
 
 if (roomId !== null && userId !== null) {
+
   if (canvas) {
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
     renderer.setSize(window.innerWidth, window.innerHeight)
@@ -130,94 +132,94 @@ if (roomId !== null && userId !== null) {
 
     window.addEventListener('mousemove', (event: MouseEvent) => {
 
-        const elementUnderMouse = document.elementFromPoint(
-            event.clientX,
-            event.clientY
-        )
+      const elementUnderMouse = document.elementFromPoint(
+        event.clientX,
+        event.clientY
+      )
 
-        // ❌ Hors canvas → reset propre
-        if (!elementUnderMouse || !canvas.contains(elementUnderMouse)) {
-            if (hoveredMesh || hoveredSlot) {
-                hideTooltip()
-            }
-
-            hoveredMesh = null
-            hoveredSlot = null
-            return
-        }
-
-        // ✅ Position souris (IMPORTANT)
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1
-        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
-
-        raycaster.setFromCamera(mouse, camera)
-
-        // ✅ Update position tooltip (CRITIQUE)
-        tooltip?.setProps({
-            getReferenceClientRect: () =>
-                new DOMRect(
-                    event.clientX,
-                    event.clientY,
-                    0,
-                    0
-                ),
-        })
-
-        const intersects = raycaster.intersectObjects(bakugansMeshs, false)
-        const gatesIntersects = raycaster.intersectObjects(gateCardMeshs, false)
-
-        // =========================
-        // 🎯 BAKUGAN
-        // =========================
-        if (intersects.length > 0) {
-            const currentMesh = intersects[0].object as THREE.Sprite
-
-            if (hoveredMesh !== currentMesh) {
-                hoveredMesh = currentMesh
-
-                const data = currentMesh.userData as BakuganPreviewData
-                const bakuganName = Bakugans[data.bakuganKey].name
-
-                showTooltip(`
-                <strong>${bakuganName}</strong><br/>
-                Power: ${data.powerLevel}
-                `)
-            }
-
-            // ⚠️ IMPORTANT → empêcher le gate card de overwrite
-            hoveredSlot = null
-            return
-        }
-
-        // =========================
-        // 🎯 GATE CARD
-        // =========================
-        if (gatesIntersects.length > 0) {
-            const currentMesh = gatesIntersects[0].object as THREE.Mesh
-
-            if (hoveredSlot !== currentMesh) {
-                hoveredSlot = currentMesh as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>
-
-                if (currentMesh.userData.cardName) {
-                    showTooltip(`<strong>${currentMesh.userData.cardName}</strong>`)
-                } else {
-                    hideTooltip()
-                }
-            }
-
-            hoveredMesh = null
-            return
-        }
-
-        // =========================
-        // ❌ RIEN HOVER
-        // =========================
+      // ❌ Hors canvas → reset propre
+      if (!elementUnderMouse || !canvas.contains(elementUnderMouse)) {
         if (hoveredMesh || hoveredSlot) {
-            hideTooltip()
+          hideTooltip()
         }
 
         hoveredMesh = null
         hoveredSlot = null
+        return
+      }
+
+      // ✅ Position souris (IMPORTANT)
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+
+      raycaster.setFromCamera(mouse, camera)
+
+      // ✅ Update position tooltip (CRITIQUE)
+      tooltip?.setProps({
+        getReferenceClientRect: () =>
+          new DOMRect(
+            event.clientX,
+            event.clientY,
+            0,
+            0
+          ),
+      })
+
+      const intersects = raycaster.intersectObjects(bakugansMeshs, false)
+      const gatesIntersects = raycaster.intersectObjects(gateCardMeshs, false)
+
+      // =========================
+      // 🎯 BAKUGAN
+      // =========================
+      if (intersects.length > 0) {
+        const currentMesh = intersects[0].object as THREE.Sprite
+
+        if (hoveredMesh !== currentMesh) {
+          hoveredMesh = currentMesh
+
+          const data = currentMesh.userData as BakuganPreviewData
+          const bakuganName = Bakugans[data.bakuganKey].name
+
+          showTooltip(`
+                <strong>${bakuganName}</strong><br/>
+                Power: ${data.powerLevel}
+                `)
+        }
+
+        // ⚠️ IMPORTANT → empêcher le gate card de overwrite
+        hoveredSlot = null
+        return
+      }
+
+      // =========================
+      // 🎯 GATE CARD
+      // =========================
+      if (gatesIntersects.length > 0) {
+        const currentMesh = gatesIntersects[0].object as THREE.Mesh
+
+        if (hoveredSlot !== currentMesh) {
+          hoveredSlot = currentMesh as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>
+
+          if (currentMesh.userData.cardName) {
+            showTooltip(`<strong>${currentMesh.userData.cardName}</strong>`)
+          } else {
+            hideTooltip()
+          }
+        }
+
+        hoveredMesh = null
+        return
+      }
+
+      // =========================
+      // ❌ RIEN HOVER
+      // =========================
+      if (hoveredMesh || hoveredSlot) {
+        hideTooltip()
+      }
+
+      hoveredMesh = null
+      hoveredSlot = null
     })
 
     registerSocketHandlers(socket, {
@@ -228,7 +230,7 @@ if (roomId !== null && userId !== null) {
       scene: scene,
       userId: userId,
       bakugansMeshs: bakugansMeshs,
-      gateCardMeshs: gateCardMeshs
+      gateCardMeshs: gateCardMeshs,
     })
 
     socket.emit('init-room-state', ({ roomId, userId, parentSocket }))
@@ -249,6 +251,7 @@ if (roomId !== null && userId !== null) {
       camera.updateProjectionMatrix()
       renderer.setSize(window.innerWidth, window.innerHeight)
     })
+
 
   }
 }

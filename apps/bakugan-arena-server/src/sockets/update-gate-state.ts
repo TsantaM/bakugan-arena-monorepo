@@ -74,7 +74,7 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
 
             const gateCardOnFieldCount = Battle_Brawlers_Game_State[roomIndex].protalSlots.filter((slot) => slot.portalCard !== null).length
 
-            StopPlayerTimer({roomState: state, userId: userId})
+            StopPlayerTimer({ roomState: state, userId: userId })
 
             if (gateCardOnFieldCount === 2) {
                 turnActionUpdater({

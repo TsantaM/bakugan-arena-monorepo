@@ -5,7 +5,7 @@ export const VisageDuChagrin: exclusiveAbilitiesType = {
     name: 'Face of Grief',
     description: `Prevents the opponent from activationg abilities`,
     maxInDeck: 1,
-    usable_in_neutral: false,
+    usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -19,5 +19,6 @@ export const VisageDuChagrin: exclusiveAbilitiesType = {
             }
         }
         return null
-    }
+    },
+    
 }

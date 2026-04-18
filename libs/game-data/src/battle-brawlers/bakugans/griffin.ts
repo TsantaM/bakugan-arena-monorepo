@@ -65,8 +65,8 @@ export const GriffinGateCard: gateCardType = {
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
 
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
         if (bakugan.family !== GriffinGateCard.family) return
@@ -86,8 +86,8 @@ export const GriffinGateCard: gateCardType = {
     onRemoveBakugan({ bakugan, slot, roomState }) {
 
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
         if (bakugan.family !== GriffinAquos.family) return

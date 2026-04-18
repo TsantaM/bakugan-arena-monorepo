@@ -152,7 +152,7 @@ export const EclatSoudain: abilityCardsType = {
                     animations: roomState.animations,
                     bakugan: a
                 })
-                
+
                 const deckDataToUpdate = deck.bakugans.find((b) => b?.bakuganData.key === a.key)
                 if (deckDataToUpdate) {
                     deckDataToUpdate.bakuganData.onDomain = false
@@ -226,7 +226,7 @@ export const ContreMaitrise: abilityCardsType = {
     image: StandardCardsImages.haos,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, slot }) => {
-        if(!roomState) return null
+        if (!roomState) return null
         const lists = [AbilityCardsList, ExclusiveAbilitiesList].flat()
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
@@ -240,9 +240,9 @@ export const ContreMaitrise: abilityCardsType = {
 
             abilities.forEach((lastAbility) => {
                 const ability = lists.find((a) => a.key === lastAbility.key)
-                const user = BakuganList.find((b) => b.key === lastAbility.bakuganKey )
-                if(!user) return
-                if(!ability) return
+                const user = BakuganList.find((b) => b.key === lastAbility.bakuganKey)
+                if (!user) return
+                if (!ability) return
 
                 const animation: AnimationDirectivesTypes = {
                     type: 'CANCEL_ABILITY_CARD',
@@ -366,5 +366,23 @@ export const HaosImmobilisation: abilityCardsType = {
                 })
             }
         }
+    },
+    activationConditions({ roomState, userId }) {
+        if (!roomState) return false
+        if (!roomState.battleState.battleInProcess || roomState.battleState.paused) return false
+        const deck = roomState?.decksState.find((d) => d.userId === userId)
+        if (!deck) return false
+        const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Haos').map((b) => b.key)).flat()
+        if (haosOnDomain.length < 2) return false
+        const bakugans = deck.bakugans.filter((bakugan) => bakugan && bakugan.bakuganData.onDomain === false && bakugan.bakuganData.elimined === false).filter((bakugan) => bakugan !== undefined && bakugan !== null)
+        if (bakugans.length === 0) return false
+        return true
+    },
+    canUse({ bakugan, roomState }) {
+        if (!roomState) return false
+
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
+
+        return true
     }
 }

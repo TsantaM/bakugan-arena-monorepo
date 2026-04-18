@@ -53,8 +53,8 @@ export const TigrerraGateCard: gateCardType = {
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
 
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
         if (bakugan.family !== TigrerraGateCard.family) return
@@ -74,8 +74,8 @@ export const TigrerraGateCard: gateCardType = {
     onRemoveBakugan({ bakugan, slot, roomState }) {
 
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
         if (bakugan.family !== TigrerraGateCard.family) return

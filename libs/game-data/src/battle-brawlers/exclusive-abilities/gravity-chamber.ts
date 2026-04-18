@@ -1,4 +1,4 @@
-import { AbilityCardFailed, CheckBattle, DragAndElimineBakuganEffect, getAdjacentsSlots } from "../../function/index.js"
+import { AbilityCardFailed, CheckBattle, ComeBackBakuganEffect, DragAndElimineBakuganEffect, getAdjacentsSlots } from "../../function/index.js"
 import { Slots } from "../../store/slots.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 import { HydranoidDarkus } from "../bakugans/hydranoid.js"
@@ -74,9 +74,11 @@ export const ChambreDeGravite: exclusiveAbilitiesType = {
                         // }
                     })
 
+                    ComeBackBakuganEffect({bakugan: user, roomState: roomState})
+
                 }
 
-                CheckBattle({ roomState })
+                // CheckBattle({ roomState })
             }
         }
 

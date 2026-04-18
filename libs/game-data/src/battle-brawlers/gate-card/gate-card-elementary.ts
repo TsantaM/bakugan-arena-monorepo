@@ -24,8 +24,8 @@ export const ReacteurPyrus: gateCardType = {
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
 
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
 
@@ -43,8 +43,8 @@ export const ReacteurPyrus: gateCardType = {
     onRemoveBakugan({ bakugan, slot, roomState }) {
 
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
 
@@ -81,8 +81,8 @@ export const ReacteurHaos: gateCardType = {
     },
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
 
@@ -98,8 +98,8 @@ export const ReacteurHaos: gateCardType = {
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
 
@@ -146,8 +146,8 @@ export const ReacteurVentus: gateCardType = {
     },
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
 
@@ -163,8 +163,8 @@ export const ReacteurVentus: gateCardType = {
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
 
@@ -205,8 +205,8 @@ export const ReacteurAquos: gateCardType = {
     },
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
 
@@ -222,8 +222,8 @@ export const ReacteurAquos: gateCardType = {
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
 
@@ -264,8 +264,8 @@ export const ReacteurSubterra: gateCardType = {
     },
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
 
@@ -281,8 +281,8 @@ export const ReacteurSubterra: gateCardType = {
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
 
@@ -323,8 +323,8 @@ export const ReacteurDarkus: gateCardType = {
     },
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
 
@@ -340,8 +340,8 @@ export const ReacteurDarkus: gateCardType = {
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
 

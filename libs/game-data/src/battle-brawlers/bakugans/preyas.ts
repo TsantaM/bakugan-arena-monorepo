@@ -42,8 +42,8 @@ export const PreyasGateCard: gateCardType = {
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
 
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
         if (bakugan.family !== PreyasGateCard.family) return
@@ -63,8 +63,8 @@ export const PreyasGateCard: gateCardType = {
     onRemoveBakugan({ bakugan, slot, roomState }) {
 
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
         if (bakugan.family !== PreyasGateCard.family) return
@@ -125,8 +125,8 @@ export const DiabloGateCard: gateCardType = {
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
 
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
         if (bakugan.family !== DiabloAquos.family) return
@@ -146,8 +146,8 @@ export const DiabloGateCard: gateCardType = {
     onRemoveBakugan({ bakugan, slot, roomState }) {
 
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
         if (bakugan.family !== DiabloGateCard.family) return
@@ -208,8 +208,8 @@ export const AngeloGateCard: gateCardType = {
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
 
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
         if (bakugan.family !== AngeloGateCard.family) return
@@ -229,8 +229,8 @@ export const AngeloGateCard: gateCardType = {
     onRemoveBakugan({ bakugan, slot, roomState }) {
 
         if (!roomState) return
-        const { blocked, canceled, open } = slot.state
-        if (blocked) return
+        const { canceled, open } = slot.state
+        
         if (canceled) return
         if (!open) return
         if (bakugan.family !== AngeloGateCard.family) return

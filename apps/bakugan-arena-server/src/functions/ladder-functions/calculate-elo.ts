@@ -12,7 +12,7 @@ function getK(elo: number): number {
     return 16
 }
 
-export async function CalculateAndUpdateElo({ winner, loser, roomData, io, roomId }: { winner: string, loser: string, roomData: stateType, io: Server, roomId: string }) {
+export async function CalculateAndUpdateElo({ winner, loser, roomData, io, roomId, forfeit = false }: { winner: string, loser: string, roomData: stateType, io: Server, roomId: string, forfeit?: boolean }) {
 
     if (!roomData) return
 
@@ -20,8 +20,11 @@ export async function CalculateAndUpdateElo({ winner, loser, roomData, io, roomI
     const loserName = roomData.players.find((p) => p.userId !== roomData.status.winner)?.username ? roomData.players.find((p) => p.userId !== roomData.status.winner)?.username : ''
     
     if (!roomData.ranked) {
+
+        const text = forfeit ? `${loserName} forfeit ! The winner is ${winnerName}` : `Game is over ! The winner is ${winnerName}`
+
         const message: Message = {
-            text: `Game is over ! The winner is ${winnerName}`,
+            text: text,
             turn: roomData.turnState.turnCount
         }
 
@@ -83,8 +86,10 @@ export async function CalculateAndUpdateElo({ winner, loser, roomData, io, roomI
     await db.update(userSchema).set({ elo: newWinnerElo }).where(eq(userSchema.id, winner))
     await db.update(userSchema).set({ elo: newLoserElo }).where(eq(userSchema.id, loser))
 
+    const text = forfeit ? `${loserName} forfeit ! The winner is ${winnerName} : ${winnerName} : ${newWinnerElo} (+ ${winnerDiffElo}) / ${loserName} : ${newLoserElo} (- ${loserDiffElo})` : `Game is over ! The winner is ${winnerName} : ${winnerName} : ${newWinnerElo} (+ ${winnerDiffElo}) / ${loserName} : ${newLoserElo} (- ${loserDiffElo})`
+
     const message: Message = {
-        text: `Game is over ! The winner is ${winnerName} : ${winnerName} : ${newWinnerElo} (+ ${winnerDiffElo}) / ${loserName} : ${newLoserElo} (- ${loserDiffElo})`,
+        text: text,
         turn: roomData.turnState.turnCount
     }
 

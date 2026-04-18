@@ -1,4 +1,4 @@
-import { AutoActivationDuringBattle, CheckBattle, CheckBattleStillInProcess, ComeBackBakuganDirectiveAnimation, ElimineBakuganDirectiveAnimation, ElimineBakuganEffect, OpenGateCardActionRequest, PowerChangeDirectiveAnumation, RemoveGateCardDirectiveAnimation, ResetSlot, Slots, SwipePowerLevelsEffects, type gateCardType } from "../../index.js";
+import { AutoActivationDuringBattle, CheckBattle, CheckBattleStillInProcess, ComeBackBakuganDirectiveAnimation, ComeBackBakuganEffect, ElimineBakuganDirectiveAnimation, ElimineBakuganEffect, OpenGateCardActionRequest, PowerChangeDirectiveAnumation, RemoveGateCardDirectiveAnimation, ResetSlot, Slots, SwipePowerLevelsEffects, type gateCardType } from "../../index.js";
 import { GateCardImages } from "../../store/gate-card-images.js";
 
 export const MineFantome: gateCardType = {
@@ -13,20 +13,9 @@ export const MineFantome: gateCardType = {
 
         if (roomState && slotOfGate && slotOfGate.portalCard !== null && slotOfGate.state.open === false && slotOfGate.state.canceled === false && otherPlayerId) {
             slotOfGate.state.open = true
-            const bakuganOnSlot = slotOfGate.bakugans.map((b) => b.key)
-            slotOfGate.bakugans.forEach((b) => {
-                ElimineBakuganDirectiveAnimation({
-                    animations: roomState.animations,
-                    bakugan: b,
-                    slot: structuredClone(slotOfGate),
-                    turn: roomState.turnState.turnCount
-
-                })
-            })
-
             const bakugans = slotOfGate.bakugans
             bakugans.forEach((bakugan) => {
-                ElimineBakuganEffect({bakugan: bakugan, roomState: roomState})
+                ElimineBakuganEffect({ bakugan: bakugan, roomState: roomState })
             })
 
 
@@ -64,10 +53,6 @@ export const MineFantome: gateCardType = {
         }
 
     },
-
-    onCanceled() {
-        return
-    },
     autoActivationCheck: ({ portalSlot }) => {
         const bakugansOnSlot = portalSlot.bakugans.length
         if (bakugansOnSlot >= 2) {
@@ -91,85 +76,56 @@ export const Echange: gateCardType = {
         if (slotOfGate && roomState && slotOfGate.state.open === false && slotOfGate.state.canceled === false) {
             slotOfGate.state.open = true
             const usersBakugan = slotOfGate.bakugans.filter((b) => b.userId === userId)
-            const usersBakuganKeys = usersBakugan.map((b) => b.key)
-            const usersBakuganDeck = roomState.decksState
-                .find(d => d.userId === userId)?.bakugans
-                .filter((b): b is NonNullable<typeof b> => b !== null && b !== undefined) // on retire null/undefined
-                .map(b => b.bakuganData)                  // On prend les données réelles du bakugan
-                .filter(bd => usersBakuganKeys.includes(bd.key))               // On garde uniquement ceux sur la carte
-                .map(bd => bd)
             const totalPowerUsersBakugans = usersBakugan.reduce((acc, bakugan) => acc + bakugan.currentPower, 0)
 
-
-
             const opponentsBakugan = slotOfGate.bakugans.filter((b) => b.userId !== userId)
-            const opponentsBakuganKey = opponentsBakugan.map((b) => b.key)
-            const opponentsBakuganDeck = roomState.decksState
-                .find(d => d.userId !== userId)?.bakugans
-                .filter((b): b is NonNullable<typeof b> => b !== null && b !== undefined) // on retire null/undefined
-                .map(b => b.bakuganData)                  // On prend les données réelles du bakugan
-                .filter(bd => opponentsBakuganKey.includes(bd.key))               // On garde uniquement ceux sur la carte
-                .map(bd => bd)
             const totalPowerOpponentsBakugans = opponentsBakugan.reduce((acc, bakugan) => acc + bakugan.currentPower, 0)
 
             if (totalPowerUsersBakugans >= 400) {
-                usersBakugan.forEach((b) => {
-                    ElimineBakuganDirectiveAnimation({
-                        animations: roomState.animations,
-                        bakugan: b,
-                        slot: slotOfGate,
-                        turn: roomState.turnState.turnCount
 
+
+                usersBakugan.forEach((b) => {
+                    ElimineBakuganEffect({
+                        bakugan: b,
+                        roomState: roomState
                     })
                 })
-                usersBakuganDeck?.forEach((b) => {
-                    b.onDomain = false
-                    b.elimined = true
-                })
+
                 // slotOfGate.bakugans = slotOfGate.bakugans.filter(
                 //     (b) => !usersBakuganKeys.includes(b.key)
                 // )
             } else {
+
                 usersBakugan.forEach((b) => {
-                    ComeBackBakuganDirectiveAnimation({
-                        animations: roomState.animations,
+                    ComeBackBakuganEffect({
                         bakugan: b,
-                        slot: slotOfGate
+                        roomState: roomState
                     })
                 })
-                usersBakuganDeck?.forEach((b) => {
-                    b.onDomain = false
-                })
+
             }
 
             if (totalPowerOpponentsBakugans >= 400) {
-                opponentsBakugan.forEach((b) => {
-                    ElimineBakuganDirectiveAnimation({
-                        animations: roomState.animations,
-                        bakugan: b,
-                        slot: slotOfGate,
-                        turn: roomState.turnState.turnCount
 
+                opponentsBakugan.forEach((b) => {
+                    ElimineBakuganEffect({
+                        bakugan: b,
+                        roomState: roomState
                     })
                 })
-                opponentsBakuganDeck?.forEach((b) => {
-                    b.onDomain = false
-                    b.elimined = true
-                })
+
                 // slotOfGate.bakugans = slotOfGate.bakugans.filter(
                 //     (b) => !opponentsBakuganKey.includes(b.key)
                 // )
             } else {
+
                 opponentsBakugan.forEach((b) => {
-                    ComeBackBakuganDirectiveAnimation({
-                        animations: roomState.animations,
+                    ComeBackBakuganEffect({
                         bakugan: b,
-                        slot: slotOfGate
+                        roomState: roomState
                     })
                 })
-                opponentsBakuganDeck?.forEach((b) => {
-                    b.onDomain = false
-                })
+
             }
 
             RemoveGateCardDirectiveAnimation({
@@ -184,24 +140,30 @@ export const Echange: gateCardType = {
 
             roomState.turnState.set_new_bakugan = true
             roomState.turnState.set_new_gate = true
-            slotOfGate.state.open = true
 
         }
 
 
         return null
     },
-    onCanceled() {
-        return
-    },
     autoActivationCheck({ portalSlot }) {
-        const enoughPowerLevels = portalSlot.bakugans.filter((b) => b.currentPower >= 400)
-        if (enoughPowerLevels.length > 0) {
-            return true
-        } else {
+        if (!portalSlot?.bakugans || portalSlot.bakugans.length === 0) {
             return false
         }
-    },
+
+        // Grouper les bakugans par userId
+        const powerByUser: Record<string, number> = {}
+
+        portalSlot.bakugans.forEach((b) => {
+            if (!powerByUser[b.userId]) {
+                powerByUser[b.userId] = 0
+            }
+            powerByUser[b.userId] += b.currentPower
+        })
+
+        // Vérifier si au moins un joueur atteint 400
+        return Object.values(powerByUser).some(total => total >= 400)
+    }
 }
 
 export const SuperPyrus: gateCardType = {

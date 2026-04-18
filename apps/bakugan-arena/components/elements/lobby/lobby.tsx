@@ -43,6 +43,7 @@ export default function Lobby() {
                     </CardHeader>
                     <CardContent className="flex flex-col gap-3">
                         <Button asChild className="w-full" variant="outline" ><Link href={"/dashboard/deck-builder"}>Deck Builder</Link></Button>
+                        <Button asChild className="w-full" variant="outline" ><Link href={"/dashboard/ladder"}>Ladder</Link></Button>
                         <FindUserComponent />
                         <WatchBattle />
                         {/* <OnChalengePopUp /> */}

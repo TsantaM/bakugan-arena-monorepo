@@ -1,4 +1,4 @@
-import { AnimationDirectivesTypes, applyWinAbilitiesEffects, CheckBattle, ComeBackBakuganDirectiveAnimation, determineWinner, ElimineBakuganDirectiveAnimation, finalizeBattle, GateCardsList, getPlayerDecksAndBakugans, GetUserName, updateDeckBakugans } from "@bakugan-arena/game-data"
+import { AnimationDirectivesTypes, applyWinAbilitiesEffects, CheckBattle, ComeBackBakuganDirectiveAnimation, determineWinner, ElimineBakuganDirectiveAnimation, finalizeBattle, GateCards, GateCardsList, getPlayerDecksAndBakugans, GetUserName, updateDeckBakugans } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
 
@@ -25,15 +25,15 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
     // FR: Récupération du slot de bataille actif ===
     // ENG Get the active battle slot ===
     const slot = protalSlots.find((s) => s.id === battleState.slot)
-    if (!slot || !Array.isArray(slot.bakugans)) return  // Vérifie que le slot existe et contient des bakugans
+    if (!slot) return  // Vérifie que le slot existe et contient des bakugans
+    if (slot.portalCard === null) return
 
     // FR: Activation de la carte portail avant l'élimination
     // ENG: Gate Card activation before elimination
-    const card = GateCardsList.find((c) => c.key === slot.portalCard?.key)
-    if (!card) return
+    const card = GateCards[slot.portalCard.key]
 
     if (!slot.state.blocked && !slot.state.open && card.activeOnBattleEnd && card.activeOnBattleEnd.activeBeforeElimination && !card.activeOnBattleEnd.autoActiveOnEnd) {
-        if(!battleState.slot) return
+        if (!battleState.slot) return
         if (card.autoActivationCheck && !card.autoActivationCheck({ portalSlot: slot, roomState: roomData })) return
 
         const animation: AnimationDirectivesTypes = {
@@ -59,7 +59,7 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
 
         card.onOpen({ roomState: roomData, slot: battleState.slot })
 
-        slot.state.open
+        slot.state.open = true
 
     }
 
@@ -79,7 +79,7 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
 
     // FR: Récupération des clés des bakugans impliqués dans la bataille ===
     // ENG Get keys of all bakugans in this battle ===
-    const keys = [...player1Bakugans.map((b) => ({key: b.key, userId: b.userId})), ...player2Bakugans.map((b) => ({key: b.key, userId: b.userId}))]
+    const keys = [...player1Bakugans.map((b) => ({ key: b.key, userId: b.userId })), ...player2Bakugans.map((b) => ({ key: b.key, userId: b.userId }))]
 
     // FR: Détermination du gagnant et du perdant ===
     // ENG Determine winner and loser ===
@@ -126,7 +126,7 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
                         animations: roomData.animations,
                         bakugan: bakugan,
                         slot: slot,
-                        turn: roomData.turnState.turnCount - 1
+                        turn: roomData.turnState.turnCount
                     })
                 }
             })
@@ -151,7 +151,9 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
             updateDeckBakugans({ deck: p1Deck, bakugans: keys })
             updateDeckBakugans({ deck: p2Deck, bakugans: keys })
 
-
+            // FR: Finaliser la bataille ===
+            //ENG: Finalize battle: reset slot, battle state, etc. ===
+            finalizeBattle({ roomData, winnerId: winner, winners: winners, loserId: loser, loosers: loosers, slotToUpdate: slot })
 
         } else {
             // FR Si égalité, juste désactiver le flag onDomain ===
@@ -165,13 +167,10 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
             })
             updateDeckBakugans({ deck: p1Deck, bakugans: keys })
             updateDeckBakugans({ deck: p2Deck, bakugans: keys })
+
+            finalizeBattle({ roomData, slotToUpdate: slot })
         }
     }
 
-    const winnerId = winner !== null ? winner : undefined
-    const loserId = loser !== null ? loser : undefined
-    // FR: Finaliser la bataille ===
-    //ENG: Finalize battle: reset slot, battle state, etc. ===
-    finalizeBattle({ roomData, winnerId: winnerId, winners: winners, loserId: loserId, loosers: loosers })
     CheckBattle({ roomState: roomData })
 }

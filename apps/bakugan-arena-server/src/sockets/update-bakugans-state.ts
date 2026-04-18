@@ -5,7 +5,6 @@ import { AbilityCardsList, ActivePlayerActionRequestType, attribut, BakuganList,
 import { turnActionUpdater } from "./turn-action";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { EmitMessage } from "../functions/emit-messages";
-import { CheckTurnPermissions } from "../functions/ckeck-turn-permissions";
 import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
 
 
@@ -56,7 +55,7 @@ export function AddAbilities({ roomState, request, bakugan, slot, userId, attrib
     }
 
     const abilitiesList = abilitieRequest.abilities.map((a) => a)
-    if(abilitiesList.length === 0) return
+    if (abilitiesList.length === 0) return
 
     let requests = [...request.actions.mustDo, ...request.actions.mustDoOne, ...request.actions.optional].find((action) => action.type === 'USE_ABILITY_CARD')
 
@@ -162,5 +161,6 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
             if (merged.length <= 0) return
             io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
         }
+
     })
 }

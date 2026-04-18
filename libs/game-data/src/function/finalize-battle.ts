@@ -1,31 +1,29 @@
-import { GateCardsList } from "../battle-brawlers/gate-gards.js";
-import { AnimationDirectivesTypes, type stateType } from "../type/type-index.js";
+import { GateCards } from "../battle-brawlers/gate-gards.js";
+import { AnimationDirectivesTypes, portalSlotsTypeElement, type stateType } from "../type/type-index.js";
 import { RemoveGateCardDirectiveAnimation } from "./create-animation-directives/index.js";
 import { GetUserName } from "./get-user-name.js";
 import { ResetSlot } from "./reset-slot.js";
 
-export const finalizeBattle = ({ roomData, winnerId, winners, loserId, loosers }: { roomData: stateType, winnerId?: string, winners: { key: string, userId: string }[], loosers: { key: string, userId: string }[], loserId?: string }) => {
+export const finalizeBattle = ({ roomData, winnerId, winners, loserId, loosers, slotToUpdate }: { roomData: stateType, winnerId?: string, winners?: { key: string, userId: string }[], loosers?: { key: string, userId: string }[], loserId?: string, slotToUpdate: portalSlotsTypeElement }) => {
     if (!roomData) return
-    const { battleState, protalSlots, turnState } = roomData
-    if (!battleState || !protalSlots || !turnState || battleState.slot === null) return
-
-    const slotToUpdate = protalSlots.find((s) => s.id === battleState.slot)
+    const { battleState, turnState } = roomData
+    if (!battleState || battleState.slot === null) return
 
     if (winnerId && loserId) {
         roomData.turnState.turn = winnerId
         roomData.turnState.previous_turn = loserId
-
+    } else {
+        turnState.previous_turn = turnState.turn
+        const players = roomData.players
+        turnState.turn = players.find(p => p.userId !== roomData.turnState.turn)?.userId ?? turnState.turn
     }
 
-    if (!slotToUpdate) return
-
-
-    const card = GateCardsList.find((c) => c.key === slotToUpdate.portalCard?.key)
-    if (!card) return
+    if (slotToUpdate.portalCard === null) return
+    const card = GateCards[slotToUpdate.portalCard.key]
 
     if (!slotToUpdate.state.blocked && !slotToUpdate.state.open && card.activeOnBattleEnd && card.activeOnBattleEnd.autoActiveOnEnd && !card.activeOnBattleEnd.activeBeforeElimination) {
 
-        if(card.autoActivationCheck && !card.autoActivationCheck({portalSlot: slotToUpdate, roomState: roomData, looser: loserId, winner: winnerId})) return
+        if (card.autoActivationCheck && !card.autoActivationCheck({ portalSlot: slotToUpdate, roomState: roomData, looser: loserId, winner: winnerId })) return
 
         const animation: AnimationDirectivesTypes = {
             type: "OPEN_GATE_CARD",
@@ -50,8 +48,8 @@ export const finalizeBattle = ({ roomData, winnerId, winners, loserId, loosers }
 
         card.onOpen({ roomState: roomData, slot: battleState.slot, looserId: loserId, winnerId: winnerId, winners: winners, loosers: loosers })
 
-        slotToUpdate.state.open
-        
+        slotToUpdate.state.open = true
+
     }
 
     RemoveGateCardDirectiveAnimation({
