@@ -65,23 +65,30 @@ export async function PowerChangeAnimation({
   });
 }
 
-export function PowerChangeNumberAnimation({ userId, slotId, newPower }: { userId: string, slotId: slots_id, newPower: number }) {
-  // Fonction pour le changement de puissance
-  const powerContainer = document.getElementById(`${userId}-${slotId}`)
-  if (!powerContainer) return
-  let power = parseInt(powerContainer.textContent)
+export function PowerChangeNumberAnimation({ userId, slotId, newPower }: { userId: string, slotId: slots_id, newPower: number }): Promise<void> {
 
+  return new Promise((resolve) => {
 
-  const step = 5
-  const interval = setInterval(() => {
-    if (Math.round(newPower) < power) {
-      power -= step
-    } else {
-      power += step
-    }
-    powerContainer.textContent = power.toString()
+    const powerContainer = document.getElementById(`${userId}-${slotId}`)
+    if (!powerContainer) return resolve()
 
-    if (power === Math.round(newPower) || power === 0)
-      clearInterval(interval)
-  }, 25)
+    let power = parseInt(powerContainer.textContent || "0")
+
+    const step = 5
+
+    const interval = setInterval(() => {
+      if (Math.round(newPower) < power) {
+        power -= step
+      } else {
+        power += step
+      }
+
+      powerContainer.textContent = power.toString()
+
+      if (power === Math.round(newPower) || power === 0) {
+        clearInterval(interval)
+        resolve()
+      }
+    }, 25)
+  })
 }
