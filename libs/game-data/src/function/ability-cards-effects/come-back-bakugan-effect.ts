@@ -10,12 +10,12 @@ export function ComeBackBakuganEffect({ bakugan, roomState }: { roomState: state
     const bakuganInDeck = roomState.decksState.find((d) => d.userId === bakugan.userId)?.bakugans.find((b) => b.bakuganData.key === bakugan.key)
 
     if (bakuganInDeck) {
-        bakuganInDeck.bakuganData.onDomain = false
         ComeBackBakuganDirectiveAnimation({
             animations: roomState.animations,
             bakugan: bakugan,
             slot: slot
         })
+        bakuganInDeck.bakuganData.onDomain = false
         slot.bakugans.splice(index, 1)
     }
     

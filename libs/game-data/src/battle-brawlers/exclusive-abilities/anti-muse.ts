@@ -72,6 +72,7 @@ export const AntiMuse: exclusiveAbilitiesType = {
         const adjacentSlots = getAdjacentsSlots({ slot: slot, roomState: roomState })
         const slotsWithOpponent = adjacentSlots.filter(
             (slot) =>
+                slot.portalCard !== null &&
                 slot.bakugans.length > 0 &&
                 slot.bakugans.some(
                     (b) =>

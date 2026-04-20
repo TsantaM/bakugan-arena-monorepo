@@ -258,6 +258,15 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
                 if (!activeSocket) return
                 if (!Battle_Brawlers_Game_State[roomIndex]) return
 
+                if (!roomData.battleState.battleInProcess || roomData.battleState.paused) {
+                    const newState1 = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "SET_BAKUGAN")
+                    Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState1 as ActivePlayerActionRequestType
+
+                    const newState2 = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "SET_GATE_CARD_ACTION")
+                    Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState2 as ActivePlayerActionRequestType
+                }
+
+
                 const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "USE_ABILITY_CARD")
                 Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
 

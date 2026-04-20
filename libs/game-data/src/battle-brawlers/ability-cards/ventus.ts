@@ -185,6 +185,9 @@ export const SouffleTout: abilityCardsType = {
 
         if (!battleInProcess || (battleInProcess && paused)) return false
 
+        const slotWithCard = roomState.protalSlots.filter((slot) => slot.portalCard !== null).length
+        if (slotWithCard < 2) return false
+
         return true
     },
     canUse({ bakugan, roomState }) {
@@ -278,6 +281,8 @@ export const TornadeExtreme: abilityCardsType = {
     activationConditions: ({ roomState, userId }) => {
         if (!roomState) return false
         const bakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().length
+        const slotWithCard = roomState.protalSlots.filter((slot) => slot.portalCard !== null).length
+        if (slotWithCard < 2) return false
         if (bakugans < 2) return false
         return true
     },

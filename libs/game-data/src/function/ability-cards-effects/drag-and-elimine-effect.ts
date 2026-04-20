@@ -13,12 +13,12 @@ export function DragAndElimineBakuganEffect({ bakugan, roomState, cardUser, init
 
     })
 
-    const bakuganOnSlotDeckState = roomState.decksState
-        .flatMap(deck => deck.bakugans)           // On prend tous les bakugans de tous les decks
-        .filter((b): b is NonNullable<typeof b> => b !== null && b !== undefined) // on retire null/undefined
-        .map(b => b.bakuganData)                  // On prend les données réelles du bakugan
-        .filter(bd => bd.key === bakugan.key)               // On garde uniquement ceux sur la carte
-        .map(bd => bd)
+    const deck = roomState.decksState.find((d) => d.userId === bakugan.userId)
+    if (!deck) return
+
+    const bakuganOnSlotDeckState = deck.bakugans.find((b) => b.bakuganData.key === bakugan.key)
+
+    if (!bakuganOnSlotDeckState) return
 
     const bakugansOnSlot = initialSlot.bakugans.filter(
         (b) =>
@@ -31,8 +31,8 @@ export function DragAndElimineBakuganEffect({ bakugan, roomState, cardUser, init
 
     initialSlot.bakugans = bakugansOnSlot
 
-    bakuganOnSlotDeckState.forEach((b) => {
-        b.onDomain = false
-        b.elimined = true
-    })
+    bakuganOnSlotDeckState.bakuganData.onDomain = false
+    bakuganOnSlotDeckState.bakuganData.elimined = true
+
+
 }
