@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils"
 import { GetUserDecks } from "@/src/actions/deck-builder/get-deck-data"
 import { authClient } from "@/src/lib/auth-client"
 import UseSearchOpponent from "@/src/sockets/search-opponent"
-import { BakuganList } from "@bakugan-arena/game-data"
+import { BakuganList, BBS1Rules, validateDeck } from "@bakugan-arena/game-data"
 import { useQuery } from "@tanstack/react-query"
 import { Check, ChevronsUpDown } from "lucide-react"
 import Image from "next/image"
@@ -28,7 +28,12 @@ export default function LauchRanckedGate() {
     }
 
     const getUserDecks = async () => {
-        return await GetUserDecks()
+
+        const decks = await GetUserDecks()
+        const Rules = BBS1Rules
+        const filteredDecks = decks?.filter((deck) => validateDeck(deck, Rules).valid)
+
+        return filteredDecks
     }
 
     const getUserDecksQuery = useQuery({

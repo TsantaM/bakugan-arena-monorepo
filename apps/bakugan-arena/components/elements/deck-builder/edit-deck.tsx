@@ -17,6 +17,7 @@ import ManageBakugansInDeck from "./edit-deck/manage-bakugans-in-deck"
 import ManageAbilityCardsInDeck from "./edit-deck/manage-ability-cards-in-deck"
 import ManageExclusiveAbilityCardsInDeck from "./edit-deck/manage-exclusive-ability-cards-in-deck"
 import ManageGateCardsInDeckEditor from "./edit-deck/manage-gate-cards-in-deck"
+import DeckChecker from "./deck-checker"
 
 export type editDeckName_type = z.infer<typeof EditDeckNameSchema>
 
@@ -70,10 +71,13 @@ export default function EditDeck({ id }: { id: string }) {
         <>
             <Card>
 
-                <CardHeader>
+                <CardHeader className="flex gap-3 items-center">
                     <CardTitle>
                         {getDeckData.data?.name}
                     </CardTitle>
+                    {
+                        getDeckData.data && <DeckChecker deck={getDeckData.data}/>
+                    }
                 </CardHeader>
                 <CardContent className="flex flex-col gap-3">
                     <Card>

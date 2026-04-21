@@ -6,7 +6,7 @@ import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import { useChatStore } from "@/src/store/chat-window-store"
-import { BakuganList, CancelChalengeSocketPropsType, chalengeAcceptSocketProps, chalengeSomeoneSocketProps, RejectChalengeSocketPropsType } from "@bakugan-arena/game-data"
+import { BakuganList, BBS1Rules, CancelChalengeSocketPropsType, chalengeAcceptSocketProps, chalengeSomeoneSocketProps, RejectChalengeSocketPropsType, validateDeck } from "@bakugan-arena/game-data"
 import { Check, ChevronsUpDown } from "lucide-react"
 import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
@@ -39,7 +39,12 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
     const [open, setOpen] = useState(false)
     const [show, setShow] = useState(false)
     const getUserDecks = async () => {
-        return await GetUserDecks()
+
+        const decks = await GetUserDecks()
+        const Rules = BBS1Rules
+        const filteredDecks = decks?.filter((deck) => validateDeck(deck, Rules).valid)
+
+        return filteredDecks
     }
 
     const getUserDecksQuery = useQuery({
