@@ -20,7 +20,11 @@ export const MegaFlareBlinder: exclusiveAbilitiesType = {
         const { canceled, open } = slotOfGate.state
 
         if (!open && !canceled) {
-            slotOfGate.state.blocked = true
+            slotOfGate.state.blocked = {
+                blocked: true,
+                blockedWith: 'ABILITY',
+                key: MegaFlareBlinder.key
+            }
         }
 
         // opponent.forEach((bakugan) => {

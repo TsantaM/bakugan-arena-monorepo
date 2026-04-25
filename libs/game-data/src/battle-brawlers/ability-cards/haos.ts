@@ -114,7 +114,19 @@ export const EclatSoudain: abilityCardsType = {
                 attribut: bakugan.bakuganData.attribut,
                 image: bakugan.bakuganData.image,
                 abilityBlock: false,
-                assist: true,
+                assist: {
+                    key: EclatSoudain.key,
+                    addedWith: 'ABILITY',
+                    assist: true
+                },
+                statut: {
+                    trapped: false,
+                    notRetreat: false,
+                    poisoned: false,
+                    protectedAgainstGate: false,
+                    protectedAgainstAbility: false,
+                    protected: false
+                },
                 family: bakugan.bakuganData.family
             }
 
@@ -136,7 +148,7 @@ export const EclatSoudain: abilityCardsType = {
         const slotToUpdate = roomState?.protalSlots.find((s) => s.id === slot)
         const deck = roomState?.decksState.find((d) => d.userId === userId)
         if (slotToUpdate && deck) {
-            const assistsBakugans = slotToUpdate.bakugans.filter((b) => b.userId === userId && b.assist)
+            const assistsBakugans = slotToUpdate.bakugans.filter((b) => b.userId === userId && b.assist && b.assist.key === EclatSoudain.key && b.assist.addedWith === 'ABILITY')
 
             assistsBakugans.forEach((a) => {
                 const index = slotToUpdate.bakugans.findIndex((b) => b.key === a.key && b.assist === a.assist && b.userId === a.userId)

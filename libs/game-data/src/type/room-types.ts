@@ -58,6 +58,12 @@ export type activateAbilities = {
     canceled: boolean,
 }
 
+export type onSlotStatutType = false | {
+    check: true,
+    origin: 'GATE' | 'ABILITY'
+    key: string,
+}
+
 export type bakuganOnSlot = {
     slot_id: slots_id
     id: number,
@@ -68,8 +74,26 @@ export type bakuganOnSlot = {
     attribut: attribut,
     image: string,
     abilityBlock: boolean,
-    assist: boolean,
+    assist: false | {
+        assist: true,
+        addedWith: 'GATE' | 'ABILITY',
+        key: string
+    },
+    statut: {
+        trapped: onSlotStatutType,
+        notRetreat: onSlotStatutType,
+        poisoned: onSlotStatutType,
+        protectedAgainstGate: onSlotStatutType,
+        protectedAgainstAbility: onSlotStatutType,
+        protected: onSlotStatutType
+    },
     family: string
+}
+
+export type blockedCardSlotType = false | {
+    blocked: true,
+    blockedWith: 'GATE' | 'ABILITY',
+    key: string
 }
 
 export type portalSlotsTypeElement = {
@@ -83,7 +107,7 @@ export type portalSlotsTypeElement = {
     state: {
         open: boolean,
         canceled: boolean,
-        blocked: boolean
+        blocked: blockedCardSlotType
     },
     activateAbilities: activateAbilities[]
 }

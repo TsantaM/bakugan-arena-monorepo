@@ -39,7 +39,15 @@ const Slot2: portalSlotsTypeElement = {
             key: 'tigrerra-haos',
             powerLevel: 370,
             slot_id: 'slot-2',
-            userId: userId
+            userId: userId,
+            statut: {
+                notRetreat: false,
+                poisoned: false,
+                trapped: false,
+                protectedAgainstGate: false,
+                protectedAgainstAbility: false,
+                protected: false
+            }
         },
         {
             id: 2,
@@ -52,7 +60,15 @@ const Slot2: portalSlotsTypeElement = {
             key: 'mantris-darkus',
             powerLevel: 370,
             slot_id: 'slot-2',
-            userId: opponentId
+            userId: opponentId,
+            statut: {
+                notRetreat: false,
+                poisoned: false,
+                trapped: false,
+                protectedAgainstGate: false,
+                protectedAgainstAbility: false,
+                protected: false
+            }
         }
     ],
     can_set: false,
@@ -73,7 +89,7 @@ const slot3: portalSlotsTypeElement = ({
     bakugans: [{
         id: 1,
         abilityBlock: false,
-        assist: true,
+        assist: false,
         attribut: 'Pyrus',
         currentPower: 500,
         family: 'dragonoid',
@@ -81,7 +97,15 @@ const slot3: portalSlotsTypeElement = ({
         key: 'dragonoid-pyrus',
         powerLevel: 370,
         slot_id: 'slot-3',
-        userId: userId
+        userId: userId,
+        statut: {
+            notRetreat: false,
+            poisoned: false,
+            trapped: false,
+            protectedAgainstGate: false,
+            protectedAgainstAbility: false,
+            protected: false
+        }
     }],
     can_set: false,
     portalCard: {

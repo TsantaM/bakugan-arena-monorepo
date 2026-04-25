@@ -109,6 +109,8 @@ export const GateCards: Record<string, gateCardType> = {
     [TentaclearGateCard.key]: TentaclearGateCard,
     [WormquakeGateCard.key]: WormquakeGateCard,
     [TigrerraGateCard.key]: TigrerraGateCard,
+    [LimulusGateCard.key]: LimulusGateCard,
+    [RobotallionGateCard.key]: RobotallionGateCard
 }
 
 export const GateCardsList: gateCardType[] = Object.values(GateCards) 

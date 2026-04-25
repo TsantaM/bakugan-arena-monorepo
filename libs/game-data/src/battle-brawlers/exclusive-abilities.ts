@@ -3,6 +3,7 @@ import { exclusiveAbilitiesType } from "../index.js";
 import { AileEnflamee } from "./exclusive-abilities/aile-enflammee.js";
 import { AntiMuse } from "./exclusive-abilities/anti-muse.js";
 import { BouclierFusion } from "./exclusive-abilities/bouclier-fusion.js";
+import { DimmensionQuatre } from "./exclusive-abilities/dimmension-quatre.js";
 import { DragonoidPlus } from "./exclusive-abilities/dragonoid-plus.js";
 import { EffecteurdOmbre } from "./exclusive-abilities/effaceur-d-ombre.js";
 import { FlareBlinder } from "./exclusive-abilities/flare-blinder.js";
@@ -22,8 +23,11 @@ import { MegaFlareBlinder } from "./exclusive-abilities/mega-flare-blinder.js";
 import { Obstruction } from "./exclusive-abilities/obstruction.js";
 import { OmbreBleue } from "./exclusive-abilities/ombre-bleue.js";
 import { PlexusSolaire } from "./exclusive-abilities/plexus-solaire.js";
+import { RayonGamma } from "./exclusive-abilities/rayon-gamma.js";
+import { ReaperOfTheChaos } from "./exclusive-abilities/reaper-of-the-chaos.js";
 import { RobotallionExecution } from "./exclusive-abilities/robotallion-execution.js";
 import { SabreDeLaMort } from "./exclusive-abilities/sabre-de-la-mort.js";
+import { SolarRay } from "./exclusive-abilities/solar-ray.js";
 import { SpiritHole } from "./exclusive-abilities/spirit-hole.js";
 import { TempeteDePlume } from "./exclusive-abilities/tempete-de-plume.js";
 import { TrappeDeSable } from "./exclusive-abilities/trappe-de-sable.js";
@@ -51,8 +55,11 @@ export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [MassueGigantesque.key]: MassueGigantesque,
     [GaucheGigantesque.key]: GaucheGigantesque,
     [TempeteDePlume.key]: TempeteDePlume,
-    // [RayonGamma.key]: RayonGamma,
-    // [DimmensionQuatre.key]: DimmensionQuatre,
+    [RobotallionExecution.key]: RobotallionExecution,
+    [SolarRay.key]: SolarRay,
+    [RayonGamma.key]: RayonGamma,
+    [DimmensionQuatre.key]: DimmensionQuatre,
+    [ReaperOfTheChaos.key]: ReaperOfTheChaos,
     [Marionnette.key]: Marionnette,
     [LanceEclair.key]: LanceEclair,
     [MachettesJumelles.key]: MachettesJumelles,

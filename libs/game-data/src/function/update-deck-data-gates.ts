@@ -1,4 +1,4 @@
-import { type deckType, type slots_id, type portalSlotsType, type portalSlotsTypeElement, type bakuganOnSlot, type activateAbilities } from "../type/type-index.js"
+import { type deckType, type slots_id, type portalSlotsType, type portalSlotsTypeElement, type bakuganOnSlot, type activateAbilities, blockedCardSlotType } from "../type/type-index.js"
 
 type newSlotState = {
     can_set: boolean,
@@ -11,7 +11,7 @@ type newSlotState = {
     state: {
         open: boolean,
         canceled: boolean,
-        blocked: boolean,
+        blocked: blockedCardSlotType,
     },
     activateAbilities: activateAbilities[],
 }

@@ -70,7 +70,7 @@ export const TectonicSwipe: abilityCardsType = {
 
         const request: AbilityCardsActions = {
             type: 'SELECT_SLOT',
-            message: 'Aquos Javelin : Select a slot',
+            message: 'Tectonic Swipe : Select a slot',
             slots: slotsIds
         }
 
@@ -144,7 +144,8 @@ export const TectonicSwipe: abilityCardsType = {
     },
     activationConditions({ roomState }) {
         if (!roomState) return false
-
+        const { battleInProcess, paused } = roomState.battleState
+        if(!battleInProcess || paused) return false
         const slots = roomState.protalSlots.filter((slot) => slot.portalCard !== null)
         if (slots.length < 2) return false
 
@@ -156,7 +157,7 @@ export const TectonicSwipe: abilityCardsType = {
 
         const slot = roomState.protalSlots.find((slot) => slot.id === bakugan.slot_id)
         if (!slot) return false
-
+        if(slot.id !== roomState.battleState.slot) return false
         const juxtaposablesSlots = getJuxtaposablesSlots({ slot: slot, roomState: roomState })
         if (juxtaposablesSlots.length === 0) return false
         const swipableSlots = juxtaposablesSlots.filter((slot) => slot.portalCard !== null)

@@ -1,6 +1,6 @@
 import { GateCardsList } from "../../battle-brawlers/gate-gards.js";
 import { resolutionType } from "../../type/actions-serveur-requests.js";
-import { bakuganOnSlot, stateType } from "../../type/room-types.js";
+import { activateAbilities, bakuganOnSlot, stateType } from "../../type/room-types.js";
 import { OpenGateCardActionRequest } from "../action-request-functions/index.js";
 import { CheckBattleStillInProcess } from "../check-battle-still-in-process.js";
 import { AddRenfortAnimationDirective, MoveToAnotherSlotDirectiveAnimation } from "../create-animation-directives/index.js";
@@ -78,10 +78,16 @@ export function moveBakuganToSelectedSlot({
 
     // --- Blocking logic ---
     if (shouldBlockAlways && slotTarget.portalCard.userId !== user.userId && !slotTarget.state.open) {
-        slotTarget.state.blocked = true;
+        slotTarget.state.blocked = {
+            blocked: true,
+            blockedWith: 'ABILITY',
+            key: resolution.cardKey
+        };
     }
 
+    const ability = slotTarget.activateAbilities.findIndex((a) => a.key === resolution.cardKey && a.userId === resolution.userId && a.bakuganKey === resolution.bakuganKey)
     slotOfGate.bakugans.splice(index, 1);
+    slotOfGate.activateAbilities.splice(ability, 1)
 
     // --- Animations ---
     MoveToAnotherSlotDirectiveAnimation({
@@ -125,6 +131,17 @@ export function moveBakuganToSelectedSlot({
             });
         }
     }
+
+    const newAbilityToPush: activateAbilities = {
+        id: newId, // FR: Toujours supérieur au précédent / ENG: Always greater than the last one
+        bakuganKey: resolution.bakuganKey,
+        canceled: false,
+        key: resolution.cardKey,
+        userId: resolution.userId
+    }
+
+    
+    slotTarget.activateAbilities.push(newAbilityToPush)
 
     OpenGateCardActionRequest({ roomState: roomData });
 

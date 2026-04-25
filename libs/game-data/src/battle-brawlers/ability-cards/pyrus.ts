@@ -132,7 +132,19 @@ export const JetEnflamme: abilityCardsType = {
                 attribut: bakugan.bakuganData.attribut,
                 image: bakugan.bakuganData.image,
                 abilityBlock: false,
-                assist: true,
+                assist: {
+                    addedWith: 'ABILITY',
+                    assist: true,
+                    key: JetEnflamme.key
+                },
+                statut: {
+                    notRetreat: false,
+                    trapped: false,
+                    poisoned: false,
+                    protectedAgainstGate: false,
+                    protectedAgainstAbility: false,
+                    protected: false
+                },
                 family: bakugan.bakuganData.family
             }
 
@@ -154,8 +166,7 @@ export const JetEnflamme: abilityCardsType = {
         const slotToUpdate = roomState?.protalSlots.find((s) => s.id === slot)
         const deck = roomState?.decksState.find((d) => d.userId === userId)
         if (slotToUpdate && deck) {
-            const assistsBakugans = slotToUpdate.bakugans.filter((b) => b.userId === userId && b.assist)
-
+            const assistsBakugans = slotToUpdate.bakugans.filter((b) => b.userId === userId && b.assist && b.assist.key === JetEnflamme.key && b.assist.addedWith === 'ABILITY')
             assistsBakugans.forEach((a) => {
                 const index = slotToUpdate.bakugans.findIndex((b) => b.key === a.key && b.assist === a.assist && b.userId === a.userId)
                 slotToUpdate.bakugans.splice(index, 1)

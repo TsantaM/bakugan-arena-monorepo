@@ -54,6 +54,22 @@ export const MirageAquatique: abilityCardsType = {
         moveBakuganToSelectedSlot({ resolution: resolution, roomData: roomData, shouldBlockAlways: true })
 
     },
+    onCanceled({ roomState, userId, bakuganKey, slot }) {
+        if (!roomState) return null
+
+        const slotOfGate = roomState.protalSlots.find((s) => s.id === slot)
+        if (!slotOfGate) return null
+
+        const user = slotOfGate.bakugans.find((b) => b.userId === userId && b.key === bakuganKey)
+        if (!user) return null
+
+        const slotState = slotOfGate.state
+        if (!slotState) return null
+        if (!slotState.blocked) return null
+
+        slotState.blocked = false
+
+    },
     activationConditions({ roomState, userId }) {
         if (!roomState) return false
         const slotWithGate = roomState.protalSlots.filter((slot) => slot.portalCard !== null)
@@ -92,7 +108,7 @@ export const BarrageDeau: abilityCardsType = {
                 key: BarrageDeau.key,
                 slot: slot
             },
-            turn: 3
+            turn: 1
         }
 
         return null

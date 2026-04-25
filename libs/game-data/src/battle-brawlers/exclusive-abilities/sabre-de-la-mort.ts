@@ -35,6 +35,14 @@ export const SabreDeLaMort: exclusiveAbilitiesType = {
                         image: tigrerra.bakuganData.image,
                         abilityBlock: false,
                         assist: false,
+                        statut: {
+                            notRetreat: false,
+                            poisoned: false,
+                            trapped: false,
+                            protectedAgainstGate: false,
+                            protectedAgainstAbility: false,
+                            protected: false
+                        },
                         family: tigrerra.bakuganData.family
                     }
 

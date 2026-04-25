@@ -49,6 +49,22 @@ export const CombatAerien: abilityCardsType = {
         return request
 
     },
+    onCanceled({ roomState, userId, bakuganKey, slot }) {
+        if(!roomState) return null
+
+        const slotOfGate = roomState.protalSlots.find((s) => s.id === slot)
+        if(!slotOfGate) return null
+
+        const user = slotOfGate.bakugans.find((b) => b.userId === userId && b.key === bakuganKey)
+        if(!user) return null
+
+        const slotState = slotOfGate.state
+        if(!slotState) return null
+        if(!slotState.blocked) return null
+
+        slotState.blocked = false
+
+    },
     onAdditionalEffect: ({ resolution, roomData }) => {
         moveBakuganToSelectedSlot({ resolution: resolution, roomData: roomData, shouldBlockAlways: true })
     },

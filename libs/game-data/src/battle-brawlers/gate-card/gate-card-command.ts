@@ -1,3 +1,4 @@
+import RemoveRenfortAnimationDirective from "../../function/create-animation-directives/remove-renfort-animation-directive.js";
 import { type gateCardType, type bakuganOnSlot, type stateType, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective, ComeBackBakuganDirectiveAnimation, RemoveGateCardDirectiveAnimation, ResetSlot, CheckBattleStillInProcess, AutoActivationDuringBattle, Slots, ComeBackBakuganEffect, AnimationDirectivesTypes } from "../../index.js";
 import { GateCardImages } from "../../store/gate-card-images.js";
 
@@ -168,7 +169,19 @@ export const TripleCombat: gateCardType = {
                         attribut: userStrongest.bakuganData.attribut,
                         image: userStrongest.bakuganData.image,
                         abilityBlock: false,
-                        assist: false,
+                        assist: {
+                            key: TripleCombat.key,
+                            addedWith: 'GATE',
+                            assist: true
+                        },
+                        statut: {
+                            trapped: false,
+                            notRetreat: false,
+                            poisoned: false,
+                            protectedAgainstGate: false,
+                            protectedAgainstAbility: false,
+                            protected: false
+                        },
                         family: userStrongest.bakuganData.family
                     }
 
@@ -188,6 +201,25 @@ export const TripleCombat: gateCardType = {
 
         }
         return null
+    },
+    onCanceled({ roomState, slot }) {
+        if (!roomState) return
+        const slotToUpdate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotToUpdate) {
+            if (!slotToUpdate.state) return
+            const { blocked, canceled, open } = slotToUpdate.state
+            if (blocked) return
+            if (!open || canceled) return
+            const assistsBakugans = slotToUpdate.bakugans.filter((b) => b.assist && b.assist.key === TripleCombat.key && b.assist.addedWith === 'GATE')
+            assistsBakugans.forEach((a) => {
+                ComeBackBakuganEffect({ bakugan: a, roomState: roomState })
+                RemoveRenfortAnimationDirective({
+                    animations: roomState.animations,
+                    bakugan: a
+                })
+            })
+
+        }
     },
     autoActivationCheck: ({ portalSlot, roomState }) => {
 
@@ -225,7 +257,7 @@ export const QuatuorDeCombat: gateCardType = {
     image: GateCardImages.command,
     maxInDeck: 1,
     onOpen: ({ roomState, slot, userId }) => {
-        if(!roomState) return null
+        if (!roomState) return null
         const opponentId = roomState?.players.find((p) => p.userId !== userId)?.userId
         const findWeakest = ({ userId, roomState }: { userId: string, roomState: stateType }) => {
             const deck = roomState?.decksState.find((d) => d.userId === userId)
@@ -277,7 +309,19 @@ export const QuatuorDeCombat: gateCardType = {
                         attribut: userWeakest.bakuganData.attribut,
                         image: userWeakest.bakuganData.image,
                         abilityBlock: false,
-                        assist: false,
+                        assist: {
+                            addedWith: 'GATE',
+                            assist: true,
+                            key: QuatuorDeCombat.key
+                        },
+                        statut: {
+                            trapped: false,
+                            notRetreat: false,
+                            poisoned: false,
+                            protectedAgainstGate: false,
+                            protectedAgainstAbility: false,
+                            protected: false
+                        },
                         family: userWeakest.bakuganData.family
                     }
 
@@ -308,7 +352,20 @@ export const QuatuorDeCombat: gateCardType = {
                         attribut: opponentWeakest.bakuganData.attribut,
                         image: opponentWeakest.bakuganData.image,
                         abilityBlock: false,
-                        assist: false,
+                        assist: {
+                            addedWith: 'GATE',
+                            assist: true,
+                            key: QuatuorDeCombat.key
+                        },
+                        statut: {
+                            trapped: false,
+                            notRetreat: false,
+                            poisoned: false,
+                            protectedAgainstGate: false,
+                            protectedAgainstAbility: false,
+                            protected: false
+
+                        },
                         family: opponentWeakest.bakuganData.family
                     }
 
@@ -333,6 +390,25 @@ export const QuatuorDeCombat: gateCardType = {
 
 
         return null
+    },
+    onCanceled({ roomState, slot }) {
+        if (!roomState) return
+        const slotToUpdate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotToUpdate) {
+            if (!slotToUpdate.state) return
+            const { blocked, canceled, open } = slotToUpdate.state
+            if (blocked) return
+            if (!open || canceled) return
+            const assistsBakugans = slotToUpdate.bakugans.filter((b) => b.assist && b.assist.key === QuatuorDeCombat.key && b.assist.addedWith === 'GATE')
+            assistsBakugans.forEach((a) => {
+                ComeBackBakuganEffect({ bakugan: a, roomState: roomState })
+                RemoveRenfortAnimationDirective({
+                    animations: roomState.animations,
+                    bakugan: a
+                })
+            })
+
+        }
     },
     autoActivationCheck: ({ portalSlot, roomState }) => {
 

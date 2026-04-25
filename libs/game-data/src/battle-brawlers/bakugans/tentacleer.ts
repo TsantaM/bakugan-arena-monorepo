@@ -8,7 +8,7 @@ export const TentaclearHaos: bakuganType = {
     powerLevel: 370,
     family: 'Tentaclear',
     image: 'tentaclear',
-    exclusiveAbilities: ['rayon-gamma', 'mega-flare-blinder', 'flare-blinder'],
+    exclusiveAbilities: ['mega-flare-blinder', 'flare-blinder', 'gamma-ray', 'solar-ray'],
     banList: StarterBanList,
     canChangeAttribut: false
 }

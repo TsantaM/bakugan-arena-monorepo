@@ -20,7 +20,11 @@ type addBakuganToSlotParams = {
     }
     ,
     bakuganToAdd: bakuganType | bakuganOnSlot,
-    assist?: boolean
+    assist?: false | {
+        assist: true;
+        addedWith: "GATE" | "ABILITY";
+        key: string;
+    }
 }
 
 export function addBakuganToSlot({ bakuganFromDeck, bakuganToAdd, roomData, slotId, userId, assist }: addBakuganToSlotParams) {
@@ -43,6 +47,14 @@ export function addBakuganToSlot({ bakuganFromDeck, bakuganToAdd, roomData, slot
         abilityBlock: false,
         assist: assist ? assist : false,
         family: bakuganToAdd.family,
+        statut: {
+            notRetreat: false,
+            trapped: false,
+            poisoned: false,
+            protectedAgainstGate: false,
+            protectedAgainstAbility: false,
+            protected: false
+        }
     }
 
     const newState = {

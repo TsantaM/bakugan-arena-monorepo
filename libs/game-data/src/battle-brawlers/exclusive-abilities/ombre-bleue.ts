@@ -24,7 +24,11 @@ export const OmbreBleue: exclusiveAbilitiesType = {
 
                 })
             }
-            slotOfGate.state.blocked = true
+            slotOfGate.state.blocked = {
+                blocked: true,
+                blockedWith: 'ABILITY',
+                key: OmbreBleue.key
+            }
         }
         return null
     }

@@ -2,8 +2,8 @@ import { CancelAbilityCard, PowerChangeDirectiveAnumation } from "../../function
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 import { TentaclearHaos } from "../bakugans/tentacleer.js"
 
-export const RayonGamma: exclusiveAbilitiesType = {
-    key: 'rayon-gamma',
+export const SolarRay: exclusiveAbilitiesType = {
+    key: 'solar-ray',
     name: 'Solar Ray',
     description: `Add 100 G to Tentaclear and cancel all opponent's abilities on the same Gate Card`,
     maxInDeck: 1,

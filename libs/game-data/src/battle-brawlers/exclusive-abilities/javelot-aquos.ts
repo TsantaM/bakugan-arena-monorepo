@@ -82,9 +82,9 @@ export const JavelotAquos: exclusiveAbilitiesType = {
         roomData.animations.push(animation)
 
         const newCard = roomData.protalSlots[Slots.indexOf(resolution.slot)].portalCard?.key
-        if(!newCard) return
+        if (!newCard) return
         const card = GateCards[newCard]
-        if(card.autoActivationCheck && card.autoActivationCheck({portalSlot: roomData.protalSlots[Slots.indexOf(resolution.slot)], roomState: roomData})) return
+        if (card.autoActivationCheck && card.autoActivationCheck({ portalSlot: roomData.protalSlots[Slots.indexOf(resolution.slot)], roomState: roomData })) return
 
         const newAction: ActionType = {
             type: 'OPEN_GATE_CARD',
@@ -97,13 +97,14 @@ export const JavelotAquos: exclusiveAbilitiesType = {
         const userActions = turn === resolution.userId ? roomData.ActivePlayerActionRequest : roomData.InactivePlayerActionRequest
         const actions = [...userActions.actions.mustDo, ...userActions.actions.mustDoOne, ...userActions.actions.optional].flat()
 
-        if(actions.some((action) => action.type === newAction.type)) return
+        if (actions.some((action) => action.type === newAction.type)) return
         userActions.actions.optional.push(newAction)
 
     },
     activationConditions({ roomState }) {
         if (!roomState) return false
-
+        const { battleInProcess, paused } = roomState.battleState
+        if (!battleInProcess || paused) return false
         const slots = roomState.protalSlots.filter((slot) => slot.portalCard !== null)
         if (slots.length < 2) return false
 
@@ -112,11 +113,13 @@ export const JavelotAquos: exclusiveAbilitiesType = {
     canUse({ roomState, bakugan }) {
 
         if (!roomState) return false
+        const { battleInProcess, paused } = roomState.battleState
+        if (!battleInProcess || paused) return false
         if (bakugan.key !== SiegeAquos.key) return false
 
         const slot = roomState.protalSlots.find((slot) => slot.id === bakugan.slot_id)
         if (!slot) return false
-
+        if(slot.id !== roomState.battleState.slot) return false
         const juxtaposablesSlots = getJuxtaposablesSlots({ slot: slot, roomState: roomState })
         if (juxtaposablesSlots.length === 0) return false
         const swipableSlots = juxtaposablesSlots.filter((slot) => slot.portalCard !== null)

@@ -28,7 +28,11 @@ export const VisageDeJoie: exclusiveAbilitiesType = {
                 }
                 slotOfGate.state.canceled = true
             } else {
-                slotOfGate.state.blocked = true
+                slotOfGate.state.blocked = {
+                    blocked: true,
+                    blockedWith: 'ABILITY',
+                    key: VisageDeJoie.key
+                }
             }
         }
 

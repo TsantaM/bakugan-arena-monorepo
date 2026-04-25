@@ -7,7 +7,7 @@ export const RobotallionPyrus: bakuganType = {
     image: 'robotallion',
     attribut: 'Pyrus',
     family: 'Robotallion',
-    powerLevel: 310,
+    powerLevel: 350,
     exclusiveAbilities: ['robotalion-execution'],
     banList: [],
     canChangeAttribut: false
@@ -19,7 +19,7 @@ export const RobotallionAquos: bakuganType = {
     image: 'robotallion',
     attribut: 'Aquos',
     family: 'Robotallion',
-    powerLevel: 310,
+    powerLevel: 350,
     exclusiveAbilities: ['robotalion-execution'],
     banList: [],
     canChangeAttribut: false
@@ -31,7 +31,7 @@ export const RobotallionDarkus: bakuganType = {
     image: 'robotallion',
     attribut: 'Darkus',
     family: 'Robotallion',
-    powerLevel: 310,
+    powerLevel: 350,
     exclusiveAbilities: ['robotalion-execution'],
     banList: [],
     canChangeAttribut: false
@@ -43,7 +43,7 @@ export const RobotallionHaos: bakuganType = {
     image: 'robotallion',
     attribut: 'Haos',
     family: 'Robotallion',
-    powerLevel: 310,
+    powerLevel: 350,
     exclusiveAbilities: ['robotalion-execution'],
     banList: [],
     canChangeAttribut: false

@@ -24,6 +24,8 @@ import { WormquakeDarkus, WormquakeSubterra } from "./bakugans/wormquake.js";
 import { StinglashAquos, StinglashDarkus, StinglashSubterra } from "./bakugans/stinglash.js";
 import { CentipodDarkus, CentipodHaos, CentipodPyrus, CentipodSubterra } from "./bakugans/centipod.js";
 import { bakuganType } from "../index.js";
+import { LimulusAquos } from "./bakugans/limulus.js";
+import { RobotallionAquos, RobotallionDarkus, RobotallionHaos, RobotallionPyrus } from "./bakugans/robotallion.js";
 
 export const Bakugans: Record<string, bakuganType> = {
     [DragonoidPyrus.key]: DragonoidPyrus,
@@ -67,10 +69,10 @@ export const Bakugans: Record<string, bakuganType> = {
     [SaurusHaos.key]: SaurusHaos,
     [SaurusSubterra.key]: SaurusSubterra,
 
-    // [RobotallionPyrus.key]: RobotallionPyrus,
-    // [RobotallionAquos.key]: RobotallionAquos,
-    // [RobotallionDarkus.key]: RobotallionDarkus,
-    // [RobotallionHaos.key]: RobotallionHaos,
+    [RobotallionPyrus.key]: RobotallionPyrus,
+    [RobotallionAquos.key]: RobotallionAquos,
+    [RobotallionDarkus.key]: RobotallionDarkus,
+    [RobotallionHaos.key]: RobotallionHaos,
 
     [ElCondorHaos.key]: ElCondorHaos,
     [ElCondorVentus.key]: ElCondorVentus,
@@ -102,7 +104,7 @@ export const Bakugans: Record<string, bakuganType> = {
     [StinglashDarkus.key]: StinglashDarkus,
     [StinglashSubterra.key]: StinglashSubterra,
 
-    // [LimulusAquos.key]: LimulusAquos,
+    [LimulusAquos.key]: LimulusAquos,
 
     [CentipodDarkus.key]: CentipodDarkus,
     [CentipodHaos.key]: CentipodHaos,
