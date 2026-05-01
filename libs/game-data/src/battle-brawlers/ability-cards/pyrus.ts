@@ -8,7 +8,7 @@ export const MurDeFeu: abilityCardsType = {
     key: "mur-de-feu",
     name: "Fire Wall",
     attribut: "Pyrus",
-    description: "Substract 50 Gs from the opponents",
+    description: "Substract 50 Gs from the opponents and protect the user against opponent's abilities",
     maxInDeck: 3,
     usable_in_neutral: false,
     image: 'FireWall.png',
@@ -24,6 +24,15 @@ export const MurDeFeu: abilityCardsType = {
                     b.currentPower -= 50
                 }
                 )
+
+            if(!user.statut.protectedAgainstAbility) {
+                user.statut.protectedAgainstAbility = {
+                    check: true,
+                    key: MurDeFeu.key,
+                    origin: 'ABILITY'
+                }
+            }
+
             }
             PowerChangeDirectiveAnumation({
                 animations: roomState.animations,
@@ -33,6 +42,8 @@ export const MurDeFeu: abilityCardsType = {
                 turn: roomState.turnState.turnCount
 
             })
+
+
         }
 
         return null
@@ -49,6 +60,11 @@ export const MurDeFeu: abilityCardsType = {
                     b.currentPower += 50
                 }
                 )
+
+                if(user.statut.protectedAgainstAbility && user.statut.protectedAgainstAbility.key === MurDeFeu.key && user.statut.protectedAgainstAbility.origin === 'ABILITY') {
+                    user.statut.protectedAgainstAbility = false
+                }
+
             }
             PowerChangeDirectiveAnumation({
                 animations: roomState.animations,

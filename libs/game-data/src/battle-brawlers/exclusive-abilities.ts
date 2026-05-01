@@ -11,6 +11,7 @@ import { ForceDattraction } from "./exclusive-abilities/force-d-attraction.js";
 import { FurryOfWind } from "./exclusive-abilities/furry-of-wind.js";
 import { GaucheGigantesque } from "./exclusive-abilities/gauche-gigantesque.js";
 import { ChambreDeGravite } from "./exclusive-abilities/gravity-chamber.js";
+import { GardianField } from "./exclusive-abilities/guardian-field.js";
 import { ImpactMajeur } from "./exclusive-abilities/impact-majeur.js";
 import { JavelotAquos } from "./exclusive-abilities/javelot-aquos.js";
 import { LanceDeFeu } from "./exclusive-abilities/lance-de-feu.js";
@@ -81,7 +82,8 @@ export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [MegaFlareBlinder.key]: MegaFlareBlinder,
     [Obstruction.key]: Obstruction,
     [BouclierFusion.key]: BouclierFusion,
-    [SpiritHole.key]: SpiritHole
+    [SpiritHole.key]: SpiritHole,
+    [GardianField.key]: GardianField
 }
 
 export const ExclusiveAbilitiesList: exclusiveAbilitiesType[] = Object.values(ExclusiveAbilities) 

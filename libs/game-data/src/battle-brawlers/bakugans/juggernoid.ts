@@ -22,7 +22,7 @@ export const JuggernoidHaos: bakuganType = {
     banList: [],
     powerLevel: 350,
     canChangeAttribut: false,
-    exclusiveAbilities: [],
+    exclusiveAbilities: ['guardian-field'],
     family: family,
     image: 'juggernoid',
     name: 'Juggernoid'
