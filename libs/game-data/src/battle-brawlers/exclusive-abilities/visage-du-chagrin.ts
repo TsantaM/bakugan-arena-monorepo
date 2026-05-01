@@ -1,4 +1,5 @@
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
+import { BlockAbilityCardsEffect, RemoveAbilityCardsBlockEffect } from "../../function/index.js"
 
 export const VisageDuChagrin: exclusiveAbilitiesType = {
     key: 'visage-du-chagrin',
@@ -8,17 +9,12 @@ export const VisageDuChagrin: exclusiveAbilitiesType = {
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (slotOfGate) {
-            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
-            const opponents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
-            if (user) {
-                opponents.forEach(opponent => {
-                    opponent.abilityBlock = true
-                })
-            }
-        }
+        if (!roomState) return null
+        BlockAbilityCardsEffect({ roomState, userId, bakuganKey, slot, card: VisageDuChagrin, turns: 1 })
         return null
     },
-    
+    onCanceled({ roomState }) {
+        if (!roomState) return
+        RemoveAbilityCardsBlockEffect({ roomState, card: VisageDuChagrin })
+    },
 }

@@ -34,32 +34,36 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
 
     if (!slot.state.blocked && !slot.state.open && card.activeOnBattleEnd && card.activeOnBattleEnd.activeBeforeElimination && !card.activeOnBattleEnd.autoActiveOnEnd) {
         if (!battleState.slot) return
-        if (card.autoActivationCheck && !card.autoActivationCheck({ portalSlot: slot, roomState: roomData })) return
+        const canAutoActivate = card.autoActivationCheck
+            ? card.autoActivationCheck({ portalSlot: slot, roomState: roomData })
+            : true
 
-        const animation: AnimationDirectivesTypes = {
-            type: "OPEN_GATE_CARD",
-            data: {
-                slot: structuredClone(slot),
-                slotId: structuredClone(slot).id
-            },
-            resolved: false,
-            message: [{
-                text: `Gate Card Open ! ${card.name}`,
-                userName: GetUserName({ roomData: roomData, userId: slot.portalCard?.userId || '' }),
-                turn: roomData.turnState.turnCount
-            },
-            {
-                text: `${card.description}`,
-                turn: roomData.turnState.turnCount,
-                description: true
-            }]
+        if (canAutoActivate) {
+            const animation: AnimationDirectivesTypes = {
+                type: "OPEN_GATE_CARD",
+                data: {
+                    slot: structuredClone(slot),
+                    slotId: structuredClone(slot).id
+                },
+                resolved: false,
+                message: [{
+                    text: `Gate Card Open ! ${card.name}`,
+                    userName: GetUserName({ roomData: roomData, userId: slot.portalCard?.userId || '' }),
+                    turn: roomData.turnState.turnCount
+                },
+                {
+                    text: `${card.description}`,
+                    turn: roomData.turnState.turnCount,
+                    description: true
+                }]
+            }
+
+            roomData.animations.push(animation)
+
+            card.onOpen({ roomState: roomData, slot: battleState.slot })
+
+            slot.state.open = true
         }
-
-        roomData.animations.push(animation)
-
-        card.onOpen({ roomState: roomData, slot: battleState.slot })
-
-        slot.state.open = true
 
     }
 

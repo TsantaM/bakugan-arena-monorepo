@@ -1,6 +1,6 @@
 import { AbilityCardsActions, AnimationDirectivesTypes, slots_id, type abilityCardsType } from "../../type/type-index.js";
 import { Slots, StandardCardsImages } from '../../store/store-index.js'
-import { AbilityCardFailed, CancelGateCardDirectiveAnimation, moveBakuganToSelectedSlot, PowerChangeDirectiveAnumation } from "../../function/index.js";
+import { AbilityCardFailed, BlockAbilityCardsEffect, CancelGateCardDirectiveAnimation, moveBakuganToSelectedSlot, PowerChangeDirectiveAnumation, RemoveAbilityCardsBlockEffect } from "../../function/index.js";
 import { AbilityCardsList } from "../ability-cards.js";
 import { ExclusiveAbilitiesList } from "../exclusive-abilities.js";
 import { BakuganList } from "../bakugans.js";
@@ -93,42 +93,16 @@ export const BarrageDeau: abilityCardsType = {
     attribut: 'Aquos',
     usable_in_neutral: true,
     image: StandardCardsImages.aquos,
-    description: `This card prevents all players from using any abilities for 3 consecutive turns.`,
+    description: `This card prevents all players from using any abilities for 1 turn.`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
-
-        const user = roomState.protalSlots.find((s) => s.id === slot)?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
-
-        if (!user) return null
-
-        roomState.turnState.ability_card_block = {
-            blocked: true,
-            reason: {
-                attribut: BarrageDeau.attribut ? BarrageDeau.attribut : "Aquos",
-                bakugan: user,
-                key: BarrageDeau.key,
-                slot: slot
-            },
-            turn: 1
-        }
+        BlockAbilityCardsEffect({ roomState, userId, bakuganKey, slot, card: BarrageDeau, turns: 1 })
 
         return null
     },
     onCanceled({ roomState }) {
-
         if (!roomState) return
-        const { blocked, reason } = roomState.turnState.ability_card_block
-        if (!blocked) return
-        if (reason === null) return
-        if (reason.attribut !== BarrageDeau.attribut) return
-        if (reason.key !== BarrageDeau.key) return
-
-        roomState.turnState.ability_card_block = {
-            blocked: false,
-            reason: null,
-            turn: 0
-        }
-
+        RemoveAbilityCardsBlockEffect({ roomState, card: BarrageDeau })
     },
 }
 

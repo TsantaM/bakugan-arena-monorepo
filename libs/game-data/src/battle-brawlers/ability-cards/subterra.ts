@@ -1,6 +1,6 @@
-import { AbilityCardFailed, AddRenfortAnimationDirective, CancelGateCardDirectiveAnimation, CheckBattle, dragBakuganToUserSlot, getJuxtaposablesSlots, MoveToAnotherSlotDirectiveAnimation, OpenGateCardActionRequest, PowerChangeDirectiveAnumation } from "../../function/index.js";
+import { AbilityCardFailed, CancelGateCardDirectiveAnimation, getJuxtaposablesSlots, PowerChangeDirectiveAnumation } from "../../function/index.js";
 import { Slots, StandardCardsImages } from "../../store/store-index.js";
-import type { AbilityCardsActions, abilityCardsType, ActionType, AnimationDirectivesTypes, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, slots_id } from "../../type/type-index.js";
+import type { AbilityCardsActions, abilityCardsType, ActionType, AnimationDirectivesTypes } from "../../type/type-index.js";
 import { GateCards, GateCardsList } from "../gate-gards.js";
 
 export const MagmaSupreme: abilityCardsType = {
@@ -16,6 +16,14 @@ export const MagmaSupreme: abilityCardsType = {
         if (slotOfGate && slotOfGate.portalCard) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
             const gate = slotOfGate.portalCard.key
+            const battleSnapshot = roomState
+                ? {
+                    battleInProcess: roomState.battleState.battleInProcess,
+                    paused: roomState.battleState.paused,
+                    turns: roomState.battleState.turns,
+                    slot: roomState.battleState.slot
+                }
+                : null
 
             if (user && gate) {
 
@@ -41,10 +49,34 @@ export const MagmaSupreme: abilityCardsType = {
                 }
 
                 slotOfGate.portalCard.key = 'reacteur-subterra'
+
+                // Keep the current battle running when the card is used during battle.
+                // Some gate onCanceled/onOpen handlers can mutate battleState as side effects.
+                if (roomState && battleSnapshot && battleSnapshot.battleInProcess && battleSnapshot.slot === slotOfGate.id) {
+                    const stillABattle = slotOfGate.bakugans.length >= 2 && new Set(slotOfGate.bakugans.map((b) => b.userId)).size >= 2
+                    if (stillABattle) {
+                        roomState.battleState.battleInProcess = true
+                        roomState.battleState.paused = false
+                        roomState.battleState.slot = battleSnapshot.slot
+                        roomState.battleState.turns = battleSnapshot.turns
+                    }
+                }
             }
         }
         return null
-    }
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+        const { battleInProcess, paused, slot } = roomState.battleState
+        if (!battleInProcess || paused || slot === null) return false
+        if (bakugan.slot_id !== slot) return false
+
+        const slotOfGate = roomState.protalSlots[Slots.indexOf(slot)]
+        if (!slotOfGate || slotOfGate.portalCard === null) return false
+        if (slotOfGate.state.canceled) return false
+
+        return true
+    },
 }
 
 export const TectonicSwipe: abilityCardsType = {

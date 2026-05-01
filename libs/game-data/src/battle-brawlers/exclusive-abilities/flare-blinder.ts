@@ -1,4 +1,5 @@
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
+import { BlockAbilityCardsEffect, RemoveAbilityCardsBlockEffect } from "../../function/index.js"
 import { TentaclearHaos } from "../bakugans/tentacleer.js"
 
 export const FlareBlinder: exclusiveAbilitiesType = {
@@ -12,37 +13,14 @@ export const FlareBlinder: exclusiveAbilitiesType = {
 
         if (bakuganKey !== TentaclearHaos.key) return null
         if (!roomState) return null
-        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (!slotOfGate) return null
-        const opponent = slotOfGate.bakugans.filter((b) => b.userId !== userId)
-
-        // const { canceled, open } = slotOfGate.state
-
-        // if (!open && !canceled) {
-        //     slotOfGate.state.blocked = true
-        // }
-
-        opponent.forEach((bakugan) => {
-            bakugan.abilityBlock = true
-        })
+        BlockAbilityCardsEffect({ roomState, userId, bakuganKey, slot, card: FlareBlinder, turns: 1 })
 
         return null
     },
-    onCanceled({ roomState, userId, slot }) {
+    onCanceled({ roomState }) {
 
         if (!roomState) return null
-        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        if (!slotOfGate) return null
-        const opponent = slotOfGate.bakugans.filter((b) => b.userId !== userId)
-
-        const { blocked } = slotOfGate.state
-        if (blocked) {
-            slotOfGate.state.blocked = false
-        }
-
-        opponent.forEach((bakugan) => {
-            bakugan.abilityBlock = false
-        })
+        RemoveAbilityCardsBlockEffect({ roomState, card: FlareBlinder })
 
     },
     canUse({ roomState, bakugan }) {
