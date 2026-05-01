@@ -1,9 +1,10 @@
 import { AbilityCardsActions, AnimationDirectivesTypes, slots_id, type abilityCardsType } from "../../type/type-index.js";
-import { StandardCardsImages } from '../../store/store-index.js'
-import { AbilityCardFailed, moveBakuganToSelectedSlot, PowerChangeDirectiveAnumation } from "../../function/index.js";
+import { Slots, StandardCardsImages } from '../../store/store-index.js'
+import { AbilityCardFailed, CancelGateCardDirectiveAnimation, moveBakuganToSelectedSlot, PowerChangeDirectiveAnumation } from "../../function/index.js";
 import { AbilityCardsList } from "../ability-cards.js";
 import { ExclusiveAbilitiesList } from "../exclusive-abilities.js";
 import { BakuganList } from "../bakugans.js";
+import { GateCardsList } from "../gate-gards.js";
 
 export const MirageAquatique: abilityCardsType = {
     key: 'mirage-aquatique',
@@ -232,4 +233,65 @@ export const PlongeeEnEauProfonde: abilityCardsType = {
 
         return null
     }
+}
+
+export const DepthDive: abilityCardsType = {
+    key: 'depth-dive',
+    name: 'Depth Dive',
+    attribut: 'Aquos',
+    description: `Nullifies the opponent's Gate Card`,
+    maxInDeck: 2,
+    usable_in_neutral: false,
+    image: StandardCardsImages.haos,
+    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        if (!roomState) return null
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate) {
+            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const gate = slotOfGate.portalCard?.key
+            if (user && gate && slotOfGate.state.open) {
+                const gateToCancel = GateCardsList.find((g) => g.key === gate)
+                CancelGateCardDirectiveAnimation({
+                    animations: roomState.animations,
+                    slot: slotOfGate,
+                    turn: roomState.turnState.turnCount
+                })
+                if (gateToCancel && gateToCancel.onCanceled) {
+                    gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
+                    slotOfGate.state.canceled = true
+                }
+
+
+            }
+        }
+
+        return null
+    },
+    activationConditions({ roomState, userId }) {
+        if (!roomState) return false
+        const { battleInProcess, paused } = roomState.battleState
+        if (!battleInProcess) return false
+        if (battleInProcess && paused) return false
+
+        return true
+    },
+    canUse({ roomState, bakugan }) {
+        if (!roomState) return false
+        const { battleInProcess, paused, slot } = roomState.battleState
+        if (!battleInProcess) return false
+        if (battleInProcess && paused) return false
+        if(slot === null) return false
+
+        const slotOfBakugan = roomState.protalSlots[Slots.indexOf(slot)]
+        if(slotOfBakugan.portalCard === null) return false
+        if(slotOfBakugan.portalCard.userId === bakugan.userId) return false 
+        if(!slotOfBakugan.state.open) return false
+        if(slotOfBakugan.state.canceled) return false
+
+        const card = GateCardsList.find((c) => c.key === slotOfBakugan.portalCard?.key)
+        if(!card) return false
+        if(!card.onCanceled) return false
+
+        return true
+    },
 }

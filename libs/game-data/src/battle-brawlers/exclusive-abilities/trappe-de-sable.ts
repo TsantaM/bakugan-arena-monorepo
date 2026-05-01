@@ -21,8 +21,9 @@ export const TrappeDeSable: exclusiveAbilitiesType = {
 
         if (!slotOfGate && !deck && !userData) return null
 
-        const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot && s.bakugans.length > 0).map((slot) => slot.bakugans).flat()
-        const bakugans: bakuganToMoveType[] = slots.map((bakugan) => ({
+        const movableBakugans = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot && s.bakugans.length > 0).map((slot) => slot.bakugans).flat().filter((b) => !b.statut.trapped && !b.statut.protected && !b.statut.protectedAgainstAbility)
+
+        const bakugans: bakuganToMoveType[] = movableBakugans.map((bakugan) => ({
             key: bakugan.key,
             userId: bakugan.userId,
             slot: bakugan.slot_id
@@ -67,7 +68,7 @@ export const TrappeDeSable: exclusiveAbilitiesType = {
 
                 })
 
-                dragBakuganToUserSlot({ resolution: resolution, roomState: roomState })
+                dragBakuganToUserSlot({ resolution: resolution, roomState: roomState, origin: 'ABILITY', trapped: true })
             }
         }
     },

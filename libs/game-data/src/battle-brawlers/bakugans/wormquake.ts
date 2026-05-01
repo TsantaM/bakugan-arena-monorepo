@@ -1,3 +1,4 @@
+import { CharacterCardByAttribut } from "../../function/caracter-cards-image-by-attribut.js"
 import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation, type bakuganType, type gateCardType } from "../../index.js"
 import { GateCardImages } from "../../store/gate-card-images.js"
 import { SpiritHole } from "../exclusive-abilities/spirit-hole.js"
@@ -34,6 +35,10 @@ export const WormquakeGateCard: gateCardType = {
     family: 'Wormquake',
     description: `When this card is activated, it doubles the level of all Wormquake on it.`,
     image: GateCardImages.caracter,
+    imageByAttribut: {
+        Darkus: CharacterCardByAttribut('wormquake', 'Darkus'),
+        Subterra: CharacterCardByAttribut('wormquake', 'Subterra'),
+    },
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'wormquake-gate-card')
         CaracterGateCardEffect({ roomState: roomState, slotOfGate: slotOfGate, family: 'Wormquake' })

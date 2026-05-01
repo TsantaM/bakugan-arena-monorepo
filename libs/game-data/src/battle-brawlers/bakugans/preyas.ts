@@ -20,7 +20,7 @@ export const PreyasGateCard: gateCardType = {
     maxInDeck: 1,
     family: 'Preyas',
     description: `When this card is activated, it doubles the level of all Preyas on it.`,
-    image: 'preyas.png',
+    image: 'caracter-gate-cards/preyas-aquos.jpg',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'preyas-gate-card')
         CaracterGateCardEffect({ roomState: roomState, slotOfGate: slotOfGate, family: 'Preyas' })

@@ -9,10 +9,14 @@ import { MoveToAnotherSlotDirectiveAnimation } from "../create-animation-directi
 
 export function dragBakuganToUserSlot({
     resolution,
-    roomState  // Certaines cartes (ex: AntiMuse) ne veulent PAS les renforts
+    roomState,
+    trapped,
+    origin  // Certaines cartes (ex: AntiMuse) ne veulent PAS les renforts
 }: {
     resolution: resolutionType,
-    roomState: stateType
+    roomState: stateType,
+    trapped?: boolean,
+    origin?: 'GATE' | 'ABILITY'
 }) {
     if (!roomState) return;
     if (resolution.data.type !== "SELECT_BAKUGAN_ON_DOMAIN") return;
@@ -52,6 +56,14 @@ export function dragBakuganToUserSlot({
     const newState: bakuganOnSlot = {
         ...bakuganToDrag,
         slot_id: slotOfGate.id,
+        statut: {
+            ...bakuganToDrag.statut,
+            trapped: trapped ? {
+                check: true,
+                key: resolution.cardKey,
+                origin: origin ? origin : 'ABILITY'
+            } : false
+        }
     };
 
     slotOfGate.bakugans.push(newState);

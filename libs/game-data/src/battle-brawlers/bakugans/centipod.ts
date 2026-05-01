@@ -1,6 +1,7 @@
 import { bakuganType, gateCardType } from "../../type/type-index.js"
 import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation } from '../../function/index.js'
 import { GateCardImages } from "../../store/store-index.js"
+import { CharacterCardByAttribut } from "../../function/caracter-cards-image-by-attribut.js"
 
 const powerLevel: number = 330
 const family: string = 'Centipod'
@@ -60,6 +61,12 @@ export const CentipodGateCard: gateCardType = {
     family: 'Centipod',
     description: `When this card is activated, it doubles the level of all Centipods on it.`,
     image: GateCardImages.caracter,
+    imageByAttribut: {
+        Darkus: CharacterCardByAttribut('centipod', 'Darkus'),
+        Subterra: CharacterCardByAttribut('centipod', 'Subterra'),
+        Pyrus: CharacterCardByAttribut('centipod', 'Pyrus'),
+        Haos: CharacterCardByAttribut('centipod', 'Haos')
+    },
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'centipod-gate-card')
         CaracterGateCardEffect({ roomState: roomState, slotOfGate: slotOfGate, family: family })

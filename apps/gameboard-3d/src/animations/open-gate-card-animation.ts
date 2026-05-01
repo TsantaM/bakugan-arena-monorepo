@@ -3,6 +3,7 @@ import gsap from "gsap";
 import * as THREE from "three";
 import { getAttributColor } from "../functions/get-attrubut-color";
 import type { SlotMeshUsersData } from "../meshes/slot.mesh";
+import { GetCharacterCardImage } from "../functions/get-character-card-image";
 
 export async function OpenGateCardAnimation({
   mesh,
@@ -14,14 +15,16 @@ export async function OpenGateCardAnimation({
   return new Promise((resolve) => {
     if (slot.portalCard === null) return resolve();
 
-    const cardData = GateCardsList.find((c) => c.key === slot.portalCard?.key);
-    if (!cardData) return resolve();
+    const card = GateCardsList.find((c) => c.key === slot.portalCard?.key);
+    if (!card) return resolve();
 
-    const color = cardData.attribut
-      ? new THREE.Color(getAttributColor(cardData.attribut))
+    const color = card.attribut
+      ? new THREE.Color(getAttributColor(card.attribut))
       : new THREE.Color("white");
 
-    const texture = new THREE.TextureLoader().load(`./../images/cards/${cardData.image}`);
+      const cardImage = card.imageByAttribut ? GetCharacterCardImage (card, slot) ? GetCharacterCardImage (card, slot) : card.image : card.image
+
+    const texture = new THREE.TextureLoader().load(`./../images/cards/${cardImage ? cardImage : card.image}`);
 
     // Clone pour effet lumineux temporaire
     const overlay = mesh.clone();
@@ -29,7 +32,7 @@ export async function OpenGateCardAnimation({
     mesh.parent?.add(overlay);
     overlay.position.copy(mesh.position);
     const data = mesh.userData as SlotMeshUsersData
-    data.cardName = cardData.name
+    data.cardName = card.name
 
     const timeline = gsap.timeline({
       onComplete: () => {

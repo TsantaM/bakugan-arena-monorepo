@@ -1,6 +1,7 @@
 import { bakuganType, gateCardType } from "../../type/type-index.js"
 import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation } from '../../function/index.js'
 import { GateCardImages } from "../../store/store-index.js"
+import { CharacterCardByAttribut } from "../../function/caracter-cards-image-by-attribut.js"
 
 export const ElCondorHaos: bakuganType = {
     key: 'el-condor-haos',
@@ -43,6 +44,11 @@ export const ElCondorGateCard: gateCardType = {
     name: 'Charachter: El Condor',
     maxInDeck: 1,
     image: GateCardImages.caracter,
+    imageByAttribut: {
+        Subterra: CharacterCardByAttribut('el-condor', 'Subterra'),
+        Haos: CharacterCardByAttribut('el-condor', 'Haos'),
+        Ventus: CharacterCardByAttribut('el-condor', 'Ventus')
+    },
     description: `When this card is activated, it doubles the level of all El Condor on it.`,
     family: 'El Condor',
     onOpen({ roomState, slot }) {

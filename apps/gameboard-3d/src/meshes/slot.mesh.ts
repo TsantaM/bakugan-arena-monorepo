@@ -1,6 +1,7 @@
 import { GateCardsList, Slots, type portalSlotsTypeElement } from '@bakugan-arena/game-data'
 import * as THREE from 'three'
 import { getSlotMeshPosition } from '../functions/get-slot-mesh-position'
+import { GetCharacterCardImage } from '../functions/get-character-card-image'
 
 type SlotMeshUsersData = {
     cardName: string | undefined,
@@ -39,8 +40,9 @@ function createSlotMesh({ slot, plane, userId, gateCardMeshs }: { slot: portalSl
     if (slot.portalCard !== null) {
         const card = GateCardsList.find((card) => card.key === slot.portalCard?.key)
         if (!card) return
+        const cardImage = card.imageByAttribut ? GetCharacterCardImage (card, slot) ? GetCharacterCardImage (card, slot) : card.image : card.image
         if (slot.state.open === true) {
-            const texture = new THREE.TextureLoader().load(`./../images/cards/${card.image}`)
+            const texture = new THREE.TextureLoader().load(`./../images/cards/${cardImage ? cardImage : card.image}`)
             mesh.material.map = texture
             data.cardName = card.name
             data.state.open = true

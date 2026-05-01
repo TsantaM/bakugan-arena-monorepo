@@ -28,6 +28,7 @@ import { StinglashGateCard } from "./bakugans/stinglash.js";
 import { TentaclearGateCard } from "./bakugans/tentacleer.js";
 import { WormquakeGateCard } from "./bakugans/wormquake.js";
 import { TigrerraGateCard } from "./bakugans/tigrerra.js";
+import { JuggernoidGateCard } from "./bakugans/juggernoid.js";
 
 export const GateCards: Record<string, gateCardType> = {
 
@@ -110,7 +111,9 @@ export const GateCards: Record<string, gateCardType> = {
     [WormquakeGateCard.key]: WormquakeGateCard,
     [TigrerraGateCard.key]: TigrerraGateCard,
     [LimulusGateCard.key]: LimulusGateCard,
-    [RobotallionGateCard.key]: RobotallionGateCard
+    [RobotallionGateCard.key]: RobotallionGateCard,
+    [JuggernoidGateCard.key]: JuggernoidGateCard
+    
 }
 
 export const GateCardsList: gateCardType[] = Object.values(GateCards) 

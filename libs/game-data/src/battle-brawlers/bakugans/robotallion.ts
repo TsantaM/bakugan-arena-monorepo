@@ -1,3 +1,4 @@
+import { CharacterCardByAttribut } from "../../function/caracter-cards-image-by-attribut.js"
 import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation, type bakuganType, type gateCardType } from "../../index.js"
 
 
@@ -56,6 +57,12 @@ export const RobotallionGateCard: gateCardType = {
     family: 'Robotallion',
     description: `When this card is activated, it doubles the level of all Robotallion on it.`,
     image: 'robotallion.png',
+    imageByAttribut: {
+        Aquos: CharacterCardByAttribut('robotallion', 'Aquos'),
+        Haos: CharacterCardByAttribut('robotallion', 'Haos'),
+        Darkus: CharacterCardByAttribut('robotallion', 'Darkus'),
+        Pyrus: CharacterCardByAttribut('robotallion', 'Pyrus'),
+    },
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'robotallion-gate-card')
         CaracterGateCardEffect({ roomState: roomState, slotOfGate: slotOfGate, family: 'Robotallion' })

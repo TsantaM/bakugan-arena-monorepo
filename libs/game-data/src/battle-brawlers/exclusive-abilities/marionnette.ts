@@ -26,7 +26,7 @@ export const Marionnette: exclusiveAbilitiesType = {
         if (!slotOfGate && !deck) return null
         if (!slotOfGate) return null
 
-        const bakugansOnField = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => !(bakugan.key === bakuganKey && bakugan.userId === userId))
+        const bakugansOnField = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => !(bakugan.key === bakuganKey && bakugan.userId === userId)).filter((bakugan) => !bakugan.statut.trapped && !bakugan.statut.protectedAgainstAbility && !bakugan.statut.protected)
 
         const slots = roomState.protalSlots.filter((s) => s.portalCard !== null).map((slot) => slot.id)
         const bakugans: bakuganToMoveType[] = bakugansOnField.map((b) => ({

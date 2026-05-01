@@ -26,6 +26,7 @@ import { CentipodDarkus, CentipodHaos, CentipodPyrus, CentipodSubterra } from ".
 import { bakuganType } from "../index.js";
 import { LimulusAquos } from "./bakugans/limulus.js";
 import { RobotallionAquos, RobotallionDarkus, RobotallionHaos, RobotallionPyrus } from "./bakugans/robotallion.js";
+import { JuggernoidAquos, JuggernoidHaos } from "./bakugans/juggernoid.js";
 
 export const Bakugans: Record<string, bakuganType> = {
     [DragonoidPyrus.key]: DragonoidPyrus,
@@ -110,6 +111,9 @@ export const Bakugans: Record<string, bakuganType> = {
     [CentipodHaos.key]: CentipodHaos,
     [CentipodPyrus.key]: CentipodPyrus,
     [CentipodSubterra.key]: CentipodSubterra,
+
+    [JuggernoidAquos.key]: JuggernoidAquos,
+    [JuggernoidHaos.key]: JuggernoidHaos
 
     // [GarganoidPyrus.key]: GarganoidPyrus,
     // [GaraganoidAquos.key]: GaraganoidAquos

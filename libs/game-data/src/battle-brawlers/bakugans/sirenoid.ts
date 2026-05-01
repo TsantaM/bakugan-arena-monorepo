@@ -20,7 +20,7 @@ export const SirenoidGateCard: gateCardType = {
     maxInDeck: 1,
     family: 'sirenoid',
     description: `When this card is activated, it doubles the level of all Sirenoid on it.`,
-    image: 'sirenoid.png',
+    image: 'caracter-gate-cards/sirenoid-aquos.jpg',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'sirenoid-gate-card')
         CaracterGateCardEffect({ roomState: roomState, slotOfGate: slotOfGate, family: 'sirenoid' })

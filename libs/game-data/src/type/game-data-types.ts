@@ -80,6 +80,7 @@ export type gateCardType = {
     attribut?: attribut,
     family?: string,
     image: string,
+    imageByAttribut?: Partial<Record<attribut, string>>,
     activeOnBattleEnd?: {
         autoActiveOnEnd: boolean,
         canBeActiveBefore: boolean,

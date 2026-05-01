@@ -1,3 +1,4 @@
+import { CharacterCardByAttribut } from "../../function/caracter-cards-image-by-attribut.js"
 import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation, type bakuganType, type gateCardType } from "../../index.js"
 import { GateCardImages } from "../../store/gate-card-images.js"
 
@@ -44,6 +45,11 @@ export const GriffinGateCard: gateCardType = {
     family: 'griffin',
     description: `When this card is activated, it doubles the level of all Griffin on it.`,
     image: GateCardImages.caracter,
+    imageByAttribut: {
+        Haos: CharacterCardByAttribut('griffin', 'Haos'),
+        Pyrus: CharacterCardByAttribut('griffin', 'Pyrus'),
+        Aquos: CharacterCardByAttribut('griffin', 'Aquos')
+    },
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'griffin-gate-card')
         CaracterGateCardEffect({ roomState: roomState, slotOfGate: slotOfGate, family: 'griffin' })

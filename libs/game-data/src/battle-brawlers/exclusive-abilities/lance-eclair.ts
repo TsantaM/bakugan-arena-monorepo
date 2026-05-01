@@ -27,8 +27,10 @@ export const LanceEclair: exclusiveAbilitiesType = {
         if (!slotOfGate && !deck && !userData) return animation
         if (!slotOfGate) return animation
         if (slotOfGate.bakugans.length < 2) return animation
+        
         const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot).map((slot) => slot.id)
-        const bakugans: bakuganToMoveType[] = slotOfGate.bakugans.filter((b) => b.userId !== userId).map((b) => ({
+
+        const bakugans: bakuganToMoveType[] = slotOfGate.bakugans.filter((b) => b.userId !== userId).filter((bakugan) => !bakugan.statut.trapped && !bakugan.statut.protectedAgainstAbility && !bakugan.statut.protected).map((b) => ({
             key: b.key,
             userId: b.userId,
             slot: slotOfGate.id

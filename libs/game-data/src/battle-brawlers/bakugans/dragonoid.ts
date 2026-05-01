@@ -43,7 +43,7 @@ export const DragonoidGateCard: gateCardType = {
     key: 'dragonoid-gate-card',
     name: 'Charachter: Dragonoid',
     maxInDeck: 1,
-    image: 'dragonoid.png',
+    image: 'caracter-gate-cards/dragonoid-pyrus.jpg',
     description: `When this card is activated, it doubles the level of all Dragonoid on it.`,
     family: 'Dragonoid',
     onOpen({ roomState, slot }) {

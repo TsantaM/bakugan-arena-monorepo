@@ -31,7 +31,7 @@ export const TigrerraGateCard: gateCardType = {
     maxInDeck: 1,
     family: 'Tigrerra',
     description: `When this card is activated, it doubles the level of all Tigrerra on it.`,
-    image: 'tigrerra.png',
+    image: 'caracter-gate-cards/tigrerra-haos.jpg',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'tigrerra-gate-card')
         CaracterGateCardEffect({ roomState: roomState, slotOfGate: slotOfGate, family: 'Tigrerra' })

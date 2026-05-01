@@ -43,7 +43,7 @@ export const HydranoidGateCard: gateCardType = {
     maxInDeck: 1,
     family: 'Hydranoid',
     description: `When this card is activated, it doubles the level of all Hydranoid on it.`,
-    image: 'hydranoid.png',
+    image: 'caracter-gate-cards/hydranoid-darkus.jpg',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'hydranoid-gate-card')
         CaracterGateCardEffect({ roomState: roomState, slotOfGate: slotOfGate, family: 'Hydranoid' })

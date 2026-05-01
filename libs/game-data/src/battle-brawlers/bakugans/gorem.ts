@@ -31,7 +31,7 @@ export const GoremGateCard: gateCardType = {
     maxInDeck: 1,
     family: 'Gorem',
     description: `When this card is activated, it doubles the level of all Gorem on it.`,
-    image: 'gorem.jpg',
+    image: 'caracter-gate-cards/gorem-subterra.jpg',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'gorem-gate-card')
         CaracterGateCardEffect({ roomState: roomState, slotOfGate: slotOfGate, family: 'Gorem' })

@@ -1,3 +1,4 @@
+import { CharacterCardByAttribut } from "../../function/caracter-cards-image-by-attribut.js"
 import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation, type bakuganType, type gateCardType } from "../../index.js"
 
 
@@ -20,6 +21,9 @@ export const MonarusGateCard: gateCardType = {
     family: 'Monarus',
     description: `When this card is activated, it doubles the level of all Monarus on it.`,
     image: 'monarus.png',
+    imageByAttribut: {
+        Ventus: CharacterCardByAttribut('monarus', 'Ventus')
+    },
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'monarus-gate-card')
         CaracterGateCardEffect({ roomState: roomState, slotOfGate: slotOfGate, family: 'Monarus' })

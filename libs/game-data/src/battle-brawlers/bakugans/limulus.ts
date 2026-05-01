@@ -1,3 +1,4 @@
+import { CharacterCardByAttribut } from "../../function/caracter-cards-image-by-attribut.js"
 import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation } from "../../function/index.js"
 import { GateCardImages } from "../../store/gate-card-images.js"
 import { type bakuganType, type gateCardType } from "../../type/game-data-types.js"
@@ -21,6 +22,9 @@ export const LimulusGateCard: gateCardType = {
     family: 'Limulus',
     description: `When this card is activated, it doubles the level of all Limulus on it.`,
     image: GateCardImages.caracter,
+    imageByAttribut: {
+        Aquos: CharacterCardByAttribut('limulus', 'Aquos')
+    },
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'limulus-gate-card')
         CaracterGateCardEffect({ roomState: roomState, slotOfGate: slotOfGate, family: 'Limulus' })

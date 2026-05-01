@@ -1,5 +1,6 @@
 import { bakuganType, gateCardType } from "../../type/type-index.js"
 import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation } from '../../function/index.js'
+import { CharacterCardByAttribut } from "../../function/caracter-cards-image-by-attribut.js"
 
 export const FearReaperPyrus: bakuganType = {
     key: 'fear-reaper-pyrus',
@@ -56,6 +57,12 @@ export const FearReaperGateCard: gateCardType = {
     description: `When this card is activated, it doubles the level of all Fear Reaper on it.`,
     family: 'Fear Reaper',
     image: 'fear-reaper.png',
+    imageByAttribut: {
+        Aquos: CharacterCardByAttribut('fear-reaper', 'Aquos'),
+        Pyrus: CharacterCardByAttribut('fear-reaper', 'Pyrus'),
+        Haos: CharacterCardByAttribut('fear-reaper', 'Haos'),
+        Darkus: CharacterCardByAttribut('fear-reaper', 'Darkus')
+    },
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'fear-reaper-gate-card')
         CaracterGateCardEffect({ roomState: roomState, slotOfGate: slotOfGate, family: 'Fear Reaper' })

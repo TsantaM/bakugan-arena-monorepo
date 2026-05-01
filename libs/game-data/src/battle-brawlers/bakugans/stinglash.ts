@@ -1,3 +1,4 @@
+import { CharacterCardByAttribut } from "../../function/caracter-cards-image-by-attribut.js"
 import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation, type bakuganType, type gateCardType } from "../../index.js"
 import { GateCardImages } from "../../store/gate-card-images.js"
 
@@ -46,6 +47,11 @@ export const StinglashGateCard: gateCardType = {
     family: 'Stinglash',
     description: `When this card is activated, it doubles the level of all Stinglash on it.`,
     image: GateCardImages.caracter,
+    imageByAttribut: {
+        Aquos: CharacterCardByAttribut('stinglash', 'Aquos'),
+        Darkus: CharacterCardByAttribut('stinglash', 'Darkus'),
+        Subterra: CharacterCardByAttribut('stinglash', 'Subterra'),
+    },
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'stinglash-gate-card')
         CaracterGateCardEffect({ roomState: roomState, slotOfGate: slotOfGate, family: 'Stinglash' })

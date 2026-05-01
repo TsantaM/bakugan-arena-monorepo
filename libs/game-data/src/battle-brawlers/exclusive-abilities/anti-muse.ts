@@ -30,7 +30,7 @@ export const AntiMuse: exclusiveAbilitiesType = {
 
                 if (slotsWithOpponent.length > 0) {
 
-                    const bakugans = slotsWithOpponent.map((slot) => slot.bakugans.filter((b) => b.userId !== user.userId)).flat()
+                    const bakugans = slotsWithOpponent.map((slot) => slot.bakugans.filter((b) => b.userId !== user.userId)).flat().filter((bakugan) => !bakugan.statut.trapped && !bakugan.statut.protectedAgainstAbility && !bakugan.statut.protected)
 
                     bakugans.forEach((b) => {
 

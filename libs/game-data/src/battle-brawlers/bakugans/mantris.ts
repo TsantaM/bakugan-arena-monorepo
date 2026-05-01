@@ -1,3 +1,4 @@
+import { CharacterCardByAttribut } from "../../function/caracter-cards-image-by-attribut.js"
 import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation, type bakuganType, type gateCardType } from "../../index.js"
 import { GateCardImages } from "../../store/gate-card-images.js"
 
@@ -56,6 +57,12 @@ export const MantrisGateCard: gateCardType = {
     family: 'Mantris',
     description: `When this card is activated, it doubles the level of all Mantris on it.`,
     image: GateCardImages.caracter,
+    imageByAttribut: {
+        Haos: CharacterCardByAttribut('mantris', 'Haos'),
+        Pyrus: CharacterCardByAttribut('mantris', 'Pyrus'),
+        Subterra: CharacterCardByAttribut('mantris', 'Subterra'),
+        Darkus: CharacterCardByAttribut('mantris', 'Darkus')
+    },
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'mantris-gate-card')
         CaracterGateCardEffect({ roomState: roomState, slotOfGate: slotOfGate, family: 'Mantris' })

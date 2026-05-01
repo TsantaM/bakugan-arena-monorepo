@@ -18,7 +18,7 @@ export const FortressGateCard: gateCardType = {
     name: 'Charachter: Fortress',
     maxInDeck: 1,
     description: `When this card is activated, it doubles the level of all Fortress on it.`,
-    image: GateCardImages.caracter,
+    image: 'caracter-gate-cards/fortress-pyrus.jpg',
     family: 'Fortress',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'fortress-gate-card')

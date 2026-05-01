@@ -1,5 +1,6 @@
 import { bakuganType, gateCardType } from "../../type/type-index.js"
 import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation } from '../../function/index.js'
+import { CharacterCardByAttribut } from "../../function/caracter-cards-image-by-attribut.js"
 
 export const FalconeerPyrus: bakuganType = {
     key: 'falconeer-pyrus',
@@ -32,6 +33,10 @@ export const FalconeerGateCard: gateCardType = {
     image: 'falconeer.png',
     description: `When this card is activated, it doubles the level of all Falconeer on it.`,
     family: 'Falconeer',
+    imageByAttribut: {
+        Pyrus: CharacterCardByAttribut('falconeer', 'Pyrus'),
+        Ventus: CharacterCardByAttribut('falconeer', 'Ventus')
+    },
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'falconeer-gate-card')
         CaracterGateCardEffect({ roomState: roomState, slotOfGate: slotOfGate, family: 'Falconeer' })

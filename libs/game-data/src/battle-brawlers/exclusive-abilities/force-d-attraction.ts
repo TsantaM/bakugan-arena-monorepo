@@ -30,7 +30,7 @@ export const ForceDattraction: exclusiveAbilitiesType = {
 
         if (!slotOfGate && !deck && !userData) return animation
 
-        const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot && s.bakugans.length > 0).map((slot) => slot.bakugans).flat()
+        const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot && s.bakugans.length > 0).map((slot) => slot.bakugans).flat().filter((bakugan) => !bakugan.statut.trapped && !bakugan.statut.protectedAgainstAbility && !bakugan.statut.protected)
         const bakugans: bakuganToMoveType[] = slots.map((bakugan) => ({
             key: bakugan.key,
             userId: bakugan.userId,

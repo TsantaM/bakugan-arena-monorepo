@@ -80,7 +80,11 @@ export const CombatAerien: abilityCardsType = {
 
         if (slotWithGate.length < 2) return false
         return true
-    }
+    },
+    canUse({ bakugan }) {
+        if(bakugan.statut.trapped) return false
+        return true
+    },
 }
 
 export const TornadeChaosTotal: abilityCardsType = {
@@ -173,7 +177,7 @@ export const SouffleTout: abilityCardsType = {
         if (!slotOfGate) return animation
         if (slotOfGate.bakugans.length < 2) return animation
         const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot).map((slot) => slot.id)
-        const bakugans: bakuganToMoveType[] = slotOfGate.bakugans.filter((b) => b.userId !== userId).map((b) => ({
+        const bakugans: bakuganToMoveType[] = slotOfGate.bakugans.filter((b) => b.userId !== userId).filter((bakugan) => !bakugan.statut.trapped && !bakugan.statut.protectedAgainstAbility && !bakugan.statut.protected).map((b) => ({
             key: b.key,
             userId: b.userId,
             slot: slotOfGate.id
@@ -274,7 +278,8 @@ export const TornadeExtreme: abilityCardsType = {
 
         if (!slotOfGate && !deck && !userData) return animation
 
-        const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot && s.bakugans.length > 0).map((slot) => slot.bakugans).flat()
+        const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot && s.bakugans.length > 0).map((slot) => slot.bakugans).flat().filter((bakugan) => !bakugan.statut.trapped && !bakugan.statut.protectedAgainstAbility && !bakugan.statut.protected)
+        
         const bakugans: bakuganToMoveType[] = slots.map((bakugan) => ({
             key: bakugan.key,
             userId: bakugan.userId,

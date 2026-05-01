@@ -1,5 +1,5 @@
 import { abilityCardsType } from "../index.js";
-import { AquosSubterra, AquosVentus, BarrageDeau, CombatAerien, ContreMaitrise, CoupDeGrace, DarkusAquos, DarkusPyrus, EarthPower, EclatSoudain, HaosDarkus, HaosImmobilisation, HaosVentus, JetEnflamme, MagmaSupreme, MirageAquatique, MurDeFeu, PlongeeEnEauProfonde, PyrusAquosHaos, PyrusDarkus, RetourDair, RetroAction, SouffleTout, SubterraAquos, SubterraHaos, SubterraPyrus, TectonicSwipe, TornadeChaosTotal, TornadeExtreme, TourbillonDeFeu, VengeanceAlItalienne, VentusHaos, VentusPyrus, VentusSubterraDarkus } from "./ability-cards/index.js";
+import { AquosSubterra, AquosVentus, BarrageDeau, CombatAerien, ContreMaitrise, CoupDeGrace, DarkusAquos, DarkusPyrus, DepthDive, EarthPower, EarthShatter, EclatSoudain, HaosDarkus, HaosImmobilisation, HaosVentus, JetEnflamme, MagmaSupreme, MirageAquatique, MurDeFeu, PlongeeEnEauProfonde, PyrusAquosHaos, PyrusDarkus, RetourDair, RetroAction, SouffleTout, SubterraAquos, SubterraHaos, SubterraPyrus, SupportLight, TectonicSwipe, TornadeChaosTotal, TornadeExtreme, TourbillonDeFeu, VengeanceAlItalienne, VentusHaos, VentusPyrus, VentusSubterraDarkus } from "./ability-cards/index.js";
 
 export const AbilityCards: Record<string, abilityCardsType> = {
     // Pyrus
@@ -19,6 +19,7 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     [PlongeeEnEauProfonde.key]: PlongeeEnEauProfonde,
     [AquosSubterra.key]: AquosSubterra,
     [AquosVentus.key]: AquosVentus,
+    [DepthDive.key]: DepthDive,
 
     // Subterra
 
@@ -29,6 +30,7 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     [EarthPower.key]: EarthPower,
     [SubterraAquos.key]: SubterraAquos,
     [SubterraHaos.key]: SubterraHaos,
+    [EarthShatter.key]: EarthShatter,
 
     // Haos
 
@@ -37,6 +39,7 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     // [LumiereDivine.key]: LumiereDivine,
     [ContreMaitrise.key]: ContreMaitrise,
     [HaosImmobilisation.key]: HaosImmobilisation,
+    [SupportLight.key]: SupportLight,
     [HaosDarkus.key]: HaosDarkus,
     [HaosVentus.key]: HaosVentus,
 
