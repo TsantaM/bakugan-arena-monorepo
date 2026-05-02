@@ -158,6 +158,10 @@ export const VengeanceAlItalienne: abilityCardsType = {
                 })
                 let oppo: bakuganOnSlot[] = []
                 opponents.forEach((opponent) => {
+                    
+                    if(opponent.statut.protected) return
+                    if(opponent.statut.protectedAgainstAbility) return
+
                     opponent.currentPower -= 100
                     oppo.push(opponent)
                 })

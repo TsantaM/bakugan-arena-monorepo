@@ -17,7 +17,7 @@ export const JuggernoidAquos: bakuganType = {
 }
 
 export const JuggernoidHaos: bakuganType = {
-    key: 'juggernoid-aquos',
+    key: 'juggernoid-haos',
     attribut: 'Haos',
     banList: [],
     powerLevel: 350,
@@ -40,13 +40,13 @@ export const JuggernoidGateCard: gateCardType = {
         Haos: CharacterCardByAttribut('juggernoid', 'Haos')
     },
     onOpen({ roomState, slot }) {
-        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'hydranoid-gate-card')
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === JuggernoidGateCard.key)
         CaracterGateCardEffect({ roomState: roomState, slotOfGate: slotOfGate, family: family })
         return null
 
     },
     onCanceled({ roomState, slot }) {
-        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'hydranoid-gate-card')
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === JuggernoidGateCard.key)
         CancelCaracterGateCard({ roomState: roomState, slotOfGate: slotOfGate, family: family })
     },
     autoActivationCheck: ({ portalSlot }) => {

@@ -155,6 +155,10 @@ export const PlongeeEnEauProfonde: abilityCardsType = {
             })
 
             NotAquosBakugans.forEach((bakugan) => {
+                
+                if(bakugan.statut.protected) return
+                if(bakugan.statut.protectedAgainstAbility) return
+
                 bakugan.currentPower -= 100
                 PowerChangeDirectiveAnumation({
                     animations: roomState.animations,

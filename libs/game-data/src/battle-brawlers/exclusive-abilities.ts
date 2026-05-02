@@ -3,6 +3,7 @@ import { exclusiveAbilitiesType } from "../index.js";
 import { AileEnflamee } from "./exclusive-abilities/aile-enflammee.js";
 import { AntiMuse } from "./exclusive-abilities/anti-muse.js";
 import { BouclierFusion } from "./exclusive-abilities/bouclier-fusion.js";
+import { DepthTornado } from "./exclusive-abilities/depht-tornado.js";
 import { DimmensionQuatre } from "./exclusive-abilities/dimmension-quatre.js";
 import { DragonoidPlus } from "./exclusive-abilities/dragonoid-plus.js";
 import { EffecteurdOmbre } from "./exclusive-abilities/effaceur-d-ombre.js";
@@ -16,6 +17,7 @@ import { ImpactMajeur } from "./exclusive-abilities/impact-majeur.js";
 import { JavelotAquos } from "./exclusive-abilities/javelot-aquos.js";
 import { LanceDeFeu } from "./exclusive-abilities/lance-de-feu.js";
 import { LanceEclair } from "./exclusive-abilities/lance-eclair.js";
+import { LifeDrew } from "./exclusive-abilities/life-drew.js";
 import { MachettesJumelles } from "./exclusive-abilities/machettes-jumelles.js";
 import { MaitreDesProfondeurs } from "./exclusive-abilities/maitre-des-profondeurs.js";
 import { Marionnette } from "./exclusive-abilities/marionnette.js";
@@ -38,7 +40,6 @@ import { VentViolentDeNobelesseVerte } from "./exclusive-abilities/vent-violent.
 import { VisageDeJoie } from "./exclusive-abilities/visage-de-joie.js";
 import { VisageDeLaFureur } from "./exclusive-abilities/visage-de-la-fureur.js";
 import { VisageDuChagrin } from "./exclusive-abilities/visage-du-chagrin.js";
-// import { AileEnflamee, AntiMuse, BouclierFusion, ChambreDeGravite, DragonoidPlus, EffecteurdOmbre, FlareBlinder, ForceDattraction, FurryOfWind, GaucheGigantesque, ImpactMajeur, JavelotAquos, LanceDeFeu, LanceEclair, MachettesJumelles, MaitreDesProfondeurs, Marionnette, MassueGigantesque, MegaFlareBlinder, Obstruction, OmbreBleue, PlexusSolaire, RobotallionExecution, SabreDeLaMort, SpiritHole, TempeteDePlume, TrappeDeSable, Tsunami, VentCinglant, VentViolentDeNobelesseVerte, VisageDeJoie, VisageDeLaFureur, VisageDuChagrin } from "./exclusive-abilities/exclusive-abilities.js";
 
 export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [OmbreBleue.key]: OmbreBleue,
@@ -83,7 +84,9 @@ export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [Obstruction.key]: Obstruction,
     [BouclierFusion.key]: BouclierFusion,
     [SpiritHole.key]: SpiritHole,
-    [GardianField.key]: GardianField
+    [DepthTornado.key]: DepthTornado,
+    [GardianField.key]: GardianField,
+    [LifeDrew.key]: LifeDrew
 }
 
 export const ExclusiveAbilitiesList: exclusiveAbilitiesType[] = Object.values(ExclusiveAbilities) 

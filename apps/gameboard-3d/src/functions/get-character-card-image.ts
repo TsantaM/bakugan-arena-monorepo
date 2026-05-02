@@ -10,4 +10,5 @@ export function GetCharacterCardImage (card: gateCardType, slot: portalSlotsType
     const image = card.imageByAttribut[attribut]
     if(!image) return card.image
 
+    return image
 }
