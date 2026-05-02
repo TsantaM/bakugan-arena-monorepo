@@ -15,20 +15,10 @@ export const MineFantome: gateCardType = {
             slotOfGate.state.open = true
             const bakugans = slotOfGate.bakugans
             bakugans.forEach((bakugan) => {
+                if (bakugan.statut.protected) return
+                if (bakugan.statut.protectedAgainstGate) return
                 ElimineBakuganEffect({ bakugan: bakugan, roomState: roomState })
             })
-
-
-            // const bakuganOnSlotDeckState = roomState.decksState
-            //     .flatMap(deck => deck.bakugans)           // On prend tous les bakugans de tous les decks
-            //     .map(b => b.bakuganData)                  // On prend les données réelles du bakugan
-            //     .filter(bd => bakuganOnSlot.includes(bd.key))               // On garde uniquement ceux sur la carte
-            //     .map(bd => bd)
-
-            // bakuganOnSlotDeckState.forEach((b) => {
-            //     b.onDomain = false
-            //     b.elimined = true
-            // })
 
             roomState.turnState.turn = slotOfGate.portalCard.userId
             roomState.turnState.previous_turn = otherPlayerId
@@ -85,6 +75,8 @@ export const Echange: gateCardType = {
 
 
                 usersBakugan.forEach((b) => {
+                    if (b.statut.protected) return
+                    if (b.statut.protectedAgainstGate) return
                     ElimineBakuganEffect({
                         bakugan: b,
                         roomState: roomState
@@ -108,6 +100,9 @@ export const Echange: gateCardType = {
             if (totalPowerOpponentsBakugans >= 400) {
 
                 opponentsBakugan.forEach((b) => {
+                    if (b.statut.protected) return
+                    if (b.statut.protectedAgainstGate) return
+
                     ElimineBakuganEffect({
                         bakugan: b,
                         roomState: roomState
@@ -222,6 +217,10 @@ export const AspirateurDePuissance: gateCardType = {
         if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
             const firstBakugan = slotOfGate.bakugans[0]
             const lastBakugan = slotOfGate.bakugans[slotOfGate.bakugans.length - 1]
+            
+            if(lastBakugan.statut.protected) return null
+            if(lastBakugan.statut.protectedAgainstGate) return null
+
             firstBakugan.currentPower = firstBakugan.currentPower + 100
             PowerChangeDirectiveAnumation({
                 animations: roomState.animations,

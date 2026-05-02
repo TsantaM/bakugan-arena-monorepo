@@ -7,9 +7,9 @@ export const LimulusAquos: bakuganType = {
     key: 'limulus-aquos',
     name: 'Limulus',
     image: 'limulus',
-    powerLevel: 230,
+    powerLevel: 350,
     family: 'Limulus',
-    exclusiveAbilities: ['divisio-holographique'],
+    exclusiveAbilities: ['holograph-divide'],
     attribut: 'Aquos',
     banList: [],
     canChangeAttribut: false

@@ -8,9 +8,9 @@ import { ExclusiveAbilitiesList } from "../exclusive-abilities.js"
 export const RayonGamma: exclusiveAbilitiesType = {
     key: 'gamma-ray',
     name: 'Gamma Ray',
-    description: `Nullifies the opponent's ability`,
+    description: `Nullifies all opponent's ability on the field`,
     maxInDeck: 1,
-    usable_in_neutral: false,
+    usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
         if (!roomState) return null
@@ -19,15 +19,10 @@ export const RayonGamma: exclusiveAbilitiesType = {
         const user = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
         if (!user) return null
 
+        const abilities = roomState.protalSlots.flatMap((s) => s.activateAbilities).filter((ability) => ability.userId !== userId && !ability.canceled)
+
         if (slotOfGate) {
             // const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
-            const abilities = slotOfGate.activateAbilities.filter((ability) => {
-                return (
-                    !ability.canceled &&
-                    ability.userId !== userId
-                );
-            });
-
             abilities.forEach((lastAbility) => {
                 const ability = lists.find((a) => a.key === lastAbility.key)
                 const abilityUser = BakuganList.find((b) => b.key === lastAbility.bakuganKey)
@@ -62,22 +57,15 @@ export const RayonGamma: exclusiveAbilitiesType = {
 
         return null
     },
-    activationConditions({ roomState }) {
-        const { battleInProcess, paused } = roomState.battleState
-        if (!battleInProcess || paused) return false
+    activationConditions({ roomState, userId }) {
 
+        const abilities = roomState.protalSlots.flatMap((s) => s.activateAbilities).filter((ability) => ability.userId !== userId && !ability.canceled)
+        if(abilities.length === 0) return false
         return true
+
     },
-    canUse({ bakugan, roomState }) {
+    canUse({ bakugan }) {
         if (bakugan.key !== TentaclearHaos.key) return false
-        const { battleInProcess, paused, slot } = roomState.battleState
-        const slots = roomState.protalSlots
-        if(!slot) return false
-        if (!battleInProcess || paused) return false
-        const slotOfBakugan = slots.find((s) => s.bakugans.some((b) => b.key === bakugan.key && b.userId === bakugan.userId) )
-
-        if(!slotOfBakugan || slotOfBakugan.id !== slot) return false
-
         return true
     },
 }

@@ -24,6 +24,16 @@ export const MurDeFeu: abilityCardsType = {
                     if (b.statut.protected) return
                     if (b.statut.protectedAgainstAbility) return
                     b.currentPower -= 50
+
+                    PowerChangeDirectiveAnumation({
+                        animations: roomState.animations,
+                        bakugans: [b],
+                        powerChange: 50,
+                        malus: true,
+                        turn: roomState.turnState.turnCount
+
+                    })
+
                 }
                 )
 
@@ -36,15 +46,6 @@ export const MurDeFeu: abilityCardsType = {
                 }
 
             }
-            PowerChangeDirectiveAnumation({
-                animations: roomState.animations,
-                bakugans: opponents,
-                powerChange: 50,
-                malus: true,
-                turn: roomState.turnState.turnCount
-
-            })
-
 
         }
 
@@ -60,6 +61,14 @@ export const MurDeFeu: abilityCardsType = {
             if (user) {
                 opponents.forEach((b) => {
                     b.currentPower += 50
+                    PowerChangeDirectiveAnumation({
+                        animations: roomState.animations,
+                        bakugans: [b],
+                        powerChange: 50,
+                        malus: false,
+                        turn: roomState.turnState.turnCount
+
+                    })
                 }
                 )
 
@@ -68,14 +77,6 @@ export const MurDeFeu: abilityCardsType = {
                 }
 
             }
-            PowerChangeDirectiveAnumation({
-                animations: roomState.animations,
-                bakugans: opponents,
-                powerChange: 50,
-                malus: false,
-                turn: roomState.turnState.turnCount
-
-            })
         }
 
         return null

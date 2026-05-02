@@ -59,7 +59,7 @@ export const ForceDattraction: exclusiveAbilitiesType = {
     canUse({ bakugan, roomState }) {
 
         if (!roomState) return false
-        const bakugansOnOtherSlots = roomState.protalSlots.filter((slot) => slot.id !== bakugan.slot_id).map((slot) => slot.bakugans).flat().length
+        const bakugansOnOtherSlots = roomState.protalSlots.filter((slot) => slot.id !== bakugan.slot_id).map((slot) => slot.bakugans).flat().filter((b) => !b.statut.trapped && !b.statut.protected && !b.statut.protectedAgainstAbility).length
         if (bakugansOnOtherSlots < 1) return false
 
         return true

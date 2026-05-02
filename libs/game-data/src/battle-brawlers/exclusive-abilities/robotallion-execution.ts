@@ -84,6 +84,12 @@ export const RobotallionExecution: exclusiveAbilitiesType = {
                 })
             }
 
+            const abilityIndex = roomState.persistantAbilities.findIndex((a) => a.key === RobotallionExecution.key && a.bakuganKey === bakuganKey && a.userId === userId && !a.canceled)
+            if (abilityIndex !== -1) {
+                roomState.persistantAbilities[abilityIndex].canceled = true
+            }
+
+
         }
     },
 }

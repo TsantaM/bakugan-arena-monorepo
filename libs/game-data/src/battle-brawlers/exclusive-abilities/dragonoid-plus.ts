@@ -31,7 +31,6 @@ export const DragonoidPlus: exclusiveAbilitiesType = {
                 }
 
                 roomState.persistantAbilities.push(activateAbility)
-                console.log('after ability persistant', roomState.persistantAbilities)
 
                 user.currentPower += 100
                 PowerChangeDirectiveAnumation({
@@ -84,6 +83,12 @@ export const DragonoidPlus: exclusiveAbilitiesType = {
                     turn: roomState.turnState.turnCount
                 })
             }
+
+            const abilityIndex = roomState.persistantAbilities.findIndex((a) => a.key === DragonoidPlus.key && a.bakuganKey === bakuganKey && a.userId === userId && !a.canceled)
+            if (abilityIndex !== -1) {
+                roomState.persistantAbilities[abilityIndex].canceled = true
+            }
+
 
         }
     },

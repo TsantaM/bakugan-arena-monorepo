@@ -5,6 +5,7 @@ import { AntiMuse } from "./exclusive-abilities/anti-muse.js";
 import { BouclierFusion } from "./exclusive-abilities/bouclier-fusion.js";
 import { DepthTornado } from "./exclusive-abilities/depht-tornado.js";
 import { DimmensionQuatre } from "./exclusive-abilities/dimmension-quatre.js";
+import { DivisionHolographique } from "./exclusive-abilities/division-holographique.js";
 import { DragonoidPlus } from "./exclusive-abilities/dragonoid-plus.js";
 import { EffecteurdOmbre } from "./exclusive-abilities/effaceur-d-ombre.js";
 import { FlareBlinder } from "./exclusive-abilities/flare-blinder.js";
@@ -73,7 +74,7 @@ export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [Tsunami.key]: Tsunami,
     [TrappeDeSable.key]: TrappeDeSable,
     [MaitreDesProfondeurs.key]: MaitreDesProfondeurs,
-    // [DivisionHolographique.key]: DivisionHolographique,
+    [DivisionHolographique.key]: DivisionHolographique,
     // [RegainSubit.key]: RegainSubit,
     // [CapeDeFeu.key]: CapeDeFeu,
     // [SouffleInfini.key]: SouffleInfini

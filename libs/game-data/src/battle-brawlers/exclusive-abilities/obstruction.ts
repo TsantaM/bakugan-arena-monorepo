@@ -29,5 +29,27 @@ export const Obstruction: exclusiveAbilitiesType = {
         }
 
         return null
-    }
+    },
+    onCanceled({ roomState, userId, bakuganKey, slot }) {
+        if (!roomState) return null
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate) {
+            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
+            if (user && opponent) {
+                const opponentPower = opponent.currentPower
+                user.currentPower -= opponentPower
+                PowerChangeDirectiveAnumation({
+                    animations: roomState?.animations,
+                    bakugans: [user],
+                    powerChange: opponentPower,
+                    malus: true,
+                    turn: roomState.turnState.turnCount
+
+                })
+            }
+        }
+
+        return null
+    },
 }
