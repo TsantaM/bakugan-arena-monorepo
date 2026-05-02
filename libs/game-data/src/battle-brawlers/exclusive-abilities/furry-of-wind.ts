@@ -1,4 +1,5 @@
 import { CheckBattleStillInProcess, ComeBackBakuganEffect, ElimineBakuganEffect, ResetSlot } from "../../function/index.js"
+import { Slots } from "../../store/slots.js"
 import { AnimationDirectivesTypes } from "../../type/animations-directives.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 import { SkyressVentus } from "../bakugans/skyress.js"
@@ -7,7 +8,7 @@ export const FurryOfWind: exclusiveAbilitiesType = {
     key: "furry-of-wind",
     description: "When three allied Ventus Bakugan, including Ventus Skyress, are present on the field, this card eliminates all opposing Bakugan on the battlefield. Additionally, it allows the user to return their own Bakugan to their hand. If this card is activated during a battle, the current Gate Card is removed from play.",
     maxInDeck: 1,
-    name: "Furry of Wind",
+    name: "Fury of Wind",
     image: "furry-of-wind.jpg",
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
@@ -22,6 +23,8 @@ export const FurryOfWind: exclusiveAbilitiesType = {
         const userBakugans = bakugans.filter((bakugan) => bakugan.userId === userId)
 
         opponentBakugans.forEach((bakugan) => {
+            if (bakugan.statut.protected) return
+            if (bakugan.statut.protectedAgainstAbility) return
             ElimineBakuganEffect({
                 bakugan: bakugan,
                 roomState: roomState,
@@ -70,8 +73,11 @@ export const FurryOfWind: exclusiveAbilitiesType = {
         return true
 
     },
-    canUse({ bakugan }) {
+    canUse({ bakugan, roomState }) {
         if (bakugan.key !== SkyressVentus.key) return false
+        const slot = roomState.protalSlots[Slots.indexOf(bakugan.slot_id)]
+        const allies = slot.bakugans.filter((b) => b.userId === bakugan.userId).length
+        if(allies > 1) return false
         return true
     },
 }

@@ -29,6 +29,7 @@ import { TentaclearGateCard } from "./bakugans/tentacleer.js";
 import { WormquakeGateCard } from "./bakugans/wormquake.js";
 import { TigrerraGateCard } from "./bakugans/tigrerra.js";
 import { JuggernoidGateCard } from "./bakugans/juggernoid.js";
+import { BeeStrikerGateCard } from "./bakugans/bee-striker.js";
 
 export const GateCards: Record<string, gateCardType> = {
 
@@ -112,7 +113,8 @@ export const GateCards: Record<string, gateCardType> = {
     [TigrerraGateCard.key]: TigrerraGateCard,
     [LimulusGateCard.key]: LimulusGateCard,
     [RobotallionGateCard.key]: RobotallionGateCard,
-    [JuggernoidGateCard.key]: JuggernoidGateCard
+    [JuggernoidGateCard.key]: JuggernoidGateCard,
+    [BeeStrikerGateCard.key]: BeeStrikerGateCard
     
 }
 

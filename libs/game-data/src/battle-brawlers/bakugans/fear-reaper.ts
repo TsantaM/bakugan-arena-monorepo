@@ -4,55 +4,55 @@ import { CharacterCardByAttribut } from "../../function/caracter-cards-image-by-
 
 export const FearReaperPyrus: bakuganType = {
     key: 'fear-reaper-pyrus',
-    name: 'Fear Reaper',
+    name: 'Fear Ripper',
     image: 'fear-reaper',
     attribut: 'Pyrus',
     family: 'Fear Reaper',
     powerLevel: 330,
-    exclusiveAbilities: [],
+    exclusiveAbilities: ['slash-zero'],
     banList: [],
     canChangeAttribut: false
 }
 
 export const FearReaperHaos: bakuganType = {
     key: 'fear-reaper-haos',
-    name: 'Fear Reaper',
+    name: 'Fear Ripper',
     image: 'fear-reaper',
     attribut: 'Haos',
     family: 'Fear Reaper',
     powerLevel: 330,
-    exclusiveAbilities: [],
+    exclusiveAbilities: ['slash-zero'],
     banList: [],
     canChangeAttribut: false
 }
 
 export const FearReaperDarkus: bakuganType = {
     key: 'fear-reaper-darkus',
-    name: 'Fear Reaper',
+    name: 'Fear Ripper',
     image: 'fear-reaper',
     attribut: 'Darkus',
     family: 'Fear Reaper',
     powerLevel: 330,
-    exclusiveAbilities: [],
+    exclusiveAbilities: ['slash-zero'],
     banList: [],
     canChangeAttribut: false
 }
 
 export const FearReaperAquos: bakuganType = {
     key: 'fear-reaper-aquos',
-    name: 'Fear Reaper',
+    name: 'Fear Ripper',
     image: 'fear-reaper',
     attribut: 'Aquos',
     family: 'Fear Reaper',
     powerLevel: 330,
-    exclusiveAbilities: [],
+    exclusiveAbilities: ['slash-zero'],
     banList: [],
     canChangeAttribut: false
 }
 
 export const FearReaperGateCard: gateCardType = {
     key: 'fear-reaper-gate-card',
-    name: 'Charachter: Fear Reaper',
+    name: 'Charachter: Fear Ripper',
     maxInDeck: 1,
     description: `When this card is activated, it doubles the level of all Fear Reaper on it.`,
     family: 'Fear Reaper',

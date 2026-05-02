@@ -31,8 +31,10 @@ import { RayonGamma } from "./exclusive-abilities/rayon-gamma.js";
 import { ReaperOfTheChaos } from "./exclusive-abilities/reaper-of-the-chaos.js";
 import { RobotallionExecution } from "./exclusive-abilities/robotallion-execution.js";
 import { SabreDeLaMort } from "./exclusive-abilities/sabre-de-la-mort.js";
+import { SlashZero } from "./exclusive-abilities/slash-zero.js";
 import { SolarRay } from "./exclusive-abilities/solar-ray.js";
 import { SpiritHole } from "./exclusive-abilities/spirit-hole.js";
+import { SpitPointer } from "./exclusive-abilities/SpitPointer.js";
 import { TempeteDePlume } from "./exclusive-abilities/tempete-de-plume.js";
 import { TrappeDeSable } from "./exclusive-abilities/trappe-de-sable.js";
 import { Tsunami } from "./exclusive-abilities/tsunami.js";
@@ -87,7 +89,9 @@ export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [SpiritHole.key]: SpiritHole,
     [DepthTornado.key]: DepthTornado,
     [GardianField.key]: GardianField,
-    [LifeDrew.key]: LifeDrew
+    [LifeDrew.key]: LifeDrew,
+    [SlashZero.key]: SlashZero,
+    [SpitPointer.key]: SpitPointer
 }
 
 export const ExclusiveAbilitiesList: exclusiveAbilitiesType[] = Object.values(ExclusiveAbilities) 

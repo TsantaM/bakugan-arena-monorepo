@@ -16,12 +16,12 @@ export function getAdjacentsSlots({ slot, roomState }: { slot: portalSlotsTypeEl
     if (!slot_1 || !slot_2 || !slot_3 || !slot_4 || !slot_5 || !slot_6) return []
 
     switch (slotId) {
-        case "slot-1": return [slot_2, slot_4, slot_5]
-        case "slot-2": return [slot_1, slot_3, slot_4, slot_5, slot_6]
-        case "slot-3": return [slot_2, slot_5, slot_6]
-        case "slot-4": return [slot_1, slot_2, slot_5]
-        case "slot-5": return [slot_1, slot_2, slot_3, slot_4, slot_6]
-        case "slot-6": return [slot_2, slot_3, slot_5]
+        case "slot-1": return [slot_2, slot_4]
+        case "slot-2": return [slot_1, slot_3, slot_5]
+        case "slot-3": return [slot_2, slot_6]
+        case "slot-4": return [slot_1, slot_5]
+        case "slot-5": return [slot_2, slot_4, slot_6]
+        case "slot-6": return [slot_3, slot_5]
     }
 
 }
