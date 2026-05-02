@@ -1,5 +1,4 @@
-import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation } from "../../function";
-import { CharacterCardByAttribut } from "../../function/caracter-cards-image-by-attribut";
+import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation } from "../../function/index.js";
 import { bakuganType, gateCardType } from "../../type/type-index.js";
 
 const family = 'Bee Striker'
