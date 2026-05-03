@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io/dist";
 import { ActiveGateCard } from "../functions/active-gate-card";
-import { activeGateCardProps, ActivePlayerActionRequestType, removeActionByType } from "@bakugan-arena/game-data";
+import { activeGateCardProps, ActivePlayerActionRequestType, InactivePlayerActionRequestType, removeActionByType } from "@bakugan-arena/game-data";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { turnActionUpdater } from "./turn-action";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
@@ -57,7 +57,7 @@ export const socketActiveGateCard = (io: Server, socket: Socket) => {
             const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest, "OPEN_GATE_CARD")
 
 
-            Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
+            Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest = newState as InactivePlayerActionRequestType
             const merged = [Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
 
             const checker = CheckTurnActionRequest({ roomState: state, userId: userId })
