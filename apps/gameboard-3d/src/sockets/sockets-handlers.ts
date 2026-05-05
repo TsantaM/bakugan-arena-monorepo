@@ -377,6 +377,18 @@ async function processAnimationQueue(userId: string,
 
         }
 
+        if(current.type === 'ADDITIONAL_MESSAGE') {
+            sendMessageToParent(current.message)
+        }
+
+        if(current.type === 'ACTIVE_PROTECTION') {
+            sendMessageToParent(current.message)
+        }
+
+        if(current.type === 'REMOVE_PROTECTION') {
+            sendMessageToParent(current.message)
+        }
+
         i++; // avancer à l'animation suivante
     }
 

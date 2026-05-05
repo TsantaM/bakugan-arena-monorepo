@@ -1,4 +1,5 @@
-import { PowerChangeDirectiveAnumation } from "../../function/index.js"
+import { PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js"
+import { NewAdditionnalMessage } from "../../function/new-additional-message.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 import { TentaclearHaos } from "../bakugans/tentacleer.js"
 
@@ -25,6 +26,12 @@ export const MegaFlareBlinder: exclusiveAbilitiesType = {
                 blockedWith: 'ABILITY',
                 key: MegaFlareBlinder.key
             }
+
+            NewAdditionnalMessage({
+                roomState: roomState,
+                text: 'Gate Card is blocked'
+            })
+
         }
 
         // opponent.forEach((bakugan) => {
@@ -34,13 +41,11 @@ export const MegaFlareBlinder: exclusiveAbilitiesType = {
         const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
         if (!user) return null
 
-        user.currentPower += 100
-        PowerChangeDirectiveAnumation({
-            animations: roomState.animations,
-            bakugans: [user],
-            powerChange: 100,
+        PowerChange({
+            bakugan: user,
+            G: 100,
             malus: false,
-            turn: roomState.turnState.turnCount
+            roomState: roomState
         })
 
         return null
@@ -55,11 +60,11 @@ export const MegaFlareBlinder: exclusiveAbilitiesType = {
         const { blocked } = slotOfGate.state
         if (blocked) {
             slotOfGate.state.blocked = false
+            NewAdditionnalMessage({
+                roomState: roomState,
+                text: `Card card is unblocked.`
+            })
         }
-
-        opponent.forEach((bakugan) => {
-            bakugan.abilityBlock = false
-        })
 
         const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
         if (!user) return null

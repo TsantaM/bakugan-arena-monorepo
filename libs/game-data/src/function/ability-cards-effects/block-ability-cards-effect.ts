@@ -1,4 +1,6 @@
+import { AbilityCards, ExclusiveAbilities } from "../../battle-brawlers/index.js"
 import { attribut, slots_id, stateType } from "../../type/type-index.js"
+import { NewAdditionnalMessage } from "../new-additional-message.js"
 
 type AbilityBlockCard = {
     key: string
@@ -36,6 +38,12 @@ export const BlockAbilityCardsEffect = ({
         },
         turn: turns < 0 ? 0 : turns
     }
+
+    NewAdditionnalMessage({
+        roomState: roomState,
+        text: `Abilities are blocked for ${turns} ${turns === 1 ? 'turn' : 'turns'} by ${AbilityCards[card.key].name || ExclusiveAbilities[card.key].name}`
+    })
+
 }
 
 export const RemoveAbilityCardsBlockEffect = ({
@@ -56,4 +64,10 @@ export const RemoveAbilityCardsBlockEffect = ({
         reason: null,
         turn: 0
     }
+
+    NewAdditionnalMessage({
+        roomState: roomState,
+        text: `Abilities are unblocked`
+    })
+
 }

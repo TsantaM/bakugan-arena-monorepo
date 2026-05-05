@@ -1,4 +1,4 @@
-import { PowerChangeDirectiveAnumation } from "../../function/index.js"
+import { PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 import { activateAbilities } from "../../type/room-types.js"
 
@@ -32,14 +32,11 @@ export const RobotallionExecution: exclusiveAbilitiesType = {
                 roomState.persistantAbilities.push(activateAbility)
                 console.log('after ability persistant', roomState.persistantAbilities)
 
-                user.currentPower += 50
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: [user],
-                    powerChange: 50,
+                PowerChange({
+                    bakugan: user,
+                    G: 50,
                     malus: false,
-                    turn: roomState.turnState.turnCount
-
+                    roomState: roomState
                 })
 
             }
@@ -56,15 +53,12 @@ export const RobotallionExecution: exclusiveAbilitiesType = {
         const user = slotOfUser.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
         if (!user) return
 
-        user.currentPower += 50
-        PowerChangeDirectiveAnumation({
-            animations: roomState?.animations,
-            bakugans: [user],
-            powerChange: 50,
-            malus: false,
-            turn: roomState.turnState.turnCount
-
-        })
+                PowerChange({
+                    bakugan: user,
+                    G: 50,
+                    malus: false,
+                    roomState: roomState
+                })
 
     },
     onCanceled({ roomState, userId, bakuganKey, slot }) {
@@ -74,13 +68,11 @@ export const RobotallionExecution: exclusiveAbilitiesType = {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
 
             if (user) {
-                user.currentPower -= 50
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: [user],
-                    powerChange: 50,
+                PowerChange({
+                    bakugan: user,
+                    G: 50,
                     malus: true,
-                    turn: roomState.turnState.turnCount
+                    roomState: roomState
                 })
             }
 

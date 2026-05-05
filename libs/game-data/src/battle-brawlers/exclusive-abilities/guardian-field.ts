@@ -1,3 +1,4 @@
+import { ProtectCardEffect } from "../../function/index.js";
 import { Slots } from "../../store/slots.js";
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js";
 import { bakuganOnSlot, portalSlotsType, portalSlotsTypeElement } from "../../type/room-types.js";
@@ -18,23 +19,22 @@ export const GardianField: exclusiveAbilitiesType = {
         const user: bakuganOnSlot | undefined = slotOfGate.bakugans.find((b) => b.userId === userId && b.key === bakuganKey)
         if (!user) return null
 
-        if (!user.statut.protected) {
-            user.statut.protected = {
-                check: true,
-                key: GardianField.key,
-                origin: 'ABILITY'
-            }
-        }
+        ProtectCardEffect({
+            bakugan: user,
+            cardKey: GardianField.key,
+            origin: 'ABILITY',
+            protectionType: 'BOTH',
+            roomState: roomState,
+        })
 
         bakugans.forEach((b) => {
-            if (b.statut.protected) return
-
-            b.statut.protected = {
-                check: true,
-                key: GardianField.key,
-                origin: 'ABILITY'
-            }
-
+            ProtectCardEffect({
+                bakugan: b,
+                cardKey: GardianField.key,
+                origin: 'ABILITY',
+                protectionType: 'BOTH',
+                roomState: roomState,
+            })
         })
 
 
@@ -46,13 +46,13 @@ export const GardianField: exclusiveAbilitiesType = {
         const slotOfGate: portalSlotsTypeElement = slots[Slots.indexOf(slot)]
         const user: bakuganOnSlot | undefined = slotOfGate.bakugans.find((b) => b.userId === userId && b.key === bakuganKey)
 
-        if(!user) return
-        if(user.statut.protected && user.statut.protected.key === GardianField.key && user.statut.protected.origin === 'ABILITY') {
+        if (!user) return
+        if (user.statut.protected && user.statut.protected.key === GardianField.key && user.statut.protected.origin === 'ABILITY') {
             user.statut.protected = false
         }
 
         bakugans.forEach((b) => {
-            if(b.statut.protected && b.statut.protected.key === GardianField.key && b.statut.protected.origin === 'ABILITY') b.statut.protected = false
+            if (b.statut.protected && b.statut.protected.key === GardianField.key && b.statut.protected.origin === 'ABILITY') b.statut.protected = false
         })
 
     },
@@ -61,12 +61,12 @@ export const GardianField: exclusiveAbilitiesType = {
         const slots: portalSlotsType = roomState.protalSlots
         const bakugans: bakuganOnSlot[] = slots.map((s) => s.bakugans).flat().filter((b) => b.userId === userId).filter((b) => !b.statut.protected)
 
-        if(bakugans.length === 0) return false
+        if (bakugans.length === 0) return false
 
         return true
     },
     canUse({ bakugan }) {
-        if(bakugan.key !== JuggernoidHaos.key) return false
+        if (bakugan.key !== JuggernoidHaos.key) return false
         return true
     },
 }

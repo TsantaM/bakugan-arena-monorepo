@@ -23,8 +23,6 @@ export const FurryOfWind: exclusiveAbilitiesType = {
         const userBakugans = bakugans.filter((bakugan) => bakugan.userId === userId)
 
         opponentBakugans.forEach((bakugan) => {
-            if (bakugan.statut.protected) return
-            if (bakugan.statut.protectedAgainstAbility) return
             ElimineBakuganEffect({
                 bakugan: bakugan,
                 roomState: roomState,

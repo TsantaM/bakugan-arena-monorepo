@@ -1,18 +1,24 @@
-import { AnimationDirectivesTypes } from "../../type/animations-directives";
-import { bakuganOnSlot } from "../../type/room-types";
+import { Bakugans } from "../../battle-brawlers/bakugans.js";
+import { AnimationDirectivesTypes } from "../../type/animations-directives.js";
+import { bakuganOnSlot } from "../../type/room-types.js";
 
 type Props = {
     bakugan: bakuganOnSlot,
     animations: AnimationDirectivesTypes[];
+    turnCount: number
 }
 
-export default function RemoveRenfortAnimationDirective({ animations, bakugan }: Props) {
+export default function RemoveRenfortAnimationDirective({ animations, bakugan, turnCount }: Props) {
     const removeRenfortAnimationDirective: AnimationDirectivesTypes = {
         type: 'REMOVE_RENFORT',
         data: {
             bakugan: bakugan
         },
-        message: [],
+        message: [{
+            text: `${Bakugans[bakugan.key].name} leave the battle`,
+            turn: turnCount,
+            description: false
+        }],
         resolve: false
     }
 

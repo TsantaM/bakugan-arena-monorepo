@@ -1,4 +1,4 @@
-import { PowerChangeDirectiveAnumation } from "../../function/index.js"
+import { PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const ImpactMajeur: exclusiveAbilitiesType = {
@@ -16,25 +16,19 @@ export const ImpactMajeur: exclusiveAbilitiesType = {
             const oppoents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
 
             if (user) {
-                user.currentPower += 50
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: [user],
-                    powerChange: 50,
+                PowerChange({
+                    bakugan: user,
+                    G: 50,
                     malus: false,
-                    turn: roomState.turnState.turnCount
-
+                    roomState: roomState
                 })
 
                 oppoents.forEach((o) => {
-                    o.currentPower -= 100
-                    PowerChangeDirectiveAnumation({
-                        animations: roomState?.animations,
-                        bakugans: [o],
-                        powerChange: 100,
+                    PowerChange({
+                        bakugan: o,
+                        G: 100,
                         malus: true,
-                        turn: roomState.turnState.turnCount
-
+                        roomState: roomState
                     })
                 })
             }

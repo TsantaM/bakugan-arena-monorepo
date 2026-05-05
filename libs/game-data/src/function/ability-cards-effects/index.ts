@@ -9,3 +9,7 @@ export * from "./elimine-bakugan-effect.js"
 export * from './come-back-bakugan-effect.js'
 export * from "./drag-and-elimine-effect.js"
 export * from './swipe-power-levels-effects.js'
+export * from './power-change.js'
+export * from './protect-card-effect.js'
+export * from './swipe-gate-card-effect.js'
+export * from './cancel-ability-card-effect.js'

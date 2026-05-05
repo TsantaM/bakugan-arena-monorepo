@@ -1,4 +1,4 @@
-import { CheckBattle, CheckBattleStillInProcess, dragBakuganToUserSlot, MoveToAnotherSlotDirectiveAnimation, PowerChangeDirectiveAnumation } from "../../function/index.js"
+import { CheckBattle, CheckBattleStillInProcess, dragBakuganToUserSlot, MoveToAnotherSlotDirectiveAnimation, PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js"
 import { AbilityCardsActions } from "../../type/actions-serveur-requests.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 import { bakuganOnSlot, slots_id } from "../../type/room-types.js"
@@ -58,14 +58,11 @@ export const TrappeDeSable: exclusiveAbilitiesType = {
 
             if (user && bakuganToDrag) {
 
-                bakuganToDrag.currentPower = bakuganToDrag.currentPower - 50
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: [bakuganToDrag],
-                    powerChange: 50,
+                PowerChange({
+                    bakugan: bakuganToDrag,
+                    G: 50,
                     malus: true,
-                    turn: roomState.turnState.turnCount
-
+                    roomState: roomState
                 })
 
                 dragBakuganToUserSlot({ resolution: resolution, roomState: roomState, origin: 'ABILITY', trapped: true })

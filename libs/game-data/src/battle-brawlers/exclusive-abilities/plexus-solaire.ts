@@ -1,4 +1,4 @@
-import { CancelGateCardDirectiveAnimation, PowerChangeDirectiveAnumation } from "../../function/index.js"
+import { CancelGateCardDirectiveAnimation, PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 import { GateCardsList } from "../gate-gards.js"
 
@@ -18,14 +18,11 @@ export const PlexusSolaire: exclusiveAbilitiesType = {
             const gate = GateCardsList.find((g) => g.key === slotOfGate.portalCard?.key)
 
             if (user && opponent) {
-                opponent.currentPower -= 50
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: [opponent],
-                    powerChange: 50,
+                PowerChange({
+                    bakugan: opponent,
+                    G: 50,
                     malus: true,
-                    turn: roomState.turnState.turnCount
-
+                    roomState: roomState
                 })
                 if (gate && gate.onCanceled && slotOfGate.state.open && !slotOfGate.state.canceled) {
                     CancelGateCardDirectiveAnimation({

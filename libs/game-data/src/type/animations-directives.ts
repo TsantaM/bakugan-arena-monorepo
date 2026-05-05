@@ -177,4 +177,26 @@ export type AnimationDirectivesTypes =
             bakuganUserId: string,
         },
         message: Message[]
-    }
+    } | {
+        type: 'ADDITIONAL_MESSAGE',
+        resolve: boolean,
+        message: Message[]
+    } | {
+        type: 'ACTIVE_PROTECTION',
+        resolve: boolean,
+        data: {
+            origin: 'GATE' | 'ABILITY',
+            cardKey: string,
+            bakugan: bakuganOnSlot
+        },
+        message: Message[]
+    } | {
+        type: 'REMOVE_PROTECTION',
+        resolve: boolean,
+        data: {
+            origin: 'GATE' | 'ABILITY',
+            cardKey: string,
+            bakugan: bakuganOnSlot
+        },
+        message: Message[]
+    } 

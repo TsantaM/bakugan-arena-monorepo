@@ -3,6 +3,8 @@ import { AbilityCardsActions, bakuganOnSlot, type abilityCardsType } from "../..
 import { GateCardsList } from "../gate-gards.js";
 import { Slots, StandardCardsImages } from "../../store/store-index.js";
 import RemoveRenfortAnimationDirective from "../../function/create-animation-directives/remove-renfort-animation-directive.js";
+import { PowerChange } from "../../function/ability-cards-effects/power-change.js";
+import { ProtectCardEffect, RemoveProtectionCardEffect } from "../../function/ability-cards-effects/protect-card-effect.js";
 
 export const MurDeFeu: abilityCardsType = {
     key: "mur-de-feu",
@@ -21,29 +23,23 @@ export const MurDeFeu: abilityCardsType = {
             const opponents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
             if (user) {
                 opponents.forEach((b) => {
-                    if (b.statut.protected) return
-                    if (b.statut.protectedAgainstAbility) return
-                    b.currentPower -= 50
-
-                    PowerChangeDirectiveAnumation({
-                        animations: roomState.animations,
-                        bakugans: [b],
-                        powerChange: 50,
+                    PowerChange({
+                        bakugan: b,
+                        G: 50,
                         malus: true,
-                        turn: roomState.turnState.turnCount
-
+                        roomState: roomState
                     })
 
                 }
                 )
 
-                if (!user.statut.protectedAgainstAbility) {
-                    user.statut.protectedAgainstAbility = {
-                        check: true,
-                        key: MurDeFeu.key,
-                        origin: 'ABILITY'
-                    }
-                }
+                ProtectCardEffect({
+                    bakugan: user,
+                    cardKey: MurDeFeu.key,
+                    origin: 'ABILITY',
+                    protectionType: 'ABILITY',
+                    roomState: roomState
+                })
 
             }
 
@@ -60,21 +56,21 @@ export const MurDeFeu: abilityCardsType = {
             const opponents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
             if (user) {
                 opponents.forEach((b) => {
-                    b.currentPower += 50
-                    PowerChangeDirectiveAnumation({
-                        animations: roomState.animations,
-                        bakugans: [b],
-                        powerChange: 50,
+                    PowerChange({
+                        bakugan: b,
+                        G: 50,
                         malus: false,
-                        turn: roomState.turnState.turnCount
-
+                        roomState: roomState
                     })
-                }
-                )
+                })
 
-                if (user.statut.protectedAgainstAbility && user.statut.protectedAgainstAbility.key === MurDeFeu.key && user.statut.protectedAgainstAbility.origin === 'ABILITY') {
-                    user.statut.protectedAgainstAbility = false
-                }
+                RemoveProtectionCardEffect({
+                    bakugan: user,
+                    cardKey: MurDeFeu.key,
+                    origin: 'ABILITY',
+                    protectionType: 'ABILITY',
+                    roomState: roomState
+                })
 
             }
         }
@@ -200,7 +196,8 @@ export const JetEnflamme: abilityCardsType = {
                     })
                     RemoveRenfortAnimationDirective({
                         animations: roomState.animations,
-                        bakugan: a
+                        bakugan: a,
+                        turnCount: roomState.turnState.turnCount
                     })
                 }
 
@@ -305,30 +302,19 @@ export const TourbillonDeFeu: abilityCardsType = {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
             const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
             if (user && opponent) {
-                user.currentPower += 100
-                PowerChangeDirectiveAnumation({
-                    animations: roomState.animations,
-                    bakugans: [user],
-                    powerChange: 100,
+                PowerChange({
+                    bakugan: user,
+                    G: 100,
                     malus: false,
-                    turn: roomState.turnState.turnCount
-
+                    roomState: roomState
                 })
 
-                if (!opponent.statut.protected && !opponent.statut.protectedAgainstAbility) {
-                    opponent.currentPower -= 100
-
-                    PowerChangeDirectiveAnumation({
-                        animations: roomState.animations,
-                        bakugans: [opponent],
-                        powerChange: 100,
-                        malus: true,
-                        turn: roomState.turnState.turnCount
-
-                    })
-                }
-
-
+                PowerChange({
+                    bakugan: user,
+                    G: 100,
+                    malus: true,
+                    roomState: roomState
+                })
             }
         }
 

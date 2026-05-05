@@ -1,4 +1,4 @@
-import { PowerChangeDirectiveAnumation } from "../../function/index.js"
+import { PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const BouclierFusion: exclusiveAbilitiesType = {
@@ -20,13 +20,11 @@ export const BouclierFusion: exclusiveAbilitiesType = {
                 const baseOpponentPower = opponent.powerLevel
                 const opponentBoost = currentOpponentPower - baseOpponentPower
                 if (opponentBoost > 0) {
-                    user.currentPower += opponentBoost
-                    PowerChangeDirectiveAnumation({
-                        animations: roomState.animations,
-                        bakugans: [user],
-                        powerChange: opponentBoost,
+                    PowerChange({
+                        bakugan: user,
+                        G: opponentBoost,
                         malus: false,
-                        turn: roomState.turnState.turnCount
+                        roomState: roomState
                     })
                 }
             }

@@ -1,5 +1,6 @@
 import { GateCardsList } from "../../battle-brawlers/gate-gards.js";
 import { resolutionType } from "../../type/actions-serveur-requests.js";
+import { Message } from "../../type/animations-directives.js";
 import { activateAbilities, bakuganOnSlot, stateType } from "../../type/room-types.js";
 import { OpenGateCardActionRequest } from "../action-request-functions/index.js";
 import { CheckBattleStillInProcess } from "../check-battle-still-in-process.js";
@@ -59,7 +60,8 @@ export function moveBakuganToSelectedSlot({
         if (sameTeam) {
             RemoveRenfortAnimationDirective({
                 animations: roomData.animations,
-                bakugan: structuredClone(user)
+                bakugan: structuredClone(user),
+                turnCount: roomData.turnState.turnCount
             })
         }
     }
@@ -89,14 +91,20 @@ export function moveBakuganToSelectedSlot({
     slotOfGate.bakugans.splice(index, 1);
     slotOfGate.activateAbilities.splice(ability, 1)
 
+    const additional: Message = {
+        text: 'Gate Card is blocked',
+        turn: roomData.turnState.turnCount,
+        description: false
+    }
+
     // --- Animations ---
     MoveToAnotherSlotDirectiveAnimation({
         animations: roomData.animations,
         bakugan: structuredClone(user),
         initialSlot: structuredClone(slotOfGate),
         newSlot: structuredClone(slotTarget),
-        turn: roomData.turnState.turnCount
-
+        turn: roomData.turnState.turnCount,
+        additionalMessages: shouldBlockAlways ? [additional] : []
     });
 
     // --- Gate Card Effect on Set bakugan
@@ -127,7 +135,6 @@ export function moveBakuganToSelectedSlot({
                 bakugan: user,
                 slot: slotTarget,
                 turn: roomData.turnState.turnCount
-
             });
         }
     }

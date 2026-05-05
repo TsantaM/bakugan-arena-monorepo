@@ -1,10 +1,12 @@
 import { AbilityCardsActions, AnimationDirectivesTypes, slots_id, type abilityCardsType } from "../../type/type-index.js";
 import { Slots, StandardCardsImages } from '../../store/store-index.js'
-import { AbilityCardFailed, BlockAbilityCardsEffect, CancelGateCardDirectiveAnimation, moveBakuganToSelectedSlot, PowerChangeDirectiveAnumation, RemoveAbilityCardsBlockEffect } from "../../function/index.js";
+import { AbilityCardFailed, BlockAbilityCardsEffect, CancelGateCardDirectiveAnimation, moveBakuganToSelectedSlot, PowerChange, PowerChangeDirectiveAnumation, RemoveAbilityCardsBlockEffect } from "../../function/index.js";
 import { AbilityCardsList } from "../ability-cards.js";
 import { ExclusiveAbilitiesList } from "../exclusive-abilities.js";
 import { BakuganList } from "../bakugans.js";
 import { GateCardsList } from "../gate-gards.js";
+import { NewAdditionnalMessage } from "../../function/new-additional-message.js";
+import { CancelAbilityCardEffect } from "../../function/ability-cards-effects/cancel-ability-card-effect.js";
 
 export const MirageAquatique: abilityCardsType = {
     key: 'mirage-aquatique',
@@ -69,6 +71,12 @@ export const MirageAquatique: abilityCardsType = {
         if (!slotState.blocked) return null
 
         slotState.blocked = false
+
+        NewAdditionnalMessage({
+            roomState: roomState,
+            text: `Card card is unblocked.`
+        })
+
 
     },
     activationConditions({ roomState, userId }) {
@@ -144,69 +152,36 @@ export const PlongeeEnEauProfonde: abilityCardsType = {
             const NotAquosBakugans = slotOfGate.bakugans.filter((b) => b.attribut !== "Aquos")
 
             AquosBakugans.forEach((bakugan) => {
-                bakugan.currentPower += 100
-                PowerChangeDirectiveAnumation({
-                    animations: roomState.animations,
-                    bakugans: [bakugan],
-                    powerChange: 100,
-                    turn: roomState.turnState.turnCount,
-                    malus: false
+                PowerChange({
+                    bakugan: bakugan,
+                    G: 100,
+                    malus: false,
+                    roomState: roomState
                 })
             })
 
             NotAquosBakugans.forEach((bakugan) => {
-                
-                if(bakugan.statut.protected) return
-                if(bakugan.statut.protectedAgainstAbility) return
 
-                bakugan.currentPower -= 100
-                PowerChangeDirectiveAnumation({
-                    animations: roomState.animations,
-                    bakugans: [bakugan],
-                    powerChange: 100,
-                    turn: roomState.turnState.turnCount,
-                    malus: true
+                PowerChange({
+                    bakugan: bakugan,
+                    G: 100,
+                    malus: true,
+                    roomState: roomState
                 })
+
             })
 
             slotOfGate.activateAbilities.forEach((ability) => {
-                if (ability.canceled) return
                 const user = slotOfGate.bakugans.find((b) => b.key === ability.bakuganKey && b.userId === ability.userId)
                 if (!user) return
                 if (user.attribut === "Aquos") return
-                const BakuganName = BakuganList.find((b) => b.key === user.key)?.name
-                if (!BakuganName) return
-                const abilityData = [...AbilityCardsList, ...ExclusiveAbilitiesList].find((card) => card.key === ability.key)
-                if (!abilityData) return
-                if (!abilityData.onCanceled) return
-
-                const animation: AnimationDirectivesTypes = {
-                    type: 'CANCEL_ABILITY_CARD',
-                    data: {
-                        card: ability.key,
-                        attribut: user.attribut
-                    },
-                    message: [{
-                        text: `${abilityData.name} of ${BakuganName} as been nullified !`,
-                        turn: roomState?.turnState.turnCount
-                    }],
-                    resolve: false
-                }
-
-                roomState.animations.push(animation)
-
-                abilityData.onCanceled({
-                    bakuganKey: ability.bakuganKey,
+                CancelAbilityCardEffect({
+                    ability: ability,
                     roomState: roomState,
-                    slot: slotOfGate.id,
-                    userId: ability.userId
+                    slotOfGate: slotOfGate,
                 })
-
-                ability.canceled = true
-
-                const persistantAbility = roomState.persistantAbilities.find((a) => a.key === ability.key && a.bakuganKey === ability.bakuganKey && a.userId === ability.userId && !a.canceled)
-                if (persistantAbility) persistantAbility.canceled = true
             })
+
         }
 
         return null
@@ -258,17 +233,17 @@ export const DepthDive: abilityCardsType = {
         const { battleInProcess, paused, slot } = roomState.battleState
         if (!battleInProcess) return false
         if (battleInProcess && paused) return false
-        if(slot === null) return false
+        if (slot === null) return false
 
         const slotOfBakugan = roomState.protalSlots[Slots.indexOf(slot)]
-        if(slotOfBakugan.portalCard === null) return false
-        if(slotOfBakugan.portalCard.userId === bakugan.userId) return false 
-        if(!slotOfBakugan.state.open) return false
-        if(slotOfBakugan.state.canceled) return false
+        if (slotOfBakugan.portalCard === null) return false
+        if (slotOfBakugan.portalCard.userId === bakugan.userId) return false
+        if (!slotOfBakugan.state.open) return false
+        if (slotOfBakugan.state.canceled) return false
 
         const card = GateCardsList.find((c) => c.key === slotOfBakugan.portalCard?.key)
-        if(!card) return false
-        if(!card.onCanceled) return false
+        if (!card) return false
+        if (!card.onCanceled) return false
 
         return true
     },

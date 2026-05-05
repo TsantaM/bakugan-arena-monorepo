@@ -20,8 +20,6 @@ export const Tsunami: exclusiveAbilitiesType = {
 
         bakugans.forEach((bakugan) => {
             if (bakugan.key === SiegeAquos.key && bakugan.userId === userId) return
-            if (bakugan.statut.protected) return
-            if (bakugan.statut.protectedAgainstAbility) return
             ElimineBakuganEffect({
                 bakugan: bakugan,
                 roomState: roomState,

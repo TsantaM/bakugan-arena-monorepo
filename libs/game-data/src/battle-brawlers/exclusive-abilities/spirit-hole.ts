@@ -1,4 +1,4 @@
-import { PowerChangeDirectiveAnumation } from "../../function/index.js"
+import { PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const SpiritHole: exclusiveAbilitiesType = {
@@ -16,15 +16,11 @@ export const SpiritHole: exclusiveAbilitiesType = {
 
         if (slotOfGate && bakuganUser && gateCount) {
             const bonus = 50 * gateCount.length
-            bakuganUser.currentPower = bakuganUser.currentPower + bonus
-            slotOfGate.state.open = true
-            PowerChangeDirectiveAnumation({
-                animations: roomState?.animations,
-                bakugans: [bakuganUser],
-                powerChange: bonus,
+            PowerChange({
+                bakugan: bakuganUser,
+                G: bonus,
                 malus: false,
-                turn: roomState.turnState.turnCount
-
+                roomState: roomState
             })
         }
 
@@ -38,15 +34,11 @@ export const SpiritHole: exclusiveAbilitiesType = {
 
         if (slotOfGate && bakuganUser && gateCount) {
             const malus = 50 * gateCount.length
-            bakuganUser.currentPower = bakuganUser.currentPower - malus
-            slotOfGate.state.open = true
-            PowerChangeDirectiveAnumation({
-                animations: roomState?.animations,
-                bakugans: [bakuganUser],
-                powerChange: malus,
+            PowerChange({
+                bakugan: bakuganUser,
+                G: malus,
                 malus: true,
-                turn: roomState.turnState.turnCount
-
+                roomState: roomState
             })
         }
 

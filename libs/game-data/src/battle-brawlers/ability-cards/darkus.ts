@@ -1,6 +1,6 @@
 import { bakuganOnSlot, type abilityCardsType } from "../../type/type-index.js";
 import { GateCardsList } from "../gate-gards.js";
-import { CancelGateCardDirectiveAnimation, PowerChangeDirectiveAnumation } from '../../function/index.js'
+import { CancelGateCardDirectiveAnimation, PowerChange, PowerChangeDirectiveAnumation } from '../../function/index.js'
 import { Slots, StandardCardsImages } from "../../store/store-index.js";
 
 export const CoupDeGrace: abilityCardsType = {
@@ -147,31 +147,20 @@ export const VengeanceAlItalienne: abilityCardsType = {
             const opponents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
 
             if (user && opponents.length > 0) {
-                user.currentPower += 100
-                PowerChangeDirectiveAnumation({
-                    animations: roomState.animations,
-                    bakugans: [user],
-                    powerChange: 100,
+                PowerChange({
+                    bakugan: user,
+                    G: 100,
                     malus: false,
-                    turn: roomState.turnState.turnCount
-
+                    roomState: roomState
                 })
-                let oppo: bakuganOnSlot[] = []
+
                 opponents.forEach((opponent) => {
-                    
-                    if(opponent.statut.protected) return
-                    if(opponent.statut.protectedAgainstAbility) return
-
-                    opponent.currentPower -= 100
-                    oppo.push(opponent)
-                })
-                PowerChangeDirectiveAnumation({
-                    animations: roomState.animations,
-                    bakugans: oppo,
-                    powerChange: 100,
-                    malus: true,
-                    turn: roomState.turnState.turnCount
-
+                    PowerChange({
+                        bakugan: opponent,
+                        G: 100,
+                        malus: true,
+                        roomState: roomState
+                    })
                 })
             }
         }
@@ -195,14 +184,11 @@ export const PoivreDesCayenne: abilityCardsType = {
             const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
 
             if (opponent) {
-                opponent.currentPower -= 50
-                PowerChangeDirectiveAnumation({
-                    animations: roomState.animations,
-                    bakugans: [opponent],
-                    powerChange: 50,
+                PowerChange({
+                    bakugan: opponent,
+                    G: 50,
                     malus: true,
-                    turn: roomState.turnState.turnCount
-
+                    roomState: roomState
                 })
             }
         }
@@ -216,14 +202,11 @@ export const PoivreDesCayenne: abilityCardsType = {
             const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
 
             if (opponent) {
-                opponent.currentPower += 50
-                PowerChangeDirectiveAnumation({
-                    animations: roomState.animations,
-                    bakugans: [opponent],
-                    powerChange: 50,
+                PowerChange({
+                    bakugan: opponent,
+                    G: 50,
                     malus: false,
-                    turn: roomState.turnState.turnCount
-
+                    roomState: roomState
                 })
             }
         }

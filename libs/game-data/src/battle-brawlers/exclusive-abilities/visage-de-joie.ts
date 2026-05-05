@@ -1,4 +1,5 @@
 import { CancelGateCardDirectiveAnimation } from "../../function/index.js"
+import { NewAdditionnalMessage } from "../../function/new-additional-message.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 import { GateCardsList } from "../gate-gards.js"
 
@@ -33,6 +34,11 @@ export const VisageDeJoie: exclusiveAbilitiesType = {
                     blockedWith: 'ABILITY',
                     key: VisageDeJoie.key
                 }
+
+                NewAdditionnalMessage({
+                    roomState: roomState,
+                    text: `Gate Card is blocked`
+                })
             }
         }
 

@@ -1,3 +1,4 @@
+import { Bakugans } from "../../battle-brawlers/bakugans.js";
 import { GateCardsList } from "../../battle-brawlers/gate-gards.js";
 import { resolutionType } from "../../type/actions-serveur-requests.js";
 import { bakuganOnSlot, stateType } from "../../type/room-types.js";
@@ -6,6 +7,7 @@ import { CheckBattle } from "../check-battle-in-process.js";
 import { CheckBattleStillInProcess } from "../check-battle-still-in-process.js";
 import { AddRenfortAnimationDirective } from "../create-animation-directives/add-renfort-directive.js";
 import { MoveToAnotherSlotDirectiveAnimation } from "../create-animation-directives/move-to-another-slot.js";
+import { NewAdditionnalMessage } from "../new-additional-message.js";
 
 export function dragBakuganToUserSlot({
     resolution,
@@ -33,7 +35,13 @@ export function dragBakuganToUserSlot({
     const bakuganToDrag = slotTarget.bakugans.find(b => b.key === targetBakuganKey);
 
     if (!bakuganToDrag) return;
-
+    if(bakuganToDrag.statut.protected || bakuganToDrag.statut.protectedAgainstAbility) {
+        NewAdditionnalMessage({
+            roomState: roomState,
+            text: `${Bakugans[bakuganToDrag.key].name} is protected.`
+        })
+        return
+    }
     // Vérifier que la carte utilisateur contient bien le bakugan lanceur
     const user = slotOfGate.bakugans.find(
         b => b.key === resolution.bakuganKey && b.userId === resolution.userId

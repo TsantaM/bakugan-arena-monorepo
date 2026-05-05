@@ -1,4 +1,5 @@
-import { PowerChangeDirectiveAnumation } from "../../function/index.js"
+import { PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js"
+import { NewAdditionnalMessage } from "../../function/new-additional-message.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const OmbreBleue: exclusiveAbilitiesType = {
@@ -14,14 +15,11 @@ export const OmbreBleue: exclusiveAbilitiesType = {
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
             if (user) {
-                user.currentPower += 50
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: [user],
-                    powerChange: 50,
+                PowerChange({
+                    bakugan: user,
+                    G: 50,
                     malus: false,
-                    turn: roomState.turnState.turnCount
-
+                    roomState: roomState
                 })
             }
             slotOfGate.state.blocked = {
@@ -29,6 +27,10 @@ export const OmbreBleue: exclusiveAbilitiesType = {
                 blockedWith: 'ABILITY',
                 key: OmbreBleue.key
             }
+            NewAdditionnalMessage({
+                roomState: roomState,
+                text: `Gate Card is blocked`
+            })
         }
         return null
     }

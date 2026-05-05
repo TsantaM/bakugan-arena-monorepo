@@ -1,5 +1,5 @@
 import RemoveRenfortAnimationDirective from "../../function/create-animation-directives/remove-renfort-animation-directive.js";
-import { type gateCardType, type bakuganOnSlot, type stateType, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective, ComeBackBakuganDirectiveAnimation, RemoveGateCardDirectiveAnimation, ResetSlot, CheckBattleStillInProcess, AutoActivationDuringBattle, Slots, ComeBackBakuganEffect, AnimationDirectivesTypes } from "../../index.js";
+import { type gateCardType, type bakuganOnSlot, type stateType, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective, ComeBackBakuganDirectiveAnimation, RemoveGateCardDirectiveAnimation, ResetSlot, CheckBattleStillInProcess, AutoActivationDuringBattle, Slots, ComeBackBakuganEffect, AnimationDirectivesTypes, PowerChange } from "../../index.js";
 import { GateCardImages } from "../../store/gate-card-images.js";
 
 export const Rechargement: gateCardType = {
@@ -20,14 +20,11 @@ export const Rechargement: gateCardType = {
                 slotOfGate.state.open = true
                 const merged = sameAttributOnDomain.flat()
                 const bonus = 100 * merged.length
-                bakuganUser.currentPower = bakuganUser.currentPower += bonus
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: [bakuganUser],
-                    powerChange: bonus,
+                PowerChange({
+                    bakugan: bakuganUser,
+                    G: bonus,
                     malus: false,
-                    turn: roomState.turnState.turnCount
-
+                    roomState: roomState
                 })
             }
         }
@@ -47,15 +44,12 @@ export const Rechargement: gateCardType = {
             if (sameAttributOnDomain) {
                 const merged = sameAttributOnDomain.flat()
                 const malus = 100 * merged.length
-                bakuganUser.currentPower = bakuganUser.currentPower -= malus
                 slotOfGate.state.canceled = true
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: [bakuganUser],
-                    powerChange: malus,
-                    malus: false,
-                    turn: roomState.turnState.turnCount
-
+                PowerChange({
+                    bakugan: bakuganUser,
+                    G: malus,
+                    malus: true,
+                    roomState: roomState
                 })
             }
         }
@@ -76,15 +70,12 @@ export const GrandEsprit: gateCardType = {
 
         if (slotOfGate && bakuganUser && gateCount && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
             const bonus = 50 * gateCount.length
-            bakuganUser.currentPower = bakuganUser.currentPower + bonus
             slotOfGate.state.open = true
-            PowerChangeDirectiveAnumation({
-                animations: roomState?.animations,
-                bakugans: [bakuganUser],
-                powerChange: bonus,
+            PowerChange({
+                bakugan: bakuganUser,
+                G: bonus,
                 malus: false,
-                turn: roomState.turnState.turnCount
-
+                roomState: roomState
             })
         }
 
@@ -99,16 +90,13 @@ export const GrandEsprit: gateCardType = {
 
         if (slotOfGate && bakuganUser && gateCount && slotOfGate.state.open && !slotOfGate.state.canceled) {
             const malus = 50 * gateCount.length
-            bakuganUser.currentPower = bakuganUser.currentPower - malus
             slotOfGate.state.canceled = true
-            PowerChangeDirectiveAnumation({
-                animations: roomState?.animations,
-                bakugans: [bakuganUser],
-                powerChange: malus,
-                malus: true,
-                turn: roomState.turnState.turnCount
-
-            })
+                PowerChange({
+                    bakugan: bakuganUser,
+                    G: malus,
+                    malus: true,
+                    roomState: roomState
+                })
         }
     },
 }
@@ -215,7 +203,8 @@ export const TripleCombat: gateCardType = {
                 ComeBackBakuganEffect({ bakugan: a, roomState: roomState })
                 RemoveRenfortAnimationDirective({
                     animations: roomState.animations,
-                    bakugan: a
+                    bakugan: a,
+                    turnCount: roomState.turnState.turnCount
                 })
             })
 
@@ -404,7 +393,8 @@ export const QuatuorDeCombat: gateCardType = {
                 ComeBackBakuganEffect({ bakugan: a, roomState: roomState })
                 RemoveRenfortAnimationDirective({
                     animations: roomState.animations,
-                    bakugan: a
+                    bakugan: a,
+                    turnCount: roomState.turnState.turnCount
                 })
             })
 

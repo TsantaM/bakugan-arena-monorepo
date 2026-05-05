@@ -1,4 +1,4 @@
-import { PowerChangeDirectiveAnumation } from "../../function/index.js"
+import { PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const Obstruction: exclusiveAbilitiesType = {
@@ -16,14 +16,11 @@ export const Obstruction: exclusiveAbilitiesType = {
             const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
             if (user && opponent) {
                 const opponentPower = opponent.currentPower
-                user.currentPower += opponentPower
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: [user],
-                    powerChange: opponentPower,
+                PowerChange({
+                    bakugan: user,
+                    G: opponentPower,
                     malus: false,
-                    turn: roomState.turnState.turnCount
-
+                    roomState: roomState
                 })
             }
         }
@@ -38,14 +35,11 @@ export const Obstruction: exclusiveAbilitiesType = {
             const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
             if (user && opponent) {
                 const opponentPower = opponent.currentPower
-                user.currentPower -= opponentPower
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: [user],
-                    powerChange: opponentPower,
+                PowerChange({
+                    bakugan: user,
+                    G: opponentPower,
                     malus: true,
-                    turn: roomState.turnState.turnCount
-
+                    roomState: roomState
                 })
             }
         }

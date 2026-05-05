@@ -37,8 +37,8 @@ export const ChambreDeGravite: exclusiveAbilitiesType = {
 
                 if (slotsWithOpponent.length > 0) {
 
-                    const bakugans = slotsWithOpponent.map((slot) => slot.bakugans.filter((b) => b.userId !== user.userId)).flat().filter((bakugan) => !bakugan.statut.trapped && !bakugan.statut.protectedAgainstAbility && !bakugan.statut.protected)
-
+                    const bakugans = slotsWithOpponent.map((slot) => slot.bakugans.filter((b) => b.userId !== user.userId)).flat()
+                    
                     bakugans.forEach((b) => {
 
                         if (b.currentPower < user.currentPower) {

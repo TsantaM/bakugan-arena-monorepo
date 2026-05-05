@@ -1,4 +1,4 @@
-import { PowerChangeDirectiveAnumation } from "../../function/index.js";
+import { PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js";
 import { Slots } from "../../store/slots.js";
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js";
 
@@ -13,14 +13,11 @@ export const SlashZero: exclusiveAbilitiesType = {
         const slotOfGate = roomState.protalSlots[Slots.indexOf(slot)]
         const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
         if (user) {
-            user.currentPower += 50
-            PowerChangeDirectiveAnumation({
-                animations: roomState?.animations,
-                bakugans: [user],
-                powerChange: 50,
+            PowerChange({
+                bakugan: user,
+                G: 50,
                 malus: false,
-                turn: roomState.turnState.turnCount
-
+                roomState: roomState
             })
         }
 
@@ -30,14 +27,11 @@ export const SlashZero: exclusiveAbilitiesType = {
         const slotOfGate = roomState.protalSlots[Slots.indexOf(slot)]
         const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
         if (user) {
-            user.currentPower -= 50
-            PowerChangeDirectiveAnumation({
-                animations: roomState?.animations,
-                bakugans: [user],
-                powerChange: 50,
+            PowerChange({
+                bakugan: user,
+                G: 50,
                 malus: true,
-                turn: roomState.turnState.turnCount
-
+                roomState: roomState
             })
         }
 

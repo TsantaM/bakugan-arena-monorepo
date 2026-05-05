@@ -1,4 +1,4 @@
-import { PowerChangeDirectiveAnumation } from "../../function/index.js"
+import { PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const DivisionHolographique: exclusiveAbilitiesType = {
@@ -15,15 +15,11 @@ export const DivisionHolographique: exclusiveAbilitiesType = {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
             const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
             if (user && opponent) {
-                const opponentPower = opponent.currentPower
-                user.currentPower += opponentPower
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: [user],
-                    powerChange: opponentPower,
+                PowerChange({
+                    bakugan: user,
+                    G: opponent.currentPower,
                     malus: false,
-                    turn: roomState.turnState.turnCount
-
+                    roomState: roomState
                 })
             }
         }
@@ -37,15 +33,11 @@ export const DivisionHolographique: exclusiveAbilitiesType = {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
             const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
             if (user && opponent) {
-                const opponentPower = opponent.currentPower
-                user.currentPower -= opponentPower
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: [user],
-                    powerChange: opponentPower,
+                PowerChange({
+                    bakugan: user,
+                    G: opponent.currentPower,
                     malus: true,
-                    turn: roomState.turnState.turnCount
-
+                    roomState: roomState
                 })
             }
         }

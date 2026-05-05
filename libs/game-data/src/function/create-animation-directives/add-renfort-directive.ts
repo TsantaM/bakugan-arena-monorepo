@@ -1,4 +1,4 @@
-import { BakuganList } from '../../battle-brawlers/bakugans.js';
+import { BakuganList, Bakugans } from '../../battle-brawlers/bakugans.js';
 import type { AnimationDirectivesTypes, bakuganOnSlot, portalSlotsTypeElement } from '../../type/type-index.js'
 
 type Props = {
@@ -38,7 +38,7 @@ export const AddRenfortAnimationDirective: AddRenfortAnimationDirectiveType = ({
         },
         resolved: false,
         message: [{
-            text: `${BakuganList.find((b) => bakugan.key === b.key)?.name || ''} join the battle !`,
+            text: `${Bakugans[bakugan.key].name} join the battle !`,
             turn: turn
         }]
     }

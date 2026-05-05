@@ -1,3 +1,4 @@
+import { Bakugans } from "../../battle-brawlers/bakugans.js";
 import { GateCardsList } from "../../battle-brawlers/gate-gards.js";
 import { resolutionType } from "../../type/actions-serveur-requests.js";
 import { bakuganOnSlot, stateType } from "../../type/room-types.js";
@@ -6,6 +7,7 @@ import { CheckBattleStillInProcess } from "../check-battle-still-in-process.js";
 import { AddRenfortAnimationDirective } from "../create-animation-directives/add-renfort-directive.js";
 import { MoveToAnotherSlotDirectiveAnimation } from "../create-animation-directives/move-to-another-slot.js";
 import RemoveRenfortAnimationDirective from "../create-animation-directives/remove-renfort-animation-directive.js";
+import { NewAdditionnalMessage } from "../new-additional-message.js";
 
 export function moveSelectedBakugan({
     resolution,
@@ -29,6 +31,13 @@ export function moveSelectedBakugan({
     );
 
     if (!bakugan) return;
+    if(bakugan.statut.protected || bakugan.statut.protectedAgainstAbility) {
+        NewAdditionnalMessage({
+            roomState: roomState,
+            text: `${Bakugans[bakugan.key].name} is protected.`
+        })
+        return
+    }
 
     const initialSlot = roomState.protalSlots.find(s => s.id === bakugan.slot_id);
     if (!initialSlot) return;
@@ -70,7 +79,8 @@ export function moveSelectedBakugan({
         if (sameTeam) {
             RemoveRenfortAnimationDirective({
                 animations: roomState.animations,
-                bakugan: structuredClone(bakugan)
+                bakugan: structuredClone(bakugan),
+                turnCount: roomState.turnState.turnCount
             })
         }
     }

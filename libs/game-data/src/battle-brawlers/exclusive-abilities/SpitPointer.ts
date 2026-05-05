@@ -1,4 +1,4 @@
-import { PowerChangeDirectiveAnumation } from "../../function/index.js";
+import { PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js";
 import { exclusiveAbilitiesType } from "../../type/type-index.js";
 
 export const SpitPointer: exclusiveAbilitiesType = {
@@ -17,26 +17,20 @@ export const SpitPointer: exclusiveAbilitiesType = {
 
             if (user && opponents.length > 0) {
 
-                user.currentPower += 100
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: [user],
-                    powerChange: 100,
+                PowerChange({
+                    bakugan: user,
+                    G: 100,
                     malus: false,
-                    turn: roomState.turnState.turnCount
-
+                    roomState: roomState
                 })
 
                 opponents.forEach((opponent) => {
-                    opponent.currentPower -= 100
-                })
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: opponents,
-                    powerChange: 100,
-                    malus: true,
-                    turn: roomState.turnState.turnCount
-
+                    PowerChange({
+                        bakugan: opponent,
+                        G: 100,
+                        malus: true,
+                        roomState: roomState
+                    })
                 })
 
             }
@@ -53,26 +47,20 @@ export const SpitPointer: exclusiveAbilitiesType = {
 
             if (user && opponents.length > 0) {
 
-                user.currentPower -= 100
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: [user],
-                    powerChange: 100,
+                PowerChange({
+                    bakugan: user,
+                    G: 100,
                     malus: true,
-                    turn: roomState.turnState.turnCount
-
+                    roomState: roomState
                 })
 
                 opponents.forEach((opponent) => {
-                    opponent.currentPower += 100
-                })
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: opponents,
-                    powerChange: 100,
-                    malus: false,
-                    turn: roomState.turnState.turnCount
-
+                    PowerChange({
+                        bakugan: opponent,
+                        G: 100,
+                        malus: true,
+                        roomState: roomState
+                    })
                 })
 
             }

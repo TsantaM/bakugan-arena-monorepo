@@ -1,5 +1,7 @@
+import { CancelAbilityCardEffect } from "../../function/ability-cards-effects/cancel-ability-card-effect.js";
 import RemoveRenfortAnimationDirective from "../../function/create-animation-directives/remove-renfort-animation-directive.js";
-import { AbilityCardFailed, CancelGateCardDirectiveAnimation, ComeBackBakuganDirectiveAnimation, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective } from "../../function/index.js";
+import { AbilityCardFailed, CancelGateCardDirectiveAnimation, ComeBackBakuganDirectiveAnimation, PowerChange, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective } from "../../function/index.js";
+import { NewAdditionnalMessage } from "../../function/new-additional-message.js";
 import { Slots, StandardCardsImages } from "../../store/store-index.js";
 import type { AbilityCardsActions, abilityCardsType, AnimationDirectivesTypes, bakuganOnSlot } from "../../type/type-index.js";
 import { AbilityCardsList } from "../ability-cards.js";
@@ -163,6 +165,7 @@ export const EclatSoudain: abilityCardsType = {
 
                 RemoveRenfortAnimationDirective({
                     animations: roomState.animations,
+                    turnCount: roomState.turnState.turnCount,
                     bakugan: a
                 })
 
@@ -252,33 +255,11 @@ export const ContreMaitrise: abilityCardsType = {
             });
 
             abilities.forEach((lastAbility) => {
-                const ability = lists.find((a) => a.key === lastAbility.key)
-                const user = BakuganList.find((b) => b.key === lastAbility.bakuganKey)
-                if (!user) return
-                if (!ability) return
-
-                const animation: AnimationDirectivesTypes = {
-                    type: 'CANCEL_ABILITY_CARD',
-                    data: {
-                        card: ability.key,
-                        attribut: user.attribut
-                    },
-                    message: [{
-                        text: `${ability.name} of ${user.name} as been nullified !`,
-                        turn: roomState?.turnState.turnCount
-                    }],
-                    resolve: false
-                }
-
-                roomState?.animations.push(animation)
-
-                if (ability && ability.onCanceled) ability.onCanceled({ roomState, bakuganKey: lastAbility.bakuganKey, slot: slot, userId: lastAbility.userId })
-
-                lastAbility.canceled = true
-
-                const persistantAbility = roomState.persistantAbilities.find((a) => a.key === lastAbility.key && a.bakuganKey === lastAbility.bakuganKey && a.userId === lastAbility.userId && !a.canceled)
-                if (persistantAbility) persistantAbility.canceled = true
-
+                CancelAbilityCardEffect({
+                    ability: lastAbility,
+                    roomState: roomState,
+                    slotOfGate: slotOfGate
+                })
             })
         }
 
@@ -345,16 +326,20 @@ export const HaosImmobilisation: abilityCardsType = {
                 const player = roomState?.players.find((p) => p.userId === userId)
 
                 if (user && player) {
-                    user.currentPower += 100
-                    player.usable_abilitys = 3
-                    PowerChangeDirectiveAnumation({
-                        animations: roomState?.animations,
-                        bakugans: [user],
-                        powerChange: 100,
-                        malus: false,
-                        turn: roomState.turnState.turnCount
 
+                    PowerChange({
+                        bakugan: user,
+                        G: 100,
+                        malus: false,
+                        roomState: roomState
                     })
+
+                    player.usable_abilitys = 3
+                    NewAdditionnalMessage({
+                        roomState: roomState,
+                        text: `${player.username} can user ${player.usable_abilitys} now.`
+                    })
+
                 }
             }
         }
@@ -446,17 +431,17 @@ export const SupportLight: abilityCardsType = {
         const { battleInProcess, paused, slot } = roomState.battleState
         if (!battleInProcess) return false
         if (battleInProcess && paused) return false
-        if(slot === null) return false
+        if (slot === null) return false
 
         const slotOfBakugan = roomState.protalSlots[Slots.indexOf(slot)]
-        if(slotOfBakugan.portalCard === null) return false
-        if(slotOfBakugan.portalCard.userId === bakugan.userId) return false 
-        if(!slotOfBakugan.state.open) return false
-        if(slotOfBakugan.state.canceled) return false
+        if (slotOfBakugan.portalCard === null) return false
+        if (slotOfBakugan.portalCard.userId === bakugan.userId) return false
+        if (!slotOfBakugan.state.open) return false
+        if (slotOfBakugan.state.canceled) return false
 
         const card = GateCardsList.find((c) => c.key === slotOfBakugan.portalCard?.key)
-        if(!card) return false
-        if(!card.onCanceled) return false
+        if (!card) return false
+        if (!card.onCanceled) return false
 
         return true
     },

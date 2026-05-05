@@ -1,3 +1,4 @@
+import { CancelAbilityCardEffect } from "../../function/index.js"
 import { AnimationDirectivesTypes } from "../../type/animations-directives.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 import { AbilityCardsList } from "../ability-cards.js"
@@ -24,32 +25,11 @@ export const RayonGamma: exclusiveAbilitiesType = {
         if (slotOfGate) {
             // const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
             abilities.forEach((lastAbility) => {
-                const ability = lists.find((a) => a.key === lastAbility.key)
-                const abilityUser = BakuganList.find((b) => b.key === lastAbility.bakuganKey)
-                if (!abilityUser) return
-                if (!ability) return
-
-                const animation: AnimationDirectivesTypes = {
-                    type: 'CANCEL_ABILITY_CARD',
-                    data: {
-                        card: ability.key,
-                        attribut: abilityUser.attribut
-                    },
-                    message: [{
-                        text: `${ability.name} of ${abilityUser.name} as been nullified !`,
-                        turn: roomState?.turnState.turnCount
-                    }],
-                    resolve: false
-                }
-
-                roomState?.animations.push(animation)
-
-                if (ability && ability.onCanceled) ability.onCanceled({ roomState, bakuganKey: lastAbility.bakuganKey, slot: slot, userId: lastAbility.userId })
-
-                lastAbility.canceled = true
-
-                const persistantAbility = roomState.persistantAbilities.find((a) => a.key === lastAbility.key && a.bakuganKey === lastAbility.bakuganKey && a.userId === lastAbility.userId && !a.canceled)
-                if (persistantAbility) persistantAbility.canceled = true
+                CancelAbilityCardEffect({
+                    ability: lastAbility,
+                    roomState: roomState,
+                    slotOfGate: slotOfGate,
+                })
 
             })
         }

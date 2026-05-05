@@ -15,9 +15,7 @@ export const MineFantome: gateCardType = {
             slotOfGate.state.open = true
             const bakugans = slotOfGate.bakugans
             bakugans.forEach((bakugan) => {
-                if (bakugan.statut.protected) return
-                if (bakugan.statut.protectedAgainstGate) return
-                ElimineBakuganEffect({ bakugan: bakugan, roomState: roomState })
+                ElimineBakuganEffect({ bakugan: bakugan, roomState: roomState, gateCardProtection: true })
             })
 
             roomState.turnState.turn = slotOfGate.portalCard.userId
@@ -75,11 +73,10 @@ export const Echange: gateCardType = {
 
 
                 usersBakugan.forEach((b) => {
-                    if (b.statut.protected) return
-                    if (b.statut.protectedAgainstGate) return
                     ElimineBakuganEffect({
                         bakugan: b,
-                        roomState: roomState
+                        roomState: roomState,
+                        gateCardProtection: true
                     })
                 })
 
@@ -100,12 +97,11 @@ export const Echange: gateCardType = {
             if (totalPowerOpponentsBakugans >= 400) {
 
                 opponentsBakugan.forEach((b) => {
-                    if (b.statut.protected) return
-                    if (b.statut.protectedAgainstGate) return
 
                     ElimineBakuganEffect({
                         bakugan: b,
-                        roomState: roomState
+                        roomState: roomState,
+                        gateCardProtection: true
                     })
                 })
 

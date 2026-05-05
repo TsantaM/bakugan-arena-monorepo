@@ -1,11 +1,31 @@
+import { Bakugans } from "../../battle-brawlers/bakugans.js"
 import { bakuganOnSlot, stateType } from "../../type/room-types.js"
 import { ElimineBakuganDirectiveAnimation } from "../create-animation-directives/index.js"
+import { NewAdditionnalMessage } from "../new-additional-message.js"
 
-export function ElimineBakuganEffect({ bakugan, roomState }: { roomState: stateType, bakugan: bakuganOnSlot }) {
+export function ElimineBakuganEffect({ bakugan, roomState, gateCardProtection }: { roomState: stateType, bakugan: bakuganOnSlot, gateCardProtection?: boolean }) {
     if (!roomState) return
 
     const slotOfGate = roomState.protalSlots.find((slot) => slot.id === bakugan.slot_id)
     if (!slotOfGate) return
+
+    if (!gateCardProtection) {
+        if (bakugan.statut.protected || bakugan.statut.protectedAgainstAbility) {
+            NewAdditionnalMessage({
+                roomState: roomState,
+                text: `${Bakugans[bakugan.key].name} is protected`
+            })
+            return
+        }
+    } else {
+        if (bakugan.statut.protected || bakugan.statut.protectedAgainstGate) {
+            NewAdditionnalMessage({
+                roomState: roomState,
+                text: `${Bakugans[bakugan.key].name} is protected`
+            })
+            return
+        }
+    }
 
     ElimineBakuganDirectiveAnimation({
         animations: roomState.animations,
@@ -16,11 +36,11 @@ export function ElimineBakuganEffect({ bakugan, roomState }: { roomState: stateT
     })
 
     const deck = roomState.decksState.find((d) => d.userId === bakugan.userId)
-    if(!deck) return
+    if (!deck) return
 
     const bakuganOnSlotDeckState = deck.bakugans.find((b) => b.bakuganData.key === bakugan.key)
 
-    if(!bakuganOnSlotDeckState) return
+    if (!bakuganOnSlotDeckState) return
 
     const bakugansOnSlot = slotOfGate.bakugans.filter(
         (b) =>
@@ -35,5 +55,5 @@ export function ElimineBakuganEffect({ bakugan, roomState }: { roomState: stateT
 
     bakuganOnSlotDeckState.bakuganData.onDomain = false
     bakuganOnSlotDeckState.bakuganData.elimined = true
-    
+
 }

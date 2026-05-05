@@ -1,4 +1,4 @@
-import { CancelAbilityCard, PowerChangeDirectiveAnumation } from "../../function/index.js"
+import { CancelAbilityCard, PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 import { TentaclearHaos } from "../bakugans/tentacleer.js"
 
@@ -16,14 +16,11 @@ export const SolarRay: exclusiveAbilitiesType = {
         const user = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
 
         if (!user) return null
-        user.currentPower += 100
-        PowerChangeDirectiveAnumation({
-            animations: roomState?.animations,
-            bakugans: [user],
-            powerChange: 100,
+        PowerChange({
+            bakugan: user,
+            G: 100,
             malus: false,
-            turn: roomState.turnState.turnCount
-
+            roomState: roomState
         })
 
         if (slotOfGate) {
@@ -45,14 +42,11 @@ export const SolarRay: exclusiveAbilitiesType = {
         const user = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
 
         if (!user) return null
-        user.currentPower -= 100
-        PowerChangeDirectiveAnumation({
-            animations: roomState?.animations,
-            bakugans: [user],
-            powerChange: 100,
+        PowerChange({
+            bakugan: user,
+            G: 100,
             malus: true,
-            turn: roomState.turnState.turnCount
-
+            roomState: roomState
         })
     },
     canUse({ roomState, bakugan }) {

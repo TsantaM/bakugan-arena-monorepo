@@ -1,4 +1,4 @@
-import { PowerChangeDirectiveAnumation } from "../../function/index.js";
+import { PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js";
 import { Slots } from "../../store/slots.js";
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js";
 import { portalSlotsTypeElement } from "../../type/room-types.js";
@@ -20,14 +20,11 @@ export const LifeDrew: exclusiveAbilitiesType = {
         const bakugans = slots.map((s) => s.bakugans).flat().filter((b) => b.userId === userId)
         bakugans.forEach((b) => {
             if (b.userId !== userId) return
-            b.currentPower += 50
-            PowerChangeDirectiveAnumation({
-                animations: roomState.animations,
-                bakugans: [b],
-                powerChange: 50,
+            PowerChange({
+                bakugan: b,
+                G: 50,
                 malus: false,
-                turn: roomState.turnState.turnCount
-
+                roomState: roomState
             })
         })
 
@@ -43,14 +40,11 @@ export const LifeDrew: exclusiveAbilitiesType = {
         const bakugans = slots.map((s) => s.bakugans).flat().filter((b) => b.userId === userId)
         bakugans.forEach((b) => {
             if (b.userId !== userId) return
-            b.currentPower -= 50
-            PowerChangeDirectiveAnumation({
-                animations: roomState.animations,
-                bakugans: [b],
-                powerChange: 50,
+            PowerChange({
+                bakugan: b,
+                G: 50,
                 malus: true,
-                turn: roomState.turnState.turnCount
-
+                roomState: roomState
             })
         })
     },
