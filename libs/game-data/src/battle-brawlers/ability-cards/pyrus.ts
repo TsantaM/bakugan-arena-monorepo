@@ -310,7 +310,7 @@ export const TourbillonDeFeu: abilityCardsType = {
                 })
 
                 PowerChange({
-                    bakugan: user,
+                    bakugan: opponent,
                     G: 100,
                     malus: true,
                     roomState: roomState
@@ -328,25 +328,18 @@ export const TourbillonDeFeu: abilityCardsType = {
             const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
 
             if (user && opponent) {
-                user.currentPower -= 100
-                PowerChangeDirectiveAnumation({
-                    animations: roomState.animations,
-                    bakugans: [user],
-                    powerChange: 100,
+                PowerChange({
+                    bakugan: user,
+                    G: 100,
                     malus: true,
-                    turn: roomState.turnState.turnCount
-
+                    roomState: roomState
                 })
 
-                opponent.currentPower += 100
-
-                PowerChangeDirectiveAnumation({
-                    animations: roomState.animations,
-                    bakugans: [opponent],
-                    powerChange: 100,
+                PowerChange({
+                    bakugan: opponent,
+                    G: 100,
                     malus: false,
-                    turn: roomState.turnState.turnCount
-
+                    roomState: roomState
                 })
             }
         }

@@ -170,28 +170,44 @@ export type bakuganToMoveType2 = {
 
 export type AbilityCardsActions = {
     type: 'SELECT_SLOT',
+    target?: string // Le joueur qui va recevoir l'action request,
     message: string,
+    skipable?: boolean,
     slots: slots_id[]
 } | {
     type: 'SELECT_BAKUGAN_TO_SET',
+    target?: string // Le joueur qui va recevoir l'action request,
     message: string,
-    bakugans: bakuganInDeck[]
+    skipable?: boolean,
+    bakugans: bakuganInDeck[],
 } | {
     type: 'MOVE_BAKUGAN_TO_ANOTHER_SLOT',
+    target?: string // Le joueur qui va recevoir l'action request,
     message: string,
     bakugans: bakuganToMoveType2[],
+    skipable?: boolean,
     slots: slots_id[]
 } | {
     type: 'SELECT_BAKUGAN_ON_DOMAIN',
+    target?: string // Le joueur qui va recevoir l'action request,
     message: string,
+    skipable?: boolean,
     bakugans: bakuganToMoveType2[],
 } | {
     type: 'ATTRACT_BAKUGAN',
+    target?: string // Le joueur qui va recevoir l'action request,
     message: string,
+    skipable?: boolean,
     bakugans: bakuganToMoveType2[]
 } | {
     type: 'CARD_FAILED',
     message: string
+} | {
+    type : 'SELECT_ABILITY_CARD',
+    target?: string,// Le joueur qui va recevoir l'action request,
+    message: string,
+    skipable?: boolean,
+    data: []
 }
 
 export type resolutionType = {
