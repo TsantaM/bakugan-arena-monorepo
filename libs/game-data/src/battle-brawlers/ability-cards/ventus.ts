@@ -288,6 +288,11 @@ export const TornadeExtreme: abilityCardsType = {
             slot: bakugan.slot_id
         }))
 
+        if (bakugans.length === 0) {
+            return animation
+        }
+
+
         const request: AbilityCardsActions = {
             type: 'SELECT_BAKUGAN_ON_DOMAIN',
             message: 'Scarlet Twister : Select a Bakugan to drag',

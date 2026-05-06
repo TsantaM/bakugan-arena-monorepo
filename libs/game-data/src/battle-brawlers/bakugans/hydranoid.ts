@@ -8,7 +8,7 @@ export const HydranoidDarkus: bakuganType = {
     image: 'hydranoid',
     powerLevel: 370,
     family: 'Hydranoid',
-    exclusiveAbilities: ['chambre-de-gravité', 'bouclier-fusion'],
+    exclusiveAbilities: ['chambre-de-gravité', 'bouclier-fusion', 'chaos-of-darkness'],
     banList: StarterBanList,
     canChangeAttribut: false
 }

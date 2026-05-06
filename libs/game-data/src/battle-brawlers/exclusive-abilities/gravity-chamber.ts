@@ -38,7 +38,7 @@ export const ChambreDeGravite: exclusiveAbilitiesType = {
                 if (slotsWithOpponent.length > 0) {
 
                     const bakugans = slotsWithOpponent.map((slot) => slot.bakugans.filter((b) => b.userId !== user.userId)).flat()
-                    
+
                     bakugans.forEach((b) => {
 
                         if (b.currentPower < user.currentPower) {
@@ -74,7 +74,7 @@ export const ChambreDeGravite: exclusiveAbilitiesType = {
                         // }
                     })
 
-                    ComeBackBakuganEffect({bakugan: user, roomState: roomState})
+                    ComeBackBakuganEffect({ bakugan: user, roomState: roomState })
 
                 }
 
@@ -112,6 +112,10 @@ export const ChambreDeGravite: exclusiveAbilitiesType = {
         )
 
         if (slotsWithOpponent.length === 0) return false
+
+        const slotOfUser = roomState.protalSlots[Slots.indexOf(bakugan.slot_id)]
+        const opponents = slotOfUser.bakugans.filter((b) => b.userId !== bakugan.userId)
+        if (opponents.length > 0) return false
 
         return true
     },

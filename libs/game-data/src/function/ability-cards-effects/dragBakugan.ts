@@ -25,6 +25,7 @@ export function dragBakuganToUserSlot({
 
     const targetSlotId = resolution.data.slot;
     const targetBakuganKey = resolution.data.bakugan;
+    const targetUserId = resolution.data.userId
 
     const slotTarget = roomState.protalSlots.find(s => s.id === targetSlotId);
     const slotOfGate = roomState.protalSlots.find(s => s.id === resolution.slot);
@@ -32,7 +33,7 @@ export function dragBakuganToUserSlot({
     if (!slotOfGate || !slotTarget || !targetBakuganKey) return;
 
     const targetIndex = slotTarget.bakugans.findIndex(b => b.key === targetBakuganKey);
-    const bakuganToDrag = slotTarget.bakugans.find(b => b.key === targetBakuganKey);
+    const bakuganToDrag = slotTarget.bakugans.find(b => b.key === targetBakuganKey && b.userId === targetUserId);
 
     if (!bakuganToDrag) return;
     if(bakuganToDrag.statut.protected || bakuganToDrag.statut.protectedAgainstAbility) {

@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io/dist";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { SetBakuganOnGate } from "../functions/set-bakugan-server";
-import { AbilityCardsList, ActivePlayerActionRequestType, attribut, BakuganList, ExclusiveAbilitiesList, InactivePlayerActionRequestType, onBoardBakugans, removeActionByType, SelectAbilityCardFilters, SelectAbilityCardInNeutralFilters, setBakuganProps, Slots, slots_id, stateType } from "@bakugan-arena/game-data";
+import { AbilityCardsList, ActivePlayerActionRequestType, attribut, BakuganList, bakuganOnSlot, ExclusiveAbilitiesList, InactivePlayerActionRequestType, onBoardBakugans, removeActionByType, SelectAbilityCardFilters, SelectAbilityCardInNeutralFilters, setBakuganProps, Slots, slots_id, stateType } from "@bakugan-arena/game-data";
 import { turnActionUpdater } from "./turn-action";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { EmitMessage } from "../functions/emit-messages";
@@ -33,19 +33,51 @@ export function AddAbilities({ roomState, request, bakugan, slot, userId, attrib
             roomState: roomState
         })
     }
+
+    const bakuganOnDomain: bakuganOnSlot | undefined =
+        roomState.protalSlots[Slots.indexOf(slot)].bakugans.find(
+            (b) => b.userId === userId && b.key === bakugan
+        )
+
+    if (!bakuganOnDomain) return
+
     const abilities = [
-        selectAbilitiesResult && selectAbilitiesResult.usableAbilities && selectAbilitiesResult.usableAbilities.map((ability) => ({
-            key: ability.key,
-            name: ability.name,
-            description: ability.description,
-            image: AbilityCardsList.find((card) => card.key === ability.key)?.image || ''
-        })),
-        selectAbilitiesResult && selectAbilitiesResult.usableExclusives && selectAbilitiesResult.usableExclusives.filter((ability) => ability !== undefined).map((ability) => ({
-            key: ability.key,
-            name: ability.name,
-            description: ability.description,
-            image: ExclusiveAbilitiesList.find((card) => card.key === ability.key)?.image || ''
-        }))].flat().filter((ability) => ability !== undefined)
+        selectAbilitiesResult?.usableAbilities?.map((ability) => {
+            const fullCard = AbilityCardsList.find((card) => card.key === ability.key)
+            if (!fullCard) return undefined
+
+            // 🔥 CHECK canUse
+            if (fullCard.canUse && !fullCard.canUse({ roomState, bakugan: bakuganOnDomain })) {
+                return undefined
+            }
+
+            return {
+                key: ability.key,
+                name: ability.name,
+                description: ability.description,
+                image: fullCard.image || ''
+            }
+        }),
+
+        selectAbilitiesResult?.usableExclusives?.filter((ability) => ability !== undefined).map((ability) => {
+                const fullCard = ExclusiveAbilitiesList.find((card) => card.key === ability.key)
+                if (!fullCard) return undefined
+
+                // 🔥 CHECK canUse
+                if (fullCard.canUse && !fullCard.canUse({ roomState, bakugan: bakuganOnDomain })) {
+                    return undefined
+                }
+
+                return {
+                    key: ability.key,
+                    name: ability.name,
+                    description: ability.description,
+                    image: fullCard.image || ''
+                }
+        })
+    ]
+        .flat()
+        .filter((ability) => ability !== undefined)
 
     const abilitieRequest: onBoardBakugans = {
         slot: slot,

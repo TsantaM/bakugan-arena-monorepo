@@ -1,8 +1,10 @@
 
 import { exclusiveAbilitiesType } from "../index.js";
 import { AileEnflamee } from "./exclusive-abilities/aile-enflammee.js";
+import { AmunRa } from "./exclusive-abilities/amun-ra.js";
 import { AntiMuse } from "./exclusive-abilities/anti-muse.js";
 import { BouclierFusion } from "./exclusive-abilities/bouclier-fusion.js";
+import { ChaosOfDarkness } from "./exclusive-abilities/chaos-of-darkness.js";
 import { DepthTornado } from "./exclusive-abilities/depht-tornado.js";
 import { DimmensionQuatre } from "./exclusive-abilities/dimmension-quatre.js";
 import { DivisionHolographique } from "./exclusive-abilities/division-holographique.js";
@@ -18,12 +20,14 @@ import { ImpactMajeur } from "./exclusive-abilities/impact-majeur.js";
 import { JavelotAquos } from "./exclusive-abilities/javelot-aquos.js";
 import { LanceDeFeu } from "./exclusive-abilities/lance-de-feu.js";
 import { LanceEclair } from "./exclusive-abilities/lance-eclair.js";
+import { LeapSting } from "./exclusive-abilities/leap-sting.js";
 import { LifeDrew } from "./exclusive-abilities/life-drew.js";
 import { MachettesJumelles } from "./exclusive-abilities/machettes-jumelles.js";
 import { MaitreDesProfondeurs } from "./exclusive-abilities/maitre-des-profondeurs.js";
 import { Marionnette } from "./exclusive-abilities/marionnette.js";
 import { MassueGigantesque } from "./exclusive-abilities/massue-gigantesque.js";
 import { MegaFlareBlinder } from "./exclusive-abilities/mega-flare-blinder.js";
+import { NoiseSlap } from "./exclusive-abilities/noise-slap.js";
 import { Obstruction } from "./exclusive-abilities/obstruction.js";
 import { OmbreBleue } from "./exclusive-abilities/ombre-bleue.js";
 import { PlexusSolaire } from "./exclusive-abilities/plexus-solaire.js";
@@ -91,7 +95,11 @@ export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [GardianField.key]: GardianField,
     [LifeDrew.key]: LifeDrew,
     [SlashZero.key]: SlashZero,
-    [SpitPointer.key]: SpitPointer
+    [SpitPointer.key]: SpitPointer,
+    [NoiseSlap.key]: NoiseSlap,
+    [LeapSting.key]: LeapSting,
+    [ChaosOfDarkness.key]: ChaosOfDarkness,
+    [AmunRa.key]: AmunRa
 }
 
 export const ExclusiveAbilitiesList: exclusiveAbilitiesType[] = Object.values(ExclusiveAbilities) 

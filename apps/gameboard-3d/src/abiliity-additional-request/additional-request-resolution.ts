@@ -259,16 +259,19 @@ export function AdditionalRequestResolution({ request, camera, plane, socket, sc
 
             // On stoppe la phase 
 
-            const slot = bakugans.find((b) => b.key === bakugan?.userData.bakuganKey)?.slot
+            const bakuganTarget = bakugans.find((b) => b.key === bakugan?.userData.bakuganKey)
+            const slot = bakuganTarget?.slot
 
+            if (!bakuganTarget) return
             if (!slot) return
             const resolution: resolutionType = {
                 bakuganKey: request.bakuganKey,
                 cardKey: request.cardKey,
                 data: {
                     type: 'SELECT_BAKUGAN_ON_DOMAIN',
-                    bakugan: bakugan.userData.bakuganKey,
-                    slot: slot
+                    bakugan: bakuganTarget.key,
+                    slot: slot,
+                    userId: bakuganTarget.userId
                 },
                 roomId: request.roomId,
                 slot: request.slot,
@@ -289,7 +292,7 @@ export function AdditionalRequestResolution({ request, camera, plane, socket, sc
     }
 
     if (request.data.type === 'SELECT_BAKUGAN_TO_SET') {
-        
+
         BuildBakuganSelecterCards({
             bakugans: request.data.bakugans
         })

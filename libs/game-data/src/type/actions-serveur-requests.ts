@@ -214,7 +214,8 @@ export type resolutionDataType = {
 } | {
     type: 'SELECT_BAKUGAN_ON_DOMAIN',
     bakugan: string,
-    slot: slots_id
+    slot: slots_id,
+    userId: string
 } | {
     type: 'ATTRACT_BAKUGAN',
     bakugan: bakuganToMoveType2

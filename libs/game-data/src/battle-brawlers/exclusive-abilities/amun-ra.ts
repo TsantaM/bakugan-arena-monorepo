@@ -1,11 +1,10 @@
-import { CancelAbilityCard, PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js"
+import { PowerChange } from "../../function/index.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
-import { TentaclearHaos } from "../bakugans/tentacleer.js"
 
-export const SolarRay: exclusiveAbilitiesType = {
-    key: 'solar-ray',
-    name: 'Solar Ray',
-    description: `Add 100 G to Tentaclear and cancel all opponent's abilities on the same Gate Card`,
+export const AmunRa: exclusiveAbilitiesType = {
+    key: 'amun-ra',
+    name: 'Amun Ra',
+    description: `Add 100 G to Manion.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
@@ -23,16 +22,6 @@ export const SolarRay: exclusiveAbilitiesType = {
             roomState: roomState
         })
 
-        if (slotOfGate) {
-            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
-            const abilities = slotOfGate.activateAbilities.filter((a) => a.userId !== userId)
-            if (user) {
-                abilities.forEach((a) => {
-                    CancelAbilityCard({ abilityKey: a.key, bakuganKey: a.bakuganKey, roomState: roomState, slot: slot, userId: userId })
-                })
-            }
-        }
-
         return null
     },
     onCanceled({ roomState, userId, bakuganKey, slot }) {
@@ -48,11 +37,9 @@ export const SolarRay: exclusiveAbilitiesType = {
             malus: true,
             roomState: roomState
         })
+
     },
     canUse({ roomState, bakugan }) {
-        if (!roomState) return false
-        if (bakugan.key !== TentaclearHaos.key) return false
-
         const { battleInProcess, paused, slot } = roomState.battleState
 
         if (!battleInProcess || paused || slot === null) return false

@@ -84,4 +84,14 @@ export const DragonoidPlus: exclusiveAbilitiesType = {
 
         }
     },
+    canUse({ roomState, bakugan }) {
+
+        const { battleInProcess, paused, slot } = roomState.battleState
+
+        if(!battleInProcess || paused || slot === null) return false
+
+        if(bakugan.slot_id !== slot) return false
+
+        return true
+    },
 }
