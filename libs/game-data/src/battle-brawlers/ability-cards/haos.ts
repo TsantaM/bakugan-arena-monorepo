@@ -5,7 +5,7 @@ import { NewAdditionnalMessage } from "../../function/new-additional-message.js"
 import { Slots, StandardCardsImages } from "../../store/store-index.js";
 import type { AbilityCardsActions, abilityCardsType, AnimationDirectivesTypes, bakuganOnSlot } from "../../type/type-index.js";
 import { AbilityCardsList } from "../ability-cards.js";
-import { BakuganList } from "../bakugans.js";
+import { Bakugans } from "../bakugans.js";
 import { ExclusiveAbilitiesList } from "../exclusive-abilities.js";
 import { GateCardsList } from "../gate-gards.js";
 
@@ -243,7 +243,6 @@ export const ContreMaitrise: abilityCardsType = {
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, slot, cardToCancel }) => {
         if (!roomState) return null
-        const lists = [AbilityCardsList, ExclusiveAbilitiesList].flat()
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
 
         if (cardToCancel) {
@@ -251,11 +250,32 @@ export const ContreMaitrise: abilityCardsType = {
             const ability = slotTarget.activateAbilities.find((a) => a.key === cardToCancel.cardKey && a.userId === cardToCancel.userId && a.bakuganKey === cardToCancel.bakuganKey)
 
             if (ability) {
-                CancelAbilityCardEffect({
-                    ability: ability,
+
+                const card = [...AbilityCardsList, ...ExclusiveAbilitiesList].find((card) => card.key === ability.key)
+                const cardUser = Bakugans[cardToCancel.bakuganKey]
+
+                const animation: AnimationDirectivesTypes = {
+                    type: 'CANCEL_ABILITY_CARD',
+                    data: {
+                        card: ability.key,
+                        attribut: cardUser.attribut
+                    },
+                    message: [{
+                        text: `${card?.name || 'Ability Card'} of ${cardUser.name} as been nullified !`,
+                        turn: roomState?.turnState.turnCount
+                    }],
+                    resolve: false
+                }
+
+                roomState.animations.push(animation)
+
+                if(card?.onCanceled) card.onCanceled({
+                    bakuganKey: cardToCancel.bakuganKey,
                     roomState: roomState,
-                    slotOfGate: slotTarget
+                    slot: cardToCancel.slot,
+                    userId: cardToCancel.userId
                 })
+
                 ability.canceled = true
             }
 

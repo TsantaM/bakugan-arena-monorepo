@@ -1,5 +1,13 @@
 import { abilityCardsType } from "../index.js";
-import { AquosSubterra, AquosVentus, BarrageDeau, CombatAerien, ContreMaitrise, CoupDeGrace, DarkusAquos, DarkusPyrus, DepthDive, EarthPower, EarthShatter, EclatSoudain, HaosDarkus, HaosImmobilisation, HaosVentus, JetEnflamme, MagmaSupreme, MirageAquatique, MurDeFeu, PlongeeEnEauProfonde, PyrusAquosHaos, PyrusDarkus, RetourDair, RetroAction, SouffleTout, SubterraAquos, SubterraHaos, SubterraPyrus, SupportLight, TectonicSwipe, TornadeChaosTotal, TornadeExtreme, TourbillonDeFeu, VengeanceAlItalienne, VentusHaos, VentusPyrus, VentusSubterraDarkus } from "./ability-cards/index.js";
+import { BarrageDeau, DepthDive, MirageAquatique, PlongeeEnEauProfonde } from "./ability-cards/aquos.js";
+import { PyrusAquosHaos, VentusSubterraDarkus } from "./ability-cards/combination-triple.js";
+import { AquosVentus, DarkusAquos, HaosDarkus, SubterraHaos, SubterraPyrus, VentusPyrus } from "./ability-cards/combinations-simple.js";
+import { CoupDeGrace, VengeanceAlItalienne } from "./ability-cards/darkus.js";
+import { AquosSubterra, DarkusPyrus, HaosVentus, PyrusDarkus, SubterraAquos, VentusHaos } from "./ability-cards/diagonal-combination.js";
+import { ContreMaitrise, EclatSoudain, HaosImmobilisation, SupportLight } from "./ability-cards/haos.js";
+import { JetEnflamme, MurDeFeu, RetroAction, TourbillonDeFeu } from "./ability-cards/pyrus.js";
+import { EarthPower, EarthShatter, MagmaSupreme, TectonicSwipe } from "./ability-cards/subterra.js";
+import { CombatAerien, RetourDair, SouffleTout, TornadeChaosTotal, TornadeExtreme } from "./ability-cards/ventus.js";
 
 export const AbilityCards: Record<string, abilityCardsType> = {
     // Pyrus

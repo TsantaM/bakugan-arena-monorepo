@@ -417,6 +417,22 @@ export function AdditionalRequestResolution({ request, camera, plane, socket, sc
 
     if (request.data.skipable) {
 
+        const turnActionContainer = document.createElement('div')
+        turnActionContainer.classList.add('turn-interface')
+
+        const button = document.createElement('button')
+        button.id = 'next-turn-button'
+
+        const img = document.createElement('img')
+        img.src = 'next-turn-icon.png'
+        img.alt = ''
+        img.id = 'next-turn-button-icon'
+
+        button.appendChild(img)
+
+        document.body.appendChild(turnActionContainer)
+        document.body.appendChild(button)
+
         let clickHandler: (() => void) | null = null
 
         const turnActionButton = document.getElementById('next-turn-button')

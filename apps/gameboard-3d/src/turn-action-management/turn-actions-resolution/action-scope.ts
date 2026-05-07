@@ -40,5 +40,7 @@ export function clearTurnInterface() {
     existingDescription?.remove();
     const descriptions = document.querySelectorAll('.card-description')
     descriptions.forEach((description) => description.remove())
+    const additionalDialog = document.getElementById('additional-effect-dialog-box')
+    additionalDialog?.remove()
     
 }
