@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: metal;
+  src: url('/fonts/square_metall-7.ttf');
+}
+
+img {
+  -webkit-touch-callout: none !important;
+  user-select: none !important;
+}
+
+p {
+  font-family: metal;
+  color: whitesmoke;
+}
+
+body {
+  overflow: hidden;
+  -webkit-touch-callout: none !important;
+  user-select: none !important;
+}
+
+/* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  cursor: default;
+  list-style: none;
+} */

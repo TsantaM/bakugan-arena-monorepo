@@ -8,6 +8,7 @@ import { BuildBakuganSelecterCards } from "../turn-action-management/turn-action
 import { removePreviousDialogBoxAnimation } from "../animations/show-message-animation";
 import { SelectSlotToSetBakugan } from "../turn-action-management/turn-actions-function/select-slot-to-set-bakugan";
 import { SelectBakuganOnMouseMove } from "../turn-action-management/turn-actions-function/select-bakugan-on-mouse-move";
+import { BuildSelectAbilityCard } from "../turn-action-management/turn-action-builder/build-select-ability-card";
 
 
 export function AdditionalRequestResolution({ request, camera, plane, socket, scene }: {
@@ -376,6 +377,78 @@ export function AdditionalRequestResolution({ request, camera, plane, socket, sc
             bak.addEventListener('mouseleave', mouseLeave)
             window.addEventListener('click', clickHandler)
         })
+
+    }
+
+    if (request.data.type === 'SELECT_ABILITY_CARD') {
+        BuildSelectAbilityCard({
+            action: request.data
+        })
+        const SelectablesCards = request.data.data
+
+        const cardsToSelect = document.querySelectorAll('.card-selecter');
+        cardsToSelect.forEach(card => {
+            card.addEventListener('click', () => {
+                const data = SelectablesCards.find(c => c.key === card.getAttribute('data-key'));
+                if (!data) return
+
+                console.log('card' + data.name)
+
+                const resolution: resolutionType = {
+                    bakuganKey: request.bakuganKey,
+                    cardKey: request.cardKey,
+                    roomId: request.roomId,
+                    slot: request.slot,
+                    userId: request.userId,
+                    data: {
+                        type: 'SELECT_ABILITY_CARD',
+                        card: data,
+                        cardOwnerId: request.data.target ? request.data.target : request.userId
+                    }
+                }
+
+                socket.emit('ability-additional-request', resolution)
+
+                clearTurnInterface()
+            })
+        })
+
+    }
+
+    if (request.data.skipable) {
+
+        let clickHandler: (() => void) | null = null
+
+        const turnActionButton = document.getElementById('next-turn-button')
+        if (!turnActionButton) return
+
+        function cleanup() {
+            if (clickHandler) {
+                turnActionButton?.removeEventListener('click', clickHandler)
+                clickHandler = null
+            }
+        }
+
+        clickHandler = () => {
+            const resolution: resolutionType = {
+                bakuganKey: request.bakuganKey,
+                cardKey: request.cardKey,
+                roomId: request.roomId,
+                slot: request.slot,
+                userId: request.userId,
+                data: {
+                    type: 'SKIP_ACTION'
+                }
+            }
+
+            socket.emit('ability-additional-request', resolution)
+
+            clearTurnInterface()
+            cleanup()
+        }
+
+        turnActionButton.addEventListener('click', clickHandler)
+
 
     }
 

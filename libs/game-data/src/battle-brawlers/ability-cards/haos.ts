@@ -241,10 +241,27 @@ export const ContreMaitrise: abilityCardsType = {
     maxInDeck: 3,
     image: StandardCardsImages.haos,
     usable_in_neutral: false,
-    onActivate: ({ roomState, userId, slot }) => {
+    onActivate: ({ roomState, userId, slot, cardToCancel }) => {
         if (!roomState) return null
         const lists = [AbilityCardsList, ExclusiveAbilitiesList].flat()
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+
+        if (cardToCancel) {
+            const slotTarget = roomState.protalSlots[Slots.indexOf(cardToCancel.slot)]
+            const ability = slotTarget.activateAbilities.find((a) => a.key === cardToCancel.cardKey && a.userId === cardToCancel.userId && a.bakuganKey === cardToCancel.bakuganKey)
+
+            if (ability) {
+                CancelAbilityCardEffect({
+                    ability: ability,
+                    roomState: roomState,
+                    slotOfGate: slotTarget
+                })
+                ability.canceled = true
+            }
+
+        }
+
+
         if (slotOfGate) {
             // const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
             const abilities = slotOfGate.activateAbilities.filter((ability) => {

@@ -377,15 +377,15 @@ async function processAnimationQueue(userId: string,
 
         }
 
-        if(current.type === 'ADDITIONAL_MESSAGE') {
+        if (current.type === 'ADDITIONAL_MESSAGE') {
             sendMessageToParent(current.message)
         }
 
-        if(current.type === 'ACTIVE_PROTECTION') {
+        if (current.type === 'ACTIVE_PROTECTION') {
             sendMessageToParent(current.message)
         }
 
-        if(current.type === 'REMOVE_PROTECTION') {
+        if (current.type === 'REMOVE_PROTECTION') {
             sendMessageToParent(current.message)
         }
 
@@ -496,7 +496,9 @@ export function registerSocketHandlers(
     })
 
     socket.on("ability-additional-request", async (request: AbilityCardsActionsRequestsType) => {
-        if (request.userId !== userId) return
+        if (!request.data.target && request.userId !== userId) return
+        if (request.data.target && request.data.target !== userId) return
+
 
         await currentAnimationPromise;
 

@@ -1,12 +1,12 @@
-import type { ActionType, SelectableAbilityCardAction } from "@bakugan-arena/game-data";
+import type { AbilityCardsActions, ActionType, SelectableGateCardAction } from "@bakugan-arena/game-data";
 import { CreateGateCardSelecter } from "../../functions/create-selecters";
 
-export function BuildSelectAbilityCard({ action }: { action: ActionType }) {
+export function BuildSelectAbilityCard({ action }: { action: ActionType | AbilityCardsActions }) {
 
     if (action.type !== "SELECT_ABILITY_CARD") return
 
-    const Abilities: SelectableAbilityCardAction = action.data.map((data) => data).flat()
-    
+    const Abilities: SelectableGateCardAction[] = action.data.map((data) => data).flat()
+
 
     const merged = [Abilities].flat()
 
@@ -19,13 +19,11 @@ export function BuildSelectAbilityCard({ action }: { action: ActionType }) {
     selectOne.appendChild(stackSelecteOne);
     document.body.appendChild(selectOne);
 
-    merged.forEach((bakugan) => {
+    merged.forEach((card, index) => {
 
-        bakugan.abilities.forEach((card, index) => {
-            CreateGateCardSelecter({
-                card: card,
-                index: index
-            })
+        CreateGateCardSelecter({
+            card: card,
+            index: index
         })
 
     })

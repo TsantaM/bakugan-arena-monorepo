@@ -1,0 +1,143 @@
+@media (width >=48rem
+  /* 768px */
+) {
+
+  .eliminated {
+    gap: 1vw !important;
+  }
+
+  .profile-picture {
+    width: 20vw;
+  }
+
+  .turn-count-number {
+    font-size: 3.5rem !important;
+  }
+
+  .power-container {
+    padding-right: 1vw;
+
+    p {
+      font-size: 2.25rem !important;
+    }
+  }
+
+  .active-ability-image {
+    width: 25vw !important;
+  }
+
+  .select-one {
+    padding: 0 !important;
+    align-items: center !important;
+
+    .stack-container {
+      transform: translateX(20%) translateY(50%) !important;
+      display: flex !important;
+      gap: 1;
+      height: 25% !important;
+    }
+
+    .bakugan-selecter {
+      .image-bakugan-selecter-container {
+        height: 30vh !important;
+      }
+    }
+
+  }
+
+  .skip-or-confirm-button {
+    width: 5vw !important;
+  }
+
+  .active-ability-image {
+    width: 25vw !important;
+  }
+
+  #next-turn-button {
+    position: absolute;
+    right: 5vw;
+    bottom: 1vw;
+    cursor: pointer;
+
+    img {
+      max-width: 7vw;
+      cursor: pointer;
+    }
+  }
+
+  .turn-interface {
+    width: 100dvw;
+    display: flex;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+
+    .open-gate-card-button {
+      width: 15dvw;
+    }
+
+  }
+
+  .stack-container {
+    min-width: 30vw !important;
+  }
+
+
+}
+
+@media (width >=64rem
+  /* 1024px */
+) {
+
+  .eliminated {
+    gap: 2vw !important;
+  }
+
+  .profile-picture {
+    width: 15vw;
+  }
+
+  .circle {
+    width: 1.75rem !important;
+    height: 1.75rem !important;
+  }
+
+  .turn-count-number {
+    font-size: 4.5rem !important;
+  }
+
+  .power-container {
+    padding-right: 0.5vw;
+
+    p {
+      font-size: 3rem !important;
+    }
+  }
+
+  .select-one {
+    padding: 0 !important;
+    align-items: center !important;
+
+    .stack-container {
+      transform: translateX(20%) translateY(50%) !important;
+      display: flex !important;
+      gap: 1;
+      height: 25% !important;
+    }
+
+    .bakugan-selecter {
+      .image-bakugan-selecter-container {
+        height: 30vh !important;
+      }
+    }
+
+  }
+
+  .skip-or-confirm-button {
+    width: 5vw !important;
+  }
+
+  .active-ability-image {
+    width: 25vw !important;
+  }
+
+}

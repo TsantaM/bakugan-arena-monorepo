@@ -1,7 +1,7 @@
-import type { ActionType, SelectableGateCardAction } from "@bakugan-arena/game-data";
+import type { AbilityCardsActions, ActionType, SelectableGateCardAction } from "@bakugan-arena/game-data";
 import { CreateGateCardSelecter } from "../../functions/create-selecters";
 
-export function BuildSelectGateCard({ action }: { action: ActionType }) {
+export function BuildSelectGateCard({ action }: { action: ActionType | AbilityCardsActions }) {
 
     if (action.type !== 'SELECT_GATE_CARD') return
 

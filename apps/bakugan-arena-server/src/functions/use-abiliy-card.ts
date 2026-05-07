@@ -156,7 +156,7 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
             const requests = Battle_Brawlers_Game_State[roomIndex].AbilityAditionalRequest
             if (!requests) return
             if (requests.length <= 0) return
-            const socket = roomData.connectedsUsers.get(requests[0].userId)
+            const socket = requests[0].data.target ? roomData.connectedsUsers.get(requests[0].data.target) : roomData.connectedsUsers.get(requests[0].userId)
             if (!socket) return
 
             const animations = Battle_Brawlers_Game_State[roomIndex].animations

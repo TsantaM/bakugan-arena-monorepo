@@ -1,0 +1,192 @@
+/* Turn Action CSS */
+
+#next-turn-button {
+  position: absolute;
+  z-index: 2000;
+  right: 5vw;
+  bottom: 1vw;
+  cursor: pointer;
+
+  img {
+    max-width: 15vw;
+    cursor: pointer;
+  }
+}
+
+.turn-interface {
+  z-index: 1000;
+  padding-left: 2vw;
+  position: absolute;
+  bottom: 1vh;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  gap: 3vw;
+  width: 1vw;
+  /* background: red; */
+
+  .bakugans {
+    display: flex;
+    gap: 0.5vw;
+    align-items: center;
+    justify-content: space-between;
+
+    .image-bakugan-selecter-container {
+      position: relative;
+      height: 15vh;
+      aspect-ratio: 1/1;
+
+      .bakugan-image-selecter {
+        transition: 0.2s;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        -webkit-touch-callout: none;
+        user-select: none;
+      }
+
+      /* Répétition avec select.css */
+
+      .bakugan-data {
+        text-align: center;
+        font-weight: bold;
+        font-size: 1rem;
+        opacity: 0;
+      }
+
+    }
+
+    .image-bakugan-selecter-container:hover {
+      .bakugan-image-selecter {
+        transform: translateY(-20%);
+      }
+
+      .bakugan-data {
+        animation-delay: 0.2s;
+        animation: textFade 0.5s forwards;
+      }
+    }
+
+    .selected-bakugan {
+      .bakugan-image-selecter {
+        transform: translateY(-20%);
+      }
+    }
+  }
+
+  .stack-container {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1vw;
+    height: 15vh;
+    aspect-ratio: 2/3;
+  }
+
+  .card-selecter {
+    place-self: center;
+    /* position: absolute; */
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 100%;
+    aspect-ratio: 2/3;
+
+    .card-description {
+      transition: 0.2s;
+      z-index: 2;
+      position: absolute;
+      display: none;
+      opacity: 0;
+      transform: translateX(-50%) translateY(-50%);
+    }
+
+    .gate-card-background {
+      transition: 0.2s;
+      z-index: 1;
+      /* position: absolute; */
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      -webkit-touch-callout: none;
+      user-select: none;
+    }
+  }
+
+  /* Répétition avec select.css */
+
+  .selected-card {
+    .gate-card-background {
+      transform: translateY(-25%);
+    }
+  }
+
+  .card-selecter::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 0;
+  }
+
+  .card-selecter:hover {
+
+    .gate-card-background {
+      transform: translateY(-25%);
+    }
+
+    .card-description {
+      display: block;
+      opacity: 1;
+      transform: translateY(-150%);
+    }
+
+  }
+
+  .card-selecter:hover::before {
+    transform: translateY(-25%);
+  }
+
+  .card-selecter.active {
+    .gate-card-background {
+      transform: translateY(-25%);
+    }
+  }
+
+  .open-gate-card-button {
+    padding: 1vw;
+    border-radius: 0.5rem;
+    color: #fff;
+    font-size: 1rem;
+    width: 25vw;
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+  }
+
+  .open-gate-card-button::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    background: #7b3306;
+    opacity: 0.5;
+  }
+
+  .open-gate-card-button:hover::before {
+    opacity: 1;
+    transition: 0.75;
+  }
+
+}

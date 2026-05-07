@@ -124,8 +124,15 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
                  * -> seulement si CE user est concerné
                  */
                 const abilityRequest = roomData.AbilityAditionalRequest[0]
-                if (abilityRequest && abilityRequest.userId === userId) {
-                    socket.emit('ability-additional-request', abilityRequest)
+                if (abilityRequest) {
+
+                    if (!abilityRequest.data.target && abilityRequest.userId === userId) {
+                        socket.emit('ability-additional-request', abilityRequest)
+                    } else {
+                        if(abilityRequest.data.target === userId) {
+                            socket.emit('ability-additional-request', abilityRequest)
+                        }
+                    }
                     return
                 }
                 /**

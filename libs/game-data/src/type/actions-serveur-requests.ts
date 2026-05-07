@@ -48,7 +48,7 @@ export type ActionType = {
     data: SelectableGateCardAction[]
 } | {
     type: 'SELECT_ABILITY_CARD',
-    data: SelectableAbilityCardAction[]
+    data: SelectableGateCardAction[]
 } | {
     type: 'SET_BAKUGAN',
     data: {
@@ -201,13 +201,15 @@ export type AbilityCardsActions = {
     bakugans: bakuganToMoveType2[]
 } | {
     type: 'CARD_FAILED',
-    message: string
+    skipable?: boolean,
+    message: string,
+    target?: string // Le joueur qui va recevoir l'action request,
 } | {
     type : 'SELECT_ABILITY_CARD',
     target?: string,// Le joueur qui va recevoir l'action request,
     message: string,
     skipable?: boolean,
-    data: []
+    data: SelectableGateCardAction[]
 }
 
 export type resolutionType = {
@@ -238,4 +240,10 @@ export type resolutionDataType = {
 } | {
     type: 'SELECT_SLOT',
     slot: slots_id
+} | {
+    type: 'SELECT_ABILITY_CARD',
+    cardOwnerId: string,
+    card: SelectableGateCardAction
+} | {
+    type: 'SKIP_ACTION'
 }
