@@ -5,6 +5,8 @@ import { Slots, StandardCardsImages } from "../../store/store-index.js";
 import RemoveRenfortAnimationDirective from "../../function/create-animation-directives/remove-renfort-animation-directive.js";
 import { PowerChange } from "../../function/ability-cards-effects/power-change.js";
 import { ProtectCardEffect, RemoveProtectionCardEffect } from "../../function/ability-cards-effects/protect-card-effect.js";
+import { ElementaryCardCancelerEffect } from "../../function/ability-cards-effects/elementary-card-canceler-effect.js";
+import { AbilityCardsList, ExclusiveAbilitiesList } from "../index.js";
 
 export const MurDeFeu: abilityCardsType = {
     key: "mur-de-feu",
@@ -345,5 +347,56 @@ export const TourbillonDeFeu: abilityCardsType = {
         }
 
         return null
+    },
+}
+
+export const BlazeReversal: abilityCardsType = {
+    key: 'blaze-reversal',
+    attribut: 'Pyrus',
+    name: 'Blaze Reversal',
+    description: `Nullifies the opponent's ability`,
+    maxInDeck: 3,
+    image: StandardCardsImages.haos,
+    usable_in_neutral: false,
+    onActivate: ({ roomState, userId, slot, cardToCancel }) => {
+        return ElementaryCardCancelerEffect({ roomState, userId, slot, cardToCancel })
+    },
+    activationConditions({ roomState, userId }) {
+
+        if (!roomState) return false
+
+        const { battleInProcess, paused, slot, turns } = roomState.battleState
+
+        if (!battleInProcess || paused) return false
+
+        return true
+
+    },
+    canUse({ roomState, bakugan }) {
+
+        if (!roomState) return false
+
+        const { battleInProcess, paused, slot, turns } = roomState.battleState
+
+        if (!battleInProcess || paused) return false
+
+        if (bakugan.slot_id !== slot) return false
+
+        const slotOfBattle = roomState.protalSlots.find((s) => s.id === slot)
+        if (!slotOfBattle) return false
+
+        const lists = [AbilityCardsList, ExclusiveAbilitiesList].flat()
+
+        const abilities = slotOfBattle.activateAbilities.filter((ability) => {
+            return (
+                !ability.canceled &&
+                ability.userId !== bakugan.userId &&
+                lists.some((a) => a.key === ability.key && a.onCanceled)
+            );
+        });
+
+        if (abilities.length < 1) return false
+
+        return true
     },
 }

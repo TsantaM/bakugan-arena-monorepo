@@ -2,6 +2,8 @@ import { bakuganOnSlot, type abilityCardsType } from "../../type/type-index.js";
 import { GateCardsList } from "../gate-gards.js";
 import { CancelGateCardDirectiveAnimation, PowerChange, PowerChangeDirectiveAnumation } from '../../function/index.js'
 import { Slots, StandardCardsImages } from "../../store/store-index.js";
+import { ElementaryCardCancelerEffect } from "../../function/ability-cards-effects/elementary-card-canceler-effect.js";
+import { AbilityCardsList, ExclusiveAbilitiesList } from "../index.js";
 
 export const CoupDeGrace: abilityCardsType = {
     key: 'coup-de-grace',
@@ -211,4 +213,55 @@ export const PoivreDesCayenne: abilityCardsType = {
             }
         }
     }
+}
+
+export const ShadowReversal: abilityCardsType = {
+    key: 'shadow-reversal',
+    attribut: 'Darkus',
+    name: 'Shadow Reversal',
+    description: `Nullifies the opponent's ability`,
+    maxInDeck: 3,
+    image: StandardCardsImages.haos,
+    usable_in_neutral: false,
+    onActivate: ({ roomState, userId, slot, cardToCancel }) => {
+        return ElementaryCardCancelerEffect({ roomState, userId, slot, cardToCancel })
+    },
+    activationConditions({ roomState, userId }) {
+
+        if (!roomState) return false
+
+        const { battleInProcess, paused, slot, turns } = roomState.battleState
+
+        if (!battleInProcess || paused) return false
+
+        return true
+
+    },
+    canUse({ roomState, bakugan }) {
+
+        if (!roomState) return false
+
+        const { battleInProcess, paused, slot, turns } = roomState.battleState
+
+        if (!battleInProcess || paused) return false
+
+        if (bakugan.slot_id !== slot) return false
+
+        const slotOfBattle = roomState.protalSlots.find((s) => s.id === slot)
+        if (!slotOfBattle) return false
+
+        const lists = [AbilityCardsList, ExclusiveAbilitiesList].flat()
+
+        const abilities = slotOfBattle.activateAbilities.filter((ability) => {
+            return (
+                !ability.canceled &&
+                ability.userId !== bakugan.userId &&
+                lists.some((a) => a.key === ability.key && a.onCanceled)
+            );
+        });
+
+        if (abilities.length < 1) return false
+
+        return true
+    },
 }

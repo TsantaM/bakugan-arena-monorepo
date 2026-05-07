@@ -1,13 +1,13 @@
 import { abilityCardsType } from "../index.js";
-import { BarrageDeau, DepthDive, MirageAquatique, PlongeeEnEauProfonde } from "./ability-cards/aquos.js";
+import { BarrageDeau, DepthDive, FlowInterference, MirageAquatique, PlongeeEnEauProfonde } from "./ability-cards/aquos.js";
 import { PyrusAquosHaos, VentusSubterraDarkus } from "./ability-cards/combination-triple.js";
 import { AquosVentus, DarkusAquos, HaosDarkus, SubterraHaos, SubterraPyrus, VentusPyrus } from "./ability-cards/combinations-simple.js";
-import { CoupDeGrace, VengeanceAlItalienne } from "./ability-cards/darkus.js";
+import { CoupDeGrace, ShadowReversal, VengeanceAlItalienne } from "./ability-cards/darkus.js";
 import { AquosSubterra, DarkusPyrus, HaosVentus, PyrusDarkus, SubterraAquos, VentusHaos } from "./ability-cards/diagonal-combination.js";
 import { ContreMaitrise, EclatSoudain, HaosImmobilisation, SupportLight } from "./ability-cards/haos.js";
-import { JetEnflamme, MurDeFeu, RetroAction, TourbillonDeFeu } from "./ability-cards/pyrus.js";
-import { EarthPower, EarthShatter, MagmaSupreme, TectonicSwipe } from "./ability-cards/subterra.js";
-import { CombatAerien, RetourDair, SouffleTout, TornadeChaosTotal, TornadeExtreme } from "./ability-cards/ventus.js";
+import { BlazeReversal, JetEnflamme, MurDeFeu, RetroAction, TourbillonDeFeu } from "./ability-cards/pyrus.js";
+import { EarthPower, EarthShatter, MagmaSupreme, TectonicSwipe, TerraLockdown } from "./ability-cards/subterra.js";
+import { CombatAerien, RetourDair, SouffleTout, StormCancel, TornadeChaosTotal, TornadeExtreme } from "./ability-cards/ventus.js";
 
 export const AbilityCards: Record<string, abilityCardsType> = {
     // Pyrus
@@ -18,6 +18,7 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     [TourbillonDeFeu.key]: TourbillonDeFeu,
     [PyrusDarkus.key]: PyrusDarkus,
     [SubterraPyrus.key]: SubterraPyrus,
+    [BlazeReversal.key]: BlazeReversal,
 
     // Aquos
 
@@ -28,6 +29,7 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     [AquosSubterra.key]: AquosSubterra,
     [AquosVentus.key]: AquosVentus,
     [DepthDive.key]: DepthDive,
+    [FlowInterference.key]: FlowInterference,
 
     // Subterra
 
@@ -39,6 +41,7 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     [SubterraAquos.key]: SubterraAquos,
     [SubterraHaos.key]: SubterraHaos,
     [EarthShatter.key]: EarthShatter,
+    [TerraLockdown.key]: TerraLockdown,
 
     // Haos
 
@@ -56,6 +59,7 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     [CoupDeGrace.key]: CoupDeGrace,
     // [EpicesMortelles.key]: EpicesMortelles,
     [VengeanceAlItalienne.key]: VengeanceAlItalienne,
+    [ShadowReversal.key]: ShadowReversal,
     // [PoivreDesCayenne.key]: PoivreDesCayenne,
     [DarkusAquos.key]: DarkusAquos,
     [DarkusPyrus.key]: DarkusPyrus,
@@ -69,6 +73,7 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     [TornadeExtreme.key]: TornadeExtreme,
     [VentusHaos.key]: VentusHaos,
     [VentusPyrus.key]: VentusPyrus,
+    [StormCancel.key]: StormCancel,
 
     // Combination Triple
     [PyrusAquosHaos.key]: PyrusAquosHaos,

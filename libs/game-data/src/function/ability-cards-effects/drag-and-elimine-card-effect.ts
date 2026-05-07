@@ -115,7 +115,7 @@ export function DragAndElimineOnAdditional({ resolution, roomData, cardData }: {
 
     const player = roomData.players.find((p) => p.userId === cardOwnerId)
 
-    if (!ability || !player) {
+    if (!ability || !player || roomData.turnState.ability_card_block) {
         eliminateDragAndElimineTargets({ roomState: roomData, user: user, bakugans: bakugans })
         return
     }

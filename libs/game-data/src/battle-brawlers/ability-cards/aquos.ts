@@ -7,6 +7,7 @@ import { BakuganList } from "../bakugans.js";
 import { GateCardsList } from "../gate-gards.js";
 import { NewAdditionnalMessage } from "../../function/new-additional-message.js";
 import { CancelAbilityCardEffect } from "../../function/ability-cards-effects/cancel-ability-card-effect.js";
+import { ElementaryCardCancelerEffect } from "../../function/ability-cards-effects/elementary-card-canceler-effect.js";
 
 export const MirageAquatique: abilityCardsType = {
     key: 'mirage-aquatique',
@@ -244,6 +245,57 @@ export const DepthDive: abilityCardsType = {
         const card = GateCardsList.find((c) => c.key === slotOfBakugan.portalCard?.key)
         if (!card) return false
         if (!card.onCanceled) return false
+
+        return true
+    },
+}
+
+export const FlowInterference: abilityCardsType = {
+    key: 'flow-interference',
+    attribut: 'Aquos',
+    name: 'Flow Interference',
+    description: `Nullifies the opponent's ability`,
+    maxInDeck: 3,
+    image: StandardCardsImages.haos,
+    usable_in_neutral: false,
+    onActivate: ({ roomState, userId, slot, cardToCancel }) => {
+        return ElementaryCardCancelerEffect({ roomState, userId, slot, cardToCancel })
+    },
+    activationConditions({ roomState, userId }) {
+
+        if (!roomState) return false
+
+        const { battleInProcess, paused, slot, turns } = roomState.battleState
+
+        if (!battleInProcess || paused) return false
+
+        return true
+
+    },
+    canUse({ roomState, bakugan }) {
+
+        if (!roomState) return false
+
+        const { battleInProcess, paused, slot, turns } = roomState.battleState
+
+        if (!battleInProcess || paused) return false
+
+        if (bakugan.slot_id !== slot) return false
+
+        const slotOfBattle = roomState.protalSlots.find((s) => s.id === slot)
+        if (!slotOfBattle) return false
+
+        const lists = [AbilityCardsList, ExclusiveAbilitiesList].flat()
+
+        const abilities = slotOfBattle.activateAbilities.filter((ability) => {
+            return (
+                !ability.canceled &&
+                ability.userId !== bakugan.userId &&
+                lists.some((a) => a.key === ability.key && a.onCanceled)
+            );
+        });
+
+        if (abilities.length < 1) return false
 
         return true
     },
