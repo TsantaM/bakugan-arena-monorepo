@@ -18,6 +18,7 @@ import ChatListener from "@/src/global-listener/chat-global-listener";
 import SearchOpponentListener from "@/src/global-listener/search-opponent-listener";
 import ChalengeSomeoneListener from "@/src/global-listener/chalenge-someone-listener"
 import ForfeitButton from "@/components/elements/battlefield/forfeit-button"
+import Image from "next/image"
 
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
@@ -40,6 +41,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
                             <div className="flex items-center gap-3">
                                 <ForfeitButton />
                                 <AnimatedThemeToggler />
+                                <Link href="https://discord.gg/8HfPK5RVuk" target="_blank"><Image src="discord.svg" alt="discord logo" width={25} height={25} /></Link>
                                 <SoundPlayerControls />
                                 <Suspense fallback={<SidebarMenuSkeleton />}>
                                     <DropdownMenu>
