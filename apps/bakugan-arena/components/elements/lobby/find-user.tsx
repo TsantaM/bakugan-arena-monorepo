@@ -33,7 +33,7 @@ export default function FindUserComponent() {
     })
 
     const addChat = useChatStore((state) => state.upsertChat)
-    const setFocused =  useChatStore((state) => state.setFocused)
+    const setFocused = useChatStore((state) => state.setFocused)
     const connectedUsers = ConnectedUsersStore((state) => state.users)
 
 
@@ -94,7 +94,8 @@ export default function FindUserComponent() {
                                                     className={`h-2.5 w-2.5 rounded-full border-2 border-white ${connectedUsers.includes(u.id)
                                                         ? "bg-green-500"
                                                         : "bg-gray-400"
-                                                        }`} ></span>
+                                                        }`} >
+                                                </span>
                                             </div>
                                         </TableCell>
 

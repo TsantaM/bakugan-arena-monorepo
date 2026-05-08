@@ -8,6 +8,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { ConnectedUsersStore } from "@/src/store/connected-users-store";
 
 import Image from "next/image"
 
@@ -20,6 +21,9 @@ export type LadderPlayer = {
 }
 
 export default function LadderTable({ players }: { players: LadderPlayer[] }) {
+
+    const connectedUsers = ConnectedUsersStore((state) => state.users)
+
     return (
         <div className="w-full">
             <Table>
@@ -54,7 +58,15 @@ export default function LadderTable({ players }: { players: LadderPlayer[] }) {
                                 </TableCell>
 
                                 <TableCell className="font-extrabold">
-                                    {player.displayUsername ? player.displayUsername : 'Player'}
+                                    <span className="flex items-center gap-1">
+                                        <span
+                                            className={`h-2.5 w-2.5 rounded-full border-2 border-white ${connectedUsers.includes(player.id)
+                                                ? "bg-green-500"
+                                                : "bg-gray-400"
+                                                }`} >
+                                        </span>
+                                        {player.displayUsername ? player.displayUsername : 'Player'}
+                                    </span>
                                 </TableCell>
 
                                 <TableCell className="text-right font-extrabold">
