@@ -144,7 +144,7 @@ export const PlongeeEnEauProfonde: abilityCardsType = {
     maxInDeck: 1,
     usable_in_neutral: false,
     image: StandardCardsImages.aquos,
-    description: `Add 100 Gs to all Aquos Bakugans, substract 100 Gs to all not Aquos Bakugans and cancel not Aquos abilities.`,
+    description: `Add 100 Gs to all Aquos Bakugans, substract 100 Gs to all not Aquos Bakugans.`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
