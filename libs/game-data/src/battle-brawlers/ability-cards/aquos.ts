@@ -172,16 +172,16 @@ export const PlongeeEnEauProfonde: abilityCardsType = {
 
             })
 
-            slotOfGate.activateAbilities.forEach((ability) => {
-                const user = slotOfGate.bakugans.find((b) => b.key === ability.bakuganKey && b.userId === ability.userId)
-                if (!user) return
-                if (user.attribut === "Aquos") return
-                CancelAbilityCardEffect({
-                    ability: ability,
-                    roomState: roomState,
-                    slotOfGate: slotOfGate,
-                })
-            })
+            // slotOfGate.activateAbilities.forEach((ability) => {
+            //     const user = slotOfGate.bakugans.find((b) => b.key === ability.bakuganKey && b.userId === ability.userId)
+            //     if (!user) return
+            //     if (user.attribut === "Aquos") return
+            //     CancelAbilityCardEffect({
+            //         ability: ability,
+            //         roomState: roomState,
+            //         slotOfGate: slotOfGate,
+            //     })
+            // })
 
         }
 

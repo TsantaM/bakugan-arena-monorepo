@@ -3,10 +3,12 @@ import { ExclusiveAbilitiesList } from "../../battle-brawlers/exclusive-abilitie
 import { CancelAbilityCards } from "../../store/cancel-ability-cards.js";
 import { Slots } from "../../store/slots.js";
 import { AbilityCardsActions, resolutionType } from "../../type/actions-serveur-requests.js";
+import { AnimationDirectivesTypes } from "../../type/animations-directives.js";
 import { abilityCardsType, exclusiveAbilitiesType } from "../../type/game-data-types.js";
 import { bakuganOnSlot, slots_id, stateType } from "../../type/room-types.js";
 import { AbilityCardFailed } from "../create-animation-directives/ability-card-failed.js";
 import { getAdjacentsSlots } from "../filters/get-adjacents-slots.js";
+import { GetUserName } from "../get-user-name.js";
 import { ComeBackBakuganEffect } from "./come-back-bakugan-effect.js";
 import { DragAndElimineBakuganEffect } from "./drag-and-elimine-effect.js";
 
@@ -120,7 +122,7 @@ export function DragAndElimineOnAdditional({ resolution, roomData, cardData }: {
         return
     }
 
-    player.usable_abilitys = player.usable_abilitys - 1
+    // player.usable_abilitys = player.usable_abilitys - 1
 
     const abilityCardUsed = roomData.decksState.find((d) => d.userId === cardOwnerId)?.abilities.find((a) => a.key === card.key && a.used === false)
 
@@ -130,6 +132,28 @@ export function DragAndElimineOnAdditional({ resolution, roomData, cardData }: {
         abilityCardUsed.used = true
     }
 
+    const activeCardAnimation: AnimationDirectivesTypes = {
+        type: 'ACTIVE_ABILITY_CARD',
+        data: {
+            card: ability.key,
+            attribut: 'Haos'
+        },
+        resolve: false,
+        message: [{
+            text: `Ability Card Activate : ${card.name}`,
+            userName: GetUserName({
+                roomData: roomData,
+                userId: cardOwnerId,
+            }),
+            turn: roomData.turnState.turnCount
+        }, {
+            text: `${ability.description}`,
+            turn: roomData.turnState.turnCount,
+            description: true
+        }]
+    }
+
+    roomData.animations.push(activeCardAnimation)
 
     ability.onActivate({
         roomState: roomData,

@@ -2,6 +2,7 @@ import { Server, Socket } from "socket.io/dist";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 
 type RoomsToWatchType = {
+    playersIds: string[]
     roomId: string,
     p1: string,
     p2: string
@@ -10,6 +11,7 @@ type RoomsToWatchType = {
 function GetRoomsToWatch(userId: string): RoomsToWatchType[] {
 
     const rooms = Battle_Brawlers_Game_State.filter((room) => room !== undefined).filter((room) => !room.players.some((player) => player.userId === userId)).filter((room) => !room.status.finished).map((room) => ({
+        playersIds: room.players.map((p) => p.userId) ,
         p1: room.players[0].username,
         p2: room.players[1].username,
         roomId: room.roomId
