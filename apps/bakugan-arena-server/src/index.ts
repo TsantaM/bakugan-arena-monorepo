@@ -27,6 +27,8 @@ import { ChatMessageSocket } from "./sockets/chat-message-socket";
 import { SendMessageInGame } from "./sockets/messages-in-game";
 import { forfeitSocket } from "./sockets/forfeit-socket";
 import { cleanGameStates } from "./functions/clear-game-state";
+import { GlobalChatSocket, OnOpentUpdateMessages, RecieveMessge } from "./sockets/global-chat-socket";
+import { CLEANUP_INTERVAL_GLOBAL_CHAT, cleanupOldMessages } from "./game-state/global-chat-store";
 
 
 
@@ -47,6 +49,10 @@ setInterval(() => {
     cleanGameStates()
 }, 60000)
 
+setInterval(() => {
+    cleanupOldMessages()
+}, CLEANUP_INTERVAL_GLOBAL_CHAT)
+
 io.on('connection', (socket) => {
     const { userId, roomId, socketType } = socket.handshake.auth
     console.log('A user connected:', 'socketId : ', socket.id, 'userId : ', userId);
@@ -55,6 +61,9 @@ io.on('connection', (socket) => {
     }
 
     ChatMessageSocket(io, socket)
+    GlobalChatSocket(io, socket)
+    RecieveMessge(io, socket)
+    OnOpentUpdateMessages(io, socket)
     getUsersRooms(io, socket)
     WatchBattleSocket(io, socket)
     ChalengeSomeoneSocket(io, socket)
