@@ -1,7 +1,6 @@
 import { AbilityCardFailed, dragBakuganToUserSlot } from "../../function/index.js"
 import { AbilityCardsActions } from "../../type/actions-serveur-requests.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
-import { bakuganOnSlot, slots_id } from "../../type/room-types.js"
 import type { bakuganToMoveType2 as bakuganToMoveType } from "../../type/type-index.js"
 
 export const ForceDattraction: exclusiveAbilitiesType = {

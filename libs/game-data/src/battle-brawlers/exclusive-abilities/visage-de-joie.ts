@@ -28,6 +28,7 @@ export const VisageDeJoie: exclusiveAbilitiesType = {
                     gate.onCanceled({ roomState, slot, userId, bakuganKey })
                 }
                 slotOfGate.state.canceled = true
+
             } else {
                 slotOfGate.state.blocked = {
                     blocked: true,
@@ -43,5 +44,19 @@ export const VisageDeJoie: exclusiveAbilitiesType = {
         }
 
         return null
+    },
+    onCanceled({ roomState, slot }) {
+        if (!roomState) return null
+        const slotOfGate = roomState.protalSlots.find((s) => s.id === slot)
+        
+        if (slotOfGate) {
+            if(slotOfGate.state.blocked && slotOfGate.state.blocked.blockedWith === 'ABILITY' && slotOfGate.state.blocked.key === VisageDeJoie.key) {
+                NewAdditionnalMessage({
+                    roomState: roomState,
+                    text: `Gate Card is unblocked`
+                })
+            }
+            slotOfGate.state.blocked = false
+        }
     }
 }

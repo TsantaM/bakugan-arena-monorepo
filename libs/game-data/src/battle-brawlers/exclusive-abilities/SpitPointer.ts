@@ -1,4 +1,4 @@
-import { PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js";
+import { PowerChange } from "../../function/index.js";
 import { exclusiveAbilitiesType } from "../../type/type-index.js";
 
 export const SpitPointer: exclusiveAbilitiesType = {
@@ -58,7 +58,7 @@ export const SpitPointer: exclusiveAbilitiesType = {
                     PowerChange({
                         bakugan: opponent,
                         G: 100,
-                        malus: true,
+                        malus: false,
                         roomState: roomState
                     })
                 })

@@ -1,8 +1,8 @@
 import { ElementaryCardCancelerEffect } from "../../function/ability-cards-effects/elementary-card-canceler-effect.js";
-import { AbilityCardFailed, CancelGateCardDirectiveAnimation, CheckBattleStillInProcess, ComeBackBakuganDirectiveAnimation, dragBakuganToUserSlot, moveBakuganToSelectedSlot, moveSelectedBakugan, MoveToAnotherSlotDirectiveAnimation, OpenGateCardActionRequest } from "../../function/index.js";
+import { AbilityCardFailed, CancelGateCardDirectiveAnimation, CheckBattleStillInProcess, ComeBackBakuganDirectiveAnimation, dragBakuganToUserSlot, moveBakuganToSelectedSlot, moveSelectedBakugan } from "../../function/index.js";
 import { StandardCardsImages } from "../../store/ability-cards-images.js";
 import { Slots } from "../../store/slots.js";
-import type { AbilityCardsActions, abilityCardsType, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, slots_id } from "../../type/type-index.js";
+import type { AbilityCardsActions, abilityCardsType, bakuganToMoveType2 as bakuganToMoveType, slots_id } from "../../type/type-index.js";
 import { GateCardsList } from "../gate-gards.js";
 import { AbilityCardsList, ExclusiveAbilitiesList } from "../index.js";
 
@@ -73,18 +73,17 @@ export const CombatAerien: abilityCardsType = {
     activationConditions({ roomState, userId }) {
         if (!roomState) return false
         const slotWithGate = roomState.protalSlots.filter((slot) => slot.portalCard !== null)
-        const opponentDeck = roomState.decksState.find((deck) => deck.userId !== userId)?.bakugans
-        if (!opponentDeck) return false
-
-        const opponentsBakugans = opponentDeck.filter((bakugan) => bakugan !== undefined && !bakugan?.bakuganData.onDomain && !bakugan?.bakuganData.elimined).length
-
-        if (opponentsBakugans < 1) return false
 
         if (slotWithGate.length < 2) return false
         return true
     },
-    canUse({ bakugan }) {
+    canUse({ bakugan, roomState }) {
+
+        const slots = roomState.protalSlots.filter((slot) => slot.id !== bakugan.slot_id && slot.portalCard !== null)
+
+        if(slots.length === 0) return false
         if (bakugan.statut.trapped) return false
+
         return true
     },
 }
