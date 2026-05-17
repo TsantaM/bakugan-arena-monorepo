@@ -39,9 +39,14 @@ export const BlockAbilityCardsEffect = ({
         turn: turns < 0 ? 0 : turns
     }
 
+    const AllAbilities = {
+        ...AbilityCards,
+        ...ExclusiveAbilities
+    }
+
     NewAdditionnalMessage({
         roomState: roomState,
-        text: `Abilities are blocked for ${turns} ${turns === 1 ? 'turn' : 'turns'} by ${AbilityCards[card.key].name || ExclusiveAbilities[card.key].name}`
+        text: `Abilities are blocked for ${turns} ${turns === 1 ? 'turn' : 'turns'} by ${AllAbilities[card.key]?.name}`
     })
 
 }
