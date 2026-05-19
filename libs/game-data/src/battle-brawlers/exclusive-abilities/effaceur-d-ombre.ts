@@ -38,5 +38,15 @@ export const EffecteurdOmbre: exclusiveAbilitiesType = {
         }
 
         return null
-    }
+    },
+    canUse({ roomState, bakugan }) {
+
+        const { battleInProcess, paused, slot } = roomState.battleState
+
+        if(!battleInProcess || paused) return false
+
+        if(bakugan.slot_id !== slot) return false
+
+        return true
+    },
 }

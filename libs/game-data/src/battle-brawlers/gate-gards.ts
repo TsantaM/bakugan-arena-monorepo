@@ -1,6 +1,6 @@
 import { ReacteurAquos, ReacteurDarkus, ReacteurHaos, ReacteurPyrus, ReacteurSubterra, ReacteurVentus } from "./gate-card/gate-card-elementary.js";
 import { AspirateurDePuissance, Echange, MineFantome, SuperPyrus } from "./gate-card/gate-card-trap.js";
-import { Androstasis, Armistice, GrandEsprit, Magma, QuatuorDeCombat, Rechargement, Revive, TripleCombat } from "./gate-card/gate-card-command.js";
+import { Androstasis, Armistice, Cadenas, GrandEsprit, Magma, QuatuorDeCombat, Rechargement, Revive, TripleCombat } from "./gate-card/gate-card-command.js";
 import { type gateCardType } from "../index.js";
 import { CentipodGateCard } from "./bakugans/centipod.js";
 import { CycloidGateCard } from "./bakugans/cycloid.js";
@@ -120,7 +120,8 @@ export const GateCards: Record<string, gateCardType> = {
     [BeeStrikerGateCard.key]: BeeStrikerGateCard,
     [TuskorGateCard.key]: TuskorGateCard,
     [LasermanGateCard.key]: LasermanGateCard,
-    [ManionGateCard.key]: ManionGateCard
+    [ManionGateCard.key]: ManionGateCard,
+    [Cadenas.key]: Cadenas
     
 }
 

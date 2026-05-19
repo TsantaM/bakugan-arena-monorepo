@@ -426,3 +426,65 @@ export const SupportLight: abilityCardsType = {
         return true
     },
 }
+
+
+export const TornadeEclair: abilityCardsType = {
+    key: 'tornade-eclair',
+    attribut: 'Haos',
+    name: 'Lightning Tornado',
+    maxInDeck: 1,
+    image: StandardCardsImages.haos,
+    usable_in_neutral: false,
+    description: `Adds 100 Gs to the user and decrease opponent power by 100 Gs`,
+    onActivate: ({ roomState, userId, bakuganKey, slot }) => {
+        if (!roomState) return null
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate) {
+            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
+            if (user && opponent) {
+                PowerChange({
+                    bakugan: user,
+                    G: 100,
+                    malus: false,
+                    roomState: roomState
+                })
+
+                PowerChange({
+                    bakugan: opponent,
+                    G: 100,
+                    malus: true,
+                    roomState: roomState
+                })
+            }
+        }
+
+        return null
+    },
+    onCanceled({ roomState, userId, bakuganKey, slot }) {
+        if (!roomState) return null
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (slotOfGate) {
+            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
+
+            if (user && opponent) {
+                PowerChange({
+                    bakugan: user,
+                    G: 100,
+                    malus: true,
+                    roomState: roomState
+                })
+
+                PowerChange({
+                    bakugan: opponent,
+                    G: 100,
+                    malus: false,
+                    roomState: roomState
+                })
+            }
+        }
+
+        return null
+    },
+}

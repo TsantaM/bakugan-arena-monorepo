@@ -1,6 +1,6 @@
 import { AbilityCardFailed, CancelGateCardDirectiveAnimation, ComeBackBakuganDirectiveAnimation, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective } from "../../function/index.js";
 import { AbilityCardsActions, bakuganOnSlot, type abilityCardsType } from "../../type/type-index.js";
-import { GateCardsList } from "../gate-gards.js";
+import { GateCards, GateCardsList } from "../gate-gards.js";
 import { Slots, StandardCardsImages } from "../../store/store-index.js";
 import RemoveRenfortAnimationDirective from "../../function/create-animation-directives/remove-renfort-animation-directive.js";
 import { PowerChange } from "../../function/ability-cards-effects/power-change.js";
@@ -398,5 +398,65 @@ export const BlazeReversal: abilityCardsType = {
         if (abilities.length < 1) return false
 
         return true
+    },
+}
+
+export const HeatWave: abilityCardsType = {
+    key: 'heat-wave',
+    name: 'Heat Wave',
+    description: 'Cancel the gate card and decrease all opponents power by 50 Gs',
+    maxInDeck: 1,
+    usable_in_neutral: false,
+    attribut: 'Pyrus',
+    onActivate({ roomState, userId, bakuganKey, slot }) {
+
+        const failed = AbilityCardFailed({ card: HeatWave.name })
+
+        const slotOfGate = roomState.protalSlots[Slots.indexOf(slot)]
+        if (slotOfGate.portalCard === null) return failed
+        const gateCard = GateCards[slotOfGate.portalCard.key]
+
+
+        if (slotOfGate.state.open && !slotOfGate.state.canceled && slotOfGate.portalCard.userId !== userId) {
+            CancelGateCardDirectiveAnimation({
+                animations: roomState.animations,
+                slot: slotOfGate,
+                turn: roomState.turnState.turnCount
+
+            })
+            if (gateCard && gateCard.onCanceled) {
+                gateCard.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
+                slotOfGate.state.canceled = true
+            }
+        }
+
+        const opponents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
+
+        opponents.forEach((o) => PowerChange({
+            bakugan: o,
+            G: 50,
+            malus: true,
+            roomState: roomState
+        }))
+
+        return null
+    },
+    canUse({ roomState, bakugan }) {
+
+        const { battleInProcess, paused, slot, turns } = roomState.battleState
+
+        if(!battleInProcess || paused) return false
+
+        if(bakugan.slot_id !== slot) return false
+
+        const slotOfGate = roomState.protalSlots[Slots.indexOf(bakugan.slot_id)]
+        if (slotOfGate.portalCard === null) return false
+
+        const opponents = slotOfGate.bakugans.filter((b) => b.userId !== bakugan.userId)
+
+        if(opponents.length === 0) return false
+
+        return true
+
     },
 }

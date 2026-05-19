@@ -5,7 +5,7 @@ import { AquosVentus, DarkusAquos, HaosDarkus, SubterraHaos, SubterraPyrus, Vent
 import { CoupDeGrace, ShadowReversal, VengeanceAlItalienne } from "./ability-cards/darkus.js";
 import { AquosSubterra, DarkusPyrus, HaosVentus, PyrusDarkus, SubterraAquos, VentusHaos } from "./ability-cards/diagonal-combination.js";
 import { ContreMaitrise, EclatSoudain, HaosImmobilisation, SupportLight } from "./ability-cards/haos.js";
-import { BlazeReversal, JetEnflamme, MurDeFeu, RetroAction, TourbillonDeFeu } from "./ability-cards/pyrus.js";
+import { BlazeReversal, HeatWave, JetEnflamme, MurDeFeu, RetroAction, TourbillonDeFeu } from "./ability-cards/pyrus.js";
 import { EarthPower, EarthShatter, MagmaSupreme, TectonicSwipe, TerraLockdown } from "./ability-cards/subterra.js";
 import { CombatAerien, RetourDair, SouffleTout, StormCancel, TornadeChaosTotal, TornadeExtreme } from "./ability-cards/ventus.js";
 
@@ -19,6 +19,7 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     [PyrusDarkus.key]: PyrusDarkus,
     [SubterraPyrus.key]: SubterraPyrus,
     [BlazeReversal.key]: BlazeReversal,
+    [HeatWave.key]: HeatWave,
 
     // Aquos
 

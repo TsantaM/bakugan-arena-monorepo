@@ -9,15 +9,7 @@ export function ElimineBakuganEffect({ bakugan, roomState, gateCardProtection }:
     const slotOfGate = roomState.protalSlots.find((slot) => slot.id === bakugan.slot_id)
     if (!slotOfGate) return
 
-    if (!gateCardProtection) {
-        if (bakugan.statut.protected || bakugan.statut.protectedAgainstAbility) {
-            NewAdditionnalMessage({
-                roomState: roomState,
-                text: `${Bakugans[bakugan.key].name} is protected`
-            })
-            return
-        }
-    } else {
+    if (gateCardProtection) {
         if (bakugan.statut.protected || bakugan.statut.protectedAgainstGate) {
             NewAdditionnalMessage({
                 roomState: roomState,
