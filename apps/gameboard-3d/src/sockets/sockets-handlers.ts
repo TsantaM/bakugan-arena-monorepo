@@ -1,5 +1,6 @@
 import type {
     AbilityCardsActionsRequestsType, ActivePlayerActionRequestType, InactivePlayerActionRequestType, roomStateType, slots_id, turnCountSocketProps, Message,
+    gateCardActionRequestsType,
 } from "@bakugan-arena/game-data"
 import { type AnimationDirectivesTypes } from "@bakugan-arena/game-data"
 import * as THREE from "three"
@@ -32,6 +33,7 @@ import { CancelAbilityCardAnimation } from "../animations/cancel-ability-card-an
 import { DragAndElimineAnimation } from "../animations/drag-and-elimine-animation"
 import { ReviveBakuganAnimation } from "../animations/revive-animation"
 import { sendMessageToParent } from "../functions/send-message-to-parent"
+import { GateCardAdditionalRequestResolution } from "../abiliity-additional-request/gate-card-additional-request"
 
 let animationQueue: AnimationDirectivesTypes[] = []
 let isProcessingAnimations = false
@@ -487,6 +489,7 @@ export function registerSocketHandlers(
     )
 
     socket.on("animations", (animations: AnimationDirectivesTypes[]) => {
+        // console.log(animations.map((a) => a.type))
         animationQueue.push(...animations)
         if (!isProcessingAnimations) {
             currentAnimationPromise = processAnimationQueue(
@@ -512,6 +515,27 @@ export function registerSocketHandlers(
         })
 
     })
+
+    socket.on('gate-card-additional-request', async (request: gateCardActionRequestsType) => {
+
+        // alert('request gate card' + request.data.type)
+        if (!request.data.target && request.userId !== userId) return
+        if (request.data.target && request.data.target !== userId) return
+        if (request.data.type === 'TURN_ACTION_LAUNCHER') return
+
+        await currentAnimationPromise;
+        clearTurnInterface()
+
+        GateCardAdditionalRequestResolution({
+            request: request, camera: camera, plane: plane, socket: socket, scene: scene
+        })
+
+        AdditionalEffectMessage({
+            message: request.data.message
+        })
+
+    })
+
 
     socket.on('turn-count-updater', (turnState: turnCountSocketProps) => {
         const turnCounter = document.getElementById('turn-counter')

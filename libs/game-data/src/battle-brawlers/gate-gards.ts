@@ -1,6 +1,4 @@
 import { ReacteurAquos, ReacteurDarkus, ReacteurHaos, ReacteurPyrus, ReacteurSubterra, ReacteurVentus } from "./gate-card/gate-card-elementary.js";
-import { AspirateurDePuissance, Echange, MineFantome, SuperPyrus } from "./gate-card/gate-card-trap.js";
-import { Androstasis, Armistice, GrandEsprit, Magma, QuatuorDeCombat, Rechargement, Revive, TripleCombat } from "./gate-card/gate-card-command.js";
 import { type gateCardType } from "../index.js";
 import { CentipodGateCard } from "./bakugans/centipod.js";
 import { CycloidGateCard } from "./bakugans/cycloid.js";
@@ -33,6 +31,18 @@ import { BeeStrikerGateCard } from "./bakugans/bee-striker.js";
 import { TuskorGateCard } from "./bakugans/tuskor.js";
 import { LasermanGateCard } from "./bakugans/laserman.js";
 import { ManionGateCard } from "./bakugans/manion.js";
+import { Rechargement } from "./gate-card/command/rechergement.js";
+import { TripleCombat } from "./gate-card/command/tripple-battle.js";
+import { QuatuorDeCombat } from "./gate-card/command/quartet-battle.js";
+import { Armistice } from "./gate-card/command/armistice.js";
+import { GrandEsprit } from "./gate-card/command/grand-esprit.js";
+import { Magma } from "./gate-card/command/magma.js";
+import { Revive } from "./gate-card/command/revive.js";
+import { Androstasis } from "./gate-card/command/androstasis.js";
+import { MineFantome } from "./gate-card/trap/mine-ghost.js";
+import { Echange } from "./gate-card/trap/trad-off.js";
+import { SuperPyrus } from "./gate-card/trap/super-pyrus.js";
+import { AspirateurDePuissance } from "./gate-card/trap/energy-merge.js";
 
 export const GateCards: Record<string, gateCardType> = {
 

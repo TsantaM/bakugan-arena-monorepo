@@ -1,7 +1,8 @@
-import { activeGateCardProps, AnimationDirectivesTypes, GateCardsList, GetUserName, slots_id } from "@bakugan-arena/game-data"
+import { activeGateCardProps, AnimationDirectivesTypes, gateCardActionRequestsType, GateCardsList, GetUserName, slots_id } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 import { turnActionUpdater } from "../sockets/turn-action"
 import { EmitMessage } from "./emit-messages"
+import { StartPlayerTime, StopPlayerTimer } from "./start-player-timer"
 
 
 
@@ -9,7 +10,6 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
     // FR : On récupère les données de la room correspondante à roomId
     // EN : Get the room data that matches the given roomId
     const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
-
 
     if (roomData) {
         // FR : On cherche le slot (portail) correspondant à l'id donné dans la room
@@ -81,13 +81,55 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
             io.to(roomId).emit('animations', roomData.animations)
             roomData.animations.forEach((animation) => EmitMessage({ roomState: roomData, animation, io }))
 
-            if (openFunction.turnAction) {
-                turnActionUpdater({
-                    io: io,
-                    roomId: roomId,
-                    userId: userId,
-                })
+            roomData.animations = []
+
+            if (openFunction !== null) {
+                if (openFunction.type === 'TURN_ACTION_LAUNCHER') {
+                    turnActionUpdater({
+                        io: io,
+                        roomId: roomId,
+                        userId: userId,
+                    })
+                } else {
+
+                    const request: gateCardActionRequestsType = {
+                        roomId: roomId,
+                        cardKey: gateCard.key,
+                        slot: slot,
+                        userId: userId,
+                        data: openFunction
+                    }
+
+                    roomData.gateCardActionRequest.push(request)
+
+                    const requests = roomData.gateCardActionRequest
+                    if (!requests) return
+                    if (requests.length <= 0) return
+                    const socket = requests[0].data.target ? roomData.connectedsUsers.get(requests[0].data.target) : roomData.connectedsUsers.get(requests[0].userId)
+                    if (!socket) return
+
+                    io.to(socket.gameboardSocket).emit('gate-card-additional-request', requests[0])
+                    const targetId = requests[0].data.target ? requests[0].data.target : requests[0].userId
+
+                    roomData.players.forEach((p) => {
+                        if (p.userId !== targetId) {
+                            StopPlayerTimer({
+                                roomState: roomData,
+                                userId: p.userId
+                            })
+                        } else {
+                            StartPlayerTime({
+                                roomState: roomData,
+                                userId: p.userId,
+                                io: io
+                            })
+                        }
+                    })
+
+
+                }
             }
         }
     }
+
 }

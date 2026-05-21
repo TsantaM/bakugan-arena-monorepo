@@ -1,4 +1,4 @@
-import { bakuganInDeck, bakuganOnSlot } from "./room-types.js"
+import type { bakuganInDeck, bakuganOnSlot } from "./room-types.js"
 
 export type gateCardAdditionalRequest = {
     type: 'CHOOSE_BAKUGAN',

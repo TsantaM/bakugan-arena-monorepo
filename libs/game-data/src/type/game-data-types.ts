@@ -1,4 +1,4 @@
-import type { AbilityCardsActions, resolutionType } from "./actions-serveur-requests.js"
+import type { AbilityCardsActions, gateCardAdditionalRequest, resolutionGateCardType, resolutionType } from "./actions-serveur-requests.js"
 import type { bakuganOnSlot, portalSlotsTypeElement, slots_id, stateType } from "./room-types.js"
 
 export type attribut = 'Pyrus' | 'Subterra' | 'Haos' | 'Darkus' | 'Aquos' | 'Ventus'
@@ -66,6 +66,7 @@ export type exclusiveAbilitiesType = {
     slotLimits?: boolean,
     usable_if_user_not_on_domain: boolean,
     image?: string,
+    attribut?: attribut,
     activationConditions?: ({ roomState, userId }: { roomState: stateType, userId: string }) => boolean,
     onActivate: ({ roomState, userId, bakuganKey, slot, cardToCancel }: { roomState: stateType, roomId: string, userId: string, bakuganKey: string, slot: slots_id, cardToCancel?: { cardKey: string, bakuganKey: string, userId: string, slot: slots_id } }) => null | AbilityCardsActions,
     onUserSet?: ({ roomState, bakuganKey, slot, userId }: { roomState: stateType, userId: string, bakuganKey: string, slot: slots_id }) => void,
@@ -105,7 +106,8 @@ export type gateCardType = {
         looserId?: string;
         winners?: { key: string, userId: string }[];
         loosers?: { key: string, userId: string }[]
-    }) => null | turnActionLauncher,
+    }) => null | gateCardAdditionalRequest,
+    onAdditionalRequest?: ({resolution, roomState} : {resolution: resolutionGateCardType, roomState: stateType}) => null | gateCardAdditionalRequest
     onSetBakuganOnSlot?: ({ bakugan, slot }: {
         bakugan: bakuganOnSlot
         slot: portalSlotsTypeElement,

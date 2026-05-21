@@ -243,6 +243,7 @@ export const createGameState = async ({ roomId, ranked }: { roomId: string; rank
         persistantAbilities: [],
         turnState,
         decksState,
+        gateCardActionRequest: [],
         protalSlots,
         status: {
             finished: false,

@@ -242,18 +242,19 @@ export const RetroAction: abilityCardsType = {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
             const gate = slotOfGate.portalCard?.key
             if (user && gate && slotOfGate.state.open) {
+                console.log('la card lancée')
                 const gateToCancel = GateCardsList.find((g) => g.key === gate)
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
-                    slot: slotOfGate,
+                    slot: structuredClone(slotOfGate),
                     turn: roomState.turnState.turnCount
 
                 })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
-                    slotOfGate.state.canceled = true
                 }
 
+                slotOfGate.state.canceled = true
 
             }
         }

@@ -1,6 +1,6 @@
 import type { AnimationDirectivesTypes, Message } from "./animations-directives.js";
 import { type attribut } from "./game-data-types.js"
-import type { AbilityCardsActionsRequestsType, ActivePlayerActionRequestType, InactivePlayerActionRequestType } from './actions-serveur-requests.js'
+import type { AbilityCardsActionsRequestsType, ActivePlayerActionRequestType, gateCardActionRequestsType, InactivePlayerActionRequestType } from './actions-serveur-requests.js'
 
 export type slots_id = "slot-1" | "slot-2" | "slot-3" | "slot-4" | "slot-5" | "slot-6"
 
@@ -200,6 +200,7 @@ export type stateType = {
     InactivePlayerActionRequest: InactivePlayerActionRequestType,
     ActivePlayerActionRequest: ActivePlayerActionRequestType,
     AbilityAditionalRequest: AbilityCardsActionsRequestsType[],
+    gateCardActionRequest: gateCardActionRequestsType[],
     createdAt: number
 }
 

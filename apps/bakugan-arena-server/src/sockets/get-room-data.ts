@@ -38,8 +38,16 @@ export const socketGetRoomState = (io: Server, socket: Socket) => {
              * -> seulement si CE user est concerné
              */
             const abilityRequest = state.AbilityAditionalRequest[0]
-            if (abilityRequest && abilityRequest.userId === userId) {
+            const abilityTarget = abilityRequest.data.target ? abilityRequest.data.target : abilityRequest.userId
+            if (abilityRequest && abilityTarget === userId) {
                 socket.emit('ability-additional-request', abilityRequest)
+                return
+            }
+
+            const gateRequest = state.gateCardActionRequest[0]
+            const gateTarget = gateRequest?.data.target ? gateRequest.data.target : gateRequest?.userId
+            if (gateRequest && gateTarget === userId) {
+                socket.emit('gate-card-additional-request', gateRequest)
                 return
             }
 
@@ -135,6 +143,20 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
                     }
                     return
                 }
+
+                const gateRequest = roomData.gateCardActionRequest[0]
+                if(gateRequest) {
+
+                    if(!gateRequest.data.target && gateRequest.userId) {
+                        socket.emit('gate-card-additional-request', gateRequest)
+                    } else {
+                        if(gateRequest.data.target === userId) {
+                            socket.emit('gate-card-additional-request', gateRequest)
+                        }
+                    }
+                    return
+                }
+
                 /**
                  * 2️⃣ Turn action request
                  * -> déterminer si le joueur est actif ou non
