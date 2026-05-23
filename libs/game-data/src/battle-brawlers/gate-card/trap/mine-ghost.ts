@@ -79,6 +79,7 @@ export const MineFantome: gateCardType = {
             roomState,
             slotOfGate,
             otherPlayerId,
+            cardsList: CancelGateCardAbilities,
             onNoCard: () => {
                 return MineGhostMainEffect({
                     roomState,

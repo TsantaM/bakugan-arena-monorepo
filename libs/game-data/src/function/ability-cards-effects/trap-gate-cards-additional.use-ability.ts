@@ -1,10 +1,12 @@
-import { AbilityCardsList, AnimationDirectivesTypes, CancelGateCardAbilities, CheckBattle, CheckBattleStillInProcess, ExclusiveAbilitiesList, gateCardAdditionalRequest, GetUserName, portalSlotsTypeElement, RemoveGateCardDirectiveAnimation, ResetSlot, resolutionGateCardType, stateType } from "../../index.js";
+import { AbilityCardsList, AnimationDirectivesTypes, CheckBattle, CheckBattleStillInProcess, ExclusiveAbilitiesList, gateCardAdditionalRequest, GetUserName, portalSlotsTypeElement, RemoveGateCardDirectiveAnimation, ResetSlot, resolutionGateCardType, stateType } from "../../index.js";
+import { NewAdditionnalMessage } from "../new-additional-message.js";
 
 
 export type ResolveMineGhostOpenParams = {
     roomState: stateType
     slotOfGate: portalSlotsTypeElement
     otherPlayerId: string
+    cardsList: string[]
     onNoCard: () => null | gateCardAdditionalRequest
 }
 
@@ -12,6 +14,7 @@ export function ResolveTrapCardOnOpen({
     roomState,
     slotOfGate,
     otherPlayerId,
+    cardsList,
     onNoCard
 }: ResolveMineGhostOpenParams): null | gateCardAdditionalRequest {
 
@@ -29,13 +32,15 @@ export function ResolveTrapCardOnOpen({
 
     const cards = deck?.abilities.filter(
         (c) =>
-            CancelGateCardAbilities.includes(c.key) &&
+            cardsList.includes(c.key) &&
             !c.used &&
             c.attribut &&
             attributs.includes(c.attribut)
-    )
+    ).filter((c, index, self) => index === self.findIndex((card) => card.key === c.key))
 
-    if (deck && opponentsBakugans.length > 0 && cards && cards.length > 0) {
+    const player = roomState.players.find((p) => p.userId === otherPlayerId)
+
+    if (deck && opponentsBakugans.length > 0 && cards && cards.length > 0 && player && player.usable_abilitys > 0) {
 
         const request: gateCardAdditionalRequest = {
             type: 'SELECT_ABILITY_CARD',
@@ -96,10 +101,6 @@ export function ResolveTrapCardAdditionalRequest({
             (a) => a.key === card.key && a.used === false
         )
 
-    if (abilityCardUsed) {
-        abilityCardUsed.used = true
-    }
-
     const cardData = [
         ...AbilityCardsList,
         ...ExclusiveAbilitiesList
@@ -139,6 +140,20 @@ export function ResolveTrapCardAdditionalRequest({
         userId: opponentsBakugan.userId,
         bakuganKey: opponentsBakugan.key
     })
+
+    if (abilityCardUsed) {
+        abilityCardUsed.used = true
+    }
+
+    const player = roomState.players.find((p) => p.userId === cardOwnerId)
+
+    if (player) {
+        player.usable_abilitys = player.usable_abilitys - 1
+        NewAdditionnalMessage({
+            roomState,
+            text: `${player.username} has ${player.usable_abilitys} ability card(s) left`
+        })
+    }
 
     const ownerBakugans = bakugans.filter(
         (b) => b.userId === slotOfGate.portalCard?.userId

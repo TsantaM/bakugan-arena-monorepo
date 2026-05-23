@@ -66,10 +66,14 @@ export function DragAndElimineOnOpen({ roomState, userId, bakuganKey, slot, card
     const opponentId = bakugans[0]?.userId
     const attributs = bakugans.map((b) => b.attribut)
 
+    const player = roomState.players.find((p) => p.userId === opponentId)
     const deck = roomState.decksState.find((d) => d.userId === opponentId)
 
-    if (deck) {
-        const cards = deck.abilities.filter((c) => CancelAbilityCards.includes(c.key) && !c.used && (c.attribut && attributs.includes(c.attribut)))
+    if (deck && player && player.usable_abilitys > 0) {
+
+        const cards = deck.abilities.filter((c) => CancelAbilityCards.includes(c.key) && !c.used && (c.attribut && attributs.includes(c.attribut))).filter((c, index, self) => index === self.findIndex((card) => card.key === c.key))
+
+
         if (cards.length > 0) {
             const request: AbilityCardsActions = {
                 type: 'SELECT_ABILITY_CARD',
@@ -79,7 +83,7 @@ export function DragAndElimineOnOpen({ roomState, userId, bakuganKey, slot, card
                     image: [...AbilityCardsList, ...ExclusiveAbilitiesList].find((ability) => ability.key === card.key)?.image || '',
                     name: card.name
                 })),
-                message: `Anthemusa : Select one ability card`,
+                message: `${card.name} : Select one ability card`,
                 target: opponentId,
                 skipable: true
             }
@@ -168,6 +172,12 @@ export function DragAndElimineOnAdditional({ resolution, roomData, cardData }: {
             slot: resolution.slot
         }
     })
+
+    const cardOwner = roomData.players.find((p) => p.userId === cardOwnerId)
+    
+    if (cardOwner) {
+        cardOwner.usable_abilitys = cardOwner.usable_abilitys - 1
+    }
 
     const antiMuseActivation = slotOfGate.activateAbilities.find((ability) =>
         ability.key === cardData.key &&

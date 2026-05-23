@@ -5,6 +5,9 @@ import { ExclusiveAbilitiesList } from '../../battle-brawlers/exclusive-abilitie
 
 export function SelectAbilityCardInNeutralFilters({ slots, userId, decksState, bakuganToSet, bakuganKey, roomState }: { slots: portalSlotsType | undefined, userId: string, decksState: deckType[] | undefined, bakuganToSet: string, bakuganKey: string, roomState: stateType }) {
 
+    const player = roomState.players.find((p) => p.userId === userId)
+    if(!player) return
+    if (player.usable_abilitys <= 0) return
     if (!slots) return
     if (!decksState) return
     if (!roomState?.turnState.use_ability_card) return
