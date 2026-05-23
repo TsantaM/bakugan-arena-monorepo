@@ -162,11 +162,6 @@ export function ResolveTrapCardAdditionalRequest({
     if (slotOfGate.state.canceled === true) {
 
         if (ownerBakugans.length === 0) {
-            CheckBattle({
-                roomState
-            })
-        } else {
-
             RemoveGateCardDirectiveAnimation({
                 animations: roomState.animations,
                 slot: slotOfGate,
@@ -179,7 +174,10 @@ export function ResolveTrapCardAdditionalRequest({
             roomState.turnState.set_new_gate = true
 
             CheckBattleStillInProcess(roomState)
-
+            CheckBattle({
+                roomState
+            })
+        } else {
             CheckBattle({
                 roomState
             })

@@ -32,16 +32,17 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
     // ENG: Check and auto-activate gate cards if their conditions are met
     const opennable = handleGateCards(roomData)
 
-    if(opennable.length > 0) {
-        opennable.forEach((card) => {
-            ActiveGateCard({
+    if (opennable.length > 0) {
+        for (const card of opennable) {
+            const requestLaunched = ActiveGateCard({
                 gateId: card.gateId,
                 roomId: roomId,
                 slot: card.slot,
                 userId: card.userId,
                 io: io
             })
-        })
+            if (requestLaunched) return
+        }
     }
 
     if (roomData && roomData.battleState.turns === 0 && roomData.battleState.battleInProcess && !roomData.battleState.paused) {

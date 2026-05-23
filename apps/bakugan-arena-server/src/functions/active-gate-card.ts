@@ -6,7 +6,7 @@ import { StartPlayerTime, StopPlayerTimer } from "./start-player-timer"
 
 
 
-export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateCardProps): AnimationDirectivesTypes[] | undefined => {
+export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateCardProps): boolean => {
     // FR : On récupère les données de la room correspondante à roomId
     // EN : Get the room data that matches the given roomId
     const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
@@ -75,8 +75,8 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
             const openFunction = gateCard.onOpen?.({ roomState: roomData, slot: slot, bakuganKey: key, userId: userId })
             slotOfGate.state.open = true
 
-            if (!openFunction) return
-            if (!io) return
+            if (!openFunction) return false
+            if (!io) return false
 
             io.to(roomId).emit('animations', roomData.animations)
             roomData.animations.forEach((animation) => EmitMessage({ roomState: roomData, animation, io }))
@@ -90,6 +90,7 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
                         roomId: roomId,
                         userId: userId,
                     })
+                    return false
                 } else {
 
                     const request: gateCardActionRequestsType = {
@@ -103,10 +104,10 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
                     roomData.gateCardActionRequest.push(request)
 
                     const requests = roomData.gateCardActionRequest
-                    if (!requests) return
-                    if (requests.length <= 0) return
+                    if (!requests) return false
+                    if (requests.length <= 0) return false
                     const socket = requests[0].data.target ? roomData.connectedsUsers.get(requests[0].data.target) : roomData.connectedsUsers.get(requests[0].userId)
-                    if (!socket) return
+                    if (!socket) return false
 
                     io.to(socket.gameboardSocket).emit('gate-card-additional-request', requests[0])
                     const targetId = requests[0].data.target ? requests[0].data.target : requests[0].userId
@@ -126,10 +127,12 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
                         }
                     })
 
-
+                    return true
                 }
             }
+            return false
         }
     }
 
+    return false
 }
