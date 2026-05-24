@@ -167,6 +167,10 @@ export type stateType = {
         gameboardSocket: string,
         nextjsSocket: string
     }>,
+    spectators: Map<string, {
+        gameboardSocket: string,
+        nextjsSocket: string
+    }>,
     messages: Message[]
     roomId: string;
     ranked: boolean;

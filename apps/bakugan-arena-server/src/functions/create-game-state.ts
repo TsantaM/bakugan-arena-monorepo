@@ -234,6 +234,7 @@ export const createGameState = async ({ roomId, ranked }: { roomId: string; rank
 
     const state: stateType = {
         connectedsUsers: new Map(),
+        spectators: new Map(),
         createdAt: Date.now(),
         messages: [],
         roomId: roomId,
