@@ -1,4 +1,4 @@
-import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation } from "../../function/index.js";
+import { CancelCaracterGateCard, CaracterGateCardEffect, CheckTwoBakugansAndBattle, PowerChangeDirectiveAnumation } from "../../function/index.js";
 import { bakuganType, gateCardType } from "../../type/game-data-types.js";
 
 const family = 'Manion'
@@ -100,12 +100,9 @@ export const ManionGateCard: gateCardType = {
         })
 
     },
-    autoActivationCheck: ({ portalSlot }) => {
-        const bakugansOnSlot = portalSlot.bakugans.length
-        if (bakugansOnSlot >= 2) {
-            return true
-        } else {
-            return false
-        }
+    autoActivationCheck: ({ portalSlot, roomState }) => {
+
+        return CheckTwoBakugansAndBattle({ portalSlot, battleState: roomState.battleState })
+
     },
 }

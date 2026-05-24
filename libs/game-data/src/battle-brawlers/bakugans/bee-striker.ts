@@ -1,4 +1,4 @@
-import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation } from "../../function/index.js";
+import { CancelCaracterGateCard, CaracterGateCardEffect, CheckTwoBakugansAndBattle, PowerChangeDirectiveAnumation } from "../../function/index.js";
 import { bakuganType, gateCardType } from "../../type/type-index.js";
 
 const family = 'Bee Striker'
@@ -73,12 +73,9 @@ export const BeeStrikerGateCard: gateCardType = {
         })
         
     },
-    autoActivationCheck: ({ portalSlot }) => {
-        const bakugansOnSlot = portalSlot.bakugans.length
-        if (bakugansOnSlot >= 2) {
-            return true
-        } else {
-            return false
-        }
+    autoActivationCheck: ({ portalSlot, roomState }) => {
+
+        return CheckTwoBakugansAndBattle({ portalSlot, battleState: roomState.battleState })
+
     },
 }

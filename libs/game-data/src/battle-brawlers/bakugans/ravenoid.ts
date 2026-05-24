@@ -1,5 +1,5 @@
 import { CharacterCardByAttribut } from "../../function/caracter-cards-image-by-attribut.js"
-import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation, type bakuganType, type gateCardType } from "../../index.js"
+import { CancelCaracterGateCard, CaracterGateCardEffect, CheckTwoBakugansAndBattle, PowerChangeDirectiveAnumation, type bakuganType, type gateCardType } from "../../index.js"
 
 
 export const RavenoidPyrus: bakuganType = {
@@ -60,13 +60,10 @@ export const RavenoidGateCard: gateCardType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'ravenoid-gate-card')
         CancelCaracterGateCard({ roomState: roomState, slotOfGate: slotOfGate, family: 'Ravenoid' })
     },
-    autoActivationCheck: ({ portalSlot }) => {
-        const bakugansOnSlot = portalSlot.bakugans.length
-        if (bakugansOnSlot >= 2) {
-            return true
-        } else {
-            return false
-        }
+    autoActivationCheck: ({ portalSlot, roomState }) => {
+
+        return CheckTwoBakugansAndBattle({ portalSlot, battleState: roomState.battleState })
+
     },
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
 

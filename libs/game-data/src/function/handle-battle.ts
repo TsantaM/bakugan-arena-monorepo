@@ -12,4 +12,5 @@ export function handleBattle(roomData: stateType, updateBattleState: boolean = t
     } else if (!battleState.battleInProcess) {
         CheckBattle({ roomState: roomData })
     }
+    
 }

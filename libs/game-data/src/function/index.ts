@@ -20,3 +20,4 @@ export * from './update-deck-data-gates.js'
 export * from './update-decks-bakugans.js'
 export * from './update-turn-state.js'
 export * from './gate-card-effects/index.js'
+export * from "./gate-cards-auto-activation-conditions/index.js"

@@ -1,5 +1,5 @@
 import { bakuganType, gateCardType } from "../../type/type-index.js"
-import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation } from '../../function/index.js'
+import { CancelCaracterGateCard, CaracterGateCardEffect, CheckTwoBakugansAndBattle, PowerChangeDirectiveAnumation } from '../../function/index.js'
 import { StarterBanList } from "../../store/store-index.js"
 
 
@@ -57,13 +57,10 @@ export const DragonoidGateCard: gateCardType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'dragonoid-gate-card')
         CancelCaracterGateCard({ roomState: roomState, slotOfGate: slotOfGate, family: 'Dragonoid' })
     },
-    autoActivationCheck: ({ portalSlot }) => {
-        const bakugansOnSlot = portalSlot.bakugans.length
-        if (bakugansOnSlot >= 2) {
-            return true
-        } else {
-            return false
-        }
+    autoActivationCheck: ({ portalSlot, roomState }) => {
+
+        return CheckTwoBakugansAndBattle({ portalSlot, battleState: roomState.battleState })
+
     },
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
 

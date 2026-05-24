@@ -102,7 +102,7 @@ export const Echange: gateCardType = {
     },
     onAdditionalRequest({ resolution, roomState }) {
 
-        const { cardKey, data, roomId, slot, userId } = resolution
+        const { slot, userId } = resolution
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
 
         const result: gateCardAdditionalRequest = {
