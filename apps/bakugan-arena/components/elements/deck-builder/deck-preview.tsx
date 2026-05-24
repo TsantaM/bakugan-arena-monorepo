@@ -7,10 +7,11 @@ import { DeleteDeck } from "@/src/actions/deck-builder/delete-deck"
 import { GetUserDeckType } from "@/src/actions/deck-builder/get-deck-data"
 import { BakuganList } from "@bakugan-arena/game-data"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { Edit, Trash } from "lucide-react"
+import { Edit, Share2, Trash } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { toast } from "sonner"
+import { encodeDeck } from "./functions/share-deck-get-code"
 
 export default function DeckPreview( {data} : {data: GetUserDeckType}) {
 
@@ -34,6 +35,18 @@ export default function DeckPreview( {data} : {data: GetUserDeckType}) {
         }
     })
 
+    function CopyToClipboard() {
+        const code = encodeDeck(data)
+
+        if(!code) {
+            toast.error('This deck is empty, cannot be shared')
+            return
+        }
+
+        navigator.clipboard.writeText(code)
+        toast.success('Deck code copied to clipboard')
+    }
+
     return (
         <Card>
             <CardHeader>
@@ -42,6 +55,9 @@ export default function DeckPreview( {data} : {data: GetUserDeckType}) {
                         {data.name}
                     </CardTitle>
                     <div className="flex items-center gap-3">
+                        <Button variant="outline" onClick={CopyToClipboard}>
+                            <Share2/>
+                        </Button>
                         <Button variant='outline' asChild ><Link href={`/dashboard/deck-builder/edit-deck?id=${data.id}`}><Edit/></Link></Button>
                         <Button variant='destructive' onClick={() => deleteDeckMutation.mutate()}><Trash/></Button>
                     </div>

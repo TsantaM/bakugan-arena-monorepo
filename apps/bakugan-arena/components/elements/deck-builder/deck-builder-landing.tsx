@@ -6,6 +6,7 @@ import CreateDeckButton from "./create-deck-button";
 import DeckPreview from "./deck-preview";
 import { useQuery } from "@tanstack/react-query";
 import { GetUserDecks } from "@/src/actions/deck-builder/get-deck-data";
+import ImportDeck from "./import-deck";
 // import { GetUserDecks } from "@/src/actions/deck-builder/get-deck-data";
 
 export default function DeckBuilerLanding() {
@@ -27,6 +28,7 @@ export default function DeckBuilerLanding() {
                     <CardHeader>
                         <div className="flex items-center justify-end gap-2">
                             <CreateDeckButton />
+                            <ImportDeck />
                         </div>
                     </CardHeader>
                     <CardContent className={GetUsersDecksQuery.data && GetUsersDecksQuery.data.length > 0 ? 'grid grid-cols-1 lg:grid-cols-3 gap-3' : ''}>
