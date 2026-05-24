@@ -1,11 +1,18 @@
-import { type stateType } from "../type/type-index.js";
+import { slots_id, type stateType } from "../type/type-index.js";
 import { GateCardsList } from "../battle-brawlers/gate-gards.js";
-import { GetUserName } from "./get-user-name.js";
+
+type returnType = {
+    slot: slots_id,
+    gateId: string,
+    userId: string
+}
 
 
-export function handleGateCards(roomData: stateType) {
+export function handleGateCards(roomData: stateType): returnType[] {
 
-    if (!roomData) return
+    if (!roomData) return []
+
+    const opennable: returnType[] = []
 
     roomData.protalSlots
         .filter(s => s.portalCard && !s.state.open && !s.state.blocked)
@@ -19,30 +26,42 @@ export function handleGateCards(roomData: stateType) {
                 : false
 
             if (canActivate && !gate.activeOnBattleEnd) {
-                roomData.animations.push({
-                    type: "OPEN_GATE_CARD",
-                    data: {
-                        slot: structuredClone(slot),
-                        slotId: slot.id
-                    },
-                    resolved: false,
-                    message: [{
-                        text: `Gate Card Open ! ${gate.name}`,
-                        userName: GetUserName({ roomData: roomData, userId: slot.portalCard.userId }),
-                        turn: roomData.turnState.turnCount
-                    },
-                    {
-                        text: `${gate.description}`,
-                        turn: roomData.turnState.turnCount,
-                        description: true
-                    }]
-                })
-                gate.onOpen({
-                    roomState: roomData,
+                // roomData.animations.push({
+                //     type: "OPEN_GATE_CARD",
+                //     data: {
+                //         slot: structuredClone(slot),
+                //         slotId: slot.id
+                //     },
+                //     resolved: false,
+                //     message: [{
+                //         text: `Gate Card Open ! ${gate.name}`,
+                //         userName: GetUserName({ roomData: roomData, userId: slot.portalCard.userId }),
+                //         turn: roomData.turnState.turnCount
+                //     },
+                //     {
+                //         text: `${gate.description}`,
+                //         turn: roomData.turnState.turnCount,
+                //         description: true
+                //     }]
+                // })
+                // gate.onOpen({
+                //     roomState: roomData,
+                //     slot: slot.id,
+                //     bakuganKey: slot.bakugans.find(b => b.userId === slot.portalCard?.userId)?.key,
+                //     userId: slot.portalCard?.userId
+                // })
+
+                const data: returnType = {
+                    gateId: gate.key,
                     slot: slot.id,
-                    bakuganKey: slot.bakugans.find(b => b.userId === slot.portalCard?.userId)?.key,
-                    userId: slot.portalCard?.userId
-                })
+                    userId: slot.portalCard.userId
+                }
+
+                opennable.push(data)
+
             }
         })
+
+        return opennable
+
 }

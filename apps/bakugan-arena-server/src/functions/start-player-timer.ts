@@ -28,6 +28,68 @@ export function StopPlayerTimer({
     }
 }
 
+export function StartPlayerTime({ roomState, userId, io }: { roomState: stateType, userId: string, io?: Server }) {
+    const intervals = intervalIds.find(i => i.roomId === roomState.roomId)
+
+    const player = roomState.players.find((player) => player.userId === userId)
+    if (!player) return
+    if (!intervals) return
+
+    const playerInterval = intervals.players.find(p => p.userId === userId)
+    if (!playerInterval) return
+
+    if (playerInterval.intervalId !== null) return
+
+    playerInterval.intervalId = setInterval(async () => {
+        player.timer -= 1
+
+        if (io) {
+            io.to(roomState.roomId).emit("player-timer", {
+                userId: player.userId,
+                remaining: player.timer,
+            })
+        }
+
+        if (player.timer === 0) {
+            if (playerInterval.intervalId !== null) {
+                clearInterval(playerInterval.intervalId)
+                playerInterval.intervalId = null
+            }
+
+            const looser = player.userId
+            const winner = roomState.players.find((player) => player.userId !== looser)?.userId
+            if (!winner) return
+
+            await db
+                .update(rooms)
+                .set({
+                    winner: winner,
+                    looser: looser,
+                    finished: true,
+                })
+                .where(eq(rooms.id, roomState.roomId))
+
+            roomState.status.finished = true
+            roomState.status.winner = winner
+
+            if (io) {
+                await CalculateAndUpdateElo({
+                    loser: looser,
+                    winner: winner,
+                    roomData: roomState,
+                    io,
+                    roomId: roomState.roomId,
+                })
+
+                roomState.players.forEach((user) => {
+                    SendUserRooms({ userId: user.userId, io })
+                })
+            }
+        }
+    }, 1000)
+}
+
+
 export function UpdatePlayerTimer({ roomState, io }: { roomState: stateType, io: Server }) {
 
     const rooms = schema.rooms
@@ -151,9 +213,7 @@ export function UpdatePlayerTimer({ roomState, io }: { roomState: stateType, io:
                         inactivePlayer.intervalId = null
                     }
                     const looser = player.userId
-                    const winner = roomState.players.find((player) => {
-                        player.userId !== userId
-                    })?.userId
+                    const winner = roomState.players.find((player) => player.userId !== userId)?.userId
                     if (!winner) return
 
                     await db

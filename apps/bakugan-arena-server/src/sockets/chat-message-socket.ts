@@ -1,4 +1,4 @@
-import { ReceiveMessageSocketType, SendMessageSocketType } from "@bakugan-arena/game-data/dist";
+import { ReceiveMessageSocketType, SendMessageSocketType } from "@bakugan-arena/game-data";
 import { Server, Socket } from "socket.io/dist";
 import { connectedUsers } from "../game-state/battle-brawlers-game-state";
 

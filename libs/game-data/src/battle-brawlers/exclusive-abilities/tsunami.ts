@@ -31,7 +31,8 @@ export const Tsunami: exclusiveAbilitiesType = {
         slots.forEach((s) => {
             RemoveGateCardDirectiveAnimation({
                 animations: roomState.animations,
-                slot: s
+                slot: s,
+                roomState
             })
             ResetSlot(s)
         })

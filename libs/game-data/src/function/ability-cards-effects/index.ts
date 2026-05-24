@@ -13,3 +13,4 @@ export * from './power-change.js'
 export * from './protect-card-effect.js'
 export * from './swipe-gate-card-effect.js'
 export * from './cancel-ability-card-effect.js'
+export * from "./trap-gate-cards-additional.use-ability.js"

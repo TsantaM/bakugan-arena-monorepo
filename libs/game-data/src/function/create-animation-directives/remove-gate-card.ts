@@ -1,16 +1,20 @@
-import type { AnimationDirectivesTypes, portalSlotsTypeElement } from '../../type/type-index.js';
+import type { AnimationDirectivesTypes, portalSlotsTypeElement, stateType } from '../../type/type-index.js';
 
 
 type Props = {
+    roomState: stateType,
     slot: portalSlotsTypeElement
     animations: AnimationDirectivesTypes[];
 }
 
-type RemoveGateCardDirectiveAnimationType = ({ animations, slot }: Props) => void
+type RemoveGateCardDirectiveAnimationType = ({ roomState, animations, slot }: Props) => void
 
-export const RemoveGateCardDirectiveAnimation: RemoveGateCardDirectiveAnimationType = ({ animations, slot }) => {
+export const RemoveGateCardDirectiveAnimation: RemoveGateCardDirectiveAnimationType = ({ roomState, animations, slot }) => {
 
     slot.bakugans.forEach((bakugan) => {
+
+        const bakuganInDeck = roomState.decksState.find((d) => d.userId === bakugan.userId)?.bakugans.find((b) => b.bakuganData.key === bakugan.key)
+
         const comeBackBakuganDirective: AnimationDirectivesTypes = {
             type: 'COME_BACK_BAKUGAN',
             data: {
@@ -21,6 +25,9 @@ export const RemoveGateCardDirectiveAnimation: RemoveGateCardDirectiveAnimationT
         }
 
         animations.push(comeBackBakuganDirective)
+
+        if(bakuganInDeck) bakuganInDeck.bakuganData.onDomain = false
+
 
     })
 

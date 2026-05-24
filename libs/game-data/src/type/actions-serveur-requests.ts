@@ -205,7 +205,7 @@ export type AbilityCardsActions = {
     message: string,
     target?: string // Le joueur qui va recevoir l'action request,
 } | {
-    type : 'SELECT_ABILITY_CARD',
+    type: 'SELECT_ABILITY_CARD',
     target?: string,// Le joueur qui va recevoir l'action request,
     message: string,
     skipable?: boolean,
@@ -244,6 +244,51 @@ export type resolutionDataType = {
     type: 'SELECT_ABILITY_CARD',
     cardOwnerId: string,
     card: SelectableGateCardAction
+} | {
+    type: 'SKIP_ACTION'
+}
+
+export type gateCardAdditionalRequest = {
+    type: 'SELECT_BAKUGAN_TO_SET',
+    target?: string // Le joueur qui va recevoir l'action request,
+    message: string,
+    skipable?: boolean,
+    bakugans: bakuganInDeck[],
+} | {
+    skipable?: boolean,
+    target?: string // Le joueur qui va recevoir l'action request,
+    type: 'SELECT_ABILITY_CARD',
+    data: SelectableGateCardAction[],
+    message: string,
+
+} | {
+    type: 'TURN_ACTION_LAUNCHER'
+    target?: string // Le joueur qui va recevoir l'action request,
+}
+
+export type gateCardActionRequestsType = {
+    roomId: string,
+    cardKey: string,
+    userId: string,
+    slot: slots_id,
+    data: gateCardAdditionalRequest
+}
+
+export type resolutionGateCardType = {
+    cardKey: string;
+    userId: string;
+    slot: slots_id;
+    roomId: string;
+    data: resolutionGateCardDataType;
+}
+
+export type resolutionGateCardDataType = {
+    type: 'SELECT_ABILITY_CARD',
+    cardOwnerId: string,
+    card: SelectableGateCardAction
+} | {
+    type: 'SELECT_BAKUGAN_TO_SET',
+    bakugan: bakuganInDeck
 } | {
     type: 'SKIP_ACTION'
 }

@@ -6,6 +6,7 @@ import { turnActionUpdater } from "../sockets/turn-action";
 import { EmitMessage } from "./emit-messages";
 import { CheckTurnActionRequest } from "./check-turn-action-request-permissions";
 import { CheckGameFinished } from "./CheckGameFinished";
+import { StartPlayerTime, StopPlayerTimer } from "./start-player-timer";
 
 export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganKey, io }: useAbilityCardProps & { io: Server }) => {
     // FR: On récupère les données de la salle en cours avec son roomId
@@ -166,6 +167,23 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
             animations.forEach((animation) => EmitMessage({ roomState: state, animation, io }))
 
             io.to(socket.gameboardSocket).emit('ability-additional-request', requests[0])
+            roomData.players.forEach((p) => {
+
+                const targetId = requests[0].data.target ? requests[0].data.target : requests[0].userId
+
+                if ( p.userId !== targetId) {
+                    StopPlayerTimer({
+                        roomState: roomData,
+                        userId: p.userId
+                    })
+                } else {
+                    StartPlayerTime({
+                        roomState: roomData,
+                        userId: p.userId,
+                        io: io
+                    })
+                }
+            })
 
         } else if (abilityReturn !== null && abilityReturn.type === 'CARD_FAILED') {
             const animation: AnimationDirectivesTypes = {

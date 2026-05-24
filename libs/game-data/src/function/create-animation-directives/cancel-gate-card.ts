@@ -22,5 +22,7 @@ export const CancelGateCardDirectiveAnimation: CancelGateCardDirectiveAnimationT
         }]
     }
 
+    console.log('slot canceled : ', slot.id, slot.portalCard?.key, slot.state)
+
     animations.push(comeBackBakuganDirective)
 }

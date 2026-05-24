@@ -56,7 +56,8 @@ export const finalizeBattle = ({ roomData, winnerId, winners, loserId, loosers, 
 
     RemoveGateCardDirectiveAnimation({
         animations: roomData.animations,
-        slot: slotToUpdate
+        slot: slotToUpdate,
+        roomState: roomData
     })
 
     if (slotToUpdate) ResetSlot(slotToUpdate)

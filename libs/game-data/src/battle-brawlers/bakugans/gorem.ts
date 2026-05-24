@@ -1,4 +1,4 @@
-import { bakuganType, CancelCaracterGateCard, CaracterGateCardEffect, gateCardType, PowerChangeDirectiveAnumation } from "../../index.js"
+import { bakuganType, CancelCaracterGateCard, CaracterGateCardEffect, CheckTwoBakugansAndBattle, gateCardType, PowerChangeDirectiveAnumation } from "../../index.js"
 import { StarterBanList } from "../../store/store-index.js"
 
 export const GoremSubterra: bakuganType = {
@@ -42,13 +42,10 @@ export const GoremGateCard: gateCardType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'gorem-gate-card')
         CancelCaracterGateCard({ roomState: roomState, slotOfGate: slotOfGate, family: 'Gorem' })
     },
-    autoActivationCheck: ({ portalSlot }) => {
-        const bakugansOnSlot = portalSlot.bakugans.length
-        if (bakugansOnSlot >= 2) {
-            return true
-        } else {
-            return false
-        }
+    autoActivationCheck: ({ portalSlot, roomState }) => {
+
+        return CheckTwoBakugansAndBattle({ portalSlot, battleState: roomState.battleState })
+
     },
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
 

@@ -8,6 +8,7 @@ import { ClearDomain } from "../functions/clear-domain";
 import { UpdatePlayerTimer } from "../functions/start-player-timer";
 import { EmitMessage } from "../functions/emit-messages";
 import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
+import { ActiveGateCard } from "../functions/active-gate-card";
 
 export function turnActionUpdater({ roomId, userId, io, updateBattleState = true }: { roomId: string, userId: string, io: Server, updateBattleState?: boolean }) {
     const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
@@ -29,8 +30,20 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
 
     // FR: Vérification et activation automatique des cartes portail si leurs conditions sont remplies
     // ENG: Check and auto-activate gate cards if their conditions are met
-    handleGateCards(roomData)
+    const opennable = handleGateCards(roomData)
 
+    if (opennable.length > 0) {
+        for (const card of opennable) {
+            const requestLaunched = ActiveGateCard({
+                gateId: card.gateId,
+                roomId: roomId,
+                slot: card.slot,
+                userId: card.userId,
+                io: io
+            })
+            if (requestLaunched) return
+        }
+    }
 
     if (roomData && roomData.battleState.turns === 0 && roomData.battleState.battleInProcess && !roomData.battleState.paused) {
         onBattleEnd({ roomId })
@@ -68,7 +81,7 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
 
     clearAnimationsInRoom(roomId)
 
-    if (activeSocket && !roomData.status.finished) {
+    if (activeSocket && !roomData.status.finished && roomData.gateCardActionRequest.length === 0 && roomData.AbilityAditionalRequest.length === 0) {
 
         const checker = CheckTurnActionRequest({ roomState: roomData, userId: userId })
         if (!checker) return
@@ -77,7 +90,7 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
         io.to(activeSocket.gameboardSocket).emit('turn-action-request', request)
     }
 
-    if (inactiveSocket && !roomData.status.finished) {
+    if (inactiveSocket && !roomData.status.finished && roomData.gateCardActionRequest.length === 0 && roomData.AbilityAditionalRequest.length === 0) {
 
         const checker = CheckTurnActionRequest({ roomState: roomData, userId: userId })
         if (!checker) return

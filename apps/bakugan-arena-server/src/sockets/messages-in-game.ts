@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io/dist";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
-import { Message, SendMessageInGameType } from "@bakugan-arena/game-data/dist";
+import { Message, SendMessageInGameType } from "@bakugan-arena/game-data";
 import { db } from "../lib/db";
 import { eq } from "drizzle-orm";
 

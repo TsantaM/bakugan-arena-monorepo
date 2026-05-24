@@ -1,5 +1,5 @@
 import { bakuganType, gateCardType } from "../../type/type-index.js"
-import { CancelCaracterGateCard, CaracterGateCardEffect, PowerChangeDirectiveAnumation } from '../../function/index.js'
+import { CancelCaracterGateCard, CaracterGateCardEffect, CheckTwoBakugansAndBattle, PowerChangeDirectiveAnumation } from '../../function/index.js'
 import { GateCardImages, StarterBanList } from "../../store/store-index.js"
 
 export const CycloidSubterra: bakuganType = {
@@ -73,12 +73,9 @@ export const CycloidGateCard: gateCardType = {
         })
 
     },
-    autoActivationCheck: ({ portalSlot }) => {
-        const bakugansOnSlot = portalSlot.bakugans.length
-        if (bakugansOnSlot >= 2) {
-            return true
-        } else {
-            return false
-        }
+    autoActivationCheck: ({ portalSlot, roomState }) => {
+
+        return CheckTwoBakugansAndBattle({ portalSlot, battleState: roomState.battleState })
+
     },
 }
