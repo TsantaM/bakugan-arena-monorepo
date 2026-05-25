@@ -596,7 +596,7 @@ if (canvas) {
 
     // ********************************** INIT TEST GAME STATE ********************************** \\
 
-    InitGameState({ state: state, bakugansMeshs, gateCardMeshs, plane, scene, userId })
+    InitGameState({ state: state, bakugansMeshs, gateCardMeshs, plane, scene, userId, isSpectator: false })
 
     TurnActionInterfaceBuilder({ request: request })
 

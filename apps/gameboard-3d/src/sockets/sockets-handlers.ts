@@ -40,7 +40,9 @@ let isProcessingAnimations = false
 let currentAnimationPromise: Promise<void> = Promise.resolve();
 
 
-async function processAnimationQueue(userId: string,
+async function processAnimationQueue(
+    userId: string,
+    isSpectator: boolean,
     camera: THREE.PerspectiveCamera,
     scene: THREE.Scene,
     plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>,
@@ -139,7 +141,8 @@ async function processAnimationQueue(userId: string,
                 plane,
                 slot: current.data.slot,
                 userId: userId,
-                gateCardMeshs
+                gateCardMeshs,
+                isSpectator
             });
 
         }
@@ -466,7 +469,7 @@ export function registerSocketHandlers(
         document.getElementById('right-bakugan-previews-container')?.remove()
 
         camera.position.set(3, 5, 8)
-        InitGameState({ state: state, bakugansMeshs, gateCardMeshs, plane, scene, userId })
+        InitGameState({ state: state, bakugansMeshs, isSpectator: false, gateCardMeshs, plane, scene, userId })
 
     })
 
@@ -493,7 +496,7 @@ export function registerSocketHandlers(
         animationQueue.push(...animations)
         if (!isProcessingAnimations) {
             currentAnimationPromise = processAnimationQueue(
-                userId, camera, scene, plane, bakugansMeshs, gateCardMeshs
+                userId, false, camera, scene, plane, bakugansMeshs, gateCardMeshs
             )
         }
     })
@@ -536,7 +539,6 @@ export function registerSocketHandlers(
 
     })
 
-
     socket.on('turn-count-updater', (turnState: turnCountSocketProps) => {
         const turnCounter = document.getElementById('turn-counter')
         if (!turnCounter) return
@@ -575,7 +577,6 @@ export function registerSocketHandlers(
     })
 
 }
-
 
 export function registerSocketHandlersViewers(socket: Socket,
     ctx: {
@@ -643,14 +644,14 @@ export function registerSocketHandlersViewers(socket: Socket,
         document.getElementById('right-bakugan-previews-container')?.remove()
 
         camera.position.set(3, 5, 8)
-        InitGameState({ state: state, bakugansMeshs, gateCardMeshs, plane, scene, userId: player1 })
+        InitGameState({ state: state, bakugansMeshs, gateCardMeshs, plane, scene, userId: player1, isSpectator: true })
 
         console.log(texture)
     })
 
     socket.on("animations", (animations: AnimationDirectivesTypes[]) => {
         animationQueue.push(...animations)
-        currentAnimationPromise = processAnimationQueue(player1, camera, scene, plane, bakugansMeshs, gateCardMeshs)
+        currentAnimationPromise = processAnimationQueue(player1, true, camera, scene, plane, bakugansMeshs, gateCardMeshs)
     })
 
     socket.on('player-timer', (timer: { userId: string, remaining: number }) => {
@@ -675,8 +676,18 @@ export function registerSocketHandlersViewers(socket: Socket,
 
     })
 
+    socket.on('turn-count-updater', (turnState: turnCountSocketProps) => {
+        const turnCounter = document.getElementById('turn-counter')
+        if (!turnCounter) return
+
+        const data = turnState.battleTurn !== undefined ? `${turnState.turnCount}T (${turnState.battleTurn})` : `${turnState.turnCount}T`
+        turnCounter.textContent = data
+
+    })
+
     socket.on('game-finished', (message: Message) => {
         clearTurnInterface()
         sendMessageToParent([message])
     })
+    
 }

@@ -7,11 +7,17 @@ export function EmitMessage({ roomState, animation, io }: { roomState: stateType
     if (!roomState) return
     if (!messages) return
 
-    const sockets = roomState.connectedsUsers
+    // const sockets = { ...roomState.connectedsUsers, ...roomState.spectators }
+    const connectedUsersSockets = roomState.connectedsUsers
+    const spectatorsSockets = roomState.spectators
 
     messages.forEach((message) => {
         roomState.messages.push(message)
-        sockets.forEach((s) => {
+        connectedUsersSockets.forEach((s) => {
+            console.log('parent-socket', s.nextjsSocket)
+            io.to(s.nextjsSocket).emit('game-messages', message)
+        })
+        spectatorsSockets.forEach((s) => {
             console.log('parent-socket', s.nextjsSocket)
             io.to(s.nextjsSocket).emit('game-messages', message)
         })
@@ -23,10 +29,12 @@ export function SendAllMessages({ roomState, io, socketNext }: { roomState: stat
 
     if (!roomState) return
     const messages = roomState.messages
-    const sockets = roomState.connectedsUsers
+    const connectedUsersSockets = roomState.connectedsUsers
+    const spectatorsSockets = roomState.spectators
     console.log('parent socket', socketNext)
     if (messages.length > 0) {
-        sockets.forEach((s) => io.to(socketNext).emit('init-game-messages', messages))
+        connectedUsersSockets.forEach((s) => io.to(socketNext).emit('init-game-messages', messages))
+        spectatorsSockets.forEach((s) => io.to(socketNext).emit('init-game-messages', messages))
     }
 
 }

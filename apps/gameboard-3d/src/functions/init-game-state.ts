@@ -10,9 +10,10 @@ import dayjs from "dayjs"
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
 
-export function InitGameState({ state, plane, scene, userId, bakugansMeshs, gateCardMeshs }: {
+export function InitGameState({ state, plane, scene, userId, bakugansMeshs, gateCardMeshs, isSpectator }: {
     state: roomStateType, scene: THREE.Scene,
     userId: string,
+    isSpectator: boolean,
     plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>,
     bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[],
     gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[]
@@ -25,7 +26,8 @@ export function InitGameState({ state, plane, scene, userId, bakugansMeshs, gate
                 plane: plane,
                 slot: slot,
                 gateCardMeshs,
-                userId
+                userId,
+                isSpectator: isSpectator
             })
 
             if (slot.bakugans.length > 0) {

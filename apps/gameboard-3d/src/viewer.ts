@@ -4,9 +4,10 @@ import * as THREE from 'three'
 import { PlaneMesh } from './meshes/plane.mesh'
 import { createSocket } from './sockets/create-socket'
 import { registerSocketHandlersViewers } from './sockets/sockets-handlers'
-import { CreateBakuganHoverPreview, RemoveBakuganHoverPreview, type BakuganPreviewData } from './functions/create-bakugan-preview-hover'
-import { OnHoverGateCard } from './animations/show-message-animation'
+import { type BakuganPreviewData } from './functions/create-bakugan-preview-hover'
 import { setImageWithFallback } from './functions/set-image-with-fallback'
+import { hideTooltip, initTooltip, showTooltip, tooltip } from './functions/tooltips-functions'
+import { Bakugans } from '@bakugan-arena/game-data'
 
 const canvas = document.getElementById('gameboard-canvas')
 const params = new URLSearchParams(window.location.search)
@@ -65,7 +66,7 @@ if (player2Image) {
 }
 
 
-socket.emit('init-room-state', ({ roomId, userId, parentSocket }))
+socket.emit('init-room-state', ({ roomId, userId, parentSocket, isSpectator: true }))
 
 if (roomId !== null && userId !== null && player1Id !== null) {
   if (canvas) {
@@ -128,6 +129,8 @@ if (roomId !== null && userId !== null && player1Id !== null) {
     let hoveredMesh: THREE.Sprite<THREE.Object3DEventMap> | null = null
     let hoveredSlot: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap> | null = null
 
+    initTooltip()
+
     window.addEventListener('mousemove', (event: MouseEvent) => {
 
       const elementUnderMouse = document.elementFromPoint(
@@ -135,70 +138,89 @@ if (roomId !== null && userId !== null && player1Id !== null) {
         event.clientY
       )
 
-      // Si la souris n’est PAS au-dessus du canvas → on annule
+      // ❌ Hors canvas → reset propre
       if (!elementUnderMouse || !canvas.contains(elementUnderMouse)) {
-        if (hoveredMesh) {
-          RemoveBakuganHoverPreview()
-          hoveredMesh = null
+        if (hoveredMesh || hoveredSlot) {
+          hideTooltip()
         }
 
-        if (hoveredSlot) {
-          document.getElementById('on-hover-gate-card')?.remove()
-          hoveredSlot = null
-        }
-
+        hoveredMesh = null
+        hoveredSlot = null
         return
       }
 
+      // ✅ Position souris (IMPORTANT)
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
 
       raycaster.setFromCamera(mouse, camera)
 
+      // ✅ Update position tooltip (CRITIQUE)
+      tooltip?.setProps({
+        getReferenceClientRect: () =>
+          new DOMRect(
+            event.clientX,
+            event.clientY,
+            0,
+            0
+          ),
+      })
+
       const intersects = raycaster.intersectObjects(bakugansMeshs, false)
       const gatesIntersects = raycaster.intersectObjects(gateCardMeshs, false)
 
+      // =========================
+      // 🎯 BAKUGAN
+      // =========================
       if (intersects.length > 0) {
-        const currentMesh = intersects[0].object as THREE.Sprite<THREE.Object3DEventMap>
+        const currentMesh = intersects[0].object as THREE.Sprite
 
         if (hoveredMesh !== currentMesh) {
-          if (hoveredMesh) {
-            RemoveBakuganHoverPreview()
-          }
-
           hoveredMesh = currentMesh
-          CreateBakuganHoverPreview(currentMesh.userData as BakuganPreviewData, { x: mouse.x, y: mouse.y })
+
+          const data = currentMesh.userData as BakuganPreviewData
+          const bakuganName = Bakugans[data.bakuganKey].name
+
+          showTooltip(`
+                <strong>${bakuganName}</strong><br/>
+                Power: ${data.powerLevel}
+                `)
         }
 
-      } else {
-        if (hoveredMesh) {
-          RemoveBakuganHoverPreview()
-          hoveredMesh = null
-        }
+        // ⚠️ IMPORTANT → empêcher le gate card de overwrite
+        hoveredSlot = null
+        return
       }
 
+      // =========================
+      // 🎯 GATE CARD
+      // =========================
       if (gatesIntersects.length > 0) {
-        const currentMesh = gatesIntersects[0].object as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>
+        const currentMesh = gatesIntersects[0].object as THREE.Mesh
 
         if (hoveredSlot !== currentMesh) {
-          if (hoveredSlot) {
-            document.getElementById('on-hover-gate-card')?.remove()
-          }
-
-          hoveredSlot = currentMesh
-          if (hoveredSlot.userData.cardName) {
-            const message: string = hoveredSlot.userData.cardName
-            OnHoverGateCard({ message: message })
+          hoveredSlot = currentMesh as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>
+          console.log('hovered slot', hoveredSlot.userData.cardName)
+          if (currentMesh.userData.cardName) {
+            showTooltip(`<strong>${currentMesh.userData.cardName}</strong>`)
+          } else {
+            hideTooltip()
           }
         }
 
-      } else {
-        if (hoveredSlot) {
-          document.getElementById('on-hover-gate-card')?.remove()
-          hoveredSlot = null
-        }
+        hoveredMesh = null
+        return
       }
 
+      // =========================
+      // ❌ RIEN HOVER
+      // =========================
+      if (hoveredMesh || hoveredSlot) {
+        hideTooltip()
+      }
+
+      hoveredMesh = null
+      hoveredSlot = null
     })
 
     registerSocketHandlersViewers(socket, {
@@ -212,7 +234,7 @@ if (roomId !== null && userId !== null && player1Id !== null) {
       player1: player1Id
     })
 
-    socket.emit('init-room-state', ({ roomId, userId, parentSocket }))
+    // socket.emit('init-room-state', ({ roomId, userId, parentSocket, isSpectator: true }))
 
     loop()
     function loop() {
@@ -222,7 +244,7 @@ if (roomId !== null && userId !== null && player1Id !== null) {
     }
 
     reload?.addEventListener("click", () => {
-      socket.emit('init-room-state', ({ roomId, userId, parentSocket }))
+      socket.emit('init-room-state', ({ roomId, userId, parentSocket, isSpectator: true }))
     })
 
     window.addEventListener('resize', () => {

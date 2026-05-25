@@ -3,13 +3,14 @@ import * as THREE from 'three'
 import { SetGateCardAnimation } from "../animations/set-gate-card-animation";
 import { createSlotMesh } from "../meshes/slot.mesh";
 
-export async function SetGateCardFunctionAndAnimation({ slot, plane, userId, gateCardMeshs }: { slot: portalSlotsTypeElement, plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>, userId: string, gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[] }) {
+export async function SetGateCardFunctionAndAnimation({ slot, plane, userId, isSpectator, gateCardMeshs }: { slot: portalSlotsTypeElement, plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>, userId: string, isSpectator: boolean, gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[] }) {
 
     createSlotMesh({
         plane: plane,
         slot: slot,
         gateCardMeshs,
-        userId
+        userId,
+        isSpectator
     })
 
     if (slot.portalCard !== null) {

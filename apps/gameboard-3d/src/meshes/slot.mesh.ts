@@ -19,7 +19,7 @@ const slotMesh = new THREE.Mesh(
     })
 )
 
-function createSlotMesh({ slot, plane, userId, gateCardMeshs }: { slot: portalSlotsTypeElement, plane: THREE.Mesh, userId: string, gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[] }) {
+function createSlotMesh({ slot, plane, userId, gateCardMeshs, isSpectator = false }: { slot: portalSlotsTypeElement, plane: THREE.Mesh, userId: string, isSpectator: boolean, gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[] }) {
     const mesh = new THREE.Mesh(
         new THREE.PlaneGeometry(4, 6),
         new THREE.MeshStandardMaterial({
@@ -40,7 +40,7 @@ function createSlotMesh({ slot, plane, userId, gateCardMeshs }: { slot: portalSl
     if (slot.portalCard !== null) {
         const card = GateCardsList.find((card) => card.key === slot.portalCard?.key)
         if (!card) return
-        const cardImage = card.imageByAttribut ? GetCharacterCardImage (card, slot) ? GetCharacterCardImage (card, slot) : card.image : card.image
+        const cardImage = card.imageByAttribut ? GetCharacterCardImage(card, slot) ? GetCharacterCardImage(card, slot) : card.image : card.image
         if (slot.state.open === true) {
             const texture = new THREE.TextureLoader().load(`./../images/cards/${cardImage ? cardImage : card.image}`)
             mesh.material.map = texture
@@ -49,8 +49,14 @@ function createSlotMesh({ slot, plane, userId, gateCardMeshs }: { slot: portalSl
         } else {
             const texture = new THREE.TextureLoader().load(`./../images/cards/portal_card.png`)
             mesh.material.map = texture
-            if (slot.portalCard.userId === userId) {
-                data.cardName = card.name
+
+            if (isSpectator) {
+                data.cardName = undefined
+                data.state.open = false
+            } else {
+                if (slot.portalCard.userId === userId) {
+                    data.cardName = card.name
+                }
                 data.state.open = false
             }
         }

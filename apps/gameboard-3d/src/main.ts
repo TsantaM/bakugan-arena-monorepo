@@ -64,7 +64,7 @@ if (opponentImage) {
 }
 
 
-socket.emit('init-room-state', ({ roomId, userId, parentSocket }))
+socket.emit('init-room-state', ({ roomId, userId, parentSocket, isSpectator: false }))
 
 if (roomId !== null && userId !== null) {
 
@@ -233,7 +233,7 @@ if (roomId !== null && userId !== null) {
       gateCardMeshs: gateCardMeshs,
     })
 
-    socket.emit('init-room-state', ({ roomId, userId, parentSocket }))
+    // socket.emit('init-room-state', ({ roomId, userId, parentSocket, isSpectator: false }))
 
     loop()
     function loop() {

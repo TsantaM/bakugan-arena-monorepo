@@ -14,17 +14,24 @@ const roomState = ({ roomId }: { roomId: string }) => {
 export const socketGetRoomState = (io: Server, socket: Socket) => {
     socket.on(
         'get-room-state',
-        ({ roomId, userId, parentSocket }: { roomId: string; userId: string, parentSocket: string }) => {
+        ({ roomId, userId, parentSocket, isSpectator }: { roomId: string; userId: string, parentSocket: string, isSpectator?: boolean }) => {
             console.log('get-room parent socket', parentSocket)
             const state = roomState({ roomId })
             if (!state) return
 
             // On rattache / met à jour le socket du user
             socket.join(roomId)
-            state.connectedsUsers.set(userId, {
-                gameboardSocket: socket.id,
-                nextjsSocket: parentSocket
-            })
+            if (isSpectator) {
+                state.spectators.set(userId, {
+                    gameboardSocket: socket.id,
+                    nextjsSocket: parentSocket
+                })
+            } else {
+                state.connectedsUsers.set(userId, {
+                    gameboardSocket: socket.id,
+                    nextjsSocket: parentSocket
+                })
+            }
 
             /**
              * 1️⃣ Etat global de la room
@@ -96,7 +103,7 @@ export const socketGetRoomState = (io: Server, socket: Socket) => {
 export const socketInitiRoomState = (io: Server, socket: Socket) => {
     socket.on(
         'init-room-state',
-        ({ roomId, userId, parentSocket }: { roomId: string; userId: string, parentSocket: string }) => {
+        ({ roomId, userId, parentSocket, isSpectator = false }: { roomId: string; userId: string, parentSocket: string, isSpectator?: boolean }) => {
             console.log('init-room parent socket', parentSocket)
             socket.join(roomId)
 
@@ -106,10 +113,17 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
             if (!roomData) return
 
             // Associer (ou réassocier) le socket au user
-            roomData.connectedsUsers.set(userId, {
-                gameboardSocket: socket.id,
-                nextjsSocket: parentSocket
-            })
+            if (isSpectator) {
+                roomData.spectators.set(userId, {
+                    gameboardSocket: socket.id,
+                    nextjsSocket: parentSocket
+                })
+            } else {
+                roomData.connectedsUsers.set(userId, {
+                    gameboardSocket: socket.id,
+                    nextjsSocket: parentSocket
+                })
+            }
 
             console.log('parent', parentSocket)
 
@@ -127,6 +141,11 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
             })
 
             if (!roomData.status.finished) {
+
+                // Only connected users (not spectators) should receive action requests
+                if (isSpectator) {
+                    return
+                }
                 /**
                  * 1️⃣ Ability additional request
                  * -> seulement si CE user est concerné
@@ -137,7 +156,7 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
                     if (!abilityRequest.data.target && abilityRequest.userId === userId) {
                         socket.emit('ability-additional-request', abilityRequest)
                     } else {
-                        if(abilityRequest.data.target === userId) {
+                        if (abilityRequest.data.target === userId) {
                             socket.emit('ability-additional-request', abilityRequest)
                         }
                     }
@@ -145,12 +164,12 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
                 }
 
                 const gateRequest = roomData.gateCardActionRequest[0]
-                if(gateRequest) {
+                if (gateRequest) {
 
-                    if(!gateRequest.data.target && gateRequest.userId) {
+                    if (!gateRequest.data.target && gateRequest.userId) {
                         socket.emit('gate-card-additional-request', gateRequest)
                     } else {
-                        if(gateRequest.data.target === userId) {
+                        if (gateRequest.data.target === userId) {
                             socket.emit('gate-card-additional-request', gateRequest)
                         }
                     }
