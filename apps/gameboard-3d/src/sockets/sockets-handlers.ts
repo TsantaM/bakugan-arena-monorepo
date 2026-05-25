@@ -573,7 +573,6 @@ export function registerSocketHandlers(
     socket.on('game-finished', (message: Message) => {
         clearTurnInterface()
         sendMessageToParent([message])
-
     })
 
 }

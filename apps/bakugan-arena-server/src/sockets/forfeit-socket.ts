@@ -22,8 +22,9 @@ export function forfeitSocket(io: Server, socket: Socket) {
         const winner = players.find((p) => p.userId !== userId)
 
         if (!winner || !loser) return
-        players.forEach((player) => StopPlayerTimer({roomState: roomData, userId: player.userId}))
+        players.forEach((player) => StopPlayerTimer({ roomState: roomData, userId: player.userId }))
         roomData.status.finished = true
+        roomData.status.finisheAt = Date.now()
         roomData.status.winner = winner.userId
 
 

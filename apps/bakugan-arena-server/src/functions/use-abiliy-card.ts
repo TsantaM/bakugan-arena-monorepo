@@ -78,6 +78,7 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
         }
 
         roomData.animations.push(activeCardAnimation)
+        roomData.animationsForReplay.push(activeCardAnimation)
 
         // FR: On exécute l’effet de la capacité en lui passant tout le contexte nécessaire
         // ENG: Execute the ability effect by passing all required context
@@ -171,7 +172,7 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
 
                 const targetId = requests[0].data.target ? requests[0].data.target : requests[0].userId
 
-                if ( p.userId !== targetId) {
+                if (p.userId !== targetId) {
                     StopPlayerTimer({
                         roomState: roomData,
                         userId: p.userId
@@ -200,6 +201,7 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
 
             const animations = Battle_Brawlers_Game_State[roomIndex].animations
             animations.push(animation)
+            roomData.animationsForReplay.push(animation)
             io.to(roomId).emit('update-room-state', state)
             if (!animations) return
             io.to(roomId).emit('animations', animations)

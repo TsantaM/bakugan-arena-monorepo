@@ -24,7 +24,9 @@ export const AspirateurDePuissance: gateCardType = {
                 bakugans: [firstBakugan],
                 powerChange: 100,
                 malus: false,
-                turn: roomState.turnState.turnCount
+                turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
+
 
             })
             lastBakugan.currentPower = lastBakugan.currentPower - 100
@@ -33,7 +35,9 @@ export const AspirateurDePuissance: gateCardType = {
                 bakugans: [lastBakugan],
                 powerChange: 100,
                 malus: true,
-                turn: roomState.turnState.turnCount
+                turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
+
 
             })
             slotOfGate.state.open = true
@@ -56,7 +60,9 @@ export const AspirateurDePuissance: gateCardType = {
                 bakugans: [firstBakugan],
                 powerChange: 100,
                 malus: true,
-                turn: roomState.turnState.turnCount
+                turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
+
 
             })
             lastBakugan.currentPower = lastBakugan.currentPower + 100
@@ -65,7 +71,8 @@ export const AspirateurDePuissance: gateCardType = {
                 bakugans: [lastBakugan],
                 powerChange: 100,
                 malus: false,
-                turn: roomState.turnState.turnCount
+                turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
 
             })
             slotOfGate.state.canceled = true

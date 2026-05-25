@@ -22,7 +22,8 @@ export const RegainSubit: exclusiveAbilitiesType = {
                     bakugans: [user],
                     powerChange: 100,
                     malus: false,
-                    turn: roomState.turnState.turnCount
+                    turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
 
                 })
                 opponents.forEach((opponent) => {
@@ -33,7 +34,8 @@ export const RegainSubit: exclusiveAbilitiesType = {
                     bakugans: opponents,
                     powerChange: 100,
                     malus: true,
-                    turn: roomState.turnState.turnCount
+                    turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
 
                 })
             }

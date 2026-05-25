@@ -6,7 +6,7 @@ type NewAdditionnalMessageType = {
     roomState: stateType
 }
 
-export function NewAdditionnalMessage({roomState, text} : NewAdditionnalMessageType) {
+export function NewAdditionnalMessage({ roomState, text }: NewAdditionnalMessageType) {
 
     const message: Message = {
         text: text,
@@ -18,8 +18,9 @@ export function NewAdditionnalMessage({roomState, text} : NewAdditionnalMessageT
         type: 'ADDITIONAL_MESSAGE',
         message: [message],
         resolve: false
-    } 
+    }
 
     roomState.animations.push(animation)
+    roomState.animationsForReplay.push(animation)
 
 }

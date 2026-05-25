@@ -12,6 +12,7 @@ export function clearAnimationsInRoom(roomId: string) {
 
     if (!roomData) return
     if (!Battle_Brawlers_Game_State[roomIndex]) return
+
     Battle_Brawlers_Game_State[roomIndex].animations = []
 }
 

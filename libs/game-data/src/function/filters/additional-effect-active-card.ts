@@ -45,6 +45,7 @@ export function AdditionalEffectActiveCard({ resolution, roomState, opponentsBak
     }
 
     roomState.animations.push(activeCardAnimation)
+    roomState.animationsForReplay.push(activeCardAnimation)
 
     cardData?.onActivate({
         roomState,

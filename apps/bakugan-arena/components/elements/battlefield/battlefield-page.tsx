@@ -8,6 +8,8 @@ import { redirect } from "next/navigation";
 import { useAudioStore } from "@/src/store/sounds-store";
 import { OSTLists } from "@/src/variables/OST";
 import { Toaster } from "@/components/ui/sonner"
+import { useRoomsStore } from "@/src/store/rooms-store";
+import DownloadAndUploadReplay from "./download-upload-replay";
 
 type player = {
     player: {
@@ -35,6 +37,7 @@ type BattleFieldPageProps = {
 export default function BattleFieldPage({ player, opponent, roomId, userId, isPlayer }: BattleFieldPageProps) {
 
     const socket = useSocketStore((state) => state.socket)
+    const room = useRoomsStore((state) => state.rooms).find((r) => r.roomId === roomId)
 
     if (!socket) return null
     const socketId = socket.id
@@ -65,7 +68,7 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
     useEffect(() => {
         playRandomOST()
     }, [])
- 
+
     return (
         <>
             <ReactHowler
@@ -74,10 +77,10 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
                 volume={volume[0]}
                 playing={true}
             />
+            <DownloadAndUploadReplay roomId={roomId} />
             <MessagesModal player={playerData?.displayUsername} opponent={opponentData?.displayUsername} roomId={roomId} userId={userId} />
             <iframe ref={iframeRef} src={link} className="w-full h-full border-0"></iframe>
-            <Toaster  />
-
+            <Toaster />
         </>
     )
 }

@@ -20,7 +20,8 @@ export const VisageDeJoie: exclusiveAbilitiesType = {
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
                     slot: slotOfGate,
-                    turn: roomState.turnState.turnCount
+                    turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
 
                 })
 

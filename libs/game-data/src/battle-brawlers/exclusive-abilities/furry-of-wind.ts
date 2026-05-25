@@ -50,6 +50,7 @@ export const FurryOfWind: exclusiveAbilitiesType = {
             }
 
             roomState.animations.push(removeGateCard)
+            roomState.animationsForReplay.push(removeGateCard)
 
             ResetSlot(slotOfGate)
 
@@ -75,7 +76,7 @@ export const FurryOfWind: exclusiveAbilitiesType = {
         if (bakugan.key !== SkyressVentus.key) return false
         const slot = roomState.protalSlots[Slots.indexOf(bakugan.slot_id)]
         const allies = slot.bakugans.filter((b) => b.userId === bakugan.userId).length
-        if(allies > 1) return false
+        if (allies > 1) return false
         return true
     },
 }

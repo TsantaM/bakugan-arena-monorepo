@@ -59,6 +59,7 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
             }
 
             roomData.animations.push(animation)
+            roomData.animationsForReplay.push(animation)
 
             card.onOpen({ roomState: roomData, slot: battleState.slot })
 
@@ -130,7 +131,9 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
                         animations: roomData.animations,
                         bakugan: bakugan,
                         slot: slot,
-                        turn: roomData.turnState.turnCount
+                        turn: roomData.turnState.turnCount,
+                        animationsForReplay: roomData.animationsForReplay
+
                     })
                 }
             })
@@ -140,7 +143,8 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
                     ComeBackBakuganDirectiveAnimation({
                         animations: roomData.animations,
                         bakugan: bakugan,
-                        slot: slot
+                        slot: slot,
+                        animationsForReplay: roomData.animationsForReplay
                     })
                 }
             })
@@ -166,7 +170,9 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
                 ComeBackBakuganDirectiveAnimation({
                     animations: roomData.animations,
                     bakugan: bakugan,
-                    slot: slot
+                    slot: slot,
+                    animationsForReplay: roomData.animationsForReplay
+
                 })
             })
             updateDeckBakugans({ deck: p1Deck, bakugans: keys })

@@ -1,7 +1,7 @@
 import { schema } from "@bakugan-arena/drizzle-orm"
 import { and, eq, inArray } from "drizzle-orm"
 import { db } from "../../lib/db"
-import { Message, stateType } from "@bakugan-arena/game-data"
+import { AnimationDirectivesTypes, Message, stateType } from "@bakugan-arena/game-data"
 import { Server } from "socket.io/dist"
 
 function getK(elo: number): number {
@@ -18,7 +18,7 @@ export async function CalculateAndUpdateElo({ winner, loser, roomData, io, roomI
 
     const winnerName = roomData.players.find((p) => p.userId === roomData.status.winner)?.username ? roomData.players.find((p) => p.userId === roomData.status.winner)?.username : ''
     const loserName = roomData.players.find((p) => p.userId !== roomData.status.winner)?.username ? roomData.players.find((p) => p.userId !== roomData.status.winner)?.username : ''
-    
+
     if (!roomData.ranked) {
 
         const text = forfeit ? `${loserName} forfeit ! The winner is ${winnerName}` : `Game is over ! The winner is ${winnerName}`
@@ -29,6 +29,20 @@ export async function CalculateAndUpdateElo({ winner, loser, roomData, io, roomI
         }
 
         io.to(roomId).emit('game-finished', message)
+
+        // ENVOI DES ANIMATIONS AUX JOUEURS POUR LE DOWNLOAD OU L'UPLOAD
+        const room: { p1: string, p2: string, roomId: string, finished: boolean, animations: AnimationDirectivesTypes[] } = {
+            roomId: roomData.roomId,
+            p1: roomData.players[0].userId,
+            p2: roomData.players[1].userId,
+            animations: roomData.animationsForReplay,
+            finished: roomData.status.finished
+        }
+        roomData.connectedsUsers.forEach((player) => {
+            io.to(player.nextjsSocket).emit('final-room-state', room)
+        })
+        // ENVOI DES ANIMATIONS AUX JOUEURS POUR LE DOWNLOAD OU L'UPLOAD
+
         const sockets = roomData.connectedsUsers
         sockets.forEach((s) => {
             console.log('parent-socket', s.nextjsSocket)
@@ -98,6 +112,20 @@ export async function CalculateAndUpdateElo({ winner, loser, roomData, io, roomI
     // console.log(loserElo)
 
     io.to(roomId).emit('game-finished', message)
+
+    // ENVOI DES ANIMATIONS AUX JOUEURS POUR LE DOWNLOAD OU L'UPLOAD
+    const room: { p1: string, p2: string, roomId: string, finished: boolean, animations: AnimationDirectivesTypes[] } = {
+        roomId: roomData.roomId,
+        p1: roomData.players[0].userId,
+        p2: roomData.players[1].userId,
+        animations: roomData.animationsForReplay,
+        finished: roomData.status.finished
+    }
+    roomData.connectedsUsers.forEach((player) => {
+        io.to(player.nextjsSocket).emit('final-room-state', room)
+    })
+    // ENVOI DES ANIMATIONS AUX JOUEURS POUR LE DOWNLOAD OU L'UPLOAD
+
     const sockets = roomData.connectedsUsers
     sockets.forEach((s) => {
         console.log('parent-socket', s.nextjsSocket)

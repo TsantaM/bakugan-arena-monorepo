@@ -6,15 +6,16 @@ type Props = {
     newSlot: portalSlotsTypeElement,
     bakugan: bakuganOnSlot,
     animations: AnimationDirectivesTypes[];
+    animationsForReplay: AnimationDirectivesTypes[];
     turn:number,
     additionalMessages?: Message[]
 }
 
-type MoveToAnotherSlotType = ({ animations, bakugan, initialSlot, newSlot, turn }: Props) => void
+type MoveToAnotherSlotType = ({ animations, bakugan, initialSlot, newSlot, turn, animationsForReplay }: Props) => void
 
 
 
-export const MoveToAnotherSlotDirectiveAnimation: MoveToAnotherSlotType = ({ animations, bakugan, initialSlot, newSlot, turn, additionalMessages }) => {
+export const MoveToAnotherSlotDirectiveAnimation: MoveToAnotherSlotType = ({ animations, bakugan, initialSlot, newSlot, turn, additionalMessages, animationsForReplay }) => {
 
     const additionnal: Message[] = additionalMessages ? additionalMessages : []
 
@@ -35,4 +36,6 @@ export const MoveToAnotherSlotDirectiveAnimation: MoveToAnotherSlotType = ({ ani
     }
 
     animations.push(animation)
+    animationsForReplay.push(animation)
+    
 }

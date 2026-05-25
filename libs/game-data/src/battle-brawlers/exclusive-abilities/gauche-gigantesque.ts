@@ -21,7 +21,8 @@ export const GaucheGigantesque: exclusiveAbilitiesType = {
                     CancelGateCardDirectiveAnimation({
                         animations: roomState?.animations,
                         slot: structuredClone(slotOfGate),
-                        turn: roomState.turnState.turnCount
+                        turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
 
                     })
 

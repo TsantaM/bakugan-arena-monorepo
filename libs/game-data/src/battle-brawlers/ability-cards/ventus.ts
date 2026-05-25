@@ -107,7 +107,9 @@ export const TornadeChaosTotal: abilityCardsType = {
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
                     slot: slotOfGate,
-                    turn: roomState.turnState.turnCount
+                    turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
+
 
                 })
                 if (gateToCancel && gateToCancel.onCanceled) {
@@ -244,7 +246,9 @@ export const RetourDair: abilityCardsType = {
                 ComeBackBakuganDirectiveAnimation({
                     animations: roomState.animations,
                     bakugan: user,
-                    slot: slotOfGate
+                    slot: slotOfGate,
+                    animationsForReplay: roomState.animationsForReplay
+
                 })
             }
 

@@ -41,7 +41,9 @@ export const RapideHaos: abilityCardsType = {
                     bakugans: [user],
                     powerChange: 100,
                     malus: false,
-                    turn: roomState.turnState.turnCount
+                    turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
+
                 })
             }
         }
@@ -161,13 +163,17 @@ export const EclatSoudain: abilityCardsType = {
                 ComeBackBakuganDirectiveAnimation({
                     animations: roomState?.animations,
                     bakugan: a,
-                    slot: slotToUpdate
+                    slot: slotToUpdate,
+                    animationsForReplay: roomState.animationsForReplay
+
                 })
 
                 RemoveRenfortAnimationDirective({
                     animations: roomState.animations,
                     turnCount: roomState.turnState.turnCount,
-                    bakugan: a
+                    bakugan: a,
+                    animationsForReplay: roomState.animationsForReplay
+
                 })
 
                 const deckDataToUpdate = deck.bakugans.find((b) => b?.bakuganData.key === a.key)
@@ -223,7 +229,9 @@ export const LumiereDivine: abilityCardsType = {
                     bakugans: [user],
                     powerChange: 100,
                     malus: false,
-                    turn: roomState.turnState.turnCount
+                    turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
+
 
                 })
             }
@@ -339,7 +347,9 @@ export const HaosImmobilisation: abilityCardsType = {
                     bakugans: [user],
                     powerChange: 100,
                     malus: true,
-                    turn: roomState.turnState.turnCount
+                    turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
+
 
                 })
             }
@@ -385,7 +395,9 @@ export const SupportLight: abilityCardsType = {
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
                     slot: slotOfGate,
-                    turn: roomState.turnState.turnCount
+                    turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
+
                 })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })

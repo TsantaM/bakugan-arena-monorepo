@@ -7,12 +7,13 @@ type Props = {
     user: bakuganOnSlot
     initialSlot: portalSlotsTypeElement
     animations: AnimationDirectivesTypes[];
+    animationsForReplay: AnimationDirectivesTypes[];
     turn: number
 }
 
-type DragAndElimineDirectiveAnimationType = ({ animations, bakugan, initialSlot, turn }: Props) => void
+type DragAndElimineDirectiveAnimationType = ({ animations, bakugan, initialSlot, turn, animationsForReplay }: Props) => void
 
-export const DragAndElimineDirectiveAnimation: DragAndElimineDirectiveAnimationType = ({ animations, bakugan, initialSlot, turn, user }) => {
+export const DragAndElimineDirectiveAnimation: DragAndElimineDirectiveAnimationType = ({ animations, bakugan, initialSlot, turn, user, animationsForReplay }) => {
 
     const name = BakuganList.find((b) => bakugan.key === b.key)?.name || 'A bakugan'
 
@@ -31,4 +32,6 @@ export const DragAndElimineDirectiveAnimation: DragAndElimineDirectiveAnimationT
     }
 
     animations.push(animation)
+    animationsForReplay.push(animation)
+
 }

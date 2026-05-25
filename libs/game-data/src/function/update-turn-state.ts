@@ -53,6 +53,8 @@ export function updateTurnState(roomData: stateType) {
                 }
 
                 roomData.animations.push(animation)
+                roomData.animationsForReplay.push(animation)
+
             }
         }
 

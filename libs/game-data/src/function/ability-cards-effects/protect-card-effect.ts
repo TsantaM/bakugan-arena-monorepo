@@ -55,6 +55,8 @@ export function ProtectCardEffect({ bakugan, cardKey, origin, roomState, protect
         }
 
         roomState.animations.push(animation)
+        roomState.animationsForReplay.push(animation)
+
 
     }
 
@@ -69,9 +71,9 @@ export function RemoveProtectionCardEffect({ bakugan, cardKey, origin, protectio
 
     if (check && check.key === cardKey && check.origin === origin) {
 
-        if(origin === 'GATE') {
+        if (origin === 'GATE') {
             bakugan.statut.protectedAgainstGate = false
-        } else if(origin === 'ABILITY') {
+        } else if (origin === 'ABILITY') {
             bakugan.statut.protectedAgainstAbility = false
         } else {
             bakugan.statut.protected = false
@@ -95,6 +97,7 @@ export function RemoveProtectionCardEffect({ bakugan, cardKey, origin, protectio
         }
 
         roomState.animations.push(animation)
+        roomState.animationsForReplay.push(animation)
 
     } else {
         const text: string = `${Bakugans[bakugan.key].name} isn't protected.`;

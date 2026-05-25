@@ -53,7 +53,9 @@ export const PreyasGateCard: gateCardType = {
             bakugans: [bakugan],
             powerChange: basePower,
             malus: false,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
 
     },
@@ -74,7 +76,9 @@ export const PreyasGateCard: gateCardType = {
             bakugans: [bakugan],
             powerChange: basePower,
             malus: true,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
 
     },
@@ -136,7 +140,9 @@ export const DiabloGateCard: gateCardType = {
             bakugans: [bakugan],
             powerChange: basePower,
             malus: false,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
 
     },
@@ -157,7 +163,9 @@ export const DiabloGateCard: gateCardType = {
             bakugans: [bakugan],
             powerChange: basePower,
             malus: true,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
 
     },
@@ -219,7 +227,9 @@ export const AngeloGateCard: gateCardType = {
             bakugans: [bakugan],
             powerChange: basePower,
             malus: false,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
 
     },
@@ -240,7 +250,9 @@ export const AngeloGateCard: gateCardType = {
             bakugans: [bakugan],
             powerChange: basePower,
             malus: true,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
 
     },

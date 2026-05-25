@@ -40,6 +40,7 @@ export function ElementaryCardCancelerEffect({ roomState, userId, slot, cardToCa
             }
 
             roomState.animations.push(animation)
+            roomState.animationsForReplay.push(animation)
 
             if (card?.onCanceled) card.onCanceled({
                 bakuganKey: cardToCancel.bakuganKey,

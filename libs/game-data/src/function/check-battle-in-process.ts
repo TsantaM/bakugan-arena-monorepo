@@ -1,4 +1,4 @@
-import { type stateType } from '../../src/type/type-index.js'
+import { AnimationDirectivesTypes, type stateType } from '../../src/type/type-index.js'
 import { CreateActionRequestFunction } from './create-action-request-function.js';
 import { OnBattleStartAnimationDirectives } from './create-animation-directives/on-battle-start-animation-directives.js'
 
@@ -32,7 +32,9 @@ export const CheckBattle = ({ roomState, updateActions = false }: { roomState: s
             OnBattleStartAnimationDirectives({
                 animations: roomState.animations,
                 slot: slotWithTwoBakugans,
-                turn: roomState.turnState.turnCount
+                turn: roomState.turnState.turnCount,
+                animationsForReplay: roomState.animationsForReplay
+
             })
 
             CreateActionRequestFunction({
@@ -51,10 +53,12 @@ export const CheckBattle = ({ roomState, updateActions = false }: { roomState: s
                 paused: false,
             }
 
-            roomState.animations.push({
+            const animation: AnimationDirectivesTypes = {
                 type: 'BATTLE-END',
                 resolved: false
-            })
+            }
+            roomState.animations.push(animation)
+            roomState.animationsForReplay.push(animation)
 
         }
 
@@ -70,16 +74,18 @@ export const CheckBattle = ({ roomState, updateActions = false }: { roomState: s
                     paused: false,
                 }
 
-                roomState.animations.push({
+                const animation: AnimationDirectivesTypes = {
                     type: 'BATTLE-END',
                     resolved: false
-                })
+                }
+                roomState.animations.push(animation)
+                roomState.animationsForReplay.push(animation)
             }
 
         }
 
-        if(updateActions) {
-            CreateActionRequestFunction({roomState: roomState})
+        if (updateActions) {
+            CreateActionRequestFunction({ roomState: roomState })
         }
 
     }

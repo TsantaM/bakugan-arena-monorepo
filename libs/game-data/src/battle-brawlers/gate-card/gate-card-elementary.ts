@@ -25,7 +25,7 @@ export const ReacteurPyrus: gateCardType = {
 
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -36,7 +36,9 @@ export const ReacteurPyrus: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: false,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
 
     },
@@ -44,7 +46,7 @@ export const ReacteurPyrus: gateCardType = {
 
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -55,7 +57,9 @@ export const ReacteurPyrus: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: true,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
 
     },
@@ -82,7 +86,7 @@ export const ReacteurHaos: gateCardType = {
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -93,13 +97,15 @@ export const ReacteurHaos: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: false,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -110,7 +116,9 @@ export const ReacteurHaos: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: true,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
     },
     onCanceled: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -147,7 +155,7 @@ export const ReacteurVentus: gateCardType = {
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -158,13 +166,15 @@ export const ReacteurVentus: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: false,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -175,7 +185,9 @@ export const ReacteurVentus: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: true,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
     },
     autoActivationCheck: ({ portalSlot }) => {
@@ -206,7 +218,7 @@ export const ReacteurAquos: gateCardType = {
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -217,13 +229,15 @@ export const ReacteurAquos: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: false,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -234,7 +248,9 @@ export const ReacteurAquos: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: true,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
     },
     autoActivationCheck: ({ portalSlot }) => {
@@ -265,7 +281,7 @@ export const ReacteurSubterra: gateCardType = {
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -276,13 +292,15 @@ export const ReacteurSubterra: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: false,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -293,7 +311,9 @@ export const ReacteurSubterra: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: true,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
     },
     autoActivationCheck: ({ portalSlot }) => {
@@ -324,7 +344,7 @@ export const ReacteurDarkus: gateCardType = {
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -335,13 +355,15 @@ export const ReacteurDarkus: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: false,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -352,7 +374,9 @@ export const ReacteurDarkus: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: true,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
     },
     autoActivationCheck: ({ portalSlot }) => {

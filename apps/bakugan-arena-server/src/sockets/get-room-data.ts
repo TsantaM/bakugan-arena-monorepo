@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io/dist"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 import { initRoomState } from "../functions/init-game-room"
-import { CreateActionRequestFunction, Message } from "@bakugan-arena/game-data"
+import { AnimationDirectivesTypes, CreateActionRequestFunction, Message } from "@bakugan-arena/game-data"
 import { SendAllMessages } from "../functions/emit-messages"
 import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions"
 
@@ -278,6 +278,24 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
                 }
 
                 socket.emit('game-finished', message)
+
+                // ENVOI DES ANIMATIONS AUX JOUEURS POUR LE DOWNLOAD OU L'UPLOAD
+                const room: { p1: string, p2: string, roomId: string, finished: boolean, animations: AnimationDirectivesTypes[] } = {
+                    roomId: roomData.roomId,
+                    p1: roomData.players[0].userId,
+                    p2: roomData.players[1].userId,
+                    animations: roomData.animationsForReplay,
+                    finished: roomData.status.finished
+                }
+
+                const player = roomData.connectedsUsers.get(userId)
+
+                if(player) {
+                    io.to(player.nextjsSocket).emit('final-room-state', room)
+                }
+
+                // ENVOI DES ANIMATIONS AUX JOUEURS POUR LE DOWNLOAD OU L'UPLOAD
+
                 const sockets = roomData.connectedsUsers
                 sockets.forEach((s) => {
                     console.log('parent-socket', s.nextjsSocket)

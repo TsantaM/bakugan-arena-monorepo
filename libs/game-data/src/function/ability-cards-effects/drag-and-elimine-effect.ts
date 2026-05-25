@@ -6,7 +6,7 @@ import { NewAdditionnalMessage } from "../new-additional-message.js"
 export function DragAndElimineBakuganEffect({ bakugan, roomState, cardUser, initialSlot }: { roomState: stateType, bakugan: bakuganOnSlot, cardUser: bakuganOnSlot, initialSlot: portalSlotsTypeElement }) {
     if (!roomState) return
 
-    if(bakugan.statut.trapped || bakugan.statut.protectedAgainstAbility || bakugan.statut.protected) {
+    if (bakugan.statut.trapped || bakugan.statut.protectedAgainstAbility || bakugan.statut.protected) {
         NewAdditionnalMessage({
             roomState: roomState,
             text: `${Bakugans[bakugan.key].name} is protected.`
@@ -19,7 +19,8 @@ export function DragAndElimineBakuganEffect({ bakugan, roomState, cardUser, init
         bakugan: bakugan,
         user: cardUser,
         initialSlot: initialSlot,
-        turn: roomState.turnState.turnCount
+        turn: roomState.turnState.turnCount,
+        animationsForReplay: roomState.animationsForReplay
 
     })
 

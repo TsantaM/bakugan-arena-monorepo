@@ -52,7 +52,9 @@ export const HarpusGateCard: gateCardType = {
             bakugans: [bakugan],
             powerChange: basePower,
             malus: false,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
 
     },
@@ -69,6 +71,7 @@ export const HarpusGateCard: gateCardType = {
         if (!basePower) return
         bakugan.currentPower -= basePower
         PowerChangeDirectiveAnumation({
+            animationsForReplay: roomState.animationsForReplay,
             animations: roomState.animations,
             bakugans: [bakugan],
             powerChange: basePower,

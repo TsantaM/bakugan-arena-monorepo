@@ -75,7 +75,9 @@ export const MegaFlareBlinder: exclusiveAbilitiesType = {
             bakugans: [user],
             powerChange: 100,
             malus: true,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
+
         })
 
     },

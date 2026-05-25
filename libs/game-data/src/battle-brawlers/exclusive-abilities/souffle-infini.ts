@@ -71,7 +71,8 @@ export const SouffleInfini: exclusiveAbilitiesType = {
                     bakugans: [bakuganToDrag],
                     powerChange: 50,
                     malus: true,
-                    turn: roomState.turnState.turnCount
+                    turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
 
                 })
 
@@ -87,7 +88,8 @@ export const SouffleInfini: exclusiveAbilitiesType = {
                     bakugan: bakuganToDrag,
                     initialSlot: slotTarget,
                     newSlot: slotOfGate,
-                    turn: roomState.turnState.turnCount
+                    turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
 
                 })
                 CheckBattle({ roomState: roomState })

@@ -20,7 +20,8 @@ export const EffecteurdOmbre: exclusiveAbilitiesType = {
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
                     slot: structuredClone(slotOfGate),
-                    turn: roomState.turnState.turnCount
+                    turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
 
                 })
                 gateCard.onCanceled({ roomState: roomState, slot: slot, userId: userId, bakuganKey: bakuganKey })

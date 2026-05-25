@@ -132,6 +132,7 @@ export function ResolveTrapCardAdditionalRequest({
     }
 
     roomState.animations.push(activeCardAnimation)
+    roomState.animationsForReplay.push(activeCardAnimation)
 
     cardData?.onActivate({
         roomState,
@@ -165,7 +166,8 @@ export function ResolveTrapCardAdditionalRequest({
             RemoveGateCardDirectiveAnimation({
                 animations: roomState.animations,
                 slot: slotOfGate,
-                roomState
+                roomState,
+                animationsForReplay: roomState.animationsForReplay
             })
 
             ResetSlot(slotOfGate)

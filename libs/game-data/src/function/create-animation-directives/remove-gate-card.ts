@@ -5,11 +5,12 @@ type Props = {
     roomState: stateType,
     slot: portalSlotsTypeElement
     animations: AnimationDirectivesTypes[];
+    animationsForReplay: AnimationDirectivesTypes[];
 }
 
-type RemoveGateCardDirectiveAnimationType = ({ roomState, animations, slot }: Props) => void
+type RemoveGateCardDirectiveAnimationType = ({ roomState, animations, slot, animationsForReplay }: Props) => void
 
-export const RemoveGateCardDirectiveAnimation: RemoveGateCardDirectiveAnimationType = ({ roomState, animations, slot }) => {
+export const RemoveGateCardDirectiveAnimation: RemoveGateCardDirectiveAnimationType = ({ roomState, animations, slot, animationsForReplay }) => {
 
     slot.bakugans.forEach((bakugan) => {
 
@@ -25,8 +26,8 @@ export const RemoveGateCardDirectiveAnimation: RemoveGateCardDirectiveAnimationT
         }
 
         animations.push(comeBackBakuganDirective)
-
-        if(bakuganInDeck) bakuganInDeck.bakuganData.onDomain = false
+        animationsForReplay.push(comeBackBakuganDirective)
+        if (bakuganInDeck) bakuganInDeck.bakuganData.onDomain = false
 
 
     })
@@ -40,4 +41,6 @@ export const RemoveGateCardDirectiveAnimation: RemoveGateCardDirectiveAnimationT
     }
 
     animations.push(removeGateCard)
+    animationsForReplay.push(removeGateCard)
+
 }

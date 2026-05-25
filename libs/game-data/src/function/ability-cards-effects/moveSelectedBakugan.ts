@@ -80,7 +80,9 @@ export function moveSelectedBakugan({
             RemoveRenfortAnimationDirective({
                 animations: roomState.animations,
                 bakugan: structuredClone(bakugan),
-                turnCount: roomState.turnState.turnCount
+                turnCount: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
+
             })
         }
     }
@@ -104,7 +106,8 @@ export function moveSelectedBakugan({
         bakugan: structuredClone(bakugan),
         initialSlot: structuredClone(initialSlot),
         newSlot: structuredClone(slotTarget),
-        turn: roomState.turnState.turnCount
+        turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
 
     });
 

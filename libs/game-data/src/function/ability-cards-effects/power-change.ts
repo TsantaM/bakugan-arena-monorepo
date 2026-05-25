@@ -3,7 +3,7 @@ import { bakuganOnSlot, stateType } from "../../type/room-types.js";
 import { PowerChangeDirectiveAnumation } from "../create-animation-directives/index.js";
 import { NewAdditionnalMessage } from "../new-additional-message.js";
 
-type PowerChangeType = { 
+type PowerChangeType = {
     roomState: stateType,
     bakugan: bakuganOnSlot,
     // messages: Message[],
@@ -33,7 +33,9 @@ export function PowerChange({ roomState, bakugan, G, malus }: PowerChangeType) {
                 bakugans: [bakugan],
                 powerChange: G,
                 malus: true,
-                turn: roomState.turnState.turnCount
+                turn: roomState.turnState.turnCount,
+                animationsForReplay: roomState.animationsForReplay
+
             })
         }
     } else {
@@ -44,7 +46,8 @@ export function PowerChange({ roomState, bakugan, G, malus }: PowerChangeType) {
             bakugans: [bakugan],
             powerChange: G,
             malus: false,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
 
         })
     }

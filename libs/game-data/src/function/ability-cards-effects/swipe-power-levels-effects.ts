@@ -27,6 +27,8 @@ export function SwipePowerLevelsEffects({ roomState, slot, userId }: { roomState
             powerChange: usersValue,
             turn: roomState.turnState.turnCount,
             malus: usersPower > opponentsPower,
+            animationsForReplay: roomState.animationsForReplay
+
         })
     })
 
@@ -37,6 +39,8 @@ export function SwipePowerLevelsEffects({ roomState, slot, userId }: { roomState
             powerChange: opponentsValue,
             turn: roomState.turnState.turnCount,
             malus: opponentsPower > usersPower,
+            animationsForReplay: roomState.animationsForReplay
+
         })
 
     })

@@ -30,7 +30,9 @@ export const RetourDAssenceur: gateCardType = {
                         ComeBackBakuganDirectiveAnimation({
                             animations: roomState.animations,
                             bakugan: b,
-                            slot: slotOfGate
+                            slot: slotOfGate,
+                    animationsForReplay: roomState.animationsForReplay
+
                         })
                     }
                 })

@@ -62,7 +62,9 @@ function EchangeMainEffect({ roomState, slotOfGate, userId }: { roomState: state
     RemoveGateCardDirectiveAnimation({
         animations: roomState.animations,
         slot: slotOfGate,
-        roomState
+        roomState,
+        animationsForReplay: roomState.animationsForReplay
+
     })
 
     ResetSlot(slotOfGate)
@@ -126,7 +128,7 @@ export const Echange: gateCardType = {
             }
 
             // LOGIQUE D'ACTIVATION
-            AdditionalEffectActiveCard({opponentsBakugan, resolution, roomState})
+            AdditionalEffectActiveCard({ opponentsBakugan, resolution, roomState })
             // LOGIQUE D'ACTIVATION END
 
             if (slotOfGate.state.canceled) {
@@ -139,7 +141,9 @@ export const Echange: gateCardType = {
                     RemoveGateCardDirectiveAnimation({
                         animations: roomState.animations,
                         slot: slotOfGate,
-                        roomState
+                        roomState,
+                        animationsForReplay: roomState.animationsForReplay
+
                     })
 
                     ResetSlot(slotOfGate)

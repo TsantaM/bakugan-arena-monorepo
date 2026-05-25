@@ -248,10 +248,12 @@ export const createGameState = async ({ roomId, ranked }: { roomId: string; rank
         protalSlots,
         status: {
             finished: false,
+            finisheAt: null,
             winner: null,
             elo: null
         },
         animations: [],
+        animationsForReplay: [],
         ActivePlayerActionRequest: {
             target: 'ACTIVE_PLAYER',
             actions: {

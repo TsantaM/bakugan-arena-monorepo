@@ -39,14 +39,17 @@ export const MagmaSupreme: abilityCardsType = {
                         }
                         slotOfGate.state.open = false
                         slotOfGate.state.canceled = false
-                        roomState?.animations.push({
+                        const animation: AnimationDirectivesTypes = {
                             type: "OPEN_GATE_CARD",
                             data: {
                                 slot: slotOfGate,
                                 slotId: slotOfGate.id
                             },
                             resolved: false
-                        })
+                        }
+                        roomState?.animations.push(animation)
+                        roomState.animationsForReplay.push(animation)
+
                         newGate.onOpen({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
                     }
                 }
@@ -241,7 +244,8 @@ export const CopieConforme: abilityCardsType = {
                     bakugans: [user],
                     powerChange: 100,
                     malus: false,
-                    turn: roomState.turnState.turnCount
+                    turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
 
                 })
             }
@@ -270,7 +274,9 @@ export const EarthShatter: abilityCardsType = {
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
                     slot: slotOfGate,
-                    turn: roomState.turnState.turnCount
+                    turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
+
                 })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })

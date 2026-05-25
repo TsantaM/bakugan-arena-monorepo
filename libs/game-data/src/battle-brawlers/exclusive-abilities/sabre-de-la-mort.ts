@@ -105,7 +105,8 @@ export const SabreDeLaMort: exclusiveAbilitiesType = {
                             bakugan: structuredClone(user),
                             initialSlot: structuredClone(slotOfGate),
                             newSlot: structuredClone(battleSlot),
-                            turn: roomState.turnState.turnCount
+                            turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
 
                         });
 

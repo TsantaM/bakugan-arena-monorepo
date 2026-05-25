@@ -1,6 +1,7 @@
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
-const MAX_ROOM_AGE = 30 * 60 * 1000 // 30 minutes
+const MAX_ROOM_AGE = 30 * 60 * 1000 // 30 min
+const FINISHED_ROOM_LIFETIME = 5 * 60 * 1000 // 5 min après fin
 
 export function cleanGameStates() {
     const now = Date.now()
@@ -10,10 +11,15 @@ export function cleanGameStates() {
     for (let i = Battle_Brawlers_Game_State.length - 1; i >= 0; i--) {
         const room = Battle_Brawlers_Game_State[i]
 
-        const isFinished = room.status.finished
-        const isTooOld = now - room.createdAt > MAX_ROOM_AGE
+        const isTooOld =
+            now - room.createdAt > MAX_ROOM_AGE
 
-        if (isFinished || isTooOld) {
+        const isFinishedTooLong =
+            room.status.finished && 
+            room.status.finisheAt !== null &&
+            now - room.status.finisheAt > FINISHED_ROOM_LIFETIME
+
+        if (isTooOld || isFinishedTooLong) {
             Battle_Brawlers_Game_State.splice(i, 1)
         }
     }

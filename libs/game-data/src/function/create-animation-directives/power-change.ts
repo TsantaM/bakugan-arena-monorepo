@@ -6,13 +6,14 @@ type Props = {
     powerChange: number;
     malus?: boolean;
     animations: AnimationDirectivesTypes[];
+    animationsForReplay: AnimationDirectivesTypes[];
     turn: number,
     finalPower?: number
 }
 
-type PowerChangeDirectiveAnumationType = ({ bakugans, powerChange, malus, animations, turn, finalPower }: Props) => void
+type PowerChangeDirectiveAnumationType = ({ bakugans, powerChange, malus, animations, turn, finalPower, animationsForReplay }: Props) => void
 
-export const PowerChangeDirectiveAnumation: PowerChangeDirectiveAnumationType = ({ bakugans, powerChange, malus = false, animations, turn, finalPower }) => {
+export const PowerChangeDirectiveAnumation: PowerChangeDirectiveAnumationType = ({ bakugans, powerChange, malus = false, animations, turn, finalPower, animationsForReplay }) => {
 
     const powerChangeDirective: AnimationDirectivesTypes = {
         type: 'POWER_CHANGE',
@@ -30,5 +31,5 @@ export const PowerChangeDirectiveAnumation: PowerChangeDirectiveAnumationType = 
     }
 
     animations.push(powerChangeDirective)
-
+    animationsForReplay.push(powerChangeDirective)
 }

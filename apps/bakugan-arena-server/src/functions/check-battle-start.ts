@@ -45,7 +45,8 @@ export const CheckBattle = ({ roomId }: { roomId: string }) => {
             OnBattleStartAnimationDirectives({
                 animations: Battle_Brawlers_Game_State[roomIndex].animations,
                 slot: slotWithTwoBakugans,
-                turn: roomData.turnState.turnCount
+                turn: roomData.turnState.turnCount,
+                animationsForReplay: roomData.animationsForReplay
             })
 
         } else {

@@ -188,6 +188,7 @@ export type stateType = {
     protalSlots: portalSlotsType;
     status: {
         finished: boolean,
+        finisheAt: number | null,
         winner: string | null,
         elo: {
             winner: {
@@ -201,11 +202,12 @@ export type stateType = {
         } | null
     },
     animations: AnimationDirectivesTypes[],
+    animationsForReplay: AnimationDirectivesTypes[],
     InactivePlayerActionRequest: InactivePlayerActionRequestType,
     ActivePlayerActionRequest: ActivePlayerActionRequestType,
     AbilityAditionalRequest: AbilityCardsActionsRequestsType[],
     gateCardActionRequest: gateCardActionRequestsType[],
-    createdAt: number
+    createdAt: number,
 }
 
 export type roomStateType = {

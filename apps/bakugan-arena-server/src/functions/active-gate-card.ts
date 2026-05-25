@@ -72,6 +72,7 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
             }
 
             roomData.animations.push(animation)
+            roomData.animationsForReplay.push(animation)
             const openFunction = gateCard.onOpen?.({ roomState: roomData, slot: slot, bakuganKey: key, userId: userId })
             slotOfGate.state.open = true
 

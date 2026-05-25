@@ -159,7 +159,9 @@ export const QuatuorDeCombat: gateCardType = {
                 RemoveRenfortAnimationDirective({
                     animations: roomState.animations,
                     bakugan: a,
-                    turnCount: roomState.turnState.turnCount
+                    turnCount: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
+
                 })
             })
 

@@ -1,12 +1,14 @@
 // src/store/roomsStore.ts
+import { AnimationDirectivesTypes } from '@bakugan-arena/game-data'
 import { create } from 'zustand'
 
-export type Room = { p1: string, p2: string, roomId: string, finished: boolean }
+export type Room = { p1: string, p2: string, roomId: string, finished: boolean, animations?: AnimationDirectivesTypes[] }
 
 interface RoomsStore {
   rooms: Room[]
   setRooms: (newRooms: Room[]) => void
   addRoom: (room: Room) => void
+  updateRoom: (room: Room) => void
   removeRoomById: (roomId: string) => void
   clearRooms: () => void
 }
@@ -14,6 +16,17 @@ interface RoomsStore {
 export const useRoomsStore = create<RoomsStore>((set) => ({
   rooms: [],
   setRooms: (newRooms) => set({ rooms: newRooms }),
+  updateRoom: (room) =>
+    set((state) => ({
+      rooms: state.rooms.map((r) =>
+        r.roomId === room.roomId
+          ? {
+            ...r,
+            ...room,
+          }
+          : r
+      ),
+    })),
   addRoom: (room) =>
     set((state) => {
       // On évite les doublons par roomId

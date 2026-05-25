@@ -27,7 +27,9 @@ function MineGhostMainEffect({
     RemoveGateCardDirectiveAnimation({
         animations: roomState.animations,
         slot: slotOfGate,
-        roomState
+        roomState,
+                    animationsForReplay: roomState.animationsForReplay
+
     })
 
     ResetSlot(slotOfGate)

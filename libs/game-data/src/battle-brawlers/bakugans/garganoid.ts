@@ -64,6 +64,7 @@ export const GarganoidGateCard: gateCardType = {
             bakugans: [bakugan],
             powerChange: basePower,
             malus: false,
+            animationsForReplay: roomState.animationsForReplay,
             turn: roomState.turnState.turnCount
         })
 
@@ -85,7 +86,9 @@ export const GarganoidGateCard: gateCardType = {
             bakugans: [bakugan],
             powerChange: basePower,
             malus: true,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
 
     },

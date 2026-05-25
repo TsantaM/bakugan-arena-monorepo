@@ -1,4 +1,4 @@
-import { bakuganInDeck, Message, stateType } from "@bakugan-arena/game-data"
+import { AnimationDirectivesTypes, bakuganInDeck, Message, stateType } from "@bakugan-arena/game-data"
 import { db } from "../lib/db"
 import { eq } from "drizzle-orm"
 import { schema } from "@bakugan-arena/drizzle-orm"
@@ -136,6 +136,7 @@ export const CheckGameFinished = async ({
 
     // 🧠 update mémoire FIRST (source de vérité)
     roomState.status.finished = true
+    roomState.status.finisheAt = Date.now()
     roomState.status.winner = result.winner
 
     // 💾 DB
@@ -165,6 +166,20 @@ export const CheckGameFinished = async ({
       }
 
       io.to(roomId).emit('game-finished', message)
+
+      // ENVOI DES ANIMATIONS AUX JOUEURS POUR LE DOWNLOAD OU L'UPLOAD
+      const roomData: { p1: string, p2: string, roomId: string, finished: boolean, animations: AnimationDirectivesTypes[] } = {
+        roomId: roomState.roomId,
+        p1: roomState.players[0].userId,
+        p2: roomState.players[1].userId,
+        animations: roomState.animationsForReplay,
+        finished: roomState.status.finished
+      }
+      roomState.connectedsUsers.forEach((player) => {
+        io.to(player.nextjsSocket).emit('final-room-state', roomData)
+      })
+      // ENVOI DES ANIMATIONS AUX JOUEURS POUR LE DOWNLOAD OU L'UPLOAD
+
       for (const user of roomState.connectedsUsers.values()) {
         io.to(user.nextjsSocket).emit('game-messages', [message])
       }

@@ -80,7 +80,7 @@ export const CentipodGateCard: gateCardType = {
 
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
         if (bakugan.family !== CentipodDarkus.family) return
@@ -93,7 +93,9 @@ export const CentipodGateCard: gateCardType = {
             bakugans: [bakugan],
             powerChange: basePower,
             malus: false,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
 
     },
@@ -101,7 +103,7 @@ export const CentipodGateCard: gateCardType = {
 
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
         if (bakugan.family !== CentipodDarkus.family) return
@@ -114,9 +116,11 @@ export const CentipodGateCard: gateCardType = {
             bakugans: [bakugan],
             powerChange: basePower,
             malus: true,
-            turn: roomState.turnState.turnCount
+            turn: roomState.turnState.turnCount,
+            animationsForReplay: roomState.animationsForReplay
+
         })
-        
+
     },
     autoActivationCheck: ({ portalSlot, roomState }) => {
 

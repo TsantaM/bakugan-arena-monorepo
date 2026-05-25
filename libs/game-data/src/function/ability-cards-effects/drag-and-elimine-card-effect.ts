@@ -158,6 +158,7 @@ export function DragAndElimineOnAdditional({ resolution, roomData, cardData }: {
     }
 
     roomData.animations.push(activeCardAnimation)
+    roomData.animationsForReplay.push(activeCardAnimation)
 
     ability.onActivate({
         roomState: roomData,
@@ -174,7 +175,7 @@ export function DragAndElimineOnAdditional({ resolution, roomData, cardData }: {
     })
 
     const cardOwner = roomData.players.find((p) => p.userId === cardOwnerId)
-    
+
     if (cardOwner) {
         cardOwner.usable_abilitys = cardOwner.usable_abilitys - 1
     }

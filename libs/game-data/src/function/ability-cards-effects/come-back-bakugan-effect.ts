@@ -13,10 +13,11 @@ export function ComeBackBakuganEffect({ bakugan, roomState }: { roomState: state
         ComeBackBakuganDirectiveAnimation({
             animations: roomState.animations,
             bakugan: bakugan,
-            slot: slot
+            slot: slot,
+            animationsForReplay: roomState.animationsForReplay
         })
         bakuganInDeck.bakuganData.onDomain = false
         slot.bakugans.splice(index, 1)
     }
-    
+
 }

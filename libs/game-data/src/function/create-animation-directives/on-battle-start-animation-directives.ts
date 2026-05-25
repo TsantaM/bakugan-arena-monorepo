@@ -1,6 +1,6 @@
 import type { AnimationDirectivesTypes, portalSlotsTypeElement } from '../../type/type-index.js'
 
-export function OnBattleStartAnimationDirectives({ animations, slot, turn } : { slot: portalSlotsTypeElement, animations: AnimationDirectivesTypes[]; turn: number}) {
+export function OnBattleStartAnimationDirectives({ animations, slot, turn } : { slot: portalSlotsTypeElement, animations: AnimationDirectivesTypes[]; turn: number; animationsForReplay: AnimationDirectivesTypes[]}) {
     const animationDirective: AnimationDirectivesTypes = {
         type: 'BATTLE_START',
         data: {

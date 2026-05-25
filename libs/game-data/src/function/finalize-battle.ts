@@ -47,6 +47,8 @@ export const finalizeBattle = ({ roomData, winnerId, winners, loserId, loosers, 
             }
 
             roomData.animations.push(animation)
+            roomData.animationsForReplay.push(animation)
+
 
             card.onOpen({ roomState: roomData, slot: battleState.slot, looserId: loserId, winnerId: winnerId, winners: winners, loosers: loosers })
 
@@ -57,7 +59,9 @@ export const finalizeBattle = ({ roomData, winnerId, winners, loserId, loosers, 
     RemoveGateCardDirectiveAnimation({
         animations: roomData.animations,
         slot: slotToUpdate,
-        roomState: roomData
+        roomState: roomData,
+        animationsForReplay: roomData.animationsForReplay
+
     })
 
     if (slotToUpdate) ResetSlot(slotToUpdate)
@@ -69,9 +73,12 @@ export const finalizeBattle = ({ roomData, winnerId, winners, loserId, loosers, 
     turnState.set_new_gate = true
     turnState.set_new_bakugan = true
 
-    roomData.animations.push({
+    const animation: AnimationDirectivesTypes = {
         type: 'BATTLE-END',
         resolved: false
-    })
+    }
+    roomData.animations.push(animation)
+    roomData.animationsForReplay.push(animation)
+
 
 }

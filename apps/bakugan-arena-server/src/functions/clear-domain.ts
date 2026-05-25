@@ -29,7 +29,8 @@ export function ClearDomain(roomData: stateType, userId: string) {
             ComeBackBakuganDirectiveAnimation({
                 animations: roomData.animations,
                 bakugan: bakugan,
-                slot: slot
+                slot: slot,
+                animationsForReplay: roomData.animationsForReplay
             })
 
             slot.bakugans.splice(index, 1)

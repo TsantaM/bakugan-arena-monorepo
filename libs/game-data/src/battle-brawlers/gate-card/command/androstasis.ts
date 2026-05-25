@@ -47,6 +47,8 @@ export const Androstasis: gateCardType = {
                 }
 
                 roomState.animations.push(animation)
+                roomState.animationsForReplay.push(animation)
+
             })
 
         }

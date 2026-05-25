@@ -1,4 +1,4 @@
-import { Message, stateType } from "@bakugan-arena/game-data";
+import { AnimationDirectivesTypes, Message, stateType } from "@bakugan-arena/game-data";
 import { Server } from "socket.io/dist";
 import { db } from "../lib/db"
 import { eq } from "drizzle-orm"
@@ -70,6 +70,7 @@ export function StartPlayerTime({ roomState, userId, io }: { roomState: stateTyp
                 .where(eq(rooms.id, roomState.roomId))
 
             roomState.status.finished = true
+            roomState.status.finisheAt = Date.now()
             roomState.status.winner = winner
 
             if (io) {
@@ -159,6 +160,7 @@ export function UpdatePlayerTimer({ roomState, io }: { roomState: stateType, io:
                         .where(eq(rooms.id, roomId))
 
                     roomState.status.finished = true
+                    roomState.status.finisheAt = Date.now()
                     roomState.status.winner = winner
 
                     await CalculateAndUpdateElo({
@@ -226,6 +228,7 @@ export function UpdatePlayerTimer({ roomState, io }: { roomState: stateType, io:
                         .where(eq(rooms.id, roomId))
 
                     roomState.status.finished = true
+                    roomState.status.finisheAt = Date.now()
                     roomState.status.winner = winner
 
                     await CalculateAndUpdateElo({
@@ -289,6 +292,7 @@ export function StartTwoTimers({ roomState, io, roomId }: { roomState: stateType
 
             if (players.some((pl) => pl.timer === 0)) {
                 roomState.status.finished = true
+                roomState.status.finisheAt = Date.now()
                 roomState.status.winner = null
 
                 roomState.players.forEach((user) => {
@@ -308,6 +312,19 @@ export function StartTwoTimers({ roomState, io, roomId }: { roomState: stateType
                 }
 
                 io.to(roomId).emit('game-finished', message)
+
+                // ENVOI DES ANIMATIONS AUX JOUEURS POUR LE DOWNLOAD OU L'UPLOAD
+                const roomData: { p1: string, p2: string, roomId: string, finished: boolean, animations: AnimationDirectivesTypes[] } = {
+                    roomId: roomState.roomId,
+                    p1: roomState.players[0].userId,
+                    p2: roomState.players[1].userId,
+                    animations: roomState.animationsForReplay,
+                    finished: roomState.status.finished
+                }
+                roomState.connectedsUsers.forEach((player) => {
+                    io.to(player.nextjsSocket).emit('final-room-state', roomData)
+                })
+                // ENVOI DES ANIMATIONS AUX JOUEURS POUR LE DOWNLOAD OU L'UPLOAD
 
                 roomState.players.forEach((user) => {
                     SendUserRooms({ userId: user.userId, io })

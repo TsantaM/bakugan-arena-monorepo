@@ -194,12 +194,16 @@ export const JetEnflamme: abilityCardsType = {
                     ComeBackBakuganDirectiveAnimation({
                         animations: roomState.animations,
                         bakugan: a,
-                        slot: slotToUpdate
+                        slot: slotToUpdate,
+                        animationsForReplay: roomState.animationsForReplay
+
                     })
                     RemoveRenfortAnimationDirective({
                         animations: roomState.animations,
                         bakugan: a,
-                        turnCount: roomState.turnState.turnCount
+                        turnCount: roomState.turnState.turnCount,
+                        animationsForReplay: roomState.animationsForReplay
+
                     })
                 }
 
@@ -247,7 +251,9 @@ export const RetroAction: abilityCardsType = {
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
                     slot: structuredClone(slotOfGate),
-                    turn: roomState.turnState.turnCount
+                    turn: roomState.turnState.turnCount,
+                    animationsForReplay: roomState.animationsForReplay
+
 
                 })
                 if (gateToCancel && gateToCancel.onCanceled) {
@@ -422,7 +428,8 @@ export const HeatWave: abilityCardsType = {
             CancelGateCardDirectiveAnimation({
                 animations: roomState.animations,
                 slot: slotOfGate,
-                turn: roomState.turnState.turnCount
+                turn: roomState.turnState.turnCount,
+                animationsForReplay: roomState.animationsForReplay
 
             })
             if (gateCard && gateCard.onCanceled) {
@@ -446,16 +453,16 @@ export const HeatWave: abilityCardsType = {
 
         const { battleInProcess, paused, slot, turns } = roomState.battleState
 
-        if(!battleInProcess || paused) return false
+        if (!battleInProcess || paused) return false
 
-        if(bakugan.slot_id !== slot) return false
+        if (bakugan.slot_id !== slot) return false
 
         const slotOfGate = roomState.protalSlots[Slots.indexOf(bakugan.slot_id)]
         if (slotOfGate.portalCard === null) return false
 
         const opponents = slotOfGate.bakugans.filter((b) => b.userId !== bakugan.userId)
 
-        if(opponents.length === 0) return false
+        if (opponents.length === 0) return false
 
         return true
 

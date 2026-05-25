@@ -54,6 +54,7 @@ export const Revive: gateCardType = {
                 }
 
                 roomState.animations.push(animation)
+                roomState.animationsForReplay.push(animation)
 
             })
         }

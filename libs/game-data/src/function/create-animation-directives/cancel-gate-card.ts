@@ -4,12 +4,13 @@ import type { AnimationDirectivesTypes, portalSlotsTypeElement } from '../../typ
 type Props = {
     slot: portalSlotsTypeElement
     animations: AnimationDirectivesTypes[];
+    animationsForReplay: AnimationDirectivesTypes[];
     turn: number
 }
 
-type CancelGateCardDirectiveAnimationType = ({ animations, slot, turn }: Props) => void
+type CancelGateCardDirectiveAnimationType = ({ animations, slot, turn, animationsForReplay }: Props) => void
 
-export const CancelGateCardDirectiveAnimation: CancelGateCardDirectiveAnimationType = ({ animations, slot, turn }) => {
+export const CancelGateCardDirectiveAnimation: CancelGateCardDirectiveAnimationType = ({ animations, slot, turn, animationsForReplay }) => {
     const comeBackBakuganDirective: AnimationDirectivesTypes = {
         type: 'CANCEL_GATE_CARD',
         data: {
@@ -25,4 +26,5 @@ export const CancelGateCardDirectiveAnimation: CancelGateCardDirectiveAnimationT
     console.log('slot canceled : ', slot.id, slot.portalCard?.key, slot.state)
 
     animations.push(comeBackBakuganDirective)
+    animationsForReplay.push(comeBackBakuganDirective)
 }
