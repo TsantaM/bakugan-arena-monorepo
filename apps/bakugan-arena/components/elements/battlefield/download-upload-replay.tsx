@@ -1,13 +1,14 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
+import { ConvertReplayToJson } from "@/src/actions/battlefield/convert-replay-to-json"
 import { Room, useRoomsStore } from "@/src/store/rooms-store"
 import { useSocketStore } from "@/src/store/socket-id-store"
-import { AnimationDirectivesTypes } from "@bakugan-arena/game-data"
+import { AnimationDirectivesTypes, playerDataType } from "@bakugan-arena/game-data"
 import { Download, Upload } from "lucide-react"
 import { useEffect, useState } from "react"
 
-export default function DownloadAndUploadReplay({ roomId }: { roomId: string }) {
+export default function DownloadAndUploadReplay({ roomId, player1, player2 }: { roomId: string, player1: playerDataType, player2: playerDataType }) {
 
     const room = useRoomsStore((state) => state.rooms).find((r) => r.roomId === roomId)
     const updateRoom = useRoomsStore((state) => state.updateRoom)
@@ -18,8 +19,8 @@ export default function DownloadAndUploadReplay({ roomId }: { roomId: string }) 
         if (!socket) return
 
         socket.on('final-room-state', (room: Room) => {
-            alert('eh')
-            console.log(room)
+            // alert('eh')
+            // console.log(room)
             updateRoom(room)
             if (!room.animations) return
             setAnimations(room.animations)
@@ -28,16 +29,38 @@ export default function DownloadAndUploadReplay({ roomId }: { roomId: string }) 
     }, [socket])
 
 
-    function handleDownload() {
-        console.log(room)
+    async function handleDownload() {
+        // console.log(room)
         if (!room) return
+        if (!player1) return
+        if (!player2) return
         if (!animations) return
-        console.log(animations)
+        // console.log(animations)
+
+        const json = await ConvertReplayToJson({ replay: animations, player1, player2, roomId })
+
+        const blob = new Blob([json], {
+            type: "application/json"
+        })
+
+        const fileName: string = `Bakugan-Arena-${player1.displayUsername}-VS-${player2.displayUsername}-${roomId}.json`
+
+        const url = URL.createObjectURL(blob)
+
+        const a = document.createElement('a');
+        a.href = url
+        a.download = fileName
+
+        a.click()
+        URL.revokeObjectURL(url)
+
     }
 
     function handleUpload() {
         console.log(room)
         if (!room) return
+        if (!player1) return
+        if (!player2) return
         if (!animations) return
         console.log(animations)
     }
@@ -46,6 +69,7 @@ export default function DownloadAndUploadReplay({ roomId }: { roomId: string }) 
 
     if (!room) return null
     if (!room.finished && !room.animations) return null
+    if (!player1 || !player2) return null
 
     return (
         <div className="flex items-center gap-2 absolute bottom-2 left-2">

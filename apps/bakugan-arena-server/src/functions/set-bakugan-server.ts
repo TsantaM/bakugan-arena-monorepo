@@ -133,6 +133,7 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuga
         }]
     }
 
+    roomData.animationsForReplay.push(animation)
     const updatedSlot = slots[Slots.indexOf(slot as slots_id)]
 
     // Battle_Brawlers_Game_State[roomIndex]?.animations.push(animation)

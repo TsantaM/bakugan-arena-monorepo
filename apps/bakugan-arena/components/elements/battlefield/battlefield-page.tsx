@@ -8,36 +8,12 @@ import { redirect } from "next/navigation";
 import { useAudioStore } from "@/src/store/sounds-store";
 import { OSTLists } from "@/src/variables/OST";
 import { Toaster } from "@/components/ui/sonner"
-import { useRoomsStore } from "@/src/store/rooms-store";
 import DownloadAndUploadReplay from "./download-upload-replay";
-
-type player = {
-    player: {
-        id: string;
-        image: string | null;
-        displayUsername: string | null;
-    };
-    deck: {
-        bakugans: string[];
-        ability: string[];
-        exclusiveAbilities: string[];
-        gateCards: string[];
-    };
-} | undefined
-
-type BattleFieldPageProps = {
-    player: player,
-    opponent: player,
-    roomId: string,
-    userId: string,
-    isPlayer: boolean
-}
-
+import { BattleFieldPageProps } from "@bakugan-arena/game-data";
 
 export default function BattleFieldPage({ player, opponent, roomId, userId, isPlayer }: BattleFieldPageProps) {
 
     const socket = useSocketStore((state) => state.socket)
-    const room = useRoomsStore((state) => state.rooms).find((r) => r.roomId === roomId)
 
     if (!socket) return null
     const socketId = socket.id
@@ -77,7 +53,7 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
                 volume={volume[0]}
                 playing={true}
             />
-            <DownloadAndUploadReplay roomId={roomId} />
+            <DownloadAndUploadReplay roomId={roomId} player1={playerData} player2={opponent?.player} />
             <MessagesModal player={playerData?.displayUsername} opponent={opponentData?.displayUsername} roomId={roomId} userId={userId} />
             <iframe ref={iframeRef} src={link} className="w-full h-full border-0"></iframe>
             <Toaster />

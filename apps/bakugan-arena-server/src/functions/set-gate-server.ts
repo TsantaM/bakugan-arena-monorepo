@@ -91,7 +91,7 @@ export const UpdateGate: ({ roomId, gateId, slot, userId }: setGateCardProps) =>
         })
     }
 
-    return [{
+    const animation: AnimationDirectivesTypes = {
         type: 'SET_GATE_CARD',
         data: {
             slot: newSlotState,
@@ -102,5 +102,7 @@ export const UpdateGate: ({ roomId, gateId, slot, userId }: setGateCardProps) =>
             userName: GetUserName({ roomData: Battle_Brawlers_Game_State[roomIndex], userId: userId }),
             turn: roomData.turnState.turnCount
         }]
-    }]
+    }
+    roomData.animationsForReplay.push(animation)
+    return [animation]
 }
