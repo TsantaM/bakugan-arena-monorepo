@@ -16,7 +16,7 @@ import { RoleType } from "@/src/actions/getUserSession"
 import { authClient } from "@/src/lib/auth-client"
 import { useSocket } from "@/src/providers/socket-provider"
 import { useRoomsStore } from "@/src/store/rooms-store"
-import { BookOpenText, ChartSpline, Home, KeyRound, SwatchBook } from "lucide-react"
+import { BookOpenText, ChartSpline, Clapperboard, Home, KeyRound, SwatchBook } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ReactNode, useEffect } from "react"
@@ -47,9 +47,13 @@ const LinksDashboard: LinksDashboardType[] = [
         icone: <ChartSpline />,
         label: 'Ladder',
         href: '/dashboard/ladder'
+    },
+    {
+        icone: <Clapperboard />,
+        label: 'Replay',
+        href: '/dashboard/replay'
     }
 ]
-
 
 export default function AppSidebar({ role }: { role: RoleType | undefined }) {
 
