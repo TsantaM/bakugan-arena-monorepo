@@ -8,11 +8,13 @@ export const CreateRoom = async ({
     P1Deck,
     Player2ID,
     P2Deck,
+    ranked
 }: {
     player1ID: string
     P1Deck: string
     Player2ID: string
-    P2Deck: string
+    P2Deck: string,
+    ranked: boolean
 }) => {
     const [room] = await db
         .insert(rooms)
@@ -24,6 +26,7 @@ export const CreateRoom = async ({
             looser: "",
             winner: "",
             finished: false,
+            ranked: ranked
         })
         .returning()
 

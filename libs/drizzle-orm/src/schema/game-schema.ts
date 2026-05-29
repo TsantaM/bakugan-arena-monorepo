@@ -1,6 +1,7 @@
-import { pgTable, text, timestamp, boolean, pgEnum, uuid } from "drizzle-orm/pg-core"
+import { pgTable, text, timestamp, boolean, pgEnum, uuid, jsonb } from "drizzle-orm/pg-core"
 import { relations } from "drizzle-orm"
 import { user } from "./auth-schema.js"
+import { type replayDataType } from "@bakugan-arena/game-data"
 
 // ================== ENUM ROLES ==================
 export const rolesEnum = pgEnum("roles", ["JOUEUR", "ADMIN", "GAMEDESIGNER"])
@@ -21,10 +22,10 @@ export const deck = pgTable("deck", {
 })
 
 export const deckRelations = relations(deck, ({ one }) => ({
-  user: one(user, {
-    fields: [deck.userId],
-    references: [user.id],
-  }),
+    user: one(user, {
+        fields: [deck.userId],
+        references: [user.id],
+    }),
 }))
 
 // ================== ROOMS TABLE ==================
@@ -39,8 +40,44 @@ export const rooms = pgTable("rooms", {
 
     finished: boolean("finished").default(false).notNull(),
 
+    ranked: boolean("ranked").default(false).notNull(),
+
     winner: text("winner"),
     looser: text("looser"),
 
     createdAt: timestamp("created_at").defaultNow().notNull(),
 })
+
+// ================== REPLAYS TABLE ==================
+export const replay = pgTable("replay", {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    title: text("title").notNull(),
+
+    roomId: uuid("room_id")
+        .notNull()
+        .unique()
+        .references(() => rooms.id, { onDelete: "cascade" }),
+
+    replayData: jsonb("replay_data")
+        .$type<replayDataType>()
+        .notNull(),
+
+    createdAt: timestamp("created_at")
+        .defaultNow()
+        .notNull(),
+})
+
+export const replayRelations = relations(replay, ({ one }) => ({
+    room: one(rooms, {
+        fields: [replay.roomId],
+        references: [rooms.id],
+    }),
+}))
+
+export const roomsRelations = relations(rooms, ({ one }) => ({
+    replay: one(replay, {
+        fields: [rooms.id],
+        references: [replay.roomId],
+    }),
+}))

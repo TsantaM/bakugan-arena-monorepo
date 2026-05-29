@@ -1,4 +1,4 @@
-import { AnimationDirectivesTypes } from "@bakugan-arena/game-data";
+import { type AnimationDirectivesTypes } from "./animations-directives.js";
 
 export type playerDataType = {
         id: string;

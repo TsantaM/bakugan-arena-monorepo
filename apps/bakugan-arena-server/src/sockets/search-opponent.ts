@@ -5,8 +5,7 @@ import { Battle_Brawlers_Game_State, intervalIds } from "../game-state/battle-br
 import { GetUsersRooms } from "../functions/get-rooms-of-user";
 import { db } from "../lib/db";
 import { eq } from "drizzle-orm";
-import { findOpponent } from "../functions/matchmaking-functions/find-opponent";
-import { StartTwoTimers, UpdatePlayerTimer } from "../functions/start-player-timer";
+import { StartTwoTimers } from "../functions/start-player-timer";
 
 export type waitingListElements = {
     socketId: string,
@@ -34,7 +33,7 @@ export const addToQueue = async ({
     userId,
     deckId,
     socketId,
-    ranked
+    ranked,
 }: {
     userId: string
     deckId: string
@@ -115,7 +114,8 @@ export const processMatchmaking = async (io: Server) => {
                 player1ID: p1.userId,
                 P1Deck: p1.deckId,
                 Player2ID: p2.userId,
-                P2Deck: p2.deckId
+                P2Deck: p2.deckId,
+                ranked: true
             })
 
             const matchedPlayers = [p1, p2]
