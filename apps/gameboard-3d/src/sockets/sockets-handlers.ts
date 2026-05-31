@@ -39,20 +39,16 @@ let animationQueue: AnimationDirectivesTypes[] = []
 let isProcessingAnimations = false
 let currentAnimationPromise: Promise<void> = Promise.resolve();
 
-
-async function processAnimationQueue(
+export async function playAnimation(
     userId: string,
     isSpectator: boolean,
     camera: THREE.PerspectiveCamera,
     scene: THREE.Scene,
     plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>,
     bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[],
-    gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[]
+    gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[],
+    animationQueue: AnimationDirectivesTypes[]
 ) {
-    if (isProcessingAnimations) return currentAnimationPromise;
-
-    isProcessingAnimations = true
-
     let i = 0;
     while (i < animationQueue.length) {
 
@@ -396,6 +392,23 @@ async function processAnimationQueue(
 
         i++; // avancer à l'animation suivante
     }
+}
+
+
+export async function processAnimationQueue(
+    userId: string,
+    isSpectator: boolean,
+    camera: THREE.PerspectiveCamera,
+    scene: THREE.Scene,
+    plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>,
+    bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[],
+    gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[]
+) {
+    if (isProcessingAnimations) return currentAnimationPromise;
+
+    isProcessingAnimations = true
+
+    await playAnimation(userId, isSpectator, camera, scene, plane, bakugansMeshs, gateCardMeshs, animationQueue)
 
     animationQueue = []
     isProcessingAnimations = false
@@ -688,5 +701,5 @@ export function registerSocketHandlersViewers(socket: Socket,
         clearTurnInterface()
         sendMessageToParent([message])
     })
-    
+
 }

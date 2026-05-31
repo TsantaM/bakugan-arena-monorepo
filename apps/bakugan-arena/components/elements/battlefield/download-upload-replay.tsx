@@ -2,11 +2,14 @@
 
 import { Button } from "@/components/ui/button"
 import { ConvertReplayToJson } from "@/src/actions/battlefield/convert-replay-to-json"
+import { UploadReplay } from "@/src/actions/replay/uploard-raplay-action"
 import { Room, useRoomsStore } from "@/src/store/rooms-store"
 import { useSocketStore } from "@/src/store/socket-id-store"
 import { AnimationDirectivesTypes, playerDataType } from "@bakugan-arena/game-data"
+import { useMutation } from "@tanstack/react-query"
 import { Download, Upload } from "lucide-react"
 import { useEffect, useState } from "react"
+import { toast, Toaster } from "sonner"
 
 export default function DownloadAndUploadReplay({ roomId, player1, player2 }: { roomId: string, player1: playerDataType, player2: playerDataType }) {
 
@@ -56,13 +59,33 @@ export default function DownloadAndUploadReplay({ roomId, player1, player2 }: { 
 
     }
 
+    // ================== UPLOAD MUTATION ==================
+    const uploadMutation = useMutation({
+        mutationFn: async () => {
+            if (!room || !player1 || !player2 || !animations) {
+                throw new Error("Missing data for upload")
+            }
+
+            return await UploadReplay({
+                roomId,
+                player1,
+                player2,
+                replay: animations
+            })
+        },
+        onSuccess: () => {
+            toast.success("Replay upload success")
+        },
+        onError: (error) => {
+           toast.error(`Replay upload failed, ${error}`)
+        }
+    })
+
+
+    // ================== HANDLE UPLOAD ==================
     function handleUpload() {
-        console.log(room)
-        if (!room) return
-        if (!player1) return
-        if (!player2) return
-        if (!animations) return
-        console.log(animations)
+        if (!room || !player1 || !player2 || !animations) return
+        uploadMutation.mutate()
     }
 
     // const checker = !room || !room.finished && !room.animations ? true : false
@@ -77,6 +100,8 @@ export default function DownloadAndUploadReplay({ roomId, player1, player2 }: { 
             <Button variant='outline' onClick={handleDownload} ><Download /> Download Replay</Button>
             <Button variant='outline' onClick={handleUpload} ><Upload /> Upload Replay</Button>
 
+            <Toaster/>
+            
         </div>
     )
 }
