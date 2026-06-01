@@ -7,7 +7,7 @@ export const HarpusVentus: bakuganType = {
     attribut: 'Ventus',
     image: 'harpus',
     family: 'Harpus',
-    powerLevel: 370,
+    powerLevel: 400,
     exclusiveAbilities: ['tempête-de-plume'],
     banList: StarterBanList,
     canChangeAttribut: false

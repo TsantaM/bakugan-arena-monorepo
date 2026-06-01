@@ -5,15 +5,23 @@ import { AmunRa } from "./exclusive-abilities/amun-ra.js";
 import { AntiMuse } from "./exclusive-abilities/anti-muse.js";
 import { BouclierFusion } from "./exclusive-abilities/bouclier-fusion.js";
 import { ChaosOfDarkness } from "./exclusive-abilities/chaos-of-darkness.js";
+import { DStrikeAttack } from "./exclusive-abilities/d-strike-attack.js";
+import { DStrikeExtreme } from "./exclusive-abilities/d-strike-extreme.js";
 import { DepthTornado } from "./exclusive-abilities/depht-tornado.js";
+import { DestructionBuster } from "./exclusive-abilities/destruction-buster.js";
+import { DestructionImpact } from "./exclusive-abilities/destruction-impact.js";
+import { GustOfWindBlow } from "./exclusive-abilities/destruction-meteor-storm.js";
 import { DimmensionQuatre } from "./exclusive-abilities/dimmension-quatre.js";
 import { DivisionHolographique } from "./exclusive-abilities/division-holographique.js";
+import { DragonicExecution } from "./exclusive-abilities/dragonoid-enforcement.js";
 import { DragonoidPlus } from "./exclusive-abilities/dragonoid-plus.js";
+import { DualGazer } from "./exclusive-abilities/dual-gazer.js";
 import { EffecteurdOmbre } from "./exclusive-abilities/effaceur-d-ombre.js";
 import { FlareBlinder } from "./exclusive-abilities/flare-blinder.js";
 import { ForceDattraction } from "./exclusive-abilities/force-d-attraction.js";
 import { FurryOfWind } from "./exclusive-abilities/furry-of-wind.js";
 import { GaucheGigantesque } from "./exclusive-abilities/gauche-gigantesque.js";
+import { GrandImpact } from "./exclusive-abilities/grand-impact.js";
 import { ChambreDeGravite } from "./exclusive-abilities/gravity-chamber.js";
 import { GardianField } from "./exclusive-abilities/guardian-field.js";
 import { ImpactMajeur } from "./exclusive-abilities/impact-majeur.js";
@@ -27,6 +35,7 @@ import { MaitreDesProfondeurs } from "./exclusive-abilities/maitre-des-profondeu
 import { Marionnette } from "./exclusive-abilities/marionnette.js";
 import { MassueGigantesque } from "./exclusive-abilities/massue-gigantesque.js";
 import { MegaFlareBlinder } from "./exclusive-abilities/mega-flare-blinder.js";
+import { MeltFlare } from "./exclusive-abilities/melt-flare.js";
 import { NoiseSlap } from "./exclusive-abilities/noise-slap.js";
 import { Obstruction } from "./exclusive-abilities/obstruction.js";
 import { OmbreBleue } from "./exclusive-abilities/ombre-bleue.js";
@@ -42,6 +51,7 @@ import { SpitPointer } from "./exclusive-abilities/SpitPointer.js";
 import { TempeteDePlume } from "./exclusive-abilities/tempete-de-plume.js";
 import { TrappeDeSable } from "./exclusive-abilities/trappe-de-sable.js";
 import { Tsunami } from "./exclusive-abilities/tsunami.js";
+import { VelocityFang } from "./exclusive-abilities/velocity-fang.js";
 import { VentCinglant } from "./exclusive-abilities/vent-cinglant.js";
 import { VentViolentDeNobelesseVerte } from "./exclusive-abilities/vent-violent.js";
 import { VisageDeJoie } from "./exclusive-abilities/visage-de-joie.js";
@@ -99,7 +109,19 @@ export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [NoiseSlap.key]: NoiseSlap,
     [LeapSting.key]: LeapSting,
     [ChaosOfDarkness.key]: ChaosOfDarkness,
-    [AmunRa.key]: AmunRa
+    [AmunRa.key]: AmunRa,
+
+    [MeltFlare.key]: MeltFlare,
+    [DestructionBuster.key]: DestructionBuster,
+    [DStrikeAttack.key]: DStrikeAttack,
+    [DStrikeExtreme.key]: DStrikeExtreme,
+    [DragonicExecution.key]: DragonicExecution,
+    [DualGazer.key]: DualGazer,
+    [DestructionImpact.key]: DestructionImpact,
+    [GustOfWindBlow.key]: GustOfWindBlow,
+    [GrandImpact.key]: GrandImpact,
+    [VelocityFang.key]: VelocityFang
+
 }
 
 export const ExclusiveAbilitiesList: exclusiveAbilitiesType[] = Object.values(ExclusiveAbilities) 

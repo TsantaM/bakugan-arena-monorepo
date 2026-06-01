@@ -11,7 +11,7 @@ export const ManionSubterra: bakuganType = {
     banList: [],
     canChangeAttribut: false,
     image: 'manion',
-    powerLevel: 350,
+    powerLevel: 380,
     exclusiveAbilities: ['amun-ra']
 }
 
@@ -23,7 +23,7 @@ export const ManionPyrus: bakuganType = {
     banList: [],
     canChangeAttribut: false,
     image: 'manion',
-    powerLevel: 350,
+    powerLevel: 380,
     exclusiveAbilities: ['amun-ra']
 }
 
@@ -35,7 +35,7 @@ export const ManionVentus: bakuganType = {
     banList: [],
     canChangeAttribut: false,
     image: 'manion',
-    powerLevel: 350,
+    powerLevel: 380,
     exclusiveAbilities: ['amun-ra']
 }
 

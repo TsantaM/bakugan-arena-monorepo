@@ -6,11 +6,11 @@ import { StarterBanList } from "../../store/store-index.js"
 export const DragonoidPyrus: bakuganType = {
     name: 'Dragonoid',
     attribut: 'Pyrus',
-    powerLevel: 370,
+    powerLevel: 400,
     image: 'dragonoid',
     key: 'dragonoid-pyrus',
     family: 'Dragonoid',
-    exclusiveAbilities: ['dragonoid-plus'],
+    exclusiveAbilities: ['dragonoid-plus', 'melt-flare'],
     banList: StarterBanList,
     canChangeAttribut: false
 }
@@ -22,7 +22,7 @@ export const DragonoidDeltaPyrus: bakuganType = {
     image: 'dragonoid-delta',
     key: 'dragonoid-delta-pyrus',
     family: 'Dragonoid',
-    exclusiveAbilities: [],
+    exclusiveAbilities: ["d-strike-attack", "dragonic-execution", "d-strike-extreme"],
     banList: StarterBanList,
     canChangeAttribut: false
 }
@@ -45,6 +45,73 @@ export const DragonoidGateCard: gateCardType = {
     maxInDeck: 1,
     image: 'caracter-gate-cards/dragonoid-pyrus.jpg',
     description: `When this card is activated, it doubles the level of all Dragonoid on it.`,
+    family: 'Dragonoid',
+    onOpen({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'dragonoid-gate-card')
+        CaracterGateCardEffect({ roomState: roomState, slotOfGate: slotOfGate, family: 'Dragonoid' })
+        return null
+
+
+    },
+    onCanceled({ roomState, slot }) {
+        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'dragonoid-gate-card')
+        CancelCaracterGateCard({ roomState: roomState, slotOfGate: slotOfGate, family: 'Dragonoid' })
+    },
+    autoActivationCheck: ({ portalSlot, roomState }) => {
+
+        return CheckTwoBakugansAndBattle({ portalSlot, battleState: roomState.battleState })
+
+    },
+    onSetBakuganOnSlot({ bakugan, slot, roomState }) {
+
+        if (!roomState) return
+        const { canceled, open } = slot.state
+        
+        if (canceled) return
+        if (!open) return
+        if (bakugan.family !== DragonoidPyrus.family) return
+
+        const basePower = structuredClone(bakugan.powerLevel)
+        if (!basePower) return
+        bakugan.currentPower += basePower
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: basePower,
+            malus: false,
+            turn: roomState.turnState.turnCount
+        })
+
+    },
+    onRemoveBakugan({ bakugan, slot, roomState }) {
+
+        if (!roomState) return
+        const { canceled, open } = slot.state
+        
+        if (canceled) return
+        if (!open) return
+        if (bakugan.family !== DragonoidPyrus.family) return
+
+        const basePower = structuredClone(bakugan.powerLevel)
+        if (!basePower) return
+        bakugan.currentPower -= basePower
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: basePower,
+            malus: true,
+            turn: roomState.turnState.turnCount
+        })
+
+    },
+}
+
+export const DragonoidDeltaGateCard: gateCardType = {
+    key: 'dragonoid-gate-card',
+    name: 'Charachter: Dragonoid Delta',
+    maxInDeck: 1,
+    image: 'caracter-gate-cards/dragonoid-pyrus.jpg',
+    description: `When this card is activated, it doubles the level of all Delta Dragonoid on it.`,
     family: 'Dragonoid',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'dragonoid-gate-card')

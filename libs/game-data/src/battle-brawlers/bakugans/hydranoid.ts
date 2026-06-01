@@ -6,21 +6,21 @@ export const HydranoidDarkus: bakuganType = {
     name: 'Hydranoid',
     attribut: 'Darkus',
     image: 'hydranoid',
-    powerLevel: 370,
+    powerLevel: 400,
     family: 'Hydranoid',
-    exclusiveAbilities: ['chambre-de-gravité', 'bouclier-fusion', 'chaos-of-darkness'],
+    exclusiveAbilities: ['chambre-de-gravité', 'bouclier-fusion', 'chaos-of-darkness', 'destruction-buster'],
     banList: StarterBanList,
     canChangeAttribut: false
 }
 
-export const DeltaHydranoidDarkus: bakuganType = {
+export const DoubleHydranoidDarkus: bakuganType = {
     key: 'delta-hydranoid-darkus',
-    name: 'Hydranoid Delta',
+    name: 'Dual Hydranoid',
     attribut: 'Darkus',
     image: 'hydranoid-delta',
     powerLevel: 450,
     family: 'Hydranoid',
-    exclusiveAbilities: [],
+    exclusiveAbilities: ["dual-gazer", "destruction-impact"],
     banList: StarterBanList,
     canChangeAttribut: false
 }

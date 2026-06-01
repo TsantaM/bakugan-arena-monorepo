@@ -2,9 +2,9 @@ import { PowerChange } from "../../function/index.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 import { activateAbilities } from "../../type/room-types.js"
 
-export const RobotallionExecution: exclusiveAbilitiesType = {
-    key: "robotalion-execution",
-    name: 'Robotalion Enforcement',
+export const DragonicExecution: exclusiveAbilitiesType = {
+    key: "dragonic-execution",
+    name: 'Dragonic Enforcement',
     maxInDeck: 1,
     description: `Adds 50 Gs to the user`,
     usable_in_neutral: true,
@@ -26,7 +26,7 @@ export const RobotallionExecution: exclusiveAbilitiesType = {
                     userId: userId,
                     canceled: false,
                     id: newId,
-                    key: RobotallionExecution.key
+                    key: DragonicExecution.key
                 }
 
                 roomState.persistantAbilities.push(activateAbility)
@@ -75,7 +75,7 @@ export const RobotallionExecution: exclusiveAbilitiesType = {
                 })
             }
 
-            const abilityIndex = roomState.persistantAbilities.findIndex((a) => a.key === RobotallionExecution.key && a.bakuganKey === bakuganKey && a.userId === userId && !a.canceled)
+            const abilityIndex = roomState.persistantAbilities.findIndex((a) => a.key === DragonicExecution.key && a.bakuganKey === bakuganKey && a.userId === userId && !a.canceled)
             if (abilityIndex !== -1) {
                 roomState.persistantAbilities[abilityIndex].canceled = true
             }

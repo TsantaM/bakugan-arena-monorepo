@@ -1,10 +1,10 @@
 
-import { DragonoidPyrus } from "./bakugans/dragonoid.js";
-import { SkyressVentus } from "./bakugans/skyress.js";
-import { PreyasAquos } from "./bakugans/preyas.js";
-import { GoremSubterra } from "./bakugans/gorem.js";
-import { TigrerraHaos } from "./bakugans/tigrerra.js";
-import { HydranoidDarkus } from "./bakugans/hydranoid.js";
+import { DragonoidDeltaPyrus, DragonoidPyrus } from "./bakugans/dragonoid.js";
+import { SkyressStormVentus, SkyressVentus } from "./bakugans/skyress.js";
+import { AngeloAquos, DiabloAquos, PreyasAquos } from "./bakugans/preyas.js";
+import { GoremSubterra, HammerGoremSubterra } from "./bakugans/gorem.js";
+import { BladeTigrerraHaos, TigrerraHaos } from "./bakugans/tigrerra.js";
+import { DoubleHydranoidDarkus, HydranoidDarkus } from "./bakugans/hydranoid.js";
 import { SirenoidAquos } from "./bakugans/sirenoid.js";
 import { GriffinPyrus } from "./bakugans/griffin.js";
 import { FourtressPyrus } from "./bakugans/fourtress.js";
@@ -129,10 +129,18 @@ export const Bakugans: Record<string, bakuganType> = {
 
     [ManionSubterra.key]: ManionSubterra,
     [ManionPyrus.key]: ManionPyrus,
-    [ManionVentus.key]: ManionVentus
+    [ManionVentus.key]: ManionVentus,
 
     // [GarganoidPyrus.key]: GarganoidPyrus,
     // [GaraganoidAquos.key]: GaraganoidAquos
+
+    [DragonoidDeltaPyrus.key]: DragonoidDeltaPyrus,
+    [HammerGoremSubterra.key]: HammerGoremSubterra,
+    [BladeTigrerraHaos.key]: BladeTigrerraHaos,
+    [DoubleHydranoidDarkus.key]: DoubleHydranoidDarkus,
+    [AngeloAquos.key]: AngeloAquos,
+    [DiabloAquos.key]: DiabloAquos,
+    [SkyressStormVentus.key]: SkyressStormVentus,
 }
 
 export const BakuganList: bakuganType[] = Object.values(Bakugans) 

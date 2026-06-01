@@ -8,7 +8,7 @@ export const SirenoidAquos: bakuganType = {
     attribut: 'Aquos',
     image: 'sirenoid',
     family: 'sirenoid',
-    powerLevel: 370,
+    powerLevel: 400,
     exclusiveAbilities: ['anti-muse', 'vent-cinglant'],
     banList: StarterBanList,
     canChangeAttribut: false

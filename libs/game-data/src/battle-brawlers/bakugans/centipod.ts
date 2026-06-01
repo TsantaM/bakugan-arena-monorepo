@@ -3,7 +3,7 @@ import { CancelCaracterGateCard, CaracterGateCardEffect, CheckTwoBakugansAndBatt
 import { GateCardImages } from "../../store/store-index.js"
 import { CharacterCardByAttribut } from "../../function/caracter-cards-image-by-attribut.js"
 
-const powerLevel: number = 330
+const powerLevel: number = 360
 const family: string = 'Centipod'
 
 export const CentipodDarkus: bakuganType = {

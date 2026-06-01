@@ -1,15 +1,14 @@
-import { CancelAbilityCardEffect, PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js"
+import { CancelAbilityCardEffect, PowerChange } from "../../function/index.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 import { activateAbilities } from "../../type/room-types.js"
 
-export const DragonoidPlus: exclusiveAbilitiesType = {
-    key: 'dragonoid-plus',
-    name: 'Boosted Dragon',
-    description: `Adds 100 Gs to the user for the entire duration of the game, as long as the card is not canceled.`,
+export const DStrikeAttack: exclusiveAbilitiesType = {
+    key: 'd-strike-attack',
+    name: 'D Strike Attack',
+    description: `Adds 200 Gs to the user for the entire duration of the game, as long as the card is not canceled.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
-    image: 'boosted-dragonoid.jpg',
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -27,14 +26,14 @@ export const DragonoidPlus: exclusiveAbilitiesType = {
                     userId: userId,
                     canceled: false,
                     id: newId,
-                    key: DragonoidPlus.key
+                    key: DStrikeAttack.key
                 }
 
                 roomState.persistantAbilities.push(activateAbility)
 
                 PowerChange({
                     bakugan: user,
-                    G: 100,
+                    G: 200,
                     malus: false,
                     roomState: roomState
                 })
@@ -55,7 +54,7 @@ export const DragonoidPlus: exclusiveAbilitiesType = {
 
         PowerChange({
             bakugan: user,
-            G: 100,
+            G: 200,
             malus: false,
             roomState: roomState
         })
@@ -70,10 +69,11 @@ export const DragonoidPlus: exclusiveAbilitiesType = {
             id: newId, // FR: Toujours supérieur au précédent / ENG: Always greater than the last one
             bakuganKey: bakuganKey,
             canceled: false,
-            key: DragonoidPlus.key,
+            key: DStrikeAttack.key,
             userId: userId
         }
         slotOfUser.activateAbilities.push(newAbilityToPush)
+
     },
     onCanceled({ roomState, userId, bakuganKey, slot }) {
         if (!roomState) return null
@@ -84,13 +84,13 @@ export const DragonoidPlus: exclusiveAbilitiesType = {
             if (user) {
                 PowerChange({
                     bakugan: user,
-                    G: 100,
+                    G: 200,
                     malus: true,
                     roomState: roomState
                 })
             }
 
-            const abilityIndex = roomState.persistantAbilities.findIndex((a) => a.key === DragonoidPlus.key && a.bakuganKey === bakuganKey && a.userId === userId && !a.canceled)
+            const abilityIndex = roomState.persistantAbilities.findIndex((a) => a.key === DStrikeAttack.key && a.bakuganKey === bakuganKey && a.userId === userId && !a.canceled)
             if (abilityIndex !== -1) {
                 roomState.persistantAbilities[abilityIndex].canceled = true
 

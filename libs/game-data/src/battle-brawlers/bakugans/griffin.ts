@@ -8,7 +8,7 @@ export const GriffinPyrus: bakuganType = {
     attribut: 'Pyrus',
     family: 'griffin',
     image: 'griffin',
-    powerLevel: 320,
+    powerLevel: 350,
     exclusiveAbilities: ['aile-enflammee'],
     banList: [],
     canChangeAttribut: false
@@ -20,7 +20,7 @@ export const GriffinHaos: bakuganType = {
     attribut: 'Haos',
     family: 'griffin',
     image: 'griffin',
-    powerLevel: 320,
+    powerLevel: 350,
     exclusiveAbilities: [],
     banList: [],
     canChangeAttribut: false
@@ -32,7 +32,7 @@ export const GriffinAquos: bakuganType = {
     attribut: 'Aquos',
     family: 'griffin',
     image: 'griffin',
-    powerLevel: 320,
+    powerLevel: 350,
     exclusiveAbilities: [],
     banList: [],
     canChangeAttribut: false

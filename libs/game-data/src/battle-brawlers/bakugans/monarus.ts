@@ -8,7 +8,7 @@ export const MonarusVentus: bakuganType = {
     image: 'monarus',
     attribut: 'Ventus',
     family: 'Monarus',
-    powerLevel: 320,
+    powerLevel: 350,
     exclusiveAbilities: ['life-drew'],
     banList: [],
     canChangeAttribut: false

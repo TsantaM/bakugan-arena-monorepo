@@ -1,4 +1,4 @@
-import { PowerChange } from "../../function/index.js";
+import { CancelAbilityCardEffect, PowerChange } from "../../function/index.js";
 import { Slots } from "../../store/slots.js";
 import { AbilityCardsActions, bakuganToMoveType2 as bakuganToMoveType } from "../../type/actions-serveur-requests.js";
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js";
@@ -96,6 +96,21 @@ export const ChaosOfDarkness: exclusiveAbilitiesType = {
             roomState: roomState
         })
 
+        const abilities = slotOfUser.activateAbilities
+        const lastId = abilities.length > 0 ? abilities[abilities.length - 1].id : 0
+        const newId = lastId + 1
+
+        // FR: On prépare l’objet représentant la capacité activée
+        // ENG: Create a new activation object for the ability
+        const newAbilityToPush: activateAbilities = {
+            id: newId, // FR: Toujours supérieur au précédent / ENG: Always greater than the last one
+            bakuganKey: bakuganKey,
+            canceled: false,
+            key: ChaosOfDarkness.key,
+            userId: userId
+        }
+        slotOfUser.activateAbilities.push(newAbilityToPush)
+
     },
     onCanceled({ roomState, userId, bakuganKey, slot }) {
         if (!roomState) return null
@@ -115,6 +130,20 @@ export const ChaosOfDarkness: exclusiveAbilitiesType = {
             const abilityIndex = roomState.persistantAbilities.findIndex((a) => a.key === ChaosOfDarkness.key && a.bakuganKey === bakuganKey && a.userId === userId && !a.canceled)
             if (abilityIndex !== -1) {
                 roomState.persistantAbilities[abilityIndex].canceled = true
+
+                if (roomState.persistantAbilities[abilityIndex].fusion) {
+                    slotOfGate.activateAbilities.forEach((a) => {
+                        if (a.userId === userId && a.bakuganKey === bakuganKey && !a.canceled && roomState.persistantAbilities[abilityIndex].fusion?.includes(a.key)) {
+                            CancelAbilityCardEffect({
+                                roomState: roomState,
+                                slotOfGate: slotOfGate,
+                                ability: a
+                            })
+                        }
+                    })
+                }
+
+
             }
 
 

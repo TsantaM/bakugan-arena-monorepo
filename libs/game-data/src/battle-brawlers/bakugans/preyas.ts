@@ -7,7 +7,7 @@ export const PreyasAquos: bakuganType = {
     name: 'Preyas',
     attribut: 'Aquos',
     image: 'preyas',
-    powerLevel: 370,
+    powerLevel: 400,
     family: 'Preyas',
     exclusiveAbilities: ['ombre-bleue'],
     banList: StarterBanList,

@@ -121,7 +121,10 @@ export const GateCards: Record<string, gateCardType> = {
     [TuskorGateCard.key]: TuskorGateCard,
     [LasermanGateCard.key]: LasermanGateCard,
     [ManionGateCard.key]: ManionGateCard,
-    [Cadenas.key]: Cadenas
+    [Cadenas.key]: Cadenas,
+    
+    [AngeloGateCard.key]: AngeloGateCard,
+    [DiabloGateCard.key]: DiabloGateCard
     
 }
 

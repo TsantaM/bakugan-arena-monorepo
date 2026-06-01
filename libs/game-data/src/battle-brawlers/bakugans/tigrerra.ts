@@ -6,7 +6,7 @@ export const TigrerraHaos: bakuganType = {
     name: 'Tigrerra',
     attribut: 'Haos',
     image: 'tigrerra',
-    powerLevel: 370,
+    powerLevel: 400,
     family: 'Tigrerra',
     exclusiveAbilities: ['sabre-de-la-mort'],
     banList: StarterBanList,
@@ -20,7 +20,7 @@ export const BladeTigrerraHaos: bakuganType = {
     image: 'tigrerra-blade',
     powerLevel: 450,
     family: 'Tigrerra',
-    exclusiveAbilities: [],
+    exclusiveAbilities: ["velocity-fang"],
     banList: StarterBanList,
     canChangeAttribut: false
 }

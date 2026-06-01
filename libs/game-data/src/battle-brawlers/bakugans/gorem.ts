@@ -6,7 +6,7 @@ export const GoremSubterra: bakuganType = {
     name: 'Gorem',
     attribut: 'Subterra',
     image: 'gorem',
-    powerLevel: 370,
+    powerLevel: 400,
     family: 'Gorem',
     exclusiveAbilities: ['impact-majeur'],
     banList: StarterBanList,
@@ -20,7 +20,7 @@ export const HammerGoremSubterra: bakuganType = {
     image: 'gorem-hammer',
     powerLevel: 450,
     family: 'Gorem',
-    exclusiveAbilities: ['impact-majeur'],
+    exclusiveAbilities: ['grand-impact'],
     banList: StarterBanList,
     canChangeAttribut: false
 }

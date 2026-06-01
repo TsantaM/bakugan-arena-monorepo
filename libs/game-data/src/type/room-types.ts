@@ -56,6 +56,7 @@ export type activateAbilities = {
     userId: string,
     bakuganKey: string,
     canceled: boolean,
+    fusion?: string[]
 }
 
 export type onSlotStatutType = false | {

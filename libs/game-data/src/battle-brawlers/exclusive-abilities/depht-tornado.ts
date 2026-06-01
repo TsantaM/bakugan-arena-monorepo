@@ -35,7 +35,7 @@ export const DepthTornado: exclusiveAbilitiesType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
-            const abilityToCancel = slotOfGate.activateAbilities.find((a) => a.key === 'machettes-jumelles')
+            const abilityToCancel = slotOfGate.activateAbilities.find((a) => a.key === DepthTornado.key)
             if (user && abilityToCancel) {
                 PowerChange({
                     bakugan: user,

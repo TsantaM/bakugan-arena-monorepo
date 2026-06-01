@@ -67,6 +67,7 @@ export type exclusiveAbilitiesType = {
     usable_if_user_not_on_domain: boolean,
     image?: string,
     attribut?: attribut,
+    fusionWith?: string,
     activationConditions?: ({ roomState, userId }: { roomState: stateType, userId: string }) => boolean,
     onActivate: ({ roomState, userId, bakuganKey, slot, cardToCancel }: { roomState: stateType, roomId: string, userId: string, bakuganKey: string, slot: slots_id, cardToCancel?: { cardKey: string, bakuganKey: string, userId: string, slot: slots_id } }) => null | AbilityCardsActions,
     onUserSet?: ({ roomState, bakuganKey, slot, userId }: { roomState: stateType, userId: string, bakuganKey: string, slot: slots_id }) => void,

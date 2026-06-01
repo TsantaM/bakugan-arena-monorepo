@@ -8,7 +8,7 @@ export const CycloidSubterra: bakuganType = {
     family: 'Cycloid',
     image: 'cycloid',
     attribut: 'Subterra',
-    powerLevel: 370,
+    powerLevel: 400,
     exclusiveAbilities: ['gauche-gigantesque', 'massue-gigantesque'],
     banList: StarterBanList,
     canChangeAttribut: false

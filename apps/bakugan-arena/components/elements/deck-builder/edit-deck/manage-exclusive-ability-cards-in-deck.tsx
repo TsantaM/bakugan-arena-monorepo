@@ -36,11 +36,17 @@ export default function ManageExclusiveAbilityCardsInDeck({ deckId, bakugans, co
     const cardInDeck = ExclusiveAbilitiesList.filter((c) => exclusiveAbilities?.includes(c.key))
     const deckCards = exclusiveAbilities ? exclusiveAbilities?.map((c) => ExclusiveAbilitiesList.find(card => card.key === c)) : []
 
-    const notInDeckExclusiveAbilities = ExclusiveAbilitiesList.filter((c) => abilities.includes(c.key)).filter((c) => {
-        const exemplary = cardInDeck.filter((a) => a.key === c.key).length
+    const notInDeckExclusiveAbilities = ExclusiveAbilitiesList
+        .filter((c) => abilities.includes(c.key))
+        .filter((c) => {
+            const exemplary = cardInDeck.filter((a) => a.key === c.key).length
 
-        return exemplary < c.maxInDeck
-    })
+            const fusionRequirementMet =
+                !c.fusionWith ||
+                cardInDeck.some((card) => card.key === c.fusionWith)
+
+            return exemplary < c.maxInDeck && fusionRequirementMet
+        })
 
 
     const addCardToDeck = async (cardId: string) => {
