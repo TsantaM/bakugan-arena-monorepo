@@ -11,7 +11,7 @@ export const WormquakeSubterra: bakuganType = {
     exclusiveAbilities: ['trappe-de-sable', SpiritHole.key],
     family: 'Wormquake',
     image: 'wormquake',
-    powerLevel: 340,
+    powerLevel: 350,
     banList: [],
     canChangeAttribut: false
 }
@@ -23,7 +23,7 @@ export const WormquakeDarkus: bakuganType = {
     exclusiveAbilities: [],
     family: 'Wormquake',
     image: 'wormquake',
-    powerLevel: 340,
+    powerLevel: 350,
     banList: [],
     canChangeAttribut: false
 }

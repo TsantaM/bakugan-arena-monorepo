@@ -5,7 +5,7 @@ export const TentaclearHaos: bakuganType = {
     key: 'tentaclear-haos',
     name: 'Tentaclear',
     attribut: 'Haos',
-    powerLevel: 400,
+    powerLevel: 420,
     family: 'Tentaclear',
     image: 'tentaclear',
     exclusiveAbilities: ['mega-flare-blinder', 'flare-blinder', 'gamma-ray', 'solar-ray'],

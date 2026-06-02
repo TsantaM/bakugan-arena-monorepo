@@ -40,6 +40,7 @@ function CreateBakuganPreviewContainer({ bakugan, userId }: { bakugan: bakuganOn
     attribut_image.classList.add('attribut-image-container')
     const attribut = document.createElement('img')
     attribut.src = `/images/attributs/${bakugan.attribut.toUpperCase()}.png`
+    attribut.id = `${bakugan.attribut}-attribut-image-${bakugan.userId}-${bakugan.key}`
     attribut.classList.add('attribut-image')
     attribut_image.appendChild(attribut)
 

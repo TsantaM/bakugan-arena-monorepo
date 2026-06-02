@@ -37,6 +37,10 @@ export function TurnActionBuilder({ request, userId, camera, scene, plane, roomI
         {
             type: 'ACTIVE_GATE_CARD',
             data: undefined
+        },
+        {
+            type: 'CHANGE_ATTRIBUTE',
+            data: undefined
         }
     ]
 

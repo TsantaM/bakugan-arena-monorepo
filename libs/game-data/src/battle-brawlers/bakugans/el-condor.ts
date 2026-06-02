@@ -10,7 +10,7 @@ export const ElCondorHaos: bakuganType = {
     family: 'El Condor',
     image: 'el-condor',
     exclusiveAbilities: ['plexus-solaire'],
-    powerLevel: 340,
+    powerLevel: 350,
     banList: [],
     canChangeAttribut: false
 }
@@ -22,7 +22,7 @@ export const ElCondorVentus: bakuganType = {
     family: 'El Condor',
     image: 'el-condor',
     exclusiveAbilities: ['plexus-solaire', 'souffle-infini'],
-    powerLevel: 340,
+    powerLevel: 350,
     banList: [],
     canChangeAttribut: false
 }
@@ -34,7 +34,7 @@ export const ElCondorSubterra: bakuganType = {
     family: 'El Condor',
     image: 'el-condor',
     exclusiveAbilities: ['plexus-solaire', 'obstruction'],
-    powerLevel: 340,
+    powerLevel: 350,
     banList: [],
     canChangeAttribut: false
 }

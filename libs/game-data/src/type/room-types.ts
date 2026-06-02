@@ -75,6 +75,7 @@ export type bakuganOnSlot = {
     attribut: attribut,
     image: string,
     abilityBlock: boolean,
+    alreadyChangeAttribut?: boolean,
     assist: false | {
         assist: true,
         addedWith: 'GATE' | 'ABILITY',

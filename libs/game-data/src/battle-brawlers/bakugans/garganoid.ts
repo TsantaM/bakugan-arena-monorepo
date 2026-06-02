@@ -6,7 +6,7 @@ export const GarganoidPyrus: bakuganType = {
     name: 'Garganoid',
     image: 'garganoid',
     attribut: 'Pyrus',
-    powerLevel: 360,
+    powerLevel: 380,
     family: 'Garganoid',
     exclusiveAbilities: ['cape de feu'],
     banList: [],
@@ -20,7 +20,7 @@ export const GaraganoidAquos: bakuganType = {
     exclusiveAbilities: [],
     family: 'Garganoid',
     image: 'garganoid',
-    powerLevel: 360,
+    powerLevel: 380,
     banList: [],
     canChangeAttribut: false
 }

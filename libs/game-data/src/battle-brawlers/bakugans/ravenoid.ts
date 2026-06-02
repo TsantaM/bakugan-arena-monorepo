@@ -8,7 +8,7 @@ export const RavenoidPyrus: bakuganType = {
     attribut: 'Pyrus',
     image: 'ravenoid',
     family: 'Ravenoid',
-    powerLevel: 340,
+    powerLevel: 350,
     exclusiveAbilities: [`effaceur-d'ombre`],
     banList: [],
     canChangeAttribut: false
@@ -20,7 +20,7 @@ export const RavenoidVentus: bakuganType = {
     attribut: 'Ventus',
     image: 'ravenoid',
     family: 'Ravenoid',
-    powerLevel: 340,
+    powerLevel: 350,
     exclusiveAbilities: [`effaceur-d'ombre`],
     banList: [],
     canChangeAttribut: false
@@ -32,7 +32,7 @@ export const RavenoidHaos: bakuganType = {
     attribut: 'Haos',
     image: 'ravenoid',
     family: 'Ravenoid',
-    powerLevel: 340,
+    powerLevel: 350,
     exclusiveAbilities: [`effaceur-d'ombre`],
     banList: [],
     canChangeAttribut: false

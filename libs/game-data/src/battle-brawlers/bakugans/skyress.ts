@@ -8,7 +8,7 @@ export const SkyressVentus: bakuganType = {
     attribut: 'Ventus',
     image: 'skyress',
     key: 'skyress-ventus',
-    powerLevel: 400,
+    powerLevel: 420,
     family: 'Skyress',
     exclusiveAbilities: [VentViolentDeNobelesseVerte.key, FurryOfWind.key],
     banList: StarterBanList,

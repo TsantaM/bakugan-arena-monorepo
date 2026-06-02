@@ -199,4 +199,12 @@ export type AnimationDirectivesTypes =
             bakugan: bakuganOnSlot
         },
         message: Message[]
-    } 
+    } | {
+        type: 'CHANGE_ATTRIBUT',
+        resolve: boolean,
+        data: {
+            bakugan: bakuganOnSlot,
+            attribut: attribut
+        },
+        message: Message[]
+    }

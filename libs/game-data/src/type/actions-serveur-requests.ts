@@ -1,5 +1,5 @@
 import type { attribut } from './game-data-types.js'
-import type { bakuganInDeck, portalSlotsTypeElement, slots_id } from './room-types.js'
+import type { bakuganInDeck, bakuganOnSlot, portalSlotsTypeElement, slots_id } from './room-types.js'
 
 export type SelectableBakuganAction = {
     key: string,
@@ -71,6 +71,12 @@ export type ActionType = {
     type: 'OPEN_GATE_CARD',
     slot: slots_id,
     gateId: string
+} | {
+    type: 'CHANGE_ATTRIBUTE',
+    data: {
+        target: bakuganOnSlot,
+        attributs: attribut[]
+    }[]
 }
 
 export type ActivePlayerActionRequestType = {
@@ -146,6 +152,13 @@ export type ActionRequestAnswerType = [
         type: 'ACTIVE_GATE_CARD',
         data: {
             slot: slots_id
+        } | undefined
+    },
+    {
+        type: 'CHANGE_ATTRIBUTE',
+        data: {
+            bakugan: bakuganOnSlot | undefined,
+            attribut: attribut
         } | undefined
     }
 ]

@@ -114,6 +114,12 @@ export type gateCardType = {
         slot: portalSlotsTypeElement,
         roomState: stateType
     }) => void,
+    onAttributChange?: ({ bakugan, slot }: {
+        bakugan: bakuganOnSlot
+        slot: portalSlotsTypeElement,
+        attribut: attribut,
+        roomState: stateType
+    }) => void,
     onRemoveBakugan?: ({ bakugan, slot }: {
         bakugan: bakuganOnSlot
         slot: portalSlotsTypeElement,

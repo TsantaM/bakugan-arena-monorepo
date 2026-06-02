@@ -308,7 +308,34 @@ const request: ActivePlayerActionRequestType = {
             }
         ],
         mustDoOne: [],
-        optional: []
+        optional: [{
+            type: 'CHANGE_ATTRIBUTE',
+            data: [{
+                attributs: ['Aquos', 'Darkus', 'Haos', 'Pyrus', 'Subterra', 'Ventus'],
+                target: {
+                    abilityBlock: false,
+                    assist: false,
+                    attribut: 'Pyrus',
+                    currentPower: 500,
+                    family: 'dragonoid',
+                    image: 'dragonoid',
+                    key: 'dragonoid-pyrus',
+                    powerLevel: 370,
+                    slot_id: 'slot-3',
+                    userId: userId,
+                    id: 1,
+                    alreadyChangeAttribut: false,
+                    statut: {
+                        notRetreat: false,
+                        poisoned: false,
+                        trapped: false,
+                        protectedAgainstGate: false,
+                        protectedAgainstAbility: false,
+                        protected: false
+                    }   
+                }
+            }]
+        }]
     }
 }
 

@@ -22,7 +22,7 @@ export async function OpenGateCardAnimation({
       ? new THREE.Color(getAttributColor(card.attribut))
       : new THREE.Color("white");
 
-      const cardImage = card.imageByAttribut ? GetCharacterCardImage (card, slot) ? GetCharacterCardImage (card, slot) : card.image : card.image
+    const cardImage = card.imageByAttribut ? GetCharacterCardImage(card, slot) ? GetCharacterCardImage(card, slot) : card.image : card.image
 
     const texture = new THREE.TextureLoader().load(`./../images/cards/${cardImage ? cardImage : card.image}`);
 

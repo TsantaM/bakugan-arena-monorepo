@@ -25,7 +25,7 @@ export const ReacteurPyrus: gateCardType = {
 
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -40,11 +40,28 @@ export const ReacteurPyrus: gateCardType = {
         })
 
     },
+    onAttributChange({ bakugan, slot, attribut, roomState }) {
+        if (!roomState) return
+        const { canceled, open } = slot.state
+
+        if (canceled) return
+        if (!open) return
+
+        if (attribut !== "Pyrus") return
+        bakugan.currentPower += 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: 100,
+            malus: false,
+            turn: roomState.turnState.turnCount
+        })
+    },
     onRemoveBakugan({ bakugan, slot, roomState }) {
 
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -82,7 +99,7 @@ export const ReacteurHaos: gateCardType = {
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -96,10 +113,27 @@ export const ReacteurHaos: gateCardType = {
             turn: roomState.turnState.turnCount
         })
     },
+    onAttributChange({ bakugan, slot, attribut, roomState }) {
+        if (!roomState) return
+        const { canceled, open } = slot.state
+
+        if (canceled) return
+        if (!open) return
+
+        if (attribut !== "Haos") return
+        bakugan.currentPower += 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: 100,
+            malus: false,
+            turn: roomState.turnState.turnCount
+        })
+    },
     onRemoveBakugan({ bakugan, slot, roomState }) {
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -147,7 +181,7 @@ export const ReacteurVentus: gateCardType = {
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -161,10 +195,27 @@ export const ReacteurVentus: gateCardType = {
             turn: roomState.turnState.turnCount
         })
     },
+    onAttributChange({ bakugan, slot, attribut, roomState }) {
+        if (!roomState) return
+        const { canceled, open } = slot.state
+
+        if (canceled) return
+        if (!open) return
+
+        if (attribut !== "Ventus") return
+        bakugan.currentPower += 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: 100,
+            malus: false,
+            turn: roomState.turnState.turnCount
+        })
+    },
     onRemoveBakugan({ bakugan, slot, roomState }) {
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -206,7 +257,7 @@ export const ReacteurAquos: gateCardType = {
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -220,10 +271,27 @@ export const ReacteurAquos: gateCardType = {
             turn: roomState.turnState.turnCount
         })
     },
+    onAttributChange({ bakugan, slot, attribut, roomState }) {
+        if (!roomState) return
+        const { canceled, open } = slot.state
+
+        if (canceled) return
+        if (!open) return
+
+        if (attribut !== "Aquos") return
+        bakugan.currentPower += 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: 100,
+            malus: false,
+            turn: roomState.turnState.turnCount
+        })
+    },
     onRemoveBakugan({ bakugan, slot, roomState }) {
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -265,7 +333,7 @@ export const ReacteurSubterra: gateCardType = {
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -279,10 +347,27 @@ export const ReacteurSubterra: gateCardType = {
             turn: roomState.turnState.turnCount
         })
     },
+    onAttributChange({ bakugan, slot, attribut, roomState }) {
+        if (!roomState) return
+        const { canceled, open } = slot.state
+
+        if (canceled) return
+        if (!open) return
+
+        if (attribut !== "Subterra") return
+        bakugan.currentPower += 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: 100,
+            malus: false,
+            turn: roomState.turnState.turnCount
+        })
+    },
     onRemoveBakugan({ bakugan, slot, roomState }) {
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -324,7 +409,7 @@ export const ReacteurDarkus: gateCardType = {
     onSetBakuganOnSlot({ bakugan, slot, roomState }) {
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 
@@ -338,10 +423,27 @@ export const ReacteurDarkus: gateCardType = {
             turn: roomState.turnState.turnCount
         })
     },
+    onAttributChange({ bakugan, slot, attribut, roomState }) {
+        if (!roomState) return
+        const { canceled, open } = slot.state
+
+        if (canceled) return
+        if (!open) return
+
+        if (attribut !== "Darkus") return
+        bakugan.currentPower += 100
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [bakugan],
+            powerChange: 100,
+            malus: false,
+            turn: roomState.turnState.turnCount
+        })
+    },
     onRemoveBakugan({ bakugan, slot, roomState }) {
         if (!roomState) return
         const { canceled, open } = slot.state
-        
+
         if (canceled) return
         if (!open) return
 

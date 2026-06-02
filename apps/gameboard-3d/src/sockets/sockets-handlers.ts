@@ -34,6 +34,7 @@ import { DragAndElimineAnimation } from "../animations/drag-and-elimine-animatio
 import { ReviveBakuganAnimation } from "../animations/revive-animation"
 import { sendMessageToParent } from "../functions/send-message-to-parent"
 import { GateCardAdditionalRequestResolution } from "../abiliity-additional-request/gate-card-additional-request"
+import { ChangeAttributAnimation } from "../animations/change-attribut-animation"
 
 let animationQueue: AnimationDirectivesTypes[] = []
 let isProcessingAnimations = false
@@ -392,6 +393,17 @@ async function processAnimationQueue(
 
         if (current.type === 'REMOVE_PROTECTION') {
             sendMessageToParent(current.message)
+        }
+
+        if(current.type === 'CHANGE_ATTRIBUT') {
+
+            sendMessageToParent(current.message)
+
+            await ChangeAttributAnimation({
+                attribut: current.data.attribut,
+                bakugan: current.data.bakugan,
+                scene: scene
+            })
         }
 
         i++; // avancer à l'animation suivante

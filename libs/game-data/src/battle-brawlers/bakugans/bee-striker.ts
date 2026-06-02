@@ -12,7 +12,7 @@ export const BeeStrikerVentus: bakuganType = {
     canChangeAttribut: false,
     image: 'bee-striker',
     family: family,
-    powerLevel: 380,
+    powerLevel: 400,
 }
 
 export const BeeStrikerGateCard: gateCardType = {

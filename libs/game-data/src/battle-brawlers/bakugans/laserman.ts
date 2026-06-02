@@ -8,7 +8,7 @@ export const LasermanDarkus: bakuganType = {
     name: 'Laserman',
     attribut: 'Darkus',
     family: family,
-    powerLevel: 380,
+    powerLevel: 400,
     canChangeAttribut: false,
     image: 'laserman',
     exclusiveAbilities: ['leap-sting'],

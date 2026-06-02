@@ -11,7 +11,7 @@ export const TuskorSubterra: bakuganType = {
     image: 'tuskor',
     canChangeAttribut: false,
     exclusiveAbilities: ['noise-slap'],
-    powerLevel: 380,
+    powerLevel: 400,
     banList: [],
     attribut: 'Subterra'
 }
@@ -23,7 +23,7 @@ export const TuskorPyrus: bakuganType = {
     image: 'tuskor',
     canChangeAttribut: false,
     exclusiveAbilities: ['noise-slap'],
-    powerLevel: 380,
+    powerLevel: 400,
     banList: [],
     attribut: 'Pyrus'
 }
@@ -36,7 +36,7 @@ export const TuskorDarkus: bakuganType = {
     image: 'tuskor',
     canChangeAttribut: false,
     exclusiveAbilities: ['noise-slap'],
-    powerLevel: 380,
+    powerLevel: 400,
     banList: [],
     attribut: 'Darkus'
 }

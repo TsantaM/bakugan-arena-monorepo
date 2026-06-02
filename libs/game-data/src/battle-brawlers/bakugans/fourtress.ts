@@ -7,7 +7,7 @@ export const FourtressPyrus: bakuganType = {
     attribut: 'Pyrus',
     image: 'fourtress',
     family: 'Fortress',
-    powerLevel: 400,
+    powerLevel: 420,
     exclusiveAbilities: ['visage-de-la-fureur', 'visage-du-chagrin', 'visage-de-joie'],
     banList: StarterBanList,
     canChangeAttribut: false

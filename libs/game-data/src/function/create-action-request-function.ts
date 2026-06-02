@@ -1,5 +1,5 @@
 import type { stateType } from '../type/type-index.js'
-import { OpenGateCardActionRequest, SelectGateCardActionRequest, SetBakuganActionRequest, SetGateCardActionRequest, UseAbilityCardActionRequest } from './action-request-functions/index.js'
+import { ChangeAttributActionRequest, OpenGateCardActionRequest, SelectGateCardActionRequest, SetBakuganActionRequest, SetGateCardActionRequest, UseAbilityCardActionRequest } from './action-request-functions/index.js'
 
 export function CreateActionRequestFunction({ roomState }: { roomState: stateType }) {
 
@@ -21,5 +21,6 @@ export function CreateActionRequestFunction({ roomState }: { roomState: stateTyp
     SetBakuganActionRequest({ roomState })
     UseAbilityCardActionRequest({ roomState })
     OpenGateCardActionRequest({ roomState })
+    ChangeAttributActionRequest({roomState})
     
 }

@@ -1,4 +1,4 @@
-import type { ActionRequestAnswerType, ActionType, ActivePlayerActionRequestType, InactivePlayerActionRequestType, setBakuganProps, slots_id } from "@bakugan-arena/game-data"
+import type { ActionRequestAnswerType, ActionType, ActivePlayerActionRequestType, attribut, InactivePlayerActionRequestType, setBakuganProps, slots_id } from "@bakugan-arena/game-data"
 import type { Socket } from "socket.io-client"
 import * as THREE from 'three'
 import { SelectCard } from "../turn-actions-function/select-card"
@@ -14,6 +14,7 @@ import { OpenGateCardResolution } from "./open-gate-card-resolution"
 import { SelectGateCard } from "./select-gate-card"
 import { SelectAbilityCard } from "./select-ability-card"
 import { SelectBakugan as sB } from "../turn-actions-resolution/select-bakugan"
+import type { SpriteUserData } from "../../meshes/bakugan.mesh"
 
 export function TurnInteractionController({
     socket,
@@ -47,27 +48,27 @@ export function TurnInteractionController({
 
     let hoveredSlot: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial> | null = null
 
-    function globalCleanup () {
-    window.removeEventListener('mousemove', mouseMoveHandler!)
-    window.removeEventListener('click', clickHandler!)
+    function globalCleanup() {
+        window.removeEventListener('mousemove', mouseMoveHandler!)
+        window.removeEventListener('click', clickHandler!)
 
-    cardClickHandlers.forEach((handler, el) => {
-        el.removeEventListener('click', handler)
-    })
+        cardClickHandlers.forEach((handler, el) => {
+            el.removeEventListener('click', handler)
+        })
 
-    bakuganClickHandlers.forEach((handler, el) => {
-        el.removeEventListener('click', handler)
-    })
+        bakuganClickHandlers.forEach((handler, el) => {
+            el.removeEventListener('click', handler)
+        })
 
-    SelectedActions.forEach((action) => {
-        action.data = undefined
-    })
+        SelectedActions.forEach((action) => {
+            action.data = undefined
+        })
 
-    cardClickHandlers.clear()
-    bakuganClickHandlers.clear()
+        cardClickHandlers.clear()
+        bakuganClickHandlers.clear()
 
-    hoveredSlot = null
-}
+        hoveredSlot = null
+    }
 
     function resetSlotsColor(
         plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>,
@@ -438,6 +439,104 @@ export function TurnInteractionController({
         card.addEventListener('mouseleave', mouseLeave)
         card.addEventListener('click', handler)
         cardClickHandlers.set(card, handler)
+    })
+
+    // CHANGE ATTRIBUT
+    const selectableAttributs = document.querySelectorAll(".attribut-image")
+    const attributs = actions.find(a => a.type === 'CHANGE_ATTRIBUTE')?.data
+    const bakugans = attributs?.map((b) => b.target)
+    const SelectedAttribut = SelectedActions.find(a => a.type === 'CHANGE_ATTRIBUTE')
+    const attributsList: attribut[] = ["Aquos", "Darkus", "Haos", "Pyrus", "Subterra", "Ventus"]
+
+    selectableAttributs.forEach(attribut => {
+        if (!attributs || !SelectedAttribut || !bakugans) return
+        if (!selectableAttributs) return
+
+        const handler = () => {
+            const data = attributsList.find((a) => a === attribut.getAttribute('data-attribut'))
+            if (!data) return
+
+            SelectedActions.forEach((action) => {
+                if (action.type !== 'CHANGE_ATTRIBUTE' && action.data !== undefined) {
+                    action.data = undefined
+                }
+            })
+
+            document.querySelectorAll('.selected-bakugan').forEach((bakugan) => {
+                bakugan.classList.remove('selected-bakugan')
+            })
+
+            document.querySelectorAll('.selected-card').forEach((c) => {
+                c.classList.remove('selected-card')
+            })
+
+            bakuganToSelect.forEach((b) => b.classList.remove('selected-bakugan'))
+            cardsToSelect.forEach(c => c.classList.remove('selected-card'))
+
+            cleanup({ clearBakugans: false, clearCards: false })
+
+
+            if (SelectedAttribut.data !== undefined && SelectedAttribut.data.attribut !== data) return
+
+            SelectedAttribut.data = {
+                attribut: data,
+                bakugan: undefined
+            }
+
+            let bakugan: THREE.Sprite<THREE.Object3DEventMap> | null = null
+            const names = attributs.filter((a) => a.attributs.includes(data)).map((a) => a.target).flat().map((bakugan) => `${bakugan.key}-${userId}`)
+
+
+            mouseMoveHandler = (event) => {
+                bakugan = SelectBakuganOnMouseMove({
+                    bakugan: bakugan,
+                    camera: camera,
+                    event: event,
+                    scene: scene,
+                    names: names
+                })
+
+            }
+
+            clickHandler = () => {
+                if (!SelectedAttribut.data || bakugan === null) return
+                if (!bakugan) return
+                if (!bakugan.userData) return
+                if (bakugan === null) return
+                const userData = bakugan.userData as SpriteUserData
+
+                const selectedBakugan = bakugans.find((b) => b.key === userData.bakuganKey && b.userId === userData.userId && b.slot_id === userData.slot)
+
+
+                if (!selectedBakugan) return
+                SelectedAttribut.data.bakugan = selectedBakugan
+                SelectedAttribut.data.attribut = data
+
+                bakugan.material.color.set('white')
+
+                bakugans.forEach((bakugan) => {
+                    const mesh = scene.getObjectByName(`${bakugan.key}-${userId}`) as THREE.Sprite<THREE.Object3DEventMap>
+                    if (!mesh) return
+
+                    if (mesh.material.opacity !== 1) {
+                        mesh.material.opacity = 1
+                    }
+                })
+
+                clearTurnInterface()
+
+                // Préparer le socket
+                socket.emit('change-attribut', ({ roomId: roomId, attribut: SelectedAttribut.data.attribut, bakugan: SelectedAttribut.data.bakugan, userId: userId }))
+                // Préparer le socket
+                cleanup({ clearBakugans: false, clearCards: false })
+
+            }
+
+            window.addEventListener('mousemove', mouseMoveHandler)
+            window.addEventListener('click', clickHandler)
+        }
+
+        attribut.addEventListener('click', handler)
     })
 
     SelectGateCard({ SelectedActions: SelectedActions, userId: userId, actions: actions, roomId: roomId, socket: socket })

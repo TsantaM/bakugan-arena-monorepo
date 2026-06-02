@@ -30,6 +30,7 @@ import { cleanGameStates } from "./functions/clear-game-state";
 import { GlobalChatSocket, OnOpentUpdateMessages, RecieveMessge } from "./sockets/global-chat-socket";
 import { CLEANUP_INTERVAL_GLOBAL_CHAT, cleanupOldMessages } from "./game-state/global-chat-store";
 import { GateCardAdditionalEffectSocket } from "./sockets/gate-card-additional-effect-socket";
+import { ChangeAttributSocket } from "./sockets/change-attribut-socket";
 
 
 
@@ -84,6 +85,7 @@ io.on('connection', (socket) => {
     AbilitiesAdditionalEffectsSocket(io, socket)
     socketActiveGateCard(io, socket)
     GateCardAdditionalEffectSocket(io, socket)
+    ChangeAttributSocket(io, socket)
     socketTurn(io, socket)
     forfeitSocket(io, socket)
 

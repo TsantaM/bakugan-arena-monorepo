@@ -7,6 +7,7 @@ import { BuildSetBakugan } from "./turn-action-builder/build-set-bakugan";
 import { BuildUseAbilityCard } from "./turn-action-builder/build-use-ability-card";
 import { clearTurnInterface } from "./turn-actions-resolution/action-scope";
 import { BuildOpenGateCard } from "./turn-action-builder/build-open-gate-card";
+import { BuildChangeAttribut } from "./turn-action-builder/build-change-attribut";
 
 export const TurnActionInterfaceBuilder = ({ request }: { request: ActivePlayerActionRequestType | InactivePlayerActionRequestType }) => {
 
@@ -55,6 +56,7 @@ export const TurnActionInterfaceBuilder = ({ request }: { request: ActivePlayerA
                 BuildSetBakugan({ action: action, turnActionContainer: turnActionContainer })
                 BuildUseAbilityCard({ action: action, turnActionContainer: turnActionContainer })
                 BuildOpenGateCard({ action: action, turnActionContainer: turnActionContainer })
+                BuildChangeAttribut({action: action, turnActionContainer: turnActionContainer})
             })
         }
 
