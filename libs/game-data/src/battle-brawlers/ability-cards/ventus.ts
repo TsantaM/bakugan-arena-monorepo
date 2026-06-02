@@ -2,7 +2,7 @@ import { ElementaryCardCancelerEffect } from "../../function/ability-cards-effec
 import { AbilityCardFailed, CancelGateCardDirectiveAnimation, CheckBattleStillInProcess, ComeBackBakuganDirectiveAnimation, dragBakuganToUserSlot, moveBakuganToSelectedSlot, moveSelectedBakugan } from "../../function/index.js";
 import { StandardCardsImages } from "../../store/ability-cards-images.js";
 import { Slots } from "../../store/slots.js";
-import type { AbilityCardsActions, abilityCardsType, bakuganToMoveType2 as bakuganToMoveType, slots_id } from "../../type/type-index.js";
+import type { AbilityCardsActions, abilityCardsType, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, slots_id } from "../../type/type-index.js";
 import { GateCardsList } from "../gate-gards.js";
 import { AbilityCardsList, ExclusiveAbilitiesList } from "../index.js";
 
@@ -81,7 +81,7 @@ export const CombatAerien: abilityCardsType = {
 
         const slots = roomState.protalSlots.filter((slot) => slot.id !== bakugan.slot_id && slot.portalCard !== null)
 
-        if(slots.length === 0) return false
+        if (slots.length === 0) return false
         if (bakugan.statut.trapped) return false
 
         return true
@@ -228,7 +228,7 @@ export const RetourDair: abilityCardsType = {
     name: `Backdraft`,
     attribut: 'Ventus',
     maxInDeck: 1,
-    description: `Remove the user from the field`,
+    description: `Remove the selected bakugan from the field`,
     image: StandardCardsImages.ventus,
     usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -239,13 +239,35 @@ export const RetourDair: abilityCardsType = {
             const bakuganInDeck = roomState?.decksState.find((d) => d.userId === userId)?.bakugans.find((b) => b?.bakuganData.key === bakuganKey)
 
             if (user && bakuganInDeck) {
-                slotOfGate.bakugans.splice(index, 1)
-                bakuganInDeck.bakuganData.onDomain = false
-                ComeBackBakuganDirectiveAnimation({
-                    animations: roomState.animations,
-                    bakugan: user,
-                    slot: slotOfGate
-                })
+
+                const bakugansOnField: bakuganOnSlot[] = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => !bakugan.statut.protected && !bakugan.statut.protectedAgainstAbility)
+
+                if (bakugansOnField.length > 1) {
+
+                    const bakugans: bakuganToMoveType[] = bakugansOnField.map((bakugan) => ({
+                        key: bakugan.key,
+                        userId: bakugan.userId,
+                        slot: bakugan.slot_id
+                    }))
+
+                    const request: AbilityCardsActions = {
+                        type: 'SELECT_BAKUGAN_ON_DOMAIN',
+                        message: 'Back Draft : Select a target',
+                        bakugans: bakugans
+                    }
+
+                    return request
+
+                } else {
+                    slotOfGate.bakugans.splice(index, 1)
+                    bakuganInDeck.bakuganData.onDomain = false
+                    ComeBackBakuganDirectiveAnimation({
+                        animations: roomState.animations,
+                        bakugan: user,
+                        slot: slotOfGate
+                    })
+                }
+
             }
 
             CheckBattleStillInProcess(roomState)
@@ -253,7 +275,32 @@ export const RetourDair: abilityCardsType = {
         }
 
         return null
-    }
+    },
+    onAdditionalEffect({ resolution, roomData }) {
+        if (!roomData) return;
+        if (resolution.data.type !== "SELECT_BAKUGAN_ON_DOMAIN") return;
+        const target = resolution.data
+        const slotOfTarget = roomData.protalSlots.find((s) => s.id === target.slot)
+        if (!slotOfTarget) return
+        const bakugan = slotOfTarget.bakugans.find((b) => b.key === target.bakugan && target.userId === b.userId && b.slot_id === target.slot)
+        const index = slotOfTarget.bakugans.findIndex((b) => b.key === target.bakugan && target.userId === b.userId && b.slot_id === target.slot)
+        const bakuganInDeck = roomData.decksState.find((d) => d.userId === target.userId)?.bakugans.find((b) => b?.bakuganData.key === target.bakugan)
+
+        if (!bakugan) return
+        if (!bakuganInDeck) return
+
+        slotOfTarget.bakugans.splice(index, 1)
+        bakuganInDeck.bakuganData.onDomain = false
+
+        ComeBackBakuganDirectiveAnimation({
+            animations: roomData.animations,
+            bakugan: bakugan,
+            slot: slotOfTarget
+        })
+
+        CheckBattleStillInProcess(roomData)
+
+    },
 }
 
 export const TornadeExtreme: abilityCardsType = {
