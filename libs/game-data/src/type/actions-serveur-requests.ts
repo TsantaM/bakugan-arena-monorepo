@@ -186,7 +186,8 @@ export type AbilityCardsActions = {
     target?: string // Le joueur qui va recevoir l'action request,
     message: string,
     skipable?: boolean,
-    slots: slots_id[]
+    slots: slots_id[],
+    emptySlot?: boolean
 } | {
     type: 'SELECT_BAKUGAN_TO_SET',
     target?: string // Le joueur qui va recevoir l'action request,

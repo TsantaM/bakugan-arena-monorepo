@@ -274,9 +274,9 @@ export const EarthShatter: abilityCardsType = {
                 })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
-                    slotOfGate.state.canceled = true
                 }
 
+                slotOfGate.state.canceled = true
 
             }
         }
@@ -318,7 +318,7 @@ export const TerraLockdown: abilityCardsType = {
     name: 'Terra Lockdown',
     description: `Nullifies the opponent's ability`,
     maxInDeck: 3,
-    image: StandardCardsImages.haos,
+    image: StandardCardsImages.subterra,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, slot, cardToCancel }) => {
         return ElementaryCardCancelerEffect({ roomState, userId, slot, cardToCancel })
@@ -359,6 +359,80 @@ export const TerraLockdown: abilityCardsType = {
 
         if (abilities.length < 1) return false
 
+        return true
+    },
+}
+
+export const GateBuilding: abilityCardsType = {
+    key: 'gate-building',
+    attribut: 'Subterra',
+    name: 'Gate Building',
+    description: `The user may set another Subterra Gate Card.`,
+    maxInDeck: 1,
+    image: StandardCardsImages.subterra,
+    usable_in_neutral: true,
+    onActivate({ roomState, userId }) {
+        const animation = AbilityCardFailed({ card: GateBuilding.name })
+
+        if (!roomState) return animation
+
+        if (GateBuilding.activationConditions) {
+            const checker = GateBuilding.activationConditions({ roomState, userId })
+            if (checker === false) return animation
+        }
+
+        const usableSlots = roomState.protalSlots.filter((slot) => slot.portalCard === null)
+        if (usableSlots.length === 0) return animation
+
+        const slots = usableSlots.map((slot) => slot.id)
+
+        const request: AbilityCardsActions = {
+            type: 'SELECT_SLOT',
+            message: 'Gate Building : Select a slot',
+            slots: slots,
+            emptySlot: true
+        }
+
+        return request
+
+    },
+    onAdditionalEffect({ resolution, roomData }) {
+        if (resolution.data.type !== "SELECT_SLOT") return
+
+        const { slot } = resolution.data
+
+        const slotTarget = roomData.protalSlots[Slots.indexOf(slot)]
+        if(slotTarget.portalCard !== null) return
+
+        slotTarget.portalCard = {
+            key: "reacteur-subterra",
+            userId: resolution.userId
+        }
+
+        slotTarget.state = {
+            blocked: false,
+            canceled: false,
+            open: false
+        }
+
+        const animation: AnimationDirectivesTypes = {
+            type: 'SET_GATE_CARD',
+            data: {
+                slot: slotTarget,
+            },
+            resolved: false,
+            message: [{
+                text: 'Gate Card Builded',
+                turn: roomData.turnState.turnCount
+            }]
+        }
+
+        roomData.animations.push(animation)
+
+    },
+    activationConditions({ roomState, userId }) {
+        const usableSlots = roomState.protalSlots.filter((slot) => slot.portalCard === null)
+        if (usableSlots.length === 0) return false
         return true
     },
 }

@@ -9,6 +9,7 @@ import { removePreviousDialogBoxAnimation } from "../animations/show-message-ani
 import { SelectSlotToSetBakugan } from "../turn-action-management/turn-actions-function/select-slot-to-set-bakugan";
 import { SelectBakuganOnMouseMove } from "../turn-action-management/turn-actions-function/select-bakugan-on-mouse-move";
 import { BuildSelectAbilityCard } from "../turn-action-management/turn-action-builder/build-select-ability-card";
+import { SelectSlotOnMouseMove } from "../turn-action-management/turn-actions-function/select-slot";
 
 
 export function AdditionalRequestResolution({ request, camera, plane, socket, scene }: {
@@ -17,6 +18,7 @@ export function AdditionalRequestResolution({ request, camera, plane, socket, sc
 
     if (request.data.type === 'SELECT_SLOT') {
         const slots = request.data.slots
+        const emptySlot = request.data.emptySlot
 
         let mouseMove: ((event: MouseEvent) => void) | null = null
         let clickHandler: (() => void) | null = null
@@ -39,14 +41,24 @@ export function AdditionalRequestResolution({ request, camera, plane, socket, sc
 
             const attribut: attribut = BakuganList.find((bakugan) => bakugan.key === request.bakuganKey)?.attribut || 'Pyrus'
 
-            hoveredSlot = SelectSlotToSetBakugan({
-                attribut: attribut,
-                camera: camera,
-                event: event,
-                hoveredSlot: hoveredSlot,
-                plane: plane,
-                slots: slots
-            })
+            if (!emptySlot) {
+                hoveredSlot = SelectSlotToSetBakugan({
+                    attribut: attribut,
+                    camera: camera,
+                    event: event,
+                    hoveredSlot: hoveredSlot,
+                    plane: plane,
+                    slots: slots
+                })
+            } else {
+                hoveredSlot = SelectSlotOnMouseMove({
+                    plane,
+                    slots,
+                    hoveredSlot,
+                    camera,
+                    event
+                })
+            }
 
 
             if (hoveredSlot === null) return
