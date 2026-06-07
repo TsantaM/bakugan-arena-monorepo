@@ -81,7 +81,7 @@ export const CombatAerien: abilityCardsType = {
 
         const slots = roomState.protalSlots.filter((slot) => slot.id !== bakugan.slot_id && slot.portalCard !== null)
 
-        if(slots.length === 0) return false
+        if (slots.length === 0) return false
         if (bakugan.statut.trapped) return false
 
         return true
@@ -112,8 +112,9 @@ export const TornadeChaosTotal: abilityCardsType = {
                 })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
-                    slotOfGate.state.canceled = true
                 }
+
+                slotOfGate.state.canceled = true
 
             }
         }

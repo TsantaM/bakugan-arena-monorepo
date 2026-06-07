@@ -392,9 +392,9 @@ export const SupportLight: abilityCardsType = {
                 })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
-                    slotOfGate.state.canceled = true
                 }
 
+                slotOfGate.state.canceled = true
 
             }
         }
