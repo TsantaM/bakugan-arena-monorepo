@@ -384,29 +384,13 @@ export const GateBuilding: abilityCardsType = {
         const usableSlots = roomState.protalSlots.filter((slot) => slot.portalCard === null)
         if (usableSlots.length === 0) return animation
 
-        const slots = usableSlots.map((slot) => slot.id)
-
-        const request: AbilityCardsActions = {
-            type: 'SELECT_SLOT',
-            message: 'Gate Building : Select a slot',
-            slots: slots,
-            emptySlot: true
-        }
-
-        return request
-
-    },
-    onAdditionalEffect({ resolution, roomData }) {
-        if (resolution.data.type !== "SELECT_SLOT") return
-
-        const { slot } = resolution.data
-
-        const slotTarget = roomData.protalSlots[Slots.indexOf(slot)]
-        if(slotTarget.portalCard !== null) return
+        const preferredSlot = usableSlots.find((slot) => slot.id === 'slot-2')
+            || usableSlots.find((slot) => slot.id === 'slot-5')
+        const slotTarget = preferredSlot ?? usableSlots[Math.floor(Math.random() * usableSlots.length)]
 
         slotTarget.portalCard = {
             key: "reacteur-subterra",
-            userId: resolution.userId
+            userId: userId
         }
 
         slotTarget.state = {
@@ -415,7 +399,7 @@ export const GateBuilding: abilityCardsType = {
             open: false
         }
 
-        const animation: AnimationDirectivesTypes = {
+        const animationToAdd: AnimationDirectivesTypes = {
             type: 'SET_GATE_CARD',
             data: {
                 slot: slotTarget,
@@ -423,12 +407,13 @@ export const GateBuilding: abilityCardsType = {
             resolved: false,
             message: [{
                 text: 'Gate Card Builded',
-                turn: roomData.turnState.turnCount
+                turn: roomState.turnState.turnCount
             }]
         }
 
-        roomData.animations.push(animation)
+        roomState.animations.push(animationToAdd)
 
+        return null
     },
     activationConditions({ roomState, userId }) {
         const usableSlots = roomState.protalSlots.filter((slot) => slot.portalCard === null)
