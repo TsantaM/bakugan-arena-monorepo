@@ -13,7 +13,7 @@ export default async function Home() {
 
   const user = await getUser()
 
-  if(user) {
+  if (user) {
     redirect("/dashboard")
   }
 
@@ -30,7 +30,10 @@ export default async function Home() {
           </div>
 
           <div className="flex gap-4">
-            <Link href="https://discord.gg/8HfPK5RVuk" target="_blank"><Image src="discord.svg" alt="discord logo" width={25} height={25} /></Link>
+            <Link href="https://discord.gg/8HfPK5RVuk" target="_blank">
+              <img src="/discord.svg" alt="discord logo" className="w-6 h-6" />
+              {/* <Image src="/discord.svg" alt="discord logo" width={25} height={25} /> */}
+            </Link>
           </div>
 
           <div className="flex flex-col gap-2">
@@ -66,5 +69,5 @@ export default async function Home() {
     </>
 
   );
-  
+
 }         

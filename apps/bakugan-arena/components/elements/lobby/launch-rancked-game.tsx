@@ -50,7 +50,7 @@ export default function LauchRanckedGate() {
         <Card>
             <CardHeader>
                 <CardTitle className="text-center text-lg lg:text-2xl">
-                    Choice a deck and launch a game
+                    Choose a deck and launch a game
                 </CardTitle>
             </CardHeader>
 
@@ -121,16 +121,22 @@ export default function LauchRanckedGate() {
             </CardContent>
 
             <CardFooter className="flex flex-col gap-3">
-                <Button disabled={!value || value === '' ? true : false} className="w-full text-xl font-bold" onClick={() => emitPlayerData({ data, deck, ranked: true })}>{waitingOpponent ? 'Waiting opponent ...' : !value || value === '' ? 'Chose a deck' : 'Start Battle !'}</Button>
+                <Button disabled={!value || value === '' ? true : false} className="w-full text-xl font-bold" onClick={() => emitPlayerData({ data, deck, ranked: true })}>{waitingOpponent ? 'Waiting opponent ...' : !value || value === '' ? 'Choose a deck' : 'Start Battle !'}</Button>
                 <Button variant="destructive" className="w-full text-xl font-bold" onClick={() => {
                     cancelSearchOpponent(data.userId)
                     setValue('')
-                    }}>Cancel</Button>
+                }}>Cancel</Button>
 
                 <div>
-                    <p className="text-destructive font-bold">DESCLAIMER</p>
-                    <p className="text-sm">Random matchmaking may take a long time or fail to find an opponent.</p>
-                    <p className="text-sm">For the best experience, challenge a player you know and coordinate a game while both of you are online.</p>
+                    <p className="text-destructive font-bold">DISCLAIMER</p>
+                    <p className="text-sm">Random matchmaking may take a long time or may fail to find an opponent.</p>
+                    <p className="text-sm">
+                        If you don’t find an opponent, join the game’s{" "}
+                        <Link href="https://discord.gg/8HfPK5RVuk" target="_blank">
+                            Discord
+                        </Link>{" "}
+                        and tag <span className="font-semibold">@Active</span> to find players.
+                    </p>
                 </div>
             </CardFooter>
         </Card>
