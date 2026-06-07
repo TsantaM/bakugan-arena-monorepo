@@ -22,10 +22,11 @@ export function SelectAbilityCardInNeutralFilters({ slots, userId, decksState, b
     const bakuganToSetData = BakuganList.find((b) => b.key === bakuganToSet)
     const abilityUserData = bakuganOnDomain.find((b) => b.key === bakuganKey) ? bakuganOnDomain.find((b) => b.key === bakuganKey) : bakuganToSetData
     const attribut = abilityUserData?.attribut
+    const secondAttribut = bakuganOnDomain.find((b) => b.key === bakuganKey)?.secondAttribut
     const abilitiesUsableInNeutral = AbilityCardsList.filter((c) => c.usable_in_neutral === true).map((c) => c.key)
     const exclusivesUsableInNeutral = ExclusiveAbilitiesList.filter((c) => c.usable_in_neutral === true).map((c) => c.key)
 
-    const usableAbilitiesBeforeFilter = decksState.find((d) => d.userId === userId)?.abilities.filter((a) => a.used === false && a.dead === false && abilitiesUsableInNeutral.includes(a.key)).filter((a) => a.attribut === attribut).filter(
+    const usableAbilitiesBeforeFilter = decksState.find((d) => d.userId === userId)?.abilities.filter((a) => a.used === false && a.dead === false && abilitiesUsableInNeutral.includes(a.key)).filter((a) => a.attribut === attribut || a.attribut === secondAttribut).filter(
         (item, index, self) =>
             index === self.findIndex((t) => t.key === item.key)
     );

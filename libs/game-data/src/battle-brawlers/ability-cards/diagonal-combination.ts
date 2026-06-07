@@ -48,7 +48,15 @@ export const PyrusDarkus: abilityCardsType = {
     canUse({ roomState, bakugan }) {
         if (!roomState) return false
 
-        if (bakugan.slot_id !== roomState.battleState.slot) return false
+        const attributs = ['Pyrus', 'Darkus']
+
+        if (
+            !attributs.includes(bakugan.attribut) &&
+            bakugan.secondAttribut &&
+            !attributs.includes(bakugan.secondAttribut)
+        ) {
+            return false
+        }
 
         return true
     }
@@ -101,7 +109,15 @@ export const DarkusPyrus: abilityCardsType = {
     canUse({ roomState, bakugan }) {
         if (!roomState) return false
 
-        if (bakugan.slot_id !== roomState.battleState.slot) return false
+        const attributs = ['Pyrus', 'Darkus']
+
+        if (
+            !attributs.includes(bakugan.attribut) &&
+            bakugan.secondAttribut &&
+            !attributs.includes(bakugan.secondAttribut)
+        ) {
+            return false
+        }
 
         return true
     }
@@ -153,7 +169,15 @@ export const VentusHaos: abilityCardsType = {
     canUse({ roomState, bakugan }) {
         if (!roomState) return false
 
-        if (bakugan.slot_id !== roomState.battleState.slot) return false
+        const attributs = ['Ventus', 'Haos']
+
+        if (
+            !attributs.includes(bakugan.attribut) &&
+            bakugan.secondAttribut &&
+            !attributs.includes(bakugan.secondAttribut)
+        ) {
+            return false
+        }
 
         return true
     }
@@ -204,7 +228,15 @@ export const HaosVentus: abilityCardsType = {
     canUse({ roomState, bakugan }) {
         if (!roomState) return false
 
-        if (bakugan.slot_id !== roomState.battleState.slot) return false
+        const attributs = ['Ventus', 'Haos']
+
+        if (
+            !attributs.includes(bakugan.attribut) &&
+            bakugan.secondAttribut &&
+            !attributs.includes(bakugan.secondAttribut)
+        ) {
+            return false
+        }
 
         return true
     }
@@ -256,7 +288,15 @@ export const AquosSubterra: abilityCardsType = {
     canUse({ roomState, bakugan }) {
         if (!roomState) return false
 
-        if (bakugan.slot_id !== roomState.battleState.slot) return false
+        const attributs = ['Aquos', 'Subterra']
+
+        if (
+            !attributs.includes(bakugan.attribut) &&
+            bakugan.secondAttribut &&
+            !attributs.includes(bakugan.secondAttribut)
+        ) {
+            return false
+        }
 
         return true
     }
@@ -308,7 +348,15 @@ export const SubterraAquos: abilityCardsType = {
     canUse({ roomState, bakugan }) {
         if (!roomState) return false
 
-        if (bakugan.slot_id !== roomState.battleState.slot) return false
+        const attributs = ['Aquos', 'Subterra']
+
+        if (
+            !attributs.includes(bakugan.attribut) &&
+            bakugan.secondAttribut &&
+            !attributs.includes(bakugan.secondAttribut)
+        ) {
+            return false
+        }
 
         return true
     }

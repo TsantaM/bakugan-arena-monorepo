@@ -6,7 +6,7 @@ import RemoveRenfortAnimationDirective from "../../function/create-animation-dir
 import { PowerChange } from "../../function/ability-cards-effects/power-change.js";
 import { ProtectCardEffect, RemoveProtectionCardEffect } from "../../function/ability-cards-effects/protect-card-effect.js";
 import { ElementaryCardCancelerEffect } from "../../function/ability-cards-effects/elementary-card-canceler-effect.js";
-import { AbilityCardsList, ExclusiveAbilitiesList } from "../index.js";
+import { AbilityCardsList, Bakugans, ExclusiveAbilitiesList } from "../index.js";
 
 export const MurDeFeu: abilityCardsType = {
     key: "mur-de-feu",
@@ -139,6 +139,9 @@ export const JetEnflamme: abilityCardsType = {
             const lastId = slotOfGate.bakugans.length > 0 ? slotOfGate.bakugans[slotOfGate.bakugans.length - 1].id : 0
             const newId = lastId + 1
 
+            const secondAttribut = Bakugans[bakugan.bakuganData.key].seconaryAttribut
+
+
             const newBakugan: bakuganOnSlot = {
                 slot_id: slot,
                 id: newId,
@@ -147,6 +150,7 @@ export const JetEnflamme: abilityCardsType = {
                 powerLevel: bakugan.bakuganData.powerLevel,
                 currentPower: bakugan.bakuganData.powerLevel,
                 attribut: bakugan.bakuganData.attribut,
+                secondAttribut: secondAttribut,
                 image: bakugan.bakuganData.image,
                 abilityBlock: false,
                 assist: {
@@ -446,16 +450,16 @@ export const HeatWave: abilityCardsType = {
 
         const { battleInProcess, paused, slot, turns } = roomState.battleState
 
-        if(!battleInProcess || paused) return false
+        if (!battleInProcess || paused) return false
 
-        if(bakugan.slot_id !== slot) return false
+        if (bakugan.slot_id !== slot) return false
 
         const slotOfGate = roomState.protalSlots[Slots.indexOf(bakugan.slot_id)]
         if (slotOfGate.portalCard === null) return false
 
         const opponents = slotOfGate.bakugans.filter((b) => b.userId !== bakugan.userId)
 
-        if(opponents.length === 0) return false
+        if (opponents.length === 0) return false
 
         return true
 

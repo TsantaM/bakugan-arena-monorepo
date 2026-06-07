@@ -5,6 +5,7 @@ import { CheckTurnActionRequest } from "../functions/check-turn-action-request-p
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { turnActionUpdater } from "./turn-action";
 import { EmitMessage } from "../functions/emit-messages";
+import { AddAbilities } from "./update-bakugans-state";
 
 export function ChangeAttributSocket(io: Server, socket: Socket) {
     socket.on('change-attribut', ({ roomId, attribut, bakugan, userId }: { roomId: string, bakugan: bakuganOnSlot, attribut: attribut, userId: string }) => {
@@ -38,9 +39,9 @@ export function ChangeAttributSocket(io: Server, socket: Socket) {
         target.attribut = attribut
         target.alreadyChangeAttribut = true
 
-        if(slot.portalCard !== null && slot.state.open && !slot.state.canceled) {
+        if (slot.portalCard !== null && slot.state.open && !slot.state.canceled) {
             const card = GateCards[slot.portalCard.key]
-            if(card.onAttributChange) card.onAttributChange({
+            if (card.onAttributChange) card.onAttributChange({
                 attribut,
                 bakugan: target,
                 roomState,
@@ -57,6 +58,16 @@ export function ChangeAttributSocket(io: Server, socket: Socket) {
 
             Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
             const merged = [Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
+
+            AddAbilities({
+                attribut: target.attribut,
+                bakugan: target.key,
+                request: Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest,
+                roomState: Battle_Brawlers_Game_State[roomIndex],
+                slot: slot.id,
+                userId: userId
+            })
+
 
             const checker = CheckTurnActionRequest({ roomState: roomState, userId: userId })
             if (!checker) return

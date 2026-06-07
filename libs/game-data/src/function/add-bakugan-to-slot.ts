@@ -1,3 +1,4 @@
+import { Bakugans } from "../battle-brawlers/bakugans.js";
 import type { slots_id, stateType, attribut, bakuganType, bakuganOnSlot } from "../type/type-index.js"
 
 type addBakuganToSlotParams = {
@@ -33,7 +34,7 @@ export function addBakuganToSlot({ bakuganFromDeck, bakuganToAdd, roomData, slot
 
     const lastId = slot && slot?.bakugans.length > 0 ? slot.bakugans[slot.bakugans.length - 1].id : 0
     const newId = lastId + 1
-
+    const bakuganData = Bakugans[bakuganToAdd.key]
 
     const newBakugan: bakuganOnSlot = {
         slot_id: slotId,
@@ -47,6 +48,7 @@ export function addBakuganToSlot({ bakuganFromDeck, bakuganToAdd, roomData, slot
         abilityBlock: false,
         assist: assist ? assist : false,
         family: bakuganToAdd.family,
+        secondAttribut: bakuganData.seconaryAttribut,
         statut: {
             notRetreat: false,
             trapped: false,

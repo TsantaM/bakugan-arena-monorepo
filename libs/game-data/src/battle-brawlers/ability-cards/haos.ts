@@ -108,6 +108,8 @@ export const EclatSoudain: abilityCardsType = {
             const lastId = slotOfGate.bakugans.length > 0 ? slotOfGate.bakugans[slotOfGate.bakugans.length - 1].id : 0
             const newId = lastId + 1
 
+            const secondAttribut = Bakugans[bakugan.bakuganData.key].seconaryAttribut
+
             const newBakugan: bakuganOnSlot = {
                 slot_id: slot,
                 id: newId,
@@ -118,6 +120,7 @@ export const EclatSoudain: abilityCardsType = {
                 attribut: bakugan.bakuganData.attribut,
                 image: bakugan.bakuganData.image,
                 abilityBlock: false,
+                secondAttribut: secondAttribut,
                 assist: {
                     key: EclatSoudain.key,
                     addedWith: 'ABILITY',
