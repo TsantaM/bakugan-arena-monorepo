@@ -5,6 +5,8 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import Link from 'next/link'
+import { Badge } from '@/components/ui/badge'
 
 export default async function TutorialPage() {
     const filePath = path.join(process.cwd(), 'app/dashboard/tutorial/tutorial.md')
@@ -72,6 +74,21 @@ export default async function TutorialPage() {
                                     <blockquote className="my-4 border-l-4 border-primary pl-4 italic text-muted-foreground">
                                         {children}
                                     </blockquote>
+                                ),
+                                a: ({ href, children }) => (
+                                    <Link
+                                        href={href ?? "#"}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-block"
+                                    >
+                                        <Badge
+                                            variant="secondary"
+                                            className="cursor-pointer text-sm px-3 py-1"
+                                        >
+                                            {children}
+                                        </Badge>
+                                    </Link>
                                 ),
                             }}
                         >

@@ -108,3 +108,17 @@ Efficient play in Bakugan Arena is about **resource timing and board control**:
 - Overextending early often leads to tactical disadvantage
 
 Mastering the interaction between positioning and ability usage is key to victory.
+
+---
+
+## 9. Need Help?
+
+If you have any questions about the game or if certain rules are unclear, we invite you to join our **[Discord Community](https://discord.gg/8HfPK5RVuk)** where players and staff members can help you.
+
+If you encounter an issue during a match, please try **refreshing the page first**, as this resolves most temporary problems.
+
+If the issue persists or if you discover a bug, please report it on our Discord server so we can investigate and fix it as quickly as possible.
+
+Thank you for playing **Bakugan Arena**, and most importantly:
+
+**Have fun and enjoy your battles!**
