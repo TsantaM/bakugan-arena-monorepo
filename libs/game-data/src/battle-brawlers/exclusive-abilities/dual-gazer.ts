@@ -1,4 +1,4 @@
-import { CancelAbilityCardEffect, PowerChange } from "../../function/index.js";
+import { CancelAbilityCardEffect, ElimineBakuganEffect, PowerChange } from "../../function/index.js";
 import { Slots } from "../../store/slots.js";
 import { AbilityCardsActions, bakuganToMoveType2 as bakuganToMoveType } from "../../type/actions-serveur-requests.js";
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js";
@@ -7,7 +7,7 @@ import { activateAbilities } from "../../type/room-types.js";
 export const DualGazer: exclusiveAbilitiesType = {
     key: 'dual-gazer',
     name: 'Dual Gazer',
-    description: `Adds 100 Gs to the user for the entire duration of the game, as long as the card is not canceled, decrease 100Gs to the opponent and decrease the selected bakugan's power by 100 Gs.`,
+    description: `Adds 100 Gs to the user for the entire duration of the game, as long as the card is not canceled, decrease 100Gs to the opponent and decrease the selected bakugan's power by 100 Gs but if Hydranoid is your last alive bakugan the target is eliminated.`,
     maxInDeck: 1,
     usable_if_user_not_on_domain: false,
     usable_in_neutral: false,
@@ -83,13 +83,24 @@ export const DualGazer: exclusiveAbilitiesType = {
         const target = slotTarget.bakugans.find((b) => b.key === bakugan && b.userId === userId)
         if (!target) return
 
-        PowerChange({
-            bakugan: target,
-            G: 100,
-            malus: true,
-            roomState: roomData
-        })
+        const deck = roomData.decksState.find((d) => d.userId === resolution.userId)
+        const aliveCount = deck?.bakugans.filter((b) => !b.bakuganData.elimined).length || 0
 
+        if (!deck || aliveCount > 1) {
+            PowerChange({
+                bakugan: target,
+                G: 100,
+                malus: true,
+                roomState: roomData
+            })
+        } else {
+            if(aliveCount === 1) {
+                ElimineBakuganEffect({
+                    bakugan: target,
+                    roomState: roomData
+                })
+            }
+        }
 
     },
     onUserSet({ roomState, bakuganKey, slot, userId }) {

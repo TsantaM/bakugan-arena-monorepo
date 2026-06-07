@@ -1,13 +1,13 @@
 import { Bakugans } from "../../battle-brawlers/index.js";
 import { ActionType, attribut, stateType } from "../../type/type-index.js";
 
-export function ChangeAttributActionRequest({roomState} : {roomState: stateType}) {
+export function ChangeAttributActionRequest({ roomState }: { roomState: stateType }) {
 
     const slots = roomState.protalSlots
     const userId = roomState.turnState.turn
     const bakugans = slots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId).filter((bakugan) => Bakugans[bakugan.key].canChangeAttribut && !bakugan.alreadyChangeAttribut)
 
-    const attriubtsList: attribut[] = ["Aquos", "Darkus", "Haos", "Pyrus", "Subterra", "Ventus"] 
+    const attriubtsList: attribut[] = ["Aquos", "Darkus", "Haos", "Pyrus", "Subterra", "Ventus"]
     let request: ActionType = {
         type: "CHANGE_ATTRIBUTE",
         data: []
@@ -26,8 +26,18 @@ export function ChangeAttributActionRequest({roomState} : {roomState: stateType}
 
     const active = roomState.ActivePlayerActionRequest
 
-    if(request.data.length > 0) active.actions.optional.push(request)
+    if (request.data.length > 0) {
+        const index = active.actions.optional.findIndex(
+            (a) => a.type === "CHANGE_ATTRIBUTE"
+        )
+
+        if (index !== -1) {
+            active.actions.optional[index] = request
+        } else {
+            active.actions.optional.push(request)
+        }
+    }
 
     return
-    
+
 }

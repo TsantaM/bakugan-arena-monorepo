@@ -1,10 +1,10 @@
-import { type portalSlotsTypeElement, type deckType, stateType } from '../../type/type-index.js'
+import { type portalSlotsTypeElement, type deckType, stateType, attribut } from '../../type/type-index.js'
 import { BakuganList } from '../../battle-brawlers/bakugans.js'
 import { AbilityCardsList } from '../../battle-brawlers/ability-cards.js'
 import { ExclusiveAbilitiesList } from '../../battle-brawlers/exclusive-abilities.js'
 
-export function SelectAbilityCardFilters({ slotOfBattle, userId, bakuganKey, playersDeck, roomState }: { slotOfBattle?: portalSlotsTypeElement | undefined, userId: string, bakuganKey: string, playersDeck: deckType | undefined, roomState: stateType }) {
-    
+export function SelectAbilityCardFilters({ slotOfBattle, userId, bakuganKey, playersDeck, roomState, bakuganAttribut }: { slotOfBattle?: portalSlotsTypeElement | undefined, userId: string, bakuganKey: string, playersDeck: deckType | undefined, roomState: stateType, bakuganAttribut?: attribut }) {
+
     if (!slotOfBattle) return
     if (!playersDeck) return
     if (!roomState?.turnState.use_ability_card) return
@@ -15,8 +15,16 @@ export function SelectAbilityCardFilters({ slotOfBattle, userId, bakuganKey, pla
 
     const bakugansList = BakuganList.filter((b) => usersBakuganKeys.includes(b.key))
 
-    const attribut = usersBakugan.find((a) => a.key === bakuganKey)?.attribut
-    const secondAttribut = usersBakugan.find((a) => a.key === bakuganKey)?.secondAttribut
+    const currentBakugan = slotOfBattle.bakugans.find(
+        (b) => b.key === bakuganKey && b.userId === userId
+    ) ?? roomState.protalSlots.flatMap((slot) => slot.bakugans).find(
+        (b) => b.key === bakuganKey && b.userId === userId
+    )
+
+    const attribut = bakuganAttribut ? bakuganAttribut : currentBakugan?.attribut
+    const secondAttribut = currentBakugan?.secondAttribut
+    console.log('bakugan', currentBakugan?.key, 'attribut', attribut, 'secondAttribut', secondAttribut)
+
     const attributLessAbilities = playersDeck.abilities.filter((a) => !a.attribut && a.used === false && a.dead === false)
     const usableAbilitiesBeforeFilter = [playersDeck?.abilities.filter((a) => a.used === false && a.dead === false).filter((a) => a.attribut === attribut || a.attribut === secondAttribut).filter(
         (item, index, self) =>
@@ -45,6 +53,7 @@ export function SelectAbilityCardFilters({ slotOfBattle, userId, bakuganKey, pla
         (item, index, self) =>
             index === self.findIndex((t) => t.key === item.key)
     ), usable_if_user_not_on_domain].flat();
+
 
     const usableExclusives = usableExclusivesNotFiltered.filter(exclu => {
         const card = ExclusiveAbilitiesList.find(c => c.key === exclu?.key);

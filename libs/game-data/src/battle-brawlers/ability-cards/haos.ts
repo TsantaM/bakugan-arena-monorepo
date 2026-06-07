@@ -1,10 +1,9 @@
-import { CancelAbilityCardEffect } from "../../function/ability-cards-effects/cancel-ability-card-effect.js";
 import { ElementaryCardCancelerEffect } from "../../function/ability-cards-effects/elementary-card-canceler-effect.js";
 import RemoveRenfortAnimationDirective from "../../function/create-animation-directives/remove-renfort-animation-directive.js";
 import { AbilityCardFailed, CancelGateCardDirectiveAnimation, ComeBackBakuganDirectiveAnimation, PowerChange, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective } from "../../function/index.js";
 import { NewAdditionnalMessage } from "../../function/new-additional-message.js";
 import { Slots, StandardCardsImages } from "../../store/store-index.js";
-import type { AbilityCardsActions, abilityCardsType, AnimationDirectivesTypes, bakuganOnSlot } from "../../type/type-index.js";
+import type { AbilityCardsActions, abilityCardsType, bakuganOnSlot } from "../../type/type-index.js";
 import { AbilityCardsList } from "../ability-cards.js";
 import { Bakugans } from "../bakugans.js";
 import { ExclusiveAbilitiesList } from "../exclusive-abilities.js";
@@ -76,9 +75,11 @@ export const EclatSoudain: abilityCardsType = {
         const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
 
         if (!slotOfGate && !deck && !userData) return animation
-        if (!deck) return null
-        const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Haos').map((b) => b.key)).flat()
+        if (!deck) return animation
+
+        const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Haos' || b.secondAttribut === "Haos").map((b) => b.key)).flat()
         if (haosOnDomain.length < 2) return animation
+
         const bakugans = deck.bakugans.filter((bakugan) => bakugan && bakugan.bakuganData.onDomain === false && bakugan.bakuganData.elimined === false).filter((bakugan) => bakugan !== undefined && bakugan !== null)
         const request: AbilityCardsActions = {
             type: 'SELECT_BAKUGAN_TO_SET',
@@ -103,7 +104,7 @@ export const EclatSoudain: abilityCardsType = {
 
         if (slotOfGate && deck && bakugan) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
-            const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Haos').map((b) => b.key)).flat()
+            const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Haos' || b.secondAttribut === 'Haos').map((b) => b.key)).flat()
 
             const lastId = slotOfGate.bakugans.length > 0 ? slotOfGate.bakugans[slotOfGate.bakugans.length - 1].id : 0
             const newId = lastId + 1

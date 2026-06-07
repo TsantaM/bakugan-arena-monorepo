@@ -1,12 +1,11 @@
-import { CancelGateCardDirectiveAnimation, PowerChange } from "../../function/index.js"
+import { PowerChange } from "../../function/index.js"
 import { NewAdditionnalMessage } from "../../function/new-additional-message.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
-import { GateCardsList } from "../index.js"
 
 export const GrandImpact: exclusiveAbilitiesType = {
     key: 'grand-impact',
     name: 'Grand Impact',
-    description: `Transfers 200 Gs from the opponent to Hammer Gorem. And nullifies the opponent's Gate Card/prevents the opponent's Gate Card from opening`,
+    description: `Transfers 100 Gs from the opponent to Hammer Gorem. And prevents the opponent's Gate Card from opening`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
@@ -20,7 +19,7 @@ export const GrandImpact: exclusiveAbilitiesType = {
             if (user) {
                 PowerChange({
                     bakugan: user,
-                    G: 200,
+                    G: 100,
                     malus: false,
                     roomState: roomState
                 })
@@ -28,7 +27,7 @@ export const GrandImpact: exclusiveAbilitiesType = {
                 oppoents.forEach((o) => {
                     PowerChange({
                         bakugan: o,
-                        G: 200,
+                        G: 100,
                         malus: true,
                         roomState: roomState
                     })
@@ -47,20 +46,21 @@ export const GrandImpact: exclusiveAbilitiesType = {
                             text: 'Gate Card is blocked by Grand Impact',
                         })
 
-                    } else if (slotOfGate.state.open && !slotOfGate.state.canceled) {
-                        const gate = slotOfGate.portalCard?.key
-                        const gateToCancel = GateCardsList.find((g) => g.key === gate)
-                        CancelGateCardDirectiveAnimation({
-                            animations: roomState.animations,
-                            slot: slotOfGate,
-                            turn: roomState.turnState.turnCount
-                        })
-                        if (gateToCancel && gateToCancel.onCanceled) {
-                            gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
-                        }
+                    } 
+                    // else if (slotOfGate.state.open && !slotOfGate.state.canceled) {
+                    //     const gate = slotOfGate.portalCard?.key
+                    //     const gateToCancel = GateCardsList.find((g) => g.key === gate)
+                    //     CancelGateCardDirectiveAnimation({
+                    //         animations: roomState.animations,
+                    //         slot: slotOfGate,
+                    //         turn: roomState.turnState.turnCount
+                    //     })
+                    //     if (gateToCancel && gateToCancel.onCanceled) {
+                    //         gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
+                    //     }
 
-                        slotOfGate.state.canceled = true
-                    }
+                    //     slotOfGate.state.canceled = true
+                    // }
                 }
             }
 

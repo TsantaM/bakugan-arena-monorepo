@@ -107,8 +107,8 @@ export const JetEnflamme: abilityCardsType = {
         const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
 
         if (!slotOfGate && !deck && !userData) return animation
-        if (!deck) return null
-        const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Pyrus').map((b) => b.key)).flat()
+        if (!deck) return animation
+        const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Pyrus' || b.secondAttribut === 'Pyrus').map((b) => b.key)).flat()
         if (haosOnDomain.length < 2) return animation
         const bakugans = deck.bakugans.filter((bakugan) => bakugan && bakugan.bakuganData.onDomain === false && bakugan.bakuganData.elimined === false).filter((bakugan) => bakugan !== undefined && bakugan !== null)
         const request: AbilityCardsActions = {
@@ -134,7 +134,7 @@ export const JetEnflamme: abilityCardsType = {
 
         if (slotOfGate && deck && bakugan) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
-            const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Pyrus').map((b) => b.key)).flat()
+            const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Pyrus' || b.secondAttribut === 'Pyrus').map((b) => b.key)).flat()
 
             const lastId = slotOfGate.bakugans.length > 0 ? slotOfGate.bakugans[slotOfGate.bakugans.length - 1].id : 0
             const newId = lastId + 1
@@ -216,7 +216,7 @@ export const JetEnflamme: abilityCardsType = {
         if (!roomState.battleState.battleInProcess || roomState.battleState.paused) return false
         const deck = roomState?.decksState.find((d) => d.userId === userId)
         if (!deck) return false
-        const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Pyrus').map((b) => b.key)).flat()
+        const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Pyrus' || b.secondAttribut === 'Pyrus').map((b) => b.key)).flat()
         if (haosOnDomain.length < 2) return false
         const bakugans = deck.bakugans.filter((bakugan) => bakugan && bakugan.bakuganData.onDomain === false && bakugan.bakuganData.elimined === false).filter((bakugan) => bakugan !== undefined && bakugan !== null)
         if (bakugans.length === 0) return false
@@ -421,6 +421,14 @@ export const HeatWave: abilityCardsType = {
         if (slotOfGate.portalCard === null) return failed
         const gateCard = GateCards[slotOfGate.portalCard.key]
 
+        const opponents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
+
+        opponents.forEach((o) => PowerChange({
+            bakugan: o,
+            G: 50,
+            malus: true,
+            roomState: roomState
+        }))
 
         if (slotOfGate.state.open && !slotOfGate.state.canceled && slotOfGate.portalCard.userId !== userId) {
             CancelGateCardDirectiveAnimation({
@@ -431,18 +439,9 @@ export const HeatWave: abilityCardsType = {
             })
             if (gateCard && gateCard.onCanceled) {
                 gateCard.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
-                slotOfGate.state.canceled = true
             }
+            slotOfGate.state.canceled = true
         }
-
-        const opponents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
-
-        opponents.forEach((o) => PowerChange({
-            bakugan: o,
-            G: 50,
-            malus: true,
-            roomState: roomState
-        }))
 
         return null
     },
