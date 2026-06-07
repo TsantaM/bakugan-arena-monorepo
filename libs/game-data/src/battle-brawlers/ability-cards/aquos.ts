@@ -80,6 +80,7 @@ export const MirageAquatique: abilityCardsType = {
     },
     activationConditions({ roomState, userId }) {
 
+
         if (!roomState) return false
         const slotWithGate = roomState.protalSlots.filter((slot) => slot.portalCard !== null)
 
@@ -219,7 +220,7 @@ export const DepthDive: abilityCardsType = {
                 }
 
                 slotOfGate.state.canceled = true
-                
+
             }
         }
 

@@ -3,6 +3,7 @@ import { AutoActivationDuringBattle, ComeBackBakuganEffect, SetBakuganAndAddRenf
 import { GateCardImages } from "../../../store/gate-card-images.js"
 import { gateCardType } from "../../../type/game-data-types.js"
 import { bakuganOnSlot, stateType } from "../../../type/room-types.js"
+import { Bakugans } from "../../bakugans.js"
 
 export const QuatuorDeCombat: gateCardType = {
     key: 'quatuor-de-combat',
@@ -53,6 +54,9 @@ export const QuatuorDeCombat: gateCardType = {
 
                 if (userWeakest !== null) {
 
+                    const secondAttribut = Bakugans[userWeakest.bakuganData.key].seconaryAttribut
+
+
                     const usersBakugan: bakuganOnSlot = {
                         slot_id: slot,
                         id: newId,
@@ -96,6 +100,9 @@ export const QuatuorDeCombat: gateCardType = {
                 if (opponentWeakest !== null) {
                     const lastId = slotToUpdate.bakugans.length > 0 ? slotToUpdate.bakugans[slotToUpdate.bakugans.length - 1].id : 0
                     const newId = lastId + 1
+
+                    const secondAttribut = Bakugans[opponentWeakest.bakuganData.key].seconaryAttribut
+
                     const opponentBakugan: bakuganOnSlot = {
                         slot_id: slot,
                         id: newId,
@@ -104,6 +111,7 @@ export const QuatuorDeCombat: gateCardType = {
                         powerLevel: opponentWeakest.bakuganData.powerLevel,
                         currentPower: opponentWeakest.bakuganData.powerLevel,
                         attribut: opponentWeakest.bakuganData.attribut,
+                        secondAttribut: secondAttribut,
                         image: opponentWeakest.bakuganData.image,
                         abilityBlock: false,
                         assist: {

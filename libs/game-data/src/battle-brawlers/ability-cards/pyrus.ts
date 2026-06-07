@@ -6,7 +6,7 @@ import RemoveRenfortAnimationDirective from "../../function/create-animation-dir
 import { PowerChange } from "../../function/ability-cards-effects/power-change.js";
 import { ProtectCardEffect, RemoveProtectionCardEffect } from "../../function/ability-cards-effects/protect-card-effect.js";
 import { ElementaryCardCancelerEffect } from "../../function/ability-cards-effects/elementary-card-canceler-effect.js";
-import { AbilityCardsList, ExclusiveAbilitiesList } from "../index.js";
+import { AbilityCardsList, Bakugans, ExclusiveAbilitiesList } from "../index.js";
 
 export const MurDeFeu: abilityCardsType = {
     key: "mur-de-feu",
@@ -107,8 +107,8 @@ export const JetEnflamme: abilityCardsType = {
         const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
 
         if (!slotOfGate && !deck && !userData) return animation
-        if (!deck) return null
-        const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Pyrus').map((b) => b.key)).flat()
+        if (!deck) return animation
+        const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Pyrus' || b.secondAttribut === 'Pyrus').map((b) => b.key)).flat()
         if (haosOnDomain.length < 2) return animation
         const bakugans = deck.bakugans.filter((bakugan) => bakugan && bakugan.bakuganData.onDomain === false && bakugan.bakuganData.elimined === false).filter((bakugan) => bakugan !== undefined && bakugan !== null)
         const request: AbilityCardsActions = {
@@ -134,10 +134,13 @@ export const JetEnflamme: abilityCardsType = {
 
         if (slotOfGate && deck && bakugan) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
-            const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Pyrus').map((b) => b.key)).flat()
+            const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Pyrus' || b.secondAttribut === 'Pyrus').map((b) => b.key)).flat()
 
             const lastId = slotOfGate.bakugans.length > 0 ? slotOfGate.bakugans[slotOfGate.bakugans.length - 1].id : 0
             const newId = lastId + 1
+
+            const secondAttribut = Bakugans[bakugan.bakuganData.key].seconaryAttribut
+
 
             const newBakugan: bakuganOnSlot = {
                 slot_id: slot,
@@ -147,6 +150,7 @@ export const JetEnflamme: abilityCardsType = {
                 powerLevel: bakugan.bakuganData.powerLevel,
                 currentPower: bakugan.bakuganData.powerLevel,
                 attribut: bakugan.bakuganData.attribut,
+                secondAttribut: secondAttribut,
                 image: bakugan.bakuganData.image,
                 abilityBlock: false,
                 assist: {
@@ -212,7 +216,7 @@ export const JetEnflamme: abilityCardsType = {
         if (!roomState.battleState.battleInProcess || roomState.battleState.paused) return false
         const deck = roomState?.decksState.find((d) => d.userId === userId)
         if (!deck) return false
-        const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Pyrus').map((b) => b.key)).flat()
+        const haosOnDomain = roomState?.protalSlots.map((s) => s.bakugans.filter((b) => b.attribut === 'Pyrus' || b.secondAttribut === 'Pyrus').map((b) => b.key)).flat()
         if (haosOnDomain.length < 2) return false
         const bakugans = deck.bakugans.filter((bakugan) => bakugan && bakugan.bakuganData.onDomain === false && bakugan.bakuganData.elimined === false).filter((bakugan) => bakugan !== undefined && bakugan !== null)
         if (bakugans.length === 0) return false
@@ -417,6 +421,14 @@ export const HeatWave: abilityCardsType = {
         if (slotOfGate.portalCard === null) return failed
         const gateCard = GateCards[slotOfGate.portalCard.key]
 
+        const opponents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
+
+        opponents.forEach((o) => PowerChange({
+            bakugan: o,
+            G: 50,
+            malus: true,
+            roomState: roomState
+        }))
 
         if (slotOfGate.state.open && !slotOfGate.state.canceled && slotOfGate.portalCard.userId !== userId) {
             CancelGateCardDirectiveAnimation({
@@ -427,18 +439,9 @@ export const HeatWave: abilityCardsType = {
             })
             if (gateCard && gateCard.onCanceled) {
                 gateCard.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
-                slotOfGate.state.canceled = true
             }
+            slotOfGate.state.canceled = true
         }
-
-        const opponents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
-
-        opponents.forEach((o) => PowerChange({
-            bakugan: o,
-            G: 50,
-            malus: true,
-            roomState: roomState
-        }))
 
         return null
     },
@@ -446,16 +449,16 @@ export const HeatWave: abilityCardsType = {
 
         const { battleInProcess, paused, slot, turns } = roomState.battleState
 
-        if(!battleInProcess || paused) return false
+        if (!battleInProcess || paused) return false
 
-        if(bakugan.slot_id !== slot) return false
+        if (bakugan.slot_id !== slot) return false
 
         const slotOfGate = roomState.protalSlots[Slots.indexOf(bakugan.slot_id)]
         if (slotOfGate.portalCard === null) return false
 
         const opponents = slotOfGate.bakugans.filter((b) => b.userId !== bakugan.userId)
 
-        if(opponents.length === 0) return false
+        if (opponents.length === 0) return false
 
         return true
 

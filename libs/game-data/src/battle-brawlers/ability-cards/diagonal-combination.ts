@@ -24,7 +24,7 @@ export const PyrusDarkus: abilityCardsType = {
         if (!slotOfGate && !portalSlots) return failed
         if (!slotOfGate) return failed
         if (!portalSlots) return failed
-        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Pyrus', attributWeak: 'Darkus', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId, turn: roomState.turnState.turnCount })
+        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Pyrus', attributWeak: 'Darkus', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId, turn: roomState.turnState.turnCount, roomState: roomState })
         return null
     },
     activationConditions({ roomState, userId }) {
@@ -37,18 +37,11 @@ export const PyrusDarkus: abilityCardsType = {
 
         // On vérifie la présence de chaque attribut obligatoire
         const hasAllAttributs = attributs.every(attr =>
-            usersBakugans.some(b => b.attribut === attr)
+            usersBakugans.some(b => b.attribut === attr || b.secondAttribut === attr)
         )
 
         if (!battleInProcess || paused) return false
         if (!hasAllAttributs) return false
-
-        return true
-    },
-    canUse({ roomState, bakugan }) {
-        if (!roomState) return false
-
-        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }
@@ -76,7 +69,7 @@ export const DarkusPyrus: abilityCardsType = {
         if (!slotOfGate && !portalSlots) return failed
         if (!slotOfGate) return failed
         if (!portalSlots) return failed
-        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Darkus', attributWeak: 'Pyrus', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId, turn: roomState.turnState.turnCount })
+        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Darkus', attributWeak: 'Pyrus', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId, turn: roomState.turnState.turnCount, roomState: roomState })
         return null
     },
     activationConditions({ roomState, userId }) {
@@ -89,19 +82,12 @@ export const DarkusPyrus: abilityCardsType = {
 
         // On vérifie la présence de chaque attribut obligatoire
         const hasAllAttributs = attributs.every(attr =>
-            usersBakugans.some(b => b.attribut === attr)
+            usersBakugans.some(b => b.attribut === attr || b.secondAttribut === attr)
         )
 
         if (!battleInProcess || paused) return false
         if (!hasAllAttributs) return false
 
-
-        return true
-    },
-    canUse({ roomState, bakugan }) {
-        if (!roomState) return false
-
-        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }
@@ -128,7 +114,7 @@ export const VentusHaos: abilityCardsType = {
         if (!slotOfGate && !portalSlots) return failed
         if (!slotOfGate) return failed
         if (!portalSlots) return failed
-        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Ventus', attributWeak: 'Haos', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId, turn: roomState.turnState.turnCount })
+        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Ventus', attributWeak: 'Haos', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId, turn: roomState.turnState.turnCount, roomState: roomState })
         return null
     },
     activationConditions({ roomState, userId }) {
@@ -141,19 +127,12 @@ export const VentusHaos: abilityCardsType = {
 
         // On vérifie la présence de chaque attribut obligatoire
         const hasAllAttributs = attributs.every(attr =>
-            usersBakugans.some(b => b.attribut === attr)
+            usersBakugans.some(b => b.attribut === attr || b.secondAttribut === attr)
         )
 
         if (!battleInProcess || paused) return false
         if (!hasAllAttributs) return false
 
-
-        return true
-    },
-    canUse({ roomState, bakugan }) {
-        if (!roomState) return false
-
-        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }
@@ -180,7 +159,7 @@ export const HaosVentus: abilityCardsType = {
         if (!slotOfGate && !portalSlots) return failed
         if (!slotOfGate) return failed
         if (!portalSlots) return failed
-        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Haos', attributWeak: 'Ventus', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId, turn: roomState.turnState.turnCount })
+        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Haos', attributWeak: 'Ventus', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId, turn: roomState.turnState.turnCount, roomState: roomState })
         return null
     },
     activationConditions({ roomState, userId }) {
@@ -193,18 +172,11 @@ export const HaosVentus: abilityCardsType = {
 
         // On vérifie la présence de chaque attribut obligatoire
         const hasAllAttributs = attributs.every(attr =>
-            usersBakugans.some(b => b.attribut === attr)
+            usersBakugans.some(b => b.attribut === attr || b.secondAttribut === attr)
         )
 
         if (!battleInProcess || paused) return false
         if (!hasAllAttributs) return false
-
-        return true
-    },
-    canUse({ roomState, bakugan }) {
-        if (!roomState) return false
-
-        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }
@@ -231,7 +203,7 @@ export const AquosSubterra: abilityCardsType = {
         if (!slotOfGate && !portalSlots) return failed
         if (!slotOfGate) return failed
         if (!portalSlots) return failed
-        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Aquos', attributWeak: 'Subterra', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId, turn: roomState.turnState.turnCount })
+        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Aquos', attributWeak: 'Subterra', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId, turn: roomState.turnState.turnCount, roomState: roomState })
         return null
     },
     activationConditions({ roomState, userId }) {
@@ -241,22 +213,16 @@ export const AquosSubterra: abilityCardsType = {
         const usersBakugans = roomState.protalSlots
             .flatMap((slot) => slot.bakugans)
             .filter((bakugan) => bakugan.userId === userId)
+        console.log('users attributs', usersBakugans.map((b) => b.attribut))
 
         // On vérifie la présence de chaque attribut obligatoire
         const hasAllAttributs = attributs.every(attr =>
-            usersBakugans.some(b => b.attribut === attr)
+            usersBakugans.some(b => b.attribut === attr || b.secondAttribut === attr)
         )
 
         if (!battleInProcess || paused) return false
         if (!hasAllAttributs) return false
 
-
-        return true
-    },
-    canUse({ roomState, bakugan }) {
-        if (!roomState) return false
-
-        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }
@@ -283,7 +249,7 @@ export const SubterraAquos: abilityCardsType = {
         if (!slotOfGate && !portalSlots) return failed
         if (!slotOfGate) return failed
         if (!portalSlots) return failed
-        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Subterra', attributWeak: 'Aquos', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId, turn: roomState.turnState.turnCount })
+        DiagonalCombinationEffect({ animations: roomState.animations, attribut: 'Subterra', attributWeak: 'Aquos', bakuganKey: bakuganKey, portalSlots: portalSlots, slotOfGate: slotOfGate, userId: userId, turn: roomState.turnState.turnCount, roomState: roomState })
         return null
     },
     activationConditions({ roomState, userId }) {
@@ -296,19 +262,12 @@ export const SubterraAquos: abilityCardsType = {
 
         // On vérifie la présence de chaque attribut obligatoire
         const hasAllAttributs = attributs.every(attr =>
-            usersBakugans.some(b => b.attribut === attr)
+            usersBakugans.some(b => b.attribut === attr || b.secondAttribut === attr)
         )
 
         if (!battleInProcess || paused) return false
         if (!hasAllAttributs) return false
 
-
-        return true
-    },
-    canUse({ roomState, bakugan }) {
-        if (!roomState) return false
-
-        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }

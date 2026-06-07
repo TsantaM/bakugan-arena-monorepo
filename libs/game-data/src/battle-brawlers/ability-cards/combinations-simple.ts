@@ -29,8 +29,8 @@ export const SubterraPyrus: abilityCardsType = {
     activationConditions({ roomState, userId }) {
         if (!roomState) return false
         const { battleInProcess, paused, slot, turns } = roomState.battleState
-        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Pyrus')
-        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Subterra')
+        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && (bakugan.attribut === 'Pyrus' || bakugan.secondAttribut === 'Pyrus'))
+        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && (bakugan.attribut === 'Subterra' || bakugan.secondAttribut === 'Subterra'))
 
         if (!battleInProcess || paused) return false
         if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
@@ -70,8 +70,8 @@ export const SubterraHaos: abilityCardsType = {
     activationConditions({ roomState, userId }) {
         if (!roomState) return false
         const { battleInProcess, paused, slot, turns } = roomState.battleState
-        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Subterra')
-        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Haos')
+        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && (bakugan.attribut === 'Subterra' || bakugan.secondAttribut === 'Subterra'))
+        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && (bakugan.attribut === 'Haos' || bakugan.secondAttribut === 'Haos'))
 
         if (!battleInProcess || paused) return false
         if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
@@ -111,8 +111,8 @@ export const HaosDarkus: abilityCardsType = {
     activationConditions({ roomState, userId }) {
         if (!roomState) return false
         const { battleInProcess, paused, slot, turns } = roomState.battleState
-        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Haos')
-        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Darkus')
+        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && (bakugan.attribut === 'Haos' || bakugan.secondAttribut === 'Haos'))
+        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && (bakugan.attribut === 'Darkus' || bakugan.secondAttribut === 'Darkus'))
 
         if (!battleInProcess || paused) return false
         if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
@@ -152,8 +152,8 @@ export const DarkusAquos: abilityCardsType = {
     activationConditions({ roomState, userId }) {
         if (!roomState) return false
         const { battleInProcess, paused, slot, turns } = roomState.battleState
-        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Darkus')
-        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Aquos')
+        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && (bakugan.attribut === 'Darkus' || bakugan.secondAttribut === 'Darkus'))
+        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && (bakugan.attribut === 'Aquos' || bakugan.secondAttribut === "Aquos"))
 
         if (!battleInProcess || paused) return false
         if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
@@ -193,8 +193,8 @@ export const AquosVentus: abilityCardsType = {
     activationConditions({ roomState, userId }) {
         if (!roomState) return false
         const { battleInProcess, paused, slot, turns } = roomState.battleState
-        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Aquos')
-        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Ventus')
+        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && (bakugan.attribut === 'Aquos' || bakugan.secondAttribut === "Aquos"))
+        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && (bakugan.attribut === 'Ventus' || bakugan.secondAttribut === 'Ventus'))
 
         if (!battleInProcess || paused) return false
         if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
@@ -234,8 +234,8 @@ export const VentusPyrus: abilityCardsType = {
     activationConditions({ roomState, userId }) {
         if (!roomState) return false
         const { battleInProcess, paused, slot, turns } = roomState.battleState
-        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Ventus')
-        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Pyrus')
+        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && (bakugan.attribut === 'Ventus' || bakugan.secondAttribut === 'Ventus'))
+        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && (bakugan.attribut === 'Pyrus' || bakugan.secondAttribut === 'Pyrus'))
 
         if (!battleInProcess || paused) return false
         if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false

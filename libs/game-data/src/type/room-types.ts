@@ -73,6 +73,7 @@ export type bakuganOnSlot = {
     powerLevel: number,
     currentPower: number,
     attribut: attribut,
+    secondAttribut?: attribut, 
     image: string,
     abilityBlock: boolean,
     alreadyChangeAttribut?: boolean,

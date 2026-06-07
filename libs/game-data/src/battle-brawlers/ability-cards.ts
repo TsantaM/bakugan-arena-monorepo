@@ -82,4 +82,26 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     [GateBuilding.key]: GateBuilding
 }
 
-export const AbilityCardsList: abilityCardsType[] = Object.values(AbilityCards) 
+export const AbilityCardsList: abilityCardsType[] = Object.values(AbilityCards)
+
+export const CorrelationCards: abilityCardsType[] = [
+    // Combinations Simple
+    AquosVentus,
+    DarkusAquos,
+    HaosDarkus,
+    SubterraHaos,
+    SubterraPyrus,
+    VentusPyrus,
+    // Diagonal Combination
+    AquosSubterra,
+    DarkusPyrus,
+    HaosVentus,
+    PyrusDarkus,
+    SubterraAquos,
+    VentusHaos,
+    // Combination Triple
+    PyrusAquosHaos,
+    VentusSubterraDarkus
+]
+
+export const CorrelationCardsList: abilityCardsType[] = CorrelationCards

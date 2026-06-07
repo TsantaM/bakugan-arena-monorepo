@@ -1,14 +1,14 @@
 import { Server, Socket } from "socket.io/dist";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { SetBakuganOnGate } from "../functions/set-bakugan-server";
-import { AbilityCardsList, ActivePlayerActionRequestType, attribut, BakuganList, bakuganOnSlot, ExclusiveAbilitiesList, InactivePlayerActionRequestType, onBoardBakugans, removeActionByType, SelectAbilityCardFilters, SelectAbilityCardInNeutralFilters, setBakuganProps, Slots, slots_id, stateType } from "@bakugan-arena/game-data";
+import { AbilityCardsList, ActivePlayerActionRequestType, attribut, BakuganList, bakuganOnSlot, ChangeAttributActionRequest, ExclusiveAbilitiesList, InactivePlayerActionRequestType, onBoardBakugans, removeActionByType, SelectAbilityCardFilters, SelectAbilityCardInNeutralFilters, setBakuganProps, Slots, slots_id, stateType } from "@bakugan-arena/game-data";
 import { turnActionUpdater } from "./turn-action";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { EmitMessage } from "../functions/emit-messages";
 import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
 
 
-export function AddAbilities({ roomState, request, bakugan, slot, userId, attribut }: { roomState: stateType, request: ActivePlayerActionRequestType | InactivePlayerActionRequestType, bakugan: string, slot: slots_id, userId: string, attribut: attribut }) {
+export function AddAbilities({ roomState, request, bakugan, slot, userId, attribut, bakuganAttribut }: { roomState: stateType, request: ActivePlayerActionRequestType | InactivePlayerActionRequestType, bakugan: string, slot: slots_id, userId: string, attribut: attribut, bakuganAttribut?: attribut }) {
     if (!roomState) return
 
     const activePlayer = roomState.decksState.find((deck) => deck.userId === roomState.turnState.turn)
@@ -16,12 +16,17 @@ export function AddAbilities({ roomState, request, bakugan, slot, userId, attrib
     let selectAbilitiesResult
 
     if (roomState.battleState.battleInProcess && roomState.battleState.slot !== null && !roomState.battleState.paused) {
+        const changedSlot = roomState.protalSlots[Slots.indexOf(slot)]
+        const battleSlot = roomState.protalSlots[Slots.indexOf(roomState.battleState.slot)]
+        const slotOfBattle = changedSlot ?? battleSlot
+
         selectAbilitiesResult = SelectAbilityCardFilters({
             bakuganKey: bakugan,
             playersDeck: activePlayer,
-            slotOfBattle: roomState.protalSlots[Slots.indexOf(roomState.battleState.slot)],
+            slotOfBattle: slotOfBattle,
             userId: userId,
-            roomState: roomState
+            roomState: roomState,
+            bakuganAttribut: bakuganAttribut
         })
     } else {
         selectAbilitiesResult = SelectAbilityCardInNeutralFilters({
@@ -38,6 +43,9 @@ export function AddAbilities({ roomState, request, bakugan, slot, userId, attrib
         roomState.protalSlots[Slots.indexOf(slot)].bakugans.find(
             (b) => b.userId === userId && b.key === bakugan
         )
+
+    roomState.protalSlots[Slots.indexOf(slot)]
+        .bakugans.find((b) => b.userId === userId && b.key === bakugan)
 
     if (!bakuganOnDomain) return
 
@@ -60,20 +68,20 @@ export function AddAbilities({ roomState, request, bakugan, slot, userId, attrib
         }),
 
         selectAbilitiesResult?.usableExclusives?.filter((ability) => ability !== undefined).map((ability) => {
-                const fullCard = ExclusiveAbilitiesList.find((card) => card.key === ability.key)
-                if (!fullCard) return undefined
+            const fullCard = ExclusiveAbilitiesList.find((card) => card.key === ability.key)
+            if (!fullCard) return undefined
 
-                // 🔥 CHECK canUse
-                if (fullCard.canUse && !fullCard.canUse({ roomState, bakugan: bakuganOnDomain })) {
-                    return undefined
-                }
+            // 🔥 CHECK canUse
+            if (fullCard.canUse && !fullCard.canUse({ roomState, bakugan: bakuganOnDomain })) {
+                return undefined
+            }
 
-                return {
-                    key: ability.key,
-                    name: ability.name,
-                    description: ability.description,
-                    image: fullCard.image || ''
-                }
+            return {
+                key: ability.key,
+                name: ability.name,
+                description: ability.description,
+                image: fullCard.image || ''
+            }
         })
     ]
         .flat()
@@ -85,6 +93,8 @@ export function AddAbilities({ roomState, request, bakugan, slot, userId, attrib
         abilities: abilities,
         attribut: attribut
     }
+
+    console.log(abilitieRequest.abilities.map((a) => a.key))
 
     const abilitiesList = abilitieRequest.abilities.map((a) => a)
     if (abilitiesList.length === 0) return
@@ -118,47 +128,46 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
 
         const animation = SetBakuganOnGate({ roomId, bakuganKey, slot, userId })
 
-        if (state) {
-            io.to(roomId).emit('update-room-state', state)
-            if (!animation) return
-            io.to(roomId).emit('animations', animation)
-            animation.forEach((a) => EmitMessage({ roomState: state, animation: a, io }))
+        const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
+        if (roomIndex === -1) return
 
-        }
+        const updatedState = Battle_Brawlers_Game_State[roomIndex]
+        if (!updatedState) return
 
-        const activeSocket = state.connectedsUsers.get(state.turnState.turn)
-        const inactiveSocket = state.connectedsUsers.get(state.turnState.previous_turn || '')
+        io.to(roomId).emit('update-room-state', updatedState)
+        if (!animation) return
+        io.to(roomId).emit('animations', animation)
+        animation.forEach((a) => EmitMessage({ roomState: updatedState, animation: a, io }))
 
-        if (state.turnState.turn === userId) {
-            const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
-            if (roomIndex === -1) return
+        const activeSocket = updatedState.connectedsUsers.get(updatedState.turnState.turn)
+        const inactiveSocket = updatedState.connectedsUsers.get(updatedState.turnState.previous_turn || '')
+
+        if (updatedState.turnState.turn === userId) {
             if (!activeSocket) return
-            if (!Battle_Brawlers_Game_State[roomIndex]) return
 
-            const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "SET_BAKUGAN")
+            const newState = removeActionByType(updatedState.ActivePlayerActionRequest, "SET_BAKUGAN")
+            updatedState.ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
 
-            Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
-
-            const removeSetGateCard = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "SET_GATE_CARD_ACTION")
-
-            Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = removeSetGateCard as ActivePlayerActionRequestType
-
+            const removeSetGateCard = removeActionByType(updatedState.ActivePlayerActionRequest, "SET_GATE_CARD_ACTION")
+            updatedState.ActivePlayerActionRequest = removeSetGateCard as ActivePlayerActionRequestType
 
             AddAbilities({
                 bakugan: bakuganKey,
-                request: Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest,
-                roomState: Battle_Brawlers_Game_State[roomIndex],
+                request: updatedState.ActivePlayerActionRequest,
+                roomState: updatedState,
                 slot: slot as slots_id,
                 userId: userId,
                 attribut: bakugan.attribut
             })
 
-            const checker = CheckTurnActionRequest({ roomState: state, userId: userId })
+            ChangeAttributActionRequest({ roomState: updatedState })
+
+            const checker = CheckTurnActionRequest({ roomState: updatedState, userId: userId })
             if (!checker) return
 
-            const merged = [Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
+            const merged = [updatedState.ActivePlayerActionRequest.actions.mustDo, updatedState.ActivePlayerActionRequest.actions.mustDoOne, updatedState.ActivePlayerActionRequest.actions.optional].flat()
             if (merged.length > 0) {
-                io.to(activeSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
+                io.to(activeSocket.gameboardSocket).emit('turn-action-request', updatedState.ActivePlayerActionRequest)
                 return
             } else {
                 clearAnimationsInRoom(roomId)
@@ -166,32 +175,28 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
             }
         }
 
-        if (state.turnState.turn !== userId) {
-            const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
-            if (roomIndex === -1) return
-            if (!Battle_Brawlers_Game_State[roomIndex]) return
+        if (updatedState.turnState.turn !== userId) {
             if (!inactiveSocket) return
 
-            const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest, "SET_BAKUGAN")
-
-            Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest = newState as InactivePlayerActionRequestType
+            const newState = removeActionByType(updatedState.InactivePlayerActionRequest, "SET_BAKUGAN")
+            updatedState.InactivePlayerActionRequest = newState as InactivePlayerActionRequestType
 
             AddAbilities({
                 bakugan: bakuganKey,
-                request: Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest,
-                roomState: Battle_Brawlers_Game_State[roomIndex],
+                request: updatedState.InactivePlayerActionRequest,
+                roomState: updatedState,
                 slot: slot as slots_id,
                 userId: userId,
                 attribut: bakugan.attribut
             })
 
-            const merged = [Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.optional].flat()
+            const merged = [updatedState.InactivePlayerActionRequest.actions.mustDo, updatedState.InactivePlayerActionRequest.actions.mustDoOne, updatedState.InactivePlayerActionRequest.actions.optional].flat()
 
-            const checker = CheckTurnActionRequest({ roomState: state, userId: userId })
+            const checker = CheckTurnActionRequest({ roomState: updatedState, userId: userId })
             if (!checker) return
 
             if (merged.length <= 0) return
-            io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
+            io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', updatedState.InactivePlayerActionRequest)
         }
 
     })
