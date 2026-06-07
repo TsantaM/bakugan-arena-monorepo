@@ -41,8 +41,10 @@ export default async function Layout({ children }: { children: React.ReactNode }
                             <SidebarTrigger />
                             <div className="flex items-center gap-3">
                                 <ForfeitButton />
-                                <Link href="https://discord.gg/8HfPK5RVuk" target="_blank"><Image src="discord.svg" alt="discord logo" width={25} height={25} /></Link>
-                                <SoundPlayerControls />
+                                <Link href="https://discord.gg/8HfPK5RVuk" target="_blank">
+                                    <img src="/discord.svg" alt="discord logo" className="w-6 h-6" />
+                                    {/* <Image src="/discord.svg" alt="discord logo" width={25} height={25} /> */}
+                                </Link>                                <SoundPlayerControls />
                                 <AnimatedThemeToggler />
                                 <GlobalChat />
                                 <Suspense fallback={<SidebarMenuSkeleton />}>
