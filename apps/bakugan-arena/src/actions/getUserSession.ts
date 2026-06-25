@@ -1,5 +1,6 @@
 'use server'
 
+import { forbidden, unauthorized } from "next/navigation"
 import { headers } from "next/headers"
 import { auth } from "../lib/auth"
 import { db } from "../lib/db"
@@ -34,3 +35,22 @@ export const getUserRole = async () => {
 }
 
 export type RoleType = Exclude<Awaited<ReturnType<typeof getUserRole>>, undefined>
+
+// -----------------------
+// Vérifier que l'utilisateur est admin
+// -----------------------
+export const requireAdmin = async () => {
+  const user = await getUser()
+
+  if (!user) {
+    unauthorized()
+  }
+
+  const role = await getUserRole()
+
+  if (role !== "ADMIN") {
+    forbidden()
+  }
+
+  return user
+}
