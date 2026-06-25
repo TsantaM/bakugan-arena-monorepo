@@ -33,6 +33,7 @@ export function forfeitSocket(io: Server, socket: Socket) {
                 winner: winner.userId,
                 looser: loser.userId,
                 finished: true,
+                ranked: roomData.ranked,
             })
             .where(eq(rooms.id, roomId))
 

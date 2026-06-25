@@ -147,6 +147,7 @@ export const CheckGameFinished = async ({
           winner: result.winner,
           looser: result.loser,
           finished: true,
+          ranked: roomState.ranked,
         })
         .where(eq(rooms.id, roomId))
     } else {
@@ -154,6 +155,7 @@ export const CheckGameFinished = async ({
         .update(rooms)
         .set({
           finished: true,
+          ranked: roomState.ranked,
         })
         .where(eq(rooms.id, roomId))
     }

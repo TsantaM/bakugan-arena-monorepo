@@ -38,6 +38,7 @@ export const rooms = pgTable("rooms", {
     p2Deck: text("p2_deck").notNull(),
 
     finished: boolean("finished").default(false).notNull(),
+    ranked: boolean("ranked").default(false).notNull(),
 
     winner: text("winner"),
     looser: text("looser"),

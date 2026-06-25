@@ -7,6 +7,7 @@ import { db } from "../lib/db";
 import { eq } from "drizzle-orm";
 import { findOpponent } from "../functions/matchmaking-functions/find-opponent";
 import { StartTwoTimers, UpdatePlayerTimer } from "../functions/start-player-timer";
+import { applyEloDecayForUser } from "../functions/ladder-functions/elo-decay";
 
 export type waitingListElements = {
     socketId: string,
@@ -51,13 +52,18 @@ export const addToQueue = async ({
         columns: { elo: true }
     })
 
+    const storedElo = user?.elo ?? 1000
+    const effectiveElo = ranked
+        ? await applyEloDecayForUser(userId, storedElo)
+        : storedElo
+
     waitingMap.set(userId, {
         userId,
         deckId,
         socketId,
         ranked,
         joinedAt: Date.now(),
-        elo: user?.elo ?? 1000
+        elo: effectiveElo
     })
 }
 
@@ -115,7 +121,8 @@ export const processMatchmaking = async (io: Server) => {
                 player1ID: p1.userId,
                 P1Deck: p1.deckId,
                 Player2ID: p2.userId,
-                P2Deck: p2.deckId
+                P2Deck: p2.deckId,
+                ranked: true,
             })
 
             const matchedPlayers = [p1, p2]
