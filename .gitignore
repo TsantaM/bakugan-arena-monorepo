@@ -9,6 +9,17 @@ dist
 .next
 .env
 
+# Ignorer l'environnement virtuel Python
+.venv
+
+# Caches et fichiers compilés Python
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+
 # Env files
 .env
 .env.*

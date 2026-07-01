@@ -7,6 +7,7 @@ import { db } from "../lib/db";
 import { eq } from "drizzle-orm";
 import { findOpponent } from "../functions/matchmaking-functions/find-opponent";
 import { StartTwoTimers, UpdatePlayerTimer } from "../functions/start-player-timer";
+import { getAvailableBot, getBotSocketId } from "../functions/bot-manager";
 
 export type waitingListElements = {
     socketId: string,
@@ -72,6 +73,57 @@ export const processMatchmaking = async (io: Server) => {
     try {
         const players = Array.from(waitingMap.values())
 
+        if (players.length === 1) {
+            const player = players[0]
+            const bot = await getAvailableBot({ ranked: player.ranked })
+            const botSocketId = bot ? getBotSocketId(bot.userId) : undefined
+
+            if (bot && botSocketId) {
+                waitingMap.delete(player.userId)
+
+                const room = await CreateRoom({
+                    player1ID: player.userId,
+                    P1Deck: player.deckId,
+                    Player2ID: bot.userId,
+                    P2Deck: bot.deckId
+                })
+
+                const matchedPlayers = [player]
+
+                matchedPlayers.forEach((p) => {
+                    io.to(p.socketId).emit('match-found', room.id)
+                })
+
+                io.to(botSocketId).emit('match-found', room.id)
+
+                const state = await createGameState({
+                    roomId: room.id,
+                    ranked: player.ranked
+                })
+
+                if (!state) return
+
+                Battle_Brawlers_Game_State.push(state)
+
+                intervalIds.push({
+                    roomId: state.roomId,
+                    players: state.players.map((p) => ({
+                        userId: p.userId,
+                        intervalId: null
+                    }))
+                })
+
+                matchedPlayers.forEach((p) => {
+                    const rooms = GetUsersRooms(p.userId)
+                    io.to(p.socketId).emit('get-rooms-user-id', rooms)
+                })
+
+                const roomState = Battle_Brawlers_Game_State[Battle_Brawlers_Game_State.indexOf(state)]
+                StartTwoTimers({io: io, roomState: roomState, roomId: roomState.roomId})
+                return
+            }
+        }
+
         if (players.length < 2) return
 
         // tri stable
@@ -126,7 +178,7 @@ export const processMatchmaking = async (io: Server) => {
 
             const state = await createGameState({
                 roomId: room.id,
-                ranked: true
+                ranked: p1.ranked
             })
 
             if (!state) continue

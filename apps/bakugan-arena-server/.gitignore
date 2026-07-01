@@ -1,5 +1,14 @@
 dist
 node_modules
 /generated/prisma
+
+# Ignorer l'environnement virtuel Python et caches
+.venv
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+
 # env files (can opt-in for committing if needed)
 .env

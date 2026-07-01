@@ -10,6 +10,7 @@ process.on("uncaughtException", (err) => {
 import { Server } from "socket.io";
 import { processMatchmaking, setupSearchOpponentSocket, waitingMap } from "./sockets/search-opponent";
 import { socketGetRoomState, socketInitiRoomState } from "./sockets/get-room-data";
+import { initializeBots } from "./functions/bot-manager";
 import { socketTurn } from "./sockets/turn-action";
 import { socketUpdateGateState } from "./sockets/update-gate-state";
 import { socketUpdateBakuganState } from "./sockets/update-bakugans-state";
@@ -41,20 +42,23 @@ const io = new Server({
     }
 });
 
-// 🔥 MATCHMAKING LOOP GLOBAL
-setInterval(() => {
-    processMatchmaking(io)
-}, 1000)
+const startServer = async () => {
+    await initializeBots()
 
-setInterval(() => {
-    cleanGameStates()
-}, 60000)
+    // 🔥 MATCHMAKING LOOP GLOBAL
+    setInterval(() => {
+        processMatchmaking(io)
+    }, 1000)
 
-setInterval(() => {
-    cleanupOldMessages()
-}, CLEANUP_INTERVAL_GLOBAL_CHAT)
+    setInterval(() => {
+        cleanGameStates()
+    }, 60000)
 
-io.on('connection', (socket) => {
+    setInterval(() => {
+        cleanupOldMessages()
+    }, CLEANUP_INTERVAL_GLOBAL_CHAT)
+
+    io.on('connection', (socket) => {
     const { userId, roomId, socketType } = socket.handshake.auth
     console.log('A user connected:', 'socketId : ', socket.id, 'userId : ', userId);
     if (!roomId && (!socketType || socketType === 'game')) {
@@ -99,9 +103,14 @@ io.on('connection', (socket) => {
         removeRoomSocket(socket.id, userId)
     })
 
-});
+    });
 
+    io.listen(PORT)
 
-io.listen(PORT)
+    console.log("Server is running on PORT: ", PORT);
+}
 
-console.log("Server is running on PORT: ", PORT);
+startServer().catch((error) => {
+    console.error("Failed to start server:", error)
+    process.exit(1)
+})
