@@ -7,7 +7,7 @@ export const ForceDattraction: exclusiveAbilitiesType = {
     key: `force-d'attraction`,
     name: `Attractor`,
     maxInDeck: 2,
-    description: `Attract one Bakugan from another Gate Card to user's Gate Card`,
+    description: `Can be used outside of battle. This card pulls one Bakugan from a slot with a gate card placed onto your Bakugan's slot. Requires at least two Bakugan on the field and a movable target that is not trapped or protected against ability cards.`,
     extraInputs: ['drag-bakugan'],
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,

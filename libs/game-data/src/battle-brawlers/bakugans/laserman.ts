@@ -20,7 +20,7 @@ export const LasermanGateCard: gateCardType = {
     name: 'Charachter: Laserman',
     maxInDeck: 1,
     family: family,
-    description: `When this card is activated, it doubles the level of all Laserman on it.`,
+    description: `When this gate card opens on its slot, this card adds Gs to every Laserman Bakugan on that slot equal to their current G-Power at that moment. Requires at least two Bakugan on that slot during battle. The bonus is reversed if this card is nullified.`,
     image: 'laserman.png',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'laserman-gate-card')

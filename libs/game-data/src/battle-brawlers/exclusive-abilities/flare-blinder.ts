@@ -6,7 +6,7 @@ export const FlareBlinder: exclusiveAbilitiesType = {
     key: 'flare-blinder',
     name: 'Flare Blinder',
     maxInDeck: 1,
-    description: `Prevent the opponent from activating abilities on the same slot as the user.`,
+    description: `Can be used outside of battle. Requires Tentaclear Haos. When you activate this card, all players cannot play ability cards for 1 turn. The block is removed if this card is nullified.`,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {

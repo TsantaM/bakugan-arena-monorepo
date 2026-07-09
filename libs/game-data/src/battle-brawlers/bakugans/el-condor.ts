@@ -49,7 +49,7 @@ export const ElCondorGateCard: gateCardType = {
         Haos: CharacterCardByAttribut('el-condor', 'Haos'),
         Ventus: CharacterCardByAttribut('el-condor', 'Ventus')
     },
-    description: `When this card is activated, it doubles the level of all El Condor on it.`,
+    description: `When this gate card opens on its slot, this card adds Gs to every El Condor Bakugan on that slot equal to their current G-Power at that moment. Requires at least two Bakugan on that slot during battle. The bonus is reversed if this card is nullified.`,
     family: 'El Condor',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'el-condor-gate-card')

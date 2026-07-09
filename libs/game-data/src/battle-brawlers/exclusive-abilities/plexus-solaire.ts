@@ -6,7 +6,7 @@ export const PlexusSolaire: exclusiveAbilitiesType = {
     key: 'plexus-solaire',
     name: 'Solar Plexus',
     maxInDeck: 1,
-    description: `Nullifies opponents Gate Card and substract 50 Gs to opponent`,
+    description: `During battle on the slot where this card is activated, this card subtracts 50 Gs from an opponent Bakugan on that slot and nullifies the opponent's open gate card on that slot if it has not already been canceled.`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {

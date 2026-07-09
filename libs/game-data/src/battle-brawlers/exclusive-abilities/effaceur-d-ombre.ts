@@ -4,7 +4,7 @@ import { GateCardsList } from "../gate-gards.js"
 
 export const EffecteurdOmbre: exclusiveAbilitiesType = {
     key: `effaceur-d'ombre`,
-    description: `Substract 50 Gs to the opponent and nullifies his Gate Card`,
+    description: `During battle on the battle slot, this card subtracts 50 Gs from an opponent Bakugan on that slot and nullifies the opponent's open gate card on that slot if it has not already been canceled.`,
     name: `Shadow Scratch`,
     maxInDeck: 1,
     usable_in_neutral: false,

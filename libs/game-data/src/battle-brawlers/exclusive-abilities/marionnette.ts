@@ -8,7 +8,7 @@ export const Marionnette: exclusiveAbilitiesType = {
     maxInDeck: 1,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
-    description: "Mantris can move any Bakugan to any Gate Card that it's owner chose",
+    description: `Can be used outside of battle. Requires a Mantris family Bakugan alone on its slot, at least three slots with a gate card placed, at least two Bakugan on the field, and no active battle. When you activate this card, you may move any Bakugan on the field to any slot with a gate card placed. The target must not be trapped or protected against ability cards.`,
     extraInputs: ['move-bakugan'],
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
 

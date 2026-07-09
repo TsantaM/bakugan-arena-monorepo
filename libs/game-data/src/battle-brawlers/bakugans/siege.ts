@@ -55,7 +55,7 @@ export const SiegeGateCard: gateCardType = {
     name: 'Charachter: Siege',
     maxInDeck: 1,
     family: 'Siege',
-    description: `When this card is activated, it doubles the level of all Siege on it.`,
+    description: `When this gate card opens on its slot, this card adds Gs to every Siege Bakugan on that slot equal to their current G-Power at that moment. Requires at least two Bakugan on that slot during battle. The bonus is reversed if this card is nullified.`,
     image: 'siege.png',
     imageByAttribut: {
         Pyrus: CharacterCardByAttribut('siege', 'Pyrus'),

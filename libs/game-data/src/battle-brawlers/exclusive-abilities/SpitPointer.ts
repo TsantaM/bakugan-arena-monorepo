@@ -5,7 +5,7 @@ export const SpitPointer: exclusiveAbilitiesType = {
     key: 'spit-pointer',
     name: 'Spit Pointer',
     maxInDeck: 1,
-    description: 'Add 100Gs to the user and substract 100 Gs to all opponents',
+    description: `During battle on the slot where this card is activated, this card adds 100 Gs to your Bakugan and subtracts 100 Gs from every opponent Bakugan on that slot. Both changes are reversed if this card is nullified.`,
     usable_if_user_not_on_domain: false,
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {

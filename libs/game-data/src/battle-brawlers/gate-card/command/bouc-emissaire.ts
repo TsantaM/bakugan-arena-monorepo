@@ -6,7 +6,7 @@ export const BoucEmissaire: gateCardType = {
     key: 'bouc-emissaire',
     name: 'Bouc Emissaire',
     maxInDeck: 1,
-    description: `Le propriétaire du premier Bakugan placé sur la carte peut décider de continuer le combat ou d'y mettre fin`,
+    description: `When this command gate card opens on its slot, the current battle on that slot ends immediately and this gate card is removed from the slot.`,
     image: GateCardImages.command,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)

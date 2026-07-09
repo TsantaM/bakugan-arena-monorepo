@@ -6,7 +6,7 @@ import { ReaperDarkus } from "../bakugans/reaper.js"
 export const ReaperOfTheChaos: exclusiveAbilitiesType = {
     key: 'reaper-of-the-chaos',
     name: 'Reaper of the Chaos',
-    description: `Add 100 Gs to Reaper`,
+    description: `During battle on the battle slot, this card adds 100 Gs to your Bakugan. Requires Reaper Darkus. The bonus is reversed if this card is nullified.`,
     maxInDeck: 1,
     usable_if_user_not_on_domain: false,
     usable_in_neutral: false,

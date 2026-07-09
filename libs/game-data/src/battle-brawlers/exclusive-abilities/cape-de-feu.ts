@@ -5,7 +5,7 @@ export const CapeDeFeu: exclusiveAbilitiesType = {
     key: 'cape de feu',
     name: 'Cape de Feu',
     maxInDeck: 1,
-    description: `Ajoute 100 G en plus à l'utilisateur`,
+    description: `During battle on the slot where this card is activated, this card adds 100 Gs to your Bakugan.`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {

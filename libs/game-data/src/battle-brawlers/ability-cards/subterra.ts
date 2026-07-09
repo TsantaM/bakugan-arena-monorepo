@@ -9,7 +9,7 @@ import { AbilityCardsList, ExclusiveAbilitiesList } from "../index.js";
 export const MagmaSupreme: abilityCardsType = {
     key: 'magma-supreme',
     name: 'Magma Prominence',
-    description: `Changes the Gate Card's attribute to Subterra.`,
+    description: `During battle on the battle slot, this card transforms the gate card on that slot into a Subterra Reactor. If the gate card was already open, its effects are canceled and the new gate card opens.`,
     attribut: 'Subterra',
     maxInDeck: 1,
     usable_in_neutral: false,
@@ -91,7 +91,7 @@ export const TectonicSwipe: abilityCardsType = {
     key: 'tectonic-swipe',
     name: 'Tectonic Swipe',
     maxInDeck: 1,
-    description: `Cancel Gate card and Switches Gate Card with the one next to it`,
+    description: `During battle on the battle slot, this card swaps the gate card on your slot with the gate card on an adjacent slot that has a gate card placed. If your gate card is open, it is nullified before the swap.`,
     usable_in_neutral: false,
     attribut: 'Subterra',
     onActivate: ({ roomState, userId, slot }) => {
@@ -161,7 +161,7 @@ export const EarthPower: abilityCardsType = {
     attribut: 'Subterra',
     name: 'Earth Power',
     maxInDeck: 2,
-    description: `Add 100 G to all of the user's Subterra Bakugans on the same gate card.`,
+    description: `During battle on the slot where this card is activated, this card adds 100 Gs to every Subterra Bakugan you control on that slot. The bonus is reversed if this card is nullified.`,
     image: StandardCardsImages.subterra,
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
@@ -225,7 +225,7 @@ export const CopieConforme: abilityCardsType = {
     name: 'Copycat',
     attribut: 'Subterra',
     maxInDeck: 1,
-    description: `Copies an ability that the opponent used or is using`,
+    description: `During battle on the slot where this card is activated, this card adds 100 Gs to your Bakugan.`,
     image: StandardCardsImages.subterra,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -255,7 +255,7 @@ export const EarthShatter: abilityCardsType = {
     key: 'earth-shatter',
     name: 'Earth Shatter',
     attribut: 'Subterra',
-    description: `Nullifies the opponent's Gate Card`,
+    description: `During battle on the battle slot, this card nullifies the opponent's open gate card on that slot if it has not already been canceled. Requires the opponent's gate card to be open on the battle slot.`,
     maxInDeck: 2,
     usable_in_neutral: false,
     image: StandardCardsImages.subterra,
@@ -316,7 +316,7 @@ export const TerraLockdown: abilityCardsType = {
     key: 'terra-lockdown',
     attribut: 'Subterra',
     name: 'Terra Lockdown',
-    description: `Nullifies the opponent's ability`,
+    description: `During battle on the battle slot, this card nullifies all opponent ability cards currently active on that slot. Requires at least one cancelable opponent ability card in play on that slot.`,
     maxInDeck: 3,
     image: StandardCardsImages.haos,
     usable_in_neutral: false,

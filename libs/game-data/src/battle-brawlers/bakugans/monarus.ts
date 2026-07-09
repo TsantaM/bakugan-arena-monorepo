@@ -19,7 +19,7 @@ export const MonarusGateCard: gateCardType = {
     name: 'Charachter: Monarus',
     maxInDeck: 1,
     family: 'Monarus',
-    description: `When this card is activated, it doubles the level of all Monarus on it.`,
+    description: `When this gate card opens on its slot, this card adds Gs to every Monarus Bakugan on that slot equal to their current G-Power at that moment. Requires at least two Bakugan on that slot during battle. The bonus is reversed if this card is nullified.`,
     image: 'monarus.png',
     imageByAttribut: {
         Ventus: CharacterCardByAttribut('monarus', 'Ventus')

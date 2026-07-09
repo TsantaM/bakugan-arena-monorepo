@@ -4,7 +4,7 @@ import type { AbilityCardsActions, bakuganToMoveType2 as bakuganToMoveType, excl
 export const LanceEclair: exclusiveAbilitiesType = {
     key: 'lance-eclair',
     name: 'Sling Blazer',
-    description: `Enable Mantris to move any bakugan to any adjacent Gate Card that its owner chooses`,
+    description: `During battle on the battle slot, this card moves one opponent Bakugan from the battle slot to an adjacent slot with a gate card placed. The target must not be trapped or protected against ability cards. Requires Mantris on the battle slot.`,
     maxInDeck: 1,
     extraInputs: ["move-opponent"],
     usable_in_neutral: false,

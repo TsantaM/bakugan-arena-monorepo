@@ -6,7 +6,7 @@ import { portalSlotsTypeElement } from "../../type/room-types.js";
 export const LifeDrew: exclusiveAbilitiesType = {
     key: 'life-drew',
     name: 'Life Drew',
-    description: `Add 50 Gs to all allied Bakugans on the field.`,
+    description: `Can be used outside of battle. When you activate this card, it adds 50 Gs to every Bakugan you control on the field. The bonus is reversed if this card is nullified.`,
     maxInDeck: 1,
     usable_if_user_not_on_domain: false,
     usable_in_neutral: true,

@@ -6,7 +6,7 @@ export const ReacteurPyrus: gateCardType = {
     key: 'reacteur-pyrus',
     name: 'Reacteur Pyrus',
     attribut: 'Pyrus',
-    description: 'Add 100 G to all Pyrus bakugans on the card',
+    description: `When this gate card opens on its slot, this card adds 100 Gs to every Pyrus Bakugan on that slot. Requires at least two Bakugan on that slot. While this card remains open, Pyrus Bakugan placed on that slot also gain 100 Gs. The bonus is reversed if this card is nullified.`,
     maxInDeck: 3,
     image: 'reacteur-pyrus.jpg',
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -86,7 +86,7 @@ export const ReacteurHaos: gateCardType = {
     key: 'reacteur-haos',
     name: 'Reacteur Haos',
     attribut: 'Haos',
-    description: 'Add 100 G to all Haos bakugans on the card',
+    description: `When this gate card opens on its slot, this card adds 100 Gs to every Haos Bakugan on that slot. Requires at least two Bakugan on that slot. While this card remains open, Haos Bakugan placed on that slot also gain 100 Gs. The bonus is reversed if this card is nullified.`,
     image: 'reacteur-haos.jpg',
     maxInDeck: 3,
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -163,7 +163,7 @@ export const ReacteurVentus: gateCardType = {
     key: 'reacteur-ventus',
     name: 'Reacteur Ventus',
     attribut: 'Ventus',
-    description: 'Add 100 G to all Ventus bakugans on the card',
+    description: `When this gate card opens on its slot, this card adds 100 Gs to every Ventus Bakugan on that slot. Requires at least two Bakugan on that slot. While this card remains open, Ventus Bakugan placed on that slot also gain 100 Gs. The bonus is reversed if this card is nullified.`,
     image: 'reacteur-ventus.jpg',
     maxInDeck: 3,
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -239,7 +239,7 @@ export const ReacteurAquos: gateCardType = {
     key: 'reacteur-aquos',
     name: 'Reacteur Aquos',
     attribut: 'Aquos',
-    description: 'Add 100 G to all Aquos bakugans on the card',
+    description: `When this gate card opens on its slot, this card adds 100 Gs to every Aquos Bakugan on that slot. Requires at least two Bakugan on that slot. While this card remains open, Aquos Bakugan placed on that slot also gain 100 Gs. The bonus is reversed if this card is nullified.`,
     image: 'reacteur-aquos.jpg',
     maxInDeck: 3,
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -315,7 +315,7 @@ export const ReacteurSubterra: gateCardType = {
     key: 'reacteur-subterra',
     name: 'Reacteur Subterra',
     attribut: 'Subterra',
-    description: 'Add 100 G to all Subterra bakugans on the card',
+    description: `When this gate card opens on its slot, this card adds 100 Gs to every Subterra Bakugan on that slot. Requires at least two Bakugan on that slot. While this card remains open, Subterra Bakugan placed on that slot also gain 100 Gs. The bonus is reversed if this card is nullified.`,
     image: 'reacteur-subterra.jpg',
     maxInDeck: 3,
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -391,7 +391,7 @@ export const ReacteurDarkus: gateCardType = {
     key: 'reacteur-darkus',
     name: 'Reacteur Darkus',
     attribut: 'Darkus',
-    description: 'Add 100 G to all Darkus bakugans on the card',
+    description: `When this gate card opens on its slot, this card adds 100 Gs to every Darkus Bakugan on that slot. Requires at least two Bakugan on that slot. While this card remains open, Darkus Bakugan placed on that slot also gain 100 Gs. The bonus is reversed if this card is nullified.`,
     image: 'reacteur-darkus.jpg',
     maxInDeck: 3,
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -471,7 +471,7 @@ export const PerilPyrus: gateCardType = {
     name: 'Péril Pyrus',
     attribut: 'Pyrus',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents sur cette carte en Pyrus`,
+    description: `When this gate card opens on its slot, this card changes the attribute of every Bakugan on that slot to Pyrus. The change is reversed if this card is nullified.`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -506,7 +506,7 @@ export const PerilAquos: gateCardType = {
     name: 'Péril Aquos',
     attribut: 'Aquos',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents sur cette carte en Aquos`,
+    description: `When this gate card opens on its slot, this card changes the attribute of every Bakugan on that slot to Aquos. The change is reversed if this card is nullified.`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -541,7 +541,7 @@ export const PerilVentus: gateCardType = {
     name: 'Péril Ventus',
     attribut: 'Ventus',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents sur cette carte en Ventus`,
+    description: `When this gate card opens on its slot, this card changes the attribute of every Bakugan on that slot to Ventus. The change is reversed if this card is nullified.`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -576,7 +576,7 @@ export const PerilSubterra: gateCardType = {
     name: 'Péril Subterra',
     attribut: 'Subterra',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents sur cette carte en Subterra`,
+    description: `When this gate card opens on its slot, this card changes the attribute of every Bakugan on that slot to Subterra. The change is reversed if this card is nullified.`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -611,7 +611,7 @@ export const PerilHaos: gateCardType = {
     name: 'Péril Haos',
     attribut: 'Haos',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents sur cette carte en Haos`,
+    description: `When this gate card opens on its slot, this card changes the attribute of every Bakugan on that slot to Haos. The change is reversed if this card is nullified.`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -646,7 +646,7 @@ export const PerilDarkus: gateCardType = {
     name: 'Péril Darkus',
     attribut: 'Darkus',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents sur cette carte en Darkus`,
+    description: `When this gate card opens on its slot, this card changes the attribute of every Bakugan on that slot to Darkus. The change is reversed if this card is nullified.`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -683,7 +683,7 @@ export const FusionMarine: gateCardType = {
     name: 'Fusion Marine',
     attribut: 'Aquos',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents en Aquos sauf les Bakugans Subterra`,
+    description: `When this gate card opens on its slot, this card changes the attribute of every Bakugan on that slot to Aquos, except Subterra Bakugan. The change is reversed if this card is nullified.`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
 
@@ -702,7 +702,7 @@ export const FusionAerienne: gateCardType = {
     name: 'Fusion Aérienne',
     attribut: 'Ventus',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents en Ventus sauf les Bakugans Haos`,
+    description: `When this gate card opens on its slot, this card changes the attribute of every Bakugan on that slot to Ventus, except Haos Bakugan. The change is reversed if this card is nullified.`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         PerilGateCardOnOpen({ roomState, slot, attribut: "Ventus", exception: "Haos" })
@@ -719,7 +719,7 @@ export const FusionTenebreuses: gateCardType = {
     name: 'Fusion Ténébreuse',
     attribut: 'Darkus',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents en Darkus sauf les Bakugans Pyrus`,
+    description: `When this gate card opens on its slot, this card changes the attribute of every Bakugan on that slot to Darkus, except Pyrus Bakugan. The change is reversed if this card is nullified.`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         PerilGateCardOnOpen({ roomState, slot, attribut: "Darkus", exception: "Pyrus" })
@@ -736,7 +736,7 @@ export const FusionTerrestre: gateCardType = {
     name: 'Fusion Terrestre',
     attribut: 'Subterra',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents en Subterra sauf les Bakugans Aquos`,
+    description: `When this gate card opens on its slot, this card changes the attribute of every Bakugan on that slot to Subterra, except Aquos Bakugan. The change is reversed if this card is nullified.`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         PerilGateCardOnOpen({ roomState, slot, attribut: "Subterra", exception: "Aquos" })
@@ -753,7 +753,7 @@ export const FusionLumineuse: gateCardType = {
     name: 'Fusion Lumineuse',
     attribut: 'Haos',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents en Haos sauf les Bakugans Ventus`,
+    description: `When this gate card opens on its slot, this card changes the attribute of every Bakugan on that slot to Haos, except Ventus Bakugan. The change is reversed if this card is nullified.`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         PerilGateCardOnOpen({ roomState, slot, attribut: "Haos", exception: "Ventus" })
@@ -770,7 +770,7 @@ export const FusionEnflammee: gateCardType = {
     name: 'Fusion Enflammée',
     attribut: 'Pyrus',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents en Pyrus sauf les Bakugans Darkus`,
+    description: `When this gate card opens on its slot, this card changes the attribute of every Bakugan on that slot to Pyrus, except Darkus Bakugan. The change is reversed if this card is nullified.`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         PerilGateCardOnOpen({ roomState, slot, attribut: "Pyrus", exception: "Darkus" })

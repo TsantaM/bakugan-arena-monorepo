@@ -6,7 +6,7 @@ import { gateCardType } from "../../../type/game-data-types.js"
 export const Androstasis: gateCardType = {
     key: 'androstasis',
     name: 'Androstasis',
-    description: `If the user loses the current battle, their defeated Bakugan remains in the game.`,
+    description: `When this command gate card opens automatically after battle if its owner loses, every Bakugan defeated in that battle becomes available again.`,
     image: GateCardImages.command,
     maxInDeck: 1,
     activeOnBattleEnd: {

@@ -8,7 +8,7 @@ export const SouffleInfini: exclusiveAbilitiesType = {
     key: 'souffle-infini',
     name: 'Souffle Infini',
     maxInDeck: 1,
-    description: `Attire un bakugan sur la même carte portail que l'utilisateur et retire 50G à la cible`,
+    description: `Can be used outside of battle. When you activate this card, it pulls one Bakugan from another slot onto your Bakugan's slot and subtracts 50 Gs from that target. Requires at least two Bakugan on the field and a target on another slot.`,
     extraInputs: ['drag-bakugan'],
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,

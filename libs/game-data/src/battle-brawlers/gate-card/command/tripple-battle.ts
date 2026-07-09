@@ -8,7 +8,7 @@ import { Bakugans } from "../../bakugans.js"
 export const TripleCombat: gateCardType = {
     key: 'triple-combat',
     name: 'Tripple Battle',
-    description: `Drag your weakest Bakugan to the battle`,
+    description: `When this command gate card opens on its slot with at least two Bakugan during battle, this card deploys the weakest available Bakugan from its owner's deck onto that slot as support. The support Bakugan is removed if this card is nullified.`,
     image: GateCardImages.command,
     maxInDeck: 1,
     onOpen: ({ roomState, slot, userId }) => {

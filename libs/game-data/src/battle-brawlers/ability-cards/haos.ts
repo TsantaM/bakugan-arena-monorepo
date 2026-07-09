@@ -13,7 +13,7 @@ export const RapideHaos: abilityCardsType = {
     key: 'rapide-haos',
     name: 'Rapide Haos',
     attribut: 'Haos',
-    description: `Permet à l'utilisateur d'ajouter un bakugan en plus sur le terrain s'il y a déjà un bakugan Haos sur la carte`,
+    description: `During battle on the slot where this card is activated, this card adds 100 Gs to your Bakugan.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     extraInputs: ['add-bakugan'],
@@ -55,7 +55,7 @@ export const EclatSoudain: abilityCardsType = {
     name: 'Rapid Haos',
     attribut: 'Haos',
     maxInDeck: 1,
-    description: `Adds another Bakugan to the Battle, it work only if there is minimum 2 haos bakugans on field`,
+    description: `During battle on the battle slot, this card deploys one Bakugan from your deck as support onto that slot. Requires at least two Haos Bakugan on the field and at least one available Bakugan in your deck. The support Bakugan is removed if this card is nullified.`,
     usable_in_neutral: false,
     image: StandardCardsImages.haos,
     extraInputs: ['add-bakugan'],
@@ -211,7 +211,7 @@ export const LumiereDivine: abilityCardsType = {
     name: 'Lumière Divine',
     maxInDeck: 1,
     attribut: 'Haos',
-    description: `Permet de redonner vie à un Bakugan qui a été vaincu au combat`,
+    description: `This card adds 100 Gs to your Bakugan on the slot where this card is activated. Can be used outside of battle.`,
     image: StandardCardsImages.haos,
     usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -242,7 +242,7 @@ export const ContreMaitrise: abilityCardsType = {
     key: 'contre-maîtrise',
     attribut: 'Haos',
     name: 'Ability Counter',
-    description: `Nullifies the opponent's ability`,
+    description: `During battle on the battle slot, this card nullifies all opponent ability cards currently active on that slot. Requires at least one cancelable opponent ability card in play on that slot.`,
     maxInDeck: 3,
     image: StandardCardsImages.haos,
     usable_in_neutral: false,
@@ -295,7 +295,7 @@ export const HaosImmobilisation: abilityCardsType = {
     name: 'Haos Stasis',
     attribut: 'Haos',
     maxInDeck: 1,
-    description: `If two Haos Bakugans are on the field, the user's power get 100 G and allow the player to reuse any of their Ability Cards`,
+    description: `During battle on the battle slot, this card adds 100 Gs to your Bakugan and restores your remaining ability card plays to 3. Requires at least two Haos Bakugan on the field. The power bonus is reversed if this card is nullified.`,
     image: StandardCardsImages.haos,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -374,7 +374,7 @@ export const SupportLight: abilityCardsType = {
     key: 'support-light',
     name: 'Support Light',
     attribut: 'Haos',
-    description: `Nullifies the opponent's Gate Card`,
+    description: `During battle on the battle slot, this card nullifies the opponent's open gate card on that slot if it has not already been canceled. Requires the opponent's gate card to be open on the battle slot.`,
     maxInDeck: 2,
     usable_in_neutral: false,
     image: StandardCardsImages.haos,
@@ -439,7 +439,7 @@ export const TornadeEclair: abilityCardsType = {
     maxInDeck: 1,
     image: StandardCardsImages.haos,
     usable_in_neutral: false,
-    description: `Adds 100 Gs to the user and decrease opponent power by 100 Gs`,
+    description: `During battle on the slot where this card is activated, this card adds 100 Gs to your Bakugan and subtracts 100 Gs from one opponent Bakugan on that slot. Both changes are reversed if this card is nullified.`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)

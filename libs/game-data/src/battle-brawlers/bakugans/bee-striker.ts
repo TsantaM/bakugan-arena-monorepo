@@ -20,7 +20,7 @@ export const BeeStrikerGateCard: gateCardType = {
     name: 'Charachter: Bee Striker',
     maxInDeck: 1,
     family: family,
-    description: `When this card is activated, it doubles the level of all Bee Striker on it.`,
+    description: `When this gate card opens on its slot, this card adds Gs to every Bee Striker Bakugan on that slot equal to their current G-Power at that moment. Requires at least two Bakugan on that slot during battle. The bonus is reversed if this card is nullified.`,
     image: 'caracter-gate-cards/bee-striker-ventus.jpg',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'bee-striker-gate-card')

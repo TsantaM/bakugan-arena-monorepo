@@ -5,7 +5,7 @@ export const SpiritHole: exclusiveAbilitiesType = {
     key: 'spirit-hole',
     name: 'Spirit Hole',
     maxInDeck: 1,
-    description: `Adds 50 Gs to your Bakugan for every gate card on the field`,
+    description: `During battle on the slot where this card is activated, this card adds 50 Gs to your Bakugan for each slot with a gate card placed on the field. The bonus is reversed if this card is nullified.`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {

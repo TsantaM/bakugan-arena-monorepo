@@ -5,7 +5,7 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js";
 export const SlashZero: exclusiveAbilitiesType = {
     key: 'slash-zero',
     name: 'Slash Zero',
-    description: 'Add 50 Gs to the user.',
+    description: `During battle on the slot where this card is activated, this card adds 50 Gs to your Bakugan. The bonus is reversed if this card is nullified.`,
     maxInDeck: 1,
     usable_if_user_not_on_domain: false,
     usable_in_neutral: false,

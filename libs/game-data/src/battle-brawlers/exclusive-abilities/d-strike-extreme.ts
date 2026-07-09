@@ -5,7 +5,7 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 export const DStrikeExtreme: exclusiveAbilitiesType = {
     key: 'd-strike-extreme',
     name: 'D Strike Extreme',
-    description: `A Fusion Ability that adds an additional +200 Gs if D Strike Attack is activated.`,
+    description: `Fusion ability. During battle on the battle slot, if D Strike Attack is active on that slot, this card adds 200 Gs to your Bakugan. The bonus is reversed if this card is nullified.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

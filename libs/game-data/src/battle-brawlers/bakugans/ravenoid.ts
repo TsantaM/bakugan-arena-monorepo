@@ -43,7 +43,7 @@ export const RavenoidGateCard: gateCardType = {
     name: 'Charachter: Ravenoid',
     maxInDeck: 1,
     family: 'Ravenoid',
-    description: `When this card is activated, it doubles the level of all Ravenoid on it.`,
+    description: `When this gate card opens on its slot, this card adds Gs to every Ravenoid Bakugan on that slot equal to their current G-Power at that moment. Requires at least two Bakugan on that slot during battle. The bonus is reversed if this card is nullified.`,
     image: 'ravenoid.png',
     imageByAttribut: {
         Ventus: CharacterCardByAttribut('ravenoid', 'Ventus'),

@@ -6,7 +6,7 @@ export const RetourDAssenceur: gateCardType = {
     key: 'retour-d-air',
     name: `Retour d'assenceur`,
     maxInDeck: 1,
-    description: `Oblige le Bakugan de l'adversaire mis en jeu à revenir immédiatement entre les main de son propriétaire`,
+    description: `When this command gate card opens on its slot, every opponent Bakugan on that slot returns to its owner's deck and the current battle on that slot ends.`,
     image: GateCardImages.command,
     onOpen({ roomState, slot, userId }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)

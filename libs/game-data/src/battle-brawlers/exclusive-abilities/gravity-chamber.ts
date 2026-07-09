@@ -7,7 +7,7 @@ import { HydranoidDarkus } from "../bakugans/hydranoid.js"
 export const ChambreDeGravite: exclusiveAbilitiesType = {
     key: 'chambre-de-gravité',
     name: 'Gravity Chamber',
-    description: `Attracts all opposing Bakugans on the Gate Cards adjecent to the one where Hydranoid is located that have a lower power level, and eliminates immediately.`,
+    description: `Can be used outside of battle. Requires Hydranoid Darkus alone on its slot. When you activate this card, all opposing Bakugan on adjacent slots with a gate card placed that have lower G-Power than Hydranoid are eliminated.`,
     maxInDeck: 1,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,

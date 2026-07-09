@@ -5,7 +5,7 @@ export const PyrusDarkus: abilityCardsType = {
     key: 'diagonal-combination-pyrus-darkus',
     name: 'Diagonal Correlation : Pyrus - Darkus',
     attribut: 'Pyrus',
-    description: `If the user is of the Pyrus attribut, they gain a 100 Gs bonus if a Darkus Bakugan is present anywhere on the field`,
+    description: `During battle, this card adds 150 Gs to your Pyrus Bakugan on the battle slot if you control both a Pyrus and a Darkus Bakugan on the field. If you activate this card from a slot other than the battle slot, the bonus is applied to your qualifying Bakugan on the battle slot instead.`,
     maxInDeck: 1,
     usable_in_neutral: true,
     image: "pyrus-darkus.jpg",
@@ -51,7 +51,7 @@ export const DarkusPyrus: abilityCardsType = {
     key: 'diagonal-combination-darkus-pyrus',
     name: 'Diagonal Correlation : Pyrus - Darkus',
     attribut: 'Darkus',
-    description: `If the user is of the Darkus attribut, they gain a 100 Gs bonus if a Pyrus Bakugan is present anywhere on the field`,
+    description: `During battle, this card adds 150 Gs to your Darkus Bakugan on the battle slot if you control both a Pyrus and a Darkus Bakugan on the field. If you activate this card from a slot other than the battle slot, the bonus is applied to your qualifying Bakugan on the battle slot instead.`,
     maxInDeck: 1,
     usable_in_neutral: true,
     image: "pyrus-darkus.jpg",
@@ -97,7 +97,7 @@ export const VentusHaos: abilityCardsType = {
     key: 'diagonal-combination-ventus-haos',
     name: 'Diagonal Correlation : Ventus - Haos',
     attribut: 'Ventus',
-    description: `If the user is of the Ventus attribut, they gain a 100 Gs bonus if a Haos Bakugan is present anywhere on the field`,
+    description: `During battle, this card adds 150 Gs to your Ventus Bakugan on the battle slot if you control both a Ventus and a Haos Bakugan on the field. If you activate this card from a slot other than the battle slot, the bonus is applied to your qualifying Bakugan on the battle slot instead.`,
     maxInDeck: 1,
     usable_in_neutral: true,
     onActivate({ roomState, userId, bakuganKey, slot }) {
@@ -142,7 +142,7 @@ export const HaosVentus: abilityCardsType = {
     key: 'diagonal-combination-haos-ventus',
     name: 'Diagonal Correlation : Ventus - Haos',
     attribut: 'Haos',
-    description: `If the user is of the Haos attribut, they gain a 100 Gs bonus if a Ventus Bakugan is present anywhere on the field`,
+    description: `During battle, this card adds 150 Gs to your Haos Bakugan on the battle slot if you control both a Ventus and a Haos Bakugan on the field. If you activate this card from a slot other than the battle slot, the bonus is applied to your qualifying Bakugan on the battle slot instead.`,
     maxInDeck: 1,
     usable_in_neutral: true,
     onActivate({ roomState, userId, bakuganKey, slot }) {
@@ -186,7 +186,7 @@ export const AquosSubterra: abilityCardsType = {
     key: 'diagonal-combination-aquos-subterra',
     name: 'Diagonal Correlation : Aquos - Subterra',
     attribut: 'Aquos',
-    description: `If the user is of the Aquos attribut, they gain a 100 Gs bonus if a Subterra Bakugan is present anywhere on the field`,
+    description: `During battle, this card adds 150 Gs to your Aquos Bakugan on the battle slot if you control both an Aquos and a Subterra Bakugan on the field. If you activate this card from a slot other than the battle slot, the bonus is applied to your qualifying Bakugan on the battle slot instead.`,
     maxInDeck: 1,
     usable_in_neutral: true,
     onActivate({ roomState, userId, bakuganKey, slot }) {
@@ -232,7 +232,7 @@ export const SubterraAquos: abilityCardsType = {
     key: 'diagonal-combination-subterra-aquos',
     name: 'Diagonal Correlation : Aquos - Subterra',
     attribut: 'Aquos',
-    description: `If the user is of the Subterra attribut, they gain a 100 Gs bonus if a Aquos Bakugan is present anywhere on the field`,
+    description: `During battle, this card adds 150 Gs to your Subterra Bakugan on the battle slot if you control both an Aquos and a Subterra Bakugan on the field. If you activate this card from a slot other than the battle slot, the bonus is applied to your qualifying Bakugan on the battle slot instead.`,
     maxInDeck: 1,
     usable_in_neutral: true,
     onActivate({ roomState, userId, bakuganKey, slot }) {

@@ -6,7 +6,7 @@ export const GrandEsprit: gateCardType = {
     key: 'grand-esprit',
     name: 'Grand Spirit',
     maxInDeck: 1,
-    description: `Adds 50 Gs to your Bakugan for every gate card on the field`,
+    description: `When this command gate card opens on its slot, this card adds 50 Gs to the Bakugan that opens this card on that slot for each slot with a gate card placed on the field. The bonus is reversed if this card is nullified.`,
     image: GateCardImages.command,
     onOpen({ roomState, slot, bakuganKey, userId }) {
         if (!roomState) return null

@@ -5,7 +5,7 @@ import { TentaclearHaos } from "../bakugans/tentacleer.js"
 export const SolarRay: exclusiveAbilitiesType = {
     key: 'solar-ray',
     name: 'Solar Ray',
-    description: `Add 100 G to Tentaclear and cancel all opponent's abilities on the same Gate Card`,
+    description: `During battle on the battle slot, this card adds 100 Gs to your Bakugan and nullifies all opponent exclusive abilities and ability cards currently active on that slot. Requires Tentaclear. The power bonus is reversed if this card is nullified.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

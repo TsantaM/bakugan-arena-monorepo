@@ -6,7 +6,7 @@ import { GateCardsList } from "../gate-gards.js"
 export const DestructionBuster: exclusiveAbilitiesType = {
     key: 'destruction-buster',
     name: 'Destruction Buster',
-    description: `A Fusion Ability that adds an additional +100 Gs and negate the gate card if Chaos of Darkness is activated.`,
+    description: `Fusion ability. During battle on the battle slot, if Chaos of Darkness is active on that slot, this card adds 100 Gs to your Bakugan and nullifies the opponent's open gate card on that slot if it has not already been canceled. The power bonus is reversed if this card is nullified.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

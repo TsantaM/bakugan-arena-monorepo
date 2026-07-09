@@ -6,7 +6,7 @@ import { TigrerraHaos } from "../bakugans/tigrerra.js"
 export const SabreDeLaMort: exclusiveAbilitiesType = {
     key: 'sabre-de-la-mort',
     name: 'Cut in Saber',
-    description: `Adds Tigrerra into a battle`,
+    description: `During battle, this card deploys Tigrerra onto the slot where this card is activated, or moves Tigrerra to the battle slot if Tigrerra is already on the field. Requires Tigrerra to be available in your deck and a battle to be in progress.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: true,

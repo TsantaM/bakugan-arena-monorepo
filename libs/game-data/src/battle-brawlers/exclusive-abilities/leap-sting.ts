@@ -6,7 +6,7 @@ import { portalSlotsTypeElement } from "../../type/room-types.js";
 export const LeapSting: exclusiveAbilitiesType = {
     key: 'leap-sting',
     name: 'Leap Sting',
-    description: 'Subtract 100 Gs to all opponent on the field',
+    description: `Can be used outside of battle. Requires your Bakugan to be alone on its slot and not on the battle slot during an active battle. When you activate this card, it subtracts 100 Gs from every opponent Bakugan on the field. The penalty is reversed if this card is nullified.`,
     maxInDeck: 1,
     usable_if_user_not_on_domain: false,
     usable_in_neutral: true,

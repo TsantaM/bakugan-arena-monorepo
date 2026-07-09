@@ -7,7 +7,7 @@ import { JuggernoidHaos } from "../bakugans/juggernoid.js";
 export const GardianField: exclusiveAbilitiesType = {
     key: 'guardian-field',
     name: 'Guardian Field',
-    description: 'Protect all allie Bakugan on the field against abilities and gate cards effects',
+    description: `Can be used outside of battle. Requires Juggernoid Haos. When you activate this card, every allied Bakugan on the field is protected against opponent ability cards and gate card effects until this card is nullified.`,
     maxInDeck: 1,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,

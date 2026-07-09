@@ -31,7 +31,7 @@ export const FalconeerGateCard: gateCardType = {
     name: 'Charachter: Falconeer',
     maxInDeck: 1,
     image: 'falconeer.png',
-    description: `When this card is activated, it doubles the level of all Falconeer on it.`,
+    description: `When this gate card opens on its slot, this card adds Gs to every Falconeer Bakugan on that slot equal to their current G-Power at that moment. Requires at least two Bakugan on that slot during battle. The bonus is reversed if this card is nullified.`,
     family: 'Falconeer',
     imageByAttribut: {
         Pyrus: CharacterCardByAttribut('falconeer', 'Pyrus'),

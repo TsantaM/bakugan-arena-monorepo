@@ -5,7 +5,7 @@ export const RegainSubit: exclusiveAbilitiesType = {
     key: 'regain-subit',
     name: 'Regain Subit',
     maxInDeck: 1,
-    description: `Retire 100 G à tous les bakugans adverse et ajoute 100 G à l'utilisateur`,
+    description: `During battle on the slot where this card is activated, this card adds 100 Gs to your Bakugan and subtracts 100 Gs from every opponent Bakugan on that slot.`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {

@@ -8,7 +8,7 @@ import { Bakugans } from "../../bakugans.js"
 export const QuatuorDeCombat: gateCardType = {
     key: 'quatuor-de-combat',
     name: 'Quartet Battle',
-    description: `Drag one bakugan from each player to join de battle`,
+    description: `When this command gate card opens on its slot with at least two Bakugan during battle, this card deploys the weakest available Bakugan from each player's deck onto that slot as support. Support Bakugan are removed if this card is nullified.`,
     image: GateCardImages.command,
     maxInDeck: 1,
     onOpen: ({ roomState, slot, userId }) => {

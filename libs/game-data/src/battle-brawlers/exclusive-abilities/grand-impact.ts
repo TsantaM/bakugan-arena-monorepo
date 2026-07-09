@@ -5,7 +5,7 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 export const GrandImpact: exclusiveAbilitiesType = {
     key: 'grand-impact',
     name: 'Grand Impact',
-    description: `Transfers 100 Gs from the opponent to Hammer Gorem. And prevents the opponent's Gate Card from opening`,
+    description: `During battle on the slot where this card is activated, this card adds 100 Gs to your Bakugan and subtracts 100 Gs from every opponent Bakugan on that slot. If the opponent's gate card on that slot has not opened yet, this card prevents that gate card from opening until this card is nullified.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

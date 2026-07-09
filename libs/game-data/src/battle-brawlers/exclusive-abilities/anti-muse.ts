@@ -7,7 +7,7 @@ import { DragAndElimineOnAdditional, DragAndElimineOnOpen } from "../../function
 export const AntiMuse: exclusiveAbilitiesType = {
     key: 'anti-muse',
     name: 'Anthemusa',
-    description: `Attracts all opposing Bakugans on the Gate Cards adjecent to the one where Sirenoid is located that have a lower power level, and eliminates immediately.`,
+    description: `Can be used outside of battle. Requires Sirenoid to be alone on its slot. When you activate this card, all opposing Bakugan on adjacent slots with a gate card placed that have lower G-Power than Sirenoid are eliminated, then Sirenoid returns to your deck.`,
     maxInDeck: 1,
     extraInputs: ['drag-bakugan'],
     usable_in_neutral: true,

@@ -6,7 +6,7 @@ import { GateCardsList } from "../gate-gards.js"
 export const VisageDeJoie: exclusiveAbilitiesType = {
     key: 'visage-de-joie',
     name: 'Face of Joy',
-    description: `Nullifies opponent's gate card if it's open and prevent it to open if it doesn't`,
+    description: `Can be used outside of battle. If the opponent's gate card on your slot is open, this card nullifies it. If it has not opened yet, this card prevents that gate card from opening until this card is nullified.`,
     maxInDeck: 1,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,

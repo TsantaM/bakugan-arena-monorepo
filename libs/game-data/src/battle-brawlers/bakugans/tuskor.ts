@@ -47,7 +47,7 @@ export const TuskorGateCard: gateCardType = {
     name: 'Charachter: Tuskor',
     maxInDeck: 1,
     family: 'Tuskor',
-    description: `When this card is activated, it doubles the level of all Tuskor on it.`,
+    description: `When this gate card opens on its slot, this card adds Gs to every Tuskor Bakugan on that slot equal to their current G-Power at that moment. Requires at least two Bakugan on that slot during battle. The bonus is reversed if this card is nullified.`,
     image: 'caracter-gate-cards/tuskor-pyrus.jpg',
     imageByAttribut: {
         Darkus: CharacterCardByAttribut('tuskor', 'Darkus'),

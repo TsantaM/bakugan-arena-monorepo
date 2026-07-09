@@ -4,7 +4,7 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 export const AileEnflamee: exclusiveAbilitiesType = {
     key: 'aile-enflammee',
     name: 'Wing Burst',
-    description: `Transfers 50 Gs from the opponent to user`,
+    description: `During battle on the slot where this card is activated, this card adds 50 Gs to your Bakugan and subtracts 50 Gs from every opponent Bakugan on that slot.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

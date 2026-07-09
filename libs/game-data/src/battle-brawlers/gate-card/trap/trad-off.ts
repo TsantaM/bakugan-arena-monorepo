@@ -79,7 +79,7 @@ export const Echange: gateCardType = {
     key: 'echange',
     name: 'Trade Off',
     maxInDeck: 1,
-    description: `If a Bakugan has 400 G-Power or more, it automaticaly lose`,
+    description: `When this trap gate card opens on its slot, for each player on that slot: if that player's combined G-Power on that slot is 400 or more, that player's Bakugan on that slot are eliminated; otherwise, those Bakugan return to their owner's deck. This gate card is then removed from the slot. Requires at least one player to reach 400 combined G-Power on that slot. The opponent may cancel this card with an ability card before the effect resolves.`,
     image: GateCardImages.command,
     onOpen: ({ roomState, slot, userId }) => {
 

@@ -5,7 +5,7 @@ export const BouclierFusion: exclusiveAbilitiesType = {
     key: 'bouclier-fusion',
     name: 'Merge Shield',
     maxInDeck: 1,
-    description: `If opponent Bakugan has gained Gs : the user gains G-Power equal to the amount gained`,
+    description: `During battle on the slot where this card is activated, if an opponent Bakugan on that slot has gained G-Power above its base level, this card adds Gs to your Bakugan equal to that amount gained.`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {

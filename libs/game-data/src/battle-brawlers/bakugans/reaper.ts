@@ -19,7 +19,7 @@ export const ReaperGateCard: gateCardType = {
     name: 'Charachter: Reaper',
     maxInDeck: 1,
     family: 'Reaper',
-    description: `When this card is activated, it doubles the level of all Reaper on it.`,
+    description: `When this gate card opens on its slot, this card adds Gs to every Reaper Bakugan on that slot equal to their current G-Power at that moment. Requires at least two Bakugan on that slot during battle. The bonus is reversed if this card is nullified.`,
     image: 'caracter-gate-cards/reaper-darkus.jpg',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'reaper-gate-card')

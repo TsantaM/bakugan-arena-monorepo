@@ -17,7 +17,7 @@ export const FortressGateCard: gateCardType = {
     key: 'fortress-gate-card',
     name: 'Charachter: Fortress',
     maxInDeck: 1,
-    description: `When this card is activated, it doubles the level of all Fortress on it.`,
+    description: `When this gate card opens on its slot, this card adds Gs to every Fortress Bakugan on that slot equal to their current G-Power at that moment. Requires at least two Bakugan on that slot during battle. The bonus is reversed if this card is nullified.`,
     image: 'caracter-gate-cards/fortress-pyrus.jpg',
     family: 'Fortress',
     onOpen({ roomState, slot }) {

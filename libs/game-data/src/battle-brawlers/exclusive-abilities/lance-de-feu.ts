@@ -5,7 +5,7 @@ export const LanceDeFeu: exclusiveAbilitiesType = {
     key: 'lance-de-feu',
     name: 'Fire Sword',
     maxInDeck: 1,
-    description: `Adds 100 Gs to the user`,
+    description: `During battle on the slot where this card is activated, this card adds 100 Gs to your Bakugan.`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {

@@ -7,7 +7,7 @@ export const SuperPyrus: gateCardType = {
     name: 'Super Pyrus',
     maxInDeck: 1,
     image: GateCardImages.command,
-    description: `Swaps the G-Power of your Bakugan with your opponent. (Automatically open on battle end)`,
+    description: `When this trap gate card opens on its slot with at least two Bakugan, this card equalizes combined G-Power between its owner's Bakugan and the opponent's Bakugan on that slot by transferring Gs from the stronger side to the weaker side. This card can open automatically at the end of battle before eliminations. The change is reversed if this card is nullified.`,
     activeOnBattleEnd: {
         canBeActiveBefore: true,
         autoActiveOnEnd: false,

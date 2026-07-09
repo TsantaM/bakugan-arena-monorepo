@@ -4,7 +4,7 @@ import { type abilityCardsType } from "../../type/type-index.js";
 export const SubterraPyrus: abilityCardsType = {
     key: 'combination-subterra-pyrus',
     name: 'Correlation : Subterra - Pyrus',
-    description: `If a Pyrus Bakugan bettles a Subterra Bakugan, this card increases its power by 100 Gs`,
+    description: `During battle on the battle slot, this card adds 100 Gs to your activating Pyrus Bakugan if an opponent Subterra Bakugan shares that slot. Requires at least one Pyrus Bakugan you control and one opponent Subterra Bakugan on the field.`,
     attribut: 'Pyrus',
     maxInDeck: 1,
     usable_in_neutral: false,
@@ -49,7 +49,7 @@ export const SubterraPyrus: abilityCardsType = {
 export const SubterraHaos: abilityCardsType = {
     key: 'combination-subterra-haos',
     name: 'Correlation : Subterra - Haos',
-    description: `If a Subterra Bakugan bettles Haos Bakugan, this card increases its power by 100 Gs`,
+    description: `During battle on the battle slot, this card adds 100 Gs to your activating Subterra Bakugan if an opponent Haos Bakugan shares that slot. Requires at least one Subterra Bakugan you control and one opponent Haos Bakugan on the field.`,
     attribut: 'Subterra',
     maxInDeck: 1,
     usable_in_neutral: false,
@@ -90,7 +90,7 @@ export const SubterraHaos: abilityCardsType = {
 export const HaosDarkus: abilityCardsType = {
     key: 'combination-haos-darkus',
     name: 'Correlation : Haos - Darkus',
-    description: `If a Haos Bakugan bettles a Darkus Bakugan, this card increases its power by 100 Gs`,
+    description: `During battle on the battle slot, this card adds 100 Gs to your activating Haos Bakugan if an opponent Darkus Bakugan shares that slot. Requires at least one Haos Bakugan you control and one opponent Darkus Bakugan on the field.`,
     attribut: 'Haos',
     maxInDeck: 1,
     usable_in_neutral: false,
@@ -131,7 +131,7 @@ export const HaosDarkus: abilityCardsType = {
 export const DarkusAquos: abilityCardsType = {
     key: 'combination-darkus-aquos',
     name: 'Correlation : Darkus - Aquos',
-    description: `If a Darkus Bakugan bettles a Aquos Bakugan, this card increases its power by 100 Gs`,
+    description: `During battle on the battle slot, this card adds 100 Gs to your activating Darkus Bakugan if an opponent Aquos Bakugan shares that slot. Requires at least one Darkus Bakugan you control and one opponent Aquos Bakugan on the field.`,
     attribut: 'Darkus',
     maxInDeck: 1,
     usable_in_neutral: false,
@@ -172,7 +172,7 @@ export const DarkusAquos: abilityCardsType = {
 export const AquosVentus: abilityCardsType = {
     key: 'combination-aquos-ventus',
     name: 'Correlation : Aquos - Ventus',
-    description: `If a Aquos Bakugan bettles a Ventus Bakugan, this card increases its power by 100 Gs`,
+    description: `During battle on the battle slot, this card adds 100 Gs to your activating Aquos Bakugan if an opponent Ventus Bakugan shares that slot. Requires at least one Aquos Bakugan you control and one opponent Ventus Bakugan on the field.`,
     attribut: 'Aquos',
     maxInDeck: 1,
     usable_in_neutral: false,
@@ -213,7 +213,7 @@ export const AquosVentus: abilityCardsType = {
 export const VentusPyrus: abilityCardsType = {
     key: 'combination-ventus-pyrus',
     name: 'Correlation : Ventus - Pyrus',
-    description: `If a Ventus Bakugan bettles a Pyrus Bakugan, this card increases its power by 100 Gs`,
+    description: `During battle on the battle slot, this card adds 100 Gs to your activating Ventus Bakugan if an opponent Pyrus Bakugan shares that slot. Requires at least one Ventus Bakugan you control and one opponent Pyrus Bakugan on the field.`,
     attribut: 'Pyrus',
     maxInDeck: 1,
     usable_in_neutral: false,

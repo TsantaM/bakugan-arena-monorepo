@@ -4,7 +4,7 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 export const AmunRa: exclusiveAbilitiesType = {
     key: 'amun-ra',
     name: 'Amun Ra',
-    description: `Add 100 G to Manion.`,
+    description: `During battle on the battle slot, this card adds 100 Gs to your Bakugan. The bonus is reversed if this card is nullified.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

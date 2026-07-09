@@ -5,7 +5,7 @@ import { JuggernoidAquos } from "../bakugans/juggernoid.js";
 export const DepthTornado: exclusiveAbilitiesType = {
     key: 'depth-tornado',
     name: 'Depth Tornado',
-    description: `Adds 100 Gs to Juggernoid`,
+    description: `Can be used outside of battle. Requires Juggernoid Aquos. When you activate this card, it adds 100 Gs to your Bakugan. The bonus is reversed if this card is nullified.`,
     maxInDeck: 1,
     usable_if_user_not_on_domain: false,
     usable_in_neutral: false,

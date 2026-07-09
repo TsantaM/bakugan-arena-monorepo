@@ -11,7 +11,7 @@ export const MirageAquatique: abilityCardsType = {
     key: 'mirage-aquatique',
     name: 'Dive Mirage',
     attribut: 'Aquos',
-    description: `Move an Aquos Bakugan from one gate card to another, also it prevents the opponent's gate card from opening`,
+    description: `Move your Aquos Bakugan from its current slot to another slot with a gate card placed. Can be used outside of battle. Requires at least two slots with a gate card placed and your Bakugan must not be trapped. If you move to an opponent's slot whose gate card has not opened yet, this card prevents that gate card from opening until this card is nullified.`,
     maxInDeck: 2,
     extraInputs: ["move-self"],
     usable_in_neutral: true,
@@ -106,7 +106,7 @@ export const BarrageDeau: abilityCardsType = {
     attribut: 'Aquos',
     usable_in_neutral: true,
     image: StandardCardsImages.aquos,
-    description: `This card prevents all players from using any abilities for 1 turn.`,
+    description: `This card prevents all players from playing ability cards for 1 turn. Can be used outside of battle. The block is removed if this card is nullified.`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
         BlockAbilityCardsEffect({ roomState, userId, bakuganKey, slot, card: BarrageDeau, turns: 1 })
@@ -122,7 +122,7 @@ export const BarrageDeau: abilityCardsType = {
 export const BouclierAquos: abilityCardsType = {
     key: 'bouclier-aquos',
     attribut: 'Aquos',
-    description: 'Protège contre toute capacité adverse pendant le tour',
+    description: `During battle, this card adds 100 Gs to your Bakugan on the slot where this card is activated.`,
     maxInDeck: 2,
     name: 'Bouclier Aquos',
     image: StandardCardsImages.aquos,
@@ -148,7 +148,7 @@ export const PlongeeEnEauProfonde: abilityCardsType = {
     maxInDeck: 1,
     usable_in_neutral: false,
     image: StandardCardsImages.aquos,
-    description: `Add 100 Gs to all Aquos Bakugans, substract 100 Gs to all not Aquos Bakugans.`,
+    description: `During battle on the slot where this card is activated, this card adds 100 Gs to every Aquos Bakugan and subtracts 100 Gs from every non-Aquos Bakugan on that slot.`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -197,7 +197,7 @@ export const DepthDive: abilityCardsType = {
     key: 'depth-dive',
     name: 'Depth Dive',
     attribut: 'Aquos',
-    description: `Nullifies the opponent's Gate Card`,
+    description: `During battle on the battle slot, this card nullifies the opponent's open gate card on that slot if it has not already been canceled. Requires the opponent's gate card to be open on the battle slot.`,
     maxInDeck: 2,
     usable_in_neutral: false,
     image: StandardCardsImages.haos,
@@ -258,7 +258,7 @@ export const FlowInterference: abilityCardsType = {
     key: 'flow-interference',
     attribut: 'Aquos',
     name: 'Flow Interference',
-    description: `Nullifies the opponent's ability`,
+    description: `During battle on the battle slot, this card nullifies all opponent ability cards currently active on that slot. Requires at least one cancelable opponent ability card in play on that slot.`,
     maxInDeck: 3,
     image: StandardCardsImages.haos,
     usable_in_neutral: false,

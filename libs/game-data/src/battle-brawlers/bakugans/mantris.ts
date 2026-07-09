@@ -55,7 +55,7 @@ export const MantrisGateCard: gateCardType = {
     name: 'Charachter: Mantris',
     maxInDeck: 1,
     family: 'Mantris',
-    description: `When this card is activated, it doubles the level of all Mantris on it.`,
+    description: `When this gate card opens on its slot, this card adds Gs to every Mantris Bakugan on that slot equal to their current G-Power at that moment. Requires at least two Bakugan on that slot during battle. The bonus is reversed if this card is nullified.`,
     image: GateCardImages.caracter,
     imageByAttribut: {
         Haos: CharacterCardByAttribut('mantris', 'Haos'),

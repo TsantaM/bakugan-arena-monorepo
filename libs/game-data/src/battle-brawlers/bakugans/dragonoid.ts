@@ -44,7 +44,7 @@ export const DragonoidGateCard: gateCardType = {
     name: 'Charachter: Dragonoid',
     maxInDeck: 1,
     image: 'caracter-gate-cards/dragonoid-pyrus.jpg',
-    description: `When this card is activated, it doubles the level of all Dragonoid on it.`,
+    description: `When this gate card opens on its slot, this card adds Gs to every Dragonoid Bakugan on that slot equal to their current G-Power at that moment. Requires at least two Bakugan on that slot during battle. The bonus is reversed if this card is nullified.`,
     family: 'Dragonoid',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'dragonoid-gate-card')
@@ -111,7 +111,7 @@ export const DragonoidDeltaGateCard: gateCardType = {
     name: 'Charachter: Dragonoid Delta',
     maxInDeck: 1,
     image: 'caracter-gate-cards/dragonoid-pyrus.jpg',
-    description: `When this card is activated, it doubles the level of all Delta Dragonoid on it.`,
+    description: `When this gate card opens on its slot, this card adds Gs to every Delta Dragonoid Bakugan on that slot equal to their current G-Power at that moment. Requires at least two Bakugan on that slot during battle. The bonus is reversed if this card is nullified.`,
     family: 'Dragonoid',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'dragonoid-gate-card')

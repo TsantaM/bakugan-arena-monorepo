@@ -5,7 +5,7 @@ export const AspirateurDePuissance: gateCardType = {
     key: 'aspirateur-de-puissance',
     name: 'Energy Merge',
     maxInDeck: 1,
-    description: `transfers 100 Gs from the last Bakugan Stand on the card to the first one`,
+    description: `When this trap gate card opens on its slot with at least two Bakugan during battle, this card transfers 100 Gs from the last Bakugan placed on that slot to the first one. The last Bakugan must not be protected against gate cards. The transfer is reversed if this card is nullified.`,
     image: GateCardImages.command,
     onOpen: ({ roomState, slot }) => {
         if (!roomState) return null

@@ -7,7 +7,7 @@ export const MegaFlareBlinder: exclusiveAbilitiesType = {
     key: 'mega-flare-blinder',
     name: 'Mega Flare Blinder',
     maxInDeck: 1,
-    description: `Add 100 G to Tentaclear and prevent the opponent from opening the Gate Card on the same slot as the user.`,
+    description: `Can be used outside of battle. Requires Tentaclear Haos. When you activate this card, it adds 100 Gs to your Bakugan. If the gate card on your slot has not opened yet, this card prevents that gate card from opening until this card is nullified.`,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {

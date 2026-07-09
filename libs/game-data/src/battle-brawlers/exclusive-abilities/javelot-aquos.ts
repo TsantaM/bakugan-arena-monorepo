@@ -10,7 +10,7 @@ export const JavelotAquos: exclusiveAbilitiesType = {
     key: 'javelot-aquos',
     name: 'Aquos Javelin',
     maxInDeck: 1,
-    description: `Cancel Gate card and Switches Gate Card with the one next to it`,
+    description: `During battle on the battle slot, this card swaps the gate card on your slot with the gate card on an adjacent slot that has a gate card placed. If your gate card is open, it is nullified before the swap. Requires Aquos Siege on the battle slot.`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, slot }) => {

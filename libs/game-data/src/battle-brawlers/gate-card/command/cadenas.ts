@@ -7,7 +7,7 @@ export const Cadenas: gateCardType = {
     key: "cadenas",
     name: "Lock Down",
     maxInDeck: 1,
-    description: "Cancel all opponents abilities.",
+    description: `When this command gate card opens on its slot, all opponent exclusive abilities and ability cards currently active on that slot are nullified.`,
     image: GateCardImages.command,
     onOpen({ roomState, slot }) {
 

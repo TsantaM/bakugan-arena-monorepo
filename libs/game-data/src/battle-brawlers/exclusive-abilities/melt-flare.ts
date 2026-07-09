@@ -5,7 +5,7 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 export const MeltFlare: exclusiveAbilitiesType = {
     key: 'melt-flare',
     name: 'Melt Flare',
-    description: `A Fusion Ability that adds an additional +150 Gs if Boosted Dragon is activated.`,
+    description: `Fusion ability. During battle on the battle slot, if Boosted Dragon is active on that slot, this card adds 150 Gs to your Bakugan. The bonus is reversed if this card is nullified.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

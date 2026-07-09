@@ -5,7 +5,7 @@ export const Rechargement: gateCardType = {
     key: 'rechargement',
     name: 'Reloaded',
     maxInDeck: 1,
-    description: `Adds 100 Gs to your Bakugan for each Bakugan on field with the same attribut`,
+    description: `When this command gate card opens on its slot, this card adds 100 Gs to the Bakugan that opens this card on that slot for each Bakugan on the field sharing that Bakugan's attribute. The bonus is reversed if this card is nullified.`,
     image: GateCardImages.command,
     onOpen: ({ roomState, slot, bakuganKey, userId }) => {
         if (!roomState) return null

@@ -6,7 +6,7 @@ export const DragonicExecution: exclusiveAbilitiesType = {
     key: "dragonic-execution",
     name: 'Dragonic Enforcement',
     maxInDeck: 1,
-    description: `Adds 50 Gs to the user`,
+    description: `Can be used outside of battle. When you activate this card, it adds 50 Gs to your Bakugan for the rest of the game until this card is nullified.`,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {

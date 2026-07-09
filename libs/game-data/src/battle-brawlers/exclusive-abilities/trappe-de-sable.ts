@@ -7,7 +7,7 @@ import type { bakuganToMoveType2 as bakuganToMoveType } from "../../type/type-in
 export const TrappeDeSable: exclusiveAbilitiesType = {
     key: 'trappe-de-sable',
     name: 'Sand Trap',
-    description: `Attract one Bakugan from another Gate Card to user's Gate Card and decrease his power by 50 Gs`,
+    description: `Can be used outside of battle. When you activate this card, it pulls one Bakugan from a slot with a gate card placed onto your Bakugan's slot, subtracts 50 Gs from that target, and traps it. Requires at least two Bakugan on the field and a movable target that is not trapped or protected against ability cards.`,
     maxInDeck: 1,
     extraInputs: ['drag-bakugan'],
     usable_in_neutral: true,

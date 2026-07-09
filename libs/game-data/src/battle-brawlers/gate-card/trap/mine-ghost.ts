@@ -50,7 +50,7 @@ export const MineFantome: gateCardType = {
     key: 'mine-fantome',
     name: 'Mine Ghost',
     maxInDeck: 1,
-    description: `When two ore Bakugan stand on the Card, no matter wich side they are on, they both lose`,
+    description: `When this trap gate card opens on its slot with at least two Bakugan, every Bakugan on that slot is eliminated and this gate card is removed from the slot. Turn passes to this gate card's owner. The opponent may cancel this card with an ability card before the effect resolves.`,
     image: GateCardImages.command,
     onOpen: ({ roomState, slot }) => {
 

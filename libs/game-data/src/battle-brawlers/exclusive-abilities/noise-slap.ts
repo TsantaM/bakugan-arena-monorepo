@@ -6,7 +6,7 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js";
 export const NoiseSlap: exclusiveAbilitiesType = {
     key: 'noise-slap',
     name: 'Noise Slap',
-    description: `Decrease the selected bakugan's power by 100 Gs.`,
+    description: `Can be used outside of battle. When you activate this card, it subtracts 100 Gs from a selected Bakugan on the field. Requires at least two slots with a gate card placed and at least two Bakugan on the field.`,
     maxInDeck: 1,
     usable_if_user_not_on_domain: false,
     usable_in_neutral: true,

@@ -5,7 +5,7 @@ export const VelocityFang: exclusiveAbilitiesType = {
     key: 'velocity-fang',
     name: 'Velocity Fang',
     maxInDeck: 1,
-    description: `Nullifies the opponent's ability, also subtracts 100 Gs from the opponent.`,
+    description: `During battle on the slot where this card is activated, this card nullifies all opponent exclusive abilities and ability cards currently active on that slot and subtracts 100 Gs from every opponent Bakugan on that slot.`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {

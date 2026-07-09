@@ -6,7 +6,7 @@ export const Armistice: gateCardType = {
     key: 'armistice',
     name: 'Peacemaker',
     maxInDeck: 1,
-    description: `Returns all battling Bakugan on this Gate Card to their player`,
+    description: `When this command gate card opens on its slot, every Bakugan on that slot returns to its owner's deck and this gate card is removed from the slot.`,
     image: GateCardImages.command,
     onOpen({ roomState, slot }) {
         if (!roomState) return null

@@ -12,7 +12,7 @@ export const MurDeFeu: abilityCardsType = {
     key: "mur-de-feu",
     name: "Fire Wall",
     attribut: "Pyrus",
-    description: "Substract 50 Gs from the opponents and protect the user against opponent's abilities",
+    description: `During battle on the slot where this card is activated, this card subtracts 50 Gs from every opponent Bakugan on that slot and protects your Bakugan against opponent ability cards for the rest of the battle. Both effects are reversed if this card is nullified.`,
     maxInDeck: 3,
     usable_in_neutral: false,
     image: 'FireWall.png',
@@ -86,7 +86,7 @@ export const JetEnflamme: abilityCardsType = {
     name: 'Rapid Fire',
     attribut: 'Pyrus',
     maxInDeck: 1,
-    description: `Adds another Bakugan to the battle if there are 2 or more Pyrus bakugan on the field`,
+    description: `During battle on the battle slot, this card deploys one Bakugan from your deck as support onto that slot. Requires at least two Pyrus Bakugan on the field and at least one available Bakugan in your deck. The support Bakugan is removed if this card is nullified.`,
     extraInputs: ['add-bakugan'],
     image: StandardCardsImages.pyrus,
     usable_in_neutral: false,
@@ -238,7 +238,7 @@ export const RetroAction: abilityCardsType = {
     name: 'Back Fire',
     image: StandardCardsImages.pyrus,
     usable_in_neutral: false,
-    description: `Nullifies opponent's Gate Card`,
+    description: `During battle on the battle slot, this card nullifies the opponent's open gate card on that slot if it has not already been canceled. Requires the opponent's gate card to be open on the battle slot.`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -301,7 +301,7 @@ export const TourbillonDeFeu: abilityCardsType = {
     maxInDeck: 1,
     image: 'FireTornado.png',
     usable_in_neutral: false,
-    description: `Adds 100 Gs to the user and decrease opponent power by 100 Gs`,
+    description: `During battle on the slot where this card is activated, this card adds 100 Gs to your Bakugan and subtracts 100 Gs from one opponent Bakugan on that slot. Both changes are reversed if this card is nullified.`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -359,7 +359,7 @@ export const BlazeReversal: abilityCardsType = {
     key: 'blaze-reversal',
     attribut: 'Pyrus',
     name: 'Blaze Reversal',
-    description: `Nullifies the opponent's ability`,
+    description: `During battle on the battle slot, this card nullifies all opponent ability cards currently active on that slot. Requires at least one cancelable opponent ability card in play on that slot.`,
     maxInDeck: 3,
     image: StandardCardsImages.haos,
     usable_in_neutral: false,
@@ -409,7 +409,7 @@ export const BlazeReversal: abilityCardsType = {
 export const HeatWave: abilityCardsType = {
     key: 'heat-wave',
     name: 'Heat Wave',
-    description: 'Cancel the gate card and decrease all opponents power by 50 Gs',
+    description: `During battle on the battle slot, this card subtracts 50 Gs from every opponent Bakugan on that slot. If the opponent's gate card on that slot is open and not yet canceled, this card also nullifies it.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     attribut: 'Pyrus',

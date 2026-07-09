@@ -19,7 +19,7 @@ export const PreyasGateCard: gateCardType = {
     name: 'Charachter: Preyas',
     maxInDeck: 1,
     family: 'Preyas',
-    description: `When this card is activated, it doubles the level of all Preyas on it.`,
+    description: `When this gate card opens on its slot, this card adds Gs to every Preyas Bakugan on that slot equal to their current G-Power at that moment. Requires at least two Bakugan on that slot during battle. The bonus is reversed if this card is nullified.`,
     image: 'caracter-gate-cards/preyas-aquos.jpg',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'preyas-gate-card')
@@ -98,7 +98,7 @@ export const DiabloGateCard: gateCardType = {
     name: 'Charachter: Diablo',
     maxInDeck: 1,
     family: 'Diablo',
-    description: `When this card is activated, it doubles the level of all Diablo on it.`,
+    description: `When this gate card opens on its slot, this card adds Gs to every Diablo Bakugan on that slot equal to their current G-Power at that moment. Requires at least two Bakugan on that slot during battle. The bonus is reversed if this card is nullified.`,
     image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'diablo-gate-card')
@@ -182,7 +182,7 @@ export const AngeloGateCard: gateCardType = {
     name: 'Charachter: Angelo',
     maxInDeck: 1,
     family: 'Angelo',
-    description: `When this card is activated, it doubles the level of all Angelo on it.`,
+    description: `When this gate card opens on its slot, this card adds Gs to every Angelo Bakugan on that slot equal to their current G-Power at that moment. Requires at least two Bakugan on that slot during battle. The bonus is reversed if this card is nullified.`,
     image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'angelo-gate-card')

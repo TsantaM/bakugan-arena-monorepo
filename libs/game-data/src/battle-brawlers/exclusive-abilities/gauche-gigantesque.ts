@@ -5,7 +5,7 @@ import { GateCardsList } from "../gate-gards.js"
 export const GaucheGigantesque: exclusiveAbilitiesType = {
     key: 'gauche-gigantesque',
     name: 'Left Giganti',
-    description: `Nullifies opponent's Gate Card`,
+    description: `During battle on the slot where this card is activated, this card nullifies the opponent's open gate card on that slot if it has not already been canceled.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

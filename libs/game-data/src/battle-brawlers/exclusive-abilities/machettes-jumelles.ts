@@ -5,7 +5,7 @@ export const MachettesJumelles: exclusiveAbilitiesType = {
     key: 'machettes-jumelles',
     name: 'Twin Machete',
     maxInDeck: 1,
-    description: `Adds 100 Gs to Mantris`,
+    description: `During battle on the slot where this card is activated, this card adds 100 Gs to your Bakugan. The bonus is reversed if this card is nullified.`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {

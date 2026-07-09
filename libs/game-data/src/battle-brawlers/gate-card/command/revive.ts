@@ -6,7 +6,7 @@ import { gateCardType } from "../../../type/game-data-types.js"
 export const Revive: gateCardType = {
     key: 'revive',
     name: 'Revive',
-    description: `If the user wins, all of their defeated Bakugan can be used again.`,
+    description: `When this command gate card opens automatically after battle if its owner wins, every eliminated Bakugan of that owner becomes available again.`,
     image: GateCardImages.command,
     maxInDeck: 1,
     activeOnBattleEnd: {

@@ -30,7 +30,7 @@ export const TigrerraGateCard: gateCardType = {
     name: 'Charachter: Tigrerra',
     maxInDeck: 1,
     family: 'Tigrerra',
-    description: `When this card is activated, it doubles the level of all Tigrerra on it.`,
+    description: `When this gate card opens on its slot, this card adds Gs to every Tigrerra Bakugan on that slot equal to their current G-Power at that moment. Requires at least two Bakugan on that slot during battle. The bonus is reversed if this card is nullified.`,
     image: 'caracter-gate-cards/tigrerra-haos.jpg',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'tigrerra-gate-card')
