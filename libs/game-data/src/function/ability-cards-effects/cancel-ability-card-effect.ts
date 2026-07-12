@@ -1,4 +1,5 @@
 import { AbilityCardsList, BakuganList, ExclusiveAbilitiesList } from "../../battle-brawlers/index.js"
+import { pushReplayAnimation } from "../replay/push-replay-animation.js";
 import { AnimationDirectivesTypes } from "../../type/animations-directives.js"
 import { activateAbilities, portalSlotsTypeElement, stateType } from "../../type/room-types.js"
 
@@ -32,7 +33,7 @@ export function CancelAbilityCardEffect({ roomState, slotOfGate, ability }: Canc
     }
 
     roomState.animations.push(animation)
-    roomState.animationsForReplay.push(animation)
+    pushReplayAnimation(roomState, animation)
 
     abilityData.onCanceled({
         bakuganKey: ability.bakuganKey,

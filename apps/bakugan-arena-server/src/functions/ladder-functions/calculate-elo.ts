@@ -1,7 +1,7 @@
 import { schema } from "@bakugan-arena/drizzle-orm"
 import { and, eq, inArray } from "drizzle-orm"
 import { db } from "../../lib/db"
-import { AnimationDirectivesTypes, Message, stateType } from "@bakugan-arena/game-data"
+import { AnimationDirectivesTypes, Message, replayEntryType, replaySnapshotType, stateType } from "@bakugan-arena/game-data"
 import { Server } from "socket.io/dist"
 
 function getK(elo: number): number {
@@ -31,11 +31,11 @@ export async function CalculateAndUpdateElo({ winner, loser, roomData, io, roomI
         io.to(roomId).emit('game-finished', message)
 
         // ENVOI DES ANIMATIONS AUX JOUEURS POUR LE DOWNLOAD OU L'UPLOAD
-        const room: { p1: string, p2: string, roomId: string, finished: boolean, animations: AnimationDirectivesTypes[] } = {
+        const room: { p1: string, p2: string, roomId: string, finished: boolean, replay: replayEntryType[], initialSnapshot: replaySnapshotType } = {
             roomId: roomData.roomId,
             p1: roomData.players[0].userId,
             p2: roomData.players[1].userId,
-            animations: roomData.animationsForReplay,
+            replay: roomData.animationsForReplay, initialSnapshot: roomData.initialReplaySnapshot,
             finished: roomData.status.finished
         }
         roomData.connectedsUsers.forEach((player) => {
@@ -114,11 +114,11 @@ export async function CalculateAndUpdateElo({ winner, loser, roomData, io, roomI
     io.to(roomId).emit('game-finished', message)
 
     // ENVOI DES ANIMATIONS AUX JOUEURS POUR LE DOWNLOAD OU L'UPLOAD
-    const room: { p1: string, p2: string, roomId: string, finished: boolean, animations: AnimationDirectivesTypes[] } = {
+    const room: { p1: string, p2: string, roomId: string, finished: boolean, replay: replayEntryType[], initialSnapshot: replaySnapshotType } = {
         roomId: roomData.roomId,
         p1: roomData.players[0].userId,
         p2: roomData.players[1].userId,
-        animations: roomData.animationsForReplay,
+        replay: roomData.animationsForReplay, initialSnapshot: roomData.initialReplaySnapshot,
         finished: roomData.status.finished
     }
     roomData.connectedsUsers.forEach((player) => {

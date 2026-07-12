@@ -23,7 +23,7 @@ export const RegainSubit: exclusiveAbilitiesType = {
                     powerChange: 100,
                     malus: false,
                     turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                 })
                 opponents.forEach((opponent) => {
@@ -35,7 +35,7 @@ export const RegainSubit: exclusiveAbilitiesType = {
                     powerChange: 100,
                     malus: true,
                     turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                 })
             }

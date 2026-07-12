@@ -5,7 +5,7 @@ import { ConvertReplayToJson } from "@/src/actions/battlefield/convert-replay-to
 import { UploadReplay } from "@/src/actions/replay/uploard-raplay-action"
 import { Room, useRoomsStore } from "@/src/store/rooms-store"
 import { useSocketStore } from "@/src/store/socket-id-store"
-import { AnimationDirectivesTypes, playerDataType } from "@bakugan-arena/game-data"
+import { playerDataType, replayEntryType, replaySnapshotType } from "@bakugan-arena/game-data"
 import { useMutation } from "@tanstack/react-query"
 import { Download, Upload } from "lucide-react"
 import { useEffect, useState } from "react"
@@ -16,31 +16,30 @@ export default function DownloadAndUploadReplay({ roomId, player1, player2 }: { 
     const room = useRoomsStore((state) => state.rooms).find((r) => r.roomId === roomId)
     const updateRoom = useRoomsStore((state) => state.updateRoom)
     const socket = useSocketStore((state) => state.socket)
-    const [animations, setAnimations] = useState<AnimationDirectivesTypes[] | undefined>(undefined)
+    const [replay, setReplay] = useState<replayEntryType[] | undefined>(undefined)
+    const [initialSnapshot, setInitialSnapshot] = useState<replaySnapshotType | undefined>(undefined)
 
     useEffect(() => {
         if (!socket) return
 
         socket.on('final-room-state', (room: Room) => {
-            // alert('eh')
-            // console.log(room)
             updateRoom(room)
-            if (!room.animations) return
-            setAnimations(room.animations)
+            if (!room.replay) return
+            setReplay(room.replay)
+            setInitialSnapshot(room.initialSnapshot)
         })
 
-    }, [socket])
+    }, [socket, updateRoom])
 
 
     async function handleDownload() {
-        // console.log(room)
         if (!room) return
         if (!player1) return
         if (!player2) return
-        if (!animations) return
-        // console.log(animations)
+        if (!replay) return
+        if (!initialSnapshot) return
 
-        const json = await ConvertReplayToJson({ replay: animations, player1, player2, roomId })
+        const json = await ConvertReplayToJson({ replay, initialSnapshot, player1, player2, roomId })
 
         const blob = new Blob([json], {
             type: "application/json"
@@ -59,10 +58,9 @@ export default function DownloadAndUploadReplay({ roomId, player1, player2 }: { 
 
     }
 
-    // ================== UPLOAD MUTATION ==================
     const uploadMutation = useMutation({
         mutationFn: async () => {
-            if (!room || !player1 || !player2 || !animations) {
+            if (!room || !player1 || !player2 || !replay || !initialSnapshot) {
                 throw new Error("Missing data for upload")
             }
 
@@ -70,7 +68,8 @@ export default function DownloadAndUploadReplay({ roomId, player1, player2 }: { 
                 roomId,
                 player1,
                 player2,
-                replay: animations
+                replay,
+                initialSnapshot,
             })
         },
         onSuccess: () => {
@@ -82,16 +81,13 @@ export default function DownloadAndUploadReplay({ roomId, player1, player2 }: { 
     })
 
 
-    // ================== HANDLE UPLOAD ==================
     function handleUpload() {
-        if (!room || !player1 || !player2 || !animations) return
+        if (!room || !player1 || !player2 || !replay || !initialSnapshot) return
         uploadMutation.mutate()
     }
 
-    // const checker = !room || !room.finished && !room.animations ? true : false
-
     if (!room) return null
-    if (!room.finished && !room.animations) return null
+    if (!room.finished && !room.replay) return null
     if (!player1 || !player2) return null
 
     return (

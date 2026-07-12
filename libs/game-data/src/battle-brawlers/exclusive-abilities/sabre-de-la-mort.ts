@@ -58,6 +58,8 @@ export const SabreDeLaMort: exclusiveAbilitiesType = {
 
                         SetBakuganAndAddRenfortAnimationDirective({
                             animations: roomState.animations,
+                    
+                    roomState: roomState,
                             bakugan: usersBakugan,
                             slot: structuredClone(slotOfGate),
                             turn: roomState.turnState.turnCount
@@ -106,7 +108,7 @@ export const SabreDeLaMort: exclusiveAbilitiesType = {
                             initialSlot: structuredClone(slotOfGate),
                             newSlot: structuredClone(battleSlot),
                             turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                         });
 
@@ -120,6 +122,7 @@ export const SabreDeLaMort: exclusiveAbilitiesType = {
                         // console.log('tigrerra eh7', sameTeam)
                             AddRenfortAnimationDirective({
                                 animations: roomState.animations,
+                roomState: roomState,
                                 bakugan: newBakuganState,
                                 slot: battleSlot,
                                 turn: roomState.turnState.turnCount

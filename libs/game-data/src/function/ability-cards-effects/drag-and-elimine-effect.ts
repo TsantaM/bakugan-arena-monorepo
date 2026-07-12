@@ -20,7 +20,7 @@ export function DragAndElimineBakuganEffect({ bakugan, roomState, cardUser, init
         user: cardUser,
         initialSlot: initialSlot,
         turn: roomState.turnState.turnCount,
-        animationsForReplay: roomState.animationsForReplay
+        roomState: roomState
 
     })
 

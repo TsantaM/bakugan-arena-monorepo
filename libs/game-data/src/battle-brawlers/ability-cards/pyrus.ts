@@ -170,6 +170,8 @@ export const JetEnflamme: abilityCardsType = {
                 bakugan.bakuganData.onDomain = true
                 SetBakuganAndAddRenfortAnimationDirective({
                     animations: roomState.animations,
+                    
+                    roomState: roomState,
                     bakugan: newBakugan,
                     slot: slotOfGate,
                     turn: roomState.turnState.turnCount
@@ -195,14 +197,14 @@ export const JetEnflamme: abilityCardsType = {
                         animations: roomState.animations,
                         bakugan: a,
                         slot: slotToUpdate,
-                        animationsForReplay: roomState.animationsForReplay
+                        roomState: roomState
 
                     })
                     RemoveRenfortAnimationDirective({
                         animations: roomState.animations,
                         bakugan: a,
                         turnCount: roomState.turnState.turnCount,
-                        animationsForReplay: roomState.animationsForReplay
+                        roomState: roomState
 
                     })
                 }
@@ -252,7 +254,7 @@ export const RetroAction: abilityCardsType = {
                     animations: roomState.animations,
                     slot: structuredClone(slotOfGate),
                     turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
 
                 })
@@ -429,7 +431,7 @@ export const HeatWave: abilityCardsType = {
                 animations: roomState.animations,
                 slot: slotOfGate,
                 turn: roomState.turnState.turnCount,
-                animationsForReplay: roomState.animationsForReplay
+                roomState: roomState
 
             })
             if (gateCard && gateCard.onCanceled) {

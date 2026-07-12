@@ -81,6 +81,8 @@ export const TripleCombat: gateCardType = {
                     slotToUpdate.state.open = true
                     SetBakuganAndAddRenfortAnimationDirective({
                         animations: roomState.animations,
+                    
+                    roomState: roomState,
                         bakugan: usersBakugan,
                         slot: slotToUpdate,
                         turn: roomState.turnState.turnCount
@@ -108,7 +110,7 @@ export const TripleCombat: gateCardType = {
                     animations: roomState.animations,
                     bakugan: a,
                     turnCount: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                 })
             })

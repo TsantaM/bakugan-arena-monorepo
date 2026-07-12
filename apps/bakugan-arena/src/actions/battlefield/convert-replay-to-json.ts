@@ -1,14 +1,27 @@
 'use server'
 
-import { AnimationDirectivesTypes, playerDataType, replayDataType } from "@bakugan-arena/game-data";
+import { playerDataType, replayDataType, replayEntryType, replaySnapshotType } from "@bakugan-arena/game-data";
 
-export async function ConvertReplayToJson({replay, player1, player2, roomId } : {replay: AnimationDirectivesTypes[], roomId: string, player1: playerDataType, player2: playerDataType}) {
+export async function ConvertReplayToJson({
+    replay,
+    initialSnapshot,
+    player1,
+    player2,
+    roomId,
+}: {
+    replay: replayEntryType[]
+    initialSnapshot: replaySnapshotType
+    roomId: string
+    player1: playerDataType
+    player2: playerDataType
+}) {
 
     const data: replayDataType = {
         roomId: roomId,
         player1: player1,
         player2: player2,
-        replay: replay 
+        initialSnapshot,
+        replay,
     }
 
     return JSON.stringify(data, null, 2)

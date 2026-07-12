@@ -1,8 +1,8 @@
 import { BakuganList } from "../../battle-brawlers/bakugans.js";
-import type { AnimationDirectivesTypes, attribut, portalSlotsType, portalSlotsTypeElement } from "../../type/type-index.js";
+import type { AnimationDirectivesTypes, attribut, portalSlotsType, portalSlotsTypeElement, stateType } from "../../type/type-index.js";
 import { PowerChangeDirectiveAnumation } from "../create-animation-directives/power-change.js";
 
-export function DiagonalCombinationEffect({ animationsForReplay, slotOfGate, bakuganKey, userId, attribut, attributWeak, portalSlots, animations, turn }: { animationsForReplay: AnimationDirectivesTypes[], slotOfGate: portalSlotsTypeElement, bakuganKey: string, userId: string, attribut: attribut, attributWeak: attribut, portalSlots: portalSlotsType, animations: AnimationDirectivesTypes[], turn: number }) {
+export function DiagonalCombinationEffect({ roomState, slotOfGate, bakuganKey, userId, attribut, attributWeak, portalSlots, animations, turn }: { roomState: stateType, slotOfGate: portalSlotsTypeElement, bakuganKey: string, userId: string, attribut: attribut, attributWeak: attribut, portalSlots: portalSlotsType, animations: AnimationDirectivesTypes[], turn: number }) {
     const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
     const userSecondAttribut = BakuganList.find((b) => b.key === user?.key)
     const userAttribut = [user?.attribut, userSecondAttribut?.seconaryAttribut]
@@ -19,7 +19,7 @@ export function DiagonalCombinationEffect({ animationsForReplay, slotOfGate, bak
                 powerChange: 150,
                 malus: false,
                 turn: turn,
-                animationsForReplay
+                roomState
             })
         }
     }

@@ -83,6 +83,8 @@ export const QuatuorDeCombat: gateCardType = {
                     userWeakest.bakuganData.onDomain = true
                     SetBakuganAndAddRenfortAnimationDirective({
                         animations: roomState.animations,
+                    
+                    roomState: roomState,
                         bakugan: usersBakugan,
                         slot: slotToUpdate,
                         turn: roomState.turnState.turnCount
@@ -128,6 +130,8 @@ export const QuatuorDeCombat: gateCardType = {
                     slotToUpdate.state.open = true
                     SetBakuganAndAddRenfortAnimationDirective({
                         animations: roomState.animations,
+                    
+                    roomState: roomState,
                         bakugan: opponentBakugan,
                         slot: slotToUpdate,
                         turn: roomState.turnState.turnCount
@@ -160,7 +164,7 @@ export const QuatuorDeCombat: gateCardType = {
                     animations: roomState.animations,
                     bakugan: a,
                     turnCount: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                 })
             })

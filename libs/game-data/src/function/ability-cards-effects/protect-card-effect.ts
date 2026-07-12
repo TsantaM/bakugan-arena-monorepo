@@ -1,4 +1,5 @@
 import { Bakugans } from "../../battle-brawlers/bakugans.js"
+import { pushReplayAnimation } from "../replay/push-replay-animation.js";
 import { GateCards } from "../../battle-brawlers/gate-gards.js"
 import { AbilityCards, ExclusiveAbilities } from "../../battle-brawlers/index.js"
 import { AnimationDirectivesTypes, Message } from "../../type/animations-directives.js"
@@ -55,7 +56,7 @@ export function ProtectCardEffect({ bakugan, cardKey, origin, roomState, protect
         }
 
         roomState.animations.push(animation)
-        roomState.animationsForReplay.push(animation)
+        pushReplayAnimation(roomState, animation)
 
 
     }
@@ -97,7 +98,7 @@ export function RemoveProtectionCardEffect({ bakugan, cardKey, origin, protectio
         }
 
         roomState.animations.push(animation)
-        roomState.animationsForReplay.push(animation)
+        pushReplayAnimation(roomState, animation)
 
     } else {
         const text: string = `${Bakugans[bakugan.key].name} isn't protected.`;

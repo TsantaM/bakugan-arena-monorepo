@@ -96,7 +96,7 @@ export const RobotallionGateCard: gateCardType = {
             powerChange: basePower,
             malus: false,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
 
@@ -119,7 +119,7 @@ export const RobotallionGateCard: gateCardType = {
             powerChange: basePower,
             malus: true,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
 

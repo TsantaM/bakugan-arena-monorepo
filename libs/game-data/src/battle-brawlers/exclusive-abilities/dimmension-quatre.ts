@@ -30,7 +30,7 @@ export const DimmensionQuatre: exclusiveAbilitiesType = {
                     animations: roomState.animations,
                     slot: slotOfGate,
                     turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                 })
                 card.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })

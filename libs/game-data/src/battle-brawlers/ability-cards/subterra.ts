@@ -1,4 +1,5 @@
 import { ElementaryCardCancelerEffect } from "../../function/ability-cards-effects/elementary-card-canceler-effect.js";
+import { pushReplayAnimation } from "../../function/replay/push-replay-animation.js";
 import { AbilityCardFailed, CancelGateCardDirectiveAnimation, getJuxtaposablesSlots, PowerChange, PowerChangeDirectiveAnumation, SwipeGateCardEffect } from "../../function/index.js";
 import { NewAdditionnalMessage } from "../../function/new-additional-message.js";
 import { Slots, StandardCardsImages } from "../../store/store-index.js";
@@ -48,7 +49,7 @@ export const MagmaSupreme: abilityCardsType = {
                             resolved: false
                         }
                         roomState?.animations.push(animation)
-                        roomState.animationsForReplay.push(animation)
+                        pushReplayAnimation(roomState, animation)
 
                         newGate.onOpen({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
                     }
@@ -245,7 +246,7 @@ export const CopieConforme: abilityCardsType = {
                     powerChange: 100,
                     malus: false,
                     turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                 })
             }
@@ -275,7 +276,7 @@ export const EarthShatter: abilityCardsType = {
                     animations: roomState.animations,
                     slot: slotOfGate,
                     turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                 })
                 if (gateToCancel && gateToCancel.onCanceled) {

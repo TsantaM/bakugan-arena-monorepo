@@ -62,8 +62,7 @@ function EchangeMainEffect({ roomState, slotOfGate, userId }: { roomState: state
     RemoveGateCardDirectiveAnimation({
         animations: roomState.animations,
         slot: slotOfGate,
-        roomState,
-        animationsForReplay: roomState.animationsForReplay
+        roomState: roomState
 
     })
 
@@ -141,8 +140,7 @@ export const Echange: gateCardType = {
                     RemoveGateCardDirectiveAnimation({
                         animations: roomState.animations,
                         slot: slotOfGate,
-                        roomState,
-                        animationsForReplay: roomState.animationsForReplay
+                        roomState: roomState
 
                     })
 

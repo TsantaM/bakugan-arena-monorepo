@@ -21,7 +21,7 @@ export const VisageDeJoie: exclusiveAbilitiesType = {
                     animations: roomState.animations,
                     slot: slotOfGate,
                     turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                 })
 

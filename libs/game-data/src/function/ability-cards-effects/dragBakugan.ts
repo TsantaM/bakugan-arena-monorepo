@@ -85,7 +85,7 @@ export function dragBakuganToUserSlot({
         initialSlot: structuredClone(slotTarget),
         newSlot: structuredClone(slotOfGate),
         turn: roomState.turnState.turnCount,
-        animationsForReplay: roomState.animationsForReplay
+        roomState: roomState
     });
 
     // --- Gate Card Effect on Set bakugan
@@ -115,6 +115,7 @@ export function dragBakuganToUserSlot({
         if (sameTeam) {
             AddRenfortAnimationDirective({
                 animations: roomState.animations,
+                roomState: roomState,
                 bakugan: bakuganToDrag,
                 slot: slotOfGate,
                 turn: roomState.turnState.turnCount

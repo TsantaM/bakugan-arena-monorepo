@@ -25,7 +25,7 @@ export const AspirateurDePuissance: gateCardType = {
                 powerChange: 100,
                 malus: false,
                 turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
 
             })
@@ -36,7 +36,7 @@ export const AspirateurDePuissance: gateCardType = {
                 powerChange: 100,
                 malus: true,
                 turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
 
             })
@@ -61,7 +61,7 @@ export const AspirateurDePuissance: gateCardType = {
                 powerChange: 100,
                 malus: true,
                 turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
 
             })
@@ -72,7 +72,7 @@ export const AspirateurDePuissance: gateCardType = {
                 powerChange: 100,
                 malus: false,
                 turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
             })
             slotOfGate.state.canceled = true

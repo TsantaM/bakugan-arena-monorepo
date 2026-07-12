@@ -1,4 +1,5 @@
 import { GateCards } from "../battle-brawlers/gate-gards.js";
+import { pushReplayAnimation } from "./replay/push-replay-animation.js";
 import { AnimationDirectivesTypes, portalSlotsTypeElement, type stateType } from "../type/type-index.js";
 import { RemoveGateCardDirectiveAnimation } from "./create-animation-directives/index.js";
 import { GetUserName } from "./get-user-name.js";
@@ -47,7 +48,7 @@ export const finalizeBattle = ({ roomData, winnerId, winners, loserId, loosers, 
             }
 
             roomData.animations.push(animation)
-            roomData.animationsForReplay.push(animation)
+            pushReplayAnimation(roomData, animation)
 
 
             card.onOpen({ roomState: roomData, slot: battleState.slot, looserId: loserId, winnerId: winnerId, winners: winners, loosers: loosers })
@@ -60,8 +61,6 @@ export const finalizeBattle = ({ roomData, winnerId, winners, loserId, loosers, 
         animations: roomData.animations,
         slot: slotToUpdate,
         roomState: roomData,
-        animationsForReplay: roomData.animationsForReplay
-
     })
 
     if (slotToUpdate) ResetSlot(slotToUpdate)
@@ -78,7 +77,7 @@ export const finalizeBattle = ({ roomData, winnerId, winners, loserId, loosers, 
         resolved: false
     }
     roomData.animations.push(animation)
-    roomData.animationsForReplay.push(animation)
+    pushReplayAnimation(roomData, animation)
 
 
 }

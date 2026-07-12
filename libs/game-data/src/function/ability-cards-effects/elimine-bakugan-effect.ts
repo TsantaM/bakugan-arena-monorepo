@@ -24,7 +24,7 @@ export function ElimineBakuganEffect({ bakugan, roomState, gateCardProtection }:
         bakugan: bakugan,
         slot: structuredClone(slotOfGate),
         turn: roomState.turnState.turnCount,
-        animationsForReplay: roomState.animationsForReplay
+        roomState: roomState
 
     })
 

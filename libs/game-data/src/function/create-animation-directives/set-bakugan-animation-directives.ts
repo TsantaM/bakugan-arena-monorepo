@@ -1,16 +1,17 @@
-import type { AnimationDirectivesTypes, bakuganOnSlot, portalSlotsTypeElement } from '../../type/type-index.js';
+import type { AnimationDirectivesTypes, bakuganOnSlot, portalSlotsTypeElement, stateType } from '../../type/type-index.js';
+import { pushReplayAnimation } from '../replay/push-replay-animation.js';
 
 
 type Props = {
     bakugan: bakuganOnSlot,
     slot: portalSlotsTypeElement
     animations: AnimationDirectivesTypes[];
-    animationsForReplay: AnimationDirectivesTypes[];
+    roomState: stateType;
 }
 
-type SetBakuganDirectiveAnimationType = ({ animations, bakugan, slot, animationsForReplay }: Props) => void
+type SetBakuganDirectiveAnimationType = ({ animations, bakugan, slot, roomState }: Props) => void
 
-export const SetBakuganDirectiveAnimation: SetBakuganDirectiveAnimationType = ({ animations, bakugan, slot, animationsForReplay }) => {
+export const SetBakuganDirectiveAnimation: SetBakuganDirectiveAnimationType = ({ animations, bakugan, slot, roomState }) => {
     const comeBackBakuganDirective: AnimationDirectivesTypes = {
         type: 'SET_BAKUGAN',
         data: {
@@ -21,5 +22,5 @@ export const SetBakuganDirectiveAnimation: SetBakuganDirectiveAnimationType = ({
     }
 
     animations.push(comeBackBakuganDirective)
-    animationsForReplay.push(comeBackBakuganDirective)
+    pushReplayAnimation(roomState, comeBackBakuganDirective)
 }

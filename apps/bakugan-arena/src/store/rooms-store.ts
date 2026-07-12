@@ -1,8 +1,15 @@
 // src/store/roomsStore.ts
-import { AnimationDirectivesTypes } from '@bakugan-arena/game-data'
+import { replayEntryType, replaySnapshotType } from '@bakugan-arena/game-data'
 import { create } from 'zustand'
 
-export type Room = { p1: string, p2: string, roomId: string, finished: boolean, animations?: AnimationDirectivesTypes[] }
+export type Room = {
+    p1: string
+    p2: string
+    roomId: string
+    finished: boolean
+    replay?: replayEntryType[]
+    initialSnapshot?: replaySnapshotType
+}
 
 interface RoomsStore {
   rooms: Room[]

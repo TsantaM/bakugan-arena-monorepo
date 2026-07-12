@@ -15,7 +15,7 @@ export function CaracterGateCardEffect({ roomState, slotOfGate, family }: { room
                 powerChange: basePower,
                 malus: false,
                 turn: roomState.turnState.turnCount,
-                animationsForReplay: roomState.animationsForReplay
+                roomState: roomState
 
             })
         })
@@ -37,7 +37,7 @@ export function CancelCaracterGateCard({ roomState, slotOfGate, family }: { room
                 powerChange: basePower,
                 malus: true,
                 turn: roomState.turnState.turnCount,
-                animationsForReplay: roomState.animationsForReplay
+                roomState: roomState
 
             })
         })

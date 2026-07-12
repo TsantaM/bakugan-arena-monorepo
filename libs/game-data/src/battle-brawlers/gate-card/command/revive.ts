@@ -1,4 +1,5 @@
 import { GateCardImages } from "../../../store/gate-card-images.js"
+import { pushReplayAnimation } from "../../../function/replay/push-replay-animation.js";
 import { Slots } from "../../../store/slots.js"
 import { AnimationDirectivesTypes } from "../../../type/animations-directives.js"
 import { gateCardType } from "../../../type/game-data-types.js"
@@ -54,7 +55,7 @@ export const Revive: gateCardType = {
                 }
 
                 roomState.animations.push(animation)
-                roomState.animationsForReplay.push(animation)
+                pushReplayAnimation(roomState, animation)
 
             })
         }

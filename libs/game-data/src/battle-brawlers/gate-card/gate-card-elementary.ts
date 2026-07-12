@@ -37,7 +37,7 @@ export const ReacteurPyrus: gateCardType = {
             powerChange: 100,
             malus: false,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
 
@@ -58,7 +58,7 @@ export const ReacteurPyrus: gateCardType = {
             powerChange: 100,
             malus: true,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
 
@@ -98,7 +98,7 @@ export const ReacteurHaos: gateCardType = {
             powerChange: 100,
             malus: false,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
     },
@@ -117,7 +117,7 @@ export const ReacteurHaos: gateCardType = {
             powerChange: 100,
             malus: true,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
     },
@@ -167,7 +167,7 @@ export const ReacteurVentus: gateCardType = {
             powerChange: 100,
             malus: false,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
     },
@@ -186,7 +186,7 @@ export const ReacteurVentus: gateCardType = {
             powerChange: 100,
             malus: true,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
     },
@@ -230,7 +230,7 @@ export const ReacteurAquos: gateCardType = {
             powerChange: 100,
             malus: false,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
     },
@@ -249,7 +249,7 @@ export const ReacteurAquos: gateCardType = {
             powerChange: 100,
             malus: true,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
     },
@@ -293,7 +293,7 @@ export const ReacteurSubterra: gateCardType = {
             powerChange: 100,
             malus: false,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
     },
@@ -312,7 +312,7 @@ export const ReacteurSubterra: gateCardType = {
             powerChange: 100,
             malus: true,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
     },
@@ -356,7 +356,7 @@ export const ReacteurDarkus: gateCardType = {
             powerChange: 100,
             malus: false,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
     },
@@ -375,7 +375,7 @@ export const ReacteurDarkus: gateCardType = {
             powerChange: 100,
             malus: true,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
     },

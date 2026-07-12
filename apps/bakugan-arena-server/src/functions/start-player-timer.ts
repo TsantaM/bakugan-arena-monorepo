@@ -1,4 +1,4 @@
-import { AnimationDirectivesTypes, Message, stateType } from "@bakugan-arena/game-data";
+import { AnimationDirectivesTypes, Message, replayEntryType, replaySnapshotType, stateType } from "@bakugan-arena/game-data";
 import { Server } from "socket.io/dist";
 import { db } from "../lib/db"
 import { eq } from "drizzle-orm"
@@ -314,11 +314,11 @@ export function StartTwoTimers({ roomState, io, roomId }: { roomState: stateType
                 io.to(roomId).emit('game-finished', message)
 
                 // ENVOI DES ANIMATIONS AUX JOUEURS POUR LE DOWNLOAD OU L'UPLOAD
-                const roomData: { p1: string, p2: string, roomId: string, finished: boolean, animations: AnimationDirectivesTypes[] } = {
+                const roomData: { p1: string, p2: string, roomId: string, finished: boolean, replay: replayEntryType[], initialSnapshot: replaySnapshotType } = {
                     roomId: roomState.roomId,
                     p1: roomState.players[0].userId,
                     p2: roomState.players[1].userId,
-                    animations: roomState.animationsForReplay,
+                    replay: roomState.animationsForReplay, initialSnapshot: roomState.initialReplaySnapshot,
                     finished: roomState.status.finished
                 }
                 roomState.connectedsUsers.forEach((player) => {

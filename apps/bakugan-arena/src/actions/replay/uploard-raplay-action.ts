@@ -1,9 +1,9 @@
 'use server'
 
 import {
-    AnimationDirectivesTypes,
     playerDataType,
-    replayDataType
+    replayDataType,
+    replayEntryType,
 } from "@bakugan-arena/game-data"
 
 import { db } from "@/src/lib/db"
@@ -12,7 +12,8 @@ import { schema } from "@bakugan-arena/drizzle-orm"
 const replaySchema = schema.replay
 
 type Props = {
-    replay: AnimationDirectivesTypes[],
+    replay: replayEntryType[],
+    initialSnapshot: replayDataType["initialSnapshot"],
     roomId: string,
     player1: playerDataType,
     player2: playerDataType
@@ -45,12 +46,13 @@ export async function UploadReplay({
     roomId,
     player1,
     player2,
-    replay
+    replay,
+    initialSnapshot,
 }: Props) {
 
     try {
         // ---------- VALIDATION ----------
-        if (!roomId || !player1 || !player2 || !replay) {
+        if (!roomId || !player1 || !player2 || !replay || !initialSnapshot) {
             throw new InvalidReplayDataError()
         }
 
@@ -68,7 +70,8 @@ export async function UploadReplay({
             roomId,
             player1,
             player2,
-            replay
+            initialSnapshot,
+            replay,
         }
 
         const title = `Bakugan-Arena-${player1.displayUsername}-VS-${player2.displayUsername}-${roomId}`
@@ -97,7 +100,7 @@ export async function UploadReplay({
             typeof error === "object" &&
             error !== null &&
             "code" in error &&
-            (error as any).code === "23505"
+            (error as { code: string }).code === "23505"
         ) {
             throw new ReplayAlreadyExistsError(roomId)
         }

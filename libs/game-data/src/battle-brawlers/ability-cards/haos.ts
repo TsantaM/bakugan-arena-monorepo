@@ -42,7 +42,7 @@ export const RapideHaos: abilityCardsType = {
                     powerChange: 100,
                     malus: false,
                     turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                 })
             }
@@ -141,6 +141,8 @@ export const EclatSoudain: abilityCardsType = {
                 bakugan.bakuganData.onDomain = true
                 SetBakuganAndAddRenfortAnimationDirective({
                     animations: roomState.animations,
+                    
+                    roomState: roomState,
                     bakugan: newBakugan,
                     slot: slotOfGate,
                     turn: roomState.turnState.turnCount
@@ -164,7 +166,7 @@ export const EclatSoudain: abilityCardsType = {
                     animations: roomState?.animations,
                     bakugan: a,
                     slot: slotToUpdate,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                 })
 
@@ -172,7 +174,7 @@ export const EclatSoudain: abilityCardsType = {
                     animations: roomState.animations,
                     turnCount: roomState.turnState.turnCount,
                     bakugan: a,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                 })
 
@@ -230,7 +232,7 @@ export const LumiereDivine: abilityCardsType = {
                     powerChange: 100,
                     malus: false,
                     turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
 
                 })
@@ -348,7 +350,7 @@ export const HaosImmobilisation: abilityCardsType = {
                     powerChange: 100,
                     malus: true,
                     turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
 
                 })
@@ -396,7 +398,7 @@ export const SupportLight: abilityCardsType = {
                     animations: roomState.animations,
                     slot: slotOfGate,
                     turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                 })
                 if (gateToCancel && gateToCancel.onCanceled) {

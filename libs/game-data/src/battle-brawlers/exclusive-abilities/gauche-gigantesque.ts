@@ -22,7 +22,7 @@ export const GaucheGigantesque: exclusiveAbilitiesType = {
                         animations: roomState?.animations,
                         slot: structuredClone(slotOfGate),
                         turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                     })
 

@@ -72,7 +72,7 @@ export const SouffleInfini: exclusiveAbilitiesType = {
                     powerChange: 50,
                     malus: true,
                     turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                 })
 
@@ -89,7 +89,7 @@ export const SouffleInfini: exclusiveAbilitiesType = {
                     initialSlot: slotTarget,
                     newSlot: slotOfGate,
                     turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                 })
                 CheckBattle({ roomState: roomState })

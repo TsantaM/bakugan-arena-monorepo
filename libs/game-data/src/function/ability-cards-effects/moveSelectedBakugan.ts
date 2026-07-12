@@ -81,7 +81,7 @@ export function moveSelectedBakugan({
                 animations: roomState.animations,
                 bakugan: structuredClone(bakugan),
                 turnCount: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
             })
         }
@@ -107,7 +107,7 @@ export function moveSelectedBakugan({
         initialSlot: structuredClone(initialSlot),
         newSlot: structuredClone(slotTarget),
         turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
     });
 
@@ -136,6 +136,7 @@ export function moveSelectedBakugan({
         if (sameTeam) {
             AddRenfortAnimationDirective({
                 animations: roomState.animations,
+                roomState: roomState,
                 bakugan: bakugan,
                 slot: slotTarget,
                 turn: roomState.turnState.turnCount

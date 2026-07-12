@@ -1,16 +1,16 @@
 import type { AnimationDirectivesTypes, portalSlotsTypeElement, stateType } from '../../type/type-index.js';
+import { pushReplayAnimation } from '../replay/push-replay-animation.js';
 
 
 type Props = {
     roomState: stateType,
     slot: portalSlotsTypeElement
     animations: AnimationDirectivesTypes[];
-    animationsForReplay: AnimationDirectivesTypes[];
 }
 
-type RemoveGateCardDirectiveAnimationType = ({ roomState, animations, slot, animationsForReplay }: Props) => void
+type RemoveGateCardDirectiveAnimationType = ({ roomState, animations, slot }: Props) => void
 
-export const RemoveGateCardDirectiveAnimation: RemoveGateCardDirectiveAnimationType = ({ roomState, animations, slot, animationsForReplay }) => {
+export const RemoveGateCardDirectiveAnimation: RemoveGateCardDirectiveAnimationType = ({ roomState, animations, slot }) => {
 
     slot.bakugans.forEach((bakugan) => {
 
@@ -26,7 +26,7 @@ export const RemoveGateCardDirectiveAnimation: RemoveGateCardDirectiveAnimationT
         }
 
         animations.push(comeBackBakuganDirective)
-        animationsForReplay.push(comeBackBakuganDirective)
+        pushReplayAnimation(roomState, comeBackBakuganDirective)
         if (bakuganInDeck) bakuganInDeck.bakuganData.onDomain = false
 
 
@@ -41,6 +41,6 @@ export const RemoveGateCardDirectiveAnimation: RemoveGateCardDirectiveAnimationT
     }
 
     animations.push(removeGateCard)
-    animationsForReplay.push(removeGateCard)
+    pushReplayAnimation(roomState, removeGateCard)
 
 }

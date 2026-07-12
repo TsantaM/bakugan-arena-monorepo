@@ -1,4 +1,5 @@
 import { AbilityCardsList } from "../../battle-brawlers/ability-cards.js";
+import { pushReplayAnimation } from "../replay/push-replay-animation.js";
 import { ExclusiveAbilitiesList } from "../../battle-brawlers/exclusive-abilities.js";
 import { CancelAbilityCards } from "../../store/cancel-ability-cards.js";
 import { Slots } from "../../store/slots.js";
@@ -158,7 +159,7 @@ export function DragAndElimineOnAdditional({ resolution, roomData, cardData }: {
     }
 
     roomData.animations.push(activeCardAnimation)
-    roomData.animationsForReplay.push(activeCardAnimation)
+    pushReplayAnimation(roomData, activeCardAnimation)
 
     ability.onActivate({
         roomState: roomData,

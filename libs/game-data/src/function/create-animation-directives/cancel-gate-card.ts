@@ -1,16 +1,17 @@
-import type { AnimationDirectivesTypes, portalSlotsTypeElement } from '../../type/type-index.js'
+import type { AnimationDirectivesTypes, portalSlotsTypeElement, stateType } from '../../type/type-index.js'
+import { pushReplayAnimation } from '../replay/push-replay-animation.js'
 
 
 type Props = {
     slot: portalSlotsTypeElement
     animations: AnimationDirectivesTypes[];
-    animationsForReplay: AnimationDirectivesTypes[];
+    roomState: stateType;
     turn: number
 }
 
-type CancelGateCardDirectiveAnimationType = ({ animations, slot, turn, animationsForReplay }: Props) => void
+type CancelGateCardDirectiveAnimationType = ({ animations, slot, turn, roomState }: Props) => void
 
-export const CancelGateCardDirectiveAnimation: CancelGateCardDirectiveAnimationType = ({ animations, slot, turn, animationsForReplay }) => {
+export const CancelGateCardDirectiveAnimation: CancelGateCardDirectiveAnimationType = ({ animations, slot, turn, roomState }) => {
     const comeBackBakuganDirective: AnimationDirectivesTypes = {
         type: 'CANCEL_GATE_CARD',
         data: {
@@ -26,5 +27,5 @@ export const CancelGateCardDirectiveAnimation: CancelGateCardDirectiveAnimationT
     console.log('slot canceled : ', slot.id, slot.portalCard?.key, slot.state)
 
     animations.push(comeBackBakuganDirective)
-    animationsForReplay.push(comeBackBakuganDirective)
+    pushReplayAnimation(roomState, comeBackBakuganDirective)
 }

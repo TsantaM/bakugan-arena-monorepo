@@ -1,8 +1,8 @@
 import { BakuganList } from "../../battle-brawlers/bakugans.js"
-import type { AnimationDirectivesTypes, attribut, portalSlotsTypeElement } from "../../type/type-index.js"
+import type { AnimationDirectivesTypes, attribut, portalSlotsTypeElement, stateType } from "../../type/type-index.js"
 import { PowerChangeDirectiveAnumation } from "../create-animation-directives/power-change.js"
 
-export function CombinationSimpleFunction({ animationsForReplay, animations, slotOfGate, bakuganKey, userId, attribut, attributWeak, turn} : { animationsForReplay: AnimationDirectivesTypes[], animations: AnimationDirectivesTypes[], slotOfGate: portalSlotsTypeElement, bakuganKey: string, userId: string, attribut: attribut, attributWeak: attribut, turn: number}) {
+export function CombinationSimpleFunction({ roomState, animations, slotOfGate, bakuganKey, userId, attribut, attributWeak, turn} : { roomState: stateType, animations: AnimationDirectivesTypes[], slotOfGate: portalSlotsTypeElement, bakuganKey: string, userId: string, attribut: attribut, attributWeak: attribut, turn: number}) {
     const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
     const userSecondAttribut = BakuganList.find((b) => b.key === user?.key)
     const userAttribut = [user?.attribut, userSecondAttribut?.seconaryAttribut]
@@ -20,7 +20,7 @@ export function CombinationSimpleFunction({ animationsForReplay, animations, slo
                 powerChange: 100,
                 malus: false,
                 turn: turn,
-                animationsForReplay
+                roomState
             })
         }
     }

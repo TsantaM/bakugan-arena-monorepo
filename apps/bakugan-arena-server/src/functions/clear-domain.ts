@@ -30,7 +30,7 @@ export function ClearDomain(roomData: stateType, userId: string) {
                 animations: roomData.animations,
                 bakugan: bakugan,
                 slot: slot,
-                animationsForReplay: roomData.animationsForReplay
+                roomState: roomData
             })
 
             slot.bakugans.splice(index, 1)

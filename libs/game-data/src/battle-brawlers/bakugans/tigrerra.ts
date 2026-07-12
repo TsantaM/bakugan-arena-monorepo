@@ -64,7 +64,7 @@ export const TigrerraGateCard: gateCardType = {
             bakugans: [bakugan],
             powerChange: basePower,
             malus: false,
-            animationsForReplay: roomState.animationsForReplay,
+            roomState: roomState,
             turn: roomState.turnState.turnCount
         })
 
@@ -87,7 +87,7 @@ export const TigrerraGateCard: gateCardType = {
             powerChange: basePower,
             malus: true,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
 

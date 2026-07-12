@@ -34,7 +34,7 @@ export function PowerChange({ roomState, bakugan, G, malus }: PowerChangeType) {
                 powerChange: G,
                 malus: true,
                 turn: roomState.turnState.turnCount,
-                animationsForReplay: roomState.animationsForReplay
+                roomState: roomState
 
             })
         }
@@ -47,7 +47,7 @@ export function PowerChange({ roomState, bakugan, G, malus }: PowerChangeType) {
             powerChange: G,
             malus: false,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
     }

@@ -1,4 +1,5 @@
 import { AnimationDirectivesTypes, Message } from "../type/animations-directives.js";
+import { pushReplayAnimation } from "./replay/push-replay-animation.js";
 import { stateType } from "../type/room-types.js";
 
 type NewAdditionnalMessageType = {
@@ -21,6 +22,6 @@ export function NewAdditionnalMessage({ roomState, text }: NewAdditionnalMessage
     }
 
     roomState.animations.push(animation)
-    roomState.animationsForReplay.push(animation)
+    pushReplayAnimation(roomState, animation)
 
 }

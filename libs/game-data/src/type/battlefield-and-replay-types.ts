@@ -1,4 +1,5 @@
 import { type AnimationDirectivesTypes } from "./animations-directives.js";
+import type { replayEntryType, replaySnapshotType } from "./replay-snapshot-types.js";
 
 export type playerDataType = {
         id: string;
@@ -32,5 +33,8 @@ export type replayDataType = {
     roomId: string;
     player1: playerDataType;
     player2: playerDataType;
-    replay: AnimationDirectivesTypes[];
+    initialSnapshot: replaySnapshotType;
+    replay: replayEntryType[];
+    /** @deprecated ancien format sans snapshots */
+    legacyReplay?: AnimationDirectivesTypes[];
 }

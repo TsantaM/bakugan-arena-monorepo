@@ -1,4 +1,4 @@
-import { AbilityCardsActionsRequestsType, AbilityCardsList, activateAbilities, ActivePlayerActionRequestType, AnimationDirectivesTypes, ExclusiveAbilitiesList, GetUserName, InactivePlayerActionRequestType, removeActionByType, useAbilityCardProps } from "@bakugan-arena/game-data";
+import { AbilityCardsActionsRequestsType, AbilityCardsList, activateAbilities, ActivePlayerActionRequestType, AnimationDirectivesTypes, ExclusiveAbilitiesList, GetUserName, InactivePlayerActionRequestType, pushReplayAnimation, removeActionByType, useAbilityCardProps } from "@bakugan-arena/game-data";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { Server } from "socket.io/dist";
 import { clearAnimationsInRoom } from "../sockets/clear-animations-socket";
@@ -78,7 +78,7 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
         }
 
         roomData.animations.push(activeCardAnimation)
-        roomData.animationsForReplay.push(activeCardAnimation)
+        pushReplayAnimation(roomData, activeCardAnimation)
 
         // FR: On exécute l’effet de la capacité en lui passant tout le contexte nécessaire
         // ENG: Execute the ability effect by passing all required context
@@ -201,7 +201,7 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
 
             const animations = Battle_Brawlers_Game_State[roomIndex].animations
             animations.push(animation)
-            roomData.animationsForReplay.push(animation)
+            pushReplayAnimation(roomData, animation)
             io.to(roomId).emit('update-room-state', state)
             if (!animations) return
             io.to(roomId).emit('animations', animations)

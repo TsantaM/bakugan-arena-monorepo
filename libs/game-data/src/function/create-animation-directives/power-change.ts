@@ -1,19 +1,20 @@
 import { BakuganList } from '../../battle-brawlers/bakugans.js';
-import type { AnimationDirectivesTypes, bakuganOnSlot } from '../../type/type-index.js';
+import type { AnimationDirectivesTypes, bakuganOnSlot, stateType } from '../../type/type-index.js';
+import { pushReplayAnimation } from '../replay/push-replay-animation.js';
 
 type Props = {
     bakugans: bakuganOnSlot[];
     powerChange: number;
     malus?: boolean;
     animations: AnimationDirectivesTypes[];
-    animationsForReplay: AnimationDirectivesTypes[];
+    roomState: stateType;
     turn: number,
     finalPower?: number
 }
 
-type PowerChangeDirectiveAnumationType = ({ bakugans, powerChange, malus, animations, turn, finalPower, animationsForReplay }: Props) => void
+type PowerChangeDirectiveAnumationType = ({ bakugans, powerChange, malus, animations, turn, finalPower, roomState }: Props) => void
 
-export const PowerChangeDirectiveAnumation: PowerChangeDirectiveAnumationType = ({ bakugans, powerChange, malus = false, animations, turn, finalPower, animationsForReplay }) => {
+export const PowerChangeDirectiveAnumation: PowerChangeDirectiveAnumationType = ({ bakugans, powerChange, malus = false, animations, turn, finalPower, roomState }) => {
 
     const powerChangeDirective: AnimationDirectivesTypes = {
         type: 'POWER_CHANGE',
@@ -31,5 +32,5 @@ export const PowerChangeDirectiveAnumation: PowerChangeDirectiveAnumationType = 
     }
 
     animations.push(powerChangeDirective)
-    animationsForReplay.push(powerChangeDirective)
+    pushReplayAnimation(roomState, powerChangeDirective)
 }

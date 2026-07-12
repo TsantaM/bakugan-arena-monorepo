@@ -77,7 +77,7 @@ export const HydranoidGateCard: gateCardType = {
             powerChange: basePower,
             malus: false,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
 
@@ -100,7 +100,7 @@ export const HydranoidGateCard: gateCardType = {
             powerChange: basePower,
             malus: true,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
 

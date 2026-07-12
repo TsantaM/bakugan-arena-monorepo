@@ -1,4 +1,4 @@
-import { AnimationDirectivesTypes, applyWinAbilitiesEffects, CheckBattle, ComeBackBakuganDirectiveAnimation, determineWinner, ElimineBakuganDirectiveAnimation, finalizeBattle, GateCards, GateCardsList, getPlayerDecksAndBakugans, GetUserName, updateDeckBakugans } from "@bakugan-arena/game-data"
+import { AnimationDirectivesTypes, applyWinAbilitiesEffects, CheckBattle, ComeBackBakuganDirectiveAnimation, determineWinner, ElimineBakuganDirectiveAnimation, finalizeBattle, GateCards, GateCardsList, getPlayerDecksAndBakugans, GetUserName, pushReplayAnimation, updateDeckBakugans } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
 
@@ -59,7 +59,7 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
             }
 
             roomData.animations.push(animation)
-            roomData.animationsForReplay.push(animation)
+            pushReplayAnimation(roomData, animation)
 
             card.onOpen({ roomState: roomData, slot: battleState.slot })
 
@@ -132,7 +132,7 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
                         bakugan: bakugan,
                         slot: slot,
                         turn: roomData.turnState.turnCount,
-                        animationsForReplay: roomData.animationsForReplay
+                        roomState: roomData
 
                     })
                 }
@@ -144,7 +144,7 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
                         animations: roomData.animations,
                         bakugan: bakugan,
                         slot: slot,
-                        animationsForReplay: roomData.animationsForReplay
+                        roomState: roomData
                     })
                 }
             })
@@ -171,7 +171,7 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
                     animations: roomData.animations,
                     bakugan: bakugan,
                     slot: slot,
-                    animationsForReplay: roomData.animationsForReplay
+                    roomState: roomData
 
                 })
             })

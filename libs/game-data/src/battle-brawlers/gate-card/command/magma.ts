@@ -36,8 +36,7 @@ export const Magma: gateCardType = {
             RemoveGateCardDirectiveAnimation({
                 animations: roomState.animations,
                 slot: s,
-                roomState,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
             })
 

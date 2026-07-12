@@ -1,18 +1,6 @@
 'use server'
 
-import { replayDataType } from "@bakugan-arena/game-data";
-
-function isReplayData (data: any): data is replayDataType {
-
-    return (
-        data &&
-        typeof data === "object" &&
-        typeof data.roomId === "string" &&
-        data.player1 && data.player2 && Array.isArray(data.replay)
-    )
-    
-
-}
+import { normalizeReplayData, replayDataType } from "@bakugan-arena/game-data";
 
 export async function ConvertReplayToObject(json: string): Promise<replayDataType> {
 
@@ -24,9 +12,5 @@ export async function ConvertReplayToObject(json: string): Promise<replayDataTyp
         throw new Error('JSON Invalid')
     }
 
-    if(!isReplayData(parse)) {
-        throw new Error('JSON structure invalid')
-    }
-
-    return parse
+    return normalizeReplayData(parse)
 }

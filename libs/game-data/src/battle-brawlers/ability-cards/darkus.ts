@@ -25,7 +25,7 @@ export const CoupDeGrace: abilityCardsType = {
                     animations: roomState.animations,
                     slot: slotOfGate,
                     turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
                 })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
@@ -90,7 +90,7 @@ export const EpicesMortelles: abilityCardsType = {
                     powerChange: 100,
                     malus: false,
                     turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                 })
                 opponent.currentPower -= 100
@@ -100,7 +100,7 @@ export const EpicesMortelles: abilityCardsType = {
                     powerChange: 100,
                     malus: true,
                     turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                 })
             }
@@ -123,7 +123,7 @@ export const EpicesMortelles: abilityCardsType = {
                     powerChange: 100,
                     malus: true,
                     turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
 
                 })
@@ -134,7 +134,7 @@ export const EpicesMortelles: abilityCardsType = {
                     powerChange: 100,
                     malus: false,
                     turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                 })
             }

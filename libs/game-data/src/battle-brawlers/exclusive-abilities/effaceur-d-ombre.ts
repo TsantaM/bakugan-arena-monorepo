@@ -21,7 +21,7 @@ export const EffecteurdOmbre: exclusiveAbilitiesType = {
                     animations: roomState.animations,
                     slot: structuredClone(slotOfGate),
                     turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                 })
                 gateCard.onCanceled({ roomState: roomState, slot: slot, userId: userId, bakuganKey: bakuganKey })

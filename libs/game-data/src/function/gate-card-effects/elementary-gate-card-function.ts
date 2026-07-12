@@ -22,7 +22,7 @@ export function ElementaryGateCardOnOpen({ roomState, slot, attribut }: { roomSt
             powerChange: 100,
             malus: false,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
     }
@@ -48,7 +48,7 @@ export function ElementaryGateCardOnCancel({ roomState, slot, attribut }: { room
             powerChange: 100,
             malus: true,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
     }

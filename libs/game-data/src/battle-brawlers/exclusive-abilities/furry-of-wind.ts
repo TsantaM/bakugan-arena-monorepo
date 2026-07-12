@@ -1,4 +1,5 @@
 import { CheckBattleStillInProcess, ComeBackBakuganEffect, ElimineBakuganEffect, ResetSlot } from "../../function/index.js"
+import { pushReplayAnimation } from "../../function/replay/push-replay-animation.js";
 import { Slots } from "../../store/slots.js"
 import { AnimationDirectivesTypes } from "../../type/animations-directives.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
@@ -50,7 +51,7 @@ export const FurryOfWind: exclusiveAbilitiesType = {
             }
 
             roomState.animations.push(removeGateCard)
-            roomState.animationsForReplay.push(removeGateCard)
+            pushReplayAnimation(roomState, removeGateCard)
 
             ResetSlot(slotOfGate)
 

@@ -54,7 +54,7 @@ export const PreyasGateCard: gateCardType = {
             powerChange: basePower,
             malus: false,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
 
@@ -77,7 +77,7 @@ export const PreyasGateCard: gateCardType = {
             powerChange: basePower,
             malus: true,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
 
@@ -141,7 +141,7 @@ export const DiabloGateCard: gateCardType = {
             powerChange: basePower,
             malus: false,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
 
@@ -164,7 +164,7 @@ export const DiabloGateCard: gateCardType = {
             powerChange: basePower,
             malus: true,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
 
@@ -228,7 +228,7 @@ export const AngeloGateCard: gateCardType = {
             powerChange: basePower,
             malus: false,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
 
@@ -251,7 +251,7 @@ export const AngeloGateCard: gateCardType = {
             powerChange: basePower,
             malus: true,
             turn: roomState.turnState.turnCount,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
 
         })
 

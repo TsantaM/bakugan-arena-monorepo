@@ -14,7 +14,7 @@ export function ComeBackBakuganEffect({ bakugan, roomState }: { roomState: state
             animations: roomState.animations,
             bakugan: bakugan,
             slot: slot,
-            animationsForReplay: roomState.animationsForReplay
+            roomState: roomState
         })
         bakuganInDeck.bakuganData.onDomain = false
         slot.bakugans.splice(index, 1)

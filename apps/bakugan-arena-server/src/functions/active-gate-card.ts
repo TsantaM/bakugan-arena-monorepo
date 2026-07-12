@@ -1,4 +1,4 @@
-import { activeGateCardProps, AnimationDirectivesTypes, gateCardActionRequestsType, GateCardsList, GetUserName, slots_id } from "@bakugan-arena/game-data"
+import { activeGateCardProps, AnimationDirectivesTypes, gateCardActionRequestsType, GateCardsList, GetUserName, pushReplayAnimation, slots_id } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 import { turnActionUpdater } from "../sockets/turn-action"
 import { EmitMessage } from "./emit-messages"
@@ -72,7 +72,7 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
             }
 
             roomData.animations.push(animation)
-            roomData.animationsForReplay.push(animation)
+            pushReplayAnimation(roomData, animation)
             const openFunction = gateCard.onOpen?.({ roomState: roomData, slot: slot, bakuganKey: key, userId: userId })
             slotOfGate.state.open = true
 

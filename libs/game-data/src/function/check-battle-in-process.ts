@@ -1,4 +1,5 @@
 import { AnimationDirectivesTypes, type stateType } from '../../src/type/type-index.js'
+import { pushReplayAnimation } from "./replay/push-replay-animation.js";
 import { CreateActionRequestFunction } from './create-action-request-function.js';
 import { OnBattleStartAnimationDirectives } from './create-animation-directives/on-battle-start-animation-directives.js'
 
@@ -33,7 +34,7 @@ export const CheckBattle = ({ roomState, updateActions = false }: { roomState: s
                 animations: roomState.animations,
                 slot: slotWithTwoBakugans,
                 turn: roomState.turnState.turnCount,
-                animationsForReplay: roomState.animationsForReplay
+                roomState: roomState
 
             })
 
@@ -58,7 +59,7 @@ export const CheckBattle = ({ roomState, updateActions = false }: { roomState: s
                 resolved: false
             }
             roomState.animations.push(animation)
-            roomState.animationsForReplay.push(animation)
+            pushReplayAnimation(roomState, animation)
 
         }
 
@@ -79,7 +80,7 @@ export const CheckBattle = ({ roomState, updateActions = false }: { roomState: s
                     resolved: false
                 }
                 roomState.animations.push(animation)
-                roomState.animationsForReplay.push(animation)
+                pushReplayAnimation(roomState, animation)
             }
 
         }

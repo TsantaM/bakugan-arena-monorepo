@@ -31,7 +31,7 @@ export const RetourDAssenceur: gateCardType = {
                             animations: roomState.animations,
                             bakugan: b,
                             slot: slotOfGate,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                         })
                     }

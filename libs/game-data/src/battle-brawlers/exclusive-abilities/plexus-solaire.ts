@@ -29,7 +29,7 @@ export const PlexusSolaire: exclusiveAbilitiesType = {
                         animations: roomState.animations,
                         slot: structuredClone(slotOfGate),
                         turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                     })
                     gate.onCanceled({ roomState: roomState, slot: slot, userId: userId, bakuganKey: bakuganKey })

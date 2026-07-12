@@ -7,10 +7,11 @@ import { PlaneMesh } from './meshes/plane.mesh'
 import { type BakuganPreviewData } from './functions/create-bakugan-preview-hover'
 import { setImageWithFallback } from './functions/set-image-with-fallback'
 import { hideTooltip, initTooltip, showTooltip, tooltip } from './functions/tooltips-functions'
-import { Bakugans } from '@bakugan-arena/game-data'
-import type { replayDataType, roomStateType } from "@bakugan-arena/game-data"
+import { Bakugans, normalizeReplayData, replaySnapshotToRoomState } from '@bakugan-arena/game-data'
+import type { replayDataType } from "@bakugan-arena/game-data"
 import { InitGameState } from './functions/init-game-state'
 import { playAnimation } from './sockets/sockets-handlers'
+import { applyReplaySnapshotUi } from './functions/apply-replay-snapshot-ui'
 
 // alert('eh replay')
 
@@ -58,124 +59,16 @@ if (player2Image) {
   );
 }
 
-async function initReplay(replayData: replayDataType) {
+async function initReplay(replayPayload: replayDataType) {
   if (roomId !== null && player1Id !== null) {
     if (canvas) {
 
-      const { player1, player2, replay } = replayData
+      const { player1, player2, replay, initialSnapshot } = replayPayload
 
       if (!player1) return
       if (!player2) return
 
-      const state: roomStateType = {
-        battleState: {
-          battleInProcess: false,
-          paused: false,
-          slot: null,
-          turns: 0
-        },
-        eliminated: {
-          opponnent: 0,
-          user: 0
-        },
-        deck: [],
-        timers: [{
-          userId: player1Id,
-          timer: 2 * 60
-        }, {
-          timer: 3 * 60,
-          userId: player2?.id
-        }],
-        turnState: {
-          can_change_player_turn: true,
-          previous_turn: player2?.id,
-          set_new_bakugan: true,
-          set_new_gate: true,
-          turn: player1Id,
-          turnCount: 5,
-          use_ability_card: true,
-          ability_card_block: {
-            blocked: false,
-            reason: null,
-            turn: 0
-          }
-        },
-        finished: undefined,
-        portalSlots: [
-          {
-            id: "slot-1",
-            can_set: false,
-            portalCard: null,
-            activateAbilities: [],
-            bakugans: [],
-            state: {
-              open: false,
-              canceled: false,
-              blocked: false
-            }
-          },
-          {
-            id: "slot-2",
-            can_set: true,
-            portalCard: null,
-            activateAbilities: [],
-            bakugans: [],
-            state: {
-              open: false,
-              canceled: false,
-              blocked: false
-            }
-          },
-          {
-            id: "slot-3",
-            can_set: false,
-            portalCard: null,
-            activateAbilities: [],
-            bakugans: [],
-            state: {
-              open: false,
-              canceled: false,
-              blocked: false
-            }
-          },
-          {
-            id: "slot-4",
-            can_set: false,
-            portalCard: null,
-            activateAbilities: [],
-            bakugans: [],
-            state: {
-              open: false,
-              canceled: false,
-              blocked: false
-            }
-          },
-          {
-            id: "slot-5",
-            can_set: false,
-            portalCard: null,
-            activateAbilities: [],
-            bakugans: [],
-            state: {
-              open: false,
-              canceled: false,
-              blocked: false
-            }
-          },
-          {
-            id: "slot-6",
-            can_set: false,
-            portalCard: null,
-            activateAbilities: [],
-            bakugans: [],
-            state: {
-              open: false,
-              canceled: false,
-              blocked: false
-            }
-          },
-        ]
-      }
+      const state = replaySnapshotToRoomState(initialSnapshot)
 
       // const { player1, player2, replay  } = replayData
 
@@ -382,11 +275,8 @@ async function initReplay(replayData: replayDataType) {
 
       camera.position.set(3, 5, 8)
 
-      alert('on arrive au initState')
-
+      applyReplaySnapshotUi(initialSnapshot, player1.id)
       InitGameState({ state: state, bakugansMeshs, gateCardMeshs, plane, scene, userId: player1.id, isSpectator: true })
-
-      alert('on arrive après le initState')
 
       loop()
       function loop() {
@@ -401,17 +291,35 @@ async function initReplay(replayData: replayDataType) {
         renderer.setSize(window.innerWidth, window.innerHeight)
       })
 
-      await playAnimation(player1Id, true, camera, scene, plane, bakugansMeshs, gateCardMeshs, replay) // important de mettre isSpectator à true pour éviter les problèmes de synchro du replay
+      for (const entry of replay) {
+        applyReplaySnapshotUi(entry.stateBefore, player1.id)
+
+        if (entry.animation) {
+          await playAnimation(player1Id, true, camera, scene, plane, bakugansMeshs, gateCardMeshs, [entry.animation])
+        }
+
+        applyReplaySnapshotUi(entry.stateAfter, player1.id)
+      }
 
     }
   }
 }
 
-console.log(replayData);
+function startReplay(rawReplay: unknown) {
+  const replayPayload = normalizeReplayData(rawReplay)
+  initReplay(replayPayload)
+}
+
+window.addEventListener('message', (event) => {
+  if (!event.data || event.data.type !== 'LOAD_REPLAY') return
+  startReplay(event.data.payload)
+})
 
 if (replayData !== null) {
-  const replay: replayDataType = JSON.parse(replayData)
-  console.log(replay)
-  initReplay(replay)
+  try {
+    startReplay(JSON.parse(decodeURIComponent(replayData)))
+  } catch {
+    startReplay(JSON.parse(replayData))
+  }
 }
 

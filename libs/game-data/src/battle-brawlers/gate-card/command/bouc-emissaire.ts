@@ -15,8 +15,7 @@ export const BoucEmissaire: gateCardType = {
             RemoveGateCardDirectiveAnimation({
                 animations: roomState.animations,
                 slot: slotOfGate,
-                roomState,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
             })
             ResetSlot(slotOfGate)

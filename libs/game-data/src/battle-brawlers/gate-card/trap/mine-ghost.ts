@@ -15,8 +15,8 @@ function MineGhostMainEffect({
 
     slotOfGate.bakugans.forEach((bakugan) => {
         ElimineBakuganEffect({
-            bakugan,
             roomState,
+            bakugan,
             gateCardProtection: true
         })
     })
@@ -27,8 +27,7 @@ function MineGhostMainEffect({
     RemoveGateCardDirectiveAnimation({
         animations: roomState.animations,
         slot: slotOfGate,
-        roomState,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
     })
 
@@ -114,8 +113,8 @@ export const MineFantome: gateCardType = {
         }
 
         return ResolveTrapCardAdditionalRequest({
-            resolution,
             roomState,
+            resolution,
             slotOfGate,
             otherPlayerId,
             onMainEffect: () => {

@@ -108,7 +108,7 @@ export const TornadeChaosTotal: abilityCardsType = {
                     animations: roomState.animations,
                     slot: slotOfGate,
                     turn: roomState.turnState.turnCount,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
 
                 })
@@ -247,7 +247,7 @@ export const RetourDair: abilityCardsType = {
                     animations: roomState.animations,
                     bakugan: user,
                     slot: slotOfGate,
-                    animationsForReplay: roomState.animationsForReplay
+                    roomState: roomState
 
                 })
             }
