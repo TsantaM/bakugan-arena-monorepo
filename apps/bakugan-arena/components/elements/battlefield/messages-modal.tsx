@@ -8,6 +8,7 @@ import { useSocket } from "@/src/providers/socket-provider"
 import { Message, SendMessageInGameType } from "@bakugan-arena/game-data"
 import { MessagesSquare, Send } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
+import { createPortal } from "react-dom"
 import { BattleLogPanel, type BattleLogTurn } from "./battle-log-panel"
 import { TurnMessagesContainer } from "./turn-messages-container"
 
@@ -50,6 +51,7 @@ export default function MessagesModal({
     userId,
     isReplay = false,
     battleLogEnabled = true,
+    embedded = false,
 }: {
     player: string | undefined | null
     opponent: string | undefined | null
@@ -57,14 +59,24 @@ export default function MessagesModal({
     userId: string
     isReplay?: boolean
     battleLogEnabled?: boolean
+    embedded?: boolean
 }) {
     const [messagesContainer, setMessagesContainer] = useState<BattleLogTurn[]>([])
     const [liveLogTurns, setLiveLogTurns] = useState<BattleLogTurn[]>([])
     const [isLogVisible, setIsLogVisible] = useState(false)
+    const [battleLogRoot, setBattleLogRoot] = useState<Element | null>(null)
     const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
     const battleLogEnabledRef = useRef(battleLogEnabled)
     const socket = useSocket()
     const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+    useEffect(() => {
+        if (!embedded) {
+            setBattleLogRoot(null)
+            return
+        }
+        setBattleLogRoot(document.querySelector("[data-battlefield-root]"))
+    }, [embedded])
 
     useEffect(() => {
         battleLogEnabledRef.current = battleLogEnabled
@@ -188,19 +200,32 @@ export default function MessagesModal({
 
     return (
         <>
-            <BattleLogPanel
-                turns={liveLogTurns}
-                visible={battleLogEnabled && isLogVisible}
-            />
+            {(() => {
+                const battleLog = (
+                    <BattleLogPanel
+                        turns={liveLogTurns}
+                        visible={battleLogEnabled && isLogVisible}
+                    />
+                )
+
+                if (embedded && battleLogRoot) {
+                    return createPortal(battleLog, battleLogRoot)
+                }
+
+                return battleLog
+            })()}
 
             <Dialog>
                 <DialogTrigger asChild>
                     <Button
                         variant="outline"
+                        aria-label="Messages"
                         className={
-                            !isReplay
-                                ? "absolute bottom-2 left-[50%] z-30 translate-x-[-50%]"
-                                : "absolute bottom-2 left-[calc(50%-9.5rem)] z-30"
+                            embedded
+                                ? undefined
+                                : !isReplay
+                                    ? "absolute bottom-2 left-[50%] z-30 translate-x-[-50%]"
+                                    : "absolute bottom-2 left-[calc(50%-9.5rem)] z-30"
                         }
                     >
                         <MessagesSquare />

@@ -1,5 +1,5 @@
 import type { replaySnapshotType } from "@bakugan-arena/game-data"
-import { replaySnapshotToRoomState } from "@bakugan-arena/game-data"
+import { replaySnapshotToRoomState, resolveEliminatedForPerspective } from "@bakugan-arena/game-data"
 import gsap from "gsap"
 import * as THREE from "three"
 import { InitGameState } from "./init-game-state"
@@ -48,14 +48,20 @@ export function applyReplayBoardState({
     document.getElementById("right-bakugan-previews-container")?.remove()
     clearActiveAbilityOverlays()
 
-    applyReplaySnapshotUi(snapshot, perspectiveUserId)
+    const remappedSnapshot: replaySnapshotType = {
+        ...snapshot,
+        eliminated: resolveEliminatedForPerspective(snapshot.decksState, perspectiveUserId),
+    }
+
+    applyReplaySnapshotUi(remappedSnapshot, perspectiveUserId)
     InitGameState({
-        state: replaySnapshotToRoomState(snapshot),
+        state: replaySnapshotToRoomState(remappedSnapshot),
         bakugansMeshs,
         gateCardMeshs,
         plane,
         scene,
         userId: perspectiveUserId,
-        isSpectator: true,
+        // Même comportement visuel que main.ts (joueur, pas spectateur)
+        isSpectator: false,
     })
 }

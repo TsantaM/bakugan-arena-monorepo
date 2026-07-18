@@ -1,17 +1,22 @@
 import type { replaySnapshotType } from "@bakugan-arena/game-data"
+import { resolveEliminatedForPerspective } from "@bakugan-arena/game-data"
 import { setEliminatedCircles } from "./set-eliminated-circle"
 import dayjs from "dayjs"
 import duration from "dayjs/plugin/duration"
 import relativeTime from "dayjs/plugin/relativeTime"
 
 export function applyReplaySnapshotUi(snapshot: replaySnapshotType, perspectiveUserId: string) {
+    // Toujours recalculer depuis decksState pour la perspective visuelle (player1),
+    // car eliminated.* a pu être capturé avec un autre point de vue (players[0]).
+    const eliminated = resolveEliminatedForPerspective(snapshot.decksState, perspectiveUserId)
+
     setEliminatedCircles({
-        count: snapshot.eliminated.user,
+        count: eliminated.user,
         isLeft: true,
     })
 
     setEliminatedCircles({
-        count: snapshot.eliminated.opponnent,
+        count: eliminated.opponnent,
         isLeft: false,
     })
 

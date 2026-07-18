@@ -8,6 +8,7 @@ import { type BakuganPreviewData } from './functions/create-bakugan-preview-hove
 import { setImageWithFallback } from './functions/set-image-with-fallback'
 import { hideTooltip, initTooltip, showTooltip, tooltip } from './functions/tooltips-functions'
 import { Bakugans } from '@bakugan-arena/game-data'
+import { requestSkipAnimations } from './functions/skip-animations'
 
 const canvas = document.getElementById('gameboard-canvas')
 const params = new URLSearchParams(window.location.search)
@@ -244,6 +245,12 @@ if (roomId !== null && userId !== null) {
 
     reload?.addEventListener("click", () => {
       socket.emit('init-room-state', ({ roomId, userId, parentSocket }))
+    })
+
+    window.addEventListener('message', (event) => {
+      if (event.data?.type === 'SKIP_ANIMATIONS') {
+        requestSkipAnimations()
+      }
     })
 
     window.addEventListener('resize', () => {

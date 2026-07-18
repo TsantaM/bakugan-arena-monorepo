@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { FontLoader, TextGeometry } from 'three/examples/jsm/Addons.js';
 import type { bakuganOnSlot, slots_id } from '@bakugan-arena/game-data';
 import type { SpriteUserData } from '../meshes/bakugan.mesh';
+import { isAnimationSkipRequested } from '../functions/skip-animations';
 
 // ✅ On charge la police une seule fois (à l’extérieur de la fonction)
 const loader = new FontLoader();
@@ -68,15 +69,26 @@ export async function PowerChangeAnimation({
 export function PowerChangeNumberAnimation({ userId, slotId, newPower }: { userId: string, slotId: slots_id, newPower: number }): Promise<void> {
 
   return new Promise((resolve) => {
-
     const powerContainer = document.getElementById(`${userId}-${slotId}`)
     if (!powerContainer) return resolve()
+
+    if (isAnimationSkipRequested()) {
+      powerContainer.textContent = Math.round(newPower).toString()
+      return resolve()
+    }
 
     let power = parseInt(powerContainer.textContent || "0")
 
     const step = 5
 
     const interval = setInterval(() => {
+      if (isAnimationSkipRequested()) {
+        clearInterval(interval)
+        powerContainer.textContent = Math.round(newPower).toString()
+        resolve()
+        return
+      }
+
       if (Math.round(newPower) < power) {
         power -= step
       } else {

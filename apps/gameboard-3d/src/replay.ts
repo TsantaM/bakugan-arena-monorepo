@@ -41,7 +41,6 @@ const params = new URLSearchParams(window.location.search)
 const roomId = params.get('roomId')
 const replayData = params.get('replayData')
 const player1Image = params.get('player1Image')
-const player1Id = params.get('player1Id')
 const player2Image = params.get('player2Image')
 // const reload = document.getElementById("init-room")
 const scene = new THREE.Scene()
@@ -80,13 +79,16 @@ if (player2Image) {
 }
 
 async function initReplay(replayPayload: replayDataType) {
-  if (roomId !== null && player1Id !== null) {
+  if (roomId !== null) {
     if (canvas) {
 
       const { player1, player2, replay, initialSnapshot } = replayPayload
 
       if (!player1) return
       if (!player2) return
+
+      // Même rôle que userId dans main.ts : perspective "locale" (gauche)
+      const perspectiveUserId = player1.id
 
       const generation = ++playbackGeneration
       abortReplayPlayback()
@@ -298,7 +300,7 @@ async function initReplay(replayPayload: replayDataType) {
 
       applyReplayBoardState({
         snapshot: initialSnapshot,
-        perspectiveUserId: player1.id,
+        perspectiveUserId,
         scene,
         plane,
         bakugansMeshs,
@@ -333,7 +335,7 @@ async function initReplay(replayPayload: replayDataType) {
 
         applyReplayBoardState({
           snapshot,
-          perspectiveUserId: player1.id,
+          perspectiveUserId,
           scene,
           plane,
           bakugansMeshs,
@@ -361,15 +363,16 @@ async function initReplay(replayPayload: replayDataType) {
         if (peekSeekTarget() !== null) continue
 
         const entry = replay[playback.currentIndex]
-        applyReplaySnapshotUi(entry.stateBefore, player1.id)
+        applyReplaySnapshotUi(entry.stateBefore, perspectiveUserId)
 
         if (entry.animation) {
           await waitWhilePaused()
           if (generation !== playbackGeneration) return
           if (peekSeekTarget() !== null) continue
 
+          // isSpectator: false comme main.ts (perspective joueur)
           await Promise.race([
-            playAnimation(player1Id, true, camera, scene, plane, bakugansMeshs, gateCardMeshs, [entry.animation]),
+            playAnimation(perspectiveUserId, false, camera, scene, plane, bakugansMeshs, gateCardMeshs, [entry.animation]),
             waitForSeekAbort(),
           ])
 
@@ -377,7 +380,7 @@ async function initReplay(replayPayload: replayDataType) {
           if (peekSeekTarget() !== null) continue
         }
 
-        applyReplaySnapshotUi(entry.stateAfter, player1.id)
+        applyReplaySnapshotUi(entry.stateAfter, perspectiveUserId)
 
         if (entry.marker === 'turn_end') {
           notifyParentTurnEnd()

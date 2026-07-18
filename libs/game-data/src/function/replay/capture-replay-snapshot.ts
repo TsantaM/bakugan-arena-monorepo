@@ -1,12 +1,28 @@
 import type { replaySnapshotType } from "../../type/replay-snapshot-types.js"
 import type { Message, stateType } from "../../type/type-index.js"
+import type { deckType } from "../../type/room-types.js"
 
-function countEliminated(deck: stateType["decksState"], userId: string): number {
+export function countEliminatedFromDecks(decksState: deckType[], userId: string): number {
     return (
-        deck
+        decksState
             .find((d) => d.userId === userId)
             ?.bakugans.filter((b) => b?.bakuganData.elimined).length ?? 0
     )
+}
+
+/** Recalcule eliminated.user / opponnent pour une perspective donnée (lecture replay). */
+export function resolveEliminatedForPerspective(
+    decksState: deckType[],
+    perspectiveUserId: string
+): replaySnapshotType["eliminated"] {
+    const opponentId = decksState.find((d) => d.userId !== perspectiveUserId)?.userId
+
+    return {
+        user: countEliminatedFromDecks(decksState, perspectiveUserId),
+        opponnent: opponentId
+            ? countEliminatedFromDecks(decksState, opponentId)
+            : 0,
+    }
 }
 
 function buildFinishedMessage(state: stateType): Message | undefined {
@@ -35,19 +51,12 @@ export function captureReplaySnapshot(
     state: stateType,
     perspectiveUserId: string
 ): replaySnapshotType {
-    const opponentId = state.players.find((p) => p.userId !== perspectiveUserId)?.userId
-
     return {
         turnState: structuredClone(state.turnState),
         battleState: structuredClone(state.battleState),
         portalSlots: structuredClone(state.protalSlots),
         decksState: structuredClone(state.decksState),
-        eliminated: {
-            user: countEliminated(state.decksState, perspectiveUserId),
-            opponnent: opponentId
-                ? countEliminated(state.decksState, opponentId)
-                : 0,
-        },
+        eliminated: resolveEliminatedForPerspective(state.decksState, perspectiveUserId),
         timers: state.players.map((player) => ({
             userId: player.userId,
             timer: player.timer,

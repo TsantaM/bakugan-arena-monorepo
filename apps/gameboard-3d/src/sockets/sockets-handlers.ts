@@ -32,7 +32,8 @@ import { SwipeGateCards } from "../animations/swipe-gate-cards"
 import { CancelAbilityCardAnimation } from "../animations/cancel-ability-card-animation"
 import { DragAndElimineAnimation } from "../animations/drag-and-elimine-animation"
 import { ReviveBakuganAnimation } from "../animations/revive-animation"
-import { sendMessageToParent, notifyParentTurnEnd, notifyParentAnimationsDone } from "../functions/send-message-to-parent"
+import { sendMessageToParent, notifyParentTurnEnd, notifyParentAnimationsDone, notifyParentAnimationsStart } from "../functions/send-message-to-parent"
+import { applySkipTimeScaleIfNeeded, clearAnimationSkip, setAnimationsActive } from "../functions/skip-animations"
 import { GateCardAdditionalRequestResolution } from "../abiliity-additional-request/gate-card-additional-request"
 
 let animationQueue: AnimationDirectivesTypes[] = []
@@ -49,9 +50,13 @@ export async function playAnimation(
     gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[],
     animationQueue: AnimationDirectivesTypes[]
 ) {
+    setAnimationsActive(true)
+    clearAnimationSkip()
+    notifyParentAnimationsStart()
     try {
     let i = 0;
     while (i < animationQueue.length) {
+        applySkipTimeScaleIfNeeded()
 
         const current = animationQueue[i];
         if (current.type === 'POWER_CHANGE') {
@@ -394,6 +399,7 @@ export async function playAnimation(
         i++; // avancer à l'animation suivante
     }
     } finally {
+        setAnimationsActive(false)
         notifyParentAnimationsDone()
     }
 }

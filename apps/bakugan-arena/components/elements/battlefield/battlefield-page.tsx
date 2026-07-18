@@ -2,7 +2,7 @@
 
 import { useSocketStore } from "@/src/store/socket-id-store";
 import ReactHowler from 'react-howler'
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import MessagesModal from "./messages-modal";
 import { redirect } from "next/navigation";
 import { useAudioStore } from "@/src/store/sounds-store";
@@ -11,11 +11,35 @@ import { Toaster } from "@/components/ui/sonner"
 import DownloadAndUploadReplay from "./download-upload-replay";
 import { BattleFieldPageProps } from "@bakugan-arena/game-data";
 import { useBattlefieldBattleLogStore } from "@/src/store/battlefield-battle-log-store";
+import { Button } from "@/components/ui/button";
+import { SkipForward } from "lucide-react";
 
 export default function BattleFieldPage({ player, opponent, roomId, userId, isPlayer }: BattleFieldPageProps) {
 
     const socket = useSocketStore((state) => state.socket)
     const battleLogEnabled = useBattlefieldBattleLogStore((state) => state.enabled)
+    const [animationsPlaying, setAnimationsPlaying] = useState(false)
+    const iframeRef = useRef<HTMLIFrameElement>(null)
+    const { volume, track } = useAudioStore()
+
+    useEffect(() => {
+        const randomIndex = Math.floor(Math.random() * OSTLists.length)
+        useAudioStore.getState().setTrack(OSTLists[randomIndex].src)
+    }, [])
+
+    useEffect(() => {
+        const onMessage = (event: MessageEvent) => {
+            if (event.data?.type === "GAME_ANIMATIONS_START") {
+                setAnimationsPlaying(true)
+            }
+            if (event.data?.type === "GAME_ANIMATIONS_DONE") {
+                setAnimationsPlaying(false)
+            }
+        }
+
+        window.addEventListener("message", onMessage)
+        return () => window.removeEventListener("message", onMessage)
+    }, [])
 
     if (!socket) return null
     const socketId = socket.id
@@ -24,18 +48,9 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
         redirect('/dashboard')
     }
 
-    const playRandomOST = () => {
-        const randomIndex = Math.floor(Math.random() * OSTLists.length)
-        const randomTrack = OSTLists[randomIndex]
-
-        useAudioStore.getState().setTrack(randomTrack.src)
-    }
-
-    const { volume, track } = useAudioStore()
     const playerData = player?.player
     const opponentData = opponent?.player
     const GAMEBOARD_URL = process.env.NEXT_PUBLIC_3D_GAMEBOARD_URL
-    const iframeRef = useRef<HTMLIFrameElement>(null)
 
     const buildGameboardLink = (page: string, params: Record<string, string | null | undefined>) => {
         const baseUrl = (GAMEBOARD_URL ?? "http://localhost:5173").replace(/\/$/, "")
@@ -68,9 +83,12 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
 
     const link = isPlayer ? playerLink : viewerLink
 
-    useEffect(() => {
-        playRandomOST()
-    }, [])
+    const skipAnimations = () => {
+        iframeRef.current?.contentWindow?.postMessage(
+            { type: "SKIP_ANIMATIONS" },
+            GAMEBOARD_URL ?? "*"
+        )
+    }
 
     return (
         <>
@@ -80,17 +98,33 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
                 volume={volume[0]}
                 playing={true}
             />
-            <div className="relative h-full w-full">
+            <div className="relative h-full w-full" data-battlefield-root>
                 <iframe ref={iframeRef} src={link} className="h-full w-full border-0"></iframe>
-                <DownloadAndUploadReplay roomId={roomId} player1={playerData} player2={opponent?.player} />
-                <MessagesModal
-                    player={playerData?.displayUsername}
-                    opponent={opponentData?.displayUsername}
-                    roomId={roomId}
-                    userId={userId}
-                    isReplay={false}
-                    battleLogEnabled={battleLogEnabled}
-                />
+                <div className="absolute bottom-2 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2">
+                    <MessagesModal
+                        player={playerData?.displayUsername}
+                        opponent={opponentData?.displayUsername}
+                        roomId={roomId}
+                        userId={userId}
+                        isReplay={false}
+                        battleLogEnabled={battleLogEnabled}
+                        embedded
+                    />
+                    <DownloadAndUploadReplay
+                        roomId={roomId}
+                        player1={playerData}
+                        player2={opponentData}
+                    />
+                    {animationsPlaying && (
+                        <Button
+                            variant="outline"
+                            onClick={skipAnimations}
+                            aria-label="Passer les animations"
+                        >
+                            <SkipForward />
+                        </Button>
+                    )}
+                </div>
             </div>
             <Toaster />
         </>

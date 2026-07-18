@@ -29,3 +29,13 @@ export function notifyParentAnimationsDone() {
         "*"
     );
 }
+
+/** Signale au parent qu'une file d'animations démarre. */
+export function notifyParentAnimationsStart() {
+    window.parent.postMessage(
+        {
+            type: "GAME_ANIMATIONS_START",
+        },
+        "*"
+    );
+}
