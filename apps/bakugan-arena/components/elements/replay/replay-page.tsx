@@ -8,7 +8,7 @@ import ReactHowler from "react-howler"
 import { useAudioStore } from "@/src/store/sounds-store"
 import MessagesModal from "../battlefield/messages-modal"
 import { Button } from "@/components/ui/button"
-import { Pause, Play, RotateCcw, SkipBack, SkipForward } from "lucide-react"
+import { Pause, Play, RotateCcw, SkipBack, SkipForward, X } from "lucide-react"
 
 type ReplayControlMessage =
     | "REPLAY_PAUSE"
@@ -51,6 +51,11 @@ export default function ReplayPage() {
         sendReplayControl(nextPaused ? "REPLAY_PAUSE" : "REPLAY_PLAY")
     }
 
+    const clearReplay = () => {
+        setReplay(null)
+        setIsPaused(true)
+    }
+
     useEffect(() => {
         if (!replay) return
 
@@ -78,19 +83,42 @@ export default function ReplayPage() {
     }, [replay, GAMEBOARD_URL])
 
     const link = buildGameboardLink("replay.html")
+    const matchLabel = replay?.player1 && replay?.player2
+        ? `${replay.player1.displayUsername} VS ${replay.player2.displayUsername}`
+        : null
 
     return (<>
-        <header className="flex items-center justify-center gap-4 mb-3">
-            <ImportReplay
-                setReplay={(replayData: replayDataType) => {
-                    setReplay(replayData)
-                }}
-            />
-            <SelectUploadedReplay
-                setReplay={(replayData: replayDataType) => {
-                    setReplay(replayData)
-                }}
-            />
+        <header className="mb-3 flex flex-wrap items-center justify-between gap-3 rounded-lg border bg-card/50 px-3 py-2">
+            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
+                <ImportReplay
+                    setReplay={(replayData: replayDataType) => {
+                        setReplay(replayData)
+                    }}
+                />
+                <SelectUploadedReplay
+                    setReplay={(replayData: replayDataType) => {
+                        setReplay(replayData)
+                    }}
+                />
+            </div>
+
+            {matchLabel && (
+                <p className="truncate text-sm font-medium text-muted-foreground">
+                    {matchLabel}
+                </p>
+            )}
+
+            <div className="flex items-center gap-2">
+                <Button
+                    variant="outline"
+                    disabled={!replay}
+                    onClick={clearReplay}
+                    aria-label="Vider le replay"
+                >
+                    <X />
+                    Clear
+                </Button>
+            </div>
         </header>
 
         {

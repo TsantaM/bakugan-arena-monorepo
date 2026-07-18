@@ -44,26 +44,24 @@ export default function SelectUploadedReplay({
     const replays = replaysQuery.data ?? []
 
     const selectedReplay = replays.find(
-        (replay) => replay.roomId === selectedReplayId
+        (replay) => replay.id === selectedReplayId
     )
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
+            <PopoverTrigger asChild className='overflow-hidden'>
                 <Button
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-75 justify-between"
+                    className="w-64 justify-between"
                 >
-                    {selectedReplay
-                        ? `${selectedReplay.replayData.player1?.displayUsername} VS ${selectedReplay.replayData.player2?.displayUsername}`
-                        : 'Select a replay'}
+                    {selectedReplay?.title ?? 'Select a replay'}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
 
-            <PopoverContent className="w-75 p-0">
+            <PopoverContent className="w-64 p-0">
                 <Command>
                     <CommandInput placeholder="Search replay..." />
 
@@ -75,25 +73,25 @@ export default function SelectUploadedReplay({
                         <CommandGroup>
                             {replays.map((replay) => (
                                 <CommandItem
-                                    key={replay.roomId}
-                                    value={`${replay.replayData.player1?.displayUsername} ${replay.replayData.player2?.displayUsername}`}
+                                    key={replay.id}
+                                    value={replay.id}
+                                    keywords={[replay.title]}
                                     onSelect={() => {
-                                        setSelectedReplayId(replay.roomId)
+                                        setSelectedReplayId(replay.id)
                                         setReplay(replay.replayData)
                                         setOpen(false)
-                                        setSelectedReplayId('')
                                     }}
                                 >
                                     <Check
                                         className={cn(
                                             'mr-2 h-4 w-4',
-                                            selectedReplayId === replay.roomId
+                                            selectedReplayId === replay.id
                                                 ? 'opacity-100'
                                                 : 'opacity-0'
                                         )}
                                     />
 
-                                    {`${replay.replayData.player1?.displayUsername} VS ${replay.replayData.player2?.displayUsername}`}
+                                    {replay.title}
                                 </CommandItem>
                             ))}
                         </CommandGroup>
