@@ -69,7 +69,7 @@ function TurnMessagesContainer({ turn, messages }: { turn: number, messages: Mes
     )
 }
 
-export default function MessagesModal({ player, opponent, roomId, userId }: { player: string | undefined | null, opponent: string | undefined | null, roomId: string, userId: string }) {
+export default function MessagesModal({ player, opponent, roomId, userId, isReplay = false }: { player: string | undefined | null, opponent: string | undefined | null, roomId: string, userId: string, isReplay: boolean }) {
 
     const [messagesContainer, setMessagesContainer] = useState<messagesContainerType[]>([])
     const socket = useSocket()
@@ -230,7 +230,7 @@ export default function MessagesModal({ player, opponent, roomId, userId }: { pl
     return <Dialog>
 
         <DialogTrigger asChild>
-            <Button variant='outline' className="absolute bottom-2 left-[50%] translate-x-[-50%]">
+            <Button variant='outline' className={ !isReplay ? "absolute bottom-2 left-[50%] translate-x-[-50%]" : ""}>
                 <MessagesSquare />
             </Button>
         </DialogTrigger>

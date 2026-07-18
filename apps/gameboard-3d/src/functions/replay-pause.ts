@@ -15,10 +15,15 @@ export function setReplayPaused(value: boolean) {
         gsap.globalTimeline.pause()
     } else {
         gsap.globalTimeline.resume()
-        const waiting = resolvers
-        resolvers = []
-        waiting.forEach((resolve) => resolve())
+        wakePauseWaiters()
     }
+}
+
+/** Réveille les attentes pause sans changer l'état (ex: seek pendant une pause). */
+export function wakePauseWaiters() {
+    const waiting = resolvers
+    resolvers = []
+    waiting.forEach((resolve) => resolve())
 }
 
 /** Bloque tant que le replay est en pause (entre deux entrées / avant une anim). */

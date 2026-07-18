@@ -7,12 +7,30 @@ import { PlaneMesh } from './meshes/plane.mesh'
 import { type BakuganPreviewData } from './functions/create-bakugan-preview-hover'
 import { setImageWithFallback } from './functions/set-image-with-fallback'
 import { hideTooltip, initTooltip, showTooltip, tooltip } from './functions/tooltips-functions'
-import { Bakugans, normalizeReplayData, replaySnapshotToRoomState } from '@bakugan-arena/game-data'
-import type { replayDataType } from "@bakugan-arena/game-data"
-import { InitGameState } from './functions/init-game-state'
+import { Bakugans, normalizeReplayData } from '@bakugan-arena/game-data'
+import type { replayDataType, replayEntryType } from "@bakugan-arena/game-data"
 import { playAnimation } from './sockets/sockets-handlers'
 import { applyReplaySnapshotUi } from './functions/apply-replay-snapshot-ui'
+import { applyReplayBoardState } from './functions/apply-replay-board-state'
 import { setReplayPaused, waitWhilePaused } from './functions/replay-pause'
+import {
+  abortReplayPlayback,
+  consumeSeekTarget,
+  findNextTurnStart,
+  findPrevTurnStart,
+  peekSeekTarget,
+  requestReplaySeek,
+  waitForSeekAbort,
+} from './functions/replay-seek'
+
+type ActiveReplayPlayback = {
+  entries: replayEntryType[]
+  currentIndex: number
+  generation: number
+}
+
+let playbackGeneration = 0
+let activePlayback: ActiveReplayPlayback | null = null
 
 // alert('eh replay')
 
@@ -69,9 +87,8 @@ async function initReplay(replayPayload: replayDataType) {
       if (!player1) return
       if (!player2) return
 
-      const state = replaySnapshotToRoomState(initialSnapshot)
-
-      // const { player1, player2, replay  } = replayData
+      const generation = ++playbackGeneration
+      abortReplayPlayback()
 
       const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
       renderer.setSize(window.innerWidth, window.innerHeight)
@@ -276,8 +293,17 @@ async function initReplay(replayPayload: replayDataType) {
 
       camera.position.set(3, 5, 8)
 
-      applyReplaySnapshotUi(initialSnapshot, player1.id)
-      InitGameState({ state: state, bakugansMeshs, gateCardMeshs, plane, scene, userId: player1.id, isSpectator: true })
+      const keepObjects = [bgPlane, plane, light, camera]
+
+      applyReplayBoardState({
+        snapshot: initialSnapshot,
+        perspectiveUserId: player1.id,
+        scene,
+        plane,
+        bakugansMeshs,
+        gateCardMeshs,
+        keepObjects,
+      })
 
       loop()
       function loop() {
@@ -292,16 +318,66 @@ async function initReplay(replayPayload: replayDataType) {
         renderer.setSize(window.innerWidth, window.innerHeight)
       })
 
-      for (const entry of replay) {
+      const playback: ActiveReplayPlayback = {
+        entries: replay,
+        currentIndex: 0,
+        generation,
+      }
+      activePlayback = playback
+
+      const seekToIndex = (targetIndex: number) => {
+        const snapshot = targetIndex <= 0
+          ? initialSnapshot
+          : replay[targetIndex].stateBefore
+
+        applyReplayBoardState({
+          snapshot,
+          perspectiveUserId: player1.id,
+          scene,
+          plane,
+          bakugansMeshs,
+          gateCardMeshs,
+          keepObjects,
+        })
+        playback.currentIndex = Math.max(0, targetIndex)
+      }
+
+      while (generation === playbackGeneration) {
+        const seekTarget = consumeSeekTarget()
+        if (seekTarget !== null) {
+          seekToIndex(seekTarget)
+          continue
+        }
+
+        // Fin du replay : rester à l'écoute des seeks (restart / tour précédent)
+        if (playback.currentIndex >= replay.length) {
+          await waitForSeekAbort()
+          continue
+        }
+
         await waitWhilePaused()
+        if (generation !== playbackGeneration) return
+        if (peekSeekTarget() !== null) continue
+
+        const entry = replay[playback.currentIndex]
         applyReplaySnapshotUi(entry.stateBefore, player1.id)
 
         if (entry.animation) {
           await waitWhilePaused()
-          await playAnimation(player1Id, true, camera, scene, plane, bakugansMeshs, gateCardMeshs, [entry.animation])
+          if (generation !== playbackGeneration) return
+          if (peekSeekTarget() !== null) continue
+
+          await Promise.race([
+            playAnimation(player1Id, true, camera, scene, plane, bakugansMeshs, gateCardMeshs, [entry.animation]),
+            waitForSeekAbort(),
+          ])
+
+          if (generation !== playbackGeneration) return
+          if (peekSeekTarget() !== null) continue
         }
 
         applyReplaySnapshotUi(entry.stateAfter, player1.id)
+        playback.currentIndex++
       }
 
     }
@@ -329,6 +405,26 @@ window.addEventListener('message', (event) => {
 
   if (event.data.type === 'REPLAY_PLAY') {
     setReplayPaused(false)
+    return
+  }
+
+  if (event.data.type === 'REPLAY_NEXT_TURN') {
+    if (!activePlayback) return
+    const next = findNextTurnStart(activePlayback.entries, activePlayback.currentIndex)
+    if (next !== null) requestReplaySeek(next)
+    return
+  }
+
+  if (event.data.type === 'REPLAY_PREV_TURN') {
+    if (!activePlayback) return
+    const prev = findPrevTurnStart(activePlayback.entries, activePlayback.currentIndex)
+    if (prev !== null) requestReplaySeek(prev)
+    return
+  }
+
+  if (event.data.type === 'REPLAY_RESTART') {
+    if (!activePlayback) return
+    requestReplaySeek(0)
   }
 })
 

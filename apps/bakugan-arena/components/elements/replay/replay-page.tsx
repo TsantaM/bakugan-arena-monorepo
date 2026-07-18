@@ -8,7 +8,14 @@ import ReactHowler from "react-howler"
 import { useAudioStore } from "@/src/store/sounds-store"
 import MessagesModal from "../battlefield/messages-modal"
 import { Button } from "@/components/ui/button"
-import { Pause, Play } from "lucide-react"
+import { Pause, Play, RotateCcw, SkipBack, SkipForward } from "lucide-react"
+
+type ReplayControlMessage =
+    | "REPLAY_PAUSE"
+    | "REPLAY_PLAY"
+    | "REPLAY_NEXT_TURN"
+    | "REPLAY_PREV_TURN"
+    | "REPLAY_RESTART"
 
 export default function ReplayPage() {
 
@@ -31,7 +38,7 @@ export default function ReplayPage() {
         return url.toString()
     }
 
-    const sendReplayControl = (type: "REPLAY_PAUSE" | "REPLAY_PLAY") => {
+    const sendReplayControl = (type: ReplayControlMessage) => {
         iframeRef.current?.contentWindow?.postMessage(
             { type },
             GAMEBOARD_URL ?? "*"
@@ -97,15 +104,37 @@ export default function ReplayPage() {
                 />
                 <iframe ref={iframeRef} src={link} className="w-full h-[85%] border-0"></iframe>
                 <div>
-                    <Button
-                        variant="outline"
-                        className="absolute bottom-2 left-[calc(50%-4rem)] -translate-x-1/2 z-10"
-                        onClick={togglePause}
-                        aria-label={isPaused ? "Play replay" : "Pause replay"}
-                    >
-                        {isPaused ? <Play /> : <Pause />}
-                    </Button>
-                    <MessagesModal player={replay.player1.displayUsername} opponent={replay.player2.displayUsername} roomId={replay.roomId} userId={replay.player1.id} />
+                    <div className="absolute bottom-2 left-1/2 z-10 flex -translate-x-[calc(50%+3rem)] items-center gap-2">
+                        <MessagesModal isReplay={true} player={replay.player1.displayUsername} opponent={replay.player2.displayUsername} roomId={replay.roomId} userId={replay.player1.id} />
+                        <Button
+                            variant="outline"
+                            onClick={() => sendReplayControl("REPLAY_RESTART")}
+                            aria-label="Recommencer le replay"
+                        >
+                            <RotateCcw />
+                        </Button>
+                        <Button
+                            variant="outline"
+                            onClick={() => sendReplayControl("REPLAY_PREV_TURN")}
+                            aria-label="Tour précédent"
+                        >
+                            <SkipBack />
+                        </Button>
+                        <Button
+                            variant="outline"
+                            onClick={togglePause}
+                            aria-label={isPaused ? "Play replay" : "Pause replay"}
+                        >
+                            {isPaused ? <Play /> : <Pause />}
+                        </Button>
+                        <Button
+                            variant="outline"
+                            onClick={() => sendReplayControl("REPLAY_NEXT_TURN")}
+                            aria-label="Tour suivant"
+                        >
+                            <SkipForward />
+                        </Button>
+                    </div>
                 </div>
 
             </>
