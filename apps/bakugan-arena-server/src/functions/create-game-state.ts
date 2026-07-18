@@ -232,7 +232,7 @@ export const createGameState = async ({ roomId, ranked }: { roomId: string; rank
         }
     }).filter((card) => card !== undefined)
 
-    const state = {
+    const state: stateType = {
         connectedsUsers: new Map(),
         spectators: new Map(),
         createdAt: Date.now(),
@@ -276,10 +276,27 @@ export const createGameState = async ({ roomId, ranked }: { roomId: string; rank
                 optional: []
             }
         },
-        AbilityAditionalRequest: []
+        AbilityAditionalRequest: [],
+        initialReplaySnapshot: {
+            decksState,
+            battleState: battleState,
+            turnState: turnState,
+            eliminated: {
+                opponnent: 0,
+                user: 0
+            },
+            finished: undefined,
+            messages: [],
+            portalSlots: protalSlots,
+            timers: playersState.map((p) => ({
+                userId: p.userId,
+                timer: p.timer
+            }))
+        }
+        
     }
 
-    state.initialReplaySnapshot = captureReplaySnapshot(state as stateType, player1.userId)
+    // state.initialReplaySnapshot = captureReplaySnapshot(state as stateType, player1.userId)
 
     return state as stateType
 
