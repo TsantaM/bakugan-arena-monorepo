@@ -79,7 +79,7 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
                 playing={true}
             />
             <DownloadAndUploadReplay roomId={roomId} player1={playerData} player2={opponent?.player} />
-            <MessagesModal player={playerData?.displayUsername} opponent={opponentData?.displayUsername} roomId={roomId} userId={userId} />
+            <MessagesModal player={playerData?.displayUsername} opponent={opponentData?.displayUsername} roomId={roomId} userId={userId} isReplay={false} />
             <iframe ref={iframeRef} src={link} className="w-full h-full border-0"></iframe>
             <Toaster />
         </>
