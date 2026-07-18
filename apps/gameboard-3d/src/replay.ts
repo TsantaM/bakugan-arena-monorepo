@@ -12,8 +12,9 @@ import type { replayDataType } from "@bakugan-arena/game-data"
 import { InitGameState } from './functions/init-game-state'
 import { playAnimation } from './sockets/sockets-handlers'
 import { applyReplaySnapshotUi } from './functions/apply-replay-snapshot-ui'
+import { setReplayPaused, waitWhilePaused } from './functions/replay-pause'
 
-alert('eh replay')
+// alert('eh replay')
 
 const canvas = document.getElementById('gameboard-canvas')
 const params = new URLSearchParams(window.location.search)
@@ -292,9 +293,11 @@ async function initReplay(replayPayload: replayDataType) {
       })
 
       for (const entry of replay) {
+        await waitWhilePaused()
         applyReplaySnapshotUi(entry.stateBefore, player1.id)
 
         if (entry.animation) {
+          await waitWhilePaused()
           await playAnimation(player1Id, true, camera, scene, plane, bakugansMeshs, gateCardMeshs, [entry.animation])
         }
 
@@ -311,8 +314,22 @@ function startReplay(rawReplay: unknown) {
 }
 
 window.addEventListener('message', (event) => {
-  if (!event.data || event.data.type !== 'LOAD_REPLAY') return
-  startReplay(event.data.payload)
+  if (!event.data?.type) return
+
+  if (event.data.type === 'LOAD_REPLAY') {
+    setReplayPaused(true)
+    startReplay(event.data.payload)
+    return
+  }
+
+  if (event.data.type === 'REPLAY_PAUSE') {
+    setReplayPaused(true)
+    return
+  }
+
+  if (event.data.type === 'REPLAY_PLAY') {
+    setReplayPaused(false)
+  }
 })
 
 if (replayData !== null) {

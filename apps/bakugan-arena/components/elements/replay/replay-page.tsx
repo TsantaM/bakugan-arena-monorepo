@@ -7,10 +7,13 @@ import SelectUploadedReplay from "./select-uploaded-replay"
 import ReactHowler from "react-howler"
 import { useAudioStore } from "@/src/store/sounds-store"
 import MessagesModal from "../battlefield/messages-modal"
+import { Button } from "@/components/ui/button"
+import { Pause, Play } from "lucide-react"
 
 export default function ReplayPage() {
 
     const [replay, setReplay] = useState<replayDataType | null>(null)
+    const [isPaused, setIsPaused] = useState(true)
     const { volume, track } = useAudioStore()
     const iframeRef = useRef<HTMLIFrameElement>(null)
     const GAMEBOARD_URL = process.env.NEXT_PUBLIC_3D_GAMEBOARD_URL
@@ -28,11 +31,26 @@ export default function ReplayPage() {
         return url.toString()
     }
 
+    const sendReplayControl = (type: "REPLAY_PAUSE" | "REPLAY_PLAY") => {
+        iframeRef.current?.contentWindow?.postMessage(
+            { type },
+            GAMEBOARD_URL ?? "*"
+        )
+    }
+
+    const togglePause = () => {
+        const nextPaused = !isPaused
+        setIsPaused(nextPaused)
+        sendReplayControl(nextPaused ? "REPLAY_PAUSE" : "REPLAY_PLAY")
+    }
+
     useEffect(() => {
         if (!replay) return
 
         const iframe = iframeRef.current
         if (!iframe) return
+
+        setIsPaused(true)
 
         const sendReplay = () => {
             iframe.contentWindow?.postMessage(
@@ -75,10 +93,20 @@ export default function ReplayPage() {
                     src={[`/sounds/OST/${track}`]}
                     loop={true}
                     volume={volume[0]}
-                    playing={true}
+                    playing={!isPaused}
                 />
                 <iframe ref={iframeRef} src={link} className="w-full h-[85%] border-0"></iframe>
-                <MessagesModal player={replay.player1.displayUsername} opponent={replay.player2.displayUsername} roomId={replay.roomId} userId={replay.player1.id} />
+                <div>
+                    <Button
+                        variant="outline"
+                        className="absolute bottom-2 left-[calc(50%-4rem)] -translate-x-1/2 z-10"
+                        onClick={togglePause}
+                        aria-label={isPaused ? "Play replay" : "Pause replay"}
+                    >
+                        {isPaused ? <Play /> : <Pause />}
+                    </Button>
+                    <MessagesModal player={replay.player1.displayUsername} opponent={replay.player2.displayUsername} roomId={replay.roomId} userId={replay.player1.id} />
+                </div>
 
             </>
         }
