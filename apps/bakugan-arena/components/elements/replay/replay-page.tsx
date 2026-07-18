@@ -8,7 +8,11 @@ import ReactHowler from "react-howler"
 import { useAudioStore } from "@/src/store/sounds-store"
 import MessagesModal from "../battlefield/messages-modal"
 import { Button } from "@/components/ui/button"
-import { Pause, Play, RotateCcw, SkipBack, SkipForward, X } from "lucide-react"
+import { Loader2, Pause, Play, RotateCcw, SkipBack, SkipForward, Upload, X } from "lucide-react"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { ReplayExistsByRoomId } from "@/src/actions/replay/replay-exists-by-room-id"
+import { UploadReplay } from "@/src/actions/replay/uploard-raplay-action"
+import { toast } from "sonner"
 
 type ReplayControlMessage =
     | "REPLAY_PAUSE"
@@ -24,6 +28,37 @@ export default function ReplayPage() {
     const { volume, track } = useAudioStore()
     const iframeRef = useRef<HTMLIFrameElement>(null)
     const GAMEBOARD_URL = process.env.NEXT_PUBLIC_3D_GAMEBOARD_URL
+    const queryClient = useQueryClient()
+
+    const existsQuery = useQuery({
+        queryKey: ["replay-exists", replay?.roomId],
+        queryFn: () => ReplayExistsByRoomId(replay!.roomId),
+        enabled: Boolean(replay?.roomId),
+    })
+
+    const uploadMutation = useMutation({
+        mutationFn: async () => {
+            if (!replay?.player1 || !replay?.player2 || !replay.initialSnapshot || !replay.replay) {
+                throw new Error("Missing data for upload")
+            }
+
+            return await UploadReplay({
+                roomId: replay.roomId,
+                player1: replay.player1,
+                player2: replay.player2,
+                replay: replay.replay,
+                initialSnapshot: replay.initialSnapshot,
+            })
+        },
+        onSuccess: async () => {
+            toast.success("Replay upload success")
+            await queryClient.invalidateQueries({ queryKey: ["replay-exists", replay?.roomId] })
+            await queryClient.invalidateQueries({ queryKey: ["get-replays"] })
+        },
+        onError: (error) => {
+            toast.error(`Replay upload failed, ${error instanceof Error ? error.message : error}`)
+        },
+    })
 
     const buildGameboardLink = (page: string) => {
         const baseUrl = (GAMEBOARD_URL ?? "http://localhost:5173").replace(/\/$/, "")
@@ -86,6 +121,7 @@ export default function ReplayPage() {
     const matchLabel = replay?.player1 && replay?.player2
         ? `${replay.player1.displayUsername} VS ${replay.player2.displayUsername}`
         : null
+    const showUploadButton = Boolean(replay) && existsQuery.isSuccess && existsQuery.data === false
 
     return (<>
         <header className="mb-3 flex flex-wrap items-center justify-between gap-3 rounded-lg border bg-card/50 px-3 py-2">
@@ -109,6 +145,21 @@ export default function ReplayPage() {
             )}
 
             <div className="flex items-center gap-2">
+                {showUploadButton && (
+                    <Button
+                        variant="outline"
+                        disabled={uploadMutation.isPending}
+                        onClick={() => uploadMutation.mutate()}
+                        aria-label="Upload replay"
+                    >
+                        {uploadMutation.isPending ? (
+                            <Loader2 className="animate-spin" />
+                        ) : (
+                            <Upload />
+                        )}
+                        Upload
+                    </Button>
+                )}
                 <Button
                     variant="outline"
                     disabled={!replay}

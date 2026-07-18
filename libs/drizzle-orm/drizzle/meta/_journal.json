@@ -29,6 +29,13 @@
       "when": 1774378856366,
       "tag": "0003_brave_cactus",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1774400000000,
+      "tag": "0004_add_replay_table",
+      "breakpoints": true
     }
   ]
 }
