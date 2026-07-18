@@ -13,7 +13,7 @@ import { InitGameState } from './functions/init-game-state'
 import { playAnimation } from './sockets/sockets-handlers'
 import { applyReplaySnapshotUi } from './functions/apply-replay-snapshot-ui'
 
-// alert('eh replay')
+alert('eh replay')
 
 const canvas = document.getElementById('gameboard-canvas')
 const params = new URLSearchParams(window.location.search)

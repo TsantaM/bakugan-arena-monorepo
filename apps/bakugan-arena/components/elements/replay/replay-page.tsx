@@ -15,6 +15,19 @@ export default function ReplayPage() {
     const iframeRef = useRef<HTMLIFrameElement>(null)
     const GAMEBOARD_URL = process.env.NEXT_PUBLIC_3D_GAMEBOARD_URL
 
+    const buildGameboardLink = (page: string) => {
+        const baseUrl = (GAMEBOARD_URL ?? "http://localhost:5173").replace(/\/$/, "")
+        const url = new URL(`${baseUrl}/${page}`)
+
+        if (replay?.roomId) url.searchParams.set("roomId", replay.roomId)
+        if (replay?.player1?.id) url.searchParams.set("player1Id", replay.player1.id)
+        if (replay?.player1?.image) url.searchParams.set("player1Image", replay.player1.image)
+        if (replay?.player2?.id) url.searchParams.set("player2Id", replay.player2.id)
+        if (replay?.player2?.image) url.searchParams.set("player2Image", replay.player2.image)
+
+        return url.toString()
+    }
+
     useEffect(() => {
         if (!replay) return
 
@@ -39,11 +52,10 @@ export default function ReplayPage() {
         }
     }, [replay, GAMEBOARD_URL])
 
-    const link = `${GAMEBOARD_URL}/replay.html/?roomId=${replay?.roomId}&player1Id=${replay?.player1?.id}&player1Image=${replay?.player1?.image ?? undefined}&player2Id=${replay?.player2?.id}&player2Image=${replay?.player2?.image ?? undefined}`
-
+    const link = buildGameboardLink("replay.html")
 
     return (<>
-        <header className="flex items-center justify-center gap-4">
+        <header className="flex items-center justify-center gap-4 mb-3">
             <ImportReplay
                 setReplay={(replayData: replayDataType) => {
                     setReplay(replayData)
@@ -65,7 +77,7 @@ export default function ReplayPage() {
                     volume={volume[0]}
                     playing={true}
                 />
-                <iframe ref={iframeRef} src={link} className="w-full h-full border-0"></iframe>
+                <iframe ref={iframeRef} src={link} className="w-full h-[85%] border-0"></iframe>
                 <MessagesModal player={replay.player1.displayUsername} opponent={replay.player2.displayUsername} roomId={replay.roomId} userId={replay.player1.id} />
 
             </>

@@ -35,9 +35,34 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
     const GAMEBOARD_URL = process.env.NEXT_PUBLIC_3D_GAMEBOARD_URL
     const iframeRef = useRef<HTMLIFrameElement>(null)
 
-    const playerLink = `${GAMEBOARD_URL}/?roomId=${roomId}&userId=${userId}&parentSocket=${socketId}&userImage=${playerData?.image ? playerData?.image : undefined}&opponentImage=${opponentData?.image ? opponentData?.image : undefined}`
+    const buildGameboardLink = (page: string, params: Record<string, string | null | undefined>) => {
+        const baseUrl = (GAMEBOARD_URL ?? "http://localhost:5173").replace(/\/$/, "")
+        const url = new URL(`${baseUrl}/${page}`)
 
-    const viewerLink = `${GAMEBOARD_URL}/viewer.html/?roomId=${roomId}&userId=${userId}&parentSocket=${socketId}&player1Id=${playerData?.id}&player1Image=${playerData?.image ?? undefined}&player2Id=${opponentData?.id}&player2Image=${opponentData?.image ?? undefined}`
+        Object.entries(params).forEach(([key, value]) => {
+            if (value) url.searchParams.set(key, value)
+        })
+
+        return url.toString()
+    }
+
+    const playerLink = buildGameboardLink("", {
+        roomId,
+        userId,
+        parentSocket: socketId,
+        userImage: playerData?.image,
+        opponentImage: opponentData?.image,
+    })
+
+    const viewerLink = buildGameboardLink("viewer.html", {
+        roomId,
+        userId,
+        parentSocket: socketId,
+        player1Id: playerData?.id,
+        player1Image: playerData?.image,
+        player2Id: opponentData?.id,
+        player2Image: opponentData?.image,
+    })
 
     const link = isPlayer ? playerLink : viewerLink
 
