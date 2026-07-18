@@ -13,6 +13,7 @@ import { playAnimation } from './sockets/sockets-handlers'
 import { applyReplaySnapshotUi } from './functions/apply-replay-snapshot-ui'
 import { applyReplayBoardState } from './functions/apply-replay-board-state'
 import { setReplayPaused, waitWhilePaused } from './functions/replay-pause'
+import { notifyParentTurnEnd } from './functions/send-message-to-parent'
 import {
   abortReplayPlayback,
   consumeSeekTarget,
@@ -377,6 +378,11 @@ async function initReplay(replayPayload: replayDataType) {
         }
 
         applyReplaySnapshotUi(entry.stateAfter, player1.id)
+
+        if (entry.marker === 'turn_end') {
+          notifyParentTurnEnd()
+        }
+
         playback.currentIndex++
       }
 

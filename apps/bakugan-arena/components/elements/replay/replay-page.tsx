@@ -7,12 +7,14 @@ import SelectUploadedReplay from "./select-uploaded-replay"
 import ReactHowler from "react-howler"
 import { useAudioStore } from "@/src/store/sounds-store"
 import MessagesModal from "../battlefield/messages-modal"
+import BattleLogToggle from "../battle-log/battle-log-toggle"
 import { Button } from "@/components/ui/button"
 import { Loader2, Pause, Play, RotateCcw, SkipBack, SkipForward, Upload, X } from "lucide-react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { ReplayExistsByRoomId } from "@/src/actions/replay/replay-exists-by-room-id"
 import { UploadReplay } from "@/src/actions/replay/uploard-raplay-action"
 import { toast } from "sonner"
+import { useReplayBattleLogStore } from "@/src/store/replay-battle-log-store"
 
 type ReplayControlMessage =
     | "REPLAY_PAUSE"
@@ -25,6 +27,7 @@ export default function ReplayPage() {
 
     const [replay, setReplay] = useState<replayDataType | null>(null)
     const [isPaused, setIsPaused] = useState(true)
+    const battleLogEnabled = useReplayBattleLogStore((state) => state.enabled)
     const { volume, track } = useAudioStore()
     const iframeRef = useRef<HTMLIFrameElement>(null)
     const GAMEBOARD_URL = process.env.NEXT_PUBLIC_3D_GAMEBOARD_URL
@@ -145,6 +148,7 @@ export default function ReplayPage() {
             )}
 
             <div className="flex items-center gap-2">
+                <BattleLogToggle context="replay" />
                 {showUploadButton && (
                     <Button
                         variant="outline"
@@ -181,10 +185,17 @@ export default function ReplayPage() {
                     volume={volume[0]}
                     playing={!isPaused}
                 />
-                <iframe ref={iframeRef} src={link} className="w-full h-[85%] border-0"></iframe>
-                <div>
-                    <div className="absolute bottom-2 left-1/2 z-10 flex -translate-x-[calc(50%+3rem)] items-center gap-2">
-                        <MessagesModal isReplay={true} player={replay.player1.displayUsername} opponent={replay.player2.displayUsername} roomId={replay.roomId} userId={replay.player1.id} />
+                <div className="relative h-[85%] w-full">
+                    <iframe ref={iframeRef} src={link} className="h-full w-full border-0"></iframe>
+                    <MessagesModal
+                        isReplay={true}
+                        battleLogEnabled={battleLogEnabled}
+                        player={replay.player1.displayUsername}
+                        opponent={replay.player2.displayUsername}
+                        roomId={replay.roomId}
+                        userId={replay.player1.id}
+                    />
+                    <div className="absolute bottom-2 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2">
                         <Button
                             variant="outline"
                             onClick={() => sendReplayControl("REPLAY_RESTART")}

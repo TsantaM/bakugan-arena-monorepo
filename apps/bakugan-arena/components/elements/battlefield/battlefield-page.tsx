@@ -10,10 +10,12 @@ import { OSTLists } from "@/src/variables/OST";
 import { Toaster } from "@/components/ui/sonner"
 import DownloadAndUploadReplay from "./download-upload-replay";
 import { BattleFieldPageProps } from "@bakugan-arena/game-data";
+import { useBattlefieldBattleLogStore } from "@/src/store/battlefield-battle-log-store";
 
 export default function BattleFieldPage({ player, opponent, roomId, userId, isPlayer }: BattleFieldPageProps) {
 
     const socket = useSocketStore((state) => state.socket)
+    const battleLogEnabled = useBattlefieldBattleLogStore((state) => state.enabled)
 
     if (!socket) return null
     const socketId = socket.id
@@ -78,9 +80,18 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
                 volume={volume[0]}
                 playing={true}
             />
-            <DownloadAndUploadReplay roomId={roomId} player1={playerData} player2={opponent?.player} />
-            <MessagesModal player={playerData?.displayUsername} opponent={opponentData?.displayUsername} roomId={roomId} userId={userId} isReplay={false} />
-            <iframe ref={iframeRef} src={link} className="w-full h-full border-0"></iframe>
+            <div className="relative h-full w-full">
+                <iframe ref={iframeRef} src={link} className="h-full w-full border-0"></iframe>
+                <DownloadAndUploadReplay roomId={roomId} player1={playerData} player2={opponent?.player} />
+                <MessagesModal
+                    player={playerData?.displayUsername}
+                    opponent={opponentData?.displayUsername}
+                    roomId={roomId}
+                    userId={userId}
+                    isReplay={false}
+                    battleLogEnabled={battleLogEnabled}
+                />
+            </div>
             <Toaster />
         </>
     )

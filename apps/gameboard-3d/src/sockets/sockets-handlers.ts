@@ -32,7 +32,7 @@ import { SwipeGateCards } from "../animations/swipe-gate-cards"
 import { CancelAbilityCardAnimation } from "../animations/cancel-ability-card-animation"
 import { DragAndElimineAnimation } from "../animations/drag-and-elimine-animation"
 import { ReviveBakuganAnimation } from "../animations/revive-animation"
-import { sendMessageToParent } from "../functions/send-message-to-parent"
+import { sendMessageToParent, notifyParentTurnEnd, notifyParentAnimationsDone } from "../functions/send-message-to-parent"
 import { GateCardAdditionalRequestResolution } from "../abiliity-additional-request/gate-card-additional-request"
 
 let animationQueue: AnimationDirectivesTypes[] = []
@@ -49,6 +49,7 @@ export async function playAnimation(
     gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[],
     animationQueue: AnimationDirectivesTypes[]
 ) {
+    try {
     let i = 0;
     while (i < animationQueue.length) {
 
@@ -392,6 +393,9 @@ export async function playAnimation(
 
         i++; // avancer à l'animation suivante
     }
+    } finally {
+        notifyParentAnimationsDone()
+    }
 }
 
 
@@ -558,7 +562,7 @@ export function registerSocketHandlers(
 
         const data = turnState.battleTurn !== undefined ? `${turnState.turnCount}T (${turnState.battleTurn})` : `${turnState.turnCount}T`
         turnCounter.textContent = data
-
+        notifyParentTurnEnd()
     })
 
     socket.on('player-timer', (timer: { userId: string, remaining: number }) => {
@@ -586,8 +590,8 @@ export function registerSocketHandlers(
     socket.on('game-finished', (message: Message) => {
         clearTurnInterface()
         sendMessageToParent([message])
+        notifyParentTurnEnd()
     })
-
 }
 
 export function registerSocketHandlersViewers(socket: Socket,
@@ -694,12 +698,13 @@ export function registerSocketHandlersViewers(socket: Socket,
 
         const data = turnState.battleTurn !== undefined ? `${turnState.turnCount}T (${turnState.battleTurn})` : `${turnState.turnCount}T`
         turnCounter.textContent = data
-
+        notifyParentTurnEnd()
     })
 
     socket.on('game-finished', (message: Message) => {
         clearTurnInterface()
         sendMessageToParent([message])
+        notifyParentTurnEnd()
     })
 
 }
