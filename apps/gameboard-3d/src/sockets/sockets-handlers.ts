@@ -36,6 +36,7 @@ import { sendMessageToParent, notifyParentTurnEnd, notifyParentAnimationsDone, n
 import { applySkipTimeScaleIfNeeded, clearAnimationSkip, setAnimationsActive } from "../functions/skip-animations"
 import { GateCardAdditionalRequestResolution } from "../abiliity-additional-request/gate-card-additional-request"
 import { ChangeAttributAnimation } from "../animations/change-attribut-animation"
+import { CustomAnimationsRegistry } from "../animations/custom-animations/registry"
 
 let animationQueue: AnimationDirectivesTypes[] = []
 let isProcessingAnimations = false
@@ -407,6 +408,23 @@ export async function playAnimation(
                 bakugan: current.data.bakugan,
                 scene: scene
             })
+        }
+
+        if (current.type === 'CUSTOM_ANIMATION') {
+            sendMessageToParent(current.message)
+
+            const play = CustomAnimationsRegistry[current.data.animationKey]
+            if (play) {
+                await play({
+                    scene,
+                    camera,
+                    plane,
+                    bakugansMeshs,
+                    gateCardMeshs,
+                    userId,
+                    data: current.data,
+                })
+            }
         }
 
         i++; // avancer à l'animation suivante
