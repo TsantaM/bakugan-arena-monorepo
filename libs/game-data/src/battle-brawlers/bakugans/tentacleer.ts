@@ -52,8 +52,9 @@ export const TentaclearGateCard: gateCardType = {
             bakugans: [bakugan],
             powerChange: basePower,
             malus: false,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
 
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
@@ -73,8 +74,9 @@ export const TentaclearGateCard: gateCardType = {
             bakugans: [bakugan],
             powerChange: basePower,
             malus: true,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
 
     },
 }

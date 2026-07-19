@@ -1,16 +1,18 @@
 import { BakuganList, Bakugans } from '../../battle-brawlers/bakugans.js';
-import type { AnimationDirectivesTypes, bakuganOnSlot, portalSlotsTypeElement } from '../../type/type-index.js'
+import type { AnimationDirectivesTypes, bakuganOnSlot, portalSlotsTypeElement, stateType } from '../../type/type-index.js'
+import { pushReplayAnimation } from '../replay/push-replay-animation.js'
 
 type Props = {
     animations: AnimationDirectivesTypes[];
+    roomState: stateType;
     bakugan: bakuganOnSlot;
     slot: portalSlotsTypeElement,
     turn: number
 }
 
-type AddRenfortAnimationDirectiveType = ({ animations, bakugan, slot, turn }: Props) => void;
+type AddRenfortAnimationDirectiveType = ({ animations, roomState, bakugan, slot, turn }: Props) => void;
 
-export const SetBakuganAndAddRenfortAnimationDirective: AddRenfortAnimationDirectiveType = ({ animations, bakugan, slot, turn }) => {
+export const SetBakuganAndAddRenfortAnimationDirective: AddRenfortAnimationDirectiveType = ({ animations, roomState, bakugan, slot, turn }) => {
     const animation: AnimationDirectivesTypes = {
         type: 'SET_BAKUGAN_AND_ADD_RENFORT',
         data: {
@@ -27,9 +29,10 @@ export const SetBakuganAndAddRenfortAnimationDirective: AddRenfortAnimationDirec
     if (animations.some((a) => a === animation)) return
 
     animations.push(animation)
+    pushReplayAnimation(roomState, animation)
 }
 
-export const AddRenfortAnimationDirective: AddRenfortAnimationDirectiveType = ({ animations, bakugan, slot, turn }) => {
+export const AddRenfortAnimationDirective: AddRenfortAnimationDirectiveType = ({ animations, roomState, bakugan, slot, turn }) => {
     const animation: AnimationDirectivesTypes = {
         type: 'ADD_RENFORT',
         data: {
@@ -46,4 +49,5 @@ export const AddRenfortAnimationDirective: AddRenfortAnimationDirectiveType = ({
     if (animations.some((a) => a === animation)) return
 
     animations.push(animation)
+    pushReplayAnimation(roomState, animation)
 }

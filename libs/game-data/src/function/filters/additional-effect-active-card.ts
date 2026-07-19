@@ -1,4 +1,5 @@
 import { AbilityCardsList, AnimationDirectivesTypes, bakuganOnSlot, ExclusiveAbilitiesList, GetUserName, type resolutionGateCardType, type stateType } from "../../index.js";
+import { pushReplayAnimation } from "../replay/push-replay-animation.js";
 import { NewAdditionnalMessage } from "../new-additional-message.js";
 
 
@@ -45,6 +46,7 @@ export function AdditionalEffectActiveCard({ resolution, roomState, opponentsBak
     }
 
     roomState.animations.push(activeCardAnimation)
+    pushReplayAnimation(roomState, activeCardAnimation)
 
     cardData?.onActivate({
         roomState,

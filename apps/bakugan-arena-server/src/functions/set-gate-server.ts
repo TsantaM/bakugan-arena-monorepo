@@ -1,4 +1,4 @@
-import { AnimationDirectivesTypes, GetUserName, SetBakuganActionRequest, setGateCardProps, stateType, updateDeckGates, updateSlot } from "@bakugan-arena/game-data"
+import { AnimationDirectivesTypes, GetUserName, pushReplayAnimation, SetBakuganActionRequest, setGateCardProps, stateType, updateDeckGates, updateSlot } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
 export const UpdateGate: ({ roomId, gateId, slot, userId }: setGateCardProps) => AnimationDirectivesTypes[] | undefined = ({ roomId, gateId, slot, userId }: setGateCardProps) => {
@@ -91,7 +91,7 @@ export const UpdateGate: ({ roomId, gateId, slot, userId }: setGateCardProps) =>
         })
     }
 
-    return [{
+    const animation: AnimationDirectivesTypes = {
         type: 'SET_GATE_CARD',
         data: {
             slot: newSlotState,
@@ -102,5 +102,7 @@ export const UpdateGate: ({ roomId, gateId, slot, userId }: setGateCardProps) =>
             userName: GetUserName({ roomData: Battle_Brawlers_Game_State[roomIndex], userId: userId }),
             turn: roomData.turnState.turnCount
         }]
-    }]
+    }
+    pushReplayAnimation(roomData, animation)
+    return [animation]
 }

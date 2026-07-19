@@ -79,8 +79,9 @@ export const DragonoidGateCard: gateCardType = {
             bakugans: [bakugan],
             powerChange: basePower,
             malus: false,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
 
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
@@ -100,8 +101,9 @@ export const DragonoidGateCard: gateCardType = {
             bakugans: [bakugan],
             powerChange: basePower,
             malus: true,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
 
     },
 }
@@ -146,8 +148,9 @@ export const DragonoidDeltaGateCard: gateCardType = {
             bakugans: [bakugan],
             powerChange: basePower,
             malus: false,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
 
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
@@ -167,8 +170,9 @@ export const DragonoidDeltaGateCard: gateCardType = {
             bakugans: [bakugan],
             powerChange: basePower,
             malus: true,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
 
     },
 }

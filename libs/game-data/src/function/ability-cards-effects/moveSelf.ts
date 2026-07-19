@@ -61,7 +61,9 @@ export function moveBakuganToSelectedSlot({
             RemoveRenfortAnimationDirective({
                 animations: roomData.animations,
                 bakugan: structuredClone(user),
-                turnCount: roomData.turnState.turnCount
+                turnCount: roomData.turnState.turnCount,
+                    roomState: roomData
+
             })
         }
     }
@@ -104,7 +106,9 @@ export function moveBakuganToSelectedSlot({
         initialSlot: structuredClone(slotOfGate),
         newSlot: structuredClone(slotTarget),
         turn: roomData.turnState.turnCount,
-        additionalMessages: shouldBlockAlways ? [additional] : []
+        additionalMessages: shouldBlockAlways ? [additional] : [],
+                    roomState: roomData
+
     });
 
     // --- Gate Card Effect on Set bakugan
@@ -132,6 +136,7 @@ export function moveBakuganToSelectedSlot({
         if (sameTeam) {
             AddRenfortAnimationDirective({
                 animations: roomData.animations,
+                roomState: roomData,
                 bakugan: user,
                 slot: slotTarget,
                 turn: roomData.turnState.turnCount

@@ -29,9 +29,9 @@ export const DimmensionQuatre: exclusiveAbilitiesType = {
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
                     slot: slotOfGate,
-                    turn: roomState.turnState.turnCount
-
-                })
+                    turn: roomState.turnState.turnCount,
+                    roomState: roomState
+                    })
                 card.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
                 slotOfGate.state.canceled = true
             }

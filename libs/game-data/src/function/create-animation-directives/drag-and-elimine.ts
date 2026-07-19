@@ -1,20 +1,19 @@
 import { BakuganList } from "../../battle-brawlers/index.js";
-import { AnimationDirectivesTypes } from "../../type/type-index.js";
-import { bakuganOnSlot, portalSlotsTypeElement } from "../../type/type-index.js";
+import { AnimationDirectivesTypes, bakuganOnSlot, portalSlotsTypeElement, stateType } from "../../type/type-index.js";
+import { pushReplayAnimation } from "../replay/push-replay-animation.js";
 
 type Props = {
     bakugan: bakuganOnSlot,
     user: bakuganOnSlot
     initialSlot: portalSlotsTypeElement
     animations: AnimationDirectivesTypes[];
+    roomState: stateType;
     turn: number
 }
 
-type DragAndElimineDirectiveAnimationType = ({ animations, bakugan, initialSlot, turn }: Props) => void
+type DragAndElimineDirectiveAnimationType = ({ animations, bakugan, initialSlot, turn, roomState }: Props) => void
 
-export const DragAndElimineDirectiveAnimation: DragAndElimineDirectiveAnimationType = ({ animations, bakugan, initialSlot, turn, user }) => {
-
-    const name = BakuganList.find((b) => bakugan.key === b.key)?.name || 'A bakugan'
+export const DragAndElimineDirectiveAnimation: DragAndElimineDirectiveAnimationType = ({ animations, bakugan, initialSlot, turn, user, roomState }) => {
 
     const animation: AnimationDirectivesTypes = {
         type: 'DRAG_AND_ELIMINE',
@@ -31,4 +30,6 @@ export const DragAndElimineDirectiveAnimation: DragAndElimineDirectiveAnimationT
     }
 
     animations.push(animation)
+    pushReplayAnimation(roomState, animation)
+
 }

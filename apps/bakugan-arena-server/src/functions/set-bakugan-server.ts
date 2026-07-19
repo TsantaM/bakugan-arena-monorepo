@@ -1,4 +1,4 @@
-import { AbilityCardsList, activateAbilities, addBakuganToSlot, AnimationDirectivesTypes, BakuganList, ExclusiveAbilitiesList, GateCardsList, GetUserName, setBakuganProps, Slots, slots_id } from "@bakugan-arena/game-data"
+import { AbilityCardsList, activateAbilities, addBakuganToSlot, AnimationDirectivesTypes, BakuganList, ExclusiveAbilitiesList, GateCardsList, GetUserName, pushReplayAnimation, setBakuganProps, Slots, slots_id } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
 export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuganProps): AnimationDirectivesTypes[] | undefined => {
@@ -133,6 +133,7 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuga
         }]
     }
 
+    pushReplayAnimation(roomData, animation)
     const updatedSlot = slots[Slots.indexOf(slot as slots_id)]
 
     // Battle_Brawlers_Game_State[roomIndex]?.animations.push(animation)

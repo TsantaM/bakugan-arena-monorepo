@@ -32,7 +32,8 @@ import { SwipeGateCards } from "../animations/swipe-gate-cards"
 import { CancelAbilityCardAnimation } from "../animations/cancel-ability-card-animation"
 import { DragAndElimineAnimation } from "../animations/drag-and-elimine-animation"
 import { ReviveBakuganAnimation } from "../animations/revive-animation"
-import { sendMessageToParent } from "../functions/send-message-to-parent"
+import { sendMessageToParent, notifyParentTurnEnd, notifyParentAnimationsDone, notifyParentAnimationsStart } from "../functions/send-message-to-parent"
+import { applySkipTimeScaleIfNeeded, clearAnimationSkip, setAnimationsActive } from "../functions/skip-animations"
 import { GateCardAdditionalRequestResolution } from "../abiliity-additional-request/gate-card-additional-request"
 import { ChangeAttributAnimation } from "../animations/change-attribut-animation"
 
@@ -41,21 +42,23 @@ let isProcessingAnimations = false
 let currentAnimationPromise: Promise<void> = Promise.resolve();
 
 
-async function processAnimationQueue(
+export async function playAnimation(
     userId: string,
     isSpectator: boolean,
     camera: THREE.PerspectiveCamera,
     scene: THREE.Scene,
     plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>,
     bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[],
-    gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[]
+    gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[],
+    animationQueue: AnimationDirectivesTypes[]
 ) {
-    if (isProcessingAnimations) return currentAnimationPromise;
-
-    isProcessingAnimations = true
-
+    setAnimationsActive(true)
+    clearAnimationSkip()
+    notifyParentAnimationsStart()
+    try {
     let i = 0;
     while (i < animationQueue.length) {
+        applySkipTimeScaleIfNeeded()
 
         const current = animationQueue[i];
         if (current.type === 'POWER_CHANGE') {
@@ -408,6 +411,27 @@ async function processAnimationQueue(
 
         i++; // avancer à l'animation suivante
     }
+    } finally {
+        setAnimationsActive(false)
+        notifyParentAnimationsDone()
+    }
+}
+
+
+export async function processAnimationQueue(
+    userId: string,
+    isSpectator: boolean,
+    camera: THREE.PerspectiveCamera,
+    scene: THREE.Scene,
+    plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>,
+    bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[],
+    gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[]
+) {
+    if (isProcessingAnimations) return currentAnimationPromise;
+
+    isProcessingAnimations = true
+
+    await playAnimation(userId, isSpectator, camera, scene, plane, bakugansMeshs, gateCardMeshs, animationQueue)
 
     animationQueue = []
     isProcessingAnimations = false
@@ -557,7 +581,7 @@ export function registerSocketHandlers(
 
         const data = turnState.battleTurn !== undefined ? `${turnState.turnCount}T (${turnState.battleTurn})` : `${turnState.turnCount}T`
         turnCounter.textContent = data
-
+        notifyParentTurnEnd()
     })
 
     socket.on('player-timer', (timer: { userId: string, remaining: number }) => {
@@ -585,7 +609,7 @@ export function registerSocketHandlers(
     socket.on('game-finished', (message: Message) => {
         clearTurnInterface()
         sendMessageToParent([message])
-
+        notifyParentTurnEnd()
     })
 
 }
@@ -694,12 +718,13 @@ export function registerSocketHandlersViewers(socket: Socket,
 
         const data = turnState.battleTurn !== undefined ? `${turnState.turnCount}T (${turnState.battleTurn})` : `${turnState.turnCount}T`
         turnCounter.textContent = data
-
+        notifyParentTurnEnd()
     })
 
     socket.on('game-finished', (message: Message) => {
         clearTurnInterface()
         sendMessageToParent([message])
+        notifyParentTurnEnd()
     })
-    
+
 }

@@ -1,4 +1,5 @@
 import { GateCards } from "../battle-brawlers/gate-gards.js";
+import { pushReplayAnimation } from "./replay/push-replay-animation.js";
 import { AnimationDirectivesTypes, portalSlotsTypeElement, type stateType } from "../type/type-index.js";
 import { RemoveGateCardDirectiveAnimation } from "./create-animation-directives/index.js";
 import { GetUserName } from "./get-user-name.js";
@@ -47,6 +48,8 @@ export const finalizeBattle = ({ roomData, winnerId, winners, loserId, loosers, 
             }
 
             roomData.animations.push(animation)
+            pushReplayAnimation(roomData, animation)
+
 
             card.onOpen({ roomState: roomData, slot: battleState.slot, looserId: loserId, winnerId: winnerId, winners: winners, loosers: loosers })
 
@@ -57,7 +60,7 @@ export const finalizeBattle = ({ roomData, winnerId, winners, loserId, loosers, 
     RemoveGateCardDirectiveAnimation({
         animations: roomData.animations,
         slot: slotToUpdate,
-        roomState: roomData
+        roomState: roomData,
     })
 
     if (slotToUpdate) ResetSlot(slotToUpdate)
@@ -69,9 +72,12 @@ export const finalizeBattle = ({ roomData, winnerId, winners, loserId, loosers, 
     turnState.set_new_gate = true
     turnState.set_new_bakugan = true
 
-    roomData.animations.push({
+    const animation: AnimationDirectivesTypes = {
         type: 'BATTLE-END',
         resolved: false
-    })
+    }
+    roomData.animations.push(animation)
+    pushReplayAnimation(roomData, animation)
+
 
 }

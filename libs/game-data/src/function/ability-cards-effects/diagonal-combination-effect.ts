@@ -24,7 +24,8 @@ export function DiagonalCombinationEffect({ slotOfGate, bakuganKey, userId, attr
                     bakugans: [user],
                     powerChange: 150,
                     malus: false,
-                    turn: turn
+                    turn: turn,
+                    roomState: roomState
                 })
             } else {
                 if(!slot) return
@@ -45,7 +46,8 @@ export function DiagonalCombinationEffect({ slotOfGate, bakuganKey, userId, attr
                     bakugans: [bakuganOnBattleSlot],
                     powerChange: 150,
                     malus: false,
-                    turn: turn
+                    turn: turn,
+                    roomState: roomState
                 })
 
             }

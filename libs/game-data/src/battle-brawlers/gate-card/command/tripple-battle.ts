@@ -3,7 +3,6 @@ import { AutoActivationDuringBattle, ComeBackBakuganEffect, SetBakuganAndAddRenf
 import { GateCardImages } from "../../../store/gate-card-images.js"
 import { gateCardType } from "../../../type/game-data-types.js"
 import { bakuganOnSlot, stateType } from "../../../type/room-types.js"
-import { Bakugans } from "../../bakugans.js"
 
 export const TripleCombat: gateCardType = {
     key: 'triple-combat',
@@ -51,9 +50,6 @@ export const TripleCombat: gateCardType = {
                     const lastId = slotToUpdate.bakugans.length > 0 ? slotToUpdate.bakugans[slotToUpdate.bakugans.length - 1].id : 0
                     const newId = lastId + 1
 
-                    const secondAttribut = Bakugans[userStrongest.bakuganData.key].seconaryAttribut
-
-
                     const usersBakugan: bakuganOnSlot = {
                         slot_id: slot,
                         id: newId,
@@ -62,7 +58,6 @@ export const TripleCombat: gateCardType = {
                         powerLevel: userStrongest.bakuganData.powerLevel,
                         currentPower: userStrongest.bakuganData.powerLevel,
                         attribut: userStrongest.bakuganData.attribut,
-                        secondAttribut: secondAttribut,
                         image: userStrongest.bakuganData.image,
                         abilityBlock: false,
                         assist: {
@@ -86,6 +81,8 @@ export const TripleCombat: gateCardType = {
                     slotToUpdate.state.open = true
                     SetBakuganAndAddRenfortAnimationDirective({
                         animations: roomState.animations,
+                    
+                    roomState: roomState,
                         bakugan: usersBakugan,
                         slot: slotToUpdate,
                         turn: roomState.turnState.turnCount
@@ -112,7 +109,9 @@ export const TripleCombat: gateCardType = {
                 RemoveRenfortAnimationDirective({
                     animations: roomState.animations,
                     bakugan: a,
-                    turnCount: roomState.turnState.turnCount
+                    turnCount: roomState.turnState.turnCount,
+                    roomState: roomState
+
                 })
             })
 

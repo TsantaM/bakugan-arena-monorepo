@@ -1,8 +1,8 @@
 import { BakuganList } from "../../battle-brawlers/bakugans.js";
-import { AnimationDirectivesTypes, attribut, portalSlotsType } from "../../type/type-index.js";
+import { AnimationDirectivesTypes, attribut, portalSlotsType, stateType } from "../../type/type-index.js";
 import { PowerChangeDirectiveAnumation } from "../create-animation-directives/power-change.js";
 
-export function CombinationTripleEffect({ animations, userId, attribut_one, attribut_tree, attribut_two, portalSlots, turn }: { animations: AnimationDirectivesTypes[], userId: string, attribut_one: attribut, attribut_two: attribut, attribut_tree: attribut, portalSlots: portalSlotsType, turn: number }) {
+export function CombinationTripleEffect({ roomState, animations, userId, attribut_one, attribut_tree, attribut_two, portalSlots, turn }: { roomState: stateType, animations: AnimationDirectivesTypes[], userId: string, attribut_one: attribut, attribut_two: attribut, attribut_tree: attribut, portalSlots: portalSlotsType, turn: number }) {
     const keys = portalSlots.filter((s) => s.bakugans.length > 0 && s.portalCard !== null && !s.can_set).map((b) => b.bakugans).flat().filter((b) => b.userId === userId).map((b) => b.key)
     const secondAttributs = BakuganList.filter((b) => keys.includes(b.key)).map((b) => b.seconaryAttribut)
     const usersBakugan = [portalSlots.filter((s) => s.bakugans.length > 0 && s.portalCard !== null && !s.can_set).map((b) => b.bakugans).flat().filter((b) => b.userId === userId).map((b) => b.attribut), secondAttributs].flat()
@@ -17,7 +17,8 @@ export function CombinationTripleEffect({ animations, userId, attribut_one, attr
                     bakugans: targets,
                     powerChange: 200,
                     malus: false,
-                    turn: turn
+                    turn: turn,
+                    roomState: roomState,
                 })
             })
         }

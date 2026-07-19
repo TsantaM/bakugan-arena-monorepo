@@ -1,4 +1,5 @@
 import { GateCards } from "../../battle-brawlers/index.js"
+import { pushReplayAnimation } from "../replay/push-replay-animation.js";
 import { Slots } from "../../store/slots.js"
 import { ActionType, AnimationDirectivesTypes, slots_id, stateType } from "../../type/type-index.js"
 import { CancelGateCardDirectiveAnimation } from "../create-animation-directives/index.js"
@@ -18,7 +19,7 @@ export function SwipeGateCardEffect({ roomData, selectedSlotId, userSlotId, baku
     if (userSlot.state.open && !userSlot.state.canceled && userSlot.portalCard) {
         const gate = GateCards[userSlot.portalCard.key]
         if (gate) {
-            CancelGateCardDirectiveAnimation({ animations: roomData.animations, slot: structuredClone(userSlot), turn: roomData.turnState.turnCount })
+            CancelGateCardDirectiveAnimation({ roomState: roomData, animations: roomData.animations, slot: structuredClone(userSlot), turn: roomData.turnState.turnCount })
 
             if (gate.onCanceled) gate.onCanceled({ roomState: roomData, slot: userSlot.id, userId: userId, bakuganKey: bakuganKey })
 
@@ -51,6 +52,8 @@ export function SwipeGateCardEffect({ roomData, selectedSlotId, userSlotId, baku
 
 
     roomData.animations.push(animation)
+    pushReplayAnimation(roomData, animation)
+
 
     const newCard = roomData.protalSlots[Slots.indexOf(userSlotId)].portalCard?.key
     if (!newCard) return

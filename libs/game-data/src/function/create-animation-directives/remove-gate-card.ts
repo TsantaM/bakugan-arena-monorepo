@@ -1,4 +1,5 @@
 import type { AnimationDirectivesTypes, portalSlotsTypeElement, stateType } from '../../type/type-index.js';
+import { pushReplayAnimation } from '../replay/push-replay-animation.js';
 
 
 type Props = {
@@ -25,8 +26,8 @@ export const RemoveGateCardDirectiveAnimation: RemoveGateCardDirectiveAnimationT
         }
 
         animations.push(comeBackBakuganDirective)
-
-        if(bakuganInDeck) bakuganInDeck.bakuganData.onDomain = false
+        pushReplayAnimation(roomState, comeBackBakuganDirective)
+        if (bakuganInDeck) bakuganInDeck.bakuganData.onDomain = false
 
 
     })
@@ -40,4 +41,6 @@ export const RemoveGateCardDirectiveAnimation: RemoveGateCardDirectiveAnimationT
     }
 
     animations.push(removeGateCard)
+    pushReplayAnimation(roomState, removeGateCard)
+
 }

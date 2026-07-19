@@ -28,9 +28,9 @@ export const PlexusSolaire: exclusiveAbilitiesType = {
                     CancelGateCardDirectiveAnimation({
                         animations: roomState.animations,
                         slot: structuredClone(slotOfGate),
-                        turn: roomState.turnState.turnCount
-
-                    })
+                        turn: roomState.turnState.turnCount,
+                        roomState: roomState
+                        })
                     gate.onCanceled({ roomState: roomState, slot: slot, userId: userId, bakuganKey: bakuganKey })
                     slotOfGate.state.canceled = true
                 }

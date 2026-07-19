@@ -17,7 +17,7 @@ export const PyrusAquosHaos: abilityCardsType = {
         const portalSlots = roomState?.protalSlots
         if (!portalSlots) return failed
 
-        CombinationTripleEffect({ animations: roomState.animations, attribut_one: 'Pyrus', attribut_two: 'Aquos', attribut_tree: 'Haos', portalSlots: portalSlots, userId: userId, turn: roomState.turnState.turnCount })
+        CombinationTripleEffect({ roomState: roomState, animations: roomState.animations, attribut_one: 'Pyrus', attribut_two: 'Aquos', attribut_tree: 'Haos', portalSlots: portalSlots, userId: userId, turn: roomState.turnState.turnCount })
         return null
     },
     activationConditions({ roomState, userId }) {
@@ -44,15 +44,7 @@ export const PyrusAquosHaos: abilityCardsType = {
     canUse({ roomState, bakugan }) {
         if (!roomState) return false
 
-        const attributs = ['Pyrus', 'Aquos', 'Haos']
-
-        if (
-            !attributs.includes(bakugan.attribut) &&
-            bakugan.secondAttribut &&
-            !attributs.includes(bakugan.secondAttribut)
-        ) {
-            return false
-        }
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }
@@ -73,7 +65,7 @@ export const VentusSubterraDarkus: abilityCardsType = {
         }
         const portalSlots = roomState?.protalSlots
         if (!portalSlots) return failed
-        CombinationTripleEffect({ animations: roomState.animations, attribut_one: 'Ventus', attribut_two: 'Subterra', attribut_tree: 'Darkus', portalSlots: portalSlots, userId: userId, turn: roomState.turnState.turnCount })
+        CombinationTripleEffect({ roomState: roomState, animations: roomState.animations, attribut_one: 'Ventus', attribut_two: 'Subterra', attribut_tree: 'Darkus', portalSlots: portalSlots, userId: userId, turn: roomState.turnState.turnCount })
         return null
     },
     activationConditions({ roomState, userId }) {
@@ -100,15 +92,7 @@ export const VentusSubterraDarkus: abilityCardsType = {
     canUse({ roomState, bakugan }) {
         if (!roomState) return false
 
-        const attributs = ['Ventus', 'Subterra', 'Darkus']
-
-        if (
-            !attributs.includes(bakugan.attribut) &&
-            bakugan.secondAttribut &&
-            !attributs.includes(bakugan.secondAttribut)
-        ) {
-            return false
-        }
+        if (bakugan.slot_id !== roomState.battleState.slot) return false
 
         return true
     }

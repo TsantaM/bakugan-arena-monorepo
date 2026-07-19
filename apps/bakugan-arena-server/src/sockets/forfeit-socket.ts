@@ -24,6 +24,7 @@ export function forfeitSocket(io: Server, socket: Socket) {
         if (!winner || !loser) return
         players.forEach((player) => StopPlayerTimer({roomState: roomData, userId: player.userId}))
         roomData.status.finished = true
+        roomData.status.finisheAt = Date.now()
         roomData.status.winner = winner.userId
 
 

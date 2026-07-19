@@ -1,6 +1,7 @@
 import { AbilityCardsList } from "../battle-brawlers/ability-cards.js";
 import { ExclusiveAbilitiesList } from "../battle-brawlers/exclusive-abilities.js";
 import { AnimationDirectivesTypes, type stateType } from "../type/type-index.js";
+import { pushReplayAnimation, pushReplayMarker } from "./replay/push-replay-animation.js";
 
 export function updateTurnState(roomData: stateType) {
     if (!roomData) return
@@ -53,6 +54,8 @@ export function updateTurnState(roomData: stateType) {
                 }
 
                 roomData.animations.push(animation)
+                pushReplayAnimation(roomData, animation)
+
             }
         }
 
@@ -72,4 +75,5 @@ export function updateTurnState(roomData: stateType) {
         }
     }
 
+    pushReplayMarker(roomData, "turn_end")
 }
