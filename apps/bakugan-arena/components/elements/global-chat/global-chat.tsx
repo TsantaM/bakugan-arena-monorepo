@@ -6,11 +6,24 @@ import { GlobalChatMessage, SendedMessage } from "@bakugan-arena/game-data"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useGlobalChatMessageStore } from "./global-chat-store"
 import { Button } from "@/components/ui/button"
+import { Bubble, BubbleContent, BubbleGroup } from "@/components/ui/bubble"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Textarea } from "@/components/ui/textarea"
 import { MessagesSquare, Send } from "lucide-react"
 import { ConnectedUsersStore } from "@/src/store/connected-users-store"
+
+function groupMessagesByUser(messages: GlobalChatMessage[]) {
+    return messages.reduce<GlobalChatMessage[][]>((groups, message) => {
+        const lastGroup = groups[groups.length - 1]
+        if (lastGroup && lastGroup[0].userId === message.userId) {
+            lastGroup.push(message)
+        } else {
+            groups.push([message])
+        }
+        return groups
+    }, [])
+}
 
 export default function GlobalChat() {
 
@@ -201,29 +214,27 @@ export default function GlobalChat() {
                 </DialogHeader>
 
                 <ScrollArea className="h-100 overflow-y-hidden" scroll="bottom">
-                    <div>
-                        {
-                            messages.map((m) => (
+                    <div className="flex flex-col gap-4 pr-2">
+                        {groupMessagesByUser(messages).map((group) => {
+                            const isOwn = group[0].userId === userId
+                            const align = isOwn ? "end" : "start"
+                            const variant = isOwn ? "default" : "muted"
 
-                                <p
-                                    key={m.id}
-                                    className={`
-                                        text-sm
-                                        leading-5
-                                        wrap-break-words
-                                    `}
-                                >
-                                    <span className={`font-semibold ${m.username === username ? 'text-blue-400' : 'text-emerald-500'
-                                        }`}>
-                                        {m.username} :
-                                    </span>
-                                    {" "}
-                                    <span>
-                                        {m.text}
-                                    </span>
-                                </p>
-                            ))
-                        }
+                            return (
+                                <BubbleGroup key={group[0].id} className={isOwn ? "items-end" : "items-start"}>
+                                    {!isOwn && (
+                                        <span className="px-1 text-xs font-medium text-muted-foreground">
+                                            {group[0].username}
+                                        </span>
+                                    )}
+                                    {group.map((m) => (
+                                        <Bubble key={m.id} align={align} variant={variant}>
+                                            <BubbleContent>{m.text}</BubbleContent>
+                                        </Bubble>
+                                    ))}
+                                </BubbleGroup>
+                            )
+                        })}
                     </div>
                 </ScrollArea>
 
