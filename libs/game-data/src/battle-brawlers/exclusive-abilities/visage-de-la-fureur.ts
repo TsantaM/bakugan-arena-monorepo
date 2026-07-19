@@ -1,4 +1,4 @@
-import { PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js"
+import { CustomAnimationDirective, PowerChange } from "../../function/index.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const VisageDeLaFureur: exclusiveAbilitiesType = {
@@ -16,6 +16,14 @@ export const VisageDeLaFureur: exclusiveAbilitiesType = {
             const opponents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
 
             if (user && opponents.length > 0) {
+                CustomAnimationDirective({
+                    roomState,
+                    animationKey: 'visage-de-la-fureur',
+                    sourceBakugan: user,
+                    targetBakugans: opponents,
+                    slotId: slot,
+                })
+
                 PowerChange({
                     bakugan: user,
                     G: 50,

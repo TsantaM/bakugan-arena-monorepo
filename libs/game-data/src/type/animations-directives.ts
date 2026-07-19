@@ -199,4 +199,15 @@ export type AnimationDirectivesTypes =
             bakugan: bakuganOnSlot
         },
         message: Message[]
-    } 
+    } | {
+        type: 'CUSTOM_ANIMATION',
+        data: {
+            animationKey: string,
+            sourceBakugan?: bakuganOnSlot,
+            targetBakugans?: bakuganOnSlot[],
+            slotId?: slots_id,
+            payload?: Record<string, unknown>
+        },
+        message?: Message[],
+        resolved: boolean
+    }
