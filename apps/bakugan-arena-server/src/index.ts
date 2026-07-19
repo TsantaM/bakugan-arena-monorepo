@@ -10,6 +10,8 @@ process.on("uncaughtException", (err) => {
 import { Server } from "socket.io";
 import { processMatchmaking, setupSearchOpponentSocket, waitingMap } from "./sockets/search-opponent";
 import { socketGetRoomState, socketInitiRoomState } from "./sockets/get-room-data";
+import { initializeBots } from "./functions/bot-manager";
+import { startBotPlayers } from "./bot/bot-player";
 import { socketTurn } from "./sockets/turn-action";
 import { socketUpdateGateState } from "./sockets/update-gate-state";
 import { socketUpdateBakuganState } from "./sockets/update-bakugans-state";
@@ -42,68 +44,78 @@ const io = new Server({
     }
 });
 
-// 🔥 MATCHMAKING LOOP GLOBAL
-setInterval(() => {
-    processMatchmaking(io)
-}, 1000)
+const startServer = async () => {
+    await initializeBots()
 
-setInterval(() => {
-    cleanGameStates()
-}, 60000)
+    // 🔥 MATCHMAKING LOOP GLOBAL
+    setInterval(() => {
+        processMatchmaking(io)
+    }, 1000)
 
-setInterval(() => {
-    cleanupOldMessages()
-}, CLEANUP_INTERVAL_GLOBAL_CHAT)
+    setInterval(() => {
+        cleanGameStates()
+    }, 60000)
 
-io.on('connection', (socket) => {
-    const { userId, roomId, socketType } = socket.handshake.auth
-    console.log('A user connected:', 'socketId : ', socket.id, 'userId : ', userId);
-    if (!roomId && (!socketType || socketType === 'game')) {
-        addOrUpdateConnectedUser(userId, socket.id, io);
-    }
+    setInterval(() => {
+        cleanupOldMessages()
+    }, CLEANUP_INTERVAL_GLOBAL_CHAT)
 
-    ChatMessageSocket(io, socket)
-    GlobalChatSocket(io, socket)
-    RecieveMessge(io, socket)
-    OnOpentUpdateMessages(io, socket)
-    getUsersRooms(io, socket)
-    WatchBattleSocket(io, socket)
-    ChalengeSomeoneSocket(io, socket)
-    ChalengeAcceptSocket(io, socket)
-    CancelChalengeSocket(io, socket)
-    RejectChalengeSocket(io, socket)
-    setupSearchOpponentSocket(io, socket)
-    CancelOpponentResearch(io, socket)
-    socketGetRoomState(io, socket)
-    socketCleanAnimations(io, socket)
-    CheckActivitiesSocket(io, socket)
-    socketInitiRoomState(io, socket)
-    SendMessageInGame(io, socket)
-    socketUpdateGateState(io, socket)
-    socketUpdateBakuganState(io, socket)
-    socketUseAbilityCard(io, socket)
-    AbilitiesAdditionalEffectsSocket(io, socket)
-    socketActiveGateCard(io, socket)
-    GateCardAdditionalEffectSocket(io, socket)
-    ChangeAttributSocket(io, socket)
-    socketTurn(io, socket)
-    forfeitSocket(io, socket)
-
-    socket.on('disconnect', (reason) => {
-        console.log('A user disconnected:', 'socketId : ', socket.id, 'userId : ', userId, reason);
-        // clean auto
-        for (const [userId, p] of waitingMap.entries()) {
-            if (p.socketId === socket.id) {
-                waitingMap.delete(userId)
-            }
+    io.on('connection', (socket) => {
+        const { userId, roomId, socketType } = socket.handshake.auth
+        console.log('A user connected:', 'socketId : ', socket.id, 'userId : ', userId);
+        if (!roomId && (!socketType || socketType === 'game')) {
+            addOrUpdateConnectedUser(userId, socket.id, io);
         }
-        removeConnectedUserBySocket(socket.id, io);
-        removeRoomSocket(socket.id, userId)
-    })
 
-});
+        ChatMessageSocket(io, socket)
+        GlobalChatSocket(io, socket)
+        RecieveMessge(io, socket)
+        OnOpentUpdateMessages(io, socket)
+        getUsersRooms(io, socket)
+        WatchBattleSocket(io, socket)
+        ChalengeSomeoneSocket(io, socket)
+        ChalengeAcceptSocket(io, socket)
+        CancelChalengeSocket(io, socket)
+        RejectChalengeSocket(io, socket)
+        setupSearchOpponentSocket(io, socket)
+        CancelOpponentResearch(io, socket)
+        socketGetRoomState(io, socket)
+        socketCleanAnimations(io, socket)
+        CheckActivitiesSocket(io, socket)
+        socketInitiRoomState(io, socket)
+        SendMessageInGame(io, socket)
+        socketUpdateGateState(io, socket)
+        socketUpdateBakuganState(io, socket)
+        socketUseAbilityCard(io, socket)
+        AbilitiesAdditionalEffectsSocket(io, socket)
+        socketActiveGateCard(io, socket)
+        GateCardAdditionalEffectSocket(io, socket)
+        ChangeAttributSocket(io, socket)
+        socketTurn(io, socket)
+        forfeitSocket(io, socket)
 
+        socket.on('disconnect', (reason) => {
+            console.log('A user disconnected:', 'socketId : ', socket.id, 'userId : ', userId, reason);
+            // clean auto
+            for (const [waitingUserId, p] of waitingMap.entries()) {
+                if (p.socketId === socket.id) {
+                    waitingMap.delete(waitingUserId)
+                }
+            }
+            removeConnectedUserBySocket(socket.id, io);
+            removeRoomSocket(socket.id, userId)
+        })
 
-io.listen(PORT)
+    });
 
-console.log("Server is running on PORT: ", PORT);
+    io.listen(PORT)
+    console.log("Server is running on PORT: ", PORT);
+
+    // Bots JS intégrés : se connectent au serveur une fois qu'il écoute
+    startBotPlayers(PORT)
+}
+
+startServer().catch((error) => {
+    console.error("Failed to start server:", error)
+    process.exit(1)
+})

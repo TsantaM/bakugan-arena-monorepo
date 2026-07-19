@@ -7,6 +7,7 @@ import { db } from "../lib/db";
 import { eq } from "drizzle-orm";
 import { findOpponent } from "../functions/matchmaking-functions/find-opponent";
 import { StartTwoTimers, UpdatePlayerTimer } from "../functions/start-player-timer";
+import { getAvailableBot, getBotSocketId, isBotUserId } from "../functions/bot-manager";
 
 export type waitingListElements = {
     socketId: string,
@@ -72,6 +73,59 @@ export const processMatchmaking = async (io: Server) => {
     try {
         const players = Array.from(waitingMap.values())
 
+        // Solo en file → match contre un bot disponible (même condition que feat/add-bot-player)
+        if (players.length === 1) {
+            const player = players[0]
+            if (isBotUserId(player.userId)) return
+
+            const bot = await getAvailableBot({ ranked: player.ranked })
+            const botSocketId = bot ? getBotSocketId(bot.userId) : undefined
+
+            if (bot && botSocketId) {
+                waitingMap.delete(player.userId)
+
+                const room = await CreateRoom({
+                    player1ID: player.userId,
+                    P1Deck: player.deckId,
+                    Player2ID: bot.userId,
+                    P2Deck: bot.deckId,
+                    ranked: player.ranked
+                })
+
+                // L'état doit exister AVANT match-found : le bot init immédiatement
+                const state = await createGameState({
+                    roomId: room.id,
+                    ranked: player.ranked
+                })
+
+                if (!state) return
+
+                Battle_Brawlers_Game_State.push(state)
+
+                intervalIds.push({
+                    roomId: state.roomId,
+                    players: state.players.map((p) => ({
+                        userId: p.userId,
+                        intervalId: null
+                    }))
+                })
+
+                const roomState = Battle_Brawlers_Game_State[Battle_Brawlers_Game_State.indexOf(state)]
+                StartTwoTimers({ io: io, roomState: roomState, roomId: roomState.roomId })
+
+                const matchedPlayers = [player]
+
+                matchedPlayers.forEach((p) => {
+                    io.to(p.socketId).emit('match-found', room.id)
+                    const rooms = GetUsersRooms(p.userId)
+                    io.to(p.socketId).emit('get-rooms-user-id', rooms)
+                })
+
+                io.to(botSocketId).emit('match-found', room.id)
+                return
+            }
+        }
+
         if (players.length < 2) return
 
         // tri stable
@@ -110,19 +164,13 @@ export const processMatchmaking = async (io: Server) => {
             waitingMap.delete(p1.userId)
             waitingMap.delete(p2.userId)
 
-            // 🎮 MATCH CREATION
+            // 🎮 MATCH CREATION — état prêt avant match-found
             const room = await CreateRoom({
                 player1ID: p1.userId,
                 P1Deck: p1.deckId,
                 Player2ID: p2.userId,
                 P2Deck: p2.deckId,
                 ranked: p1.ranked
-            })
-
-            const matchedPlayers = [p1, p2]
-
-            matchedPlayers.forEach(p => {
-                io.to(p.socketId).emit('match-found', room.id)
             })
 
             const state = await createGameState({
@@ -142,14 +190,16 @@ export const processMatchmaking = async (io: Server) => {
                 }))
             })
 
+            const roomState = Battle_Brawlers_Game_State[Battle_Brawlers_Game_State.indexOf(state)]
+            StartTwoTimers({ io: io, roomState: roomState, roomId: roomState.roomId })
+
+            const matchedPlayers = [p1, p2]
+
             matchedPlayers.forEach(p => {
+                io.to(p.socketId).emit('match-found', room.id)
                 const rooms = GetUsersRooms(p.userId)
                 io.to(p.socketId).emit('get-rooms-user-id', rooms)
             })
-
-            const roomState = Battle_Brawlers_Game_State[Battle_Brawlers_Game_State.indexOf(state)]
-
-            StartTwoTimers({io: io, roomState: roomState, roomId: roomState.roomId})
 
         }
 
