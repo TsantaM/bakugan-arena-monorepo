@@ -10,7 +10,7 @@ export function GetGlobalMessages(io: Server, socket: Socket) {
 }
 
 export function GlobalChatSocket(io: Server, socket: Socket) {
-    socket.on('send-message-global', ({ text, username, userId }: SendedMessage) => {
+    socket.on('send-message-global', ({ text, username, userId, image }: SendedMessage) => {
 
         const message: GlobalChatMessage = {
             username,
@@ -18,7 +18,8 @@ export function GlobalChatSocket(io: Server, socket: Socket) {
             userId,
             date: new Date(),
             id: uuidv4(),
-            viewers: [userId]
+            viewers: [userId],
+            image,
         };
 
         GlobalChatStore.push(message);

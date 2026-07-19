@@ -5,9 +5,16 @@ import { useSocket } from "@/src/providers/socket-provider"
 import { GlobalChatMessage, SendedMessage } from "@bakugan-arena/game-data"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useGlobalChatMessageStore } from "./global-chat-store"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Bubble, BubbleContent, BubbleGroup } from "@/components/ui/bubble"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import {
+    Message,
+    MessageAvatar,
+    MessageContent,
+    MessageHeader,
+} from "@/components/ui/message"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Textarea } from "@/components/ui/textarea"
 import { MessagesSquare, Send } from "lucide-react"
@@ -25,6 +32,10 @@ function groupMessagesByUser(messages: GlobalChatMessage[]) {
     }, [])
 }
 
+function getInitials(username: string) {
+    return username.trim().charAt(0).toUpperCase() || "?"
+}
+
 export default function GlobalChat() {
 
     const socket = useSocket()
@@ -34,6 +45,7 @@ export default function GlobalChat() {
 
     const userId = userData?.user.id
     const username = userData?.user.displayUsername
+    const userImage = userData?.user.image
 
     const connectedUsers = ConnectedUsersStore((state) => state.users)
     const messages = useGlobalChatMessageStore((state) => state.messages)
@@ -82,7 +94,8 @@ export default function GlobalChat() {
         const message: SendedMessage = {
             text,
             userId,
-            username
+            username,
+            image: userImage,
         }
 
         socket.emit('send-message-global', message)
@@ -216,23 +229,35 @@ export default function GlobalChat() {
                 <ScrollArea className="h-100 overflow-y-hidden" scroll="bottom">
                     <div className="flex flex-col gap-4 pr-2">
                         {groupMessagesByUser(messages).map((group) => {
-                            const isOwn = group[0].userId === userId
-                            const align = isOwn ? "end" : "start"
+                            const first = group[0]
+                            const isOwn = first.userId === userId
                             const variant = isOwn ? "default" : "muted"
 
                             return (
-                                <BubbleGroup key={group[0].id} className={isOwn ? "items-end" : "items-start"}>
-                                    {!isOwn && (
-                                        <span className="px-1 text-xs font-medium text-muted-foreground">
-                                            {group[0].username}
-                                        </span>
-                                    )}
-                                    {group.map((m) => (
-                                        <Bubble key={m.id} align={align} variant={variant}>
-                                            <BubbleContent>{m.text}</BubbleContent>
-                                        </Bubble>
-                                    ))}
-                                </BubbleGroup>
+                                <Message key={first.id} align={isOwn ? "end" : "start"}>
+                                    <MessageAvatar>
+                                        <Avatar>
+                                            {first.image && (
+                                                <AvatarImage src={first.image} alt={first.username} />
+                                            )}
+                                            <AvatarFallback>
+                                                {getInitials(first.username)}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                    </MessageAvatar>
+                                    <MessageContent>
+                                        {!isOwn && (
+                                            <MessageHeader>{first.username}</MessageHeader>
+                                        )}
+                                        <BubbleGroup>
+                                            {group.map((m) => (
+                                                <Bubble key={m.id} variant={variant}>
+                                                    <BubbleContent>{m.text}</BubbleContent>
+                                                </Bubble>
+                                            ))}
+                                        </BubbleGroup>
+                                    </MessageContent>
+                                </Message>
                             )
                         })}
                     </div>

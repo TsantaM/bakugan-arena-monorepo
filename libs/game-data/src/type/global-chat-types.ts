@@ -4,7 +4,13 @@ export type GlobalChatMessage = {
     userId: string,
     date: Date,
     id: string,
-    viewers: string[]
+    viewers: string[],
+    image?: string | null,
 }
 
-export type SendedMessage = {text: string, username: string, userId: string}
+export type SendedMessage = {
+    text: string,
+    username: string,
+    userId: string,
+    image?: string | null,
+}
