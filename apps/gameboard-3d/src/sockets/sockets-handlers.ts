@@ -57,378 +57,378 @@ export async function playAnimation(
     clearAnimationSkip()
     notifyParentAnimationsStart()
     try {
-    let i = 0;
-    while (i < animationQueue.length) {
-        applySkipTimeScaleIfNeeded()
+        let i = 0;
+        while (i < animationQueue.length) {
+            applySkipTimeScaleIfNeeded()
 
-        const current = animationQueue[i];
-        if (current.type === 'POWER_CHANGE') {
+            const current = animationQueue[i];
+            if (current.type === 'POWER_CHANGE') {
 
-            const group: AnimationDirectivesTypes[] = [];
+                const group: AnimationDirectivesTypes[] = [];
 
-            while (i < animationQueue.length && animationQueue[i].type === 'POWER_CHANGE') {
-                group.push(animationQueue[i]);
-                i++;
-            }
-
-            await Promise.all(
-                group.map(anim => {
-                    if (anim.type !== 'POWER_CHANGE') return
-                    return Promise.all(
-                        anim.data.bakugan.map(b =>
-                            PowerChangeAnimation({
-                                bakugan: b,
-                                camera: camera,
-                                powerChange: anim.data.powerChange,
-                                scene: scene,
-                                malus: anim.data.malus
-                            })
-                        )
-
-                    );
-                })
-            );
-
-            const combinedPowerChanges = new Map<string, number>();
-
-            for (const anim of group) {
-                if (anim.type !== 'POWER_CHANGE') return
-                for (const b of anim.data.bakugan) {
-                    const key = `${b.userId}-${b.slot_id}`;
-                    const old = combinedPowerChanges.get(key) || 0;
-                    const delta = anim.data.malus ? -anim.data.powerChange : anim.data.powerChange;
-                    combinedPowerChanges.set(key, old + delta);
+                while (i < animationQueue.length && animationQueue[i].type === 'POWER_CHANGE') {
+                    group.push(animationQueue[i]);
+                    i++;
                 }
 
-                if (anim.message) sendMessageToParent(anim.message)
+                await Promise.all(
+                    group.map(anim => {
+                        if (anim.type !== 'POWER_CHANGE') return
+                        return Promise.all(
+                            anim.data.bakugan.map(b =>
+                                PowerChangeAnimation({
+                                    bakugan: b,
+                                    camera: camera,
+                                    powerChange: anim.data.powerChange,
+                                    scene: scene,
+                                    malus: anim.data.malus
+                                })
+                            )
 
+                        );
+                    })
+                );
+
+                const combinedPowerChanges = new Map<string, number>();
+
+                for (const anim of group) {
+                    if (anim.type !== 'POWER_CHANGE') return
+                    for (const b of anim.data.bakugan) {
+                        const key = `${b.userId}-${b.slot_id}`;
+                        const old = combinedPowerChanges.get(key) || 0;
+                        const delta = anim.data.malus ? -anim.data.powerChange : anim.data.powerChange;
+                        combinedPowerChanges.set(key, old + delta);
+                    }
+
+                    if (anim.message) sendMessageToParent(anim.message)
+
+                }
+
+                await Promise.all(
+                    Array.from(combinedPowerChanges.entries()).map(([key, totalChange]) => {
+                        return (async () => {
+                            const [userId, slot, number] = key.split("-");
+                            const slotId = `${slot}-${number}`;
+                            const powerContainer = document.getElementById(key);
+                            if (!powerContainer) return;
+
+                            const oldPower = parseInt(powerContainer.textContent || "0");
+                            const newPower = oldPower + totalChange;
+
+                            await PowerChangeNumberAnimation({
+                                userId,
+                                slotId: slotId as slots_id,
+                                newPower: current.data.finalPower ? current.data.finalPower : newPower
+                            });
+                        })();
+                    })
+                );
+
+                current.data.bakugan.forEach((b) => {
+                    const name = `${b.key}-${b.userId}`
+                    const mesh = scene.getObjectByName(name)
+                    if (!mesh) return
+                    mesh.userData.powerLevel = b.currentPower
+                })
+
+                continue;
             }
 
-            await Promise.all(
-                Array.from(combinedPowerChanges.entries()).map(([key, totalChange]) => {
-                    return (async () => {
-                        const [userId, slot, number] = key.split("-");
-                        const slotId = `${slot}-${number}`;
-                        const powerContainer = document.getElementById(key);
-                        if (!powerContainer) return;
+            // --------------------------
+            // OTHERS ANIMATIONS TYPES
+            // --------------------------
 
-                        const oldPower = parseInt(powerContainer.textContent || "0");
-                        const newPower = oldPower + totalChange;
-
-                        await PowerChangeNumberAnimation({
-                            userId,
-                            slotId: slotId as slots_id,
-                            newPower: current.data.finalPower ? current.data.finalPower : newPower
-                        });
-                    })();
-                })
-            );
-
-            current.data.bakugan.forEach((b) => {
-                const name = `${b.key}-${b.userId}`
-                const mesh = scene.getObjectByName(name)
-                if (!mesh) return
-                mesh.userData.powerLevel = b.currentPower
-            })
-
-            continue;
-        }
-
-        // --------------------------
-        // OTHERS ANIMATIONS TYPES
-        // --------------------------
-
-        if (current.type === 'SET_GATE_CARD') {
-
-            sendMessageToParent(current.message)
-
-            await SetGateCardFunctionAndAnimation({
-                plane,
-                slot: current.data.slot,
-                userId: userId,
-                gateCardMeshs,
-                isSpectator
-            });
-
-        }
-
-        if (current.type === 'SET_BAKUGAN') {
-
-            sendMessageToParent(current.message)
-
-            await SetBakuganFunctionAnimation({
-                bakugan: current.data.bakugan,
-                slot: current.data.slot,
-                camera,
-                scene,
-                userId,
-                bakugansMeshs
-            });
-
-        }
-
-        if (current.type === 'MOVE_TO_ANOTHER_SLOT') {
-
-            sendMessageToParent(current.message)
-
-            await MoveToAnotherSlotFunctionAnimation({
-                bakugan: current.data.bakugan,
-                initialSlot: current.data.initialSlot,
-                newSlot: current.data.newSlot,
-                scene,
-                userId
-            });
-
-        }
-
-        if (current.type === 'OPEN_GATE_CARD') {
-
-            sendMessageToParent(current.message)
-
-            await OpenGateGateCardFunctionAnimation({
-                plane,
-                slot: current.data.slot,
-                slotId: current.data.slotId
-            });
-
-        }
-
-        if (current.type === 'CANCEL_GATE_CARD') {
-            const mesh = plane.getObjectByName(current.data.slot.id)
-            if (mesh) {
+            if (current.type === 'SET_GATE_CARD') {
 
                 sendMessageToParent(current.message)
 
-                await CancelGateCardAnimation({
-                    mesh: mesh as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>,
-                    slot: current.data.slot
+                await SetGateCardFunctionAndAnimation({
+                    plane,
+                    slot: current.data.slot,
+                    userId: userId,
+                    gateCardMeshs,
+                    isSpectator
                 });
 
             }
-        }
 
-        if (current.type === 'COME_BACK_BAKUGAN') {
+            if (current.type === 'SET_BAKUGAN') {
 
-            sendMessageToParent(current.message)
+                sendMessageToParent(current.message)
 
-            await ComeBackBakuganFunctionAnimation({
-                bakugan: current.data.bakugan,
-                slot: current.data.slot,
-                camera,
-                scene,
-                userId,
-                bakugansMeshs
-            });
-
-        }
-
-        if (current.type === 'ELIMINE_BAKUGAN') {
-
-            sendMessageToParent(current.message)
-
-            await ElimineBakuganFunctionAnimation({
-                bakugan: current.data.bakugan,
-                scene,
-                slot: current.data.slot,
-                userId,
-                bakugansMeshs
-            });
-
-        }
-
-        if (current.type === 'REMOVE_GATE_CARD') {
-
-            sendMessageToParent(current.message)
-
-            await RemoveGateCardFunctionAnimation({
-                plane,
-                slot: current.data.slot,
-                camera,
-                scene,
-                userId,
-                gateCardMeshs,
-                bakugansMeshs
-            });
-
-        }
-
-        if (current.type === 'BATTLE_START') {
-
-            sendMessageToParent(current.message)
-
-            await OnBattleStartFunctionAnimation({
-                slot: current.data.slot,
-                userId: userId
-            })
-
-        }
-
-        if (current.type === 'BATTLE-END') {
-            sendMessageToParent(current.message)
-
-            await OnBattleEndAnimation()
-        }
-
-        if (current.type === 'SET_BAKUGAN_AND_ADD_RENFORT') {
-
-            sendMessageToParent(current.message)
-
-            await SetBakuganAndAddRenfortAnimationAndFunction({
-                bakugan: current.data.bakugan,
-                camera: camera,
-                scene: scene,
-                slot: current.data.slot,
-                userId: userId,
-                bakugansMeshs
-            })
-
-        }
-
-        if (current.type === 'ADD_RENFORT') {
-
-            sendMessageToParent(current.message)
-
-            await AddRenfortToBattleAnimationFunction({
-                bakugan: current.data.bakugan,
-                userId: userId
-            })
-
-        }
-
-        if (current.type === 'ACTIVE_ABILITY_CARD') {
-            sendMessageToParent(current.message)
-            await ActiveAbilityCardAnimation(current.data.card, current.data.attribut)
-        }
-
-        if (current.type === 'ABILITY_CARD_FAILED') {
-
-            sendMessageToParent(current.message)
-
-        }
-
-        if (current.type === 'REMOVE_RENFORT') {
-
-            sendMessageToParent(current.message)
-
-            await RemoveRenforAnimation({
-                bakugan: current.data.bakugan,
-                userId: userId,
-            })
-
-        }
-
-        if (current.type === 'MOVE_GATE_CARD') {
-
-            sendMessageToParent(current.message)
-
-            await MoveGateCard({
-                newSlot: current.data.newSlot,
-                slot: current.data.slot,
-                plane: plane,
-                scene: scene,
-                userId: userId
-            })
-
-        }
-
-        if (current.type === 'SWIPE_GATE_CARD') {
-            sendMessageToParent(current.message)
-
-            await SwipeGateCards({
-                plane: plane,
-                scene: scene,
-                slot1: current.data.slot1,
-                slot2: current.data.slot2,
-                userId: userId
-            })
-
-        }
-
-        if (current.type === 'CANCEL_ABILITY_CARD') {
-
-            sendMessageToParent(current.message)
-
-            await CancelAbilityCardAnimation(
-                current.data.card,
-                current.data.attribut
-            )
-
-        }
-
-        if (current.type === 'DRAG_AND_ELIMINE') {
-
-            sendMessageToParent(current.message)
-
-            await DragAndElimineAnimation({
-                bakugan: current.data.bakugan,
-                cardUser: current.data.cardUser,
-                bakugansMeshs: bakugansMeshs,
-                scene,
-            })
-
-            updateEliminatedUI({
-                bakuganUserId: current.data.bakugan.userId,
-                currentUserId: userId
-            })
-
-        }
-
-        if (current.type === 'REVIVE_BAKUGAN') {
-
-            sendMessageToParent(current.message)
-
-            await ReviveBakuganAnimation({
-                bakuganKey: current.data.bakuganKey,
-                bakuganUserId: current.data.bakuganUserId,
-                camera: camera,
-                scene: scene,
-                userId: userId
-            })
-
-        }
-
-        if (current.type === 'ADDITIONAL_MESSAGE') {
-            sendMessageToParent(current.message)
-        }
-
-        if (current.type === 'ACTIVE_PROTECTION') {
-            sendMessageToParent(current.message)
-        }
-
-        if (current.type === 'REMOVE_PROTECTION') {
-            sendMessageToParent(current.message)
-        }
-
-        if(current.type === 'CHANGE_ATTRIBUT') {
-
-            sendMessageToParent(current.message)
-
-            await ChangeAttributAnimation({
-                attribut: current.data.attribut,
-                bakugan: current.data.bakugan,
-                scene: scene
-            })
-        }
-
-        if (current.type === 'CUSTOM_ANIMATION') {
-            sendMessageToParent(current.message)
-
-            const play = CustomAnimationsRegistry[current.data.animationKey]
-            if (play) {
-                await play({
-                    scene,
+                await SetBakuganFunctionAnimation({
+                    bakugan: current.data.bakugan,
+                    slot: current.data.slot,
                     camera,
-                    plane,
-                    bakugansMeshs,
-                    gateCardMeshs,
+                    scene,
                     userId,
-                    data: current.data,
+                    bakugansMeshs
+                });
+
+            }
+
+            if (current.type === 'MOVE_TO_ANOTHER_SLOT') {
+
+                sendMessageToParent(current.message)
+
+                await MoveToAnotherSlotFunctionAnimation({
+                    bakugan: current.data.bakugan,
+                    initialSlot: current.data.initialSlot,
+                    newSlot: current.data.newSlot,
+                    scene,
+                    userId
+                });
+
+            }
+
+            if (current.type === 'OPEN_GATE_CARD') {
+
+                sendMessageToParent(current.message)
+
+                await OpenGateGateCardFunctionAnimation({
+                    plane,
+                    slot: current.data.slot,
+                    slotId: current.data.slotId
+                });
+
+            }
+
+            if (current.type === 'CANCEL_GATE_CARD') {
+                const mesh = plane.getObjectByName(current.data.slot.id)
+                if (mesh) {
+
+                    sendMessageToParent(current.message)
+
+                    await CancelGateCardAnimation({
+                        mesh: mesh as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>,
+                        slot: current.data.slot
+                    });
+
+                }
+            }
+
+            if (current.type === 'COME_BACK_BAKUGAN') {
+
+                sendMessageToParent(current.message)
+
+                await ComeBackBakuganFunctionAnimation({
+                    bakugan: current.data.bakugan,
+                    slot: current.data.slot,
+                    camera,
+                    scene,
+                    userId,
+                    bakugansMeshs
+                });
+
+            }
+
+            if (current.type === 'ELIMINE_BAKUGAN') {
+
+                sendMessageToParent(current.message)
+
+                await ElimineBakuganFunctionAnimation({
+                    bakugan: current.data.bakugan,
+                    scene,
+                    slot: current.data.slot,
+                    userId,
+                    bakugansMeshs
+                });
+
+            }
+
+            if (current.type === 'REMOVE_GATE_CARD') {
+
+                sendMessageToParent(current.message)
+
+                await RemoveGateCardFunctionAnimation({
+                    plane,
+                    slot: current.data.slot,
+                    camera,
+                    scene,
+                    userId,
+                    gateCardMeshs,
+                    bakugansMeshs
+                });
+
+            }
+
+            if (current.type === 'BATTLE_START') {
+
+                sendMessageToParent(current.message)
+
+                await OnBattleStartFunctionAnimation({
+                    slot: current.data.slot,
+                    userId: userId
+                })
+
+            }
+
+            if (current.type === 'BATTLE-END') {
+                sendMessageToParent(current.message)
+
+                await OnBattleEndAnimation()
+            }
+
+            if (current.type === 'SET_BAKUGAN_AND_ADD_RENFORT') {
+
+                sendMessageToParent(current.message)
+
+                await SetBakuganAndAddRenfortAnimationAndFunction({
+                    bakugan: current.data.bakugan,
+                    camera: camera,
+                    scene: scene,
+                    slot: current.data.slot,
+                    userId: userId,
+                    bakugansMeshs
+                })
+
+            }
+
+            if (current.type === 'ADD_RENFORT') {
+
+                sendMessageToParent(current.message)
+
+                await AddRenfortToBattleAnimationFunction({
+                    bakugan: current.data.bakugan,
+                    userId: userId
+                })
+
+            }
+
+            if (current.type === 'ACTIVE_ABILITY_CARD') {
+                sendMessageToParent(current.message)
+                await ActiveAbilityCardAnimation(current.data.card, current.data.attribut)
+            }
+
+            if (current.type === 'ABILITY_CARD_FAILED') {
+
+                sendMessageToParent(current.message)
+
+            }
+
+            if (current.type === 'REMOVE_RENFORT') {
+
+                sendMessageToParent(current.message)
+
+                await RemoveRenforAnimation({
+                    bakugan: current.data.bakugan,
+                    userId: userId,
+                })
+
+            }
+
+            if (current.type === 'MOVE_GATE_CARD') {
+
+                sendMessageToParent(current.message)
+
+                await MoveGateCard({
+                    newSlot: current.data.newSlot,
+                    slot: current.data.slot,
+                    plane: plane,
+                    scene: scene,
+                    userId: userId
+                })
+
+            }
+
+            if (current.type === 'SWIPE_GATE_CARD') {
+                sendMessageToParent(current.message)
+
+                await SwipeGateCards({
+                    plane: plane,
+                    scene: scene,
+                    slot1: current.data.slot1,
+                    slot2: current.data.slot2,
+                    userId: userId
+                })
+
+            }
+
+            if (current.type === 'CANCEL_ABILITY_CARD') {
+
+                sendMessageToParent(current.message)
+
+                await CancelAbilityCardAnimation(
+                    current.data.card,
+                    current.data.attribut
+                )
+
+            }
+
+            if (current.type === 'DRAG_AND_ELIMINE') {
+
+                sendMessageToParent(current.message)
+
+                await DragAndElimineAnimation({
+                    bakugan: current.data.bakugan,
+                    cardUser: current.data.cardUser,
+                    bakugansMeshs: bakugansMeshs,
+                    scene,
+                })
+
+                updateEliminatedUI({
+                    bakuganUserId: current.data.bakugan.userId,
+                    currentUserId: userId
+                })
+
+            }
+
+            if (current.type === 'REVIVE_BAKUGAN') {
+
+                sendMessageToParent(current.message)
+
+                await ReviveBakuganAnimation({
+                    bakuganKey: current.data.bakuganKey,
+                    bakuganUserId: current.data.bakuganUserId,
+                    camera: camera,
+                    scene: scene,
+                    userId: userId
+                })
+
+            }
+
+            if (current.type === 'ADDITIONAL_MESSAGE') {
+                sendMessageToParent(current.message)
+            }
+
+            if (current.type === 'ACTIVE_PROTECTION') {
+                sendMessageToParent(current.message)
+            }
+
+            if (current.type === 'REMOVE_PROTECTION') {
+                sendMessageToParent(current.message)
+            }
+
+            if (current.type === 'CHANGE_ATTRIBUT') {
+
+                sendMessageToParent(current.message)
+
+                await ChangeAttributAnimation({
+                    attribut: current.data.attribut,
+                    bakugan: current.data.bakugan,
+                    scene: scene
                 })
             }
-        }
 
-        i++; // avancer à l'animation suivante
-    }
+            if (current.type === 'CUSTOM_ANIMATION') {
+                sendMessageToParent(current.message)
+
+                const play = CustomAnimationsRegistry[current.data.animationKey]
+                if (play) {
+                    await play({
+                        scene,
+                        camera,
+                        plane,
+                        bakugansMeshs,
+                        gateCardMeshs,
+                        userId,
+                        data: current.data,
+                    })
+                }
+            }
+
+            i++; // avancer à l'animation suivante
+        }
     } finally {
         setAnimationsActive(false)
         notifyParentAnimationsDone()
@@ -485,7 +485,7 @@ export function registerSocketHandlers(
 
         texture.wrapS = THREE.RepeatWrapping
         texture.wrapT = THREE.RepeatWrapping
-
+        //Dans ce cas si c'est plus interessant fait les deux corrige le bot et corrige également le flux d'animation pour qu'il soit plus performant.
         const planeSize = 500
 
         texture.repeat.set(

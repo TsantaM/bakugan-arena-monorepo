@@ -69,7 +69,9 @@ export const getAvailableBot = async ({ ranked }: { ranked: boolean }) => {
     return true
   })
 
-  return botCandidates[0]
+  if (botCandidates.length === 0) return undefined
+
+  return botCandidates[Math.floor(Math.random() * botCandidates.length)]
 }
 
 export const getBotSocketId = (userId: string) => {
