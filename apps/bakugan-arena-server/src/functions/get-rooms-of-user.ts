@@ -5,8 +5,7 @@ export function GetUsersRooms(userId: string) {
         .filter(
             (room) => room !== undefined)
         .filter((room) => room.players.some((player) => player.userId === userId || room.spectators.has(userId)))
-        .filter((room) => !room.status.finished)
-        .filter((room) => !room.status.finished)
+        // Keep finished rooms visible so players can download replay / dismiss them
         .map((room) => ({
             p1: room.players[0].username,
             p2: room.players[1].username,

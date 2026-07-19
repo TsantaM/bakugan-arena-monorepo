@@ -13,16 +13,22 @@ export type Room = {
 
 interface RoomsStore {
   rooms: Room[]
+  dismissedRoomIds: string[]
   setRooms: (newRooms: Room[]) => void
   addRoom: (room: Room) => void
   updateRoom: (room: Room) => void
   removeRoomById: (roomId: string) => void
+  dismissRoom: (roomId: string) => void
   clearRooms: () => void
 }
 
 export const useRoomsStore = create<RoomsStore>((set) => ({
   rooms: [],
-  setRooms: (newRooms) => set({ rooms: newRooms }),
+  dismissedRoomIds: [],
+  setRooms: (newRooms) =>
+    set((state) => ({
+      rooms: newRooms.filter((r) => !state.dismissedRoomIds.includes(r.roomId)),
+    })),
   updateRoom: (room) =>
     set((state) => ({
       rooms: state.rooms.map((r) =>
@@ -36,6 +42,9 @@ export const useRoomsStore = create<RoomsStore>((set) => ({
     })),
   addRoom: (room) =>
     set((state) => {
+      if (state.dismissedRoomIds.includes(room.roomId)) {
+        return state
+      }
       // On évite les doublons par roomId
       const exists = state.rooms.find((r) => r.roomId === room.roomId)
       if (exists) {
@@ -51,5 +60,12 @@ export const useRoomsStore = create<RoomsStore>((set) => ({
     set((state) => ({
       rooms: state.rooms.filter((r) => r.roomId !== roomId),
     })),
-  clearRooms: () => set({ rooms: [] }),
+  dismissRoom: (roomId) =>
+    set((state) => ({
+      rooms: state.rooms.filter((r) => r.roomId !== roomId),
+      dismissedRoomIds: state.dismissedRoomIds.includes(roomId)
+        ? state.dismissedRoomIds
+        : [...state.dismissedRoomIds, roomId],
+    })),
+  clearRooms: () => set({ rooms: [], dismissedRoomIds: [] }),
 }))

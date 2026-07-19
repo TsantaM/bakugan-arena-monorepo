@@ -155,7 +155,8 @@ export const ChalengeAcceptSocket = (io: Server, socket: Socket) => {
             player1ID: challenge.chalenger.userId,
             P1Deck: challenge.chalenger.deckId,
             Player2ID: challenge.target.userId,
-            P2Deck: challenge.target.deckId!
+            P2Deck: challenge.target.deckId!,
+            ranked: false
         })
 
         const newRoomState = await createGameState({

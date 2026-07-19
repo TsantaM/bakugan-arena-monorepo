@@ -115,7 +115,8 @@ export const processMatchmaking = async (io: Server) => {
                 player1ID: p1.userId,
                 P1Deck: p1.deckId,
                 Player2ID: p2.userId,
-                P2Deck: p2.deckId
+                P2Deck: p2.deckId,
+                ranked: p1.ranked
             })
 
             const matchedPlayers = [p1, p2]
@@ -126,7 +127,7 @@ export const processMatchmaking = async (io: Server) => {
 
             const state = await createGameState({
                 roomId: room.id,
-                ranked: true
+                ranked: p1.ranked
             })
 
             if (!state) continue
