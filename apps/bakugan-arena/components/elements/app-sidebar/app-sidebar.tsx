@@ -121,7 +121,7 @@ export default function AppSidebar({ role }: { role: RoleType | undefined }) {
                             role === 'ADMIN' && <SidebarMenu>
                                 <SidebarMenuItem>
                                     <SidebarMenuButton asChild>
-                                        <Link href={'/dashboard'}>
+                                        <Link href='/dashboard/admin'>
                                             <KeyRound />
                                             <span>Administration</span>
                                         </Link>
