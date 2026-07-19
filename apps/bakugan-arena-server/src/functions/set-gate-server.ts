@@ -103,6 +103,6 @@ export const UpdateGate: ({ roomId, gateId, slot, userId }: setGateCardProps) =>
             turn: roomData.turnState.turnCount
         }]
     }
-    pushReplayAnimation(roomData, animation)
+    pushReplayAnimation(Battle_Brawlers_Game_State[roomIndex], animation)
     return [animation]
 }

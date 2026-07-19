@@ -25,6 +25,7 @@
   "packageManager": "pnpm@10.15.0",
   "type": "module",
   "dependencies": {
+    "@bakugan-arena/game-data": "workspace:*",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.45.1",
     "pg": "^8.17.2"
