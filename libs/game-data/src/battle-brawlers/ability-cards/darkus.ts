@@ -24,13 +24,13 @@ export const CoupDeGrace: abilityCardsType = {
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
                     slot: slotOfGate,
-                    turn: roomState.turnState.turnCount
+                    turn: roomState.turnState.turnCount,
+                    roomState: roomState
                 })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
+                    slotOfGate.state.canceled = true
                 }
-
-                slotOfGate.state.canceled = true
 
 
             }
@@ -51,17 +51,17 @@ export const CoupDeGrace: abilityCardsType = {
         const { battleInProcess, paused, slot } = roomState.battleState
         if (!battleInProcess) return false
         if (battleInProcess && paused) return false
-        if (slot === null) return false
+        if(slot === null) return false
 
         const slotOfBakugan = roomState.protalSlots[Slots.indexOf(slot)]
-        if (slotOfBakugan.portalCard === null) return false
-        if (slotOfBakugan.portalCard.userId === bakugan.userId) return false
-        if (!slotOfBakugan.state.open) return false
-        if (slotOfBakugan.state.canceled) return false
+        if(slotOfBakugan.portalCard === null) return false
+        if(slotOfBakugan.portalCard.userId === bakugan.userId) return false 
+        if(!slotOfBakugan.state.open) return false
+        if(slotOfBakugan.state.canceled) return false
 
         const card = GateCardsList.find((c) => c.key === slotOfBakugan.portalCard?.key)
-        if (!card) return false
-        if (!card.onCanceled) return false
+        if(!card) return false
+        if(!card.onCanceled) return false
 
         return true
     },
@@ -89,7 +89,9 @@ export const EpicesMortelles: abilityCardsType = {
                     bakugans: [user],
                     powerChange: 100,
                     malus: false,
-                    turn: roomState.turnState.turnCount
+                    turn: roomState.turnState.turnCount,
+                    roomState: roomState
+
                 })
                 opponent.currentPower -= 100
                 PowerChangeDirectiveAnumation({
@@ -97,7 +99,9 @@ export const EpicesMortelles: abilityCardsType = {
                     bakugans: [opponent],
                     powerChange: 100,
                     malus: true,
-                    turn: roomState.turnState.turnCount
+                    turn: roomState.turnState.turnCount,
+                    roomState: roomState
+
                 })
             }
         }
@@ -118,7 +122,9 @@ export const EpicesMortelles: abilityCardsType = {
                     bakugans: [user],
                     powerChange: 100,
                     malus: true,
-                    turn: roomState.turnState.turnCount
+                    turn: roomState.turnState.turnCount,
+                    roomState: roomState
+
 
                 })
                 opponent.currentPower += 100
@@ -127,7 +133,9 @@ export const EpicesMortelles: abilityCardsType = {
                     bakugans: [opponent],
                     powerChange: 100,
                     malus: false,
-                    turn: roomState.turnState.turnCount
+                    turn: roomState.turnState.turnCount,
+                    roomState: roomState
+
                 })
             }
         }

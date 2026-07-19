@@ -79,8 +79,7 @@ export const MirageAquatique: abilityCardsType = {
 
     },
     activationConditions({ roomState, userId }) {
-
-
+        
         if (!roomState) return false
         const slotWithGate = roomState.protalSlots.filter((slot) => slot.portalCard !== null)
 
@@ -92,9 +91,9 @@ export const MirageAquatique: abilityCardsType = {
 
         const slots = roomState.protalSlots.filter((slot) => slot.id !== bakugan.slot_id && slot.portalCard !== null)
 
-        if (slots.length === 0) return false
+        if(slots.length === 0) return false
         if (bakugan.statut.trapped) return false
-
+        
         return true
 
     },
@@ -213,13 +212,14 @@ export const DepthDive: abilityCardsType = {
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
                     slot: slotOfGate,
-                    turn: roomState.turnState.turnCount
+                    turn: roomState.turnState.turnCount,
+                    roomState: roomState
                 })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
+                    slotOfGate.state.canceled = true
                 }
 
-                slotOfGate.state.canceled = true
 
             }
         }

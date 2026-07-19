@@ -12,11 +12,12 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import RemoveRoomButton from "@/components/elements/lobby/remove-room-button"
 import { RoleType } from "@/src/actions/getUserSession"
 import { authClient } from "@/src/lib/auth-client"
 import { useSocket } from "@/src/providers/socket-provider"
 import { useRoomsStore } from "@/src/store/rooms-store"
-import { BookOpenText, ChartSpline, Home, KeyRound, SwatchBook } from "lucide-react"
+import { BookOpenText, ChartSpline, Clapperboard, Home, KeyRound, SwatchBook } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ReactNode, useEffect } from "react"
@@ -52,6 +53,11 @@ const LinksDashboard: LinksDashboardType[] = [
         icone: <ChartSpline />,
         label: 'Ladder',
         href: '/dashboard/ladder'
+    },
+    {
+        icone: <Clapperboard />,
+        label: 'Replay',
+        href: '/dashboard/replay'
     }
 ]
 
@@ -138,8 +144,8 @@ export default function AppSidebar({ role }: { role: RoleType | undefined }) {
                     </SidebarGroupLabel>
                     <SidebarGroupContent>
                         {
-                            Rooms.length > 0 && Rooms.map((room, index) =>
-                                <SidebarMenu key={index}>
+                            Rooms.length > 0 && Rooms.map((room) =>
+                                <SidebarMenu key={room.roomId}>
                                     <SidebarMenuItem>
                                         <SidebarMenuButton asChild>
                                             <Link href={`/dashboard/battlefield?id=${room.roomId}`}>
@@ -147,6 +153,11 @@ export default function AppSidebar({ role }: { role: RoleType | undefined }) {
                                                 <span>{`${room.p1} VS ${room.p2}`}</span>
                                             </Link>
                                         </SidebarMenuButton>
+                                        <RemoveRoomButton
+                                            roomId={room.roomId}
+                                            finished={room.finished}
+                                            variant="sidebar"
+                                        />
                                     </SidebarMenuItem>
                                 </SidebarMenu>
                             )

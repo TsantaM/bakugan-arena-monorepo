@@ -1,4 +1,4 @@
-import { AbilityCards, AbilityCardsList, BakuganList, Bakugans, ExclusiveAbilities, ExclusiveAbilitiesList, GateCards, GateCardsList, portalSlotsType, SelectableGateCardAction, stateType, turnStateType } from "@bakugan-arena/game-data"
+import { AbilityCards, AbilityCardsList, BakuganList, Bakugans, ExclusiveAbilities, ExclusiveAbilitiesList, GateCards, GateCardsList, captureReplaySnapshot, portalSlotsType, SelectableGateCardAction, stateType, turnStateType } from "@bakugan-arena/game-data"
 import { getDecksData, getRoomPlayers } from "./get-room-data"
 
 export const createGameState = async ({ roomId, ranked }: { roomId: string; ranked: boolean }) => {
@@ -248,10 +248,12 @@ export const createGameState = async ({ roomId, ranked }: { roomId: string; rank
         protalSlots,
         status: {
             finished: false,
+            finisheAt: null,
             winner: null,
             elo: null
         },
         animations: [],
+        animationsForReplay: [],
         ActivePlayerActionRequest: {
             target: 'ACTIVE_PLAYER',
             actions: {
@@ -274,8 +276,24 @@ export const createGameState = async ({ roomId, ranked }: { roomId: string; rank
                 optional: []
             }
         },
-        AbilityAditionalRequest: []
-    }
+        AbilityAditionalRequest: [],
+        initialReplaySnapshot: {
+            decksState,
+            battleState: battleState,
+            turnState: turnState,
+            eliminated: {
+                opponnent: 0,
+                user: 0
+            },
+            finished: undefined,
+            messages: [],
+            portalSlots: protalSlots,
+            timers: playersState.map((p) => ({
+                userId: p.userId,
+                timer: p.timer
+            }))
+        }
+    } as stateType
 
     return state
 

@@ -1,20 +1,22 @@
 import { BakuganList } from "../../battle-brawlers/bakugans.js";
-import type { AnimationDirectivesTypes, bakuganOnSlot, Message, portalSlotsTypeElement } from "../../type/type-index.js";
+import type { AnimationDirectivesTypes, bakuganOnSlot, Message, portalSlotsTypeElement, stateType } from "../../type/type-index.js";
+import { pushReplayAnimation } from "../replay/push-replay-animation.js";
 
 type Props = {
     initialSlot: portalSlotsTypeElement,
     newSlot: portalSlotsTypeElement,
     bakugan: bakuganOnSlot,
     animations: AnimationDirectivesTypes[];
+    roomState: stateType;
     turn:number,
     additionalMessages?: Message[]
 }
 
-type MoveToAnotherSlotType = ({ animations, bakugan, initialSlot, newSlot, turn }: Props) => void
+type MoveToAnotherSlotType = ({ animations, bakugan, initialSlot, newSlot, turn, roomState }: Props) => void
 
 
 
-export const MoveToAnotherSlotDirectiveAnimation: MoveToAnotherSlotType = ({ animations, bakugan, initialSlot, newSlot, turn, additionalMessages }) => {
+export const MoveToAnotherSlotDirectiveAnimation: MoveToAnotherSlotType = ({ animations, bakugan, initialSlot, newSlot, turn, additionalMessages, roomState }) => {
 
     const additionnal: Message[] = additionalMessages ? additionalMessages : []
 
@@ -35,4 +37,6 @@ export const MoveToAnotherSlotDirectiveAnimation: MoveToAnotherSlotType = ({ ani
     }
 
     animations.push(animation)
+    pushReplayAnimation(roomState, animation)
+    
 }

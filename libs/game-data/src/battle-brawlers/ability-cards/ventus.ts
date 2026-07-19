@@ -107,9 +107,9 @@ export const TornadeChaosTotal: abilityCardsType = {
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
                     slot: slotOfGate,
-                    turn: roomState.turnState.turnCount
-
-                })
+                    turn: roomState.turnState.turnCount,
+                    roomState: roomState
+                    })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
                 }
@@ -265,8 +265,9 @@ export const RetourDair: abilityCardsType = {
                     ComeBackBakuganDirectiveAnimation({
                         animations: roomState.animations,
                         bakugan: user,
-                        slot: slotOfGate
-                    })
+                        slot: slotOfGate,
+                        roomState: roomState
+                        })
                 }
 
             }
@@ -296,8 +297,9 @@ export const RetourDair: abilityCardsType = {
         ComeBackBakuganDirectiveAnimation({
             animations: roomData.animations,
             bakugan: bakugan,
-            slot: slotOfTarget
-        })
+            slot: slotOfTarget,
+            roomState: roomData
+            })
 
         CheckBattleStillInProcess(roomData)
 

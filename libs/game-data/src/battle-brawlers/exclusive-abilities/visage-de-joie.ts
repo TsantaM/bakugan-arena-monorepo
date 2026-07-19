@@ -20,9 +20,9 @@ export const VisageDeJoie: exclusiveAbilitiesType = {
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
                     slot: slotOfGate,
-                    turn: roomState.turnState.turnCount
-
-                })
+                    turn: roomState.turnState.turnCount,
+                    roomState: roomState
+                    })
 
                 if (gate.onCanceled) {
                     gate.onCanceled({ roomState, slot, userId, bakuganKey })

@@ -1,4 +1,5 @@
 import { AbilityCardsList, BakuganList, ExclusiveAbilitiesList } from "../../battle-brawlers/index.js"
+import { pushReplayAnimation } from "../replay/push-replay-animation.js";
 import { AnimationDirectivesTypes } from "../../type/animations-directives.js"
 import { activateAbilities, portalSlotsTypeElement, stateType } from "../../type/room-types.js"
 
@@ -8,10 +9,10 @@ type CancelAbilityCardEffectProps = {
     ability: activateAbilities
 }
 
-export function CancelAbilityCardEffect({roomState, slotOfGate, ability} : CancelAbilityCardEffectProps) {
+export function CancelAbilityCardEffect({ roomState, slotOfGate, ability }: CancelAbilityCardEffectProps) {
     if (ability.canceled) return
     const user = slotOfGate.bakugans.find((b) => b.key === ability.bakuganKey && b.userId === ability.userId)
-    if(!user) return
+    if (!user) return
     const BakuganName = BakuganList.find((b) => b.key === user.key)?.name
     if (!BakuganName) return
     const abilityData = [...AbilityCardsList, ...ExclusiveAbilitiesList].find((card) => card.key === ability.key)
@@ -32,6 +33,7 @@ export function CancelAbilityCardEffect({roomState, slotOfGate, ability} : Cance
     }
 
     roomState.animations.push(animation)
+    pushReplayAnimation(roomState, animation)
 
     abilityData.onCanceled({
         bakuganKey: ability.bakuganKey,

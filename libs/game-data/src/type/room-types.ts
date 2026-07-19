@@ -1,4 +1,5 @@
 import type { AnimationDirectivesTypes, Message } from "./animations-directives.js";
+import type { replayEntryType, replaySnapshotType } from "./replay-snapshot-types.js";
 import { type attribut } from "./game-data-types.js"
 import type { AbilityCardsActionsRequestsType, ActivePlayerActionRequestType, gateCardActionRequestsType, InactivePlayerActionRequestType } from './actions-serveur-requests.js'
 
@@ -191,6 +192,7 @@ export type stateType = {
     protalSlots: portalSlotsType;
     status: {
         finished: boolean,
+        finisheAt: number | null,
         winner: string | null,
         elo: {
             winner: {
@@ -204,6 +206,8 @@ export type stateType = {
         } | null
     },
     animations: AnimationDirectivesTypes[],
+    animationsForReplay: replayEntryType[],
+    initialReplaySnapshot: replaySnapshotType,
     InactivePlayerActionRequest: InactivePlayerActionRequestType,
     ActivePlayerActionRequest: ActivePlayerActionRequestType,
     AbilityAditionalRequest: AbilityCardsActionsRequestsType[],

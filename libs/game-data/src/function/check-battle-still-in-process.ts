@@ -1,4 +1,5 @@
-import { stateType } from "../type/type-index.js";
+import { AnimationDirectivesTypes, stateType } from "../type/type-index.js";
+import { pushReplayAnimation } from "./replay/push-replay-animation.js";
 import { CreateActionRequestFunction } from "./create-action-request-function.js";
 
 export function CheckBattleStillInProcess(roomState: stateType, updateActions?: boolean) {
@@ -28,12 +29,14 @@ export function CheckBattleStillInProcess(roomState: stateType, updateActions?: 
     turnState.set_new_gate = true;
     turnState.set_new_bakugan = true;
 
-    roomState.animations.push({
-        type: "BATTLE-END",
+    const animation: AnimationDirectivesTypes = {
+        type: 'BATTLE-END',
         resolved: false
-    });
+    }
+    roomState.animations.push(animation)
+    pushReplayAnimation(roomState, animation)
 
-    if(updateActions) {
-        CreateActionRequestFunction({roomState: roomState})
+    if (updateActions) {
+        CreateActionRequestFunction({ roomState: roomState })
     }
 }

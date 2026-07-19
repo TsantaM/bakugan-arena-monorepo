@@ -1,3 +1,4 @@
+import { pushReplayAnimation } from "../../function/replay/push-replay-animation.js";
 import { ElementaryCardCancelerEffect } from "../../function/ability-cards-effects/elementary-card-canceler-effect.js";
 import { AbilityCardFailed, CancelGateCardDirectiveAnimation, getJuxtaposablesSlots, PowerChange, PowerChangeDirectiveAnumation, SwipeGateCardEffect } from "../../function/index.js";
 import { NewAdditionnalMessage } from "../../function/new-additional-message.js";
@@ -39,14 +40,17 @@ export const MagmaSupreme: abilityCardsType = {
                         }
                         slotOfGate.state.open = false
                         slotOfGate.state.canceled = false
-                        roomState?.animations.push({
+                        const animation: AnimationDirectivesTypes = {
                             type: "OPEN_GATE_CARD",
                             data: {
                                 slot: slotOfGate,
                                 slotId: slotOfGate.id
                             },
                             resolved: false
-                        })
+                        }
+                        roomState?.animations.push(animation)
+                        pushReplayAnimation(roomState, animation)
+
                         newGate.onOpen({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
                     }
                 }
@@ -241,9 +245,9 @@ export const CopieConforme: abilityCardsType = {
                     bakugans: [user],
                     powerChange: 100,
                     malus: false,
-                    turn: roomState.turnState.turnCount
-
-                })
+                    turn: roomState.turnState.turnCount,
+                    roomState: roomState
+                    })
             }
         }
 
@@ -270,8 +274,9 @@ export const EarthShatter: abilityCardsType = {
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
                     slot: slotOfGate,
-                    turn: roomState.turnState.turnCount
-                })
+                    turn: roomState.turnState.turnCount,
+                    roomState: roomState
+                    })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
                 }
@@ -412,6 +417,7 @@ export const GateBuilding: abilityCardsType = {
         }
 
         roomState.animations.push(animationToAdd)
+        pushReplayAnimation(roomState, animationToAdd)
 
         return null
     },

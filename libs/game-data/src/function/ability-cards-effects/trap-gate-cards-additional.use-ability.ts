@@ -1,4 +1,5 @@
 import { AbilityCardsList, AnimationDirectivesTypes, CheckBattle, CheckBattleStillInProcess, ExclusiveAbilitiesList, gateCardAdditionalRequest, GetUserName, portalSlotsTypeElement, RemoveGateCardDirectiveAnimation, ResetSlot, resolutionGateCardType, stateType } from "../../index.js";
+import { pushReplayAnimation } from "../replay/push-replay-animation.js";
 import { NewAdditionnalMessage } from "../new-additional-message.js";
 
 
@@ -76,6 +77,7 @@ export function ResolveTrapCardAdditionalRequest({
     resolution,
     roomState,
     slotOfGate,
+    otherPlayerId,
     onMainEffect
 }: ResolveMineGhostAdditionalRequestParams): null | gateCardAdditionalRequest {
 
@@ -132,6 +134,7 @@ export function ResolveTrapCardAdditionalRequest({
     }
 
     roomState.animations.push(activeCardAnimation)
+    pushReplayAnimation(roomState, activeCardAnimation)
 
     cardData?.onActivate({
         roomState,
@@ -165,7 +168,7 @@ export function ResolveTrapCardAdditionalRequest({
             RemoveGateCardDirectiveAnimation({
                 animations: roomState.animations,
                 slot: slotOfGate,
-                roomState
+                roomState: roomState
             })
 
             ResetSlot(slotOfGate)

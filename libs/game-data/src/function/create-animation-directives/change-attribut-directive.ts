@@ -1,4 +1,5 @@
 import type { AnimationDirectivesTypes, attribut, bakuganOnSlot, Message, stateType } from "../../type/type-index.js";
+import { pushReplayAnimation } from "../replay/push-replay-animation.js";
 
 export function ChangeAttributAnimationDirective({roomState, bakugan, attribut,message} : {roomState: stateType, bakugan: bakuganOnSlot, attribut: attribut, message: Message[]}) {
 
@@ -13,5 +14,5 @@ export function ChangeAttributAnimationDirective({roomState, bakugan, attribut,m
     }
 
     roomState.animations.push(directive)
-    
+    pushReplayAnimation(roomState, directive)
 }

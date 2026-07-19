@@ -36,7 +36,7 @@ export function dragBakuganToUserSlot({
     const bakuganToDrag = slotTarget.bakugans.find(b => b.key === targetBakuganKey && b.userId === targetUserId);
 
     if (!bakuganToDrag) return;
-    if(bakuganToDrag.statut.protected || bakuganToDrag.statut.protectedAgainstAbility) {
+    if (bakuganToDrag.statut.protected || bakuganToDrag.statut.protectedAgainstAbility) {
         NewAdditionnalMessage({
             roomState: roomState,
             text: `${Bakugans[bakuganToDrag.key].name} is protected.`
@@ -84,7 +84,8 @@ export function dragBakuganToUserSlot({
         bakugan: structuredClone(bakuganToDrag),
         initialSlot: structuredClone(slotTarget),
         newSlot: structuredClone(slotOfGate),
-        turn: roomState.turnState.turnCount
+        turn: roomState.turnState.turnCount,
+        roomState: roomState
     });
 
     // --- Gate Card Effect on Set bakugan
@@ -114,6 +115,7 @@ export function dragBakuganToUserSlot({
         if (sameTeam) {
             AddRenfortAnimationDirective({
                 animations: roomState.animations,
+                roomState: roomState,
                 bakugan: bakuganToDrag,
                 slot: slotOfGate,
                 turn: roomState.turnState.turnCount

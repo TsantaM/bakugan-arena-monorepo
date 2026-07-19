@@ -22,15 +22,15 @@ export const SubterraPyrus: abilityCardsType = {
         if (!roomState) return failed
         if (!slotOfGate) return failed
 
-        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Pyrus', attributWeak: 'Subterra', bakuganKey: bakuganKey, userId: userId, turn: roomState.turnState.turnCount })
+        CombinationSimpleFunction({ roomState: roomState, animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Pyrus', attributWeak: 'Subterra', bakuganKey: bakuganKey, userId: userId, turn: roomState.turnState.turnCount })
         return null
 
     },
     activationConditions({ roomState, userId }) {
         if (!roomState) return false
         const { battleInProcess, paused, slot, turns } = roomState.battleState
-        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && (bakugan.attribut === 'Pyrus' || bakugan.secondAttribut === 'Pyrus'))
-        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && (bakugan.attribut === 'Subterra' || bakugan.secondAttribut === 'Subterra'))
+        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Pyrus')
+        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Subterra')
 
         if (!battleInProcess || paused) return false
         if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
@@ -64,14 +64,14 @@ export const SubterraHaos: abilityCardsType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (!roomState) return failed
         if (!slotOfGate) return failed
-        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Subterra', attributWeak: 'Haos', bakuganKey: bakuganKey, userId: userId, turn: roomState.turnState.turnCount })
+        CombinationSimpleFunction({ roomState: roomState, animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Subterra', attributWeak: 'Haos', bakuganKey: bakuganKey, userId: userId, turn: roomState.turnState.turnCount })
         return null
     },
     activationConditions({ roomState, userId }) {
         if (!roomState) return false
         const { battleInProcess, paused, slot, turns } = roomState.battleState
-        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && (bakugan.attribut === 'Subterra' || bakugan.secondAttribut === 'Subterra'))
-        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && (bakugan.attribut === 'Haos' || bakugan.secondAttribut === 'Haos'))
+        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Subterra')
+        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Haos')
 
         if (!battleInProcess || paused) return false
         if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
@@ -105,14 +105,14 @@ export const HaosDarkus: abilityCardsType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (!roomState) return failed
         if (!slotOfGate) return failed
-        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Haos', attributWeak: 'Darkus', bakuganKey: bakuganKey, userId: userId, turn: roomState.turnState.turnCount })
+        CombinationSimpleFunction({ roomState: roomState, animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Haos', attributWeak: 'Darkus', bakuganKey: bakuganKey, userId: userId, turn: roomState.turnState.turnCount })
         return null
     },
     activationConditions({ roomState, userId }) {
         if (!roomState) return false
         const { battleInProcess, paused, slot, turns } = roomState.battleState
-        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && (bakugan.attribut === 'Haos' || bakugan.secondAttribut === 'Haos'))
-        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && (bakugan.attribut === 'Darkus' || bakugan.secondAttribut === 'Darkus'))
+        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Haos')
+        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Darkus')
 
         if (!battleInProcess || paused) return false
         if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
@@ -146,14 +146,14 @@ export const DarkusAquos: abilityCardsType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (!roomState) return failed
         if (!slotOfGate) return failed
-        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Darkus', attributWeak: 'Aquos', bakuganKey: bakuganKey, userId: userId, turn: roomState.turnState.turnCount })
+        CombinationSimpleFunction({ roomState: roomState, animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Darkus', attributWeak: 'Aquos', bakuganKey: bakuganKey, userId: userId, turn: roomState.turnState.turnCount })
         return null
     },
     activationConditions({ roomState, userId }) {
         if (!roomState) return false
         const { battleInProcess, paused, slot, turns } = roomState.battleState
-        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && (bakugan.attribut === 'Darkus' || bakugan.secondAttribut === 'Darkus'))
-        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && (bakugan.attribut === 'Aquos' || bakugan.secondAttribut === "Aquos"))
+        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Darkus')
+        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Aquos')
 
         if (!battleInProcess || paused) return false
         if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
@@ -187,14 +187,14 @@ export const AquosVentus: abilityCardsType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (!roomState) return failed
         if (!slotOfGate) return failed
-        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Aquos', attributWeak: 'Ventus', bakuganKey: bakuganKey, userId: userId, turn: roomState.turnState.turnCount })
+        CombinationSimpleFunction({ roomState: roomState, animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Aquos', attributWeak: 'Ventus', bakuganKey: bakuganKey, userId: userId, turn: roomState.turnState.turnCount })
         return null
     },
     activationConditions({ roomState, userId }) {
         if (!roomState) return false
         const { battleInProcess, paused, slot, turns } = roomState.battleState
-        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && (bakugan.attribut === 'Aquos' || bakugan.secondAttribut === "Aquos"))
-        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && (bakugan.attribut === 'Ventus' || bakugan.secondAttribut === 'Ventus'))
+        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Aquos')
+        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Ventus')
 
         if (!battleInProcess || paused) return false
         if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false
@@ -228,14 +228,14 @@ export const VentusPyrus: abilityCardsType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (!roomState) return failed
         if (!slotOfGate) return failed
-        CombinationSimpleFunction({ animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Ventus', attributWeak: 'Pyrus', bakuganKey: bakuganKey, userId: userId, turn: roomState.turnState.turnCount })
+        CombinationSimpleFunction({ roomState: roomState, animations: roomState?.animations, slotOfGate: slotOfGate, attribut: 'Ventus', attributWeak: 'Pyrus', bakuganKey: bakuganKey, userId: userId, turn: roomState.turnState.turnCount })
         return null
     },
     activationConditions({ roomState, userId }) {
         if (!roomState) return false
         const { battleInProcess, paused, slot, turns } = roomState.battleState
-        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && (bakugan.attribut === 'Ventus' || bakugan.secondAttribut === 'Ventus'))
-        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && (bakugan.attribut === 'Pyrus' || bakugan.secondAttribut === 'Pyrus'))
+        const usersBakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId && bakugan.attribut === 'Ventus')
+        const opponentsbakugans = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId !== userId && bakugan.attribut === 'Pyrus')
 
         if (!battleInProcess || paused) return false
         if (usersBakugans.length === 0 || opponentsbakugans.length === 0) return false

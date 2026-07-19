@@ -36,8 +36,9 @@ export const ReacteurPyrus: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: false,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
 
     },
     onAttributChange({ bakugan, slot, attribut, roomState }) {
@@ -54,8 +55,9 @@ export const ReacteurPyrus: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: false,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
 
@@ -72,8 +74,9 @@ export const ReacteurPyrus: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: true,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
 
     },
     autoActivationCheck: ({ portalSlot }) => {
@@ -110,8 +113,9 @@ export const ReacteurHaos: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: false,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
     },
     onAttributChange({ bakugan, slot, attribut, roomState }) {
         if (!roomState) return
@@ -127,8 +131,9 @@ export const ReacteurHaos: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: false,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
         if (!roomState) return
@@ -144,8 +149,9 @@ export const ReacteurHaos: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: true,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
     },
     onCanceled: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
 
@@ -192,8 +198,9 @@ export const ReacteurVentus: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: false,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
     },
     onAttributChange({ bakugan, slot, attribut, roomState }) {
         if (!roomState) return
@@ -209,8 +216,9 @@ export const ReacteurVentus: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: false,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
         if (!roomState) return
@@ -226,8 +234,9 @@ export const ReacteurVentus: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: true,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
     },
     autoActivationCheck: ({ portalSlot }) => {
         const check = DoubleBakuganCheck({ portalSlot })
@@ -268,8 +277,9 @@ export const ReacteurAquos: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: false,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
     },
     onAttributChange({ bakugan, slot, attribut, roomState }) {
         if (!roomState) return
@@ -285,8 +295,9 @@ export const ReacteurAquos: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: false,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
         if (!roomState) return
@@ -302,8 +313,9 @@ export const ReacteurAquos: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: true,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
     },
     autoActivationCheck: ({ portalSlot }) => {
         const check = DoubleBakuganCheck({ portalSlot })
@@ -344,8 +356,9 @@ export const ReacteurSubterra: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: false,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
     },
     onAttributChange({ bakugan, slot, attribut, roomState }) {
         if (!roomState) return
@@ -361,8 +374,9 @@ export const ReacteurSubterra: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: false,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
         if (!roomState) return
@@ -378,8 +392,9 @@ export const ReacteurSubterra: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: true,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
     },
     autoActivationCheck: ({ portalSlot }) => {
         const check = DoubleBakuganCheck({ portalSlot })
@@ -420,8 +435,9 @@ export const ReacteurDarkus: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: false,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
     },
     onAttributChange({ bakugan, slot, attribut, roomState }) {
         if (!roomState) return
@@ -437,8 +453,9 @@ export const ReacteurDarkus: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: false,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
         if (!roomState) return
@@ -454,8 +471,9 @@ export const ReacteurDarkus: gateCardType = {
             bakugans: [bakugan],
             powerChange: 100,
             malus: true,
-            turn: roomState.turnState.turnCount
-        })
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+            })
     },
     autoActivationCheck: ({ portalSlot }) => {
         const check = DoubleBakuganCheck({ portalSlot })
