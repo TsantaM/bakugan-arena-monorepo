@@ -1,4 +1,4 @@
-import { CancelAbilityCardEffect, ElimineBakuganEffect, PowerChange } from "../../function/index.js";
+import { CancelAbilityCardEffect, CustomAnimationDirective, ElimineBakuganEffect, PowerChange } from "../../function/index.js";
 import { Slots } from "../../store/slots.js";
 import { AbilityCardsActions, bakuganToMoveType2 as bakuganToMoveType } from "../../type/actions-serveur-requests.js";
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js";
@@ -33,6 +33,14 @@ export const DualGazer: exclusiveAbilitiesType = {
                 }
 
                 roomState.persistantAbilities.push(activateAbility)
+
+                CustomAnimationDirective({
+                    roomState,
+                    animationKey: DualGazer.key,
+                    sourceBakugan: user,
+                    targetBakugans: opponents,
+                    slotId: slot,
+                })
 
                 PowerChange({
                     bakugan: user,
@@ -82,6 +90,21 @@ export const DualGazer: exclusiveAbilitiesType = {
         const slotTarget = roomData.protalSlots[Slots.indexOf(slot)]
         const target = slotTarget.bakugans.find((b) => b.key === bakugan && b.userId === userId)
         if (!target) return
+
+        const casterSlot = roomData.protalSlots.find((s) => s.id === resolution.slot)
+        const sourceBakugan = casterSlot?.bakugans.find(
+            (b) => b.key === resolution.bakuganKey && b.userId === resolution.userId
+        )
+
+        if (sourceBakugan) {
+            CustomAnimationDirective({
+                roomState: roomData,
+                animationKey: DualGazer.key,
+                sourceBakugan,
+                targetBakugans: [target],
+                slotId: resolution.slot,
+            })
+        }
 
         const deck = roomData.decksState.find((d) => d.userId === resolution.userId)
         const aliveCount = deck?.bakugans.filter((b) => !b.bakuganData.elimined).length || 0

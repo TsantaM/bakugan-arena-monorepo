@@ -12,10 +12,12 @@ type Props = {
 type CancelGateCardDirectiveAnimationType = ({ animations, slot, turn, roomState }: Props) => void
 
 export const CancelGateCardDirectiveAnimation: CancelGateCardDirectiveAnimationType = ({ animations, slot, turn, roomState }) => {
+    // Snapshot figé : évite que onCanceled / mutations live altèrent
+    // les checks client avant le rendu de l'animation.
     const comeBackBakuganDirective: AnimationDirectivesTypes = {
         type: 'CANCEL_GATE_CARD',
         data: {
-            slot: slot
+            slot: structuredClone(slot)
         },
         resolved: false,
         message: [{
@@ -23,8 +25,6 @@ export const CancelGateCardDirectiveAnimation: CancelGateCardDirectiveAnimationT
             turn: turn
         }]
     }
-
-    console.log('slot canceled : ', slot.id, slot.portalCard?.key, slot.state)
 
     animations.push(comeBackBakuganDirective)
     pushReplayAnimation(roomState, comeBackBakuganDirective)

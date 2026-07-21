@@ -10,20 +10,21 @@ async function CancelGateCardAnimation({
   mesh: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>
 }): Promise<void> {
   return new Promise((resolve) => {
-    // Vérifications de sécurité
-    if (slot.portalCard === null) return resolve()
-    if (slot.state.open === false) return resolve()
-    if (!mesh) return resolve()
+    if (!mesh?.material) return resolve()
 
-    // === Timeline GSAP ===
+    // Ne pas bloquer si l'état serveur a déjà été marqué canceled/open
+    // avant le rendu : la directive a déjà validé l'effet côté game-data.
+    const material = mesh.material as THREE.MeshStandardMaterial
+    if (!material.color) return resolve()
+
+    gsap.killTweensOf(material.color)
+
     const timeline = gsap.timeline({
-      onComplete: () => {
-        resolve() // ✅ animation terminée
-      }
+      onComplete: () => resolve(),
     })
 
     timeline.fromTo(
-      mesh.material.color,
+      material.color,
       { r: 1, g: 1, b: 1 },
       {
         r: 0.1,
@@ -32,8 +33,10 @@ async function CancelGateCardAnimation({
         duration: 0.5,
         ease: 'power1.inOut',
         onComplete: () => {
-          mesh.userData.state.canceled = true
-        }
+          if (mesh.userData?.state) {
+            mesh.userData.state.canceled = true
+          }
+        },
       }
     )
   })

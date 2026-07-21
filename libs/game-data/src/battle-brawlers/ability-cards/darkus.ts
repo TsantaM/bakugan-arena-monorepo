@@ -1,6 +1,6 @@
 import { bakuganOnSlot, type abilityCardsType } from "../../type/type-index.js";
 import { GateCardsList } from "../gate-gards.js";
-import { CancelGateCardDirectiveAnimation, PowerChange, PowerChangeDirectiveAnumation } from '../../function/index.js'
+import { CancelGateCardDirectiveAnimation, CustomAnimationDirective, PowerChange, PowerChangeDirectiveAnumation } from '../../function/index.js'
 import { Slots, StandardCardsImages } from "../../store/store-index.js";
 import { ElementaryCardCancelerEffect } from "../../function/ability-cards-effects/elementary-card-canceler-effect.js";
 import { AbilityCardsList, ExclusiveAbilitiesList } from "../index.js";
@@ -21,6 +21,14 @@ export const CoupDeGrace: abilityCardsType = {
             const gate = slotOfGate.portalCard?.key
             if (user && gate && slotOfGate.state.open) {
                 const gateToCancel = GateCardsList.find((g) => g.key === gate)
+
+                CustomAnimationDirective({
+                    roomState,
+                    animationKey: CoupDeGrace.key,
+                    sourceBakugan: user,
+                    slotId: slot,
+                })
+
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
                     slot: slotOfGate,

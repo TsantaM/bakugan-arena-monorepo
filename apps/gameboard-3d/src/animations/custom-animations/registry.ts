@@ -1,4 +1,6 @@
 import type { CustomAnimFn } from "./types"
+import { CoupDeGraceAnimation } from "./coup-de-grace-animation"
+import { DualGazerAnimation } from "./dual-gazer-animation"
 import { VisageDeLaFureurAnimation } from "./visage-de-la-fureur-animation"
 
 /**
@@ -8,4 +10,6 @@ import { VisageDeLaFureurAnimation } from "./visage-de-la-fureur-animation"
  */
 export const CustomAnimationsRegistry: Partial<Record<string, CustomAnimFn>> = {
     "visage-de-la-fureur": VisageDeLaFureurAnimation,
+    "dual-gazer": DualGazerAnimation,
+    "coup-de-grace": CoupDeGraceAnimation,
 }

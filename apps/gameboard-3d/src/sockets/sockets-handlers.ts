@@ -196,16 +196,18 @@ export async function playAnimation(
             }
 
             if (current.type === 'CANCEL_GATE_CARD') {
-                const mesh = plane.getObjectByName(current.data.slot.id)
-                if (mesh) {
+                const slotId = current.data.slot.id
+                const mesh =
+                    gateCardMeshs.find((m) => m.name === slotId) ??
+                    plane.getObjectByName(slotId)
 
+                if (mesh) {
                     sendMessageToParent(current.message)
 
                     await CancelGateCardAnimation({
                         mesh: mesh as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>,
                         slot: current.data.slot
                     });
-
                 }
             }
 
