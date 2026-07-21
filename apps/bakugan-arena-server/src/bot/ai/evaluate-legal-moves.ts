@@ -4,6 +4,7 @@ import type {
   InactivePlayerActionRequestType,
   stateType,
 } from "@bakugan-arena/game-data"
+import { getBotByUserId, type personalities } from "../../functions/bot-data"
 import { simulateAction } from "./simulate-action"
 import { scoreAction } from "./score-action"
 import {
@@ -37,6 +38,8 @@ type EvaluateLegalMovesParams = {
    * (sauf s'il y a des additional requests pending dans l'état).
    */
   request?: TurnRequest
+  /** Override personnalités (sinon lues depuis bot-data via `persolaty`) */
+  personalities?: personalities[]
 }
 
 const flattenTurnActions = (request: TurnRequest): ActionType[] => {
@@ -73,7 +76,8 @@ const labelForAction = (action: SimulateAction): string => {
 const toScoredMove = (
   before: stateType,
   action: SimulateAction,
-  userId: string
+  userId: string,
+  personalities: personalities[]
 ): ScoredMove => {
   const result = simulateAction(before, action)
   const score = result.rejected
@@ -83,6 +87,7 @@ const toScoredMove = (
         after: result.state,
         action,
         userId,
+        personalities,
       })
 
   return {
@@ -107,7 +112,10 @@ export function evaluateLegalMoves({
   state,
   userId,
   request,
+  personalities,
 }: EvaluateLegalMovesParams): ScoredMove[] {
+  const traits = personalities ?? getBotByUserId(userId)?.persolaty ?? []
+
   const finalize = (moves: ScoredMove[]): ScoredMove[] =>
     moves
       .filter((move) => !move.rejected)
@@ -117,7 +125,7 @@ export function evaluateLegalMoves({
   if (pendingAbility && isAdditionalRequestForUser(pendingAbility, userId)) {
     return finalize(
       expandAbilityAdditional(pendingAbility).map((action) =>
-        toScoredMove(state, action, userId)
+        toScoredMove(state, action, userId, traits)
       )
     )
   }
@@ -130,7 +138,7 @@ export function evaluateLegalMoves({
   ) {
     return finalize(
       expandGateAdditional(pendingGate).map((action) =>
-        toScoredMove(state, action, userId)
+        toScoredMove(state, action, userId, traits)
       )
     )
   }
@@ -151,7 +159,7 @@ export function evaluateLegalMoves({
     moves.push({ type: "TURN_SKIP", userId })
   }
 
-  return finalize(moves.map((action) => toScoredMove(state, action, userId)))
+  return finalize(moves.map((action) => toScoredMove(state, action, userId, traits)))
 }
 
 /**

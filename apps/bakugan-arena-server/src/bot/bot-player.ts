@@ -127,6 +127,19 @@ const playBestMove = (
   }
 
   const moves = evaluateLegalMoves({ state, userId, request })
+
+  // Tour 0 : gate card choisie au hasard parmi les poses légales
+  if (state.turnState.turnCount === 0) {
+    const gateMoves = moves.filter((m) => m.action.type === "SET_GATE")
+    if (gateMoves.length > 0) {
+      const pick = gateMoves[Math.floor(Math.random() * gateMoves.length)]!
+      console.log(
+        `[BOT ${botLabel}] turn0 random gate ${pick.label} (${gateMoves.length} options)`
+      )
+      return emitSimulateAction(socket, roomId, pick.action)
+    }
+  }
+
   const best = pickBestMove(moves)
 
   if (!best) {

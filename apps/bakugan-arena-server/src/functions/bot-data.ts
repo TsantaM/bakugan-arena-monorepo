@@ -1,5 +1,7 @@
 import { decodeDeckCode } from "./share-deck-decode"
 
+export type personalities = "rush_down" | "zoner" | "blocker"
+
 export type BotAccount = {
   userId: string
   email: string
@@ -7,7 +9,8 @@ export type BotAccount = {
   displayUsername: string
   deckId: string
   deckName: string
-  deckCode: string
+  deckCode: string,
+  persolaty: personalities[]
 }
 
 export const BOT_ACCOUNTS: BotAccount[] = [
@@ -18,7 +21,8 @@ export const BOT_ACCOUNTS: BotAccount[] = [
     displayUsername: "Bot Alpha",
     deckId: "00000000-0000-0000-0000-000000000001",
     deckName: "Alpha Strike",
-    deckCode: "NrBsEYBoBYE5IMwHYC6lgCZJQZJlRIAGNYORHcUjIyADmy0NRSA"
+    deckCode: "NrBsEYBoBYE5IMwHYC6lgCZJQZJlRIAGNYORHcUjIyADmy0NRSA",
+    persolaty: ["rush_down"]
   },
   {
     userId: "bot-omega",
@@ -27,7 +31,8 @@ export const BOT_ACCOUNTS: BotAccount[] = [
     displayUsername: "Bot Omega",
     deckId: "00000000-0000-0000-0000-000000000002",
     deckName: "Omega Assault",
-    deckCode: "NrBsEYBoBYE5IMwHYC6lgCZJQZJlRIAGNYORHcUjIyADmy0NRSA"
+    deckCode: "NrBsEYBoBYE5IMwHYC6lgCZJQZJlRIAGNYORHcUjIyADmy0NRSA",
+    persolaty: ['zoner']
   },
   {
     userId: "bot-sigma",
@@ -36,7 +41,8 @@ export const BOT_ACCOUNTS: BotAccount[] = [
     displayUsername: "Bot Sigma",
     deckId: "00000000-0000-0000-0000-000000000003",
     deckName: "Sigma Tempest",
-    deckCode: "NrBsEYBoBYE5IMwHYC6lgCZJQZJlRIAGNYORHcUjIyADmy0NRSA"
+    deckCode: "NrBsEYBoBYE5IMwHYC6lgCZJQZJlRIAGNYORHcUjIyADmy0NRSA",
+    persolaty: ["blocker"]
   }
 ]
 

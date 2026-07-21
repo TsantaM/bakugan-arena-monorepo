@@ -7,6 +7,7 @@ import {
   type portalSlotsTypeElement,
   type stateType,
 } from "@bakugan-arena/game-data"
+import type { personalities } from "../../functions/bot-data"
 import { applyTurnAdvance } from "./apply/apply-turn-advance"
 import { cloneRoomState } from "./clone-room-state"
 import {
@@ -22,6 +23,8 @@ export type ScoreActionParams = {
   after: stateType
   action: SimulateAction
   userId: string
+  /** Personnalités du bot (multiplicateurs ×1.5) */
+  personalities?: personalities[]
 }
 
 type ResolvedScorer = (
@@ -42,6 +45,7 @@ const CHARACTER_GATE_SET_BONUS = 2
 const CHARACTER_BAKUGAN_MATCH_BONUS = 2
 const REACTOR_BAKUGAN_MATCH_BONUS = 1
 const CHARACTER_GATE_MISMATCH_PENALTY = -1
+const SET_GATE_PLACEMENT_BONUS = 1
 const ABILITY_WASTE_WHILE_LEADING = -1.5
 const ABILITY_WASTE_TURN_TWO_LEADING = -2
 const TRADE_OFF_OVER_CAP_PENALTY = -2
@@ -49,6 +53,7 @@ const SUPER_PYRUS_BAD_OPEN_PENALTY = -2
 const TRADE_OFF_POWER_CAP = 400
 const SUPER_PYRUS_KEY = "super-pyrus"
 const TRADE_OFF_KEY = "echange"
+const PERSONALITY_MULTIPLIER = 1.5
 const MAX_ADDITIONAL_DEPTH = 6
 
 /** Bataille active : en cours et non en pause */
@@ -204,11 +209,51 @@ function scoresOpponentGateNeutralized(
 
 function scoresOpponentBlockedNextTurn(after: stateType, userId: string): boolean {
   if (!isActiveBattle(after)) return false
+  return opponentHasNoActionsNextTurn(after, userId)
+}
+
+/** Adversaire sans aucune action au tour suivant (bataille ou neutral) */
+function opponentHasNoActionsNextTurn(after: stateType, userId: string): boolean {
+  if (hasPendingAdditional(after)) return false
   const projected = projectToOpponentTurn(after, userId)
-  if (!projected || !isActiveBattle(projected)) return false
+  if (!projected) return false
   const opponentId = getOpponentId(projected, userId)
   if (!opponentId) return false
   return countTurnActions(projected, opponentId) === 0
+}
+
+/** Gate adverse annulée / bloquée (slot de bataille ou n'importe quel slot) */
+function scoresAnyOpponentGateNeutralized(
+  before: stateType,
+  after: stateType,
+  userId: string
+): boolean {
+  if (scoresOpponentGateNeutralized(before, after, userId)) return true
+
+  const opponentId = getOpponentId(before, userId)
+  if (!opponentId) return false
+
+  for (const afterSlot of after.protalSlots) {
+    if (afterSlot.portalCard?.userId !== opponentId) continue
+    const beforeSlot = before.protalSlots.find((s) => s.id === afterSlot.id)
+    if (!beforeSlot?.portalCard) continue
+
+    const becameCanceled =
+      beforeSlot.state.canceled !== true && afterSlot.state.canceled === true
+    const becameBlocked =
+      !isGateBlocked(beforeSlot.state.blocked) && isGateBlocked(afterSlot.state.blocked)
+
+    if (becameCanceled || becameBlocked) return true
+  }
+
+  return false
+}
+
+function scoresAbilityBlockNewlySet(before: stateType, after: stateType): boolean {
+  return (
+    before.turnState.ability_card_block.blocked !== true &&
+    after.turnState.ability_card_block.blocked === true
+  )
 }
 
 /** Adversaire incapable d'utiliser des abilities au tour suivant */
@@ -267,7 +312,7 @@ function scoresFreeOpponentElimination(
   })
 }
 
-/** TURN_SKIP +2 si aucune gate / ability n'est obligatoire */
+/** TURN_SKIP +2 si aucune gate / ability n'est obligatoire ni en option gate */
 function scoresTurnSkipSavesResources(
   before: stateType,
   action: SimulateAction,
@@ -281,14 +326,23 @@ function scoresTurnSkipSavesResources(
       : before.InactivePlayerActionRequest
 
   const mandatory = [...request.actions.mustDo, ...request.actions.mustDoOne]
+  const optional = request.actions.optional
+
   const forcesSpend = mandatory.some(
     (a) =>
       a.type === "SET_GATE_CARD_ACTION" ||
       a.type === "SELECT_GATE_CARD" ||
       a.type === "USE_ABILITY_CARD"
   )
+  if (forcesSpend) return false
 
-  return !forcesSpend
+  // Ne pas préférer le skip quand une pose de gate est encore possible
+  const hasOptionalGate = optional.some(
+    (a) => a.type === "SET_GATE_CARD_ACTION" || a.type === "SELECT_GATE_CARD"
+  )
+  if (hasOptionalGate) return false
+
+  return true
 }
 
 /**
@@ -605,6 +659,11 @@ export function battleStartsNowOrNextTurn(after: stateType): boolean {
   return projectBattleStartState(after) !== null
 }
 
+/** +1 de base pour tout placement de gate (après tour 0 notamment) */
+function scoreSetGatePlacementBonus(action: SimulateAction): number {
+  return action.type === "SET_GATE" ? SET_GATE_PLACEMENT_BONUS : 0
+}
+
 /** Scoring setup neutral (pas de bataille immédiate ni au tour suivant). */
 function scoreNeutralSetupResolved(
   before: stateType,
@@ -614,6 +673,7 @@ function scoreNeutralSetupResolved(
 ): number {
   let score = 0
 
+  score += scoreSetGatePlacementBonus(action)
   score += scoreCharacterGateSetPenalty(action, after, userId)
   score += scoreCharacterGateSetBonus(action, after, userId)
   score += scoreCharacterGateBakuganMismatch(action, after)
@@ -643,7 +703,8 @@ function scoreViaPendingAdditional(
   pendingState: stateType,
   userId: string,
   depth: number,
-  scoreResolved: ResolvedScorer
+  scoreResolved: ResolvedScorer,
+  personalities: personalities[] | undefined
 ): number | null {
   if (depth > MAX_ADDITIONAL_DEPTH) return 0
 
@@ -661,12 +722,23 @@ function scoreViaPendingAdditional(
         result.state,
         userId,
         depth + 1,
-        scoreResolved
+        scoreResolved,
+        personalities
       )
-      const score =
+      const base =
         nested !== null
           ? nested
           : scoreResolved(rootBefore, result.state, option, userId)
+      const score =
+        nested !== null
+          ? base
+          : applyPersonalityMultiplier(base, {
+              before: rootBefore,
+              after: result.state,
+              action: option,
+              userId,
+              personalities,
+            })
 
       if (score > best) best = score
     }
@@ -692,12 +764,23 @@ function scoreViaPendingAdditional(
         result.state,
         userId,
         depth + 1,
-        scoreResolved
+        scoreResolved,
+        personalities
       )
-      const score =
+      const base =
         nested !== null
           ? nested
           : scoreResolved(rootBefore, result.state, option, userId)
+      const score =
+        nested !== null
+          ? base
+          : applyPersonalityMultiplier(base, {
+              before: rootBefore,
+              after: result.state,
+              action: option,
+              userId,
+              personalities,
+            })
 
       if (score > best) best = score
     }
@@ -709,37 +792,168 @@ function scoreViaPendingAdditional(
 }
 
 function scoreNeutral(params: ScoreActionParams): number {
-  const { before, after, action, userId } = params
+  const { before, after, action, userId, personalities } = params
 
   const viaAdditional = scoreViaPendingAdditional(
     before,
     after,
     userId,
     0,
-    scoreNeutralResolved
+    scoreNeutralResolved,
+    personalities
   )
   if (viaAdditional !== null) {
     return viaAdditional
   }
 
-  return scoreNeutralResolved(before, after, action, userId)
+  return applyPersonalityMultiplier(scoreNeutralResolved(before, after, action, userId), params)
 }
 
 function scoreInBattle(params: ScoreActionParams): number {
-  const { before, after, action, userId } = params
+  const { before, after, action, userId, personalities } = params
 
   const viaAdditional = scoreViaPendingAdditional(
     before,
     after,
     userId,
     0,
-    scoreBattleResolved
+    scoreBattleResolved,
+    personalities
   )
   if (viaAdditional !== null) {
     return viaAdditional
   }
 
-  return scoreBattleResolved(before, after, action, userId)
+  return applyPersonalityMultiplier(scoreBattleResolved(before, after, action, userId), params)
+}
+
+function isBakuganPlacementAction(action: SimulateAction): boolean {
+  if (action.type === "SET_BAKUGAN") return true
+  if (
+    (action.type === "ABILITY_ADDITIONAL" || action.type === "GATE_ADDITIONAL") &&
+    action.data.type === "SELECT_BAKUGAN_TO_SET"
+  ) {
+    return true
+  }
+  return false
+}
+
+function isRelocationAction(action: SimulateAction): boolean {
+  if (action.type !== "ABILITY_ADDITIONAL" && action.type !== "GATE_ADDITIONAL") {
+    return false
+  }
+  const t = action.data.type
+  return (
+    t === "MOVE_BAKUGAN_TO_ANOTHER_SLOT" ||
+    t === "ATTRACT_BAKUGAN" ||
+    t === "SELECT_BAKUGAN_ON_DOMAIN" ||
+    t === "SELECT_SLOT"
+  )
+}
+
+/** rush_down : engage bataille / boost puissance alliée / dépasse l'adversaire */
+function matchesRushDown(
+  before: stateType,
+  after: stateType,
+  userId: string
+): boolean {
+  const engagesBattle =
+    (!isActiveBattle(before) && isActiveBattle(after)) ||
+    (!isActiveBattle(before) && battleStartsNowOrNextTurn(after))
+
+  const powerUp = scoresAllAlliedPowerIncreased(before, after, userId)
+
+  let surpass = false
+  const powerState = isActiveBattle(after)
+    ? after
+    : projectBattleStartState(after)
+
+  if (powerState) {
+    const afterTotals = getBattlePowerTotals(powerState, userId)
+    if (afterTotals && afterTotals.botPower > afterTotals.opponentPower) {
+      const beforeTotals = isActiveBattle(before)
+        ? getBattlePowerTotals(before, userId)
+        : null
+      surpass =
+        !beforeTotals || beforeTotals.botPower <= beforeTotals.opponentPower
+    }
+  }
+
+  return engagesBattle || powerUp || surpass
+}
+
+/**
+ * zoner : pose bakugan sans combat, fuite de combat,
+ * ou déplacement adverse mettant fin au combat.
+ */
+function matchesZoner(
+  before: stateType,
+  after: stateType,
+  action: SimulateAction
+): boolean {
+  if (isBakuganPlacementAction(action)) {
+    if (!isActiveBattle(after) && !battleStartsNowOrNextTurn(after)) {
+      return true
+    }
+  }
+
+  const fledBattle = isActiveBattle(before) && !isActiveBattle(after)
+  if (fledBattle) return true
+
+  if (isActiveBattle(before) && isRelocationAction(action) && !isActiveBattle(after)) {
+    return true
+  }
+
+  return false
+}
+
+/**
+ * blocker : aucune action adverse au tour suivant,
+ * block/cancel gate, ou block abilities.
+ */
+function matchesBlocker(
+  before: stateType,
+  after: stateType,
+  userId: string
+): boolean {
+  if (opponentHasNoActionsNextTurn(after, userId)) return true
+  if (scoresAnyOpponentGateNeutralized(before, after, userId)) return true
+  if (scoresAbilityBlockNewlySet(before, after)) return true
+  if (scoresOpponentCannotUseAbilitiesNextTurn(after, userId)) return true
+  return false
+}
+
+/**
+ * Applique les multiplicateurs de personnalité (×1.5 par trait matché).
+ * Uniquement sur score > 0 pour ne pas aggraver les pénalités.
+ */
+export function applyPersonalityMultiplier(
+  score: number,
+  params: Pick<
+    ScoreActionParams,
+    "before" | "after" | "action" | "userId" | "personalities"
+  >
+): number {
+  if (score <= 0) return score
+
+  const { before, after, action, userId, personalities } = params
+  if (!personalities || personalities.length === 0) return score
+
+  let multiplier = 1
+
+  if (personalities.includes("rush_down") && matchesRushDown(before, after, userId)) {
+    multiplier *= PERSONALITY_MULTIPLIER
+  }
+
+  if (personalities.includes("zoner") && matchesZoner(before, after, action)) {
+    multiplier *= PERSONALITY_MULTIPLIER
+  }
+
+  if (personalities.includes("blocker") && matchesBlocker(before, after, userId)) {
+    multiplier *= PERSONALITY_MULTIPLIER
+  }
+
+  return score * multiplier
 }
 
 export function scoreAction(params: ScoreActionParams): number {

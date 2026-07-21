@@ -5,6 +5,7 @@ export { applyAbilityAdditional } from "./apply/apply-ability-additional"
 export { applyGateAdditional } from "./apply/apply-gate-additional"
 export {
   scoreAction,
+  applyPersonalityMultiplier,
   isActiveBattle,
   isNeutralSituation,
   battleJustStarted,
