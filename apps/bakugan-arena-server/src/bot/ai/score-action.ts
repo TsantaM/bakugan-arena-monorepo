@@ -1,0 +1,753 @@
+import {
+  BakuganList,
+  GateCardsList,
+  getPlayerDecksAndBakugans,
+  type bakuganOnSlot,
+  type blockedCardSlotType,
+  type portalSlotsTypeElement,
+  type stateType,
+} from "@bakugan-arena/game-data"
+import { applyTurnAdvance } from "./apply/apply-turn-advance"
+import { cloneRoomState } from "./clone-room-state"
+import {
+  expandAbilityAdditional,
+  expandGateAdditional,
+  isAdditionalRequestForUser,
+} from "./expand-legal-moves"
+import { simulateAction } from "./simulate-action"
+import type { SimulateAction } from "./types"
+
+export type ScoreActionParams = {
+  before: stateType
+  after: stateType
+  action: SimulateAction
+  userId: string
+}
+
+type ResolvedScorer = (
+  rootBefore: stateType,
+  resolvedAfter: stateType,
+  action: SimulateAction,
+  userId: string
+) => number
+
+const POWER_LEAD_POINTS = 1
+const GATE_NEUTRALIZE_POINTS = 1
+const OPPONENT_BLOCKED_POINTS = 1.5
+const OPPONENT_NO_ABILITY_POINTS = 1
+const ALLIED_POWER_UP_POINTS = 1
+const FREE_ELIM_POINTS = 1.5
+const TURN_SKIP_SAVE_POINTS = 2
+const CHARACTER_GATE_SET_BONUS = 2
+const CHARACTER_BAKUGAN_MATCH_BONUS = 2
+const REACTOR_BAKUGAN_MATCH_BONUS = 1
+const CHARACTER_GATE_MISMATCH_PENALTY = -1
+const ABILITY_WASTE_WHILE_LEADING = -1.5
+const ABILITY_WASTE_TURN_TWO_LEADING = -2
+const TRADE_OFF_OVER_CAP_PENALTY = -2
+const SUPER_PYRUS_BAD_OPEN_PENALTY = -2
+const TRADE_OFF_POWER_CAP = 400
+const SUPER_PYRUS_KEY = "super-pyrus"
+const TRADE_OFF_KEY = "echange"
+const MAX_ADDITIONAL_DEPTH = 6
+
+/** Bataille active : en cours et non en pause */
+export const isActiveBattle = (state: stateType): boolean => {
+  const { battleInProcess, paused } = state.battleState
+  return battleInProcess === true && paused !== true
+}
+
+export const isNeutralSituation = (state: stateType): boolean => !isActiveBattle(state)
+
+export const battleJustStarted = (before: stateType, after: stateType): boolean =>
+  !isActiveBattle(before) && isActiveBattle(after)
+
+const sumCurrentPower = (arr: bakuganOnSlot[]): number =>
+  arr.reduce((acc, b) => acc + (b?.currentPower ?? 0), 0)
+
+const isGateBlocked = (blocked: blockedCardSlotType): boolean =>
+  typeof blocked === "object" && blocked.blocked === true
+
+const getOpponentId = (state: stateType, userId: string): string | undefined =>
+  state.players.find((p) => p.userId !== userId)?.userId
+
+const getBattleSlot = (state: stateType): portalSlotsTypeElement | undefined => {
+  const slotId = state.battleState.slot
+  if (!slotId) return undefined
+  return state.protalSlots.find((s) => s.id === slotId)
+}
+
+const hasPendingAdditional = (state: stateType): boolean =>
+  state.AbilityAditionalRequest.length > 0 || state.gateCardActionRequest.length > 0
+
+const isReactorGate = (gateKey: string): boolean => gateKey.startsWith("reacteur-")
+
+const isCharacterGate = (gateKey: string): boolean => {
+  const gate = GateCardsList.find((g) => g.key === gateKey)
+  return Boolean(gate?.family)
+}
+
+const getAlliedBakugansOnDomain = (state: stateType, userId: string): bakuganOnSlot[] =>
+  state.protalSlots.flatMap((s) => s.bakugans.filter((b) => b.userId === userId))
+
+const getSlotPowerTotals = (
+  slot: portalSlotsTypeElement,
+  userId: string
+): { botPower: number; opponentPower: number } => ({
+  botPower: sumCurrentPower(slot.bakugans.filter((b) => b.userId === userId)),
+  opponentPower: sumCurrentPower(slot.bakugans.filter((b) => b.userId !== userId)),
+})
+
+/**
+ * Totaux de puissance sur le slot de bataille (même logique que on-battle-end).
+ */
+export function getBattlePowerTotals(
+  state: stateType,
+  userId: string
+): { botPower: number; opponentPower: number } | null {
+  const slot = getBattleSlot(state)
+  if (!slot) return null
+
+  const opponentId = getOpponentId(state, userId)
+  if (!opponentId) return null
+
+  const { player1Bakugans, player2Bakugans } = getPlayerDecksAndBakugans({
+    slot,
+    decksState: state.decksState,
+    players: state.players,
+  })
+
+  const botIsP1 = state.players[0]?.userId === userId
+
+  return {
+    botPower: sumCurrentPower(botIsP1 ? player1Bakugans : player2Bakugans),
+    opponentPower: sumCurrentPower(botIsP1 ? player2Bakugans : player1Bakugans),
+  }
+}
+
+const countTurnActions = (state: stateType, whoseTurn: string): number => {
+  const request =
+    state.turnState.turn === whoseTurn
+      ? state.ActivePlayerActionRequest
+      : state.InactivePlayerActionRequest
+
+  return [
+    ...request.actions.mustDo,
+    ...request.actions.mustDoOne,
+    ...request.actions.optional,
+  ].length
+}
+
+const requestHasAbilityAction = (state: stateType, whoseTurn: string): boolean => {
+  const request =
+    state.turnState.turn === whoseTurn
+      ? state.ActivePlayerActionRequest
+      : state.InactivePlayerActionRequest
+
+  return [...request.actions.mustDo, ...request.actions.mustDoOne, ...request.actions.optional].some(
+    (a) => a.type === "USE_ABILITY_CARD"
+  )
+}
+
+/** Projette jusqu'au tour de l'adversaire (ou échec). */
+function projectToOpponentTurn(after: stateType, userId: string): stateType | null {
+  if (hasPendingAdditional(after)) return null
+
+  const opponentId = getOpponentId(after, userId)
+  if (!opponentId) return null
+
+  const projected = cloneRoomState(after)
+
+  for (let i = 0; i < 4; i++) {
+    if (projected.status.finished) return null
+    if (hasPendingAdditional(projected)) return null
+
+    if (projected.turnState.turn === opponentId) {
+      return projected
+    }
+
+    applyTurnAdvance(projected, projected.turnState.turn)
+  }
+
+  return null
+}
+
+function scoresPowerLead(after: stateType, userId: string): boolean {
+  const totals = getBattlePowerTotals(after, userId)
+  if (!totals) return false
+  return totals.botPower > totals.opponentPower
+}
+
+function scoresOpponentGateNeutralized(
+  before: stateType,
+  after: stateType,
+  userId: string
+): boolean {
+  const opponentId = getOpponentId(before, userId)
+  if (!opponentId) return false
+
+  const beforeSlot = getBattleSlot(before)
+  const afterSlot = getBattleSlot(after)
+  if (!beforeSlot?.portalCard || !afterSlot) return false
+  if (beforeSlot.portalCard.userId !== opponentId) return false
+
+  const wasOpen = beforeSlot.state.open === true
+  const becameCanceled =
+    beforeSlot.state.canceled !== true && afterSlot.state.canceled === true
+  const becameBlocked =
+    !isGateBlocked(beforeSlot.state.blocked) && isGateBlocked(afterSlot.state.blocked)
+
+  if (wasOpen && becameCanceled) return true
+  if (!wasOpen && becameBlocked) return true
+  return false
+}
+
+function scoresOpponentBlockedNextTurn(after: stateType, userId: string): boolean {
+  if (!isActiveBattle(after)) return false
+  const projected = projectToOpponentTurn(after, userId)
+  if (!projected || !isActiveBattle(projected)) return false
+  const opponentId = getOpponentId(projected, userId)
+  if (!opponentId) return false
+  return countTurnActions(projected, opponentId) === 0
+}
+
+/** Adversaire incapable d'utiliser des abilities au tour suivant */
+function scoresOpponentCannotUseAbilitiesNextTurn(
+  after: stateType,
+  userId: string
+): boolean {
+  const projected = projectToOpponentTurn(after, userId)
+  if (!projected) return false
+
+  const opponentId = getOpponentId(projected, userId)
+  if (!opponentId) return false
+
+  if (projected.turnState.ability_card_block.blocked) return true
+
+  const usable =
+    projected.players.find((p) => p.userId === opponentId)?.usable_abilitys ?? 0
+  if (usable <= 0) return true
+
+  return !requestHasAbilityAction(projected, opponentId)
+}
+
+/** Tous les bakugans alliés déjà sur le domaine ont augmenté de puissance */
+function scoresAllAlliedPowerIncreased(
+  before: stateType,
+  after: stateType,
+  userId: string
+): boolean {
+  const beforeAllied = getAlliedBakugansOnDomain(before, userId)
+  if (beforeAllied.length === 0) return false
+
+  return beforeAllied.every((b) => {
+    const next = getAlliedBakugansOnDomain(after, userId).find(
+      (a) => a.key === b.key && a.slot_id === b.slot_id
+    )
+    return Boolean(next && next.currentPower > b.currentPower)
+  })
+}
+
+/** Élimination gratuite d'au moins un bakugan adverse */
+function scoresFreeOpponentElimination(
+  before: stateType,
+  after: stateType,
+  userId: string
+): boolean {
+  const opponentId = getOpponentId(before, userId)
+  if (!opponentId) return false
+
+  const beforeDeck = before.decksState.find((d) => d.userId === opponentId)?.bakugans ?? []
+  const afterDeck = after.decksState.find((d) => d.userId === opponentId)?.bakugans ?? []
+
+  return beforeDeck.some((b) => {
+    if (b.bakuganData.elimined) return false
+    const afterBakugan = afterDeck.find((a) => a.bakuganData.key === b.bakuganData.key)
+    return afterBakugan?.bakuganData.elimined === true
+  })
+}
+
+/** TURN_SKIP +2 si aucune gate / ability n'est obligatoire */
+function scoresTurnSkipSavesResources(
+  before: stateType,
+  action: SimulateAction,
+  userId: string
+): boolean {
+  if (action.type !== "TURN_SKIP") return false
+
+  const request =
+    before.turnState.turn === userId
+      ? before.ActivePlayerActionRequest
+      : before.InactivePlayerActionRequest
+
+  const mandatory = [...request.actions.mustDo, ...request.actions.mustDoOne]
+  const forcesSpend = mandatory.some(
+    (a) =>
+      a.type === "SET_GATE_CARD_ACTION" ||
+      a.type === "SELECT_GATE_CARD" ||
+      a.type === "USE_ABILITY_CARD"
+  )
+
+  return !forcesSpend
+}
+
+/**
+ * Effets génériques (ability / gate / attribut / skip) hors lancement de bataille.
+ */
+function scoreNeutralEffectActions(
+  before: stateType,
+  after: stateType,
+  action: SimulateAction,
+  userId: string
+): number {
+  const isEffectAction =
+    action.type === "USE_ABILITY" ||
+    action.type === "ACTIVE_GATE" ||
+    action.type === "CHANGE_ATTRIBUTE" ||
+    action.type === "TURN_SKIP" ||
+    action.type === "ABILITY_ADDITIONAL" ||
+    action.type === "GATE_ADDITIONAL"
+
+  if (!isEffectAction) return 0
+
+  let score = 0
+
+  if (scoresOpponentCannotUseAbilitiesNextTurn(after, userId)) {
+    score += OPPONENT_NO_ABILITY_POINTS
+  }
+
+  if (scoresAllAlliedPowerIncreased(before, after, userId)) {
+    score += ALLIED_POWER_UP_POINTS
+  }
+
+  if (scoresFreeOpponentElimination(before, after, userId)) {
+    score += FREE_ELIM_POINTS
+  }
+
+  if (scoresTurnSkipSavesResources(before, action, userId)) {
+    score += TURN_SKIP_SAVE_POINTS
+  }
+
+  return score
+}
+
+function scoreCharacterGateSetPenalty(
+  action: SimulateAction,
+  state: stateType,
+  userId: string
+): number {
+  if (action.type !== "SET_GATE") return 0
+
+  const gate = GateCardsList.find((g) => g.key === action.gateId)
+  if (!gate?.family) return 0
+
+  const deck = state.decksState.find((d) => d.userId === userId)
+  const affiliated =
+    deck?.bakugans.filter((b) => b.bakuganData.family === gate.family) ?? []
+
+  const hasAvailable = affiliated.some(
+    (b) => !b.bakuganData.elimined && !b.bakuganData.onDomain
+  )
+
+  return hasAvailable ? 0 : CHARACTER_GATE_MISMATCH_PENALTY
+}
+
+/** +2 character gate bien posée (bakugan affilié encore disponible) */
+function scoreCharacterGateSetBonus(
+  action: SimulateAction,
+  state: stateType,
+  userId: string
+): number {
+  if (action.type !== "SET_GATE") return 0
+
+  const gate = GateCardsList.find((g) => g.key === action.gateId)
+  if (!gate?.family) return 0
+
+  const deck = state.decksState.find((d) => d.userId === userId)
+  const hasAvailable = (deck?.bakugans ?? []).some(
+    (b) =>
+      b.bakuganData.family === gate.family &&
+      !b.bakuganData.elimined &&
+      !b.bakuganData.onDomain
+  )
+
+  return hasAvailable ? CHARACTER_GATE_SET_BONUS : 0
+}
+
+function resolveSetBakuganPlacement(
+  action: SimulateAction,
+  state: stateType
+): { bakuganKey: string; slotId: string } | null {
+  if (action.type === "SET_BAKUGAN") {
+    return { bakuganKey: action.bakuganKey, slotId: action.slot }
+  }
+
+  if (
+    (action.type === "ABILITY_ADDITIONAL" || action.type === "GATE_ADDITIONAL") &&
+    action.data.type === "SELECT_BAKUGAN_TO_SET"
+  ) {
+    const bakuganKey = action.data.bakugan.bakuganData.key
+    const placed = state.protalSlots
+      .flatMap((s) => s.bakugans.map((b) => ({ slot: s, bakugan: b })))
+      .find((entry) => entry.bakugan.key === bakuganKey)
+    if (!placed) return null
+    return { bakuganKey, slotId: placed.slot.id }
+  }
+
+  return null
+}
+
+function scoreCharacterGateBakuganMismatch(
+  action: SimulateAction,
+  state: stateType
+): number {
+  const placement = resolveSetBakuganPlacement(action, state)
+  if (!placement) return 0
+
+  const slot = state.protalSlots.find((s) => s.id === placement.slotId)
+  const gateKey = slot?.portalCard?.key
+  if (!gateKey || !isCharacterGate(gateKey)) return 0
+
+  const gate = GateCardsList.find((g) => g.key === gateKey)
+  const bakugan =
+    BakuganList.find((b) => b.key === placement.bakuganKey) ??
+    state.protalSlots.flatMap((s) => s.bakugans).find((b) => b.key === placement.bakuganKey)
+
+  if (!gate?.family || !bakugan?.family) return 0
+  if (bakugan.family === gate.family) return 0
+
+  return CHARACTER_GATE_MISMATCH_PENALTY
+}
+
+/**
+ * +2 bakugan sur sa character gate, +1 bakugan sur reactor de son attribut.
+ * Gates attribut / command / trap hors reactor : score neutre (0).
+ */
+function scoreBakuganPlacementBonuses(
+  action: SimulateAction,
+  state: stateType
+): number {
+  const placement = resolveSetBakuganPlacement(action, state)
+  if (!placement) return 0
+
+  const slot = state.protalSlots.find((s) => s.id === placement.slotId)
+  const gateKey = slot?.portalCard?.key
+  if (!gateKey) return 0
+
+  const gate = GateCardsList.find((g) => g.key === gateKey)
+  if (!gate) return 0
+
+  const bakugan =
+    BakuganList.find((b) => b.key === placement.bakuganKey) ??
+    state.protalSlots.flatMap((s) => s.bakugans).find((b) => b.key === placement.bakuganKey)
+
+  if (!bakugan) return 0
+
+  if (gate.family && bakugan.family === gate.family) {
+    return CHARACTER_BAKUGAN_MATCH_BONUS
+  }
+
+  if (isReactorGate(gateKey) && gate.attribut && bakugan.attribut === gate.attribut) {
+    return REACTOR_BAKUGAN_MATCH_BONUS
+  }
+
+  return 0
+}
+
+/** Économie abilities en bataille quand on mène déjà */
+function scoreBattleAbilityEconomy(
+  before: stateType,
+  action: SimulateAction,
+  userId: string
+): number {
+  if (action.type !== "USE_ABILITY") return 0
+  if (!isActiveBattle(before)) return 0
+
+  const totals = getBattlePowerTotals(before, userId)
+  if (!totals || totals.botPower <= totals.opponentPower) return 0
+
+  // turns === 1 → second tour de bataille (après le premier advance)
+  if (before.battleState.turns === 1) {
+    return ABILITY_WASTE_TURN_TWO_LEADING
+  }
+
+  return ABILITY_WASTE_WHILE_LEADING
+}
+
+/**
+ * Trade-Off alliée : ne pas monter la puissance alliée ≥ 400
+ * (sauf gate bloquée). S'applique à toutes les situations.
+ */
+function scoreTradeOffPowerCap(
+  before: stateType,
+  after: stateType,
+  userId: string
+): number {
+  const slots = after.protalSlots.filter(
+    (s) =>
+      s.portalCard?.key === TRADE_OFF_KEY &&
+      s.portalCard.userId === userId &&
+      !isGateBlocked(s.state.blocked)
+  )
+
+  for (const afterSlot of slots) {
+    const beforeSlot = before.protalSlots.find((s) => s.id === afterSlot.id)
+    const beforeTotal = beforeSlot
+      ? sumCurrentPower(beforeSlot.bakugans.filter((b) => b.userId === userId))
+      : 0
+    const afterTotal = sumCurrentPower(
+      afterSlot.bakugans.filter((b) => b.userId === userId)
+    )
+
+    if (afterTotal >= TRADE_OFF_POWER_CAP && afterTotal > beforeTotal) {
+      return TRADE_OFF_OVER_CAP_PENALTY
+    }
+  }
+
+  return 0
+}
+
+/**
+ * Super Pyrus : si puissance adverse > alliée, ne pas ouvrir
+ * (attendre l'auto-open de fin) sauf gate bloquée.
+ */
+function scoreSuperPyrusOpen(
+  after: stateType,
+  action: SimulateAction,
+  userId: string
+): number {
+  if (action.type !== "ACTIVE_GATE" || action.gateId !== SUPER_PYRUS_KEY) return 0
+
+  const slot = after.protalSlots.find((s) => s.id === action.slot)
+  if (!slot?.portalCard || slot.portalCard.key !== SUPER_PYRUS_KEY) return 0
+  if (slot.portalCard.userId !== userId) return 0
+  if (isGateBlocked(slot.state.blocked)) return 0
+
+  const { botPower, opponentPower } = getSlotPowerTotals(slot, userId)
+  if (opponentPower > botPower) {
+    return SUPER_PYRUS_BAD_OPEN_PENALTY
+  }
+
+  return 0
+}
+
+/** Règles globales Super Pyrus + Trade-Off */
+function scoreGlobalSpecialGates(
+  before: stateType,
+  after: stateType,
+  action: SimulateAction,
+  userId: string
+): number {
+  return (
+    scoreTradeOffPowerCap(before, after, userId) +
+    scoreSuperPyrusOpen(after, action, userId)
+  )
+}
+
+/** Critères de scoring bataille une fois l'état pleinement résolu. */
+function scoreBattleResolved(
+  before: stateType,
+  after: stateType,
+  action: SimulateAction,
+  userId: string
+): number {
+  let score = 0
+
+  if (scoresPowerLead(after, userId)) {
+    score += POWER_LEAD_POINTS
+  }
+
+  if (scoresOpponentGateNeutralized(before, after, userId)) {
+    score += GATE_NEUTRALIZE_POINTS
+  }
+
+  if (scoresOpponentBlockedNextTurn(after, userId)) {
+    score += OPPONENT_BLOCKED_POINTS
+  }
+
+  // Effet immédiat de l'ouverture de gate / ability en bataille
+  if (
+    action.type === "ACTIVE_GATE" ||
+    action.type === "USE_ABILITY" ||
+    action.type === "CHANGE_ATTRIBUTE" ||
+    action.type === "ABILITY_ADDITIONAL" ||
+    action.type === "GATE_ADDITIONAL"
+  ) {
+    if (scoresAllAlliedPowerIncreased(before, after, userId)) {
+      score += ALLIED_POWER_UP_POINTS
+    }
+    if (scoresFreeOpponentElimination(before, after, userId)) {
+      score += FREE_ELIM_POINTS
+    }
+    if (scoresOpponentCannotUseAbilitiesNextTurn(after, userId)) {
+      score += OPPONENT_NO_ABILITY_POINTS
+    }
+  }
+
+  score += scoreBattleAbilityEconomy(before, action, userId)
+  score += scoreGlobalSpecialGates(before, after, action, userId)
+
+  return score
+}
+
+function projectBattleStartState(after: stateType): stateType | null {
+  if (isActiveBattle(after)) return after
+  if (hasPendingAdditional(after)) return null
+
+  const projected = cloneRoomState(after)
+  applyTurnAdvance(projected, projected.turnState.turn)
+
+  if (!isActiveBattle(projected)) return null
+  return projected
+}
+
+export function battleStartsNowOrNextTurn(after: stateType): boolean {
+  return projectBattleStartState(after) !== null
+}
+
+/** Scoring setup neutral (pas de bataille immédiate ni au tour suivant). */
+function scoreNeutralSetupResolved(
+  before: stateType,
+  after: stateType,
+  action: SimulateAction,
+  userId: string
+): number {
+  let score = 0
+
+  score += scoreCharacterGateSetPenalty(action, after, userId)
+  score += scoreCharacterGateSetBonus(action, after, userId)
+  score += scoreCharacterGateBakuganMismatch(action, after)
+  score += scoreBakuganPlacementBonuses(action, after)
+  score += scoreNeutralEffectActions(before, after, action, userId)
+  score += scoreGlobalSpecialGates(before, after, action, userId)
+
+  return score
+}
+
+function scoreNeutralResolved(
+  before: stateType,
+  after: stateType,
+  action: SimulateAction,
+  userId: string
+): number {
+  const battleState = projectBattleStartState(after)
+  if (battleState) {
+    return scoreBattleResolved(before, battleState, action, userId)
+  }
+
+  return scoreNeutralSetupResolved(before, after, action, userId)
+}
+
+function scoreViaPendingAdditional(
+  rootBefore: stateType,
+  pendingState: stateType,
+  userId: string,
+  depth: number,
+  scoreResolved: ResolvedScorer
+): number | null {
+  if (depth > MAX_ADDITIONAL_DEPTH) return 0
+
+  const pendingAbility = pendingState.AbilityAditionalRequest[0]
+  if (pendingAbility && isAdditionalRequestForUser(pendingAbility, userId)) {
+    const options = expandAbilityAdditional(pendingAbility)
+    let best = Number.NEGATIVE_INFINITY
+
+    for (const option of options) {
+      const result = simulateAction(pendingState, option)
+      if (result.rejected) continue
+
+      const nested = scoreViaPendingAdditional(
+        rootBefore,
+        result.state,
+        userId,
+        depth + 1,
+        scoreResolved
+      )
+      const score =
+        nested !== null
+          ? nested
+          : scoreResolved(rootBefore, result.state, option, userId)
+
+      if (score > best) best = score
+    }
+
+    return best === Number.NEGATIVE_INFINITY ? 0 : best
+  }
+
+  const pendingGate = pendingState.gateCardActionRequest[0]
+  if (
+    pendingGate &&
+    isAdditionalRequestForUser(pendingGate, userId) &&
+    pendingGate.data.type !== "TURN_ACTION_LAUNCHER"
+  ) {
+    const options = expandGateAdditional(pendingGate)
+    let best = Number.NEGATIVE_INFINITY
+
+    for (const option of options) {
+      const result = simulateAction(pendingState, option)
+      if (result.rejected) continue
+
+      const nested = scoreViaPendingAdditional(
+        rootBefore,
+        result.state,
+        userId,
+        depth + 1,
+        scoreResolved
+      )
+      const score =
+        nested !== null
+          ? nested
+          : scoreResolved(rootBefore, result.state, option, userId)
+
+      if (score > best) best = score
+    }
+
+    return best === Number.NEGATIVE_INFINITY ? 0 : best
+  }
+
+  return null
+}
+
+function scoreNeutral(params: ScoreActionParams): number {
+  const { before, after, action, userId } = params
+
+  const viaAdditional = scoreViaPendingAdditional(
+    before,
+    after,
+    userId,
+    0,
+    scoreNeutralResolved
+  )
+  if (viaAdditional !== null) {
+    return viaAdditional
+  }
+
+  return scoreNeutralResolved(before, after, action, userId)
+}
+
+function scoreInBattle(params: ScoreActionParams): number {
+  const { before, after, action, userId } = params
+
+  const viaAdditional = scoreViaPendingAdditional(
+    before,
+    after,
+    userId,
+    0,
+    scoreBattleResolved
+  )
+  if (viaAdditional !== null) {
+    return viaAdditional
+  }
+
+  return scoreBattleResolved(before, after, action, userId)
+}
+
+export function scoreAction(params: ScoreActionParams): number {
+  const { before } = params
+
+  if (isNeutralSituation(before)) {
+    return scoreNeutral(params)
+  }
+
+  return scoreInBattle(params)
+}
