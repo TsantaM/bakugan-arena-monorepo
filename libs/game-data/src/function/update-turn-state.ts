@@ -25,7 +25,14 @@ export function updateTurnState(roomData: stateType) {
         turnState.set_new_bakugan = true
         turnState.use_ability_card = true
         protalSlots.forEach(p => {
-            if (!p.can_set && !p.portalCard) p.can_set = true
+            if (!p.can_set && !p.portalCard) {
+                p.can_set = true
+                // Slot vide recyclé : garantir un state propre avant le prochain set
+                p.state.open = false
+                p.state.canceled = false
+                p.state.blocked = false
+                p.activateAbilities = []
+            }
         })
     }
 

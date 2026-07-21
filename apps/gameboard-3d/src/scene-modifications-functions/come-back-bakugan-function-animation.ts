@@ -13,16 +13,27 @@ type ComeBackBakuganFunctionAnimationProps = {
 }
 
 async function ComeBackBakuganFunctionAnimation({ bakugan, camera, scene, slot, userId, bakugansMeshs }: ComeBackBakuganFunctionAnimationProps) {
-    const reajustSpritesPositions = () => {
-        slot.bakugans.splice(slot.bakugans.indexOf(bakugan), 1)
-        slot.bakugans.filter((b) => b.userId === bakugan.userId && b.key !== bakugan.key).forEach((b) => {
-            MoveBakugan({
-                bakugan: b,
-                scene: scene,
-                slot: slot,
-                userId: userId
-            })
-        })
+    const slotAfterComeBack: portalSlotsTypeElement = {
+        ...slot,
+        bakugans: slot.bakugans.filter(
+            (b) => !(b.key === bakugan.key && b.userId === bakugan.userId)
+        ),
+    }
+
+    const reajustSpritesPositions = async () => {
+        const remaining = slotAfterComeBack.bakugans.filter(
+            (b) => b.userId === bakugan.userId
+        )
+        await Promise.all(
+            remaining.map((b) =>
+                MoveBakugan({
+                    bakugan: b,
+                    scene: scene,
+                    slot: slotAfterComeBack,
+                    userId: userId
+                })
+            )
+        )
     }
     
     await ComeBackBakuganAnimation({

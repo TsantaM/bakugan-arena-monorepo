@@ -1,9 +1,11 @@
 import { Slots, type portalSlotsTypeElement } from "@bakugan-arena/game-data";
 import * as THREE from 'three'
 import { SetGateCardAnimation } from "../animations/set-gate-card-animation";
-import { createSlotMesh } from "../meshes/slot.mesh";
+import { clearExistingSlotMeshes, createSlotMesh } from "../meshes/slot.mesh";
 
 export async function SetGateCardFunctionAndAnimation({ slot, plane, userId, isSpectator, gateCardMeshs }: { slot: portalSlotsTypeElement, plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>, userId: string, isSpectator: boolean, gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[] }) {
+    // Drop any leftover mesh for this slot (e.g. remove anim interrupted / duplicate names)
+    clearExistingSlotMeshes({ plane, slotId: slot.id, gateCardMeshs })
 
     createSlotMesh({
         plane: plane,

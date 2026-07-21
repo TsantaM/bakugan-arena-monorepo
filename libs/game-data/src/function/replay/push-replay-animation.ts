@@ -23,7 +23,8 @@ export function pushReplayAnimation(
     const stateAfter = captureReplaySnapshot(state, perspectiveUserId)
 
     state.animationsForReplay.push({
-        animation,
+        // Clone so later mutations of live slot.state (e.g. open=true) cannot rewrite past events
+        animation: structuredClone(animation),
         stateBefore: getStateBefore(state, state.animationsForReplay),
         stateAfter,
     })

@@ -1,6 +1,27 @@
 import * as THREE from 'three'
 import gsap from 'gsap'
 
+function killGateCardTweens(
+  mesh: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>
+) {
+  gsap.killTweensOf(mesh)
+  gsap.killTweensOf(mesh.scale)
+  gsap.killTweensOf(mesh.material)
+  gsap.killTweensOf(mesh.material.emissive)
+  gsap.killTweensOf(mesh.material.color)
+}
+
+function removeFromGateCardMeshs(
+  meshName: string,
+  gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[]
+) {
+  for (let i = gateCardMeshs.length - 1; i >= 0; i--) {
+    if (gateCardMeshs[i].name === meshName) {
+      gateCardMeshs.splice(i, 1)
+    }
+  }
+}
+
 async function RemoveGateCardAnimation({
   mesh,
   gateCardMeshs
@@ -9,13 +30,16 @@ async function RemoveGateCardAnimation({
   gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[]
 }): Promise<void> {
   return new Promise((resolve) => {
+    killGateCardTweens(mesh)
+    removeFromGateCardMeshs(mesh.name, gateCardMeshs)
+
     const color = new THREE.Color('white')
     mesh.material.map = null
 
     const timeline = gsap.timeline({
       onComplete: () => {
         mesh.removeFromParent()
-        resolve() // ✅ l’animation est terminée, on résout la promesse
+        resolve()
       },
     })
 
@@ -41,19 +65,7 @@ async function RemoveGateCardAnimation({
       b: 0,
       duration: 0.3,
     })
-
-    gateCardMeshs.forEach((m) => {
-      if (m.name !== mesh.name) return
-      const meshsIndex = gateCardMeshs.findIndex((b) => b.name === m.name)
-      if (meshsIndex === -1) return
-      gateCardMeshs.splice(meshsIndex, 1)
-    })
-
-    const index = gateCardMeshs.findIndex((card) => card.name === mesh.name)
-    if (index === -1) return
-    gateCardMeshs.splice(index, 1)
-
   })
 }
 
-export { RemoveGateCardAnimation }
+export { RemoveGateCardAnimation, killGateCardTweens, removeFromGateCardMeshs }

@@ -23,7 +23,7 @@ export async function SetBakuganAndAddRenfortAnimationAndFunction({ bakugan, sce
         bakugansMeshs
     })
 
-    AddRenfortToBattleField({
+    await AddRenfortToBattleField({
         bakugan: bakugan,
         final_power: final_power,
         userId: userId
@@ -37,7 +37,7 @@ export async function AddRenfortToBattleAnimationFunction({ bakugan, userId }: {
     if (!powerContainer) return
     const final_power = parseInt(powerContainer.innerHTML) + bakugan.currentPower
 
-    AddRenfortToBattleField({
+    await AddRenfortToBattleField({
         bakugan: bakugan,
         final_power: final_power,
         userId: userId

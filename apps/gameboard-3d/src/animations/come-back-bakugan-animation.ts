@@ -10,7 +10,7 @@ type ComeBackBakuganAnimationProps = {
   slot: portalSlotsTypeElement
   scene: THREE.Scene,
   bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[]
-  onCompleteFunction?: () => void
+  onCompleteFunction?: () => void | Promise<void>
 }
 
 export async function ComeBackBakuganAnimation({
@@ -19,7 +19,8 @@ export async function ComeBackBakuganAnimation({
   scene,
   slot,
   userId,
-  bakugansMeshs
+  bakugansMeshs,
+  onCompleteFunction,
 }: ComeBackBakuganAnimationProps): Promise<void> {
   return new Promise((resolve) => {
     const bakuganMesh = scene.getObjectByName(
@@ -27,6 +28,9 @@ export async function ComeBackBakuganAnimation({
     ) as THREE.Sprite<THREE.Object3DEventMap>
 
     if (!bakuganMesh) return resolve()
+
+    const index = Slots.indexOf(slot.id)
+    if (index === -1) return resolve()
 
     // Création de la sphère (Bakugan qui revient)
     const sphere = new THREE.Mesh(
@@ -38,18 +42,19 @@ export async function ComeBackBakuganAnimation({
     const attributColor = getAttributColor(bakugan.attribut)
     const color = new THREE.Color(attributColor)
 
-    const index = Slots.indexOf(slot.id)
-    if (index === -1) return resolve()
-
     const position = sphere.position
-    if (!position) return resolve()
+    if (!position) {
+      scene.remove(sphere)
+      return resolve()
+    }
 
     // === Timeline GSAP ===
     const timeline = gsap.timeline({
-      onComplete: () => {
+      onComplete: async () => {
         // Nettoyage et résolution
         scene.remove(bakuganMesh)
         scene.remove(sphere)
+        await onCompleteFunction?.()
         resolve()
       }
     })
@@ -93,12 +98,10 @@ export async function ComeBackBakuganAnimation({
       }
     )
 
-    bakugansMeshs.forEach((mesh) => {
-      if(mesh.name !== bakuganMesh.name) return
-      const meshsIndex = bakugansMeshs.findIndex((b) => b.name === mesh.name)
-      if (meshsIndex === -1) return
-      bakugansMeshs.splice(meshsIndex, 1)
-    }) 
-
+    for (let i = bakugansMeshs.length - 1; i >= 0; i--) {
+      if (bakugansMeshs[i].name === bakuganMesh.name) {
+        bakugansMeshs.splice(i, 1)
+      }
+    }
   })
 }

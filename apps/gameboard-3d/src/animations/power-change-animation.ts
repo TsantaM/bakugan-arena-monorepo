@@ -86,22 +86,28 @@ export function PowerChangeNumberAnimation({
     if (!powerContainer) return resolve()
 
     let power = parseInt(powerContainer.textContent || "0")
-
+    const target = Math.round(newPower)
     const step = 5
 
+    if (power === target) {
+      powerContainer.textContent = String(target)
+      return resolve()
+    }
+
+    const dir = target > power ? 1 : -1
+
     const interval = setInterval(() => {
-      if (Math.round(newPower) < power) {
-        power -= step
-      } else {
-        power += step
-      }
-
-      powerContainer.textContent = power.toString()
-
-      if (power === Math.round(newPower) || power === 0) {
+      const next = power + dir * step
+      if ((dir > 0 && next >= target) || (dir < 0 && next <= target) || next <= 0) {
+        power = Math.max(0, target)
+        powerContainer.textContent = String(power)
         clearInterval(interval)
         resolve()
+        return
       }
+
+      power = next
+      powerContainer.textContent = String(power)
     }, 25)
   })
 }

@@ -26,14 +26,34 @@ export async function SwipeGateCards({ slot2, plane, slot1 }: SwipeGateCardsProp
         const slot1MeshData = slot1Mesh.userData as SlotMeshUsersData
         const slot2MeshData = slot2Mesh.userData as SlotMeshUsersData
 
+        // Snapshot before either onComplete mutates the shared userData objects
+        const slot1DataSnapshot: SlotMeshUsersData = {
+            cardName: slot1MeshData.cardName,
+            state: { ...slot1MeshData.state },
+        }
+        const slot2DataSnapshot: SlotMeshUsersData = {
+            cardName: slot2MeshData.cardName,
+            state: { ...slot2MeshData.state },
+        }
+
+        let completed = 0
+        const finish = () => {
+            completed++
+            if (completed < 2) return
+
+            slot1Mesh.name = slot2.id
+            slot1MeshData.cardName = slot2DataSnapshot.cardName
+            slot1MeshData.state = { ...slot2DataSnapshot.state }
+
+            slot2Mesh.name = slot1.id
+            slot2MeshData.cardName = slot1DataSnapshot.cardName
+            slot2MeshData.state = { ...slot1DataSnapshot.state }
+
+            resolve()
+        }
+
         const timeline = gsap.timeline({
-            onComplete: () => {
-                slot1Mesh.name = slot2.id
-                slot1MeshData.state.open = slot2MeshData.state.open
-                slot1MeshData.cardName = slot2MeshData.cardName
-                slot1MeshData.state.canceled = slot2MeshData.state.canceled
-                slot1MeshData.state.blocked = slot2MeshData.state.blocked
-            }
+            onComplete: finish,
         })
 
         timeline.fromTo(slot1Mesh.position, {
@@ -57,14 +77,7 @@ export async function SwipeGateCards({ slot2, plane, slot1 }: SwipeGateCardsProp
 
         const timeline2 = gsap.timeline({
             delay: 0.01,
-            onComplete: () => {
-                slot2Mesh.name = slot1.id
-                slot2MeshData.state.open = slot1MeshData.state.open
-                slot2MeshData.cardName = slot1MeshData.cardName
-                slot2MeshData.state.canceled = slot1MeshData.state.canceled
-                slot2MeshData.state.blocked = slot1MeshData.state.blocked
-                resolve() // ✅ La promesse se résout à la fin du mouvement
-            }
+            onComplete: finish,
         })
 
         timeline2.fromTo(slot2Mesh.position, {

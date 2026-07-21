@@ -95,14 +95,21 @@ export async function playAnimation(
                 );
 
                 const combinedPowerChanges = new Map<string, number>();
+                const latestPowerByMesh = new Map<string, number>();
+                let groupedFinalPower: number | undefined
 
                 for (const anim of group) {
-                    if (anim.type !== 'POWER_CHANGE') return
+                    if (anim.type !== 'POWER_CHANGE') continue
                     for (const b of anim.data.bakugan) {
                         const key = `${b.userId}-${b.slot_id}`;
                         const old = combinedPowerChanges.get(key) || 0;
                         const delta = anim.data.malus ? -anim.data.powerChange : anim.data.powerChange;
                         combinedPowerChanges.set(key, old + delta);
+                        latestPowerByMesh.set(`${b.key}-${b.userId}`, b.currentPower)
+                    }
+
+                    if (anim.data.finalPower !== undefined) {
+                        groupedFinalPower = anim.data.finalPower
                     }
 
                     if (anim.message) sendMessageToParent(anim.message)
@@ -120,17 +127,16 @@ export async function playAnimation(
 
                             await PowerChangeNumberAnimation({
                                 elementId: key,
-                                newPower: current.data.finalPower ? current.data.finalPower : newPower
+                                newPower: groupedFinalPower !== undefined ? groupedFinalPower : newPower
                             });
                         })();
                     })
                 );
 
-                current.data.bakugan.forEach((b) => {
-                    const name = `${b.key}-${b.userId}`
+                latestPowerByMesh.forEach((powerLevel, name) => {
                     const mesh = scene.getObjectByName(name)
                     if (!mesh) return
-                    mesh.userData.powerLevel = b.currentPower
+                    mesh.userData.powerLevel = powerLevel
                 })
 
                 continue;

@@ -9,14 +9,15 @@ type ElimineBakuganAnimationProps = {
     slot: portalSlotsTypeElement
     scene: THREE.Scene,
     bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[],
-    onCompleteFunction?: () => void
+    onCompleteFunction?: () => void | Promise<void>
 }
 
 export async function ElimineBakuganAnimation({
     bakugan,
     scene,
     slot,
-    bakugansMeshs
+    bakugansMeshs,
+    onCompleteFunction,
 }: ElimineBakuganAnimationProps): Promise<void> {
     return new Promise((resolve) => {
         const bakuganMesh = scene.getObjectByName(
@@ -32,10 +33,10 @@ export async function ElimineBakuganAnimation({
         if (index === -1) return resolve()
 
         const timeline = gsap.timeline({
-            onComplete: () => {
-                // 🧹 Nettoyage
+            onComplete: async () => {
                 scene.remove(bakuganMesh)
-                resolve() // ✅ Résout la promesse à la fin de l’animation
+                await onCompleteFunction?.()
+                resolve()
             }
         })
 
@@ -54,12 +55,10 @@ export async function ElimineBakuganAnimation({
             { x: 0, y: 0, z: 0, duration: 1, ease: 'power2.in' }
         )
 
-    bakugansMeshs.forEach((mesh) => {
-      if(mesh.name !== bakuganMesh.name) return
-      const meshsIndex = bakugansMeshs.findIndex((b) => b.name === mesh.name)
-      if (meshsIndex === -1) return
-      bakugansMeshs.splice(meshsIndex, 1)
-    }) 
-
+        for (let i = bakugansMeshs.length - 1; i >= 0; i--) {
+            if (bakugansMeshs[i].name === bakuganMesh.name) {
+                bakugansMeshs.splice(i, 1)
+            }
+        }
     })
 }

@@ -14,6 +14,7 @@ import { applyReplaySnapshotUi } from './functions/apply-replay-snapshot-ui'
 import { applyReplayBoardState } from './functions/apply-replay-board-state'
 import { setReplayPaused, waitWhilePaused } from './functions/replay-pause'
 import { notifyParentTurnEnd } from './functions/send-message-to-parent'
+import { collectReplayAnimationBatch } from './functions/collect-replay-animation-batch'
 import {
   abortReplayPlayback,
   consumeSeekTarget,
@@ -370,14 +371,30 @@ async function initReplay(replayPayload: replayDataType) {
           if (generation !== playbackGeneration) return
           if (peekSeekTarget() !== null) continue
 
-          // isSpectator: false comme main.ts (perspective joueur)
+          // Même regroupement que playAnimation (POWER_CHANGE consécutifs en parallèle)
+          const { animations: batch, endIndex } = collectReplayAnimationBatch(
+            replay,
+            playback.currentIndex
+          )
+
           await Promise.race([
-            playAnimation(perspectiveUserId, false, camera, scene, plane, bakugansMeshs, gateCardMeshs, [entry.animation]),
+            playAnimation(perspectiveUserId, false, camera, scene, plane, bakugansMeshs, gateCardMeshs, batch),
             waitForSeekAbort(),
           ])
 
           if (generation !== playbackGeneration) return
           if (peekSeekTarget() !== null) continue
+
+          applyReplaySnapshotUi(replay[endIndex].stateAfter, perspectiveUserId)
+
+          for (let j = playback.currentIndex; j <= endIndex; j++) {
+            if (replay[j].marker === 'turn_end') {
+              notifyParentTurnEnd()
+            }
+          }
+
+          playback.currentIndex = endIndex + 1
+          continue
         }
 
         applyReplaySnapshotUi(entry.stateAfter, perspectiveUserId)
