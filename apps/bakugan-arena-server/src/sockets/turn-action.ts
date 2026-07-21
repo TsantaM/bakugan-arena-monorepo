@@ -34,14 +34,15 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
 
     if (opennable.length > 0) {
         for (const card of opennable) {
-            const requestLaunched = ActiveGateCard({
+            const result = ActiveGateCard({
                 gateId: card.gateId,
                 roomId: roomId,
                 slot: card.slot,
                 userId: card.userId,
                 io: io
             })
-            if (requestLaunched) return
+            // Additional en cours OU tour déjà avancé en interne → ne pas continuer
+            if (result === 'additional' || result === 'turn_advanced') return
         }
     }
 

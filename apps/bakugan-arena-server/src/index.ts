@@ -12,6 +12,7 @@ import { processMatchmaking, setupSearchOpponentSocket, waitingMap } from "./soc
 import { socketGetRoomState, socketInitiRoomState } from "./sockets/get-room-data";
 import { initializeBots } from "./functions/bot-manager";
 import { startBotPlayers } from "./bot/bot-player";
+import { startScoreWeightsPolling } from "./bot/ai/score-weights-runtime";
 import { socketTurn } from "./sockets/turn-action";
 import { socketUpdateGateState } from "./sockets/update-gate-state";
 import { socketUpdateBakuganState } from "./sockets/update-bakugans-state";
@@ -46,6 +47,7 @@ const io = new Server({
 
 const startServer = async () => {
     await initializeBots()
+    startScoreWeightsPolling()
 
     // 🔥 MATCHMAKING LOOP GLOBAL
     setInterval(() => {

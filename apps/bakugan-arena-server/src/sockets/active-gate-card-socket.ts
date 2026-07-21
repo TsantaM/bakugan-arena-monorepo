@@ -15,70 +15,85 @@ export const socketActiveGateCard = (io: Server, socket: Socket) => {
 
         clearAnimationsInRoom(roomId)
 
-        ActiveGateCard({ roomId, gateId, slot, userId, io })
+        const result = ActiveGateCard({ roomId, gateId, slot, userId, io })
 
-
-        io.to(roomId).emit('animations', state.animations)
-        state.animations.forEach((animation) => EmitMessage({ roomState: state, animation, io }))
-
-
-        const activeSocket = state.connectedsUsers.get(state.turnState.turn)
-        const inactiveSocket = state.connectedsUsers.get(state.turnState.previous_turn || '')
         const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
         if (roomIndex === -1) return
         if (!Battle_Brawlers_Game_State[roomIndex]) return
 
+        const activeSocket = state.connectedsUsers.get(state.turnState.turn)
+        const inactiveSocket = state.connectedsUsers.get(state.turnState.previous_turn || '')
+
+        // Retirer OPEN_GATE_CARD de la request du joueur
+        if (state.turnState.turn === userId) {
+            const newState = removeActionByType(
+                Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest,
+                "OPEN_GATE_CARD"
+            )
+            Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest =
+                newState as ActivePlayerActionRequestType
+        } else {
+            const newState = removeActionByType(
+                Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest,
+                "OPEN_GATE_CARD"
+            )
+            Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest =
+                newState as InactivePlayerActionRequestType
+        }
+
+        // Déjà géré entièrement (additional ou turn advance) — pas de 2ᵉ emit / advance
+        if (result === "additional" || result === "turn_advanced") {
+            return
+        }
+
+        // Gate ouverte sans emit interne, ou noop : émettre les anims restantes une seule fois
+        if (result === "opened" || state.animations.length > 0) {
+            const batch = [...state.animations]
+            io.to(roomId).emit('animations', batch)
+            batch.forEach((animation) => EmitMessage({ roomState: state, animation, io }))
+            state.animations = []
+        }
+
+        if (result === false) return
+
+        const checker = CheckTurnActionRequest({ roomState: state, userId: userId })
+        if (!checker) return
 
         if (state.turnState.turn === userId) {
-
-            const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "OPEN_GATE_CARD")
-
-
-            Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
-            const merged = [Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
-
-            const checker = CheckTurnActionRequest({ roomState: state, userId: userId })
-            if (!checker) return
-
-            if (activeSocket) {
-                if (merged.length > 0) {
-                    io.to(activeSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
-                } else {
-                    clearAnimationsInRoom(roomId)
-                    turnActionUpdater({ roomId, userId, io })
-                }
-            }
-
-
-
-        }
-
-        if (state.turnState.turn !== userId) {
-            const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest, "OPEN_GATE_CARD")
-
-
-            Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest = newState as InactivePlayerActionRequestType
             const merged = [
-                Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDo,
-                Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDoOne,
-                Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.optional,
+                Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo,
+                Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne,
+                Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional,
             ].flat()
 
-            const checker = CheckTurnActionRequest({ roomState: state, userId: userId })
-            if (!checker) return
-
-            if (inactiveSocket) {
-                if (merged.length > 0) {
-                    io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
-                } else {
-                    clearAnimationsInRoom(roomId)
-                    turnActionUpdater({ roomId, userId, io })
-                }
+            if (!activeSocket) return
+            if (merged.length > 0) {
+                io.to(activeSocket.gameboardSocket).emit(
+                    'turn-action-request',
+                    Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest
+                )
+            } else {
+                clearAnimationsInRoom(roomId)
+                turnActionUpdater({ roomId, userId, io })
             }
-
+            return
         }
 
+        const merged = [
+            Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDo,
+            Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDoOne,
+            Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.optional,
+        ].flat()
 
-
+        if (!inactiveSocket) return
+        if (merged.length > 0) {
+            io.to(inactiveSocket.gameboardSocket).emit(
+                'turn-action-request',
+                Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest
+            )
+        } else {
+            clearAnimationsInRoom(roomId)
+            turnActionUpdater({ roomId, userId, io })
+        }
     })
 }

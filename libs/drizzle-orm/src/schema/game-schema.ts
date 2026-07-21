@@ -2,6 +2,7 @@ import { pgTable, text, timestamp, boolean, pgEnum, uuid, jsonb } from "drizzle-
 import { relations } from "drizzle-orm"
 import { user } from "./auth-schema.js"
 import { type replayDataType } from "@bakugan-arena/game-data"
+import type { BotScoreWeights, BotTrainingMetrics } from "../bot-score-weights.js"
 
 // ================== ENUM ROLES ==================
 export const rolesEnum = pgEnum("roles", ["JOUEUR", "ADMIN", "GAMEDESIGNER"])
@@ -81,3 +82,25 @@ export const roomsRelations = relations(rooms, ({ one }) => ({
         references: [replay.roomId],
     }),
 }))
+
+// ================== BOT TRAINING ==================
+export const botTrainingItem = pgTable("bot_training_item", {
+    id: uuid("id").primaryKey().defaultRandom(),
+    title: text("title").notNull(),
+    source: text("source").notNull(), // 'database' | 'import'
+    replayId: uuid("replay_id").references(() => replay.id, { onDelete: "set null" }),
+    roomId: uuid("room_id"),
+    replayData: jsonb("replay_data").$type<replayDataType>().notNull(),
+    learnFromUserId: text("learn_from_user_id").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
+export const botScoreWeights = pgTable("bot_score_weights", {
+    id: uuid("id").primaryKey().defaultRandom(),
+    version: text("version").notNull(),
+    label: text("label").notNull(),
+    weights: jsonb("weights").$type<BotScoreWeights>().notNull(),
+    metrics: jsonb("metrics").$type<BotTrainingMetrics>().notNull(),
+    isActive: boolean("is_active").default(false).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+})

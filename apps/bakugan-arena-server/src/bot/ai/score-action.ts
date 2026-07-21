@@ -17,6 +17,7 @@ import {
 } from "./expand-legal-moves"
 import { simulateAction } from "./simulate-action"
 import type { SimulateAction } from "./types"
+import { getScoreWeights } from "./score-weights-runtime"
 
 export type ScoreActionParams = {
   before: stateType
@@ -34,26 +35,8 @@ type ResolvedScorer = (
   userId: string
 ) => number
 
-const POWER_LEAD_POINTS = 1
-const GATE_NEUTRALIZE_POINTS = 1
-const OPPONENT_BLOCKED_POINTS = 1.5
-const OPPONENT_NO_ABILITY_POINTS = 1
-const ALLIED_POWER_UP_POINTS = 1
-const FREE_ELIM_POINTS = 1.5
-const TURN_SKIP_SAVE_POINTS = 2
-const CHARACTER_GATE_SET_BONUS = 2
-const CHARACTER_BAKUGAN_MATCH_BONUS = 2
-const REACTOR_BAKUGAN_MATCH_BONUS = 1
-const CHARACTER_GATE_MISMATCH_PENALTY = -1
-const SET_GATE_PLACEMENT_BONUS = 1
-const ABILITY_WASTE_WHILE_LEADING = -1.5
-const ABILITY_WASTE_TURN_TWO_LEADING = -2
-const TRADE_OFF_OVER_CAP_PENALTY = -2
-const SUPER_PYRUS_BAD_OPEN_PENALTY = -2
-const TRADE_OFF_POWER_CAP = 400
 const SUPER_PYRUS_KEY = "super-pyrus"
 const TRADE_OFF_KEY = "echange"
-const PERSONALITY_MULTIPLIER = 1.5
 const MAX_ADDITIONAL_DEPTH = 6
 
 /** Bataille active : en cours et non en pause */
@@ -367,19 +350,19 @@ function scoreNeutralEffectActions(
   let score = 0
 
   if (scoresOpponentCannotUseAbilitiesNextTurn(after, userId)) {
-    score += OPPONENT_NO_ABILITY_POINTS
+    score += getScoreWeights().opponentNoAbilityPoints
   }
 
   if (scoresAllAlliedPowerIncreased(before, after, userId)) {
-    score += ALLIED_POWER_UP_POINTS
+    score += getScoreWeights().alliedPowerUpPoints
   }
 
   if (scoresFreeOpponentElimination(before, after, userId)) {
-    score += FREE_ELIM_POINTS
+    score += getScoreWeights().freeElimPoints
   }
 
   if (scoresTurnSkipSavesResources(before, action, userId)) {
-    score += TURN_SKIP_SAVE_POINTS
+    score += getScoreWeights().turnSkipSavePoints
   }
 
   return score
@@ -403,7 +386,7 @@ function scoreCharacterGateSetPenalty(
     (b) => !b.bakuganData.elimined && !b.bakuganData.onDomain
   )
 
-  return hasAvailable ? 0 : CHARACTER_GATE_MISMATCH_PENALTY
+  return hasAvailable ? 0 : getScoreWeights().characterGateMismatchPenalty
 }
 
 /** +2 character gate bien posée (bakugan affilié encore disponible) */
@@ -425,7 +408,7 @@ function scoreCharacterGateSetBonus(
       !b.bakuganData.onDomain
   )
 
-  return hasAvailable ? CHARACTER_GATE_SET_BONUS : 0
+  return hasAvailable ? getScoreWeights().characterGateSetBonus : 0
 }
 
 function resolveSetBakuganPlacement(
@@ -470,7 +453,7 @@ function scoreCharacterGateBakuganMismatch(
   if (!gate?.family || !bakugan?.family) return 0
   if (bakugan.family === gate.family) return 0
 
-  return CHARACTER_GATE_MISMATCH_PENALTY
+  return getScoreWeights().characterGateMismatchPenalty
 }
 
 /**
@@ -498,11 +481,11 @@ function scoreBakuganPlacementBonuses(
   if (!bakugan) return 0
 
   if (gate.family && bakugan.family === gate.family) {
-    return CHARACTER_BAKUGAN_MATCH_BONUS
+    return getScoreWeights().characterBakuganMatchBonus
   }
 
   if (isReactorGate(gateKey) && gate.attribut && bakugan.attribut === gate.attribut) {
-    return REACTOR_BAKUGAN_MATCH_BONUS
+    return getScoreWeights().reactorBakuganMatchBonus
   }
 
   return 0
@@ -522,10 +505,10 @@ function scoreBattleAbilityEconomy(
 
   // turns === 1 → second tour de bataille (après le premier advance)
   if (before.battleState.turns === 1) {
-    return ABILITY_WASTE_TURN_TWO_LEADING
+    return getScoreWeights().abilityWasteTurnTwoLeading
   }
 
-  return ABILITY_WASTE_WHILE_LEADING
+  return getScoreWeights().abilityWasteWhileLeading
 }
 
 /**
@@ -553,8 +536,8 @@ function scoreTradeOffPowerCap(
       afterSlot.bakugans.filter((b) => b.userId === userId)
     )
 
-    if (afterTotal >= TRADE_OFF_POWER_CAP && afterTotal > beforeTotal) {
-      return TRADE_OFF_OVER_CAP_PENALTY
+    if (afterTotal >= getScoreWeights().tradeOffPowerCap && afterTotal > beforeTotal) {
+      return getScoreWeights().tradeOffOverCapPenalty
     }
   }
 
@@ -579,7 +562,7 @@ function scoreSuperPyrusOpen(
 
   const { botPower, opponentPower } = getSlotPowerTotals(slot, userId)
   if (opponentPower > botPower) {
-    return SUPER_PYRUS_BAD_OPEN_PENALTY
+    return getScoreWeights().superPyrusBadOpenPenalty
   }
 
   return 0
@@ -608,15 +591,15 @@ function scoreBattleResolved(
   let score = 0
 
   if (scoresPowerLead(after, userId)) {
-    score += POWER_LEAD_POINTS
+    score += getScoreWeights().powerLeadPoints
   }
 
   if (scoresOpponentGateNeutralized(before, after, userId)) {
-    score += GATE_NEUTRALIZE_POINTS
+    score += getScoreWeights().gateNeutralizePoints
   }
 
   if (scoresOpponentBlockedNextTurn(after, userId)) {
-    score += OPPONENT_BLOCKED_POINTS
+    score += getScoreWeights().opponentBlockedPoints
   }
 
   // Effet immédiat de l'ouverture de gate / ability en bataille
@@ -628,13 +611,13 @@ function scoreBattleResolved(
     action.type === "GATE_ADDITIONAL"
   ) {
     if (scoresAllAlliedPowerIncreased(before, after, userId)) {
-      score += ALLIED_POWER_UP_POINTS
+      score += getScoreWeights().alliedPowerUpPoints
     }
     if (scoresFreeOpponentElimination(before, after, userId)) {
-      score += FREE_ELIM_POINTS
+      score += getScoreWeights().freeElimPoints
     }
     if (scoresOpponentCannotUseAbilitiesNextTurn(after, userId)) {
-      score += OPPONENT_NO_ABILITY_POINTS
+      score += getScoreWeights().opponentNoAbilityPoints
     }
   }
 
@@ -661,7 +644,7 @@ export function battleStartsNowOrNextTurn(after: stateType): boolean {
 
 /** +1 de base pour tout placement de gate (après tour 0 notamment) */
 function scoreSetGatePlacementBonus(action: SimulateAction): number {
-  return action.type === "SET_GATE" ? SET_GATE_PLACEMENT_BONUS : 0
+  return action.type === "SET_GATE" ? getScoreWeights().setGatePlacementBonus : 0
 }
 
 /** Scoring setup neutral (pas de bataille immédiate ni au tour suivant). */
@@ -1018,27 +1001,27 @@ export function applyPersonalityMultiplier(
   let multiplier = 1
 
   if (personalities.includes("rush_down") && matchesRushDown(before, after, userId)) {
-    multiplier *= PERSONALITY_MULTIPLIER
+    multiplier *= getScoreWeights().personalityMultiplier
   }
 
   if (personalities.includes("zoner") && matchesZoner(before, after, action)) {
-    multiplier *= PERSONALITY_MULTIPLIER
+    multiplier *= getScoreWeights().personalityMultiplier
   }
 
   if (personalities.includes("blocker") && matchesBlocker(before, after, userId)) {
-    multiplier *= PERSONALITY_MULTIPLIER
+    multiplier *= getScoreWeights().personalityMultiplier
   }
 
   if (personalities.includes("setup") && matchesSetup(before, after, action, userId)) {
-    multiplier *= PERSONALITY_MULTIPLIER
+    multiplier *= getScoreWeights().personalityMultiplier
   }
 
   if (personalities.includes("finisher") && matchesFinisher(before, after, userId)) {
-    multiplier *= PERSONALITY_MULTIPLIER
+    multiplier *= getScoreWeights().personalityMultiplier
   }
 
   if (personalities.includes("control") && matchesControl(before, after, action, userId)) {
-    multiplier *= PERSONALITY_MULTIPLIER
+    multiplier *= getScoreWeights().personalityMultiplier
   }
 
   return score * multiplier

@@ -77,7 +77,7 @@ export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
 
                 if (merged.length > 0) {
                     io.to(activeSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
-                } else {
+                } else if (!result?.turnActionLaucher) {
                     clearAnimationsInRoom(roomId)
                     turnActionUpdater({ roomId, userId: request.userId, io })
                 }

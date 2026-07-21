@@ -191,22 +191,13 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
   const joinRoom = (matchedRoomId: string) => {
     roomId = matchedRoomId
     pendingAdditionalRequests = 0
+    // Un seul bootstrap : init-room-state suffit (évite un 2ᵉ turn-action-request)
     socket.emit("init-room-state", {
       roomId: matchedRoomId,
       userId: bot.userId,
       parentSocket: socket.id,
       isSpectator: false,
     })
-
-    setTimeout(() => {
-      if (roomId !== matchedRoomId) return
-      socket.emit("get-room-state", {
-        roomId: matchedRoomId,
-        userId: bot.userId,
-        parentSocket: socket.id,
-        isSpectator: false,
-      })
-    }, 500)
   }
 
   socket.on("match-found", (matchedRoomId: string) => {

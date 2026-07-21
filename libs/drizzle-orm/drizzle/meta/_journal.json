@@ -36,6 +36,13 @@
       "when": 1774400000000,
       "tag": "0004_add_replay_table",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1774550000000,
+      "tag": "0005_bot_training",
+      "breakpoints": true
     }
   ]
 }

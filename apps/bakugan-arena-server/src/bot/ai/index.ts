@@ -13,6 +13,11 @@ export {
   getBattlePowerTotals,
 } from "./score-action"
 export type { ScoreActionParams } from "./score-action"
+export {
+  getScoreWeights,
+  refreshScoreWeightsFromDb,
+  startScoreWeightsPolling,
+} from "./score-weights-runtime"
 export { evaluateLegalMoves, pickBestMove } from "./evaluate-legal-moves"
 export type { ScoredMove } from "./evaluate-legal-moves"
 export type {

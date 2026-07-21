@@ -6,7 +6,8 @@ import { cleanupStaleRooms } from "@/src/actions/admin/cleanup-stale-rooms"
 import { getStaleRoomsCount } from "@/src/actions/admin/get-stale-rooms-count"
 import { resetLadder } from "@/src/actions/admin/reset-ladder"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { Loader2, RotateCcw, Trash2 } from "lucide-react"
+import { Brain, Loader2, RotateCcw, Trash2 } from "lucide-react"
+import Link from "next/link"
 import { toast } from "sonner"
 import {
     AlertDialog,
@@ -56,6 +57,23 @@ export default function AdminPanel() {
     return (
         <>
             <Section className="grid gap-4 md:grid-cols-2">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Bot training</CardTitle>
+                        <CardDescription>
+                            Curate replays, train scoring weights, and deploy them to live bots.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardFooter>
+                        <Button asChild>
+                            <Link href="/dashboard/admin/bot-training">
+                                <Brain />
+                                Open training
+                            </Link>
+                        </Button>
+                    </CardFooter>
+                </Card>
+
                 <Card>
                     <CardHeader>
                         <CardTitle>Reset ladder</CardTitle>
