@@ -2,10 +2,14 @@
 
 import { authClient } from "@/src/lib/auth-client"
 import { Message } from "@bakugan-arena/game-data"
+import { resolveBattleMessage } from "@bakugan-arena/i18n"
+import { useLocale } from "next-intl"
 
 export function MessageParagraph({ message }: { message: Message }) {
     const username = authClient.useSession().data?.user.displayUsername
-    const { userName, text, description } = message
+    const locale = useLocale()
+    const { userName, description } = message
+    const text = resolveBattleMessage(message, locale)
     const isMe = userName === username
 
     return (

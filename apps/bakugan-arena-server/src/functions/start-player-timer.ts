@@ -307,7 +307,7 @@ export function StartTwoTimers({ roomState, io, roomId }: { roomState: stateType
                     .where(eq(rooms.id, roomId))
 
                 const message: Message = {
-                    text: 'Game is over ! Equality !',
+                    key: 'game_over_draw',
                     turn: roomState.turnState.turnCount
                 }
 

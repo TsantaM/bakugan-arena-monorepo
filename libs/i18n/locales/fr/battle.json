@@ -1,0 +1,14 @@
+{
+  "gate_card_set": "Carte portail position !",
+  "bakugan_brawl": "Bakugan au combat !",
+  "bakugan_stand": "{name} transformation !",
+  "ability_activate": "Carte Maîtrise activée : {name}",
+  "gate_open": "Carte portail ouvre toi ! {name}",
+  "attribute_change": "{name} change son attribut en {attribut}.",
+  "game_over_draw": "Combat terminé ! Égalité !",
+  "game_over_winner": "Combat terminé ! Le vainqueur est {winner}",
+  "game_over_winner_ranked": "Combat terminé ! Le vainqueur est {winnerName} : {winnerName} : {winnerElo}(+{winnerBonus}) / {loserName} : {loserElo}(-{loserMalus})",
+  "forfeit_winner": "{loserName} abandonne ! Le vainqueur est {winnerName}",
+  "forfeit_winner_ranked": "{loserName} abandonne ! Le vainqueur est {winnerName} : {winnerName} : {winnerElo}(+{winnerBonus}) / {loserName} : {loserElo}(-{loserMalus})",
+  "user_offline": "Cet utilisateur n'est pas en ligne"
+}

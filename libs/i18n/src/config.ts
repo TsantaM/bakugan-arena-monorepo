@@ -20,6 +20,7 @@ export const namespaces = [
   'bakuDex',
   'ladder',
   'battlefield',
+  'battle',
   'replay',
   'tutorial',
   'admin',

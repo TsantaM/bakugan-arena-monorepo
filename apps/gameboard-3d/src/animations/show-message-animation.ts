@@ -1,5 +1,7 @@
 import type { Message } from "@bakugan-arena/game-data";
+import { resolveBattleMessage } from "@bakugan-arena/i18n";
 import gsap from "gsap";
+import { getGameboardLocale } from "../i18n/locale";
 
 export const removePreviousDialogBoxAnimation = (target: HTMLElement | null, delay: number = 0) => {
     if (target === null) return
@@ -28,6 +30,11 @@ export const newDialogBoxAnimation = (target: HTMLElement | null) => {
     })
 }
 
+function formatMessageLine(message: Message): string {
+    const resolved = resolveBattleMessage(message, getGameboardLocale())
+    return message.userName ? `${message.userName} : ${resolved}` : resolved
+}
+
 export async function ShowMessageAnimation({ messages }: { messages: Message[] | undefined }) {
 
     if (!messages) return
@@ -48,8 +55,7 @@ export async function ShowMessageAnimation({ messages }: { messages: Message[] |
     messages.forEach((message) => {
         if(message.description) return
         const messageContainer = document.createElement('p')
-        const textContent = message.userName ? `${message.userName} : ${message.text}` : `${message.text}`
-        messageContainer.textContent = textContent
+        messageContainer.textContent = formatMessageLine(message)
         dialog?.appendChild(messageContainer)
     })
 
@@ -65,9 +71,8 @@ export function EndGameMessage({ message }: { message: Message | undefined }) {
     newDialogBox.id = 'end-game-dialog-box'
     document.body.appendChild(newDialogBox)
 
-    const textContent = `${message.text}`
     const messageContainer = document.createElement('p')
-    messageContainer.textContent = textContent
+    messageContainer.textContent = resolveBattleMessage(message, getGameboardLocale())
     newDialogBox.appendChild(messageContainer)
     newDialogBoxAnimation(newDialogBox)
 }

@@ -15,7 +15,7 @@ import { ReplayExistsByRoomId } from "@/src/actions/replay/replay-exists-by-room
 import { UploadReplay } from "@/src/actions/replay/uploard-raplay-action"
 import { toast } from "sonner"
 import { useReplayBattleLogStore } from "@/src/store/replay-battle-log-store"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 
 type ReplayControlMessage =
     | "REPLAY_PAUSE"
@@ -27,6 +27,7 @@ type ReplayControlMessage =
 export default function ReplayPage() {
     const t = useTranslations('replay')
     const tCommon = useTranslations('common')
+    const locale = useLocale()
 
     const [replay, setReplay] = useState<replayDataType | null>(null)
     const [isPaused, setIsPaused] = useState(true)
@@ -77,6 +78,7 @@ export default function ReplayPage() {
         if (replay?.player1?.image) url.searchParams.set("player1Image", replay.player1.image)
         if (replay?.player2?.id) url.searchParams.set("player2Id", replay.player2.id)
         if (replay?.player2?.image) url.searchParams.set("player2Image", replay.player2.image)
+        url.searchParams.set("locale", locale)
 
         return url.toString()
     }

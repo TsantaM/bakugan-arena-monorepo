@@ -44,11 +44,13 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
         resolved: false,
         message: [
             {
-                text: `Gate Card Open ! ${gateCard.name}`,
+                key: 'gate_open',
+                params: { name: gateCard.name },
                 userName: GetUserName({ roomData: roomData, userId: userId }),
                 turn: roomData.turnState.turnCount,
             },
             {
+                // game-data description — not translated yet
                 text: `${gateCard.description}`,
                 turn: roomData.turnState.turnCount,
                 description: true,

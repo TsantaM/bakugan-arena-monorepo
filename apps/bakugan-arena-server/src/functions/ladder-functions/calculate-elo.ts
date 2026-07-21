@@ -21,12 +21,20 @@ export async function CalculateAndUpdateElo({ winner, loser, roomData, io, roomI
     
     if (!roomData.ranked) {
 
-        const text = forfeit ? `${loserName} forfeit ! The winner is ${winnerName}` : `Game is over ! The winner is ${winnerName}`
-
-        const message: Message = {
-            text: text,
-            turn: roomData.turnState.turnCount
-        }
+        const message: Message = forfeit
+            ? {
+                key: 'forfeit_winner',
+                params: {
+                    loserName: loserName ?? '',
+                    winnerName: winnerName ?? '',
+                },
+                turn: roomData.turnState.turnCount
+            }
+            : {
+                key: 'game_over_winner',
+                params: { winner: winnerName ?? '' },
+                turn: roomData.turnState.turnCount
+            }
 
 
         io.to(roomId).emit('game-finished', message)
@@ -101,12 +109,31 @@ export async function CalculateAndUpdateElo({ winner, loser, roomData, io, roomI
     await db.update(userSchema).set({ elo: newWinnerElo }).where(eq(userSchema.id, winner))
     await db.update(userSchema).set({ elo: newLoserElo }).where(eq(userSchema.id, loser))
 
-    const text = forfeit ? `${loserName} forfeit ! The winner is ${winnerName} : ${winnerName} : ${newWinnerElo} (+ ${winnerDiffElo}) / ${loserName} : ${newLoserElo} (- ${loserDiffElo})` : `Game is over ! The winner is ${winnerName} : ${winnerName} : ${newWinnerElo} (+ ${winnerDiffElo}) / ${loserName} : ${newLoserElo} (- ${loserDiffElo})`
-
-    const message: Message = {
-        text: text,
-        turn: roomData.turnState.turnCount
-    }
+    const message: Message = forfeit
+        ? {
+            key: 'forfeit_winner_ranked',
+            params: {
+                loserName: loserName ?? '',
+                winnerName: winnerName ?? '',
+                winnerElo: newWinnerElo,
+                winnerBonus: winnerDiffElo,
+                loserElo: newLoserElo,
+                loserMalus: loserDiffElo,
+            },
+            turn: roomData.turnState.turnCount
+        }
+        : {
+            key: 'game_over_winner_ranked',
+            params: {
+                winnerName: winnerName ?? '',
+                loserName: loserName ?? '',
+                winnerElo: newWinnerElo,
+                winnerBonus: winnerDiffElo,
+                loserElo: newLoserElo,
+                loserMalus: loserDiffElo,
+            },
+            turn: roomData.turnState.turnCount
+        }
 
     // console.log(roomData.status.elo)
     // console.log(message.text)

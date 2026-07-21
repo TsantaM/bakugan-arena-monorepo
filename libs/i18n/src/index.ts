@@ -10,3 +10,10 @@ export {
   type Namespace,
   type RtlLocale,
 } from './config.js'
+
+export {
+  battleCatalogs,
+  interpolate,
+  resolveBattleMessage,
+  type BattleMessageInput,
+} from './resolve-battle-message.js'

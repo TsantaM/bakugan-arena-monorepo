@@ -287,13 +287,14 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
                     const winner = roomData.players.find((p) => p.userId === roomData.status.winner)?.username ? roomData.players.find((p) => p.userId === roomData.status.winner)?.username : ''
 
                     message = {
-                        text: `Game is over ! The winner is ${winner}`,
+                        key: 'game_over_winner',
+                        params: { winner: winner ?? '' },
                         turn: roomData.turnState.turnCount
                     }
 
                 } else {
                     message = {
-                        text: `Game is over ! Equality !`,
+                        key: 'game_over_draw',
                         turn: roomData.turnState.turnCount
                     }
                 }

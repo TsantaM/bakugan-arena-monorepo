@@ -1,11 +1,20 @@
 import type { portalSlotsTypeElement, bakuganOnSlot, slots_id } from '../type/room-types.js'
 import type { attribut } from './game-data-types.js'
 
+/**
+ * Battle / system message shown in the gameboard dialog and Next battle log.
+ * - Prefer `key` + `params` for new server messages (clients translate).
+ * - `text` remains for: legacy replays, player chat, and game-data passthrough.
+ */
 export type Message = {
     userName?: string,
-    text: string,
     turn: number,
-    description?: boolean
+    description?: boolean,
+    /** i18n key in the `battle` namespace (e.g. `gate_card_set`) */
+    key?: string,
+    params?: Record<string, string | number>,
+    /** Legacy / user-authored / game-data raw string */
+    text?: string,
 }
 
 export type AnimationDirectivesTypes =

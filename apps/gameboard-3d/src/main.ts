@@ -9,6 +9,9 @@ import { setImageWithFallback } from './functions/set-image-with-fallback'
 import { hideTooltip, initTooltip, showTooltip, tooltip } from './functions/tooltips-functions'
 import { Bakugans } from '@bakugan-arena/game-data'
 import { requestSkipAnimations } from './functions/skip-animations'
+import { initGameboardLocaleFromUrl } from './i18n/locale'
+
+initGameboardLocaleFromUrl()
 
 const canvas = document.getElementById('gameboard-canvas')
 const params = new URLSearchParams(window.location.search)

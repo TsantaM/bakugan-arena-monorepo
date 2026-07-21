@@ -24,6 +24,9 @@ import {
   requestReplaySeek,
   waitForSeekAbort,
 } from './functions/replay-seek'
+import { initGameboardLocaleFromUrl } from './i18n/locale'
+
+initGameboardLocaleFromUrl()
 
 type ActiveReplayPlayback = {
   entries: replayEntryType[]

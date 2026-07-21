@@ -25,7 +25,11 @@ export function ChangeAttributSocket(io: Server, socket: Socket) {
         if (target.alreadyChangeAttribut === true) return
 
         const message: Message = {
-            text: `${Bakugans[bakugan.key].name} change his attribut to ${attribut}.`,
+            key: 'attribute_change',
+            params: {
+                name: Bakugans[bakugan.key].name,
+                attribut,
+            },
             turn: roomState.turnState.turnCount
         }
 

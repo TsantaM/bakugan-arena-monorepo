@@ -1,0 +1,14 @@
+{
+  "gate_card_set": "Gate Card Set !",
+  "bakugan_brawl": "Bakugan brawl !",
+  "bakugan_stand": "{name} stand !",
+  "ability_activate": "Ability Card Activate : {name}",
+  "gate_open": "Gate Card Open ! {name}",
+  "attribute_change": "{name} change his attribut to {attribut}.",
+  "game_over_draw": "Game is over ! Equality !",
+  "game_over_winner": "Game is over ! The winner is {winner}",
+  "game_over_winner_ranked": "Game is over ! The winner is {winnerName} : {winnerName} : {winnerElo}(+{winnerBonus}) / {loserName} : {loserElo}(-{loserMalus})",
+  "forfeit_winner": "{loserName} forfeit ! The winner is {winnerName}",
+  "forfeit_winner_ranked": "{loserName} forfeit ! The winner is {winnerName} : {winnerName} : {winnerElo}(+{winnerBonus}) / {loserName} : {loserElo}(-{loserMalus})",
+  "user_offline": "This user is not online"
+}

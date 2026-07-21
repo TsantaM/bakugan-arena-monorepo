@@ -47,11 +47,13 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
                 },
                 resolved: false,
                 message: [{
-                    text: `Gate Card Open ! ${card.name}`,
+                    key: 'gate_open',
+                    params: { name: card.name },
                     userName: GetUserName({ roomData: roomData, userId: slot.portalCard?.userId || '' }),
                     turn: roomData.turnState.turnCount
                 },
                 {
+                    // game-data description — not translated yet
                     text: `${card.description}`,
                     turn: roomData.turnState.turnCount,
                     description: true

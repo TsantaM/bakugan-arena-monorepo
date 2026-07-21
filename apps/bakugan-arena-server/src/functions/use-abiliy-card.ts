@@ -64,13 +64,15 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
             },
             resolve: false,
             message: [{
-                text: `Ability Card Activate : ${abilityToUse.name}`,
+                key: 'ability_activate',
+                params: { name: abilityToUse.name },
                 userName: GetUserName({
                     roomData: roomData,
                     userId: userId,
                 }),
                 turn: roomData.turnState.turnCount
             }, {
+                // game-data description — not translated yet
                 text: `${abilityToUse.description}`,
                 turn: roomData.turnState.turnCount,
                 description: true

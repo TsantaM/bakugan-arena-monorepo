@@ -13,10 +13,11 @@ import { BattleFieldPageProps } from "@bakugan-arena/game-data";
 import { useBattlefieldBattleLogStore } from "@/src/store/battlefield-battle-log-store";
 import { Button } from "@/components/ui/button";
 import { SkipForward } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 export default function BattleFieldPage({ player, opponent, roomId, userId, isPlayer }: BattleFieldPageProps) {
     const t = useTranslations('battlefield')
+    const locale = useLocale()
     const socket = useSocketStore((state) => state.socket)
     const battleLogEnabled = useBattlefieldBattleLogStore((state) => state.enabled)
     const [animationsPlaying, setAnimationsPlaying] = useState(false)
@@ -70,6 +71,7 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
         parentSocket: socketId,
         userImage: playerData?.image,
         opponentImage: opponentData?.image,
+        locale,
     })
 
     const viewerLink = buildGameboardLink("viewer.html", {
@@ -80,6 +82,7 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
         player1Image: playerData?.image,
         player2Id: opponentData?.id,
         player2Image: opponentData?.image,
+        locale,
     })
 
     const link = isPlayer ? playerLink : viewerLink

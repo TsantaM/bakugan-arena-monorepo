@@ -117,7 +117,7 @@ export const ChalengeSomeoneSocket = (io: Server, socket: Socket) => {
 
         const target = connectedUsers.find(u => u.userId === targetId)
         if (!target) {
-            socket.emit('no-player-found', { message: 'This user is not online' })
+            socket.emit('no-player-found', { key: 'user_offline', message: 'This user is not online' })
             return
         }
 

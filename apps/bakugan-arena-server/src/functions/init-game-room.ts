@@ -35,14 +35,22 @@ const initRoomState:
                 const { loser, winner } = data.status.elo
 
                 finished = {
-                    text: `Game is over ! The winner is ${winnerName} : ${winnerName} : ${winner.newElo}(+${winner.bonus}) / ${loserName} : ${loser.newElo}(-${loser.malus})`,
+                    key: 'game_over_winner_ranked',
+                    params: {
+                        winnerName: winnerName ?? '',
+                        loserName: loserName ?? '',
+                        winnerElo: winner.newElo,
+                        winnerBonus: winner.bonus,
+                        loserElo: loser.newElo,
+                        loserMalus: loser.malus,
+                    },
                     turn: data.turnState.turnCount
                 }
 
             } else {
 
                 finished = {
-                    text: `Game is over ! Equality !`,
+                    key: 'game_over_draw',
                     turn: data.turnState.turnCount
                 }
             }

@@ -161,7 +161,7 @@ export const CheckGameFinished = async ({
 
     if (result.reason === 'DRAW' || result.reason === 'NO_GATES') {
       const message: Message = {
-        text: 'Game is over ! Equality !',
+        key: 'game_over_draw',
         turn: roomState.turnState.turnCount
       }
 
