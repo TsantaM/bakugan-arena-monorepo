@@ -1,7 +1,6 @@
 import * as THREE from 'three'
 import { RemoveGateCardAnimation } from '../animations/remove-gate-card-animation'
 import type { portalSlotsTypeElement } from '@bakugan-arena/game-data'
-import { ComeBackBakuganAnimation } from '../animations/come-back-bakugan-animation'
 
 type RemoveGateCardFunctionAnimationProps = {
     plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>,
@@ -13,33 +12,24 @@ type RemoveGateCardFunctionAnimationProps = {
     bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[]
 }
 
-async function RemoveGateCardFunctionAnimation({ plane, slot, userId, scene, camera, gateCardMeshs, bakugansMeshs }: RemoveGateCardFunctionAnimationProps) {
+async function RemoveGateCardFunctionAnimation({ plane, slot, gateCardMeshs }: RemoveGateCardFunctionAnimationProps) {
+    // COME_BACK_BAKUGAN is already played as its own directive before REMOVE_GATE_CARD.
+    // Animate/remove every mesh named after this slot (guards against leftover duplicates).
+    const meshes = plane.children.filter(
+        (child): child is THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap> =>
+            child.name === slot.id && (child as THREE.Mesh).isMesh
+    )
 
-    async function gateCardRemover() {
-        const mesh = plane.getObjectByName(slot.id)
-        if (!mesh) return
-        RemoveGateCardAnimation({
-            mesh: mesh as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>,
-            gateCardMeshs
-        })
-    }
+    if (meshes.length === 0) return
 
-    if (slot.bakugans.length > 0) {
-        slot.bakugans.forEach((b) => {
-            ComeBackBakuganAnimation({
-                bakugan: b,
-                scene: scene,
-                slot: slot,
-                userId: userId,
-                camera: camera,
-                onCompleteFunction: gateCardRemover,
-                bakugansMeshs
-            }
-            )
-        })
-    } else {
-        await gateCardRemover()
-    }
+    await Promise.all(
+        meshes.map((mesh) =>
+            RemoveGateCardAnimation({
+                mesh,
+                gateCardMeshs,
+            })
+        )
+    )
 }
 
 export {

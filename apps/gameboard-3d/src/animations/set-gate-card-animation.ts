@@ -29,10 +29,10 @@ export async function SetGateCardAnimation({
             cardMesh.userData.cardName = cardData.name
         }
 
-        if(gateCardMeshs.some((mesh) => mesh.name === cardMesh.name)) {
-            const index = gateCardMeshs.findIndex((mesh) => mesh.name === cardMesh.name)
-            if(index === -1) return
-            gateCardMeshs.splice(index, 1)
+        for (let i = gateCardMeshs.length - 1; i >= 0; i--) {
+            if (gateCardMeshs[i].name === cardMesh.name) {
+                gateCardMeshs.splice(i, 1)
+            }
         }
 
         gateCardMeshs.push(cardMesh)

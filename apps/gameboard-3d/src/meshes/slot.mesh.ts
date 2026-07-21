@@ -2,6 +2,7 @@ import { GateCardsList, Slots, type portalSlotsTypeElement } from '@bakugan-aren
 import * as THREE from 'three'
 import { getSlotMeshPosition } from '../functions/get-slot-mesh-position'
 import { GetCharacterCardImage } from '../functions/get-character-card-image'
+import { killGateCardTweens, removeFromGateCardMeshs } from '../animations/remove-gate-card-animation'
 
 type SlotMeshUsersData = {
     cardName: string | undefined,
@@ -18,6 +19,28 @@ const slotMesh = new THREE.Mesh(
         side: THREE.DoubleSide,
     })
 )
+
+function clearExistingSlotMeshes({
+    plane,
+    slotId,
+    gateCardMeshs,
+}: {
+    plane: THREE.Mesh
+    slotId: string
+    gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[]
+}) {
+    const existing = plane.children.filter(
+        (child): child is THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap> =>
+            child.name === slotId && (child as THREE.Mesh).isMesh
+    )
+
+    for (const mesh of existing) {
+        killGateCardTweens(mesh)
+        mesh.removeFromParent()
+    }
+
+    removeFromGateCardMeshs(slotId, gateCardMeshs)
+}
 
 function createSlotMesh({ slot, plane, userId, gateCardMeshs, isSpectator = false }: { slot: portalSlotsTypeElement, plane: THREE.Mesh, userId: string, isSpectator: boolean, gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[] }) {
     const mesh = new THREE.Mesh(
@@ -77,11 +100,9 @@ function createSlotMesh({ slot, plane, userId, gateCardMeshs, isSpectator = fals
     const position = getSlotMeshPosition({ index: index })
     mesh.position.set(position.x, position.y, position.z)
     mesh.name = slot.id
-    data.state.canceled = false
-    data.state.open = false
     mesh.userData = data
     plane.add(mesh)
 
 }
 
-export { slotMesh, createSlotMesh, type SlotMeshUsersData }
+export { slotMesh, createSlotMesh, clearExistingSlotMeshes, type SlotMeshUsersData }

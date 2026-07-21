@@ -11,6 +11,8 @@ type Props = {
 type RemoveGateCardDirectiveAnimationType = ({ roomState, animations, slot }: Props) => void
 
 export const RemoveGateCardDirectiveAnimation: RemoveGateCardDirectiveAnimationType = ({ roomState, animations, slot }) => {
+    // Snapshot so ResetSlot (often called right after) cannot mutate animation payloads
+    const slotSnapshot = structuredClone(slot)
 
     slot.bakugans.forEach((bakugan) => {
 
@@ -19,8 +21,8 @@ export const RemoveGateCardDirectiveAnimation: RemoveGateCardDirectiveAnimationT
         const comeBackBakuganDirective: AnimationDirectivesTypes = {
             type: 'COME_BACK_BAKUGAN',
             data: {
-                bakugan: bakugan,
-                slot: slot
+                bakugan: structuredClone(bakugan),
+                slot: slotSnapshot
             },
             resolved: false,
         }
@@ -35,7 +37,7 @@ export const RemoveGateCardDirectiveAnimation: RemoveGateCardDirectiveAnimationT
     const removeGateCard: AnimationDirectivesTypes = {
         type: 'REMOVE_GATE_CARD',
         data: {
-            slot: slot
+            slot: slotSnapshot
         },
         resolved: false,
     }

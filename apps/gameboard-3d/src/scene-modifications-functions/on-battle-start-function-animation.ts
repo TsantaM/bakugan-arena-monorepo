@@ -9,7 +9,7 @@ async function OnBattleStartFunctionAnimation({ slot, userId }: { slot: portalSl
 
     const left_data_container = document.getElementById('left-data-container')
     const right_data_container = document.getElementById('right-data-container')
-    const bakugans = slot.bakugans
+    const bakugans = [...slot.bakugans]
 
     const userBakugan = bakugans.filter((b) => b.userId === userId)
     const container = CreateBakuganPreviewContainer({
@@ -25,26 +25,24 @@ async function OnBattleStartFunctionAnimation({ slot, userId }: { slot: portalSl
     })
     right_data_container?.appendChild(opponentContainer)
 
-    bakugans.splice(bakugans.indexOf(userBakugan[0]), 1)
-    bakugans.splice(bakugans.indexOf(opponentsBakugan[0]), 1)
+    const remaining = bakugans.filter(
+        (b) => b !== userBakugan[0] && b !== opponentsBakugan[0]
+    )
 
-    // await BakuganPreviewOnBattleStartAnimation(container.id)
-    // await BakuganPreviewOnBattleStartAnimation(opponentContainer.id)
+    await Promise.all(
+        remaining.map((bakugan) => {
+            const powerContainer = document.getElementById(`${bakugan.userId}-${bakugan.slot_id}`)
+            if (!powerContainer) return Promise.resolve()
 
-    bakugans.forEach((bakugan) => {
+            const final_power = parseInt(powerContainer.innerHTML) + bakugan.currentPower
 
-        const powerContainer = document.getElementById(`${bakugan.userId}-${bakugan.slot_id}`)
-
-        if (!powerContainer) return
-        const final_power = parseInt(powerContainer.innerHTML) + bakugan.currentPower
-
-        AddRenfortToBattleField({
-            bakugan: bakugan,
-            userId: userId,
-            final_power: final_power
+            return AddRenfortToBattleField({
+                bakugan: bakugan,
+                userId: userId,
+                final_power: final_power
+            })
         })
-
-    })
+    )
 
 }
 

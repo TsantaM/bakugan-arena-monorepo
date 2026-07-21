@@ -39,7 +39,10 @@ function updateEliminatedUI({
 async function ElimineBakuganFunctionAnimation({ bakugan, scene, slot, userId, bakugansMeshs }: {
     scene: THREE.Scene, bakugan: bakuganOnSlot, slot: portalSlotsTypeElement, userId: string, bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[]
 }) {
-
+    const slotAfterElim: portalSlotsTypeElement = {
+        ...slot,
+        bakugans: slot.bakugans.filter((b) => b.id !== bakugan.id),
+    }
 
     await ElimineBakuganAnimation({
         bakugan: bakugan,
@@ -47,18 +50,20 @@ async function ElimineBakuganFunctionAnimation({ bakugan, scene, slot, userId, b
         slot: slot,
         userId: userId,
         bakugansMeshs,
-        onCompleteFunction: () => {
-            slot.bakugans.filter((baks) => baks.userId === bakugan.userId).forEach((b) => {
-                if (b.userId === bakugan.userId && b.id !== bakugan.id) {
+        onCompleteFunction: async () => {
+            const remaining = slotAfterElim.bakugans.filter(
+                (b) => b.userId === bakugan.userId
+            )
+            await Promise.all(
+                remaining.map((b) =>
                     MoveBakugan({
                         bakugan: b,
                         scene: scene,
-                        slot: slot,
+                        slot: slotAfterElim,
                         userId: userId,
                     })
-                }
-
-            })
+                )
+            )
         },
     })
 

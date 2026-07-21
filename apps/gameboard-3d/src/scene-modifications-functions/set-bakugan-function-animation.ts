@@ -26,28 +26,29 @@ async function SetBakuganFunctionAnimation({ bakugan, scene, slot, camera, userI
     if (!bakuganMesh) return
     if (!sphere) return
 
+    const alliesToReposition = slot.bakugans.filter(
+        (b) => b.userId === bakugan.userId && b.id !== bakugan.id
+    )
 
-    slot.bakugans.filter((baks) => baks.userId === bakugan.userId).forEach((b) => {
-        if (b.userId === bakugan.userId && b.id !== bakugan.id) {
+    await Promise.all([
+        ...alliesToReposition.map((b) =>
             MoveBakugan({
                 bakugan: b,
                 scene: scene,
                 slot: slot,
                 userId: userId
             })
-        }
-
-    })
-
-    await SetBakuganAnimation({
-        bakugan: bakugan,
-        bakuganMesh: bakuganMesh as THREE.Sprite<THREE.Object3DEventMap>,
-        camera: camera,
-        scene: scene,
-        slot: slot,
-        sphere: sphere as THREE.Mesh<THREE.SphereGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>,
-        userId: userId
-    })
+        ),
+        SetBakuganAnimation({
+            bakugan: bakugan,
+            bakuganMesh: bakuganMesh as THREE.Sprite<THREE.Object3DEventMap>,
+            camera: camera,
+            scene: scene,
+            slot: slot,
+            sphere: sphere as THREE.Mesh<THREE.SphereGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>,
+            userId: userId
+        }),
+    ])
 }
 
 export {

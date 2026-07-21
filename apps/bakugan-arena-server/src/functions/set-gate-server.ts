@@ -43,12 +43,17 @@ export const UpdateGate: ({ roomId, gateId, slot, userId }: setGateCardProps) =>
     // ENG: If any of these entities are missing, stop execution
     if (!slotToUpdate || !deckToUpdate || !newPlayerState) return
 
-    // FR: Nouveau slot : on bloque le placement (can_set = false) et on associe la gate au slot
-    // ENG: New slot: disable further placement (can_set = false) and attach the gate to the slot
+    // Always reset state: spreading slotToUpdate would reuse a previous open/canceled/blocked.
     const newSlotState = {
         ...slotToUpdate,
         can_set: false,
-        portalCard: { key: gateId, userId }
+        portalCard: { key: gateId, userId },
+        state: {
+            open: false,
+            canceled: false,
+            blocked: false as const,
+        },
+        activateAbilities: [],
     }
 
     // FR: Nouveau deck du joueur : met à jour les gates (la gate jouée devient "unusable")
@@ -94,7 +99,7 @@ export const UpdateGate: ({ roomId, gateId, slot, userId }: setGateCardProps) =>
     const animation: AnimationDirectivesTypes = {
         type: 'SET_GATE_CARD',
         data: {
-            slot: newSlotState,
+            slot: structuredClone(newSlotState),
         },
         resolved: false,
         message: [{

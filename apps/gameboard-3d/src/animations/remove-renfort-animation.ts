@@ -11,59 +11,62 @@ export async function RemoveRenforAnimation({ bakugan, userId }: { bakugan: baku
         const container = document.getElementById(containerId)
         const bakuganAttributColor = getAttributColor(bakugan.attribut)
 
+        if (!container) return resolve()
 
-        if (container) {
-            const overlay = document.createElement('div')
-            overlay.classList.add('container-overlay')
-            overlay.id = `${container.id}-overlay`
-            container.appendChild(overlay)
+        const overlay = document.createElement('div')
+        overlay.classList.add('container-overlay')
+        overlay.id = `${container.id}-overlay`
+        container.appendChild(overlay)
 
-            const powerContainer = document.getElementById(`${bakugan.userId}-${bakugan.slot_id}`)
-            if (!powerContainer) return resolve()
-            const newPower = parseInt(powerContainer.textContent) - bakugan.currentPower
-            const spritesContainer = document.querySelectorAll('.sprite-container')
-            const DataKey = `${bakugan.key}-${bakugan.userId}-${bakugan.slot_id}`
+        const powerContainer = document.getElementById(`${bakugan.userId}-${bakugan.slot_id}`)
+        if (!powerContainer) {
+            overlay.remove()
+            return resolve()
+        }
+        const newPower = parseInt(powerContainer.textContent || '0') - bakugan.currentPower
+        const spritesContainer = document.querySelectorAll('.sprite-container')
+        const DataKey = `${bakugan.key}-${bakugan.userId}-${bakugan.slot_id}`
 
-
-            const Sprite = [...spritesContainer].some((container) => container.getAttribute('data-key') === DataKey)
-            if (!Sprite) return resolve()
-
-            const timeline = gsap.timeline({
-                onComplete() {
-                    return resolve()
-                }
-            })
-            timeline.fromTo(overlay, {
-                background: 'none'
-            }, {
-                background: bakuganAttributColor,
-                duration: 0.5,
-                onComplete: () => {
-                    spritesContainer.forEach((sprite) => {
-                        if (sprite.getAttribute('data-key') === DataKey) {
-                            sprite.remove()
-                        }
-                    })
-                }
-            })
-
-            timeline.fromTo(overlay, {
-                background: bakuganAttributColor,
-                opacity: 1
-            }, {
-                opacity: 0,
-                duration: 0.5,
-                onComplete: () => {
-                    overlay.remove()
-                    PowerChangeNumberAnimation({
-                        newPower: newPower,
-                        slotId: bakugan.slot_id,
-                        userId: bakugan.userId
-                    })
-                }
-            },)
+        const Sprite = [...spritesContainer].some((container) => container.getAttribute('data-key') === DataKey)
+        if (!Sprite) {
+            overlay.remove()
+            return resolve()
         }
 
+        const timeline = gsap.timeline({
+            onComplete: async () => {
+                await PowerChangeNumberAnimation({
+                    newPower: newPower,
+                    slotId: bakugan.slot_id,
+                    userId: bakugan.userId
+                })
+                resolve()
+            }
+        })
+        timeline.fromTo(overlay, {
+            background: 'none'
+        }, {
+            background: bakuganAttributColor,
+            duration: 0.5,
+            onComplete: () => {
+                spritesContainer.forEach((sprite) => {
+                    if (sprite.getAttribute('data-key') === DataKey) {
+                        sprite.remove()
+                    }
+                })
+            }
+        })
+
+        timeline.fromTo(overlay, {
+            background: bakuganAttributColor,
+            opacity: 1
+        }, {
+            opacity: 0,
+            duration: 0.5,
+            onComplete: () => {
+                overlay.remove()
+            }
+        })
     })
 
 }

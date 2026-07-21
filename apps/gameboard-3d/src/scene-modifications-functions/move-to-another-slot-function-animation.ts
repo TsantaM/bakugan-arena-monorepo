@@ -11,18 +11,26 @@ type MoveToAnotherSlotFunctionAnimationProps = {
 }
 
 async function MoveToAnotherSlotFunctionAnimation({ scene, bakugan, initialSlot, newSlot, userId }: MoveToAnotherSlotFunctionAnimationProps) {
+    const alliesOnInitial = initialSlot.bakugans.filter(
+        (b) => b.userId === bakugan.userId && b.key !== bakugan.key
+    )
+    const slotWithoutMover: portalSlotsTypeElement = {
+        ...initialSlot,
+        bakugans: initialSlot.bakugans.filter(
+            (b) => !(b.key === bakugan.key && b.userId === bakugan.userId)
+        ),
+    }
 
-    initialSlot.bakugans.filter((baks) => baks.userId === bakugan.userId).forEach((b) => {
-        if (b.userId === bakugan.userId && b.key !== bakugan.key) {
+    await Promise.all(
+        alliesOnInitial.map((b) =>
             MoveBakugan({
                 bakugan: b,
                 scene: scene,
-                slot: initialSlot,
+                slot: slotWithoutMover,
                 userId: userId
             })
-        }
-
-    })
+        )
+    )
 
     await MoveBakugan({
         bakugan: bakugan,
@@ -31,19 +39,20 @@ async function MoveToAnotherSlotFunctionAnimation({ scene, bakugan, initialSlot,
         userId: userId
     })
 
-    newSlot.bakugans.filter((baks) => baks.userId === bakugan.userId).forEach((b) => {
-        if (b.userId === bakugan.userId && b.key !== bakugan.key) {
+    const alliesOnNew = newSlot.bakugans.filter(
+        (b) => b.userId === bakugan.userId && b.key !== bakugan.key
+    )
+
+    await Promise.all(
+        alliesOnNew.map((b) =>
             MoveBakugan({
                 bakugan: b,
                 scene: scene,
                 slot: newSlot,
                 userId: userId
             })
-        }
-
-    })
-
-
+        )
+    )
 }
 
 export {

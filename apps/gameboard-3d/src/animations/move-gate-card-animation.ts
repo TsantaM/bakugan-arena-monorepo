@@ -14,19 +14,18 @@ type MoveGateCardProps = {
 
 
 export async function MoveGateCard({ plane, slot, newSlot, scene, userId }: MoveGateCardProps): Promise<void> {
-    return new Promise((resolve) => {
-        const initialSlotMesh = plane.getObjectByName(slot.id)
+    const initialSlotMesh = plane.getObjectByName(slot.id)
 
-        const initialSlotPosition = getSlotMeshPosition({ index: Slots.indexOf(slot.id) })
-        const newSlotPosition = getSlotMeshPosition({ index: Slots.indexOf(newSlot.id) })
+    const initialSlotPosition = getSlotMeshPosition({ index: Slots.indexOf(slot.id) })
+    const newSlotPosition = getSlotMeshPosition({ index: Slots.indexOf(newSlot.id) })
 
-        if (!initialSlotMesh || !initialSlotPosition || !newSlotPosition) return resolve()
+    if (!initialSlotMesh || !initialSlotPosition || !newSlotPosition) return
 
-
+    const moveGate = new Promise<void>((resolve) => {
         const timeline = gsap.timeline({
             onComplete: () => {
                 initialSlotMesh.name = newSlot.id
-                resolve() // ✅ La promesse se résout à la fin du mouvement
+                resolve()
             }
         })
 
@@ -48,17 +47,21 @@ export async function MoveGateCard({ plane, slot, newSlot, scene, userId }: Move
             duration: 1,
             ease: 'power2.inOut'
         })
+    })
 
-        if(slot.bakugans.length > 0) {
-            slot.bakugans.forEach(async (b) => {
-                await MoveBakugan({
+    const moveBakugans = slot.bakugans.length > 0
+        ? Promise.all(
+            slot.bakugans.map((b) =>
+                MoveBakugan({
                     bakugan: b,
                     scene: scene,
                     slot: newSlot,
                     userId: userId,
                     duration: 1
                 })
-            })
-        }
-    })
+            )
+        )
+        : Promise.resolve()
+
+    await Promise.all([moveGate, moveBakugans])
 }

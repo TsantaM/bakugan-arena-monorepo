@@ -15,17 +15,19 @@ type Props = {
 type PowerChangeDirectiveAnumationType = ({ bakugans, powerChange, malus, animations, turn, finalPower, roomState }: Props) => void
 
 export const PowerChangeDirectiveAnumation: PowerChangeDirectiveAnumationType = ({ bakugans, powerChange, malus = false, animations, turn, finalPower, roomState }) => {
+    // Snapshot bakugans so later PowerChange mutations don't rewrite currentPower on older directives
+    const bakugansSnapshot = structuredClone(bakugans)
 
     const powerChangeDirective: AnimationDirectivesTypes = {
         type: 'POWER_CHANGE',
         data: {
-            bakugan: bakugans,
+            bakugan: bakugansSnapshot,
             powerChange: powerChange,
             malus: malus,
             finalPower: finalPower
         },
         resolved: false,
-        message: bakugans.map((b) => ({
+        message: bakugansSnapshot.map((b) => ({
             text: malus ? `${BakuganList.find((bakugan) => bakugan.key === b.key)?.name || ''} power decreased of ${powerChange} Gs !` : `${BakuganList.find((bakugan) => bakugan.key === b.key)?.name || ''} power increased of ${powerChange} Gs !`,
             turn: turn
         }))

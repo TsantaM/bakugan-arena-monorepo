@@ -9,80 +9,84 @@ function AnimatePreviewAttributeChange({
 }: {
     bakugan: bakuganOnSlot
     newAttribut: attribut
-}) {
-    const container = document.querySelector(
-        `[data-key="${bakugan.key}-${bakugan.userId}-${bakugan.slot_id}"]`
-    ) as HTMLDivElement | null
+}): Promise<void> {
+    return new Promise((resolve) => {
+        const container = document.querySelector(
+            `[data-key="${bakugan.key}-${bakugan.userId}-${bakugan.slot_id}"]`
+        ) as HTMLDivElement | null
 
-    if (!container) return
+        if (!container) return resolve()
 
-    const background = container.querySelector(
-        '.attribut-background'
-    ) as HTMLImageElement | null
+        const background = container.querySelector(
+            '.attribut-background'
+        ) as HTMLImageElement | null
 
-    const sprite = container.querySelector(
-        '.sprite'
-    ) as HTMLImageElement | null
+        const sprite = container.querySelector(
+            '.sprite'
+        ) as HTMLImageElement | null
 
-    const attributIcon = document.getElementById(
-        `${bakugan.attribut}-attribut-image-${bakugan.userId}-${bakugan.key}`
-    ) as HTMLImageElement | null
+        const attributIcon = document.getElementById(
+            `${bakugan.attribut}-attribut-image-${bakugan.userId}-${bakugan.key}`
+        ) as HTMLImageElement | null
 
-    if (!background || !sprite) return
+        if (!background || !sprite) return resolve()
 
-    const oldColor = getAttributColor(bakugan.attribut)
-    const nextColor = getAttributColor(newAttribut)
+        const oldColor = getAttributColor(bakugan.attribut)
+        const nextColor = getAttributColor(newAttribut)
 
-    const glow = {
-        value: 0,
-    }
-
-    gsap.timeline()
-
-        // Glow attribut actuel
-        .to(glow, {
-            value: 25,
-            duration: 0.2,
-            onUpdate: () => {
-                container.style.filter =
-                    `drop-shadow(0 0 ${glow.value}px ${oldColor})`
-            },
-        })
-
-        // Transition vers nouvel attribut
-        .to(glow, {
-            value: 35,
-            duration: 0.4,
-            onStart: () => {
-                background.src =
-                    `/images/attributs-background/${newAttribut.toUpperCase()}.png`
-
-                sprite.src =
-                    `/images/bakugans/sphere/${bakugan.image}/${newAttribut.toUpperCase()}.png`
-
-                if (attributIcon) {
-                    attributIcon.src = `/images/attributs/${newAttribut.toUpperCase()}.png`
-                }
-
-            },
-            onUpdate: () => {
-                container.style.filter =
-                    `drop-shadow(0 0 ${glow.value}px ${nextColor})`
-            },
-        })
-
-        // Extinction
-        .to(glow, {
+        const glow = {
             value: 0,
-            duration: 0.3,
-            onUpdate: () => {
-                container.style.filter =
-                    `drop-shadow(0 0 ${glow.value}px ${nextColor})`
-            },
+        }
+
+        gsap.timeline({
             onComplete: () => {
                 container.style.filter = ''
+                resolve()
             },
         })
+
+            // Glow attribut actuel
+            .to(glow, {
+                value: 25,
+                duration: 0.2,
+                onUpdate: () => {
+                    container.style.filter =
+                        `drop-shadow(0 0 ${glow.value}px ${oldColor})`
+                },
+            })
+
+            // Transition vers nouvel attribut
+            .to(glow, {
+                value: 35,
+                duration: 0.4,
+                onStart: () => {
+                    background.src =
+                        `/images/attributs-background/${newAttribut.toUpperCase()}.png`
+
+                    sprite.src =
+                        `/images/bakugans/sphere/${bakugan.image}/${newAttribut.toUpperCase()}.png`
+
+                    if (attributIcon) {
+                        attributIcon.src = `/images/attributs/${newAttribut.toUpperCase()}.png`
+                    }
+
+                },
+                onUpdate: () => {
+                    container.style.filter =
+                        `drop-shadow(0 0 ${glow.value}px ${nextColor})`
+                },
+            })
+
+            // Extinction
+            .to(glow, {
+                value: 0,
+                duration: 0.3,
+                onUpdate: () => {
+                    container.style.filter =
+                        `drop-shadow(0 0 ${glow.value}px ${nextColor})`
+                },
+            })
+    })
 }
 
 export async function ChangeAttributAnimation({
@@ -94,45 +98,41 @@ export async function ChangeAttributAnimation({
     scene: THREE.Scene
     attribut: attribut
 }): Promise<void> {
-    return new Promise((resolve) => {
-        const bakuganMesh = scene.getObjectByName(
-            `${bakugan.key}-${bakugan.userId}`
-        ) as THREE.Sprite
+    const bakuganMesh = scene.getObjectByName(
+        `${bakugan.key}-${bakugan.userId}`
+    ) as THREE.Sprite | undefined
 
-        if (!bakuganMesh) {
-            resolve()
-            return
-        }
+    if (!bakuganMesh) {
+        await AnimatePreviewAttributeChange({
+            bakugan,
+            newAttribut: attribut,
+        })
+        return
+    }
 
-        const material = bakuganMesh.material as THREE.SpriteMaterial
+    const material = bakuganMesh.material as THREE.SpriteMaterial
 
-        const oldColor = new THREE.Color(
-            getAttributColor(bakugan.attribut)
-        )
+    const oldColor = new THREE.Color(
+        getAttributColor(bakugan.attribut)
+    )
 
-        const newColor = new THREE.Color(
-            getAttributColor(attribut)
-        )
+    const newColor = new THREE.Color(
+        getAttributColor(attribut)
+    )
 
-        const originalScale = {
-            x: bakuganMesh.scale.x,
-            y: bakuganMesh.scale.y,
-            z: bakuganMesh.scale.z,
-        }
+    const originalScale = {
+        x: bakuganMesh.scale.x,
+        y: bakuganMesh.scale.y,
+        z: bakuganMesh.scale.z,
+    }
 
-        const newTexture = new THREE.TextureLoader().load(
-            `./../images/bakugans/sphere/${bakugan.image}/${attribut.toUpperCase()}.png`
-        )
+    const newTexture = new THREE.TextureLoader().load(
+        `./../images/bakugans/sphere/${bakugan.image}/${attribut.toUpperCase()}.png`
+    )
 
+    await new Promise<void>((resolve) => {
         gsap.timeline({
-            onComplete: () => {
-                AnimatePreviewAttributeChange({
-                    bakugan,
-                    newAttribut: attribut,
-                })
-
-                resolve()
-            },
+            onComplete: () => resolve(),
         })
 
             // 1. Le Bakugan commence à briller avec son attribut actuel
@@ -189,5 +189,10 @@ export async function ChangeAttributAnimation({
                 },
                 "<"
             )
+    })
+
+    await AnimatePreviewAttributeChange({
+        bakugan,
+        newAttribut: attribut,
     })
 }

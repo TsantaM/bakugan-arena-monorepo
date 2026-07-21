@@ -393,6 +393,7 @@ export const GateBuilding: abilityCardsType = {
             || usableSlots.find((slot) => slot.id === 'slot-5')
         const slotTarget = preferredSlot ?? usableSlots[Math.floor(Math.random() * usableSlots.length)]
 
+        slotTarget.can_set = false
         slotTarget.portalCard = {
             key: "reacteur-subterra",
             userId: userId
@@ -403,11 +404,12 @@ export const GateBuilding: abilityCardsType = {
             canceled: false,
             open: false
         }
+        slotTarget.activateAbilities = []
 
         const animationToAdd: AnimationDirectivesTypes = {
             type: 'SET_GATE_CARD',
             data: {
-                slot: slotTarget,
+                slot: structuredClone(slotTarget),
             },
             resolved: false,
             message: [{

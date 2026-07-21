@@ -51,6 +51,12 @@ export function applySetGate({
     ...slotToUpdate,
     can_set: false,
     portalCard: { key: gateId, userId },
+    state: {
+      open: false,
+      canceled: false,
+      blocked: false as const,
+    },
+    activateAbilities: [],
   }
 
   const newDeckGates = updateDeckGates(deckToUpdate, gateId)
