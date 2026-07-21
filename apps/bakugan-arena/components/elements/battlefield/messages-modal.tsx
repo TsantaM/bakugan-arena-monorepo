@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 import { BattleLogPanel, type BattleLogTurn } from "./battle-log-panel"
 import { TurnMessagesContainer } from "./turn-messages-container"
+import { useTranslations } from "next-intl"
 
 const LOG_HIDE_DELAY_MS = 1800
 
@@ -61,6 +62,8 @@ export default function MessagesModal({
     battleLogEnabled?: boolean
     embedded?: boolean
 }) {
+    const t = useTranslations('battlefield')
+    const tCommon = useTranslations('common')
     const [messagesContainer, setMessagesContainer] = useState<BattleLogTurn[]>([])
     const [liveLogTurns, setLiveLogTurns] = useState<BattleLogTurn[]>([])
     const [isLogVisible, setIsLogVisible] = useState(false)
@@ -219,7 +222,7 @@ export default function MessagesModal({
                 <DialogTrigger asChild>
                     <Button
                         variant="outline"
-                        aria-label="Messages"
+                        aria-label={t('messages.aria')}
                         className={
                             embedded
                                 ? undefined
@@ -234,7 +237,7 @@ export default function MessagesModal({
 
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>{`${player} VS ${opponent}`}</DialogTitle>
+                        <DialogTitle>{tCommon('labels.vs', { p1: player ?? '', p2: opponent ?? '' })}</DialogTitle>
                     </DialogHeader>
                     <ScrollArea className="h-100" scroll="bottom">
                         {[...messagesContainer]
@@ -252,7 +255,7 @@ export default function MessagesModal({
                         <div className="flex items-end gap-2 border rounded-2xl p-1 shadow-sm bg-background mt-2">
                             <Textarea
                                 ref={textareaRef}
-                                placeholder="Write your message..."
+                                placeholder={tCommon('placeholders.writeMessage')}
                                 className="min-h-10 max-h-30 resize-none border-0 focus-visible:ring-0"
                                 onKeyDown={(e) => {
                                     if (e.key === "Enter" && !e.shiftKey) {

@@ -7,9 +7,11 @@ import DeckPreview from "./deck-preview";
 import { useQuery } from "@tanstack/react-query";
 import { GetUserDecks } from "@/src/actions/deck-builder/get-deck-data";
 import ImportDeck from "./import-deck";
+import { useTranslations } from "next-intl";
 // import { GetUserDecks } from "@/src/actions/deck-builder/get-deck-data";
 
 export default function DeckBuilerLanding() {
+    const t = useTranslations('deckBuilder')
 
     const GetUsersDecks = async () => {
         return await GetUserDecks()
@@ -33,7 +35,7 @@ export default function DeckBuilerLanding() {
                     </CardHeader>
                     <CardContent className={GetUsersDecksQuery.data && GetUsersDecksQuery.data.length > 0 ? 'grid grid-cols-1 lg:grid-cols-3 gap-3' : ''}>
                         {
-                            GetUsersDecksQuery.data && GetUsersDecksQuery.data.length > 0 ? GetUsersDecksQuery.data.map((d, index) => <DeckPreview key={index} data={d} />) : <p className="text-center">{`You d'ont have deck create one`}</p>
+                            GetUsersDecksQuery.data && GetUsersDecksQuery.data.length > 0 ? GetUsersDecksQuery.data.map((d, index) => <DeckPreview key={index} data={d} />) : <p className="text-center">{t('empty')}</p>
                         }
                     </CardContent>
                 </Card>

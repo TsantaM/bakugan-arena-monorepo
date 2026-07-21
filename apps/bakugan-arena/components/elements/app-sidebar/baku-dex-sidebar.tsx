@@ -14,8 +14,9 @@ import {
 } from "@/components/ui/sidebar"
 import { UserType } from "@/src/actions/getUserSession"
 import { Home, SwatchBook } from "lucide-react"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
-import { ReactNode } from "react"
+import { ReactNode, useMemo } from "react"
 
 type LinksDashboardType = {
     icone: ReactNode,
@@ -23,42 +24,45 @@ type LinksDashboardType = {
     href: string
 }
 
-const LinksDashboard: LinksDashboardType[] = [
-    {
-        icone: <SwatchBook />,
-        label: 'Bakugans',
-        href: '/dashboard/baku-dex'
-    },
-    {
-        icone: <SwatchBook />,
-        label: 'Ability Cards',
-        href: '/dashboard/baku-dex/ability-cards'
-    },
-    {
-        icone: <SwatchBook />,
-        label: 'Exclusives Ability Cards',
-        href: '/dashboard/baku-dex/exclusive-ability-cards'
-    },
-    {
-        icone: <SwatchBook />,
-        label: 'Gate Cards',
-        href: '/dashboard/baku-dex/gate-cards'
-    }
-]
-
 export default function BakuDexSidebar({ user }: { user: UserType | undefined }) {
+    const t = useTranslations('nav')
+    const tCommon = useTranslations('common')
+
+    const LinksDashboard: LinksDashboardType[] = useMemo(() => [
+        {
+            icone: <SwatchBook />,
+            label: t('bakuDexLinks.bakugans'),
+            href: '/dashboard/baku-dex'
+        },
+        {
+            icone: <SwatchBook />,
+            label: t('bakuDexLinks.abilityCards'),
+            href: '/dashboard/baku-dex/ability-cards'
+        },
+        {
+            icone: <SwatchBook />,
+            label: t('bakuDexLinks.exclusiveAbilityCards'),
+            href: '/dashboard/baku-dex/exclusive-ability-cards'
+        },
+        {
+            icone: <SwatchBook />,
+            label: t('bakuDexLinks.gateCards'),
+            href: '/dashboard/baku-dex/gate-cards'
+        }
+    ], [t])
+
     return (
         <Sidebar variant="inset">
             <SidebarHeader>
                 <div className='flex items-center gap-2'>
                     <Logo height={50} width={50} />
-                    <h1 className='font-bold'>Bakugan Arena</h1>
+                    <h1 className='font-bold'>{tCommon('brand')}</h1>
                 </div>
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
                     <SidebarGroupLabel>
-                        Baku-Dex Navigation
+                        {t('group.bakuDexNavigation')}
                     </SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
@@ -66,7 +70,7 @@ export default function BakuDexSidebar({ user }: { user: UserType | undefined })
                                 <SidebarMenuButton asChild>
                                     <Link href='/'>
                                         <Home />
-                                        <span>Home</span>
+                                        <span>{t('home')}</span>
                                     </Link>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
@@ -77,7 +81,7 @@ export default function BakuDexSidebar({ user }: { user: UserType | undefined })
                                     <SidebarMenuButton asChild>
                                         <Link href='/dashboard'>
                                             <Home />
-                                            <span>Dashboard</span>
+                                            <span>{t('dashboard')}</span>
                                         </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>

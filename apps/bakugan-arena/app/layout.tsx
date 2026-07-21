@@ -1,9 +1,15 @@
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import TanstackProvider from "../src/providers/queryClientProvider";
 import { TouchProvider } from "@/components/ui/hybrid-tooltip";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages, getTranslations } from "next-intl/server";
+import { getTextDirection } from "@bakugan-arena/i18n";
+import { DirectionProvider } from "@/components/ui/direction";
+import LocaleStorageSync from "@/components/elements/language-switcher/locale-storage-sync";
+import { parseLocale } from "@/src/i18n/config";
+import type { Metadata } from "next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,28 +21,40 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Bakugan Arena",
-  description: "...Bakugan Arena is a fan game inspired by Pokémon battle simulator Pkemon Showdown",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('common')
+  return {
+    title: t('brand'),
+    description: t('metadata.description'),
+  }
+}
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = parseLocale(await getLocale())
+  const messages = await getMessages()
+  const direction = getTextDirection(locale)
+
   return (
-    <html lang="fr" suppressHydrationWarning>
+    <html lang={locale} dir={direction} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden flex flex-col`}
       >
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
-          <TanstackProvider>
-            <TouchProvider>
-              {children}
-            </TouchProvider>
-          </TanstackProvider>
-        </ThemeProvider>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <DirectionProvider dir={direction}>
+            <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
+              <TanstackProvider>
+                <TouchProvider>
+                  <LocaleStorageSync />
+                  {children}
+                </TouchProvider>
+              </TanstackProvider>
+            </ThemeProvider>
+          </DirectionProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

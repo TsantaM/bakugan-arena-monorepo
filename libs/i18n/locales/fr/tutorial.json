@@ -1,0 +1,79 @@
+{
+  "title": "Bakugan Arena – Tutoriel officiel",
+  "overview": {
+    "title": "1. Présentation du jeu",
+    "body": "Bakugan Arena est un jeu de combat stratégique au tour par tour où les joueurs déploient des Bakugans, utilisent des cartes capacité et contrôlent des cartes portail pour vaincre leur adversaire.",
+    "objective": "L'objectif est simple : éliminer tous les Bakugans ennemis ou survivre plus longtemps que votre adversaire grâce au jeu stratégique."
+  },
+  "coreRules": {
+    "title": "2. Règles de base",
+    "intro": "Chaque joueur commence la partie avec :",
+    "bakugans": "3 Bakugans",
+    "abilityCards": "3 cartes capacité (maximum utilisable par partie)",
+    "gateCards": "3 cartes portail (maximum utilisable par partie)"
+  },
+  "victory": {
+    "title": "3. Conditions de victoire",
+    "intro": "Un joueur gagne la partie si :",
+    "eliminate": "Les 3 Bakugans adverses sont éliminés",
+    "timer": "Le chronomètre de l'adversaire atteint 0 (uniquement après que les conditions du Tour 0 ne soient plus actives)"
+  },
+  "draw": {
+    "title": "4. Conditions d'égalité",
+    "intro": "Un match se termine par une égalité si :",
+    "noGates": "Plus aucune carte portail ne peut être placée par aucun des joueurs",
+    "mutualElimination": "Tous les Bakugans des deux joueurs sont éliminés au même tour",
+    "timerTurn0": "Le chronomètre d'un joueur atteint 0 pendant le Tour 0"
+  },
+  "battle": {
+    "title": "5. Système de combat",
+    "intro": "Un combat commence lorsque deux Bakugans adverses atterrissent sur la même carte portail.",
+    "duration": "Chaque combat dure 2 tours :",
+    "turn1Title": "Tour 1",
+    "turn1First": "Le joueur qui a occupé la carte portail en premier agit en premier",
+    "turn1May": "Il peut :",
+    "turn1Ability": "Utiliser une carte capacité",
+    "turn1Gate": "Activer la carte portail (s'il la possède, et qu'elle n'est ni déjà activée ni bloquée)",
+    "turn2Title": "Tour 2",
+    "turn2Body": "L'adversaire joue son tour avec les mêmes options",
+    "endTitle": "Résolution de fin de combat",
+    "endIntro": "Après les deux tours :",
+    "endGate": "L'effet de la carte portail est résolu (le cas échéant)",
+    "endEliminate": "Le Bakugan avec le niveau de puissance le plus bas est éliminé"
+  },
+  "abilities": {
+    "title": "6. Système des cartes capacité",
+    "filter": "Les cartes capacité sont automatiquement filtrées par le jeu avant d'être ajoutées à la main d'un joueur.",
+    "unused": "Si une carte ne peut pas être utilisée dans le contexte actuel, elle n'est pas donnée au joueur.",
+    "examplesTitle": "Exemples",
+    "airBattle": "Air Battle — Permet de se déplacer vers une autre carte portail. S'il n'existe pas d'autre carte portail, la carte n'est pas ajoutée à la main.",
+    "marionette": "Marionette — Permet de contrôler/déplacer des Bakugans ennemis. S'il n'existe pas de cible valide (ex. : un seul Bakugan reste sur le terrain), la carte n'est pas ajoutée."
+  },
+  "neutral": {
+    "title": "7. Phase neutre (aucun combat actif)",
+    "intro": "Lorsqu'aucun combat n'est en cours, les joueurs peuvent effectuer une action par tour.",
+    "actionsTitle": "Actions disponibles",
+    "placeGateTitle": "1. Placer une carte portail",
+    "placeGateBody": "Première action possible. Ne restreint pas les autres actions futures pendant le tour.",
+    "deployTitle": "2. Déployer un Bakugan",
+    "deployBody": "Deuxième action possible. Si elle est effectuée, le joueur ne peut plus placer de carte portail ce tour-ci.",
+    "abilityTitle": "3. Utiliser une carte capacité",
+    "abilityBody": "Troisième action possible. Termine immédiatement le tour après utilisation. Empêche toute autre action ce tour-ci."
+  },
+  "strategic": {
+    "title": "8. Note stratégique",
+    "intro": "Un jeu efficace dans Bakugan Arena repose sur le timing des ressources et le contrôle du plateau :",
+    "gate": "Le placement des portails définit les opportunités de combat",
+    "abilities": "Les cartes capacité peuvent faire basculer le momentum mais sont limitées",
+    "overextend": "Trop s'étendre tôt mène souvent à un désavantage tactique",
+    "outro": "Maîtriser l'interaction entre positionnement et utilisation des capacités est la clé de la victoire."
+  },
+  "help": {
+    "title": "9. Besoin d'aide ?",
+    "discord": "Si vous avez des questions sur le jeu ou si certaines règles ne sont pas claires, nous vous invitons à rejoindre notre communauté Discord où joueurs et membres du staff pourront vous aider.",
+    "refresh": "Si vous rencontrez un problème pendant un match, essayez d'abord de rafraîchir la page, car cela résout la plupart des problèmes temporaires.",
+    "report": "Si le problème persiste ou si vous découvrez un bug, signalez-le sur notre serveur Discord afin que nous puissions l'examiner et le corriger rapidement.",
+    "thanks": "Merci de jouer à Bakugan Arena, et surtout :",
+    "outro": "Amusez-vous et profitez de vos combats !"
+  }
+}

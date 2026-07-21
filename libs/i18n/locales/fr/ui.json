@@ -1,0 +1,13 @@
+{
+  "command": {
+    "description": "Rechercher une commande à exécuter..."
+  },
+  "multiSelect": {
+    "placeholder": "Sélectionner des options",
+    "search": "Rechercher des options...",
+    "searchAria": "Parcourir les options disponibles",
+    "empty": "Aucun résultat trouvé.",
+    "selectAll": "Tout sélectionner",
+    "close": "Fermer"
+  }
+}

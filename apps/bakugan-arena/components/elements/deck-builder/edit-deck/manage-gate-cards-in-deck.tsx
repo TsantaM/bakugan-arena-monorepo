@@ -24,9 +24,11 @@ import { toast } from "sonner"
 import { AddGateCardToDeck } from "@/src/actions/deck-builder/edit-deck-action"
 import { GateCardsList } from "@bakugan-arena/game-data"
 import { BakuganList } from "@bakugan-arena/game-data"
+import { useTranslations } from "next-intl"
 
 export default function ManageGateCardsInDeckEditor({ deckId, gateCards, bakugans }: { deckId: string, gateCards: string[], bakugans: string[] }) {
-
+    const t = useTranslations('deckBuilder')
+    const tCommon = useTranslations('common')
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState("")
     const queryClient = useQueryClient()
@@ -57,7 +59,7 @@ export default function ManageGateCardsInDeckEditor({ deckId, gateCards, bakugan
         mutationKey: ['add-gate-to-deck'],
         mutationFn: addGateToDeck,
         onSuccess: () => {
-            toast.success('New get as been added successfuly')
+            toast.success(t('toasts.gateAdded'))
             queryClient.invalidateQueries({ queryKey: ['get-deck-data'] })
             queryClient.invalidateQueries({ queryKey: ['get-user-decks'] })
             setValue('')
@@ -71,7 +73,7 @@ export default function ManageGateCardsInDeckEditor({ deckId, gateCards, bakugan
                 <CardHeader>
                     <div className='flex flex-col md:flex-row items-start md:items-center justify-between gap-3'>
                         <CardTitle>
-                            Gate Cards {gateCards.length} / 5
+                            {t('sections.gateCards', { n: gateCards.length })}
                         </CardTitle>
                         <Popover open={open} onOpenChange={setOpen}>
                             <PopoverTrigger asChild>
@@ -88,7 +90,7 @@ export default function ManageGateCardsInDeckEditor({ deckId, gateCards, bakugan
                                                 (b) => b.name === value
                                             )
 
-                                            if (!selectedCard) return "Select gate Cards..."
+                                            if (!selectedCard) return t('select.gateCards')
 
                                             const { name } = selectedCard
 
@@ -99,16 +101,16 @@ export default function ManageGateCardsInDeckEditor({ deckId, gateCards, bakugan
                                             )
                                         })()
                                     ) : (
-                                        "Select Gate Card..."
+                                        t('select.gateCard')
                                     )}
                                     <ChevronsUpDown className="opacity-50" />
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-50 lg:w-75 p-0">
                                 <Command>
-                                    <CommandInput placeholder="Search Bakugan..." className="h-9" />
+                                    <CommandInput placeholder={t('search.bakugan')} className="h-9" />
                                     <CommandList>
-                                        <CommandEmpty>No card found.</CommandEmpty>
+                                        <CommandEmpty>{tCommon('empty.noCardFound')}</CommandEmpty>
                                         <CommandGroup>
                                             {notInDeckCards.map((b, index) => (
                                                 <CommandItem
@@ -143,7 +145,7 @@ export default function ManageGateCardsInDeckEditor({ deckId, gateCards, bakugan
                     {
                         deckCards && deckCards.length > 0 ? deckCards.map((b, index) => <GateCardPreviewDeckEditor key={index} id={b ? b.key : ''} nom={b ? b.name : ''} deckId={deckId} description={b ? b.description : ''} />)
 
-                            : <p className='text-center'>No Gate Card in the deck</p>
+                            : <p className='text-center'>{t('emptyStates.noGateCards')}</p>
                     }
                 </CardContent>
             </Card>

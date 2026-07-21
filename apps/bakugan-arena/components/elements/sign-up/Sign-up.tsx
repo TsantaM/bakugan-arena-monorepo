@@ -10,25 +10,35 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form"
-import { SignUpSchema } from "./Sign-up-Zod"
+import { createSignUpSchema, type signUpForm_type } from "./Sign-up-Zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 import { authClient } from "@/src/lib/auth-client"
-import z from "zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { useMutation } from "@tanstack/react-query"
 import { Loader } from "lucide-react"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
+import { useMemo } from "react"
 
-export type signUpForm_type = z.infer<typeof SignUpSchema>
+export type { signUpForm_type }
 
 
 export function SignUp({ className }: { className?: string }) {
-
+    const t = useTranslations('auth')
+    const tCommon = useTranslations('common')
     const router = useRouter()
+    const signUpSchema = useMemo(
+        () => createSignUpSchema({
+            usernameRequired: t('validation.usernameRequired'),
+            displayUsernameRequired: t('validation.displayUsernameRequired'),
+            passwordMin: t('validation.passwordMin'),
+        }),
+        [t]
+    )
     const signUpForm = useForm<signUpForm_type>({
-        resolver: zodResolver(SignUpSchema), defaultValues: {
+        resolver: zodResolver(signUpSchema), defaultValues: {
             email: '',
             username: '',
             displayUsername: '',
@@ -71,9 +81,9 @@ export function SignUp({ className }: { className?: string }) {
     return (
         <Card className={`w-full max-w-sm ${className}`}>
             <CardHeader>
-                <CardTitle>Create an Account</CardTitle>
+                <CardTitle>{t('signUp.title')}</CardTitle>
                 <CardDescription>
-                    Enter your Name, Email and Password to create your account
+                    {t('signUp.description')}
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -84,11 +94,11 @@ export function SignUp({ className }: { className?: string }) {
                             name='username'
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Username</FormLabel>
+                                    <FormLabel>{tCommon('labels.username')}</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Shun Kazami" {...field} type="text" />
+                                        <Input placeholder={tCommon('placeholders.usernameExample')} {...field} type="text" />
                                     </FormControl>
-                                    <FormDescription>{`Username is the name you'll use it to sign in to you account`}</FormDescription>
+                                    <FormDescription>{t('signUp.usernameHelp')}</FormDescription>
                                 </FormItem>
                             )}
                         />
@@ -97,11 +107,11 @@ export function SignUp({ className }: { className?: string }) {
                             name='displayUsername'
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Display username</FormLabel>
+                                    <FormLabel>{tCommon('labels.displayUsername')}</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Shun K4z4m1" {...field} type="text" />
+                                        <Input placeholder={tCommon('placeholders.displayUsernameExample')} {...field} type="text" />
                                     </FormControl>
-                                    <FormDescription>{`Display username is the username that will appear to you and other players`}</FormDescription>
+                                    <FormDescription>{t('signUp.displayUsernameHelp')}</FormDescription>
                                 </FormItem>
                             )}
                         />
@@ -110,9 +120,9 @@ export function SignUp({ className }: { className?: string }) {
                             name='email'
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Email</FormLabel>
+                                    <FormLabel>{tCommon('labels.email')}</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="mmm@gmail.com" {...field} type="email" />
+                                        <Input placeholder={tCommon('placeholders.emailExample')} {...field} type="email" />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -123,7 +133,7 @@ export function SignUp({ className }: { className?: string }) {
                             name='password'
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Password</FormLabel>
+                                    <FormLabel>{tCommon('labels.password')}</FormLabel>
                                     <FormControl>
                                         <Input placeholder="" {...field} type="password" />
                                     </FormControl>
@@ -131,7 +141,7 @@ export function SignUp({ className }: { className?: string }) {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit">Sign Up</Button>
+                        <Button type="submit">{t('signUp.submit')}</Button>
                     </form>
                 </Form>
             </CardContent>
@@ -140,10 +150,19 @@ export function SignUp({ className }: { className?: string }) {
 }
 
 export function SignUpModal({ triggerContent }: { triggerContent?: string }) {
-
+    const t = useTranslations('auth')
+    const tCommon = useTranslations('common')
     const router = useRouter()
+    const signUpSchema = useMemo(
+        () => createSignUpSchema({
+            usernameRequired: t('validation.usernameRequired'),
+            displayUsernameRequired: t('validation.displayUsernameRequired'),
+            passwordMin: t('validation.passwordMin'),
+        }),
+        [t]
+    )
     const signUpForm = useForm<signUpForm_type>({
-        resolver: zodResolver(SignUpSchema), defaultValues: {
+        resolver: zodResolver(signUpSchema), defaultValues: {
             email: '',
             username: '',
             displayUsername: '',
@@ -195,15 +214,15 @@ export function SignUpModal({ triggerContent }: { triggerContent?: string }) {
             <Dialog>
                 <DialogTrigger asChild>
                     <Button>
-                        { triggerContent ? triggerContent : 'Register'}
+                        { triggerContent ? triggerContent : t('signUp.trigger')}
                     </Button>
                 </DialogTrigger>
 
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Create an Account</DialogTitle>
+                        <DialogTitle>{t('signUp.title')}</DialogTitle>
                         <DialogDescription>
-                            Enter your Name, Email and Password to create your account
+                            {t('signUp.description')}
                         </DialogDescription>
                     </DialogHeader>
                     <Form {...signUpForm}>
@@ -213,11 +232,11 @@ export function SignUpModal({ triggerContent }: { triggerContent?: string }) {
                                 name='username'
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Username</FormLabel>
+                                        <FormLabel>{tCommon('labels.username')}</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Shun Kazami" {...field} type="text" />
+                                            <Input placeholder={tCommon('placeholders.usernameExample')} {...field} type="text" />
                                         </FormControl>
-                                        <FormDescription>{`Username is the name you'll use it to sign in to you account`}</FormDescription>
+                                        <FormDescription>{t('signUp.usernameHelp')}</FormDescription>
                                     </FormItem>
                                 )}
                             />
@@ -226,11 +245,11 @@ export function SignUpModal({ triggerContent }: { triggerContent?: string }) {
                                 name='displayUsername'
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Display username</FormLabel>
+                                        <FormLabel>{tCommon('labels.displayUsername')}</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Shun K4z4m1" {...field} type="text" />
+                                            <Input placeholder={tCommon('placeholders.displayUsernameExample')} {...field} type="text" />
                                         </FormControl>
-                                        <FormDescription>{`Display username is the username that will appear to you and other players`}</FormDescription>
+                                        <FormDescription>{t('signUp.displayUsernameHelp')}</FormDescription>
                                     </FormItem>
                                 )}
                             />
@@ -239,9 +258,9 @@ export function SignUpModal({ triggerContent }: { triggerContent?: string }) {
                                 name='email'
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Email</FormLabel>
+                                        <FormLabel>{tCommon('labels.email')}</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="mmm@gmail.com" {...field} type="email" />
+                                            <Input placeholder={tCommon('placeholders.emailExample')} {...field} type="email" />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -252,7 +271,7 @@ export function SignUpModal({ triggerContent }: { triggerContent?: string }) {
                                 name='password'
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Password</FormLabel>
+                                        <FormLabel>{tCommon('labels.password')}</FormLabel>
                                         <FormControl>
                                             <Input placeholder="" {...field} type="password" />
                                         </FormControl>
@@ -262,9 +281,9 @@ export function SignUpModal({ triggerContent }: { triggerContent?: string }) {
                             />
                             <DialogFooter>
                                 <DialogClose asChild>
-                                    <Button variant='destructive'>Cancel</Button>
+                                    <Button variant='destructive'>{tCommon('actions.cancel')}</Button>
                                 </DialogClose>
-                                <Button type="submit" disabled={signUpMutation.isPending}> {signUpMutation.isPending ? <Loader /> : 'Register'}</Button>
+                                <Button type="submit" disabled={signUpMutation.isPending}> {signUpMutation.isPending ? <Loader /> : t('signUp.submitModal')}</Button>
                             </DialogFooter>
                         </form>
                     </Form>

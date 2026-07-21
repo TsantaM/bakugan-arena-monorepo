@@ -1,0 +1,55 @@
+{
+  "otherActions": "Autres actions",
+  "ranked": {
+    "title": "Choisissez un deck et lancez une partie",
+    "selectDeck": "Sélectionner un deck...",
+    "noDeckCta": "Pas de deck ! Aller au constructeur de deck",
+    "waitingOpponent": "En attente d'un adversaire...",
+    "chooseDeck": "Choisir un deck",
+    "startBattle": "Lancer le combat !",
+    "disclaimerTitle": "AVERTISSEMENT",
+    "disclaimerBody": "Le matchmaking aléatoire peut prendre longtemps ou ne pas trouver d'adversaire.",
+    "disclaimerDiscord": "Si vous ne trouvez pas d'adversaire, rejoignez le <discord>Discord</discord> du jeu et mentionnez <active>@Active</active> pour trouver des joueurs."
+  },
+  "rooms": {
+    "title": "Vos parties en cours"
+  },
+  "findUser": {
+    "trigger": "Trouver un joueur",
+    "title": "Trouver un joueur",
+    "placeholder": "Nom d'utilisateur",
+    "tableUser": "Utilisateur",
+    "openChat": "Ouvrir le chat",
+    "empty": "Aucun utilisateur trouvé avec ce nom"
+  },
+  "watch": {
+    "trigger": "Regarder un combat",
+    "title": "Regarder un combat",
+    "searchPlaceholder": "Rechercher un joueur...",
+    "empty": "Aucun match trouvé"
+  },
+  "chats": {
+    "title": "Chats",
+    "empty": "Aucun message pour le moment."
+  },
+  "globalChat": {
+    "title": "Chat global"
+  },
+  "challenge": {
+    "button": "Défier",
+    "send": "Défier",
+    "waitingResponse": "En attente de réponse...",
+    "choseDeck": "Choisir un deck",
+    "popupTitle": "Sélectionnez un deck pour le défi",
+    "popupDescription": "{name} vous défie !"
+  },
+  "removeRoom": {
+    "ariaRemove": "Supprimer la salle",
+    "ariaForfeit": "Abandonner le match"
+  },
+  "toasts": {
+    "minAbilityCards": "Vous devez avoir au minimum 3 cartes capacité dans votre deck",
+    "minGateCards": "Vous devez avoir au minimum 3 cartes portail dans votre deck",
+    "opponentCancelled": "L'adversaire a annulé la recherche. Vous pouvez réessayer."
+  }
+}

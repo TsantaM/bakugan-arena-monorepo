@@ -3,8 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import z from "zod";
-import { editPasswordSchema } from "./edit-password-zod";
+import { createEditPasswordSchema, editPasswordForm_type } from "./edit-password-zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authClient } from "@/src/lib/auth-client";
 import { toast } from "sonner";
@@ -12,13 +11,21 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
+import { useTranslations } from "next-intl";
+import { useMemo } from "react";
 
-export type editPasswordForm_type = z.infer<typeof editPasswordSchema>
-
+export type { editPasswordForm_type }
 
 export default function EditPassword() {
-
+    const t = useTranslations('account')
+    const tAuth = useTranslations('auth')
     const router = useRouter()
+
+    const editPasswordSchema = useMemo(
+        () => createEditPasswordSchema(tAuth('validation.passwordMin')),
+        [tAuth]
+    )
+
     const updatePasswordForm = useForm<editPasswordForm_type>({
         resolver: zodResolver(editPasswordSchema), defaultValues: {
             currentPassword: '',
@@ -37,7 +44,7 @@ export default function EditPassword() {
             },
                 {
                     onSuccess: async () => {
-                        toast.success('Password Updated')
+                        toast.success(t('toasts.passwordUpdated'))
                         updatePasswordForm.reset()
                         router.refresh()
                     },
@@ -57,7 +64,7 @@ export default function EditPassword() {
         <Card>
             <CardHeader>
                 <CardTitle>
-                    Update Password
+                    {t('password.title')}
                 </CardTitle>
             </CardHeader>
             <CardContent>
@@ -68,7 +75,7 @@ export default function EditPassword() {
                             name='currentPassword'
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Current Password</FormLabel>
+                                    <FormLabel>{t('password.current')}</FormLabel>
                                     <FormControl>
                                         <Input placeholder="" {...field} type="password" />
                                     </FormControl>
@@ -80,14 +87,14 @@ export default function EditPassword() {
                             name='newPassword'
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>New Password</FormLabel>
+                                    <FormLabel>{t('password.new')}</FormLabel>
                                     <FormControl>
                                         <Input placeholder="" {...field} type="password" />
                                     </FormControl>
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit">Update Password</Button>
+                        <Button type="submit">{t('password.submit')}</Button>
                     </form>
                 </Form>
             </CardContent>

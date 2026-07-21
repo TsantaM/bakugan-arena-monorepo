@@ -3,8 +3,10 @@
 import { HybridTooltip, HybridTooltipContent, HybridTooltipProvider, HybridTooltipTrigger } from "@/components/ui/hybrid-tooltip"
 import { BBS1Rules, GetDeckDataType, validateDeck } from "@bakugan-arena/game-data"
 import { CircleCheck, CircleX } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 export default function DeckChecker({deck} : {deck: GetDeckDataType}) {
+    const t = useTranslations('deckBuilder')
 
     const Rules = BBS1Rules
     const ckeck = validateDeck(deck, Rules)
@@ -23,8 +25,8 @@ export default function DeckChecker({deck} : {deck: GetDeckDataType}) {
 
                     <HybridTooltipContent>
                         {
-                            ckeck.valid ? <p className="text-green-500">Valid deck</p> : <div>
-                                <p className="text-red-500">No Valid Deck</p>
+                            ckeck.valid ? <p className="text-green-500">{t('checker.valid')}</p> : <div>
+                                <p className="text-red-500">{t('checker.invalid')}</p>
                                 {
                                     ckeck.reasons.map((r, index) => <p key={index}>{r}</p>)
                                 }
@@ -38,4 +40,4 @@ export default function DeckChecker({deck} : {deck: GetDeckDataType}) {
         </>
 
     )
-} 
+}

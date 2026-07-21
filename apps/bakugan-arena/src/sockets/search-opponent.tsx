@@ -5,6 +5,7 @@ import { useSocket } from "../providers/socket-provider"
 import { redirect } from "next/navigation"
 import { GetUserDeckType } from "../actions/deck-builder/get-deck-data"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 
 
 type PlayerData = {
@@ -13,6 +14,7 @@ type PlayerData = {
 }
 
 export default function UseSearchOpponent() {
+    const t = useTranslations('lobby.toasts')
     const socket = useSocket()
     const [waitingOpponent, setWaitingOpponent] = useState(false)
 
@@ -27,10 +29,10 @@ export default function UseSearchOpponent() {
                     socket?.emit('search-opponent', ({ userId, deckId, ranked }))
                     setWaitingOpponent(true)
                 } else {
-                    toast.error('You should have minimum 3 Ability Cards in your deck')
+                    toast.error(t('minAbilityCards'))
                 }
             } else {
-                toast.error('You should have minimum 3 Gate Cards in your deck')
+                toast.error(t('minGateCards'))
             }
         }
     }
@@ -65,7 +67,7 @@ export default function UseSearchOpponent() {
 
         const onCancelSearch = () => {
             setWaitingOpponent(false)
-            toast.error('Opponent cancelled the search. You can try again.')
+            toast.error(t('opponentCancelled'))
         }
 
         socket.on('search-cancelled', onCancelSearch)
@@ -74,7 +76,7 @@ export default function UseSearchOpponent() {
             socket.off('search-cancelled', onCancelSearch)
         }
 
-    }, [socket])
+    }, [socket, t])
 
 
     return {

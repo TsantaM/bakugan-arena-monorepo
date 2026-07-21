@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -6,6 +8,7 @@ import { authClient } from "@/src/lib/auth-client";
 import { useSocket } from "@/src/providers/socket-provider";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 
 type RoomsToWatchType = {
     playersIds: string[]
@@ -15,6 +18,8 @@ type RoomsToWatchType = {
 }
 
 export default function WatchBattle() {
+    const t = useTranslations('lobby.watch')
+    const tCommon = useTranslations('common')
     const [open, setOpen] = useState(false)
     const [rooms, setRooms] = useState<RoomsToWatchType[]>([])
     const [search, setSearch] = useState("")
@@ -62,17 +67,17 @@ export default function WatchBattle() {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button className="w-full">Watch Battle</Button>
+                <Button className="w-full">{t('trigger')}</Button>
             </DialogTrigger>
 
             <DialogContent className="max-w-md">
                 <DialogTitle className="text-center text-xl">
-                    Watch Battle
+                    {t('title')}
                 </DialogTitle>
 
                 <div className="flex flex-col gap-4 mt-4 w-full">
                     {/* 🔍 Search */}
-                    <SearchPlayer value={search} onChange={setSearch} />
+                    <SearchPlayer value={search} onChange={setSearch} placeholder={t('searchPlaceholder')} />
 
                     {/* 📜 Scrollable list */}
                     <ScrollArea className="max-h-75 w-full">
@@ -81,13 +86,13 @@ export default function WatchBattle() {
                                 filteredRooms.map((r, index) => (
                                     <Button key={index} className="w-full" variant={'outline'} asChild>
                                         <Link href={`/dashboard/battlefield?id=${r.roomId}`} className="italic w-full">
-                                            {r.p1} VS {r.p2}
+                                            {tCommon('labels.vs', { p1: r.p1, p2: r.p2 })}
                                         </Link>
                                     </Button>
                                 ))
                             ) : (
                                 <p className="text-center text-muted-foreground text-sm">
-                                    Aucun match trouvé
+                                    {t('empty')}
                                 </p>
                             )}
                         </div>
@@ -104,13 +109,15 @@ export default function WatchBattle() {
 function SearchPlayer({
     value,
     onChange,
+    placeholder,
 }: {
     value: string
     onChange: (v: string) => void
+    placeholder: string
 }) {
     return (
         <Input
-            placeholder="Rechercher un joueur..."
+            placeholder={placeholder}
             value={value}
             onChange={(e) => onChange(e.target.value)}
             className="w-full"

@@ -1,0 +1,55 @@
+{
+  "otherActions": "إجراءات أخرى",
+  "ranked": {
+    "title": "اختر مجموعة وابدأ لعبة",
+    "selectDeck": "اختر مجموعة...",
+    "noDeckCta": "لا توجد مجموعة! اذهب إلى منشئ المجموعة",
+    "waitingOpponent": "في انتظار الخصم...",
+    "chooseDeck": "اختر مجموعة",
+    "startBattle": "ابدأ المعركة!",
+    "disclaimerTitle": "تنويه",
+    "disclaimerBody": "قد يستغرق التوفيق العشوائي وقتًا طويلًا أو قد يفشل في إيجاد خصم.",
+    "disclaimerDiscord": "إذا لم تجد خصمًا، انضم إلى <discord>ديسكورد</discord> اللعبة وأشر إلى <active>@Active</active> للعثور على لاعبين."
+  },
+  "rooms": {
+    "title": "مبارياتك الجارية"
+  },
+  "findUser": {
+    "trigger": "البحث عن لاعب",
+    "title": "البحث عن لاعب",
+    "placeholder": "اسم المستخدم",
+    "tableUser": "المستخدم",
+    "openChat": "فتح المحادثة",
+    "empty": "لم يتم العثور على مستخدم بهذا الاسم"
+  },
+  "watch": {
+    "trigger": "مشاهدة معركة",
+    "title": "مشاهدة معركة",
+    "searchPlaceholder": "ابحث عن لاعب...",
+    "empty": "لم يتم العثور على مباراة"
+  },
+  "chats": {
+    "title": "المحادثات",
+    "empty": "لا توجد رسائل بعد."
+  },
+  "globalChat": {
+    "title": "الدردشة العامة"
+  },
+  "challenge": {
+    "button": "تحدي",
+    "send": "تحدي",
+    "waitingResponse": "في انتظار الرد...",
+    "choseDeck": "اختر مجموعة",
+    "popupTitle": "اختر مجموعة للتحدي",
+    "popupDescription": "{name} يتحداك!"
+  },
+  "removeRoom": {
+    "ariaRemove": "إزالة الغرفة",
+    "ariaForfeit": "الاستسلام في المباراة"
+  },
+  "toasts": {
+    "minAbilityCards": "يجب أن تحتوي مجموعتك على 3 بطاقات قدرة على الأقل",
+    "minGateCards": "يجب أن تحتوي مجموعتك على 3 بطاقات بوابة على الأقل",
+    "opponentCancelled": "ألغى الخصم البحث. يمكنك المحاولة مرة أخرى."
+  }
+}

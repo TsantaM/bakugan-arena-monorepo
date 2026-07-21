@@ -6,7 +6,6 @@ import { Toaster } from "@/components/ui/sonner"
 import { useSocket } from "@/src/providers/socket-provider"
 import { redirect } from "next/navigation"
 import LauchRanckedGate from "./launch-rancked-game"
-// import OnChalengePopUp from "./on-chalenge-pop-up"
 import Section from "@/components/ui/section"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
@@ -14,10 +13,12 @@ import RoomsOfPlayer from "./rooms-of-player"
 import WatchBattle from "./watch-battle"
 import FindUserComponent from "./find-user"
 import ChatsCard from "./chats-cards"
+import { useTranslations } from "next-intl"
 
 
 export default function Lobby() {
-
+    const t = useTranslations('lobby')
+    const tNav = useTranslations('nav')
     const socket = useSocket()
 
     useEffect(() => {
@@ -38,16 +39,15 @@ export default function Lobby() {
                 <Card>
                     <CardHeader>
                         <CardTitle>
-                            Other actions
+                            {t('otherActions')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="flex flex-col gap-3">
-                        <Button asChild className="w-full" variant="outline" ><Link href={"/dashboard/tutorial"}>Tutorial</Link></Button>
-                        <Button asChild className="w-full" variant="outline" ><Link href={"/dashboard/deck-builder"}>Deck Builder</Link></Button>
-                        <Button asChild className="w-full" variant="outline" ><Link href={"/dashboard/ladder"}>Ladder</Link></Button>
+                        <Button asChild className="w-full" variant="outline" ><Link href={"/dashboard/tutorial"}>{tNav('tutorial')}</Link></Button>
+                        <Button asChild className="w-full" variant="outline" ><Link href={"/dashboard/deck-builder"}>{tNav('deckBuilder')}</Link></Button>
+                        <Button asChild className="w-full" variant="outline" ><Link href={"/dashboard/ladder"}>{tNav('ladder')}</Link></Button>
                         <FindUserComponent />
                         <WatchBattle />
-                        {/* <OnChalengePopUp /> */}
                     </CardContent>
                 </Card>
             </Section>

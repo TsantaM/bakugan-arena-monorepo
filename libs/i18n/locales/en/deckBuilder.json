@@ -1,0 +1,68 @@
+{
+  "empty": "You don't have a deck, create one",
+  "newDeck": "New Deck",
+  "import": {
+    "trigger": "Import Deck",
+    "title": "Import Deck",
+    "description": "Paste your deck code below to import it.",
+    "placeholder": "Paste your deck code here",
+    "invalidTitle": "We couldn't read this code",
+    "invalidBody": "The code you entered doesn't seem to be valid or may be corrupted. Please double-check and try again.",
+    "readyTitle": "Deck ready to import",
+    "readyBody": "Everything looks good. You can safely import this deck now.",
+    "importing": "Importing...",
+    "failed": "Failed to import deck"
+  },
+  "preview": {
+    "noBakugan": "No bakugan in this deck"
+  },
+  "edit": {
+    "nameLabel": "Name",
+    "namePlaceholder": "New Deck",
+    "nameHelp": "The name of the Deck",
+    "submitting": "Submitting in process...",
+    "updateName": "Update Deck Name"
+  },
+  "sections": {
+    "bakugans": "Bakugans {n} / 3",
+    "abilityCards": "Ability Cards {n} / 6",
+    "exclusiveCards": "Exclu. Cards {n} / 3",
+    "gateCards": "Gate Cards {n} / 5"
+  },
+  "select": {
+    "bakugan": "Select Bakugan...",
+    "abilityCard": "Select Ability Card...",
+    "abilityCards": "Select Ability Cards...",
+    "gateCard": "Select Gate Card...",
+    "gateCards": "Select Gate Cards..."
+  },
+  "search": {
+    "bakugan": "Search Bakugan...",
+    "abilityCard": "Search Ability Card..."
+  },
+  "emptyStates": {
+    "bakuganNotFound": "No bakugan found.",
+    "noAbilityCards": "No Ability Cards in the deck",
+    "noExclusiveCards": "No exclusive ability cards in this deck",
+    "noGateCards": "No Gate Card in the deck"
+  },
+  "checker": {
+    "valid": "Valid deck",
+    "invalid": "No Valid Deck"
+  },
+  "toasts": {
+    "updated": "Deck has been updated",
+    "deleted": "Deck has been deleted",
+    "deleteError": "Error during deleting : {err}",
+    "emptyShare": "This deck is empty, cannot be shared",
+    "codeCopied": "Deck code copied to clipboard",
+    "bakuganAdded": "Bakugan has been added to deck",
+    "bakuganRemoved": "Bakugan removed from deck successfully!",
+    "bakuganRemoveFailed": "Failed to remove Bakugan from deck",
+    "abilityAdded": "Ability card has been added to deck",
+    "abilityRemoved": "Ability card removed from deck successfully!",
+    "exclusiveRemoved": "Exclusive ability card removed from deck successfully!",
+    "gateAdded": "Gate card has been added successfully",
+    "gateRemoved": "Gate card removed from deck successfully!"
+  }
+}

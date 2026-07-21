@@ -24,9 +24,11 @@ import { toast } from "sonner"
 import { AddExclusiveAbilityCardToDeck } from "@/src/actions/deck-builder/edit-deck-action"
 import { BakuganList } from "@bakugan-arena/game-data"
 import { ExclusiveAbilitiesList } from "@bakugan-arena/game-data"
+import { useTranslations } from "next-intl"
 
 export default function ManageExclusiveAbilityCardsInDeck({ deckId, bakugans, countBakugans, exclusiveAbilities }: { deckId: string, bakugans: string[], countBakugans: number, exclusiveAbilities: string[] | undefined }) {
-
+    const t = useTranslations('deckBuilder')
+    const tCommon = useTranslations('common')
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState("")
     const queryClient = useQueryClient()
@@ -57,7 +59,7 @@ export default function ManageExclusiveAbilityCardsInDeck({ deckId, bakugans, co
         mutationKey: ['add-ability-card-to-deck'],
         mutationFn: addCardToDeck,
         onSuccess: () => {
-            toast.success("Ability card has been added to deck")
+            toast.success(t('toasts.abilityAdded'))
             queryClient.invalidateQueries({ queryKey: ['get-deck-data'] })
             queryClient.invalidateQueries({ queryKey: ['get-user-decks'] })
             setValue('')
@@ -70,7 +72,7 @@ export default function ManageExclusiveAbilityCardsInDeck({ deckId, bakugans, co
             <Card>
                 <CardHeader>
                     <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-                        <CardTitle>Exclu. Cards {exclusiveAbilities ? exclusiveAbilities.length : 0} / 3</CardTitle>
+                        <CardTitle>{t('sections.exclusiveCards', { n: exclusiveAbilities ? exclusiveAbilities.length : 0 })}</CardTitle>
                         <Popover open={open} onOpenChange={setOpen}>
                             <PopoverTrigger asChild>
                                 <Button
@@ -86,7 +88,7 @@ export default function ManageExclusiveAbilityCardsInDeck({ deckId, bakugans, co
                                                 (b) => b.name === value
                                             )
 
-                                            if (!selectedCard) return "Select Ability Cards..."
+                                            if (!selectedCard) return t('select.abilityCards')
 
                                             const { name } = selectedCard
 
@@ -97,16 +99,16 @@ export default function ManageExclusiveAbilityCardsInDeck({ deckId, bakugans, co
                                             )
                                         })()
                                     ) : (
-                                        "Select Ability Card..."
+                                        t('select.abilityCard')
                                     )}
                                     <ChevronsUpDown className="opacity-50" />
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-50 lg:w-75 p-0">
                                 <Command>
-                                    <CommandInput placeholder="Search Bakugan..." className="h-9" />
+                                    <CommandInput placeholder={t('search.bakugan')} className="h-9" />
                                     <CommandList>
-                                        <CommandEmpty>No card found.</CommandEmpty>
+                                        <CommandEmpty>{tCommon('empty.noCardFound')}</CommandEmpty>
                                         <CommandGroup>
                                             {notInDeckExclusiveAbilities.map((b, index) => (
                                                 <CommandItem
@@ -137,7 +139,7 @@ export default function ManageExclusiveAbilityCardsInDeck({ deckId, bakugans, co
                 <CardContent className={exclusiveAbilities && exclusiveAbilities?.length > 0 ? "grid grid-cols-1 md:grid-cols-2 gap-3" : ""}>
                     {
                         deckCards.length > 0 ? deckCards?.map((c, index) => <ExclusiveAbilityCardPreviewDeckEditor key={index} nom={c ? c.name : ''} description={c ? c.description : ''} id={c ? c.key : ''} deckId={deckId} />)
-                            : <p className="text-center">No exclusive ability cards in this deck</p>
+                            : <p className="text-center">{t('emptyStates.noExclusiveCards')}</p>
                     }
                 </CardContent>
             </Card>

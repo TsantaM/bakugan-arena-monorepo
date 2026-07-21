@@ -1,0 +1,67 @@
+{
+  "brand": "Bakugan Arena",
+  "metadata": {
+    "description": "Bakugan Arena est un jeu fan inspiré du simulateur de combats Pokémon Showdown"
+  },
+  "actions": {
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "submit": "Envoyer",
+    "update": "Mettre à jour",
+    "edit": "Modifier",
+    "close": "Fermer",
+    "import": "Importer",
+    "delete": "Supprimer",
+    "reset": "Réinitialiser",
+    "accept": "Accepter",
+    "reject": "Refuser",
+    "upload": "Téléverser",
+    "clear": "Effacer",
+    "remove": "Retirer"
+  },
+  "nav": {
+    "account": "Compte",
+    "logOut": "Se déconnecter"
+  },
+  "labels": {
+    "username": "Nom d'utilisateur",
+    "displayUsername": "Nom affiché",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "vs": "{p1} VS {p2}"
+  },
+  "placeholders": {
+    "usernameExample": "Shun Kazami",
+    "displayUsernameExample": "Shun K4z4m1",
+    "emailExample": "mmm@gmail.com",
+    "writeMessage": "Écrivez votre message..."
+  },
+  "empty": {
+    "noResult": "Aucun résultat",
+    "noCardFound": "Aucune carte trouvée."
+  },
+  "a11y": {
+    "toggleSidebar": "Afficher/masquer la barre latérale",
+    "toggleTheme": "Changer de thème",
+    "discordLogo": "logo discord",
+    "battleScreenshot": "capture-de-combat",
+    "defaultProfilePicture": "Photo de profil par défaut"
+  },
+  "fallback": {
+    "player": "Joueur",
+    "unknownPlayer": "Joueur inconnu",
+    "playerName": "Nom du joueur"
+  },
+  "status": {
+    "onlineCount": "{count} en ligne",
+    "offline": "Hors ligne"
+  },
+  "links": {
+    "discord": "Discord"
+  },
+  "language": {
+    "label": "Langue",
+    "en": "English",
+    "fr": "Français"
+  }
+}

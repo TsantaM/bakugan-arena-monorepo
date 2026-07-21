@@ -1,0 +1,19 @@
+{
+  "forfeit": {
+    "label": "Forfeit",
+    "title": "Are you sure?",
+    "description": "Do you really want to forfeit this match?",
+    "confirm": "Confirm Forfeit"
+  },
+  "messages": {
+    "aria": "Messages"
+  },
+  "battleLogs": {
+    "label": "Battle logs",
+    "heading": "Battle log"
+  },
+  "turn": "Turn {turn}",
+  "a11y": {
+    "skipAnimations": "Skip animations"
+  }
+}

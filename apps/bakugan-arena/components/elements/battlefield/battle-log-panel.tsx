@@ -4,6 +4,7 @@ import { TurnMessagesContainer } from "./turn-messages-container"
 import { cn } from "@/lib/utils"
 import { useEffect, useRef } from "react"
 import type { Message } from "@bakugan-arena/game-data"
+import { useTranslations } from "next-intl"
 
 export type BattleLogTurn = {
     turn: number
@@ -17,6 +18,7 @@ type BattleLogPanelProps = {
 }
 
 export function BattleLogPanel({ turns, visible, className }: BattleLogPanelProps) {
+    const t = useTranslations('battlefield')
     const scrollRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
@@ -39,7 +41,7 @@ export function BattleLogPanel({ turns, visible, className }: BattleLogPanelProp
             aria-live="polite"
         >
             <p className="mb-1 px-1 text-[10px] font-semibold uppercase tracking-wide text-neutral-400">
-                Battle log
+                {t('battleLogs.heading')}
             </p>
             <div className="pr-1">
                 {[...turns]

@@ -5,9 +5,10 @@ import { CreateDeckAction } from "@/src/actions/deck-builder/create-deck-action"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Plus } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 
 export default function CreateDeckButton() {
-
+    const t = useTranslations('deckBuilder')
     const queryClient = useQueryClient()
     const router = useRouter()
     const createDeck = async () => {
@@ -30,7 +31,7 @@ export default function CreateDeckButton() {
 
     return (
         <Button variant='outline' className="cursor-pointer" disabled={createNewDeckMutation.isPending ? true : false} onClick={() => createNewDeckMutation.mutate()}>
-            <Plus /> New Deck
+            <Plus /> {t('newDeck')}
         </Button>
     )
 }

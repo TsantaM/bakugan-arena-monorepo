@@ -14,13 +14,19 @@ import Logo from "@/components/ui/logo";
 import { AnimatedThemeToggler } from "@/components/magicui/theme-toggler";
 import { SignInModal } from "../sign-in/Sign-in";
 import { SignUpModal } from "../sign-up/Sign-up";
-import { LinksList } from "@/src/store/links-list";
+import LanguageSwitcher from "@/components/elements/language-switcher/language-switcher";
+import { getTranslations } from "next-intl/server";
 
 export default async function Header() {
-
     const user = await getUser()
+    const tNav = await getTranslations('nav')
+    const tCommon = await getTranslations('common')
 
-
+    const links = [
+        { name: tNav('home'), href: '/' },
+        { name: tNav('bakuDex'), href: '/baku-dex' },
+        { name: tNav('patchNotes'), href: '/patch-notes' },
+    ]
 
     return (
         <header className="w-screen flex justify-between items-center px-5 md:px-10 py-3 sticky top-0 left-0 z-20 bg-background">
@@ -30,13 +36,14 @@ export default async function Header() {
                 <nav className='hidden md:block'>
                     <ul className="flex items-center gap-3">
                         {
-                            LinksList.map((l, index) => <li key={index}><Button asChild variant='link'><Link href={l.href}>{l.name}</Link></Button></li>)
+                            links.map((l, index) => <li key={index}><Button asChild variant='link'><Link href={l.href}>{l.name}</Link></Button></li>)
                         }
                     </ul>
                 </nav>
             </div>
 
             <div className="flex items-center gap-2">
+                <LanguageSwitcher />
                 <AnimatedThemeToggler />
                 {
                     user ?
@@ -56,7 +63,7 @@ export default async function Header() {
                                     <DropdownMenuItem asChild>
                                         <Link className="flex items-center gap-3" href='/dashboard'>
                                             <User2 />
-                                            Account
+                                            {tCommon('nav.account')}
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem>
@@ -70,7 +77,7 @@ export default async function Header() {
 
                                                 redirect('/')
                                             }}>
-                                                <LogOutIcon /> Log out
+                                                <LogOutIcon /> {tCommon('nav.logOut')}
                                             </button>
                                         </form>
                                     </DropdownMenuItem>
@@ -91,7 +98,7 @@ export default async function Header() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         {
-                            LinksList.map((l, index) => <DropdownMenuItem key={index} asChild>
+                            links.map((l, index) => <DropdownMenuItem key={index} asChild>
                                 <Link href={l.href}>{l.name}</Link>
                             </DropdownMenuItem>)
                         }

@@ -11,6 +11,7 @@ import {
 import { ConnectedUsersStore } from "@/src/store/connected-users-store";
 
 import Image from "next/image"
+import { useTranslations } from "next-intl"
 
 export type LadderPlayer = {
     id: string;
@@ -21,7 +22,8 @@ export type LadderPlayer = {
 }
 
 export default function LadderTable({ players }: { players: LadderPlayer[] }) {
-
+    const t = useTranslations('ladder')
+    const tCommon = useTranslations('common')
     const connectedUsers = ConnectedUsersStore((state) => state.users)
 
     return (
@@ -29,17 +31,19 @@ export default function LadderTable({ players }: { players: LadderPlayer[] }) {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>#</TableHead>
-                        <TableHead>Avatar</TableHead>
-                        <TableHead>Player</TableHead>
-                        <TableHead className="text-right">ELO</TableHead>
+                        <TableHead>{t('columns.rank')}</TableHead>
+                        <TableHead>{t('columns.avatar')}</TableHead>
+                        <TableHead>{t('columns.player')}</TableHead>
+                        <TableHead className="text-right">{t('columns.elo')}</TableHead>
                     </TableRow>
                 </TableHeader>
 
                 <TableBody>
                     {players.map((player, index) => {
                         const imageLink = player.image ?? "/images/default-profil-picture.png"
-                        const alt = player.image ? player.displayUsername : "Default Profile Picture"
+                        const alt = player.image
+                            ? (player.displayUsername ?? tCommon('fallback.player'))
+                            : tCommon('a11y.defaultProfilePicture')
 
                         return (
                             <TableRow key={index}>
@@ -49,7 +53,7 @@ export default function LadderTable({ players }: { players: LadderPlayer[] }) {
                                     {imageLink && (
                                         <Image
                                             src={imageLink}
-                                            alt={alt || "Default Profile Picture"}
+                                            alt={alt}
                                             width={50}
                                             height={50}
                                             className="rounded-full"
@@ -65,7 +69,7 @@ export default function LadderTable({ players }: { players: LadderPlayer[] }) {
                                                 : "bg-gray-400"
                                                 }`} >
                                         </span>
-                                        {player.displayUsername ? player.displayUsername : 'Player'}
+                                        {player.displayUsername ? player.displayUsername : tCommon('fallback.player')}
                                     </span>
                                 </TableCell>
 

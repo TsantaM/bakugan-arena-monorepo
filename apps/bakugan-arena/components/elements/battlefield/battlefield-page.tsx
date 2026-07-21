@@ -13,9 +13,10 @@ import { BattleFieldPageProps } from "@bakugan-arena/game-data";
 import { useBattlefieldBattleLogStore } from "@/src/store/battlefield-battle-log-store";
 import { Button } from "@/components/ui/button";
 import { SkipForward } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function BattleFieldPage({ player, opponent, roomId, userId, isPlayer }: BattleFieldPageProps) {
-
+    const t = useTranslations('battlefield')
     const socket = useSocketStore((state) => state.socket)
     const battleLogEnabled = useBattlefieldBattleLogStore((state) => state.enabled)
     const [animationsPlaying, setAnimationsPlaying] = useState(false)
@@ -119,7 +120,7 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
                         <Button
                             variant="outline"
                             onClick={skipAnimations}
-                            aria-label="Passer les animations"
+                            aria-label={t('a11y.skipAnimations')}
                         >
                             <SkipForward />
                         </Button>

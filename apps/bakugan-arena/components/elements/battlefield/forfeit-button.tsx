@@ -15,8 +15,11 @@ import { useRoomsStore } from "@/src/store/rooms-store"
 import { authClient } from "@/src/lib/auth-client"
 import { useSocket } from "@/src/providers/socket-provider"
 import { forfeitSocketProps } from "@bakugan-arena/game-data"
+import { useTranslations } from "next-intl"
 
 export default function ForfeitButton() {
+    const t = useTranslations('battlefield.forfeit')
+    const tCommon = useTranslations('common')
 
     const router = useRouter()
     const socket = useSocket()
@@ -56,15 +59,15 @@ export default function ForfeitButton() {
         <Dialog>
             <DialogTrigger asChild>
                 <Button variant="destructive">
-                    Forfeit
+                    {t('label')}
                 </Button>
             </DialogTrigger>
 
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Are you sure?</DialogTitle>
+                    <DialogTitle>{t('title')}</DialogTitle>
                     <DialogDescription>
-                        Do you really want to forfeit this match?
+                        {t('description')}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -72,14 +75,14 @@ export default function ForfeitButton() {
                     <Button
                         variant="outline"
                     >
-                        Cancel
+                        {tCommon('actions.cancel')}
                     </Button>
 
                     <Button
                         variant="destructive"
                         onClick={handleForfeit}
                     >
-                        Confirm Forfeit
+                        {t('confirm')}
                     </Button>
                 </DialogFooter>
             </DialogContent>

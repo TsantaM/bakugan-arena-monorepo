@@ -19,6 +19,7 @@ import { useSocket } from "@/src/providers/socket-provider"
 import { forfeitSocketProps } from "@bakugan-arena/game-data"
 import { X } from "lucide-react"
 import type { MouseEvent, ReactElement } from "react"
+import { useTranslations } from "next-intl"
 
 type RemoveRoomButtonProps = {
     roomId: string
@@ -31,6 +32,9 @@ export default function RemoveRoomButton({
     finished,
     variant = 'default',
 }: RemoveRoomButtonProps) {
+    const t = useTranslations('lobby.removeRoom')
+    const tForfeit = useTranslations('battlefield.forfeit')
+    const tCommon = useTranslations('common')
     const router = useRouter()
     const socket = useSocket()
     const userId = authClient.useSession().data?.user.id
@@ -60,7 +64,7 @@ export default function RemoveRoomButton({
                 <SidebarMenuAction
                     showOnHover
                     type="button"
-                    aria-label={finished ? 'Remove room' : 'Forfeit match'}
+                    aria-label={finished ? t('ariaRemove') : t('ariaForfeit')}
                     onClick={onClick}
                 >
                     <X />
@@ -74,7 +78,7 @@ export default function RemoveRoomButton({
                 variant="ghost"
                 size="icon"
                 className="shrink-0"
-                aria-label={finished ? 'Remove room' : 'Forfeit match'}
+                aria-label={finished ? t('ariaRemove') : t('ariaForfeit')}
                 onClick={onClick}
             >
                 <X className="size-4" />
@@ -94,16 +98,16 @@ export default function RemoveRoomButton({
 
             <DialogContent onClick={(e) => e.stopPropagation()}>
                 <DialogHeader>
-                    <DialogTitle>Are you sure?</DialogTitle>
+                    <DialogTitle>{tForfeit('title')}</DialogTitle>
                     <DialogDescription>
-                        Do you really want to forfeit this match?
+                        {tForfeit('description')}
                     </DialogDescription>
                 </DialogHeader>
 
                 <DialogFooter className="flex gap-2 justify-end">
                     <DialogClose asChild>
                         <Button variant="outline">
-                            Cancel
+                            {tCommon('actions.cancel')}
                         </Button>
                     </DialogClose>
 
@@ -111,7 +115,7 @@ export default function RemoveRoomButton({
                         variant="destructive"
                         onClick={handleForfeit}
                     >
-                        Confirm Forfeit
+                        {tForfeit('confirm')}
                     </Button>
                 </DialogFooter>
             </DialogContent>

@@ -1,5 +1,6 @@
 import AppSidebar from "@/components/elements/app-sidebar/app-sidebar"
 import { SoundPlayerControls } from "@/components/elements/sound-player/sound-player"
+import LanguageSwitcher from "@/components/elements/language-switcher/language-switcher"
 import { AnimatedThemeToggler } from "@/components/magicui/theme-toggler"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -9,6 +10,7 @@ import { getUser, getUserRole } from "@/src/actions/getUserSession"
 import { auth } from "@/src/lib/auth"
 import { SocketProvider } from "@/src/providers/socket-provider"
 import { LogOutIcon, User2 } from "lucide-react"
+import { getTranslations } from "next-intl/server"
 import { headers } from "next/headers"
 import Link from "next/link"
 import { redirect } from "next/navigation"
@@ -26,6 +28,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
     const user = await getUser()
     const role = await getUserRole()
+    const tCommon = await getTranslations('common')
 
     return (
         <SocketProvider>
@@ -42,8 +45,9 @@ export default async function Layout({ children }: { children: React.ReactNode }
                             <div className="flex items-center gap-3">
                                 <ForfeitButton />
                                 <BattleLogToggle context="battlefield" />
+                                <LanguageSwitcher />
                                 <Link href="https://discord.gg/8HfPK5RVuk" target="_blank">
-                                    <img src="/discord.svg" alt="discord logo" className="w-6 h-6" />
+                                    <img src="/discord.svg" alt={tCommon('a11y.discordLogo')} className="w-6 h-6" />
                                 </Link>
                                 <SoundPlayerControls />
                                 <AnimatedThemeToggler />
@@ -64,7 +68,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
                                             <DropdownMenuItem asChild>
                                                 <Link className="flex items-center gap-3" href='/dashboard/user-data'>
                                                     <User2 />
-                                                    Account
+                                                    {tCommon('nav.account')}
                                                 </Link>
                                             </DropdownMenuItem>
                                             <DropdownMenuItem>
@@ -78,7 +82,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
                                                         redirect('/')
                                                     }}>
-                                                        <LogOutIcon /> Log out
+                                                        <LogOutIcon /> {tCommon('nav.logOut')}
                                                     </button>
                                                 </form>
                                             </DropdownMenuItem>

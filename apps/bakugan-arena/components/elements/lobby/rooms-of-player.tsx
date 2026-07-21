@@ -6,8 +6,11 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { useRoomsStore } from "@/src/store/rooms-store"
 import Link from "next/link"
 import RemoveRoomButton from "./remove-room-button"
+import { useTranslations } from "next-intl"
 
 export default function RoomsOfPlayer() {
+    const t = useTranslations('lobby.rooms')
+    const tCommon = useTranslations('common')
 
     const rooms = useRoomsStore((state) => state.rooms)
     if (rooms.length === 0) return null
@@ -16,7 +19,7 @@ export default function RoomsOfPlayer() {
         <Card>
             <CardHeader>
                 <CardTitle>
-                    Your in process games
+                    {t('title')}
                 </CardTitle>
             </CardHeader>
 
@@ -28,7 +31,7 @@ export default function RoomsOfPlayer() {
                             <li key={room.roomId} className="w-full flex items-center gap-2">
                                 <Button variant={'outline'} className="flex-1" asChild>
                                     <Link href={`/dashboard/battlefield?id=${room.roomId}`}>
-                                        {`${room.p1} VS ${room.p2}`}
+                                        {tCommon('labels.vs', { p1: room.p1, p2: room.p2 })}
                                     </Link>
                                 </Button>
                                 <RemoveRoomButton roomId={room.roomId} finished={room.finished} />

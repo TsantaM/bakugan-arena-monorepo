@@ -13,8 +13,11 @@ import { Send, X } from "lucide-react"
 import { useRef } from "react"
 import ChalengeCard from "./chalenge-card"
 import { useSocket } from "@/src/providers/socket-provider"
+import { useTranslations } from "next-intl"
 
 function ChatWindow({ chat }: { chat: ChatWindowType }) {
+    const t = useTranslations('lobby.chats')
+    const tCommon = useTranslations('common')
 
     const username = authClient.useSession().data?.user.displayUsername
     const userId = authClient.useSession().data?.user.id
@@ -71,7 +74,7 @@ function ChatWindow({ chat }: { chat: ChatWindowType }) {
                                 <p key={index} className="text-sm">
                                     <span className={`font-bold ${textColor(message.senderName)}`}>{message.senderName} : </span>{message.text}
                                 </p>
-                            )) : <p className="text-sm text-muted-foreground">No messages yet.</p>}
+                            )) : <p className="text-sm text-muted-foreground">{t('empty')}</p>}
                         </ScrollArea>
                     </CardContent>
                 </Card>
@@ -79,7 +82,7 @@ function ChatWindow({ chat }: { chat: ChatWindowType }) {
                 <div className="flex items-end gap-2 border rounded-2xl p-1 shadow-sm bg-background">
                     <Textarea
                         ref={textareaRef}
-                        placeholder="Write your message..."
+                        placeholder={tCommon('placeholders.writeMessage')}
                         className="min-h-10 max-h-30 resize-none border-0 focus-visible:ring-0"
                         onKeyDown={(e) => {
                             if (e.key === "Enter" && !e.shiftKey) {
@@ -104,6 +107,7 @@ function ChatWindow({ chat }: { chat: ChatWindowType }) {
 }
 
 export default function ChatsCard() {
+    const t = useTranslations('lobby.chats')
 
     const chats = useChatStore((state) => state.chats)
     const userId = authClient.useSession().data?.user.id
@@ -150,7 +154,7 @@ export default function ChatsCard() {
         <Card>
             <CardHeader>
                 <CardTitle className="text-center text-lg lg:text-2xl">
-                    Chats
+                    {t('title')}
                 </CardTitle>
             </CardHeader>
             <CardContent>
@@ -187,4 +191,3 @@ export default function ChatsCard() {
         </Card>
     )
 }
-

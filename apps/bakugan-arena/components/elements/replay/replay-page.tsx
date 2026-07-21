@@ -15,6 +15,7 @@ import { ReplayExistsByRoomId } from "@/src/actions/replay/replay-exists-by-room
 import { UploadReplay } from "@/src/actions/replay/uploard-raplay-action"
 import { toast } from "sonner"
 import { useReplayBattleLogStore } from "@/src/store/replay-battle-log-store"
+import { useTranslations } from "next-intl"
 
 type ReplayControlMessage =
     | "REPLAY_PAUSE"
@@ -24,6 +25,8 @@ type ReplayControlMessage =
     | "REPLAY_RESTART"
 
 export default function ReplayPage() {
+    const t = useTranslations('replay')
+    const tCommon = useTranslations('common')
 
     const [replay, setReplay] = useState<replayDataType | null>(null)
     const [isPaused, setIsPaused] = useState(true)
@@ -54,12 +57,14 @@ export default function ReplayPage() {
             })
         },
         onSuccess: async () => {
-            toast.success("Replay upload success")
+            toast.success(t('toasts.uploadSuccess'))
             await queryClient.invalidateQueries({ queryKey: ["replay-exists", replay?.roomId] })
             await queryClient.invalidateQueries({ queryKey: ["get-replays"] })
         },
         onError: (error) => {
-            toast.error(`Replay upload failed, ${error instanceof Error ? error.message : error}`)
+            toast.error(t('toasts.uploadFailed', {
+                error: error instanceof Error ? error.message : String(error),
+            }))
         },
     })
 
@@ -122,7 +127,10 @@ export default function ReplayPage() {
 
     const link = buildGameboardLink("replay.html")
     const matchLabel = replay?.player1 && replay?.player2
-        ? `${replay.player1.displayUsername} VS ${replay.player2.displayUsername}`
+        ? tCommon('labels.vs', {
+            p1: replay.player1.displayUsername ?? tCommon('fallback.player'),
+            p2: replay.player2.displayUsername ?? tCommon('fallback.player'),
+        })
         : null
     const showUploadButton = Boolean(replay) && existsQuery.isSuccess && existsQuery.data === false
 
@@ -154,24 +162,24 @@ export default function ReplayPage() {
                         variant="outline"
                         disabled={uploadMutation.isPending}
                         onClick={() => uploadMutation.mutate()}
-                        aria-label="Upload replay"
+                        aria-label={t('a11y.upload')}
                     >
                         {uploadMutation.isPending ? (
                             <Loader2 className="animate-spin" />
                         ) : (
                             <Upload />
                         )}
-                        Upload
+                        {t('upload')}
                     </Button>
                 )}
                 <Button
                     variant="outline"
                     disabled={!replay}
                     onClick={clearReplay}
-                    aria-label="Vider le replay"
+                    aria-label={t('a11y.clear')}
                 >
                     <X />
-                    Clear
+                    {t('clear')}
                 </Button>
             </div>
         </header>
@@ -199,28 +207,28 @@ export default function ReplayPage() {
                         <Button
                             variant="outline"
                             onClick={() => sendReplayControl("REPLAY_RESTART")}
-                            aria-label="Recommencer le replay"
+                            aria-label={t('a11y.restart')}
                         >
                             <RotateCcw />
                         </Button>
                         <Button
                             variant="outline"
                             onClick={() => sendReplayControl("REPLAY_PREV_TURN")}
-                            aria-label="Tour précédent"
+                            aria-label={t('a11y.prevTurn')}
                         >
                             <SkipBack />
                         </Button>
                         <Button
                             variant="outline"
                             onClick={togglePause}
-                            aria-label={isPaused ? "Play replay" : "Pause replay"}
+                            aria-label={isPaused ? t('a11y.play') : t('a11y.pause')}
                         >
                             {isPaused ? <Play /> : <Pause />}
                         </Button>
                         <Button
                             variant="outline"
                             onClick={() => sendReplayControl("REPLAY_NEXT_TURN")}
-                            aria-label="Tour suivant"
+                            aria-label={t('a11y.nextTurn')}
                         >
                             <SkipForward />
                         </Button>

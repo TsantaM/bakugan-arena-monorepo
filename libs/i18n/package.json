@@ -1,0 +1,40 @@
+{
+  "name": "@bakugan-arena/i18n",
+  "version": "1.0.0",
+  "description": "Shared UI translation catalogs for Bakugan Arena (en, fr, ar)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./server": {
+      "import": "./dist/server.js",
+      "types": "./dist/server.d.ts",
+      "default": "./dist/server.js"
+    },
+    "./locales/*": "./locales/*"
+  },
+  "files": [
+    "dist",
+    "locales"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "i18n",
+    "locales",
+    "bakugan-arena"
+  ],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.15.0",
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

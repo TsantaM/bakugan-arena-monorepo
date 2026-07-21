@@ -18,9 +18,10 @@ import { authClient } from "@/src/lib/auth-client"
 import { useSocket } from "@/src/providers/socket-provider"
 import { useRoomsStore } from "@/src/store/rooms-store"
 import { BookOpenText, ChartSpline, Clapperboard, Home, KeyRound, SwatchBook } from "lucide-react"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { ReactNode, useEffect } from "react"
+import { ReactNode, useEffect, useMemo } from "react"
 
 type LinksDashboardType = {
     icone: ReactNode,
@@ -28,47 +29,47 @@ type LinksDashboardType = {
     href: string
 }
 
-const LinksDashboard: LinksDashboardType[] = [
-    {
-        icone: <Home />,
-        label: 'Dashboard',
-        href: '/dashboard'
-    },
-    {
-        icone: <SwatchBook />,
-        label: 'Deck Builder',
-        href: '/dashboard/deck-builder'
-    },
-    {
-        icone: <BookOpenText />,
-        label: 'Baku Dex',
-        href: '/dashboard/baku-dex'
-    },
-    {
-        icone: <BookOpenText />,
-        label: 'Tutorial',
-        href: '/dashboard/tutorial'
-    },
-    {
-        icone: <ChartSpline />,
-        label: 'Ladder',
-        href: '/dashboard/ladder'
-    },
-    {
-        icone: <Clapperboard />,
-        label: 'Replay',
-        href: '/dashboard/replay'
-    }
-]
-
-
 export default function AppSidebar({ role }: { role: RoleType | undefined }) {
-
+    const t = useTranslations('nav')
+    const tCommon = useTranslations('common')
     const router = useRouter()
     const socket = useSocket()
     const Rooms = useRoomsStore((state) => state.rooms)
     const setRooms = useRoomsStore((state) => state.setRooms)
     const user = authClient.useSession()
+
+    const LinksDashboard: LinksDashboardType[] = useMemo(() => [
+        {
+            icone: <Home />,
+            label: t('dashboard'),
+            href: '/dashboard'
+        },
+        {
+            icone: <SwatchBook />,
+            label: t('deckBuilder'),
+            href: '/dashboard/deck-builder'
+        },
+        {
+            icone: <BookOpenText />,
+            label: t('bakuDex'),
+            href: '/dashboard/baku-dex'
+        },
+        {
+            icone: <BookOpenText />,
+            label: t('tutorial'),
+            href: '/dashboard/tutorial'
+        },
+        {
+            icone: <ChartSpline />,
+            label: t('ladder'),
+            href: '/dashboard/ladder'
+        },
+        {
+            icone: <Clapperboard />,
+            label: t('replay'),
+            href: '/dashboard/replay'
+        }
+    ], [t])
 
     useEffect(() => {
         if (!socket) return
@@ -76,7 +77,7 @@ export default function AppSidebar({ role }: { role: RoleType | undefined }) {
         const userId = user.data.user.id
         socket.emit('get-rooms-user-id', userId)
 
-    }, [socket, router])
+    }, [socket, router, user.data?.user.id])
 
     useEffect(() => {
         if (!socket) return
@@ -84,20 +85,20 @@ export default function AppSidebar({ role }: { role: RoleType | undefined }) {
             if (rooms === Rooms) return
             setRooms(rooms)
         })
-    }, [socket])
+    }, [socket, Rooms, setRooms])
 
     return (
         <Sidebar variant="inset">
             <SidebarHeader>
                 <div className='flex items-center gap-2'>
                     <Logo height={50} width={50} />
-                    <h1 className='font-bold'>Bakugan Arena</h1>
+                    <h1 className='font-bold'>{tCommon('brand')}</h1>
                 </div>
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
                     <SidebarGroupLabel>
-                        Navigation
+                        {t('group.navigation')}
                     </SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
@@ -105,7 +106,7 @@ export default function AppSidebar({ role }: { role: RoleType | undefined }) {
                                 <SidebarMenuButton asChild>
                                     <Link href='/'>
                                         <Home />
-                                        <span>Home</span>
+                                        <span>{t('home')}</span>
                                     </Link>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
@@ -129,7 +130,7 @@ export default function AppSidebar({ role }: { role: RoleType | undefined }) {
                                     <SidebarMenuButton asChild>
                                         <Link href='/dashboard/admin'>
                                             <KeyRound />
-                                            <span>Administration</span>
+                                            <span>{t('administration')}</span>
                                         </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
@@ -140,7 +141,7 @@ export default function AppSidebar({ role }: { role: RoleType | undefined }) {
                 </SidebarGroup>
                 <SidebarGroup>
                     <SidebarGroupLabel>
-                        Battles in process ({Rooms.length})
+                        {t('group.battlesInProcess', { count: Rooms.length })}
                     </SidebarGroupLabel>
                     <SidebarGroupContent>
                         {
@@ -150,7 +151,7 @@ export default function AppSidebar({ role }: { role: RoleType | undefined }) {
                                         <SidebarMenuButton asChild>
                                             <Link href={`/dashboard/battlefield?id=${room.roomId}`}>
                                                 <KeyRound />
-                                                <span>{`${room.p1} VS ${room.p2}`}</span>
+                                                <span>{tCommon('labels.vs', { p1: room.p1, p2: room.p2 })}</span>
                                             </Link>
                                         </SidebarMenuButton>
                                         <RemoveRoomButton

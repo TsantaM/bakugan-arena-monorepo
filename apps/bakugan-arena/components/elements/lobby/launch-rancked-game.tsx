@@ -14,8 +14,11 @@ import { Check, ChevronsUpDown } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 
 export default function LauchRanckedGate() {
+    const t = useTranslations('lobby.ranked')
+    const tCommon = useTranslations('common')
 
     const { emitPlayerData, waitingOpponent, cancelSearchOpponent } = UseSearchOpponent()
     const [value, setValue] = useState('')
@@ -50,7 +53,7 @@ export default function LauchRanckedGate() {
         <Card>
             <CardHeader>
                 <CardTitle className="text-center text-lg lg:text-2xl">
-                    Choose a deck and launch a game
+                    {t('title')}
                 </CardTitle>
             </CardHeader>
 
@@ -66,7 +69,7 @@ export default function LauchRanckedGate() {
                         >
                             {getUserDecksQuery.data && value
                                 ? getUserDecksQuery.data.find((d) => d.id === value)?.name
-                                : "Select deck..."}
+                                : t('selectDeck')}
                             <ChevronsUpDown className="opacity-50" />
                         </Button>
                     </PopoverTrigger>
@@ -74,7 +77,7 @@ export default function LauchRanckedGate() {
                         <Command>
                             <CommandList>
                                 <CommandEmpty>
-                                    <Button asChild variant='outline'><Link href='/dashboard/deck-builder'>No deck ! Go to deck builder</Link></Button>
+                                    <Button asChild variant='outline'><Link href='/dashboard/deck-builder'>{t('noDeckCta')}</Link></Button>
                                 </CommandEmpty>
                                 <CommandGroup>
                                     {getUserDecksQuery.data && getUserDecksQuery.data.map((d, index) => (
@@ -121,21 +124,24 @@ export default function LauchRanckedGate() {
             </CardContent>
 
             <CardFooter className="flex flex-col gap-3">
-                <Button disabled={!value || value === '' ? true : false} className="w-full text-xl font-bold" onClick={() => emitPlayerData({ data, deck, ranked: true })}>{waitingOpponent ? 'Waiting opponent ...' : !value || value === '' ? 'Choose a deck' : 'Start Battle !'}</Button>
+                <Button disabled={!value || value === '' ? true : false} className="w-full text-xl font-bold" onClick={() => emitPlayerData({ data, deck, ranked: true })}>{waitingOpponent ? t('waitingOpponent') : !value || value === '' ? t('chooseDeck') : t('startBattle')}</Button>
                 <Button variant="destructive" className="w-full text-xl font-bold" onClick={() => {
                     cancelSearchOpponent(data.userId)
                     setValue('')
-                }}>Cancel</Button>
+                }}>{tCommon('actions.cancel')}</Button>
 
                 <div>
-                    <p className="text-destructive font-bold">DISCLAIMER</p>
-                    <p className="text-sm">Random matchmaking may take a long time or may fail to find an opponent.</p>
+                    <p className="text-destructive font-bold">{t('disclaimerTitle')}</p>
+                    <p className="text-sm">{t('disclaimerBody')}</p>
                     <p className="text-sm">
-                        If you don’t find an opponent, join the game’s{" "}
-                        <Link href="https://discord.gg/8HfPK5RVuk" target="_blank">
-                            Discord
-                        </Link>{" "}
-                        and tag <span className="font-semibold">@Active</span> to find players.
+                        {t.rich('disclaimerDiscord', {
+                            discord: (chunks) => (
+                                <Link href="https://discord.gg/8HfPK5RVuk" target="_blank">
+                                    {chunks}
+                                </Link>
+                            ),
+                            active: (chunks) => <span className="font-semibold">{chunks}</span>,
+                        })}
                     </p>
                 </div>
             </CardFooter>

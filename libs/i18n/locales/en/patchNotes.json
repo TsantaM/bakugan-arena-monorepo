@@ -1,0 +1,32 @@
+{
+  "title": "Bakugan Arena patch notes",
+  "release1": {
+    "heading": "Patch Note 1 : 02 - 02 - 2026 :",
+    "items": {
+      "1": {
+        "title": "1 – Card Translation",
+        "body": "All remaining French cards have been translated into English."
+      },
+      "2": {
+        "title": "2 – Deck Builder Fixes & Improvements",
+        "body": "Fixed a bug preventing players from creating multiple decks. Updated the Deck Builder interface to be fully responsive on mobile devices."
+      },
+      "3": {
+        "title": "3 – Mantris Marionette Card",
+        "body": "Resolved an issue causing turn-related problems when using the Mantris Marionette card."
+      },
+      "4": {
+        "title": "4 – Phantom Turn",
+        "body": "The game no longer displays the interface to a player who cannot act during their turn. Now, if you cannot perform any action, the game simply prompts you to end your turn."
+      },
+      "5": {
+        "title": "5 – Landing Page & Dashboard Fixes",
+        "body": "Fixed multiple integration issues affecting the landing page and the dashboard."
+      },
+      "6": {
+        "title": "6 – Discord Link Added",
+        "body": "Added a direct link to the game's official Discord server on the landing page."
+      }
+    }
+  }
+}

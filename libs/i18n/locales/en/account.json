@@ -1,0 +1,20 @@
+{
+  "userData": {
+    "title": "User Data"
+  },
+  "edit": {
+    "title": "Edit your data",
+    "profilePicture": "Profile Picture",
+    "imageMaxSize": "Max file size is 5MB.",
+    "imageFormats": "Only .jpg, .jpeg, .png and .webp formats are supported."
+  },
+  "password": {
+    "title": "Update Password",
+    "current": "Current Password",
+    "new": "New Password",
+    "submit": "Update Password"
+  },
+  "toasts": {
+    "passwordUpdated": "Password Updated"
+  }
+}

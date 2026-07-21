@@ -5,10 +5,12 @@ import ImportReplayAction from "@/src/actions/replay/import-replay-action"
 import { replayDataType } from "@bakugan-arena/game-data"
 import { useMutation } from "@tanstack/react-query"
 import { FileJson, Loader2 } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useRef } from "react"
 import { toast, Toaster } from "sonner"
 
 export default function ImportReplay({ setReplay }: { setReplay: (replay: replayDataType) => void }) {
+    const t = useTranslations('replay')
     const inputRef = useRef<HTMLInputElement>(null)
 
     const mutation = useMutation({
@@ -16,14 +18,14 @@ export default function ImportReplay({ setReplay }: { setReplay: (replay: replay
             return await ImportReplayAction(file)
         },
         onSuccess: (data) => {
-            toast.success(`Importation success`)
+            toast.success(t('toasts.importSuccess'))
             setReplay(data)
             if (inputRef.current) {
                 inputRef.current.value = ""
             }
         },
         onError: () => {
-            toast.error(`Importation failed`)
+            toast.error(t('toasts.importFailed'))
             if (inputRef.current) {
                 inputRef.current.value = ""
             }
@@ -54,7 +56,7 @@ export default function ImportReplay({ setReplay }: { setReplay: (replay: replay
                 ) : (
                     <FileJson />
                 )}
-                Import JSON
+                {t('importJson')}
             </Button>
             <Toaster />
         </>

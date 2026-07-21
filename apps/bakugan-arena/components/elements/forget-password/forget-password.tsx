@@ -17,10 +17,13 @@ import { authClient } from "@/src/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
+import { useTranslations } from "next-intl";
 
 export type forgetPassword_type = z.infer<typeof forgetPasswordSchema>
 
 export default function ForgetPassword() {
+    const t = useTranslations('auth')
+    const tCommon = useTranslations('common')
     const router = useRouter()
     const forgetPassWordForm = useForm<forgetPassword_type>({
         resolver: zodResolver(forgetPasswordSchema), defaultValues: {
@@ -55,14 +58,14 @@ export default function ForgetPassword() {
                         name='email'
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Email</FormLabel>
+                                <FormLabel>{tCommon('labels.email')}</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="mmm@gmail.com" {...field} type="email" />
+                                    <Input placeholder={tCommon('placeholders.emailExample')} {...field} type="email" />
                                 </FormControl>
                             </FormItem>
                         )}
                     />
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit">{t('forgetPassword.submit')}</Button>
                 </form>
             </Form >
             <Toaster />

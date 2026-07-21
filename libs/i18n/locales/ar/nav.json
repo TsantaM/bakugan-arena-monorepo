@@ -1,0 +1,22 @@
+{
+  "group": {
+    "navigation": "التنقل",
+    "battlesInProcess": "المعارك الجارية ({count})",
+    "bakuDexNavigation": "تنقل باكو-دكس"
+  },
+  "home": "الرئيسية",
+  "dashboard": "لوحة التحكم",
+  "deckBuilder": "منشئ المجموعة",
+  "bakuDex": "باكو دكس",
+  "tutorial": "الدليل",
+  "ladder": "الترتيب",
+  "replay": "إعادة التشغيل",
+  "administration": "الإدارة",
+  "patchNotes": "ملاحظات التحديث",
+  "bakuDexLinks": {
+    "bakugans": "الباكوجان",
+    "abilityCards": "بطاقات القدرة",
+    "exclusiveAbilityCards": "بطاقات القدرة الحصرية",
+    "gateCards": "بطاقات البوابة"
+  }
+}

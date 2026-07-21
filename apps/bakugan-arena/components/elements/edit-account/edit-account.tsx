@@ -1,8 +1,7 @@
 'use client'
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import z from "zod";
-import { EditAccountSchema } from "./edit-account-zod";
+import { createEditAccountSchema, editAccount_type } from "./edit-account-zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,12 +11,23 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/src/lib/auth-client";
 import { deleteFile, uploadFile } from "@/src/actions/upload-action";
-
-type editAccount_type = z.infer<typeof EditAccountSchema>
+import { useTranslations } from "next-intl";
+import { useMemo } from "react";
 
 export default function EditAccount({ username, displayUsername, imgUrl }: { username: string, displayUsername: string, imgUrl: string | undefined | null }) {
-
+    const t = useTranslations('account')
+    const tAuth = useTranslations('auth')
+    const tCommon = useTranslations('common')
     const router = useRouter()
+
+    const EditAccountSchema = useMemo(
+        () => createEditAccountSchema({
+            imageMaxSize: t('edit.imageMaxSize'),
+            imageFormats: t('edit.imageFormats'),
+        }),
+        [t]
+    )
+
     const editAccountForm = useForm<editAccount_type>({
         resolver: zodResolver(EditAccountSchema), defaultValues: {
             username: username,
@@ -51,7 +61,7 @@ export default function EditAccount({ username, displayUsername, imgUrl }: { use
         <Card>
             <CardHeader>
                 <CardTitle>
-                    Edit your data
+                    {t('edit.title')}
                 </CardTitle>
             </CardHeader>
 
@@ -63,11 +73,11 @@ export default function EditAccount({ username, displayUsername, imgUrl }: { use
                             name='username'
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Username</FormLabel>
+                                    <FormLabel>{tCommon('labels.username')}</FormLabel>
                                     <FormControl>
                                         <Input {...field} type="text" />
                                     </FormControl>
-                                    <FormDescription>{`Username is the name you'll use it to sign in to you account`}</FormDescription>
+                                    <FormDescription>{tAuth('signUp.usernameHelp')}</FormDescription>
                                 </FormItem>
                             )}
                         />
@@ -77,21 +87,21 @@ export default function EditAccount({ username, displayUsername, imgUrl }: { use
                             name='displayName'
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Display Username</FormLabel>
+                                    <FormLabel>{tCommon('labels.displayUsername')}</FormLabel>
                                     <FormControl>
                                         <Input {...field} type="text" />
                                     </FormControl>
-                                    <FormDescription>{`Display username is the username that will appear to you and other players`}</FormDescription>
+                                    <FormDescription>{tAuth('signUp.displayUsernameHelp')}</FormDescription>
                                 </FormItem>
                             )}
                         />
 
                         <div className="">
-                            <Label>Profile Picture</Label>
+                            <Label>{t('edit.profilePicture')}</Label>
                             <Input {...editAccountForm.register('image')} type="file" />
                         </div>
 
-                        <Button type="submit">Update</Button>
+                        <Button type="submit">{tCommon('actions.update')}</Button>
                     </form>
                 </Form>
             </CardContent>

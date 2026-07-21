@@ -1,0 +1,32 @@
+{
+  "title": "Notes de patch Bakugan Arena",
+  "release1": {
+    "heading": "Note de patch 1 : 02 - 02 - 2026 :",
+    "items": {
+      "1": {
+        "title": "1 – Traduction des cartes",
+        "body": "Toutes les cartes restantes en français ont été traduites en anglais."
+      },
+      "2": {
+        "title": "2 – Corrections et améliorations du constructeur de deck",
+        "body": "Correction d'un bug empêchant les joueurs de créer plusieurs decks. Interface du constructeur de deck désormais entièrement responsive sur mobile."
+      },
+      "3": {
+        "title": "3 – Carte Mantris Marionette",
+        "body": "Résolution d'un problème de tours lors de l'utilisation de la carte Mantris Marionette."
+      },
+      "4": {
+        "title": "4 – Tour fantôme",
+        "body": "Le jeu n'affiche plus l'interface à un joueur qui ne peut pas agir pendant son tour. Désormais, s'il ne peut effectuer aucune action, le jeu lui demande simplement de terminer son tour."
+      },
+      "5": {
+        "title": "5 – Corrections landing page et tableau de bord",
+        "body": "Correction de plusieurs problèmes d'intégration affectant la landing page et le tableau de bord."
+      },
+      "6": {
+        "title": "6 – Lien Discord ajouté",
+        "body": "Ajout d'un lien direct vers le serveur Discord officiel du jeu sur la landing page."
+      }
+    }
+  }
+}

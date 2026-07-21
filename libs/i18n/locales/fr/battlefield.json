@@ -1,0 +1,19 @@
+{
+  "forfeit": {
+    "label": "Abandonner",
+    "title": "Êtes-vous sûr ?",
+    "description": "Voulez-vous vraiment abandonner ce match ?",
+    "confirm": "Confirmer l'abandon"
+  },
+  "messages": {
+    "aria": "Messages"
+  },
+  "battleLogs": {
+    "label": "Journaux de combat",
+    "heading": "Journal de combat"
+  },
+  "turn": "Tour {turn}",
+  "a11y": {
+    "skipAnimations": "Passer les animations"
+  }
+}

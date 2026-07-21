@@ -1,0 +1,55 @@
+{
+  "otherActions": "Other actions",
+  "ranked": {
+    "title": "Choose a deck and launch a game",
+    "selectDeck": "Select deck...",
+    "noDeckCta": "No deck ! Go to deck builder",
+    "waitingOpponent": "Waiting opponent ...",
+    "chooseDeck": "Choose a deck",
+    "startBattle": "Start Battle !",
+    "disclaimerTitle": "DISCLAIMER",
+    "disclaimerBody": "Random matchmaking may take a long time or may fail to find an opponent.",
+    "disclaimerDiscord": "If you don't find an opponent, join the game's <discord>Discord</discord> and tag <active>@Active</active> to find players."
+  },
+  "rooms": {
+    "title": "Your in process games"
+  },
+  "findUser": {
+    "trigger": "Find user",
+    "title": "Find user",
+    "placeholder": "Username",
+    "tableUser": "User",
+    "openChat": "Open Chat",
+    "empty": "No user found with this username"
+  },
+  "watch": {
+    "trigger": "Watch Battle",
+    "title": "Watch Battle",
+    "searchPlaceholder": "Search for a player...",
+    "empty": "No match found"
+  },
+  "chats": {
+    "title": "Chats",
+    "empty": "No messages yet."
+  },
+  "globalChat": {
+    "title": "Global Chat"
+  },
+  "challenge": {
+    "button": "Challenge",
+    "send": "Challenge",
+    "waitingResponse": "Waiting response...",
+    "choseDeck": "Choose a deck",
+    "popupTitle": "Select a deck for challenge",
+    "popupDescription": "{name} challenges you !"
+  },
+  "removeRoom": {
+    "ariaRemove": "Remove room",
+    "ariaForfeit": "Forfeit match"
+  },
+  "toasts": {
+    "minAbilityCards": "You should have minimum 3 Ability Cards in your deck",
+    "minGateCards": "You should have minimum 3 Gate Cards in your deck",
+    "opponentCancelled": "Opponent cancelled the search. You can try again."
+  }
+}

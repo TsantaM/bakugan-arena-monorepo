@@ -9,9 +9,12 @@ import { headers } from "next/headers"
 import Link from "next/link"
 import { redirect, unauthorized } from "next/navigation"
 import { Suspense } from "react";
+import { getTranslations } from "next-intl/server"
 
 
 export default async function DashboardPage() {
+    const t = await getTranslations('account')
+    const tCommon = await getTranslations('common')
 
     const user = await getUser()
 
@@ -26,28 +29,28 @@ export default async function DashboardPage() {
                 <CardHeader>
                     <div className="flex items-center justify-between">
                         <CardTitle>
-                            User Date
+                            {t('userData.title')}
                         </CardTitle>
-                        <Button variant='outline' asChild><Link href='/dashboard/edit-account'><Edit />Edit</Link></Button>
+                        <Button variant='outline' asChild><Link href='/dashboard/edit-account'><Edit />{tCommon('actions.edit')}</Link></Button>
                     </div>
                 </CardHeader>
 
                 <CardContent>
                     <div className="grid gap-5">
                         <div className="flex flex-col">
-                            <span className="text-sm text-muted-foreground">Username</span>
+                            <span className="text-sm text-muted-foreground">{tCommon('labels.username')}</span>
                             <Suspense fallback={<Skeleton className="w-full" />}>
                                 <span className='capitalize'>{user.username}</span>
                             </Suspense>
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-sm text-muted-foreground">Display Username</span>
+                            <span className="text-sm text-muted-foreground">{tCommon('labels.displayUsername')}</span>
                             <Suspense fallback={<Skeleton className="w-full" />}>
                                 <span className='capitalize'>{user.displayUsername}</span>
                             </Suspense>
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-sm text-muted-foreground">Email</span>
+                            <span className="text-sm text-muted-foreground">{tCommon('labels.email')}</span>
                             <span>{user.email}</span>
                         </div>
                     </div>
@@ -65,7 +68,7 @@ export default async function DashboardPage() {
 
                                 redirect('/auth/sign-in')
                             }}>
-                                <LogOut /> Log out
+                                <LogOut /> {tCommon('nav.logOut')}
                             </Button>
                         </form>
                     </div>

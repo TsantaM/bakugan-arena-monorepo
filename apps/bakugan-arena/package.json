@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "pnpm --filter @bakugan-arena/game-data build && pnpm --filter @bakugan-arena/drizzle-orm build && next build"
+    "deploy": "pnpm --filter @bakugan-arena/game-data build && pnpm --filter @bakugan-arena/drizzle-orm build && pnpm --filter @bakugan-arena/i18n build && next build"
   },
   "packageManager": "pnpm@10.15.0",
   "peerDependencies": {
@@ -17,6 +17,7 @@
   "dependencies": {
     "@bakugan-arena/drizzle-orm": "workspace:*",
     "@bakugan-arena/game-data": "workspace:*",
+    "@bakugan-arena/i18n": "workspace:*",
     "@base-ui/react": "^1.5.0",
     "@gsap/react": "^2.1.2",
     "@hookform/resolvers": "^5.2.1",
@@ -42,6 +43,7 @@
     "gsap": "^3.13.0",
     "lucide-react": "^0.539.0",
     "lz-string": "^1.5.0",
+    "next-intl": "^4.13.3",
     "next-themes": "^0.4.6",
     "pg": "^8.17.2",
     "radix-ui": "^1.4.3",

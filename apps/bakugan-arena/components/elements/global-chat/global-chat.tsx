@@ -11,8 +11,11 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Textarea } from "@/components/ui/textarea"
 import { MessagesSquare, Send } from "lucide-react"
 import { ConnectedUsersStore } from "@/src/store/connected-users-store"
+import { useTranslations } from "next-intl"
 
 export default function GlobalChat() {
+    const t = useTranslations('lobby.globalChat')
+    const tCommon = useTranslations('common')
 
     const socket = useSocket()
 
@@ -195,9 +198,9 @@ export default function GlobalChat() {
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>
-                        Global Chat
+                        {t('title')}
                     </DialogTitle>
-                    <span className={`text-sm ${connectedUsers.length === 0 ? 'text-gray-500' : 'text-green-500'}`} >{`${connectedUsers.length} online`}</span>
+                    <span className={`text-sm ${connectedUsers.length === 0 ? 'text-gray-500' : 'text-green-500'}`} >{tCommon('status.onlineCount', { count: connectedUsers.length })}</span>
                 </DialogHeader>
 
                 <ScrollArea className="h-100 overflow-y-hidden" scroll="bottom">
@@ -230,7 +233,7 @@ export default function GlobalChat() {
                 <div className="flex items-end gap-2 border rounded-2xl p-1 shadow-sm bg-background mt-2">
                     <Textarea
                         ref={textareaRef}
-                        placeholder="Write your message..."
+                        placeholder={tCommon('placeholders.writeMessage')}
                         className="min-h-10 max-h-30 max-w-100 resize-none border-0 focus-visible:ring-0"
                         onKeyDown={(e) => {
 

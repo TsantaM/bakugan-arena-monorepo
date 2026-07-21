@@ -1,0 +1,20 @@
+{
+  "userData": {
+    "title": "بيانات المستخدم"
+  },
+  "edit": {
+    "title": "تعديل بياناتك",
+    "profilePicture": "صورة الملف الشخصي",
+    "imageMaxSize": "الحد الأقصى لحجم الملف هو 5 ميغابايت.",
+    "imageFormats": "تُدعم فقط صيغ .jpg و.jpeg و.png و.webp."
+  },
+  "password": {
+    "title": "تحديث كلمة المرور",
+    "current": "كلمة المرور الحالية",
+    "new": "كلمة المرور الجديدة",
+    "submit": "تحديث كلمة المرور"
+  },
+  "toasts": {
+    "passwordUpdated": "تم تحديث كلمة المرور"
+  }
+}

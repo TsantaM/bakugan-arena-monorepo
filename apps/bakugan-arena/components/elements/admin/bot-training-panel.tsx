@@ -19,8 +19,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Brain, FileJson, Loader2, Trash2, Upload } from "lucide-react"
 import { useMemo, useRef, useState } from "react"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 
 export default function BotTrainingPanel() {
+  const t = useTranslations('admin')
+  const tCommon = useTranslations('common')
   const queryClient = useQueryClient()
   const fileRef = useRef<HTMLInputElement>(null)
   const [selectedReplayIds, setSelectedReplayIds] = useState<string[]>([])
@@ -54,11 +57,11 @@ export default function BotTrainingPanel() {
   const addFromDbMutation = useMutation({
     mutationFn: () => addTrainingItemsFromDb(selectedReplayIds),
     onSuccess: async ({ added }) => {
-      toast.success(`${added} replay(s) added to training set`)
+      toast.success(t('toasts.replaysAdded', { n: added }))
       setSelectedReplayIds([])
       await invalidateAll()
     },
-    onError: (err) => toast.error(err instanceof Error ? err.message : "Failed to add replays"),
+    onError: (err) => toast.error(err instanceof Error ? err.message : t('toasts.addReplaysFailed')),
   })
 
   const importMutation = useMutation({
@@ -71,59 +74,59 @@ export default function BotTrainingPanel() {
       })
     },
     onSuccess: async () => {
-      toast.success("Replay imported into training set")
+      toast.success(t('toasts.replayImported'))
       if (fileRef.current) fileRef.current.value = ""
       await invalidateAll()
     },
-    onError: (err) => toast.error(err instanceof Error ? err.message : "Import failed"),
+    onError: (err) => toast.error(err instanceof Error ? err.message : t('toasts.importFailed')),
   })
 
   const removeMutation = useMutation({
     mutationFn: () => removeBotTrainingItems(selectedItemIds),
     onSuccess: async ({ removed }) => {
-      toast.success(`${removed} item(s) removed`)
+      toast.success(t('toasts.itemsRemoved', { n: removed }))
       setSelectedItemIds([])
       await invalidateAll()
     },
-    onError: () => toast.error("Failed to remove items"),
+    onError: () => toast.error(t('toasts.removeFailed')),
   })
 
   const clearMutation = useMutation({
     mutationFn: clearBotTrainingSet,
     onSuccess: async () => {
-      toast.success("Training set cleared")
+      toast.success(t('toasts.setCleared'))
       setSelectedItemIds([])
       await invalidateAll()
     },
-    onError: () => toast.error("Failed to clear training set"),
+    onError: () => toast.error(t('toasts.clearFailed')),
   })
 
   const trainMutation = useMutation({
     mutationFn: () => trainBotFromTrainingSet(trainLabel || undefined),
     onSuccess: async (created) => {
-      toast.success(`Training done: ${created.version} (${created.metrics.decisionsAnalyzed} decisions)`)
+      toast.success(t('toasts.trainingDone', { version: created.version, n: created.metrics.decisionsAnalyzed }))
       setTrainLabel("")
       await invalidateAll()
     },
-    onError: (err) => toast.error(err instanceof Error ? err.message : "Training failed"),
+    onError: (err) => toast.error(err instanceof Error ? err.message : t('toasts.trainingFailed')),
   })
 
   const activateMutation = useMutation({
     mutationFn: (id: string) => activateBotWeightVersion(id),
     onSuccess: async () => {
-      toast.success("Weights activated — bots refresh within ~60s")
+      toast.success(t('toasts.weightsActivated'))
       await invalidateAll()
     },
-    onError: () => toast.error("Failed to activate weights"),
+    onError: () => toast.error(t('toasts.activateFailed')),
   })
 
   const defaultMutation = useMutation({
     mutationFn: activateDefaultBotWeights,
     onSuccess: async () => {
-      toast.success("Default weights activated")
+      toast.success(t('toasts.defaultsActivated'))
       await invalidateAll()
     },
-    onError: () => toast.error("Failed to activate defaults"),
+    onError: () => toast.error(t('toasts.defaultsFailed')),
   })
 
   const activeVersion = useMemo(
@@ -138,14 +141,13 @@ export default function BotTrainingPanel() {
   return (
     <Section className="flex flex-col gap-6">
       <div>
-        <h2 className="text-xl font-semibold">Bot training</h2>
+        <h2 className="text-xl font-semibold">{t('botTraining.pageTitle')}</h2>
         <p className="text-muted-foreground text-sm mt-1 max-w-3xl">
-          Build a curated replay set, train new scoring weights, then activate a version.
-          Live bots reload active weights from the database about every 60 seconds — no file download needed.
+          {t('botTraining.intro')}
         </p>
         {activeVersion && (
           <p className="text-sm mt-2">
-            Active version: <span className="font-medium">{activeVersion.label}</span>{" "}
+            {t('botTraining.activeVersion')} <span className="font-medium">{activeVersion.label}</span>{" "}
             ({activeVersion.version})
           </p>
         )}
@@ -154,9 +156,9 @@ export default function BotTrainingPanel() {
       <div className="grid gap-4 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>1. Replays from database</CardTitle>
+            <CardTitle>{t('botTraining.replaysFromDb')}</CardTitle>
             <CardDescription>
-              Select finished match replays. Learning targets the room winner when available.
+              {t('botTraining.replaysFromDbDesc')}
             </CardDescription>
           </CardHeader>
           <CardContent className="max-h-72 overflow-y-auto space-y-2">
@@ -172,14 +174,16 @@ export default function BotTrainingPanel() {
                 <span>
                   <span className="font-medium">{replay.title}</span>
                   <span className="block text-muted-foreground text-xs">
-                    winner: {replay.room?.winner ?? "unknown"} ·{" "}
-                    {new Date(replay.createdAt).toLocaleString()}
+                    {t('botTraining.winnerLine', {
+                      w: replay.room?.winner ?? t('botTraining.winnerUnknown'),
+                      date: new Date(replay.createdAt).toLocaleString(),
+                    })}
                   </span>
                 </span>
               </label>
             ))}
             {!replaysQuery.isLoading && (replaysQuery.data?.length ?? 0) === 0 && (
-              <p className="text-sm text-muted-foreground">No replays in database.</p>
+              <p className="text-sm text-muted-foreground">{t('botTraining.noReplays')}</p>
             )}
           </CardContent>
           <CardFooter>
@@ -188,16 +192,16 @@ export default function BotTrainingPanel() {
               onClick={() => addFromDbMutation.mutate()}
             >
               {addFromDbMutation.isPending ? <Loader2 className="animate-spin" /> : <Brain />}
-              Add to training set
+              {t('botTraining.addToSet')}
             </Button>
           </CardFooter>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>2. Import replay file</CardTitle>
+            <CardTitle>{t('botTraining.importTitle')}</CardTitle>
             <CardDescription>
-              Upload a replay JSON (same format as the Replay page). Choose which player to imitate.
+              {t('botTraining.importDesc')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -209,7 +213,7 @@ export default function BotTrainingPanel() {
                   checked={importLearnFrom === "player1"}
                   onChange={() => setImportLearnFrom("player1")}
                 />
-                Learn from player 1
+                {t('botTraining.learnP1')}
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -218,7 +222,7 @@ export default function BotTrainingPanel() {
                   checked={importLearnFrom === "player2"}
                   onChange={() => setImportLearnFrom("player2")}
                 />
-                Learn from player 2
+                {t('botTraining.learnP2')}
               </label>
             </div>
             <input
@@ -239,7 +243,7 @@ export default function BotTrainingPanel() {
               onClick={() => fileRef.current?.click()}
             >
               {importMutation.isPending ? <Loader2 className="animate-spin" /> : <Upload />}
-              Import JSON
+              {tCommon('actions.import')}
             </Button>
           </CardFooter>
         </Card>
@@ -247,9 +251,9 @@ export default function BotTrainingPanel() {
 
       <Card>
         <CardHeader>
-          <CardTitle>3. Training set</CardTitle>
+          <CardTitle>{t('botTraining.trainingSet')}</CardTitle>
           <CardDescription>
-            {(itemsQuery.data?.length ?? 0)} replay(s) selected for the next training run.
+            {t('botTraining.trainingSetDesc', { n: itemsQuery.data?.length ?? 0 })}
           </CardDescription>
         </CardHeader>
         <CardContent className="max-h-64 overflow-y-auto space-y-2">
@@ -270,7 +274,7 @@ export default function BotTrainingPanel() {
             </label>
           ))}
           {!itemsQuery.isLoading && (itemsQuery.data?.length ?? 0) === 0 && (
-            <p className="text-sm text-muted-foreground">Training set is empty.</p>
+            <p className="text-sm text-muted-foreground">{t('botTraining.emptySet')}</p>
           )}
         </CardContent>
         <CardFooter className="flex flex-wrap gap-2">
@@ -280,31 +284,31 @@ export default function BotTrainingPanel() {
             onClick={() => removeMutation.mutate()}
           >
             {removeMutation.isPending ? <Loader2 className="animate-spin" /> : <Trash2 />}
-            Remove selected
+            {t('botTraining.removeSelected')}
           </Button>
           <Button
             variant="destructive"
             disabled={!itemsQuery.data?.length || clearMutation.isPending}
             onClick={() => {
-              if (window.confirm("Clear the entire training set?")) clearMutation.mutate()
+              if (window.confirm(t('botTraining.clearConfirm'))) clearMutation.mutate()
             }}
           >
-            Clear all
+            {t('botTraining.clearAll')}
           </Button>
         </CardFooter>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>4. Train &amp; deploy</CardTitle>
+          <CardTitle>{t('botTraining.trainDeploy')}</CardTitle>
           <CardDescription>
-            Training creates a new weight version (not active yet). Activate it to push to live bots.
+            {t('botTraining.trainDesc')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           <input
             className="border rounded-md px-3 py-2 text-sm w-full max-w-md bg-background"
-            placeholder="Optional label (e.g. high-elo week 12)"
+            placeholder={t('botTraining.labelPlaceholder')}
             value={trainLabel}
             onChange={(e) => setTrainLabel(e.target.value)}
           />
@@ -314,7 +318,7 @@ export default function BotTrainingPanel() {
               onClick={() => trainMutation.mutate()}
             >
               {trainMutation.isPending ? <Loader2 className="animate-spin" /> : <Brain />}
-              Train from set
+              {t('botTraining.trainFromSet')}
             </Button>
             <Button
               variant="outline"
@@ -322,12 +326,12 @@ export default function BotTrainingPanel() {
               onClick={() => defaultMutation.mutate()}
             >
               {defaultMutation.isPending ? <Loader2 className="animate-spin" /> : <FileJson />}
-              Activate defaults
+              {t('botTraining.activateDefaults')}
             </Button>
           </div>
         </CardContent>
         <CardFooter className="flex-col items-stretch gap-2">
-          <p className="text-sm font-medium">Weight versions</p>
+          <p className="text-sm font-medium">{t('botTraining.weightVersions')}</p>
           <div className="max-h-64 overflow-y-auto space-y-2 w-full">
             {(weightsQuery.data ?? []).map((version) => (
               <div
@@ -338,7 +342,7 @@ export default function BotTrainingPanel() {
                   <div className="font-medium">
                     {version.label}{" "}
                     {version.isActive && (
-                      <span className="text-xs text-green-600 font-normal">(active)</span>
+                      <span className="text-xs text-green-600 font-normal">{t('botTraining.activeBadge')}</span>
                     )}
                   </div>
                   <div className="text-muted-foreground text-xs">
@@ -353,13 +357,13 @@ export default function BotTrainingPanel() {
                   disabled={version.isActive || activateMutation.isPending}
                   onClick={() => activateMutation.mutate(version.id)}
                 >
-                  {version.isActive ? "Active" : "Activate"}
+                  {version.isActive ? t('botTraining.active') : t('botTraining.activate')}
                 </Button>
               </div>
             ))}
             {!weightsQuery.isLoading && (weightsQuery.data?.length ?? 0) === 0 && (
               <p className="text-sm text-muted-foreground">
-                No trained versions yet. Bots currently use built-in default heuristics.
+                {t('botTraining.noVersions')}
               </p>
             )}
           </div>

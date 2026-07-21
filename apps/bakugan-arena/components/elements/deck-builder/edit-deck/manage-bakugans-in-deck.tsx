@@ -26,9 +26,10 @@ import BakuganPreviewDeckEditor from "./bakugan-preview-deck-editor"
 import { AddBakuganToDeckAction } from "@/src/actions/deck-builder/edit-deck-action"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 
 export default function ManageBakugansInDeck({ deckId, bakugans }: { deckId: string, bakugans: string[] | undefined }) {
-
+    const t = useTranslations('deckBuilder')
     const queryClient = useQueryClient()
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState("")
@@ -47,7 +48,7 @@ export default function ManageBakugansInDeck({ deckId, bakugans }: { deckId: str
         mutationKey: ['add-bakugan-to-deck'],
         mutationFn: addBakuganToDeck,
         onSuccess: () => {
-            toast.success("Bakugan has been added to deck")
+            toast.success(t('toasts.bakuganAdded'))
             queryClient.invalidateQueries({ queryKey: ['get-deck-data'] })
             queryClient.invalidateQueries({ queryKey: ['get-user-decks'] })
             setValue('')
@@ -65,7 +66,7 @@ export default function ManageBakugansInDeck({ deckId, bakugans }: { deckId: str
                 <CardHeader>
                     <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
                         <CardTitle>
-                            Bakugans {bakugans ? bakugans.length : 0} / 3
+                            {t('sections.bakugans', { n: bakugans ? bakugans.length : 0 })}
                         </CardTitle>
                         <Popover open={open} onOpenChange={setOpen}>
                             <PopoverTrigger asChild>
@@ -82,7 +83,7 @@ export default function ManageBakugansInDeck({ deckId, bakugans }: { deckId: str
                                                 (b) => `${b.name} ${b.attribut}` === value
                                             )
 
-                                            if (!selectedBakugan) return "Select Bakugan..."
+                                            if (!selectedBakugan) return t('select.bakugan')
 
                                             const { name, attribut, image } = selectedBakugan
                                             const imageUrl = `/images/bakugans/sphere/${image}/${attribut.toUpperCase()}.png`
@@ -95,16 +96,16 @@ export default function ManageBakugansInDeck({ deckId, bakugans }: { deckId: str
                                             )
                                         })()
                                     ) : (
-                                        "Select Bakugan..."
+                                        t('select.bakugan')
                                     )}
                                     <ChevronsUpDown className="opacity-50" />
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-full lg:w-75 p-0">
                                 <Command>
-                                    <CommandInput placeholder="Search Bakugan..." className="h-9" />
+                                    <CommandInput placeholder={t('search.bakugan')} className="h-9" />
                                     <CommandList>
-                                        <CommandEmpty>No bakugan found.</CommandEmpty>
+                                        <CommandEmpty>{t('emptyStates.bakuganNotFound')}</CommandEmpty>
                                         <CommandGroup>
                                             {notInDeckBakugans.map((b, index) => (
                                                 <CommandItem

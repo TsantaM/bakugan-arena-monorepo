@@ -1,0 +1,8 @@
+{
+  "columns": {
+    "rank": "#",
+    "avatar": "Avatar",
+    "player": "Joueur",
+    "elo": "ELO"
+  }
+}

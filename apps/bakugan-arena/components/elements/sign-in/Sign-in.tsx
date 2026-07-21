@@ -29,11 +29,14 @@ import { Toaster } from "@/components/ui/sonner"
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { useMutation } from "@tanstack/react-query"
 import { Loader } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 export type signInForm_type = z.infer<typeof SignInSchema>
 
 
 export default function SignIn({ className }: { className?: string }) {
+    const t = useTranslations('auth')
+    const tCommon = useTranslations('common')
     const router = useRouter()
     const signInForm = useForm<signInForm_type>({
         resolver: zodResolver(SignInSchema), defaultValues: {
@@ -88,9 +91,9 @@ export default function SignIn({ className }: { className?: string }) {
                     name='username'
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Username</FormLabel>
+                            <FormLabel>{tCommon('labels.username')}</FormLabel>
                             <FormControl>
-                                <Input placeholder="Shun Kazami" {...field} type="text" />
+                                <Input placeholder={tCommon('placeholders.usernameExample')} {...field} type="text" />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -101,7 +104,7 @@ export default function SignIn({ className }: { className?: string }) {
                     name='password'
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Password</FormLabel>
+                            <FormLabel>{tCommon('labels.password')}</FormLabel>
                             <FormControl>
                                 <Input placeholder="" {...field} type="password" />
                             </FormControl>
@@ -109,7 +112,7 @@ export default function SignIn({ className }: { className?: string }) {
                         </FormItem>
                     )}
                 />
-                <Button type="submit">Sign In</Button>
+                <Button type="submit">{t('signIn.submit')}</Button>
             </form>
         </Form>
 
@@ -118,7 +121,8 @@ export default function SignIn({ className }: { className?: string }) {
 }
 
 export function SignInModal({ triggerContent }: { triggerContent?: string }) {
-
+    const t = useTranslations('auth')
+    const tCommon = useTranslations('common')
     const router = useRouter()
 
     const signInForm = useForm<signInForm_type>({
@@ -164,16 +168,16 @@ export function SignInModal({ triggerContent }: { triggerContent?: string }) {
 
             <DialogTrigger asChild>
                 <Button variant='outline'>
-                    { triggerContent ? triggerContent : 'Log In'}
+                    { triggerContent ? triggerContent : t('signIn.trigger')}
                 </Button>
             </DialogTrigger>
 
             <DialogContent className="flex flex-col">
 
                 <DialogHeader>
-                    <DialogTitle>Sign in to your Account</DialogTitle>
+                    <DialogTitle>{t('signIn.title')}</DialogTitle>
                     <DialogDescription>
-                        Enter your username and password to sign in to your account
+                        {t('signIn.description')}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -184,9 +188,9 @@ export function SignInModal({ triggerContent }: { triggerContent?: string }) {
                             name='username'
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Username</FormLabel>
+                                    <FormLabel>{tCommon('labels.username')}</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Shun Kazami" {...field} type="text" />
+                                        <Input placeholder={tCommon('placeholders.usernameExample')} {...field} type="text" />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -197,7 +201,7 @@ export function SignInModal({ triggerContent }: { triggerContent?: string }) {
                             name='password'
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Password</FormLabel>
+                                    <FormLabel>{tCommon('labels.password')}</FormLabel>
                                     <FormControl>
                                         <Input placeholder="" {...field} type="password" />
                                     </FormControl>
@@ -208,9 +212,9 @@ export function SignInModal({ triggerContent }: { triggerContent?: string }) {
 
                         <DialogFooter>
                             <DialogClose asChild>
-                                <Button variant='destructive'>Cancel</Button>
+                                <Button variant='destructive'>{tCommon('actions.cancel')}</Button>
                             </DialogClose>
-                            <Button type="submit" disabled={signInMutation.isPending}> {signInMutation.isPending ? <Loader /> : 'Sign In'}</Button>
+                            <Button type="submit" disabled={signInMutation.isPending}> {signInMutation.isPending ? <Loader /> : t('signIn.submit')}</Button>
                         </DialogFooter>
 
                     </form>

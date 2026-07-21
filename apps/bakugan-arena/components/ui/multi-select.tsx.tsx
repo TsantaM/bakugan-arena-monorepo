@@ -1,3 +1,5 @@
+'use client'
+
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import {
@@ -26,6 +28,7 @@ import {
 	CommandList,
 	CommandSeparator,
 } from "@/components/ui/command";
+import { useTranslations } from "next-intl";
 
 /**
  * Animation types and configurations
@@ -311,7 +314,7 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
 			onValueChange,
 			variant,
 			defaultValue = [],
-			placeholder = "Select options",
+			placeholder,
 			animation = 0,
 			animationConfig,
 			maxCount = 3,
@@ -335,6 +338,9 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
 		},
 		ref
 	) => {
+		const t = useTranslations("ui.multiSelect");
+		const tCommon = useTranslations("common");
+		const resolvedPlaceholder = placeholder ?? t("placeholder");
 		const [selectedValues, setSelectedValues] =
 			React.useState<string[]>(defaultValue);
 		const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
@@ -804,7 +810,7 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
 							aria-describedby={`${triggerDescriptionId} ${selectedCountId}`}
 							aria-label={`Multi-select: ${selectedValues.length} of ${
 								getAllOptions().length
-							} options selected. ${placeholder}`}
+							} options selected. ${resolvedPlaceholder}`}
 							className={cn(
 								"flex p-1 rounded-md border min-h-10 h-auto items-center justify-between bg-inherit hover:bg-inherit [&_svg]:pointer-events-auto",
 								autoSize ? "w-auto" : "w-full",
@@ -990,7 +996,7 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
 							) : (
 								<div className="flex items-center justify-between w-full mx-auto">
 									<span className="text-sm text-muted-foreground mx-3">
-										{placeholder}
+										{resolvedPlaceholder}
 									</span>
 									<ChevronDown className="h-4 cursor-pointer text-muted-foreground mx-2" />
 								</div>
@@ -1022,11 +1028,11 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
 						<Command>
 							{searchable && (
 								<CommandInput
-									placeholder="Search options..."
+									placeholder={t("search")}
 									onKeyDown={handleInputKeyDown}
 									value={searchValue}
 									onValueChange={setSearchValue}
-									aria-label="Search through available options"
+									aria-label={t("searchAria")}
 									aria-describedby={`${multiSelectId}-search-help`}
 								/>
 							)}
@@ -1042,7 +1048,7 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
 									"overscroll-behavior-y-contain"
 								)}>
 								<CommandEmpty>
-									{emptyIndicator || "No results found."}
+									{emptyIndicator || t("empty")}
 								</CommandEmpty>{" "}
 								{!hideSelectAll && !searchValue && (
 									<CommandGroup>
@@ -1071,7 +1077,7 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
 												<CheckIcon className="h-4 w-4" />
 											</div>
 											<span>
-												(Select All
+												({t("selectAll")}
 												{getAllOptions().length > 20
 													? ` - ${getAllOptions().length} options`
 													: ""}
@@ -1173,7 +1179,7 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
 												<CommandItem
 													onSelect={handleClear}
 													className="flex-1 justify-center cursor-pointer">
-													Clear
+													{tCommon("actions.clear")}
 												</CommandItem>
 												<Separator
 													orientation="vertical"
@@ -1184,7 +1190,7 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
 										<CommandItem
 											onSelect={() => setIsPopoverOpen(false)}
 											className="flex-1 justify-center cursor-pointer max-w-full">
-											Close
+											{t("close")}
 										</CommandItem>
 									</div>
 								</CommandGroup>

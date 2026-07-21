@@ -1,0 +1,28 @@
+{
+  "bakugans": {
+    "title": "الباكوجان",
+    "search": "اسم الباكوجان"
+  },
+  "abilityCards": {
+    "title": "بطاقات القدرة",
+    "search": "اسم بطاقة القدرة"
+  },
+  "gateCards": {
+    "title": "بطاقات البوابة ({count})",
+    "search": "اسم بطاقة البوابة"
+  },
+  "detail": {
+    "powerLevel": "مستوى القوة:",
+    "exclusiveAbilities": "القدرات الحصرية",
+    "abilitiesCards": "بطاقات القدرة"
+  },
+  "card": {
+    "maxPerDeck": "الحد الأقصى لكل مجموعة:",
+    "description": "الوصف:"
+  },
+  "empty": "لا توجد نتائج",
+  "exclusiveAbilityCards": {
+    "title": "بطاقات القدرة الحصرية",
+    "search": "اسم بطاقة القدرة"
+  }
+}

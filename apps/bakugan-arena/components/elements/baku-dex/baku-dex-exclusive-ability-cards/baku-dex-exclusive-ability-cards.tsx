@@ -6,10 +6,11 @@ import ExclusiveAbilityCardDexPreview from "../baku-dex-preview/exclusive-abilit
 import { useState } from "react";
 import { ExclusiveAbilitiesList } from "@bakugan-arena/game-data";
 import { BakuganList } from "@bakugan-arena/game-data";
+import { useTranslations } from "next-intl";
 
 export default function BakuDexExclusiveAbilityCards() {
-
-
+    const t = useTranslations('bakuDex')
+    const tCommon = useTranslations('common')
     const [search, setSearch] = useState('')
     const filtered = ExclusiveAbilitiesList.filter((d) => d.name.toLowerCase().includes(search.toLowerCase()))
 
@@ -18,10 +19,10 @@ export default function BakuDexExclusiveAbilityCards() {
 
             <CardHeader>
                 <CardTitle>
-                    Ability Cards
+                    {t('exclusiveAbilityCards.title')}
                 </CardTitle>
                 <div>
-                    <Input placeholder="Ability Card Name" onChange={(e) => setSearch(e.target.value)} />
+                    <Input placeholder={t('exclusiveAbilityCards.search')} onChange={(e) => setSearch(e.target.value)} />
                 </div>
             </CardHeader>
 
@@ -30,7 +31,7 @@ export default function BakuDexExclusiveAbilityCards() {
                     filtered.length > 0 ? filtered.map((c, index) => {
                         const compatibles = BakuganList.filter((b) => b.exclusiveAbilities.includes(c.key))
                     return <ExclusiveAbilityCardDexPreview key={index} nom={c.name} description={c.description} max={c.maxInDeck} bakugan={compatibles} />
-                }) : <p className="text-center">No result</p>
+                }) : <p className="text-center">{tCommon('empty.noResult')}</p>
                 }
             </CardContent>
 

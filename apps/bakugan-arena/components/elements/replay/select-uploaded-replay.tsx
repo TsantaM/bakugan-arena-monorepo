@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Check, ChevronsUpDown } from 'lucide-react'
 import { replayDataType } from '@bakugan-arena/game-data'
 import { useQuery } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -28,6 +29,7 @@ export default function SelectUploadedReplay({
 }: {
     setReplay: (replay: replayDataType) => void
 }) {
+    const t = useTranslations('replay')
     const [open, setOpen] = useState(false)
     const [selectedReplayId, setSelectedReplayId] = useState('')
 
@@ -56,18 +58,18 @@ export default function SelectUploadedReplay({
                     aria-expanded={open}
                     className="w-64 justify-between"
                 >
-                    {selectedReplay?.title ?? 'Select a replay'}
+                    {selectedReplay?.title ?? t('select')}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
 
             <PopoverContent className="w-64 p-0">
                 <Command>
-                    <CommandInput placeholder="Search replay..." />
+                    <CommandInput placeholder={t('search')} />
 
                     <CommandList>
                         <CommandEmpty>
-                            No replay found.
+                            {t('empty')}
                         </CommandEmpty>
 
                         <CommandGroup>
@@ -80,7 +82,8 @@ export default function SelectUploadedReplay({
                                         setSelectedReplayId(replay.id)
                                         setReplay(replay.replayData)
                                         setOpen(false)
-                                    }}
+                                    }
+                                    }
                                 >
                                     <Check
                                         className={cn(

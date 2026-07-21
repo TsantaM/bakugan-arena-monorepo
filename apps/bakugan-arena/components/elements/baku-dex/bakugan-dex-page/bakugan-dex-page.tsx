@@ -5,8 +5,10 @@ import { bakuganType } from "@bakugan-arena/game-data"
 import { BakuganList } from "@bakugan-arena/game-data";
 import { ExclusiveAbilitiesList } from "@bakugan-arena/game-data";
 import { AbilityCardsList } from "@bakugan-arena/game-data";
+import { getTranslations } from "next-intl/server";
 
-export default function BakuganDex({ data }: { data: bakuganType }) {
+export default async function BakuganDex({ data }: { data: bakuganType }) {
+    const t = await getTranslations('bakuDex')
 
     const bakugan = BakuganList.find((b) => b.key === data.key)
     const exclusiveAbilities = ExclusiveAbilitiesList.filter((c) => bakugan?.exclusiveAbilities.includes(c.key))
@@ -28,7 +30,7 @@ export default function BakuganDex({ data }: { data: bakuganType }) {
                                     </CardTitle>
                                     <ul className="flex flex-col gap-1">
                                         <li className="relative size-10"><Image src={`/images/attributs/${bakugan?.attribut.toUpperCase()}.png`} alt={bakugan?.attribut ? bakugan?.attribut : ''} fill /></li>
-                                        <li><span className='text-bold text-sm'>Power Level : </span><span className="text-sm">{bakugan?.powerLevel} G</span></li>
+                                        <li><span className='text-bold text-sm'>{t('detail.powerLevel')} </span><span className="text-sm">{bakugan?.powerLevel} G</span></li>
                                     </ul>
                                 </div>
                             </div>
@@ -39,7 +41,7 @@ export default function BakuganDex({ data }: { data: bakuganType }) {
                     <Card>
                         <CardHeader>
                             <CardTitle>
-                                Exclusives Abilities
+                                {t('detail.exclusiveAbilities')}
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
@@ -52,7 +54,7 @@ export default function BakuganDex({ data }: { data: bakuganType }) {
                     <Card>
                         <CardHeader>
                             <CardTitle>
-                                Abilities Cards
+                                {t('detail.abilitiesCards')}
                             </CardTitle>
                         </CardHeader>
                         <CardContent>

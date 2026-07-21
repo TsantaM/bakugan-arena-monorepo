@@ -15,6 +15,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { useSocket } from "@/src/providers/socket-provider"
 import { authClient } from "@/src/lib/auth-client"
+import { useTranslations } from "next-intl"
 
 export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
     chalenge: null | {
@@ -27,6 +28,9 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
         waitingForResponse: boolean
     }
 }) {
+    const t = useTranslations('lobby.challenge')
+    const tRanked = useTranslations('lobby.ranked')
+    const tCommon = useTranslations('common')
 
     const username = authClient.useSession().data?.user.displayUsername
     const userId = authClient.useSession().data?.user.id
@@ -61,7 +65,7 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
         if (!userId) return
         const data: chalengeSomeoneSocketProps = {
             userId: userId,
-            chalengerName: username || 'Player Name',
+            chalengerName: username || tCommon('fallback.playerName'),
             deckId: chalenge.deck,
             targetId: targetId
         }
@@ -131,7 +135,7 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
                                 >
                                     {getUserDecksQuery.data && isChalenged?.deck
                                         ? getUserDecksQuery.data.find((d) => d.id === isChalenged.deck)?.name
-                                        : "Select deck..."}
+                                        : tRanked('selectDeck')}
                                     <ChevronsUpDown className="opacity-50" />
                                 </Button>
                             </PopoverTrigger>
@@ -139,7 +143,7 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
                                 <Command>
                                     <CommandList>
                                         <CommandEmpty>
-                                            <Button asChild variant='outline'><Link href='/dashboard/deck-builder'>No deck ! Go to deck builder</Link></Button>
+                                            <Button asChild variant='outline'><Link href='/dashboard/deck-builder'>{tRanked('noDeckCta')}</Link></Button>
                                         </CommandEmpty>
                                         <CommandGroup>
                                             {getUserDecksQuery.data && getUserDecksQuery.data.map((d, index) => (
@@ -201,12 +205,12 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
 
                     <CardFooter className="flex justify-end gap-1">
                         <Button disabled={!isChalenged?.deck ? true : false} className="font-bold" onClick={acceptChalenge}>
-                            {!isChalenged?.deck ? 'Chose a deck' : 'Accept'}
+                            {!isChalenged?.deck ? t('choseDeck') : tCommon('actions.accept')}
                         </Button>
-                        <Button variant="destructive" className="font-bold" onClick={rejectChalgenge}>Reject</Button>
+                        <Button variant="destructive" className="font-bold" onClick={rejectChalgenge}>{tCommon('actions.reject')}</Button>
                     </CardFooter>
                 </Card> :
-                    !show ? <Button variant="outline" className="w-full" onClick={() => setShow(true)}>Chalenge</Button> : <Card>
+                    !show ? <Button variant="outline" className="w-full" onClick={() => setShow(true)}>{t('button')}</Button> : <Card>
                         <CardContent className="flex flex-col gap-3">
                             <Popover open={open} onOpenChange={setOpen}>
                                 <PopoverTrigger asChild className="m-auto">
@@ -218,7 +222,7 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
                                     >
                                         {getUserDecksQuery.data && chalenge?.deck
                                             ? getUserDecksQuery.data.find((d) => d.id === chalenge.deck)?.name
-                                            : "Select deck..."}
+                                            : tRanked('selectDeck')}
                                         <ChevronsUpDown className="opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
@@ -226,7 +230,7 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
                                     <Command>
                                         <CommandList>
                                             <CommandEmpty>
-                                                <Button asChild variant='outline'><Link href='/dashboard/deck-builder'>No deck ! Go to deck builder</Link></Button>
+                                                <Button asChild variant='outline'><Link href='/dashboard/deck-builder'>{tRanked('noDeckCta')}</Link></Button>
                                             </CommandEmpty>
                                             <CommandGroup>
                                                 {getUserDecksQuery.data && getUserDecksQuery.data.map((d, index) => (
@@ -274,12 +278,12 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
 
                         <CardFooter className="flex justify-end gap-1">
                             <Button disabled={!chalenge?.deck || chalenge?.waitingForResponse ? true : false} className="font-bold" onClick={sendChalenge}>
-                                {chalenge?.waitingForResponse ? 'Waiting response...' : !chalenge?.deck ? 'Chose a deck' : 'Challenge'}
+                                {chalenge?.waitingForResponse ? t('waitingResponse') : !chalenge?.deck ? t('choseDeck') : t('send')}
                             </Button>
                             <Button variant="destructive" className="font-bold" onClick={() => {
                                 cancelChalenge()
                                 setShow(false)
-                            }} >Cancel</Button>
+                            }} >{tCommon('actions.cancel')}</Button>
                         </CardFooter>
                     </Card>
             }

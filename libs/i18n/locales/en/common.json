@@ -1,0 +1,67 @@
+{
+  "brand": "Bakugan Arena",
+  "metadata": {
+    "description": "Bakugan Arena is a fan game inspired by Pokémon battle simulator Pokémon Showdown"
+  },
+  "actions": {
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "submit": "Submit",
+    "update": "Update",
+    "edit": "Edit",
+    "close": "Close",
+    "import": "Import",
+    "delete": "Delete",
+    "reset": "Reset",
+    "accept": "Accept",
+    "reject": "Reject",
+    "upload": "Upload",
+    "clear": "Clear",
+    "remove": "Remove"
+  },
+  "nav": {
+    "account": "Account",
+    "logOut": "Log out"
+  },
+  "labels": {
+    "username": "Username",
+    "displayUsername": "Display Username",
+    "email": "Email",
+    "password": "Password",
+    "vs": "{p1} VS {p2}"
+  },
+  "placeholders": {
+    "usernameExample": "Shun Kazami",
+    "displayUsernameExample": "Shun K4z4m1",
+    "emailExample": "mmm@gmail.com",
+    "writeMessage": "Write your message..."
+  },
+  "empty": {
+    "noResult": "No result",
+    "noCardFound": "No card found."
+  },
+  "a11y": {
+    "toggleSidebar": "Toggle Sidebar",
+    "toggleTheme": "Toggle theme",
+    "discordLogo": "discord logo",
+    "battleScreenshot": "battle-screenshot",
+    "defaultProfilePicture": "Default Profile Picture"
+  },
+  "fallback": {
+    "player": "Player",
+    "unknownPlayer": "Unknown Player",
+    "playerName": "Player Name"
+  },
+  "status": {
+    "onlineCount": "{count} online",
+    "offline": "Offline"
+  },
+  "links": {
+    "discord": "Discord"
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "fr": "Français"
+  }
+}

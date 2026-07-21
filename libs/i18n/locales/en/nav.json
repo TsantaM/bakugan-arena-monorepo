@@ -1,0 +1,22 @@
+{
+  "group": {
+    "navigation": "Navigation",
+    "battlesInProcess": "Battles in process ({count})",
+    "bakuDexNavigation": "Baku-Dex Navigation"
+  },
+  "home": "Home",
+  "dashboard": "Dashboard",
+  "deckBuilder": "Deck Builder",
+  "bakuDex": "Baku Dex",
+  "tutorial": "Tutorial",
+  "ladder": "Ladder",
+  "replay": "Replay",
+  "administration": "Administration",
+  "patchNotes": "Patch notes",
+  "bakuDexLinks": {
+    "bakugans": "Bakugans",
+    "abilityCards": "Ability Cards",
+    "exclusiveAbilityCards": "Exclusives Ability Cards",
+    "gateCards": "Gate Cards"
+  }
+}

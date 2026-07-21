@@ -15,8 +15,12 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { BakuganList } from "@bakugan-arena/game-data";
+import { useTranslations } from "next-intl";
 
 export default function OnChalengePopUp() {
+    const t = useTranslations('lobby.challenge')
+    const tRanked = useTranslations('lobby.ranked')
+    const tCommon = useTranslations('common')
 
     const socket = useSocket()
     const [value, setValue] = useState('')
@@ -58,9 +62,9 @@ export default function OnChalengePopUp() {
         <Dialog open={chalenge ? true : false} >
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Select a deck for chalenge</DialogTitle>
+                    <DialogTitle>{t('popupTitle')}</DialogTitle>
                     <DialogDescription>
-                        {chalenge?.chalengerName} chalenge you !
+                        {t('popupDescription', { name: chalenge?.chalengerName ?? '' })}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -74,7 +78,7 @@ export default function OnChalengePopUp() {
                         >
                             {getUserDecksQuery.data && value
                                 ? getUserDecksQuery.data.find((d) => d.id === value)?.name
-                                : "Select deck..."}
+                                : tRanked('selectDeck')}
                             <ChevronsUpDown className="opacity-50" />
                         </Button>
                     </PopoverTrigger>
@@ -82,7 +86,7 @@ export default function OnChalengePopUp() {
                         <Command>
                             <CommandList>
                                 <CommandEmpty>
-                                    <Button asChild variant='outline'><Link href='/dashboard/deck-builder'>No deck ! Go to deck builder</Link></Button>
+                                    <Button asChild variant='outline'><Link href='/dashboard/deck-builder'>{tRanked('noDeckCta')}</Link></Button>
                                 </CommandEmpty>
                                 <CommandGroup>
                                     {getUserDecksQuery.data && getUserDecksQuery.data.map((d, index) => (
@@ -140,9 +144,9 @@ export default function OnChalengePopUp() {
                         setChalenge(undefined)
                         setValue('')
 
-                    }}>Accept</Button>
+                    }}>{tCommon('actions.accept')}</Button>
                     <DialogClose asChild>
-                        <Button variant='destructive'>Reject</Button>
+                        <Button variant='destructive'>{tCommon('actions.reject')}</Button>
                     </DialogClose>
                 </DialogFooter>
 

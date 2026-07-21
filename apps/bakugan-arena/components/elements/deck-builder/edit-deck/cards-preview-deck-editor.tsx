@@ -8,9 +8,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Trash } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export default function CardPreviewDeckEditor({ id, deckId, nom, attribut, description }: { id: string, deckId: string, nom: string, attribut?: string, description: string }) {
-
+    const t = useTranslations('deckBuilder')
+    const tCommon = useTranslations('common')
     const queryClient = useQueryClient()
 
     const RemoveAbilityFromDeckFunction = async () => {
@@ -21,7 +23,7 @@ export default function CardPreviewDeckEditor({ id, deckId, nom, attribut, descr
         mutationKey: ['remove-ability-card-from-deck'],
         mutationFn: RemoveAbilityFromDeckFunction,
         onSuccess: () => {
-            toast.success('Ability card removed from deck successfully!')
+            toast.success(t('toasts.abilityRemoved'))
             queryClient.invalidateQueries({ queryKey: ['get-deck-data'] })
             queryClient.invalidateQueries({ queryKey: ['get-user-decks'] })
 
@@ -39,7 +41,7 @@ export default function CardPreviewDeckEditor({ id, deckId, nom, attribut, descr
                             {nom}
                         </CardTitle>
 
-                        <Button disabled={RemoveAbilityFromDeckMutation.isPending ? true : false} variant='outline' onClick={() => RemoveAbilityFromDeckMutation.mutate()}><Trash /> Remove</Button>
+                        <Button disabled={RemoveAbilityFromDeckMutation.isPending ? true : false} variant='outline' onClick={() => RemoveAbilityFromDeckMutation.mutate()}><Trash /> {tCommon('actions.remove')}</Button>
                     </div>
                 </CardHeader>
                 <CardContent>
@@ -55,7 +57,8 @@ export default function CardPreviewDeckEditor({ id, deckId, nom, attribut, descr
 }
 
 export function ExclusiveAbilityCardPreviewDeckEditor({ id, deckId, nom, description }: { id: string, deckId: string, nom: string, description: string }) {
-
+    const t = useTranslations('deckBuilder')
+    const tCommon = useTranslations('common')
     const queryClient = useQueryClient()
 
     const RemoveExclusiveAbilityFromDeckFunction = async () => {
@@ -69,7 +72,7 @@ export function ExclusiveAbilityCardPreviewDeckEditor({ id, deckId, nom, descrip
         mutationKey: ['remove-exclusive-ability-card-from-deck'],
         mutationFn: RemoveExclusiveAbilityFromDeckFunction,
         onSuccess: () => {
-            toast.success('Exclusive ability card removed from deck successfully!')
+            toast.success(t('toasts.exclusiveRemoved'))
             queryClient.invalidateQueries({ queryKey: ['get-deck-data'] })
             queryClient.invalidateQueries({ queryKey: ['get-user-decks'] })
 
@@ -83,7 +86,7 @@ export function ExclusiveAbilityCardPreviewDeckEditor({ id, deckId, nom, descrip
                 <CardHeader>
                     <div className='flex items-center justify-between'>
                         <CardTitle>{nom}</CardTitle>
-                        <Button disabled={RemoveExclusiveAbilityFromDeckMutation.isPending ? true : false} variant='outline' onClick={() => RemoveExclusiveAbilityFromDeckMutation.mutate()}><Trash /> Remove</Button>
+                        <Button disabled={RemoveExclusiveAbilityFromDeckMutation.isPending ? true : false} variant='outline' onClick={() => RemoveExclusiveAbilityFromDeckMutation.mutate()}><Trash /> {tCommon('actions.remove')}</Button>
                     </div>
                 </CardHeader>
                 <CardContent>
@@ -99,7 +102,8 @@ export function ExclusiveAbilityCardPreviewDeckEditor({ id, deckId, nom, descrip
 }
 
 export function GateCardPreviewDeckEditor({ id, deckId, nom, description }: { id: string, deckId: string, nom: string, description: string }) {
-
+    const t = useTranslations('deckBuilder')
+    const tCommon = useTranslations('common')
     const queryClient = useQueryClient()
 
     const RemoveGateCardFromDeckFunction = async () => {
@@ -110,7 +114,7 @@ export function GateCardPreviewDeckEditor({ id, deckId, nom, description }: { id
         mutationKey: ['remove-exclusive-ability-card-from-deck'],
         mutationFn: RemoveGateCardFromDeckFunction,
         onSuccess: () => {
-            toast.success('Gate card removed from deck successfully!')
+            toast.success(t('toasts.gateRemoved'))
             queryClient.invalidateQueries({ queryKey: ['get-deck-data'] })
             queryClient.invalidateQueries({ queryKey: ['get-user-decks'] })
 
@@ -124,7 +128,7 @@ export function GateCardPreviewDeckEditor({ id, deckId, nom, description }: { id
                 <CardHeader>
                     <div className='flex items-center justify-between'>
                         <CardTitle>{nom}</CardTitle>
-                        <Button disabled={RemoveGateCardDeckMutation.isPending ? true : false} variant='outline' onClick={() => RemoveGateCardDeckMutation.mutate()}><Trash /> Remove</Button>
+                        <Button disabled={RemoveGateCardDeckMutation.isPending ? true : false} variant='outline' onClick={() => RemoveGateCardDeckMutation.mutate()}><Trash /> {tCommon('actions.remove')}</Button>
                     </div>
                 </CardHeader>
                 <CardContent>

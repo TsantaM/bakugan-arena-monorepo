@@ -13,8 +13,11 @@ import { AlertCircle } from "lucide-react"
 import CopyDeck from "@/src/actions/deck-builder/copy-deck"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 
 export default function ImportDeck() {
+    const t = useTranslations('deckBuilder')
+    const tCommon = useTranslations('common')
 
     const [open, setOpen] = useState(false)
     const [code, setCode] = useState("")
@@ -37,7 +40,7 @@ export default function ImportDeck() {
 
         },
         onError: () => {
-            toast("Failed to import deck")
+            toast(t('import.failed'))
         }
     })
 
@@ -99,17 +102,17 @@ export default function ImportDeck() {
         }}>
             <DialogTrigger asChild>
                 <Button variant='outline' className="cursor-pointer">
-                    <Import /> Import Deck
+                    <Import /> {t('import.trigger')}
                 </Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Import Deck</DialogTitle>
+                    <DialogTitle>{t('import.title')}</DialogTitle>
                     <DialogDescription>
-                        Paste your deck code below to import it.
+                        {t('import.description')}
                     </DialogDescription>
                 </DialogHeader>
-                <Input id="deck-code" placeholder="Paste your deck code here" value={code} onChange={(e) => handleCodeChange(e)} />
+                <Input id="deck-code" placeholder={t('import.placeholder')} value={code} onChange={(e) => handleCodeChange(e)} />
                 {
                     decodedReturn && (
                         <Alert
@@ -126,16 +129,16 @@ export default function ImportDeck() {
 
                             <AlertTitle>
                                 {decodedReturn === "INVALID_CODE"
-                                    ? "We couldn’t read this code"
-                                    : "Deck ready to import"}
+                                    ? t('import.invalidTitle')
+                                    : t('import.readyTitle')}
                             </AlertTitle>
 
                             <AlertDescription>
                                 {decodedReturn === "INVALID_CODE" &&
-                                    "The code you entered doesn’t seem to be valid or may be corrupted. Please double-check and try again."}
+                                    t('import.invalidBody')}
 
                                 {decodedReturn !== "INVALID_CODE" &&
-                                    "Everything looks good. You can safely import this deck now."}
+                                    t('import.readyBody')}
                             </AlertDescription>
                         </Alert>
                     )
@@ -144,11 +147,11 @@ export default function ImportDeck() {
                 <DialogFooter>
                     <DialogClose>
                         <Button variant="destructive" onClick={onClose} disabled={importMutation.isPending}>
-                            Cancel
+                            {tCommon('actions.cancel')}
                         </Button>
                     </DialogClose>
                     <Button type="submit" onClick={ImportDeckFunction} disabled={checker || importMutation.isPending}>
-                        {importMutation.isPending ? "Importing..." : "Import"}
+                        {importMutation.isPending ? t('import.importing') : tCommon('actions.import')}
                     </Button>
                 </DialogFooter>
             </DialogContent>

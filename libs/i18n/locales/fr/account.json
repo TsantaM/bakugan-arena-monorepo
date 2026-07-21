@@ -1,0 +1,20 @@
+{
+  "userData": {
+    "title": "Données utilisateur"
+  },
+  "edit": {
+    "title": "Modifier vos données",
+    "profilePicture": "Photo de profil",
+    "imageMaxSize": "La taille maximale du fichier est de 5 Mo.",
+    "imageFormats": "Seuls les formats .jpg, .jpeg, .png et .webp sont pris en charge."
+  },
+  "password": {
+    "title": "Mettre à jour le mot de passe",
+    "current": "Mot de passe actuel",
+    "new": "Nouveau mot de passe",
+    "submit": "Mettre à jour le mot de passe"
+  },
+  "toasts": {
+    "passwordUpdated": "Mot de passe mis à jour"
+  }
+}

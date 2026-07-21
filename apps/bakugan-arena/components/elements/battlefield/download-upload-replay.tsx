@@ -10,13 +10,14 @@ import { useMutation } from "@tanstack/react-query"
 import { Download, Upload } from "lucide-react"
 import { useEffect, useState } from "react"
 import { toast, Toaster } from "sonner"
+import { useTranslations } from "next-intl"
 
 export default function DownloadAndUploadReplay({ roomId, player1, player2 }: {
     roomId: string
     player1: playerDataType | undefined
     player2: playerDataType | undefined
 }) {
-
+    const t = useTranslations('replay')
     const room = useRoomsStore((state) => state.rooms).find((r) => r.roomId === roomId)
     const updateRoom = useRoomsStore((state) => state.updateRoom)
     const socket = useSocketStore((state) => state.socket)
@@ -103,10 +104,10 @@ export default function DownloadAndUploadReplay({ roomId, player1, player2 }: {
             })
         },
         onSuccess: () => {
-            toast.success("Replay upload success")
+            toast.success(t('toasts.uploadSuccess'))
         },
         onError: (error) => {
-           toast.error(`Replay upload failed, ${error}`)
+           toast.error(t('toasts.uploadFailed', { error: String(error) }))
         }
     })
 
@@ -125,14 +126,14 @@ export default function DownloadAndUploadReplay({ roomId, player1, player2 }: {
             <Button
                 variant="outline"
                 onClick={handleDownload}
-                aria-label="Download replay"
+                aria-label={t('a11y.download')}
             >
                 <Download />
             </Button>
             <Button
                 variant="outline"
                 onClick={handleUpload}
-                aria-label="Upload replay"
+                aria-label={t('a11y.upload')}
                 disabled={uploadMutation.isPending}
             >
                 <Upload />

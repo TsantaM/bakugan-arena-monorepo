@@ -1,0 +1,11 @@
+{
+  "title": "Bakugan Arena - Online Battle Simulator",
+  "tagline": "Play Bakugan battles directly in your browser. No install. Fan Made. Multiplayer",
+  "welcome": "Welcome to Bakugan Arena (Alpha), a fan made online simulator inspired by Bakugan Battle Brawlers.",
+  "ctaBody": "Create an account, build deck with your favorite Bakugan, and challenge other players in browser based matches - no download required.",
+  "cta": {
+    "signIn": "Connect to your account !",
+    "signUp": "Create an account and Play !",
+    "alreadyLogged": "You're already logged ! Go to dashboard"
+  }
+}

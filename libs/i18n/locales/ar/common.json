@@ -1,0 +1,68 @@
+{
+  "brand": "Bakugan Arena",
+  "metadata": {
+    "description": "Bakugan Arena لعبة من صنع المعجبين مستوحاة من محاكي معارك بوكيمون شووداون"
+  },
+  "actions": {
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "submit": "إرسال",
+    "update": "تحديث",
+    "edit": "تعديل",
+    "close": "إغلاق",
+    "import": "استيراد",
+    "delete": "حذف",
+    "reset": "إعادة تعيين",
+    "accept": "قبول",
+    "reject": "رفض",
+    "upload": "رفع",
+    "clear": "مسح",
+    "remove": "إزالة"
+  },
+  "nav": {
+    "account": "الحساب",
+    "logOut": "تسجيل الخروج"
+  },
+  "labels": {
+    "username": "اسم المستخدم",
+    "displayUsername": "اسم العرض",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "vs": "{p1} ضد {p2}"
+  },
+  "placeholders": {
+    "usernameExample": "Shun Kazami",
+    "displayUsernameExample": "Shun K4z4m1",
+    "emailExample": "mmm@gmail.com",
+    "writeMessage": "اكتب رسالتك..."
+  },
+  "empty": {
+    "noResult": "لا توجد نتائج",
+    "noCardFound": "لم يتم العثور على بطاقة."
+  },
+  "a11y": {
+    "toggleSidebar": "إظهار/إخفاء الشريط الجانبي",
+    "toggleTheme": "تبديل السمة",
+    "discordLogo": "شعار ديسكورد",
+    "battleScreenshot": "لقطة-معركة",
+    "defaultProfilePicture": "صورة الملف الشخصي الافتراضية"
+  },
+  "fallback": {
+    "player": "لاعب",
+    "unknownPlayer": "لاعب غير معروف",
+    "playerName": "اسم اللاعب"
+  },
+  "status": {
+    "onlineCount": "{count} متصل",
+    "offline": "غير متصل"
+  },
+  "links": {
+    "discord": "ديسكورد"
+  },
+  "language": {
+    "label": "اللغة",
+    "en": "English",
+    "fr": "Français",
+    "ar": "العربية"
+  }
+}

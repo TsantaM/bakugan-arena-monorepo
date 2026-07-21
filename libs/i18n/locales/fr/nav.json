@@ -1,0 +1,22 @@
+{
+  "group": {
+    "navigation": "Navigation",
+    "battlesInProcess": "Combats en cours ({count})",
+    "bakuDexNavigation": "Navigation Baku-Dex"
+  },
+  "home": "Accueil",
+  "dashboard": "Tableau de bord",
+  "deckBuilder": "Constructeur de deck",
+  "bakuDex": "Baku Dex",
+  "tutorial": "Tutoriel",
+  "ladder": "Classement",
+  "replay": "Replay",
+  "administration": "Administration",
+  "patchNotes": "Notes de patch",
+  "bakuDexLinks": {
+    "bakugans": "Bakugans",
+    "abilityCards": "Cartes capacité",
+    "exclusiveAbilityCards": "Cartes capacité exclusives",
+    "gateCards": "Cartes portail"
+  }
+}

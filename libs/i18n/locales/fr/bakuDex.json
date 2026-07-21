@@ -1,0 +1,28 @@
+{
+  "bakugans": {
+    "title": "Bakugans",
+    "search": "Nom du Bakugan"
+  },
+  "abilityCards": {
+    "title": "Cartes capacité",
+    "search": "Nom de la carte capacité"
+  },
+  "gateCards": {
+    "title": "Cartes portail ({count})",
+    "search": "Nom de la carte portail"
+  },
+  "detail": {
+    "powerLevel": "Niveau de puissance :",
+    "exclusiveAbilities": "Capacités exclusives",
+    "abilitiesCards": "Cartes capacité"
+  },
+  "card": {
+    "maxPerDeck": "Max par deck :",
+    "description": "Description :"
+  },
+  "empty": "Aucun résultat",
+  "exclusiveAbilityCards": {
+    "title": "Cartes capacité exclusives",
+    "search": "Nom de la carte capacité"
+  }
+}

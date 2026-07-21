@@ -1,0 +1,24 @@
+{
+  "importJson": "Import JSON",
+  "select": "Select a replay",
+  "search": "Search replay...",
+  "empty": "No replay found.",
+  "upload": "Upload",
+  "clear": "Clear",
+  "a11y": {
+    "upload": "Upload replay",
+    "clear": "Clear replay",
+    "restart": "Restart replay",
+    "prevTurn": "Previous turn",
+    "nextTurn": "Next turn",
+    "play": "Play replay",
+    "pause": "Pause replay",
+    "download": "Download replay"
+  },
+  "toasts": {
+    "importSuccess": "Importation success",
+    "importFailed": "Importation failed",
+    "uploadSuccess": "Replay upload success",
+    "uploadFailed": "Replay upload failed, {error}"
+  }
+}

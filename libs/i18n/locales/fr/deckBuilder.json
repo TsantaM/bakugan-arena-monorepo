@@ -1,0 +1,68 @@
+{
+  "empty": "Vous n'avez pas de deck, créez-en un",
+  "newDeck": "Nouveau deck",
+  "import": {
+    "trigger": "Importer un deck",
+    "title": "Importer un deck",
+    "description": "Collez votre code de deck ci-dessous pour l'importer.",
+    "placeholder": "Collez votre code de deck ici",
+    "invalidTitle": "Impossible de lire ce code",
+    "invalidBody": "Le code saisi ne semble pas valide ou est peut-être corrompu. Vérifiez-le et réessayez.",
+    "readyTitle": "Deck prêt à importer",
+    "readyBody": "Tout semble correct. Vous pouvez importer ce deck en toute sécurité.",
+    "importing": "Importation...",
+    "failed": "Échec de l'importation du deck"
+  },
+  "preview": {
+    "noBakugan": "Aucun bakugan dans ce deck"
+  },
+  "edit": {
+    "nameLabel": "Nom",
+    "namePlaceholder": "Nouveau deck",
+    "nameHelp": "Le nom du deck",
+    "submitting": "Envoi en cours...",
+    "updateName": "Mettre à jour le nom du deck"
+  },
+  "sections": {
+    "bakugans": "Bakugans {n} / 3",
+    "abilityCards": "Cartes capacité {n} / 6",
+    "exclusiveCards": "Cartes excl. {n} / 3",
+    "gateCards": "Cartes portail {n} / 5"
+  },
+  "select": {
+    "bakugan": "Sélectionner un Bakugan...",
+    "abilityCard": "Sélectionner une carte capacité...",
+    "abilityCards": "Sélectionner des cartes capacité...",
+    "gateCard": "Sélectionner une carte portail...",
+    "gateCards": "Sélectionner des cartes portail..."
+  },
+  "search": {
+    "bakugan": "Rechercher un Bakugan...",
+    "abilityCard": "Rechercher une carte capacité..."
+  },
+  "emptyStates": {
+    "bakuganNotFound": "Aucun bakugan trouvé.",
+    "noAbilityCards": "Aucune carte capacité dans le deck",
+    "noExclusiveCards": "Aucune carte capacité exclusive dans ce deck",
+    "noGateCards": "Aucune carte portail dans le deck"
+  },
+  "checker": {
+    "valid": "Deck valide",
+    "invalid": "Deck non valide"
+  },
+  "toasts": {
+    "updated": "Le deck a été mis à jour",
+    "deleted": "Le deck a été supprimé",
+    "deleteError": "Erreur lors de la suppression : {err}",
+    "emptyShare": "Ce deck est vide, il ne peut pas être partagé",
+    "codeCopied": "Code du deck copié dans le presse-papiers",
+    "bakuganAdded": "Bakugan ajouté au deck",
+    "bakuganRemoved": "Bakugan retiré du deck avec succès !",
+    "bakuganRemoveFailed": "Échec du retrait du Bakugan du deck",
+    "abilityAdded": "Carte capacité ajoutée au deck",
+    "abilityRemoved": "Carte capacité retirée du deck avec succès !",
+    "exclusiveRemoved": "Carte capacité exclusive retirée du deck avec succès !",
+    "gateAdded": "Carte portail ajoutée avec succès",
+    "gateRemoved": "Carte portail retirée du deck avec succès !"
+  }
+}

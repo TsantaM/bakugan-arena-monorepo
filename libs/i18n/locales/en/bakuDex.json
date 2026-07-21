@@ -1,0 +1,28 @@
+{
+  "bakugans": {
+    "title": "Bakugans",
+    "search": "Bakugan Name"
+  },
+  "abilityCards": {
+    "title": "Ability Cards",
+    "search": "Ability Card Name"
+  },
+  "gateCards": {
+    "title": "Gate Cards ({count})",
+    "search": "Gate Card Name"
+  },
+  "detail": {
+    "powerLevel": "Power Level :",
+    "exclusiveAbilities": "Exclusives Abilities",
+    "abilitiesCards": "Abilities Cards"
+  },
+  "card": {
+    "maxPerDeck": "Max Per Deck :",
+    "description": "Description :"
+  },
+  "empty": "No result",
+  "exclusiveAbilityCards": {
+    "title": "Exclusive Ability Cards",
+    "search": "Ability Card Name"
+  }
+}

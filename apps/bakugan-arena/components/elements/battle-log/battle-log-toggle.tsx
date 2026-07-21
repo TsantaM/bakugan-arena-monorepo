@@ -5,12 +5,14 @@ import { Switch } from "@/components/ui/switch"
 import { useBattlefieldBattleLogStore } from "@/src/store/battlefield-battle-log-store"
 import { useReplayBattleLogStore } from "@/src/store/replay-battle-log-store"
 import { usePathname } from "next/navigation"
+import { useTranslations } from "next-intl"
 
 type BattleLogToggleProps = {
     context: "battlefield" | "replay"
 }
 
 export default function BattleLogToggle({ context }: BattleLogToggleProps) {
+    const t = useTranslations('battlefield')
     const pathname = usePathname()
 
     const battlefieldEnabled = useBattlefieldBattleLogStore((state) => state.enabled)
@@ -38,7 +40,7 @@ export default function BattleLogToggle({ context }: BattleLogToggleProps) {
                 htmlFor={switchId}
                 className="cursor-pointer text-sm whitespace-nowrap"
             >
-                Battle logs
+                {t('battleLogs.label')}
             </Label>
         </div>
     )

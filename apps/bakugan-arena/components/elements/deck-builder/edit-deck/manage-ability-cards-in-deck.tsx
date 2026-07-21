@@ -25,10 +25,12 @@ import { toast } from "sonner"
 import CardPreviewDeckEditor from "./cards-preview-deck-editor"
 import { AbilityCardsList } from "@bakugan-arena/game-data"
 import { BakuganList } from "@bakugan-arena/game-data"
+import { useTranslations } from "next-intl"
 
 
 export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBakugans, bakugans }: { deckId: string, abilityCards: string[] | undefined, countBakugans: number, bakugans: string[] }) {
-
+    const t = useTranslations('deckBuilder')
+    const tCommon = useTranslations('common')
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState("")
     const queryClient = useQueryClient()
@@ -61,7 +63,7 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
         mutationKey: ['add-ability-card-to-deck'],
         mutationFn: addCardToDeck,
         onSuccess: () => {
-            toast.success("Ability card has been added to deck")
+            toast.success(t('toasts.abilityAdded'))
             queryClient.invalidateQueries({ queryKey: ['get-deck-data'] })
             queryClient.invalidateQueries({ queryKey: ['get-user-decks'] })
             setValue('')
@@ -75,7 +77,7 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
                 <CardHeader>
                     <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
                         <CardTitle>
-                            Ability Cards {abilityCards ? abilityCards?.length : 0} / 6
+                            {t('sections.abilityCards', { n: abilityCards ? abilityCards?.length : 0 })}
                         </CardTitle>
                         <Popover open={open} onOpenChange={setOpen}>
                             <PopoverTrigger asChild>
@@ -92,7 +94,7 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
                                                 (b) => b.name === value
                                             )
 
-                                            if (!selectedCard) return "Select Ability Cards..."
+                                            if (!selectedCard) return t('select.abilityCards')
 
                                             const { name, attribut } = selectedCard
                                             const imageUrl = `/images/attribut/${attribut?.toUpperCase()}.png`
@@ -105,16 +107,16 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
                                             )
                                         })()
                                     ) : (
-                                        "Select Ability Card..."
+                                        t('select.abilityCard')
                                     )}
                                     <ChevronsUpDown className="opacity-50" />
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-full lg:w-75 p-0">
                                 <Command>
-                                    <CommandInput placeholder="Search Ability Card..." className="h-9" />
+                                    <CommandInput placeholder={t('search.abilityCard')} className="h-9" />
                                     <CommandList>
-                                        <CommandEmpty>No card found.</CommandEmpty>
+                                        <CommandEmpty>{tCommon('empty.noCardFound')}</CommandEmpty>
                                         <CommandGroup>
                                             {notInDeckAbilities.map((b, index) => (
                                                 <CommandItem
@@ -148,7 +150,7 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
                     {
                         deckCards.length > 0 ? deckCards.map((c, index) => <CardPreviewDeckEditor key={index} nom={c ? c.name : ''} description={c ? c.description : ''} attribut={c && c.attribut} id={c ? c.key : ''} deckId={deckId} />)
 
-                            : <p className='text-center'>No Ability Cards in the deck</p>
+                            : <p className='text-center'>{t('emptyStates.noAbilityCards')}</p>
                     }
                 </CardContent>
 

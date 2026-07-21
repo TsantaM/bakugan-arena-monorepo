@@ -18,11 +18,13 @@ import ManageAbilityCardsInDeck from "./edit-deck/manage-ability-cards-in-deck"
 import ManageExclusiveAbilityCardsInDeck from "./edit-deck/manage-exclusive-ability-cards-in-deck"
 import ManageGateCardsInDeckEditor from "./edit-deck/manage-gate-cards-in-deck"
 import DeckChecker from "./deck-checker"
+import { useTranslations } from "next-intl"
 
 export type editDeckName_type = z.infer<typeof EditDeckNameSchema>
 
 
 export default function EditDeck({ id }: { id: string }) {
+    const t = useTranslations('deckBuilder')
     const queryClient = useQueryClient()
     const deckData = async () => {
         return await GetDeckData(id)
@@ -54,11 +56,11 @@ export default function EditDeck({ id }: { id: string }) {
             queryClient.invalidateQueries({
                 queryKey: ['get-deck-data']
             })
-            toast.success('Deck has been updated')
+            toast.success(t('toasts.updated'))
         },
 
         onError: (err) => {
-            toast.success('Deck has been updated' + err)
+            toast.success(t('toasts.updated') + err)
 
         }
     })
@@ -90,11 +92,11 @@ export default function EditDeck({ id }: { id: string }) {
                                         name='nom'
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Name</FormLabel>
+                                                <FormLabel>{t('edit.nameLabel')}</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="New Deck" {...field} type="text" />
+                                                    <Input placeholder={t('edit.namePlaceholder')} {...field} type="text" />
                                                 </FormControl>
-                                                <FormDescription>{`The name of the Deck`}</FormDescription>
+                                                <FormDescription>{t('edit.nameHelp')}</FormDescription>
                                             </FormItem>
                                         )}
                                     />
@@ -102,7 +104,7 @@ export default function EditDeck({ id }: { id: string }) {
                                         disabled={updateNameMutation.isPending ? true : false}
                                     >
 
-                                        {updateNameMutation.isPending ? 'Submiting in process...' : 'Update Deck Name'}
+                                        {updateNameMutation.isPending ? t('edit.submitting') : t('edit.updateName')}
                                     </Button>
                                 </form>
 

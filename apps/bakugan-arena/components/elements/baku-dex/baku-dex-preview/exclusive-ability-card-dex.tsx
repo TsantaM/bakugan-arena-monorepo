@@ -1,10 +1,15 @@
+'use client'
+
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { bakuganType } from "@bakugan-arena/game-data"
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export default function ExclusiveAbilityCardDexPreview({ nom, description, max, attribut, bakugan }: { nom: string, description: string, max: number, attribut?: string, bakugan?: bakuganType[]}) {
+    const t = useTranslations('bakuDex.card')
+
     return (
         <Card>
             <CardHeader>
@@ -18,8 +23,8 @@ export default function ExclusiveAbilityCardDexPreview({ nom, description, max, 
                         attribut && <li className="relative size-7"><Image src={`/images/attributs/${attribut?.toUpperCase()}.png`} alt={attribut} fill /></li>
                     }
 
-                    <li>Max Per Deck : {max}</li>
-                    <li>Description : {description}</li>
+                    <li>{t('maxPerDeck')} {max}</li>
+                    <li>{t('description')} {description}</li>
                 </ul>
 
                 <div className="flex w-full flex-wrap gap-2">

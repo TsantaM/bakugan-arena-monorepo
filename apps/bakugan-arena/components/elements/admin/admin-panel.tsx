@@ -21,8 +21,11 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import Section from "@/components/ui/section"
+import { useTranslations } from "next-intl"
 
 export default function AdminPanel() {
+    const t = useTranslations('admin')
+    const tCommon = useTranslations('common')
     const queryClient = useQueryClient()
 
     const staleRoomsQuery = useQuery({
@@ -34,20 +37,20 @@ export default function AdminPanel() {
         mutationKey: ['admin', 'reset-ladder'],
         mutationFn: resetLadder,
         onSuccess: ({ resetCount }) => {
-            toast.success(`Ladder reset for ${resetCount} player(s)`)
+            toast.success(t('toasts.ladderReset', { n: resetCount }))
             queryClient.invalidateQueries({ queryKey: ['ladder'] })
         },
-        onError: () => toast.error('Failed to reset ladder'),
+        onError: () => toast.error(t('toasts.ladderResetFailed')),
     })
 
     const cleanupRoomsMutation = useMutation({
         mutationKey: ['admin', 'cleanup-stale-rooms'],
         mutationFn: cleanupStaleRooms,
         onSuccess: ({ deletedCount }) => {
-            toast.success(`${deletedCount} stale room(s) deleted`)
+            toast.success(t('toasts.roomsDeleted', { n: deletedCount }))
             queryClient.invalidateQueries({ queryKey: ['admin', 'stale-rooms-count'] })
         },
-        onError: () => toast.error('Failed to cleanup stale rooms'),
+        onError: () => toast.error(t('toasts.cleanupFailed')),
     })
 
     const confirmAndRun = (message: string, fn: () => void) => {
@@ -59,16 +62,16 @@ export default function AdminPanel() {
             <Section className="grid gap-4 md:grid-cols-2">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Bot training</CardTitle>
+                        <CardTitle>{t('botTraining.cardTitle')}</CardTitle>
                         <CardDescription>
-                            Curate replays, train scoring weights, and deploy them to live bots.
+                            {t('botTraining.cardDesc')}
                         </CardDescription>
                     </CardHeader>
                     <CardFooter>
                         <Button asChild>
                             <Link href="/dashboard/admin/bot-training">
                                 <Brain />
-                                Open training
+                                {t('botTraining.open')}
                             </Link>
                         </Button>
                     </CardFooter>
@@ -76,9 +79,9 @@ export default function AdminPanel() {
 
                 <Card>
                     <CardHeader>
-                        <CardTitle>Reset ladder</CardTitle>
+                        <CardTitle>{t('resetLadder.title')}</CardTitle>
                         <CardDescription>
-                            Resets all players&apos; ELO to 1000.
+                            {t('resetLadder.desc')}
                         </CardDescription>
                     </CardHeader>
                     <CardFooter>
@@ -92,25 +95,25 @@ export default function AdminPanel() {
                                     ) : (
                                         <RotateCcw />
                                     )}
-                                    Reset
+                                    {tCommon('actions.reset')}
                                 </Button>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                                 <AlertDialogHeader>
-                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogTitle>{t('resetLadder.confirmTitle')}</AlertDialogTitle>
                                     <AlertDialogDescription>
-                                        This action cannot be undone. This will reset all players&apos; ELO to 1000.
+                                        {t('resetLadder.confirmDesc')}
                                     </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogCancel>{tCommon('actions.cancel')}</AlertDialogCancel>
                                     <AlertDialogAction asChild>
                                         <Button
                                             variant="destructive"
                                             disabled={resetLadderMutation.isPending}
                                             onClick={() => resetLadderMutation.mutate()}
                                         >
-                                            Confirm Reset
+                                            {t('resetLadder.confirm')}
                                         </Button>
                                     </AlertDialogAction>
                                 </AlertDialogFooter>
@@ -121,11 +124,11 @@ export default function AdminPanel() {
 
                 <Card>
                     <CardHeader>
-                        <CardTitle>Cleanup stale rooms</CardTitle>
+                        <CardTitle>{t('cleanup.title')}</CardTitle>
                         <CardDescription>
-                            Deletes unfinished rooms older than 30 minutes.
+                            {t('cleanup.desc')}
                             {staleRoomsQuery.data !== undefined && (
-                                <> ({staleRoomsQuery.data.count} room(s) affected)</>
+                                <> {t('cleanup.affected', { count: staleRoomsQuery.data.count })}</>
                             )}
                         </CardDescription>
                     </CardHeader>
@@ -140,25 +143,25 @@ export default function AdminPanel() {
                                     ) : (
                                         <Trash2 />
                                     )}
-                                    Delete
+                                    {tCommon('actions.delete')}
                                 </Button>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                                 <AlertDialogHeader>
-                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogTitle>{t('resetLadder.confirmTitle')}</AlertDialogTitle>
                                     <AlertDialogDescription>
-                                        This action cannot be undone. This will delete all stale rooms.
+                                        {t('cleanup.confirmDesc')}
                                     </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogCancel>{tCommon('actions.cancel')}</AlertDialogCancel>
                                     <AlertDialogAction asChild>
                                         <Button
                                             variant="destructive"
                                             disabled={cleanupRoomsMutation.isPending}
                                             onClick={() => cleanupRoomsMutation.mutate()}
                                         >
-                                            Confirm Delete
+                                            {t('cleanup.confirm')}
                                         </Button>
                                     </AlertDialogAction>
                                 </AlertDialogFooter>

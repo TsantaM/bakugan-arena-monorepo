@@ -17,8 +17,11 @@ import { useQuery } from "@tanstack/react-query";
 // import { Check, ChevronsUpDown } from "lucide-react";
 // import Link from "next/link";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 export default function FindUserComponent() {
+    const t = useTranslations('lobby.findUser')
+    const tCommon = useTranslations('common')
     const [displayUserName, setDisplayUserName] = useState('')
     // const [open, setOpen] = useState(false)
     const [open, setOpen] = useState(false)
@@ -49,15 +52,15 @@ export default function FindUserComponent() {
             }
         }}>
             <DialogTrigger asChild>
-                <Button className="w-full">Find user</Button>
+                <Button className="w-full">{t('trigger')}</Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogTitle>
-                    Find user
+                    {t('title')}
                 </DialogTitle>
 
                 <Input
-                    placeholder="Username"
+                    placeholder={t('placeholder')}
                     onChange={(e) => setDisplayUserName(e.target.value)}
                     value={displayUserName}
                 />
@@ -67,7 +70,7 @@ export default function FindUserComponent() {
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead className='font-extrabold'>User</TableHead>
+                                    <TableHead className='font-extrabold'>{t('tableUser')}</TableHead>
                                     <TableHead className="text-right">#</TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -106,13 +109,13 @@ export default function FindUserComponent() {
                                                 onClick={() => {
                                                     addChat({
                                                         targetId: u.id,
-                                                        targetName: u.displayUsername || 'Unknown Player'
+                                                        targetName: u.displayUsername || tCommon('fallback.unknownPlayer')
                                                     })
                                                     setFocused(u.id)
                                                     setOpen(false)
                                                 }}
                                             >
-                                                {connectedUsers.includes(u.id) ? `Open Chat` : 'Offline'}
+                                                {connectedUsers.includes(u.id) ? t('openChat') : tCommon('status.offline')}
                                             </Button>
                                         </TableCell>
                                     </TableRow>
@@ -122,7 +125,7 @@ export default function FindUserComponent() {
                     ) : (
                         displayUserName && (
                             <p className="text-sm text-neutral-500 text-center py-4">
-                                No user found with this username
+                                {t('empty')}
                             </p>
                         )
                     )}

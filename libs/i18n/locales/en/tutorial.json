@@ -1,0 +1,79 @@
+{
+  "title": "Bakugan Arena – Official Tutorial",
+  "overview": {
+    "title": "1. Game Overview",
+    "body": "Bakugan Arena is a strategic turn-based battle game where players deploy Bakugans, use Ability Cards, and control Gate Cards to defeat their opponent.",
+    "objective": "The objective is simple: eliminate all enemy Bakugans or outlast your opponent through strategic play."
+  },
+  "coreRules": {
+    "title": "2. Core Rules",
+    "intro": "Each player starts the game with:",
+    "bakugans": "3 Bakugans",
+    "abilityCards": "3 Ability Cards (maximum usable per game)",
+    "gateCards": "3 Gate Cards (maximum usable per game)"
+  },
+  "victory": {
+    "title": "3. Victory Conditions",
+    "intro": "A player wins the game if:",
+    "eliminate": "All 3 opponent Bakugans are eliminated",
+    "timer": "The opponent's timer reaches 0 (only after Turn 0 conditions are no longer active)"
+  },
+  "draw": {
+    "title": "4. Draw Conditions",
+    "intro": "A match ends in a draw if:",
+    "noGates": "No more Gate Cards can be placed by either player",
+    "mutualElimination": "All Bakugans from both players are eliminated in the same turn",
+    "timerTurn0": "A player's timer reaches 0 during Turn 0"
+  },
+  "battle": {
+    "title": "5. Battle System",
+    "intro": "A battle begins when two opposing Bakugans land on the same Gate Card.",
+    "duration": "Each battle lasts 2 turns:",
+    "turn1Title": "Turn 1",
+    "turn1First": "The player who first occupied the Gate Card acts first",
+    "turn1May": "They may:",
+    "turn1Ability": "Use an Ability Card",
+    "turn1Gate": "Activate the Gate Card (if they own it, and it is neither already activated nor blocked)",
+    "turn2Title": "Turn 2",
+    "turn2Body": "The opponent takes their turn with the same options",
+    "endTitle": "End of Battle Resolution",
+    "endIntro": "After both turns:",
+    "endGate": "The Gate Card effect is resolved (if applicable)",
+    "endEliminate": "The Bakugan with the lowest power level is eliminated"
+  },
+  "abilities": {
+    "title": "6. Ability Cards System",
+    "filter": "Ability Cards are automatically filtered by the game before being added to a player's hand.",
+    "unused": "If a card cannot be used in the current context, it is not given to the player.",
+    "examplesTitle": "Examples",
+    "airBattle": "Air Battle — Allows movement to another Gate Card. If no other Gate Cards exist, the card is not added to the hand.",
+    "marionette": "Marionette — Allows control/movement of enemy Bakugans. If no valid target exists (e.g., only one Bakugan remains on the field), the card is not added."
+  },
+  "neutral": {
+    "title": "7. Neutral Phase (No Active Battle)",
+    "intro": "When no battle is currently occurring, players can perform one action per turn.",
+    "actionsTitle": "Available Actions",
+    "placeGateTitle": "1. Place a Gate Card",
+    "placeGateBody": "First possible action. Does not restrict other future actions during the turn.",
+    "deployTitle": "2. Deploy a Bakugan",
+    "deployBody": "Second possible action. If performed, the player can no longer place a Gate Card this turn.",
+    "abilityTitle": "3. Use an Ability Card",
+    "abilityBody": "Third possible action. Immediately ends the turn after use. Prevents any other action this turn."
+  },
+  "strategic": {
+    "title": "8. Strategic Note",
+    "intro": "Efficient play in Bakugan Arena is about resource timing and board control:",
+    "gate": "Gate placement defines battle opportunities",
+    "abilities": "Ability Cards can shift momentum but are limited",
+    "overextend": "Overextending early often leads to tactical disadvantage",
+    "outro": "Mastering the interaction between positioning and ability usage is key to victory."
+  },
+  "help": {
+    "title": "9. Need Help?",
+    "discord": "If you have any questions about the game or if certain rules are unclear, we invite you to join our Discord Community where players and staff members can help you.",
+    "refresh": "If you encounter an issue during a match, please try refreshing the page first, as this resolves most temporary problems.",
+    "report": "If the issue persists or if you discover a bug, please report it on our Discord server so we can investigate and fix it as quickly as possible.",
+    "thanks": "Thank you for playing Bakugan Arena, and most importantly:",
+    "outro": "Have fun and enjoy your battles!"
+  }
+}
