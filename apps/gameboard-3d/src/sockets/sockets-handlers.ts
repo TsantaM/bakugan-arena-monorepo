@@ -1,5 +1,5 @@
 import type {
-    AbilityCardsActionsRequestsType, ActivePlayerActionRequestType, InactivePlayerActionRequestType, roomStateType, slots_id, turnCountSocketProps, Message,
+    AbilityCardsActionsRequestsType, ActivePlayerActionRequestType, InactivePlayerActionRequestType, roomStateType, turnCountSocketProps, Message,
     gateCardActionRequestsType,
 } from "@bakugan-arena/game-data"
 import { type AnimationDirectivesTypes } from "@bakugan-arena/game-data"
@@ -41,7 +41,12 @@ import { CustomAnimationsRegistry } from "../animations/custom-animations/regist
 let animationQueue: AnimationDirectivesTypes[] = []
 let isProcessingAnimations = false
 let currentAnimationPromise: Promise<void> = Promise.resolve();
+/** Joueur actif connu localement (anti emit croisé) */
+let localTurnUserId: string | null = null
 
+const syncLocalTurnFromState = (state: roomStateType) => {
+    localTurnUserId = state.turnState.turn
+}
 
 export async function playAnimation(
     userId: string,
@@ -107,8 +112,6 @@ export async function playAnimation(
                 await Promise.all(
                     Array.from(combinedPowerChanges.entries()).map(([key, totalChange]) => {
                         return (async () => {
-                            const [userId, slot, number] = key.split("-");
-                            const slotId = `${slot}-${number}`;
                             const powerContainer = document.getElementById(key);
                             if (!powerContainer) return;
 
@@ -116,8 +119,7 @@ export async function playAnimation(
                             const newPower = oldPower + totalChange;
 
                             await PowerChangeNumberAnimation({
-                                userId,
-                                slotId: slotId as slots_id,
+                                elementId: key,
                                 newPower: current.data.finalPower ? current.data.finalPower : newPower
                             });
                         })();
@@ -449,10 +451,24 @@ export async function processAnimationQueue(
 
     isProcessingAnimations = true
 
-    await playAnimation(userId, isSpectator, camera, scene, plane, bakugansMeshs, gateCardMeshs, animationQueue)
-
-    animationQueue = []
-    isProcessingAnimations = false
+    try {
+        // Drain jusqu'à vide : les anims arrivées pendant un batch ne sont plus perdues
+        while (animationQueue.length > 0) {
+            const batch = animationQueue.splice(0, animationQueue.length)
+            await playAnimation(
+                userId,
+                isSpectator,
+                camera,
+                scene,
+                plane,
+                bakugansMeshs,
+                gateCardMeshs,
+                batch
+            )
+        }
+    } finally {
+        isProcessingAnimations = false
+    }
 }
 
 export function registerSocketHandlers(
@@ -523,11 +539,23 @@ export function registerSocketHandlers(
         document.getElementById('right-bakugan-previews-container')?.remove()
 
         camera.position.set(3, 5, 8)
+        syncLocalTurnFromState(state)
         InitGameState({ state: state, bakugansMeshs, isSpectator: false, gateCardMeshs, plane, scene, userId })
 
     })
 
+    socket.on("turn-action", (state: roomStateType) => {
+        syncLocalTurnFromState(state)
+    })
+
     socket.on("turn-action-request", async (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
+
+        // Ignorer les payloads destinés à l'autre rôle (emit croisé serveur)
+        if (localTurnUserId) {
+            const isLocalActive = localTurnUserId === userId
+            if (request.target === "ACTIVE_PLAYER" && !isLocalActive) return
+            if (request.target === "INACTIVE_PLAYER" && isLocalActive) return
+        }
 
         // attendre que les animations en cours soient terminées
         await currentAnimationPromise;

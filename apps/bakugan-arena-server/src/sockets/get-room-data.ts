@@ -45,17 +45,25 @@ export const socketGetRoomState = (io: Server, socket: Socket) => {
              * -> seulement si CE user est concerné
              */
             const abilityRequest = state.AbilityAditionalRequest[0]
-            const abilityTarget = abilityRequest.data.target ? abilityRequest.data.target : abilityRequest.userId
-            if (abilityRequest && abilityTarget === userId) {
-                socket.emit('ability-additional-request', abilityRequest)
-                return
+            if (abilityRequest) {
+                const abilityTarget = abilityRequest.data.target
+                    ? abilityRequest.data.target
+                    : abilityRequest.userId
+                if (abilityTarget === userId) {
+                    socket.emit('ability-additional-request', abilityRequest)
+                    return
+                }
             }
 
             const gateRequest = state.gateCardActionRequest[0]
-            const gateTarget = gateRequest?.data.target ? gateRequest.data.target : gateRequest?.userId
-            if (gateRequest && gateTarget === userId) {
-                socket.emit('gate-card-additional-request', gateRequest)
-                return
+            if (gateRequest) {
+                const gateTarget = gateRequest.data.target
+                    ? gateRequest.data.target
+                    : gateRequest.userId
+                if (gateTarget === userId) {
+                    socket.emit('gate-card-additional-request', gateRequest)
+                    return
+                }
             }
 
             /**
@@ -210,10 +218,23 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
                             CreateActionRequestFunction({ roomState: roomData })
                             const activeSocket = roomData.connectedsUsers.get(roomData.turnState.turn)
                             const inactiveSocket = roomData.connectedsUsers.get(roomData.turnState.previous_turn || '')
-                            if (!activeSocket) return
-                            io.to(activeSocket.gameboardSocket).emit('turn-action-request', activeRequest)
-                            if (!inactiveSocket) return
-                            io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', request)
+                            const activeFilled = roomData.ActivePlayerActionRequest
+                            const inactiveFilled = roomData.InactivePlayerActionRequest
+
+                            // Ne jamais envoyer ActivePlayerActionRequest au joueur inactif
+                            if (activeSocket) {
+                                io.to(activeSocket.gameboardSocket).emit('turn-action-request', activeFilled)
+                            }
+                            if (inactiveSocket) {
+                                const inactiveMerged = [
+                                    inactiveFilled.actions.mustDo,
+                                    inactiveFilled.actions.mustDoOne,
+                                    inactiveFilled.actions.optional,
+                                ].flat()
+                                if (inactiveMerged.length > 0) {
+                                    io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', inactiveFilled)
+                                }
+                            }
                         }
                     }
                     return

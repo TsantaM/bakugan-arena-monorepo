@@ -58,7 +58,11 @@ export const socketActiveGateCard = (io: Server, socket: Socket) => {
 
 
             Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest = newState as InactivePlayerActionRequestType
-            const merged = [Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
+            const merged = [
+                Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDo,
+                Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDoOne,
+                Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.optional,
+            ].flat()
 
             const checker = CheckTurnActionRequest({ roomState: state, userId: userId })
             if (!checker) return

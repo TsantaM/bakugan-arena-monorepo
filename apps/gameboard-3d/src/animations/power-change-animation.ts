@@ -65,11 +65,24 @@ export async function PowerChangeAnimation({
   });
 }
 
-export function PowerChangeNumberAnimation({ userId, slotId, newPower }: { userId: string, slotId: slots_id, newPower: number }): Promise<void> {
+export function PowerChangeNumberAnimation({
+  userId,
+  slotId,
+  elementId,
+  newPower,
+}: {
+  userId?: string
+  slotId?: slots_id
+  /** Id DOM complet (ex. bot-alpha-slot-1) — préféré pour éviter le split sur userId hyphenés */
+  elementId?: string
+  newPower: number
+}): Promise<void> {
 
   return new Promise((resolve) => {
 
-    const powerContainer = document.getElementById(`${userId}-${slotId}`)
+    const powerContainer = document.getElementById(
+      elementId ?? `${userId}-${slotId}`
+    )
     if (!powerContainer) return resolve()
 
     let power = parseInt(powerContainer.textContent || "0")

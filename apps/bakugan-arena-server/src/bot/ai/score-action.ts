@@ -924,6 +924,82 @@ function matchesBlocker(
 }
 
 /**
+ * setup : synergie character gate / reactor / pose de gate utile.
+ */
+function matchesSetup(
+  before: stateType,
+  after: stateType,
+  action: SimulateAction,
+  userId: string
+): boolean {
+  if (action.type === "SET_GATE") {
+    const gate = GateCardsList.find((g) => g.key === action.gateId)
+    if (gate?.family) {
+      const deck = after.decksState.find((d) => d.userId === userId)
+      const hasAvailable = (deck?.bakugans ?? []).some(
+        (b) =>
+          b.bakuganData.family === gate.family &&
+          !b.bakuganData.elimined &&
+          !b.bakuganData.onDomain
+      )
+      if (hasAvailable) return true
+    }
+    // Pose de gate générique (hors tour 0) — setup board
+    if (before.turnState.turnCount > 0) return true
+  }
+
+  if (scoreBakuganPlacementBonuses(action, after) > 0) return true
+
+  return false
+}
+
+/**
+ * finisher : élimination gratuite ou prise / maintien d'avantage de puissance en bataille.
+ */
+function matchesFinisher(
+  before: stateType,
+  after: stateType,
+  userId: string
+): boolean {
+  if (scoresFreeOpponentElimination(before, after, userId)) return true
+
+  const powerState = isActiveBattle(after)
+    ? after
+    : projectBattleStartState(after)
+  if (!powerState) return false
+
+  const afterTotals = getBattlePowerTotals(powerState, userId)
+  if (!afterTotals || afterTotals.botPower <= afterTotals.opponentPower) return false
+
+  // Priorise surtout le 2ᵉ tour de bataille / fin de combat
+  if (isActiveBattle(before) && before.battleState.turns <= 1) return true
+
+  const beforeTotals = isActiveBattle(before)
+    ? getBattlePowerTotals(before, userId)
+    : null
+  // Vient de prendre l'avantage
+  if (!beforeTotals || beforeTotals.botPower <= beforeTotals.opponentPower) return true
+
+  return false
+}
+
+/**
+ * control : denial (abilities / gates) + conservation de ressources (skip utile).
+ */
+function matchesControl(
+  before: stateType,
+  after: stateType,
+  action: SimulateAction,
+  userId: string
+): boolean {
+  if (scoresAbilityBlockNewlySet(before, after)) return true
+  if (scoresOpponentCannotUseAbilitiesNextTurn(after, userId)) return true
+  if (scoresAnyOpponentGateNeutralized(before, after, userId)) return true
+  if (scoresTurnSkipSavesResources(before, action, userId)) return true
+  return false
+}
+
+/**
  * Applique les multiplicateurs de personnalité (×1.5 par trait matché).
  * Uniquement sur score > 0 pour ne pas aggraver les pénalités.
  */
@@ -950,6 +1026,18 @@ export function applyPersonalityMultiplier(
   }
 
   if (personalities.includes("blocker") && matchesBlocker(before, after, userId)) {
+    multiplier *= PERSONALITY_MULTIPLIER
+  }
+
+  if (personalities.includes("setup") && matchesSetup(before, after, action, userId)) {
+    multiplier *= PERSONALITY_MULTIPLIER
+  }
+
+  if (personalities.includes("finisher") && matchesFinisher(before, after, userId)) {
+    multiplier *= PERSONALITY_MULTIPLIER
+  }
+
+  if (personalities.includes("control") && matchesControl(before, after, action, userId)) {
     multiplier *= PERSONALITY_MULTIPLIER
   }
 

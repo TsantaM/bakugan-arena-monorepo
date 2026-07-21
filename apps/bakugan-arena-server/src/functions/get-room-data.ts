@@ -2,7 +2,7 @@
 import { schema } from "@bakugan-arena/drizzle-orm"
 import { and, eq, inArray } from "drizzle-orm"
 import { db } from "../lib/db"
-import { getBotDeckByUserId, getBotPlayerByUserId, isBotUserId } from "./bot-data"
+import { getBotDeckById, getBotDeckByUserId, getBotPlayerByUserId, isBotUserId } from "./bot-data"
 
 const rooms = schema.rooms
 
@@ -22,10 +22,13 @@ export const getDecksData = async ({ roomId }: { roomId: string }) => {
   const players = [roomData.player1Id, roomData.player2Id]
   const decksIds = [roomData.p1Deck, roomData.p2Deck]
 
-  const botDecks = players
-    .filter(isBotUserId)
-    .map(getBotDeckByUserId)
-    .filter((deck): deck is NonNullable<ReturnType<typeof getBotDeckByUserId>> => deck !== undefined)
+  const botDecks = decksIds
+    .map((deckId, index) => {
+      const playerId = players[index]
+      if (!playerId || !deckId || !isBotUserId(playerId)) return undefined
+      return getBotDeckByUserId(playerId, deckId) ?? getBotDeckById(deckId)
+    })
+    .filter((deck): deck is NonNullable<typeof deck> => deck !== undefined)
 
   const humanPlayerIds = players.filter((id) => !isBotUserId(id))
 
