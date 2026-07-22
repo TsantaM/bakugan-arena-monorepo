@@ -9,6 +9,9 @@ import { DragAndElimineAnimation } from './animations/drag-and-elimine-animation
 import { ReviveBakuganAnimation } from './animations/revive-animation'
 import { TurnActionInterfaceBuilder } from './turn-action-management/turn-interface-builder'
 import { hideTooltip, initTooltip, showTooltip, tooltip } from './functions/tooltips-functions'
+import { initGameboardLocaleFromUrl } from './i18n/locale'
+
+initGameboardLocaleFromUrl()
 
 const canvas = document.getElementById('gameboard-canvas')
 // const reload = document.getElementById("init-room")

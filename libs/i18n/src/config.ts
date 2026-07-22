@@ -1,11 +1,11 @@
-export const locales = ['en', 'fr'] as const
+export const locales = ['en', 'fr', 'ar'] as const
 
 export type Locale = (typeof locales)[number]
 
 export const defaultLocale: Locale = 'en'
 
-/** Locales that should render with dir="rtl" (Arabic disabled for now) */
-export const rtlLocales = [] as const satisfies readonly Locale[]
+/** Locales whose text should use dir="rtl" (layout stays LTR) */
+export const rtlLocales = ['ar'] as const satisfies readonly Locale[]
 
 export type RtlLocale = (typeof rtlLocales)[number]
 

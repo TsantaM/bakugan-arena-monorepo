@@ -5,9 +5,8 @@ import TanstackProvider from "../src/providers/queryClientProvider";
 import { TouchProvider } from "@/components/ui/hybrid-tooltip";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
-import { getTextDirection } from "@bakugan-arena/i18n";
-import { DirectionProvider } from "@/components/ui/direction";
 import LocaleStorageSync from "@/components/elements/language-switcher/locale-storage-sync";
+import TextDirectionScope from "@/components/elements/language-switcher/text-direction-scope";
 import { parseLocale } from "@/src/i18n/config";
 import type { Metadata } from "next";
 
@@ -36,24 +35,22 @@ export default async function RootLayout({
 }>) {
   const locale = parseLocale(await getLocale())
   const messages = await getMessages()
-  const direction = getTextDirection(locale)
 
   return (
-    <html lang={locale} dir={direction} suppressHydrationWarning>
+    <html lang={locale} dir="ltr" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden flex flex-col`}
       >
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <DirectionProvider dir={direction}>
-            <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
-              <TanstackProvider>
-                <TouchProvider>
-                  <LocaleStorageSync />
-                  {children}
-                </TouchProvider>
-              </TanstackProvider>
-            </ThemeProvider>
-          </DirectionProvider>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
+            <TanstackProvider>
+              <TouchProvider>
+                <LocaleStorageSync />
+                <TextDirectionScope />
+                {children}
+              </TouchProvider>
+            </TanstackProvider>
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>

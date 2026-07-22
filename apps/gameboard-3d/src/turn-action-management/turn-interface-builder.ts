@@ -8,6 +8,7 @@ import { BuildUseAbilityCard } from "./turn-action-builder/build-use-ability-car
 import { clearTurnInterface } from "./turn-actions-resolution/action-scope";
 import { BuildOpenGateCard } from "./turn-action-builder/build-open-gate-card";
 import { BuildChangeAttribut } from "./turn-action-builder/build-change-attribut";
+import { applyTextDirection } from "../i18n/locale";
 
 export const TurnActionInterfaceBuilder = ({ request }: { request: ActivePlayerActionRequestType | InactivePlayerActionRequestType }) => {
 
@@ -48,6 +49,7 @@ export const TurnActionInterfaceBuilder = ({ request }: { request: ActivePlayerA
         if (actions.length === 0) {
             if (request.target === 'INACTIVE_PLAYER') return
             const message = document.createElement('p');
+            applyTextDirection(message)
             message.textContent = `You can't do anything ! Just pass your turn`
             turnActionContainer.appendChild(message)
         } else {

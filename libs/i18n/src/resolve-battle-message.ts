@@ -1,9 +1,11 @@
+import arBattle from '#locales/ar/battle.json' with { type: 'json' }
 import enBattle from '#locales/en/battle.json' with { type: 'json' }
 import frBattle from '#locales/fr/battle.json' with { type: 'json' }
 import { defaultLocale, isLocale, type Locale } from './config.js'
 import { resolveAbilityCard, resolveGateCard } from './resolve-game-data.js'
 
 export const battleCatalogs: Record<Locale, Record<string, string>> = {
+  ar: arBattle,
   en: enBattle,
   fr: frBattle,
 }

@@ -1,7 +1,7 @@
 import type { Message } from "@bakugan-arena/game-data";
 import { resolveBattleMessage, type BattleMessageInput } from "@bakugan-arena/i18n";
 import gsap from "gsap";
-import { getGameboardLocale } from "../i18n/locale";
+import { applyTextDirection, getGameboardLocale } from "../i18n/locale";
 
 export const removePreviousDialogBoxAnimation = (target: HTMLElement | null, delay: number = 0) => {
     if (target === null) return
@@ -46,6 +46,7 @@ export async function ShowMessageAnimation({ messages }: { messages: Message[] |
         const newDialogBox = document.createElement('div')
         newDialogBox.classList.add('dialog-box')
         newDialogBox.id = 'dialog-box'
+        applyTextDirection(newDialogBox)
         document.body.appendChild(newDialogBox)
         newDialogBoxAnimation(newDialogBox)
     }
@@ -55,6 +56,7 @@ export async function ShowMessageAnimation({ messages }: { messages: Message[] |
     messages.forEach((message) => {
         if(message.description) return
         const messageContainer = document.createElement('p')
+        applyTextDirection(messageContainer)
         messageContainer.textContent = formatMessageLine(message)
         dialog?.appendChild(messageContainer)
     })
@@ -69,9 +71,11 @@ export function EndGameMessage({ message }: { message: Message | undefined }) {
     const newDialogBox = document.createElement('div')
     newDialogBox.classList.add('dialog-box')
     newDialogBox.id = 'end-game-dialog-box'
+    applyTextDirection(newDialogBox)
     document.body.appendChild(newDialogBox)
 
     const messageContainer = document.createElement('p')
+    applyTextDirection(messageContainer)
     messageContainer.textContent = resolveBattleMessage(message, getGameboardLocale())
     newDialogBox.appendChild(messageContainer)
     newDialogBoxAnimation(newDialogBox)
@@ -82,12 +86,14 @@ export function AdditionalEffectMessage({ message }: { message: string | BattleM
     const newDialogBox = document.createElement('div')
     newDialogBox.classList.add('dialog-box')
     newDialogBox.id = 'additional-effect-dialog-box'
+    applyTextDirection(newDialogBox)
     document.body.appendChild(newDialogBox)
 
     const textContent = typeof message === 'string'
         ? message
         : resolveBattleMessage(message, getGameboardLocale())
     const messageContainer = document.createElement('p')
+    applyTextDirection(messageContainer)
     messageContainer.textContent = textContent
     newDialogBox.appendChild(messageContainer)
     newDialogBoxAnimation(newDialogBox)
@@ -98,10 +104,12 @@ export function OnHoverGateCard({ message }: { message: string }) {
     const newDialogBox = document.createElement('div')
     newDialogBox.classList.add('dialog-box')
     newDialogBox.id = 'on-hover-gate-card'
+    applyTextDirection(newDialogBox)
     document.body.appendChild(newDialogBox)
 
     const textContent = `${message}`
     const messageContainer = document.createElement('p')
+    applyTextDirection(messageContainer)
     messageContainer.textContent = textContent
     newDialogBox.appendChild(messageContainer)
     newDialogBoxAnimation(newDialogBox)

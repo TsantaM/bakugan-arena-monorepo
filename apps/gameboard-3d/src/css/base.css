@@ -23,6 +23,12 @@ body {
   user-select: none !important;
 }
 
+/* Text bidi only — layout stays LTR (html[dir=ltr]). */
+html[data-text-dir="rtl"] :is(p, button, label, h1, h2, h3, h4, h5, h6, input, textarea, .dialog-box) {
+  direction: rtl;
+  unicode-bidi: isolate;
+}
+
 /* * {
   margin: 0;
   padding: 0;

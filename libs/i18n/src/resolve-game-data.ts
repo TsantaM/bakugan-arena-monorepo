@@ -1,3 +1,4 @@
+import arGameData from '#locales/ar/gameData.json' with { type: 'json' }
 import enGameData from '#locales/en/gameData.json' with { type: 'json' }
 import frGameData from '#locales/fr/gameData.json' with { type: 'json' }
 import { defaultLocale, isLocale, type Locale } from './config.js'
@@ -16,6 +17,7 @@ type GameDataEntityEntry = {
 type GameDataCatalog = Record<GameDataEntityKind, Record<string, GameDataEntityEntry>>
 
 const gameDataCatalogs: Record<Locale, GameDataCatalog> = {
+  ar: arGameData as GameDataCatalog,
   en: enGameData as GameDataCatalog,
   fr: frGameData as GameDataCatalog,
 }
