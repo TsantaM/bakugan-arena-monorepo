@@ -8,6 +8,7 @@ import { eq } from "drizzle-orm";
 import { findOpponent } from "../functions/matchmaking-functions/find-opponent";
 import { StartTwoTimers, UpdatePlayerTimer } from "../functions/start-player-timer";
 import { getAvailableBot, getBotSocketId, isBotUserId } from "../functions/bot-manager";
+import { applyEloDecayForUser } from "../functions/ladder-functions/elo-decay";
 
 export type waitingListElements = {
     socketId: string,
@@ -71,13 +72,18 @@ export const addToQueue = async ({
         columns: { elo: true }
     })
 
+    const storedElo = user?.elo ?? 1000
+    const effectiveElo = ranked
+        ? await applyEloDecayForUser(userId, storedElo)
+        : storedElo
+
     waitingMap.set(userId, {
         userId,
         deckId,
         socketId,
         ranked,
         joinedAt: Date.now(),
-        elo: user?.elo ?? 1000
+        elo: effectiveElo
     })
 }
 

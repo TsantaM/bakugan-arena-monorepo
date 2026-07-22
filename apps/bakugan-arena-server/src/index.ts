@@ -34,6 +34,7 @@ import { GlobalChatSocket, OnOpentUpdateMessages, RecieveMessge } from "./socket
 import { CLEANUP_INTERVAL_GLOBAL_CHAT, cleanupOldMessages } from "./game-state/global-chat-store";
 import { GateCardAdditionalEffectSocket } from "./sockets/gate-card-additional-effect-socket";
 import { ChangeAttributSocket } from "./sockets/change-attribut-socket";
+import { applyEloDecayToAllUsers } from "./functions/ladder-functions/elo-decay";
 
 
 
@@ -44,6 +45,8 @@ const io = new Server({
         methods: ["GET", "POST"]
     }
 });
+
+const ELO_DECAY_INTERVAL_MS = 24 * 60 * 60 * 1000
 
 const startServer = async () => {
     await initializeBots()
@@ -61,6 +64,12 @@ const startServer = async () => {
     setInterval(() => {
         cleanupOldMessages()
     }, CLEANUP_INTERVAL_GLOBAL_CHAT)
+
+    setInterval(() => {
+        applyEloDecayToAllUsers().catch((err) => {
+            console.error("ELO decay job error", err)
+        })
+    }, ELO_DECAY_INTERVAL_MS)
 
     io.on('connection', (socket) => {
         const { userId, roomId, socketType } = socket.handshake.auth
