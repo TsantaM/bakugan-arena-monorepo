@@ -54,7 +54,8 @@ export function updateTurnState(roomData: stateType) {
                     message: [
                         {
                             turn: roomData.turnState.turnCount,
-                            text: `${card.name} nullified !`
+                            key: 'ability_nullified_short',
+                            params: { abilityKey: card.key },
                         }
                     ],
                     resolve: false

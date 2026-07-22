@@ -4,10 +4,8 @@ import { GateCardImages } from "../../../store/gate-card-images.js";
 
 export const SuperPyrus: gateCardType = {
     key: 'super-pyrus',
-    name: 'Super Pyrus',
     maxInDeck: 1,
     image: GateCardImages.command,
-    description: `Swaps the G-Power of your Bakugan with your opponent. (Automatically open on battle end)`,
     activeOnBattleEnd: {
         canBeActiveBefore: true,
         autoActiveOnEnd: false,

@@ -42,10 +42,8 @@ export const StinglashSubterra: bakuganType = {
 
 export const StinglashGateCard: gateCardType = {
     key: 'stinglash-gate-card',
-    name: 'Charachter: Stinglash',
     maxInDeck: 1,
     family: 'Stinglash',
-    description: `When this card is activated, it doubles the level of all Stinglash on it.`,
     image: GateCardImages.caracter,
     imageByAttribut: {
         Aquos: CharacterCardByAttribut('stinglash', 'Aquos'),

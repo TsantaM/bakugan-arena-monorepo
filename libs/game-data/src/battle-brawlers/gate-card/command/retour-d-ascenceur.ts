@@ -4,9 +4,7 @@ import { gateCardType } from "../../../type/game-data-types.js"
 
 export const RetourDAssenceur: gateCardType = {
     key: 'retour-d-air',
-    name: `Retour d'assenceur`,
     maxInDeck: 1,
-    description: `Oblige le Bakugan de l'adversaire mis en jeu à revenir immédiatement entre les main de son propriétaire`,
     image: GateCardImages.command,
     onOpen({ roomState, slot, userId }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)

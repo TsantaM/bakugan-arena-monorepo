@@ -4,8 +4,6 @@ import { JuggernoidAquos } from "../bakugans/juggernoid.js";
 
 export const DepthTornado: exclusiveAbilitiesType = {
     key: 'depth-tornado',
-    name: 'Depth Tornado',
-    description: `Adds 100 Gs to Juggernoid`,
     maxInDeck: 1,
     usable_if_user_not_on_domain: false,
     usable_in_neutral: false,

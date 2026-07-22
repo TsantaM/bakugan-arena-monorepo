@@ -36,12 +36,14 @@ export const finalizeBattle = ({ roomData, winnerId, winners, loserId, loosers, 
                 },
                 resolved: false,
                 message: [{
-                    text: `Gate Card Open ! ${card.name}`,
+                    key: 'gate_open',
+                    params: { gateKey: card.key },
                     userName: GetUserName({ roomData: roomData, userId: slotToUpdate.portalCard?.userId || '' }),
                     turn: roomData.turnState.turnCount
                 },
                 {
-                    text: `${card.description}`,
+                    key: 'gate_description',
+                    params: { gateKey: card.key },
                     turn: roomData.turnState.turnCount,
                     description: true
                 }]

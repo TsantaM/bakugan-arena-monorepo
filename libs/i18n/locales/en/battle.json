@@ -10,5 +10,48 @@
   "game_over_winner_ranked": "Game is over ! The winner is {winnerName} : {winnerName} : {winnerElo}(+{winnerBonus}) / {loserName} : {loserElo}(-{loserMalus})",
   "forfeit_winner": "{loserName} forfeit ! The winner is {winnerName}",
   "forfeit_winner_ranked": "{loserName} forfeit ! The winner is {winnerName} : {winnerName} : {winnerElo}(+{winnerBonus}) / {loserName} : {loserElo}(-{loserMalus})",
-  "user_offline": "This user is not online"
+  "user_offline": "This user is not online",
+
+  "battle_start": "New Battle Start !",
+  "bakugan_join_battle": "{name} join the battle !",
+  "bakugan_leave_battle": "{name} leave the battle",
+  "bakugan_eliminated": "{name} is elimined",
+  "bakugan_eliminate": "{name} eliminate",
+  "bakugan_move_to_slot": "{name} move to {slot}",
+  "bakugan_revived": "{name} revived",
+  "bakugan_protected": "{name} is protected.",
+  "bakugan_protection_ended": "{name} is not protected anymore",
+
+  "gate_nullified": "Gate Card nullified",
+  "gate_blocked": "Gate Card is blocked",
+  "gate_blocked_by": "Gate Card is blocked by {name}",
+  "gate_unblocked": "Gate Card is unblocked",
+  "gate_cards_swiped": "Gate Cards Swiped",
+  "gate_card_built": "Gate Card Builded",
+  "gate_card_became": "Gate Card became {name}.",
+
+  "ability_nullified": "{ability} of {bakugan} as been nullified !",
+  "ability_nullified_short": "{name} nullified !",
+  "abilities_blocked": "Abilities are blocked for {turns} turn(s) by {name}",
+  "abilities_unblocked": "Abilities are unblocked",
+  "abilities_remaining": "{username} has {count} ability card(s) left",
+  "abilities_usable_now": "{username} can use {count} now.",
+
+  "power_increased": "{name} power increased of {amount} Gs !",
+  "power_decreased": "{name} power decreased of {amount} Gs !",
+
+  "ability_failed": "{name} failed",
+  "bakugan_already_protected_by": "{name} is already protected by {source}",
+  "bakugan_protected_against_abilities": "{name} is protected against abilities",
+  "bakugan_protected_against_gates": "{name} is protected against gate cards",
+  "bakugan_protected_against_both": "{name} is protected against gate cards and abilities",
+  "bakugan_not_protected": "{name} isn't protected.",
+
+  "prompt_select_slot": "{name} : Select a slot",
+  "prompt_select_bakugan_set": "{name} : Select a Bakugan to set ?",
+  "prompt_select_bakugan_move": "{name} : Select a Bakugan to move and his destination",
+  "prompt_select_bakugan_drag": "{name} : Select a Bakugan to drag",
+  "prompt_select_bakugan_target": "{name} : Select a Bakugan to target",
+  "prompt_select_target": "{name} : Select a target",
+  "prompt_select_ability_card": "{name} : Select one ability card"
 }

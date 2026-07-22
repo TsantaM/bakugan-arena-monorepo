@@ -3,8 +3,6 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const MaitreDesProfondeurs: exclusiveAbilitiesType = {
     key: 'maitre-des-profondeurs',
-    name: 'Abyss Ruler',
-    description: `Adds 100 Gs to the user`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

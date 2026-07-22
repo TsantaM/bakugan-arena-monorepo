@@ -16,10 +16,8 @@ export const CycloidSubterra: bakuganType = {
 
 export const CycloidGateCard: gateCardType = {
     key: 'cycloid-gate-card',
-    name: 'Charachter: Cycloid',
     maxInDeck: 1,
     family: 'Cycloid',
-    description: `When this card is activated, it doubles the level of all Cycloid on it.`,
     image: 'caracter-gate-cards/cycloid-subterra.jpg',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'cycloid-gate-card')

@@ -4,9 +4,7 @@ import { gateCardType } from "../../../type/game-data-types.js"
 
 export const GrandEsprit: gateCardType = {
     key: 'grand-esprit',
-    name: 'Grand Spirit',
     maxInDeck: 1,
-    description: `Adds 50 Gs to your Bakugan for every gate card on the field`,
     image: GateCardImages.command,
     onOpen({ roomState, slot, bakuganKey, userId }) {
         if (!roomState) return null

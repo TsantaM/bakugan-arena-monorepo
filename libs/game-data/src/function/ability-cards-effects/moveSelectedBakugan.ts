@@ -34,7 +34,8 @@ export function moveSelectedBakugan({
     if(bakugan.statut.protected || bakugan.statut.protectedAgainstAbility) {
         NewAdditionnalMessage({
             roomState: roomState,
-            text: `${Bakugans[bakugan.key].name} is protected.`
+            key: 'bakugan_protected',
+            params: { name: Bakugans[bakugan.key].name },
         })
         return
     }

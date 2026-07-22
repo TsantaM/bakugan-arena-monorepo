@@ -4,9 +4,7 @@ import { GateCardImages } from "../../store/gate-card-images.js";
 
 export const ReacteurPyrus: gateCardType = {
     key: 'reacteur-pyrus',
-    name: 'Reacteur Pyrus',
     attribut: 'Pyrus',
-    description: 'Add 100 G to all Pyrus bakugans on the card',
     maxInDeck: 3,
     image: 'reacteur-pyrus.jpg',
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -87,9 +85,7 @@ export const ReacteurPyrus: gateCardType = {
 
 export const ReacteurHaos: gateCardType = {
     key: 'reacteur-haos',
-    name: 'Reacteur Haos',
     attribut: 'Haos',
-    description: 'Add 100 G to all Haos bakugans on the card',
     image: 'reacteur-haos.jpg',
     maxInDeck: 3,
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -167,9 +163,7 @@ export const ReacteurHaos: gateCardType = {
 
 export const ReacteurVentus: gateCardType = {
     key: 'reacteur-ventus',
-    name: 'Reacteur Ventus',
     attribut: 'Ventus',
-    description: 'Add 100 G to all Ventus bakugans on the card',
     image: 'reacteur-ventus.jpg',
     maxInDeck: 3,
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -246,9 +240,7 @@ export const ReacteurVentus: gateCardType = {
 
 export const ReacteurAquos: gateCardType = {
     key: 'reacteur-aquos',
-    name: 'Reacteur Aquos',
     attribut: 'Aquos',
-    description: 'Add 100 G to all Aquos bakugans on the card',
     image: 'reacteur-aquos.jpg',
     maxInDeck: 3,
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -325,9 +317,7 @@ export const ReacteurAquos: gateCardType = {
 
 export const ReacteurSubterra: gateCardType = {
     key: 'reacteur-subterra',
-    name: 'Reacteur Subterra',
     attribut: 'Subterra',
-    description: 'Add 100 G to all Subterra bakugans on the card',
     image: 'reacteur-subterra.jpg',
     maxInDeck: 3,
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -404,9 +394,7 @@ export const ReacteurSubterra: gateCardType = {
 
 export const ReacteurDarkus: gateCardType = {
     key: 'reacteur-darkus',
-    name: 'Reacteur Darkus',
     attribut: 'Darkus',
-    description: 'Add 100 G to all Darkus bakugans on the card',
     image: 'reacteur-darkus.jpg',
     maxInDeck: 3,
     onOpen: ({ roomState, slot }: { roomState: stateType, slot: slots_id }) => {
@@ -486,10 +474,8 @@ export const ReacteurDarkus: gateCardType = {
 
 export const PerilPyrus: gateCardType = {
     key: 'peril-pyrus',
-    name: 'Péril Pyrus',
     attribut: 'Pyrus',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents sur cette carte en Pyrus`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -521,10 +507,8 @@ export const PerilPyrus: gateCardType = {
 
 export const PerilAquos: gateCardType = {
     key: 'peril-aquos',
-    name: 'Péril Aquos',
     attribut: 'Aquos',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents sur cette carte en Aquos`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -556,10 +540,8 @@ export const PerilAquos: gateCardType = {
 
 export const PerilVentus: gateCardType = {
     key: 'peril-ventus',
-    name: 'Péril Ventus',
     attribut: 'Ventus',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents sur cette carte en Ventus`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -591,10 +573,8 @@ export const PerilVentus: gateCardType = {
 
 export const PerilSubterra: gateCardType = {
     key: 'peril-subterra',
-    name: 'Péril Subterra',
     attribut: 'Subterra',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents sur cette carte en Subterra`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -626,10 +606,8 @@ export const PerilSubterra: gateCardType = {
 
 export const PerilHaos: gateCardType = {
     key: 'peril-haos',
-    name: 'Péril Haos',
     attribut: 'Haos',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents sur cette carte en Haos`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -661,10 +639,8 @@ export const PerilHaos: gateCardType = {
 
 export const PerilDarkus: gateCardType = {
     key: 'peril-darkus',
-    name: 'Péril Darkus',
     attribut: 'Darkus',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents sur cette carte en Darkus`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -698,10 +674,8 @@ export const PerilDarkus: gateCardType = {
 
 export const FusionMarine: gateCardType = {
     key: 'fusion-marine',
-    name: 'Fusion Marine',
     attribut: 'Aquos',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents en Aquos sauf les Bakugans Subterra`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
 
@@ -717,10 +691,8 @@ export const FusionMarine: gateCardType = {
 
 export const FusionAerienne: gateCardType = {
     key: 'fusion-aerienne',
-    name: 'Fusion Aérienne',
     attribut: 'Ventus',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents en Ventus sauf les Bakugans Haos`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         PerilGateCardOnOpen({ roomState, slot, attribut: "Ventus", exception: "Haos" })
@@ -734,10 +706,8 @@ export const FusionAerienne: gateCardType = {
 
 export const FusionTenebreuses: gateCardType = {
     key: 'fusion-tenebreuse',
-    name: 'Fusion Ténébreuse',
     attribut: 'Darkus',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents en Darkus sauf les Bakugans Pyrus`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         PerilGateCardOnOpen({ roomState, slot, attribut: "Darkus", exception: "Pyrus" })
@@ -751,10 +721,8 @@ export const FusionTenebreuses: gateCardType = {
 
 export const FusionTerrestre: gateCardType = {
     key: 'fusion-terrestre',
-    name: 'Fusion Terrestre',
     attribut: 'Subterra',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents en Subterra sauf les Bakugans Aquos`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         PerilGateCardOnOpen({ roomState, slot, attribut: "Subterra", exception: "Aquos" })
@@ -768,10 +736,8 @@ export const FusionTerrestre: gateCardType = {
 
 export const FusionLumineuse: gateCardType = {
     key: 'fusion-lumineuse',
-    name: 'Fusion Lumineuse',
     attribut: 'Haos',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents en Haos sauf les Bakugans Ventus`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         PerilGateCardOnOpen({ roomState, slot, attribut: "Haos", exception: "Ventus" })
@@ -785,10 +751,8 @@ export const FusionLumineuse: gateCardType = {
 
 export const FusionEnflammee: gateCardType = {
     key: 'fusion-enflammee',
-    name: 'Fusion Enflammée',
     attribut: 'Pyrus',
     maxInDeck: 1,
-    description: `Transforme l'attribut de tous les Bakugans présents en Pyrus sauf les Bakugans Darkus`,
     image: GateCardImages.elementary,
     onOpen: ({ roomState, slot }) => {
         PerilGateCardOnOpen({ roomState, slot, attribut: "Pyrus", exception: "Darkus" })

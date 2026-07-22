@@ -8,8 +8,6 @@ import { ExclusiveAbilitiesList } from "../exclusive-abilities.js"
 
 export const RayonGamma: exclusiveAbilitiesType = {
     key: 'gamma-ray',
-    name: 'Gamma Ray',
-    description: `Nullifies all opponent's ability on the field`,
     maxInDeck: 1,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,

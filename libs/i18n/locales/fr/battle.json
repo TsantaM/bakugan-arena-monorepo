@@ -10,5 +10,48 @@
   "game_over_winner_ranked": "Combat terminé ! Le vainqueur est {winnerName} : {winnerName} : {winnerElo}(+{winnerBonus}) / {loserName} : {loserElo}(-{loserMalus})",
   "forfeit_winner": "{loserName} abandonne ! Le vainqueur est {winnerName}",
   "forfeit_winner_ranked": "{loserName} abandonne ! Le vainqueur est {winnerName} : {winnerName} : {winnerElo}(+{winnerBonus}) / {loserName} : {loserElo}(-{loserMalus})",
-  "user_offline": "Cet utilisateur n'est pas en ligne"
+  "user_offline": "Cet utilisateur n'est pas en ligne",
+
+  "battle_start": "Nouveau combat !",
+  "bakugan_join_battle": "{name} rejoint le combat !",
+  "bakugan_leave_battle": "{name} quitte le combat",
+  "bakugan_eliminated": "{name} est éliminé",
+  "bakugan_eliminate": "{name} est éliminé",
+  "bakugan_move_to_slot": "{name} se déplace vers {slot}",
+  "bakugan_revived": "{name} est ressuscité",
+  "bakugan_protected": "{name} est protégé.",
+  "bakugan_protection_ended": "{name} n'est plus protégé",
+
+  "gate_nullified": "Carte portail annulée",
+  "gate_blocked": "Carte portail bloquée",
+  "gate_blocked_by": "Carte portail bloquée par {name}",
+  "gate_unblocked": "Carte portail débloquée",
+  "gate_cards_swiped": "Cartes portail échangées",
+  "gate_card_built": "Carte portail construite",
+  "gate_card_became": "La carte portail est devenue {name}.",
+
+  "ability_nullified": "{ability} de {bakugan} a été annulée !",
+  "ability_nullified_short": "{name} annulée !",
+  "abilities_blocked": "Les capacités sont bloquées pour {turns} tour(s) par {name}",
+  "abilities_unblocked": "Les capacités sont débloquées",
+  "abilities_remaining": "{username} a {count} carte(s) capacité restante(s)",
+  "abilities_usable_now": "{username} peut utiliser {count} capacité(s) maintenant.",
+
+  "power_increased": "Hausse du niveau de puissance de {name} de {amount} Gs !",
+  "power_decreased": "Baisse du niveau de puissance de {name} de {amount} Gs !",
+
+  "ability_failed": "{name} a échoué",
+  "bakugan_already_protected_by": "{name} est déjà protégé par {source}",
+  "bakugan_protected_against_abilities": "{name} est protégé contre les capacités",
+  "bakugan_protected_against_gates": "{name} est protégé contre les cartes portail",
+  "bakugan_protected_against_both": "{name} est protégé contre les cartes portail et les capacités",
+  "bakugan_not_protected": "{name} n'est pas protégé.",
+
+  "prompt_select_slot": "{name} : Sélectionnez un emplacement",
+  "prompt_select_bakugan_set": "{name} : Sélectionnez un Bakugan à poser ?",
+  "prompt_select_bakugan_move": "{name} : Sélectionnez un Bakugan à déplacer et sa destination",
+  "prompt_select_bakugan_drag": "{name} : Sélectionnez un Bakugan à attirer",
+  "prompt_select_bakugan_target": "{name} : Sélectionnez un Bakugan cible",
+  "prompt_select_target": "{name} : Sélectionnez une cible",
+  "prompt_select_ability_card": "{name} : Sélectionnez une carte capacité"
 }

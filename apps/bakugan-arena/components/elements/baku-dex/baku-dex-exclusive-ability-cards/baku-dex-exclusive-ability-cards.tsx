@@ -6,13 +6,24 @@ import ExclusiveAbilityCardDexPreview from "../baku-dex-preview/exclusive-abilit
 import { useState } from "react";
 import { ExclusiveAbilitiesList } from "@bakugan-arena/game-data";
 import { BakuganList } from "@bakugan-arena/game-data";
-import { useTranslations } from "next-intl";
+import { resolveAbilityCard } from "@bakugan-arena/i18n";
+import { useLocale, useTranslations } from "next-intl";
 
 export default function BakuDexExclusiveAbilityCards() {
     const t = useTranslations('bakuDex')
     const tCommon = useTranslations('common')
+    const locale = useLocale()
     const [search, setSearch] = useState('')
-    const filtered = ExclusiveAbilitiesList.filter((d) => d.name.toLowerCase().includes(search.toLowerCase()))
+
+    const cards = ExclusiveAbilitiesList.map((c) => {
+        const resolved = resolveAbilityCard(c.key, locale)
+        return { ...c, displayName: resolved.name, displayDescription: resolved.description }
+    })
+
+    const filtered = cards.filter((d) =>
+        d.displayName.toLowerCase().includes(search.toLowerCase())
+        || d.key.toLowerCase().includes(search.toLowerCase())
+    )
 
     return (
         <Card>
@@ -30,7 +41,7 @@ export default function BakuDexExclusiveAbilityCards() {
                 {
                     filtered.length > 0 ? filtered.map((c, index) => {
                         const compatibles = BakuganList.filter((b) => b.exclusiveAbilities.includes(c.key))
-                    return <ExclusiveAbilityCardDexPreview key={index} nom={c.name} description={c.description} max={c.maxInDeck} bakugan={compatibles} />
+                    return <ExclusiveAbilityCardDexPreview key={index} nom={c.displayName} description={c.displayDescription} max={c.maxInDeck} bakugan={compatibles} />
                 }) : <p className="text-center">{tCommon('empty.noResult')}</p>
                 }
             </CardContent>

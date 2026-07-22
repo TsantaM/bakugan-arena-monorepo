@@ -25,15 +25,20 @@ import { toast } from "sonner"
 import CardPreviewDeckEditor from "./cards-preview-deck-editor"
 import { AbilityCardsList } from "@bakugan-arena/game-data"
 import { BakuganList } from "@bakugan-arena/game-data"
-import { useTranslations } from "next-intl"
+import { resolveAbilityCard } from "@bakugan-arena/i18n"
+import { useLocale, useTranslations } from "next-intl"
 
 
 export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBakugans, bakugans }: { deckId: string, abilityCards: string[] | undefined, countBakugans: number, bakugans: string[] }) {
     const t = useTranslations('deckBuilder')
     const tCommon = useTranslations('common')
+    const locale = useLocale()
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState("")
     const queryClient = useQueryClient()
+
+    const resolveCard = (c: (typeof AbilityCardsList)[number]) =>
+        resolveAbilityCard(c.key, locale)
 
     // Récupère l'attribut des bakugans dans l'équite
     const firstAttribut = [... new Set(BakuganList.filter((b) => bakugans.includes(b.key)).map((b) => b.attribut))]
@@ -91,18 +96,18 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
                                     {notInDeckAbilities && value ? (
                                         (() => {
                                             const selectedCard = notInDeckAbilities.find(
-                                                (b) => b.name === value
+                                                (b) => resolveCard(b).name === value || b.key === value
                                             )
 
                                             if (!selectedCard) return t('select.abilityCards')
 
-                                            const { name, attribut } = selectedCard
+                                            const { attribut } = selectedCard
                                             const imageUrl = `/images/attribut/${attribut?.toUpperCase()}.png`
 
                                             return (
                                                 <>
                                                     <Image src={imageUrl} alt={`${attribut}`} width={20} height={20} />
-                                                    {`${name}`}
+                                                    {resolveCard(selectedCard).name}
                                                 </>
                                             )
                                         })()
@@ -118,10 +123,12 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
                                     <CommandList>
                                         <CommandEmpty>{tCommon('empty.noCardFound')}</CommandEmpty>
                                         <CommandGroup>
-                                            {notInDeckAbilities.map((b, index) => (
+                                            {notInDeckAbilities.map((b, index) => {
+                                                const displayName = resolveCard(b).name
+                                                return (
                                                 <CommandItem
                                                     key={index}
-                                                    value={b.name}
+                                                    value={displayName}
                                                     onSelect={(currentValue) => {
                                                         setValue(currentValue === value ? "" : currentValue)
                                                         setOpen(false)
@@ -129,7 +136,7 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
                                                     }}
                                                 >
                                                     {b.attribut && <Image src={`/images/attributs/${b.attribut?.toUpperCase()}.png`} alt={b.attribut} width={20} height={20} />
-                                                    }                                                        {b.name}
+                                                    }                                                        {displayName}
                                                     <Check
                                                         className={cn(
                                                             "ml-auto",
@@ -137,7 +144,7 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
                                                         )}
                                                     />
                                                 </CommandItem>
-                                            ))}
+                                            )})}
                                         </CommandGroup>
                                     </CommandList>
                                 </Command>
@@ -148,7 +155,12 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
 
                 <CardContent className={deckAbilityCards.length > 0 ? "grid grid-cols-1 md:grid-cols-2 gap-3" : ""}>
                     {
-                        deckCards.length > 0 ? deckCards.map((c, index) => <CardPreviewDeckEditor key={index} nom={c ? c.name : ''} description={c ? c.description : ''} attribut={c && c.attribut} id={c ? c.key : ''} deckId={deckId} />)
+                        deckCards.length > 0 ? deckCards.map((c, index) => {
+                            const resolved = c
+                                ? resolveCard(c)
+                                : { name: '', description: '' }
+                            return <CardPreviewDeckEditor key={index} nom={resolved.name} description={resolved.description} attribut={c && c.attribut} id={c ? c.key : ''} deckId={deckId} />
+                        })
 
                             : <p className='text-center'>{t('emptyStates.noAbilityCards')}</p>
                     }

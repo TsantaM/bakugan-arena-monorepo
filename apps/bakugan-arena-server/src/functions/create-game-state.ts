@@ -36,8 +36,6 @@ export const createGameState = async ({ roomId, ranked }: { roomId: string; rank
 
             const excluAbilitiesState = bakuganAbilities.map((c) => ({
                 key: c.key,
-                name: c.name,
-                description: c.description,
                 usable_if_user_not_on_domain: c.usable_if_user_not_on_domain,
                 used: false,
                 dead: false
@@ -54,9 +52,7 @@ export const createGameState = async ({ roomId, ranked }: { roomId: string; rank
 
         const abilities = cardsInDeck.map((c) => ({
             key: c.key,
-            name: c.name,
             attribut: c.attribut,
-            description: c.description,
             used: false,
             dead: false
         }))
@@ -68,9 +64,7 @@ export const createGameState = async ({ roomId, ranked }: { roomId: string; rank
 
         const gates = [... new Set(gateInDeck.map((c) => ({
             key: c.key,
-            name: c.name,
             attribut: c.attribut,
-            description: c.description,
             set: false,
             usable: true,
             dead: false
@@ -213,8 +207,6 @@ export const createGameState = async ({ roomId, ranked }: { roomId: string; rank
         if (gate) {
             return {
                 key: gate.key,
-                name: gate.name,
-                description: gate.description,
                 image: gate.image,
             }
         }
@@ -225,8 +217,6 @@ export const createGameState = async ({ roomId, ranked }: { roomId: string; rank
         if (gate) {
             return {
                 key: gate.key,
-                name: gate.name,
-                description: gate.description,
                 image: gate.image,
             }
         }

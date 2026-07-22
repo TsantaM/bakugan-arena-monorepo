@@ -4,8 +4,6 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const GrandImpact: exclusiveAbilitiesType = {
     key: 'grand-impact',
-    name: 'Grand Impact',
-    description: `Transfers 100 Gs from the opponent to Hammer Gorem. And prevents the opponent's Gate Card from opening`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
@@ -43,7 +41,8 @@ export const GrandImpact: exclusiveAbilitiesType = {
 
                         NewAdditionnalMessage({
                             roomState: roomState,
-                            text: 'Gate Card is blocked by Grand Impact',
+                            key: 'gate_blocked_by',
+                            params: { abilityKey: GrandImpact.key },
                         })
 
                     } 

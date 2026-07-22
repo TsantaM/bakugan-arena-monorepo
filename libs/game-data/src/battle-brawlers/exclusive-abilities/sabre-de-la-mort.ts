@@ -5,8 +5,6 @@ import { TigrerraHaos } from "../bakugans/tigrerra.js"
 
 export const SabreDeLaMort: exclusiveAbilitiesType = {
     key: 'sabre-de-la-mort',
-    name: 'Cut in Saber',
-    description: `Adds Tigrerra into a battle`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: true,

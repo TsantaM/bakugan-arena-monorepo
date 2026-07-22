@@ -47,14 +47,17 @@ export function ResolveTrapCardOnOpen({
             type: 'SELECT_ABILITY_CARD',
             data: cards.map((card) => ({
                 key: card.key,
-                description: card.description,
                 image:
                     [...AbilityCardsList, ...ExclusiveAbilitiesList]
                         .find((ability) => ability.key === card.key)
                         ?.image || '',
-                name: card.name
             })),
-            message: `Mine Ghost : Select one ability card`,
+            message: {
+                key: 'prompt_select_ability_card',
+                params: {
+                    gateKey: slotOfGate.portalCard?.key ?? 'mine-ghost',
+                },
+            },
             skipable: true,
             target: otherPlayerId
         }
@@ -118,7 +121,10 @@ export function ResolveTrapCardAdditionalRequest({
         resolve: false,
         message: [
             {
-                text: `Ability Card Activate : ${card.name}`,
+                key: 'ability_activate',
+                params: {
+                    abilityKey: card.key,
+                },
                 userName: GetUserName({
                     roomData: roomState,
                     userId: cardOwnerId
@@ -126,7 +132,8 @@ export function ResolveTrapCardAdditionalRequest({
                 turn: roomState.turnState.turnCount
             },
             {
-                text: `${card.description}`,
+                key: 'ability_description',
+                params: { abilityKey: card.key },
                 turn: roomState.turnState.turnCount,
                 description: true
             }
@@ -154,7 +161,11 @@ export function ResolveTrapCardAdditionalRequest({
         player.usable_abilitys = player.usable_abilitys - 1
         NewAdditionnalMessage({
             roomState,
-            text: `${player.username} has ${player.usable_abilitys} ability card(s) left`
+            key: 'abilities_remaining',
+            params: {
+                username: player.username,
+                count: player.usable_abilitys,
+            },
         })
     }
 

@@ -4,8 +4,6 @@ import { activateAbilities } from "../../type/room-types.js"
 
 export const DragonoidPlus: exclusiveAbilitiesType = {
     key: 'dragonoid-plus',
-    name: 'Boosted Dragon',
-    description: `Adds 100 Gs to the user for the entire duration of the game, as long as the card is not canceled.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

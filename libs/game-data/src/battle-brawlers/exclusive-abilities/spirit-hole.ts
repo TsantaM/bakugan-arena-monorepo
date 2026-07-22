@@ -3,9 +3,7 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const SpiritHole: exclusiveAbilitiesType = {
     key: 'spirit-hole',
-    name: 'Spirit Hole',
     maxInDeck: 1,
-    description: `Adds 50 Gs to your Bakugan for every gate card on the field`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {

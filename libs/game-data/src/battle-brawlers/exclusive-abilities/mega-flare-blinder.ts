@@ -5,9 +5,7 @@ import { TentaclearHaos } from "../bakugans/tentacleer.js"
 
 export const MegaFlareBlinder: exclusiveAbilitiesType = {
     key: 'mega-flare-blinder',
-    name: 'Mega Flare Blinder',
     maxInDeck: 1,
-    description: `Add 100 G to Tentaclear and prevent the opponent from opening the Gate Card on the same slot as the user.`,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -29,7 +27,7 @@ export const MegaFlareBlinder: exclusiveAbilitiesType = {
 
             NewAdditionnalMessage({
                 roomState: roomState,
-                text: 'Gate Card is blocked'
+                key: 'gate_blocked',
             })
 
         }
@@ -62,7 +60,7 @@ export const MegaFlareBlinder: exclusiveAbilitiesType = {
             slotOfGate.state.blocked = false
             NewAdditionnalMessage({
                 roomState: roomState,
-                text: `Card card is unblocked.`
+                key: 'gate_unblocked',
             })
         }
 

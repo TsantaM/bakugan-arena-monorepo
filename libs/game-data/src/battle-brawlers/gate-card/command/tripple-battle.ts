@@ -6,8 +6,6 @@ import { bakuganOnSlot, stateType } from "../../../type/room-types.js"
 
 export const TripleCombat: gateCardType = {
     key: 'triple-combat',
-    name: 'Tripple Battle',
-    description: `Drag your weakest Bakugan to the battle`,
     image: GateCardImages.command,
     maxInDeck: 1,
     onOpen: ({ roomState, slot, userId }) => {

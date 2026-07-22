@@ -29,10 +29,8 @@ export const SkyressStormVentus: bakuganType = {
 
 export const SkyressGateCard: gateCardType = {
     key: 'skyress-gate-card',
-    name: 'Charachter: Skyress',
     maxInDeck: 1,
     family: 'Skyress',
-    description: `When this card is activated, it doubles the level of all Skyress on it.`,
     image: 'caracter-gate-cards/skyress-ventus.jpg',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'skyress-gate-card')

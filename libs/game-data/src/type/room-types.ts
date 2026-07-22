@@ -135,8 +135,8 @@ export type bakuganInDeck = {
     };
     excluAbilitiesState: {
         key: string;
-        name: string;
-        description: string;
+        name?: string;
+        description?: string;
         usable_if_user_not_on_domain: boolean,
         used: boolean;
         dead: boolean;
@@ -149,17 +149,17 @@ export type deckType = {
     bakugans: bakuganInDeck[];
     abilities: {
         key: string;
-        name: string;
+        name?: string;
         attribut: attribut | undefined;
-        description: string;
+        description?: string;
         used: boolean;
         dead: boolean;
     }[];
     gates: {
         key: string;
-        name: string;
+        name?: string;
         attribut: attribut | undefined;
-        description: string;
+        description?: string;
         set: boolean;
         usable: boolean;
         dead: boolean;

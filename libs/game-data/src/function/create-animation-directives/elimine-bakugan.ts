@@ -22,7 +22,8 @@ export const ElimineBakuganDirectiveAnimation: ElimineBakuganDirectiveAnimationT
         },
         resolved: false,
         message: [{
-            text: `${BakuganList.find((b) => bakugan.key === b.key )?.name || ''} eliminate`,
+            key: 'bakugan_eliminate',
+            params: { name: BakuganList.find((b) => bakugan.key === b.key )?.name || '' },
             turn: turn
         }]
     }

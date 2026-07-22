@@ -17,7 +17,8 @@ export default function RemoveRenfortAnimationDirective({ animations, bakugan, t
             bakugan: bakugan
         },
         message: [{
-            text: `${Bakugans[bakugan.key].name} leave the battle`,
+            key: 'bakugan_leave_battle',
+            params: { name: Bakugans[bakugan.key].name },
             turn: turnCount,
             description: false
         }],

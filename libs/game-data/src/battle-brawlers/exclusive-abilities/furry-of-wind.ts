@@ -6,9 +6,7 @@ import { SkyressVentus } from "../bakugans/skyress.js"
 
 export const FurryOfWind: exclusiveAbilitiesType = {
     key: "furry-of-wind",
-    description: "When three allied Ventus Bakugan, including Ventus Skyress, are present on the field, this card eliminates all opposing Bakugan on the battlefield. Additionally, it allows the user to return their own Bakugan to their hand. If this card is activated during a battle, the current Gate Card is removed from play.",
     maxInDeck: 1,
-    name: "Fury of Wind",
     image: "furry-of-wind.jpg",
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

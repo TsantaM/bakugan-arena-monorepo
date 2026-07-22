@@ -3,9 +3,7 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const CapeDeFeu: exclusiveAbilitiesType = {
     key: 'cape de feu',
-    name: 'Cape de Feu',
     maxInDeck: 1,
-    description: `Ajoute 100 G en plus à l'utilisateur`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {

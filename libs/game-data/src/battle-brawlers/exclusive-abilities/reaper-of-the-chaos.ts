@@ -5,8 +5,6 @@ import { ReaperDarkus } from "../bakugans/reaper.js"
 
 export const ReaperOfTheChaos: exclusiveAbilitiesType = {
     key: 'reaper-of-the-chaos',
-    name: 'Reaper of the Chaos',
-    description: `Add 100 Gs to Reaper`,
     maxInDeck: 1,
     usable_if_user_not_on_domain: false,
     usable_in_neutral: false,

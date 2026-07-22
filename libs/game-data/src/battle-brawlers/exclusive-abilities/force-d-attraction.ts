@@ -5,14 +5,12 @@ import type { bakuganToMoveType2 as bakuganToMoveType } from "../../type/type-in
 
 export const ForceDattraction: exclusiveAbilitiesType = {
     key: `force-d'attraction`,
-    name: `Attractor`,
     maxInDeck: 2,
-    description: `Attract one Bakugan from another Gate Card to user's Gate Card`,
     extraInputs: ['drag-bakugan'],
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        const animation = AbilityCardFailed({ card: ForceDattraction.name })
+        const animation = AbilityCardFailed({ abilityKey: ForceDattraction.key })
 
         if (!roomState) return animation
 
@@ -38,7 +36,7 @@ export const ForceDattraction: exclusiveAbilitiesType = {
 
         const request: AbilityCardsActions = {
             type: 'SELECT_BAKUGAN_ON_DOMAIN',
-            message: "Attractor : Select a Bakugan to drag",
+            message: { key: 'prompt_select_bakugan_drag', params: { abilityKey: ForceDattraction.key } },
             bakugans: bakugans
         }
 

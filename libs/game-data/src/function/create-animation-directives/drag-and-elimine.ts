@@ -24,7 +24,8 @@ export const DragAndElimineDirectiveAnimation: DragAndElimineDirectiveAnimationT
         },
         resolve: false,
         message: [{
-            text: `${BakuganList.find((b) => bakugan.key === b.key)?.name || 'A bakugan'} is elimined`,
+            key: 'bakugan_eliminated',
+            params: { name: BakuganList.find((b) => bakugan.key === b.key)?.name || 'A bakugan' },
             turn: turn
         }]
     }

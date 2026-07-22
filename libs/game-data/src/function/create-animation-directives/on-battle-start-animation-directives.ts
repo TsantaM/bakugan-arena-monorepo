@@ -9,7 +9,7 @@ export function OnBattleStartAnimationDirectives({ animations, slot, turn, roomS
         },
         resolved: false,
         message: [{
-            text: `New Battle Start !`,
+            key: 'battle_start',
             turn: turn
         }]
     }

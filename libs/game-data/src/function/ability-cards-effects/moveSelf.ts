@@ -94,7 +94,7 @@ export function moveBakuganToSelectedSlot({
     slotOfGate.activateAbilities.splice(ability, 1)
 
     const additional: Message = {
-        text: 'Gate Card is blocked',
+        key: 'gate_blocked',
         turn: roomData.turnState.turnCount,
         description: false
     }

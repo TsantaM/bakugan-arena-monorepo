@@ -4,9 +4,7 @@ import { gateCardType } from "../../../type/game-data-types.js"
 
 export const BoucEmissaire: gateCardType = {
     key: 'bouc-emissaire',
-    name: 'Bouc Emissaire',
     maxInDeck: 1,
-    description: `Le propriétaire du premier Bakugan placé sur la carte peut décider de continuer le combat ou d'y mettre fin`,
     image: GateCardImages.command,
     onOpen: ({ roomState, slot }) => {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)

@@ -6,8 +6,6 @@ import { activateAbilities } from "../../type/room-types.js";
 
 export const DualGazer: exclusiveAbilitiesType = {
     key: 'dual-gazer',
-    name: 'Dual Gazer',
-    description: `Adds 100 Gs to the user for the entire duration of the game, as long as the card is not canceled, decrease 100Gs to the opponent and decrease the selected bakugan's power by 100 Gs but if Hydranoid is your last alive bakugan the target is eliminated.`,
     maxInDeck: 1,
     usable_if_user_not_on_domain: false,
     usable_in_neutral: false,
@@ -72,7 +70,7 @@ export const DualGazer: exclusiveAbilitiesType = {
 
                 const request: AbilityCardsActions = {
                     type: 'SELECT_BAKUGAN_ON_DOMAIN',
-                    message: 'Dual Gazer : Select a Bakugan to target',
+                    message: { key: 'prompt_select_bakugan_target', params: { abilityKey: DualGazer.key } },
                     bakugans: bakugans
                 }
 

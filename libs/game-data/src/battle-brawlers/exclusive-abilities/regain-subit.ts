@@ -3,9 +3,7 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const RegainSubit: exclusiveAbilitiesType = {
     key: 'regain-subit',
-    name: 'Regain Subit',
     maxInDeck: 1,
-    description: `Retire 100 G à tous les bakugans adverse et ajoute 100 G à l'utilisateur`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {

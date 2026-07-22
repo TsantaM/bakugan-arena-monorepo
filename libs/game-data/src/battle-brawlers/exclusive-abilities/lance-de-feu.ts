@@ -3,9 +3,7 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const LanceDeFeu: exclusiveAbilitiesType = {
     key: 'lance-de-feu',
-    name: 'Fire Sword',
     maxInDeck: 1,
-    description: `Adds 100 Gs to the user`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {

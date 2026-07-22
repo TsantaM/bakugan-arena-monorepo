@@ -21,7 +21,11 @@ export const MoveToAnotherSlotDirectiveAnimation: MoveToAnotherSlotType = ({ ani
     const additionnal: Message[] = additionalMessages ? additionalMessages : []
 
     const messages: Message[] = [{
-            text: `${BakuganList.find((b) => bakugan.key === b.key )?.name || ''} move to ${newSlot.id}`,
+            key: 'bakugan_move_to_slot',
+            params: {
+                name: BakuganList.find((b) => bakugan.key === b.key )?.name || '',
+                slot: newSlot.id,
+            },
             turn: turn
         }, ...additionnal]
 

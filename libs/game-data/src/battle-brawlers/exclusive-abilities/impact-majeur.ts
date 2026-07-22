@@ -3,8 +3,6 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const ImpactMajeur: exclusiveAbilitiesType = {
     key: 'impact-majeur',
-    name: 'Mega Impact',
-    description: `Adds 50 Gs to the user and substract 100 Gs to all opponents Bakugans.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

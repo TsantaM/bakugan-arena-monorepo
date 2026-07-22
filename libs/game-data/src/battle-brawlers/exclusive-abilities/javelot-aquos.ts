@@ -8,13 +8,11 @@ import { GateCards, GateCardsList } from "../gate-gards.js"
 
 export const JavelotAquos: exclusiveAbilitiesType = {
     key: 'javelot-aquos',
-    name: 'Aquos Javelin',
     maxInDeck: 1,
-    description: `Cancel Gate card and Switches Gate Card with the one next to it`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, slot }) => {
-        const animation = AbilityCardFailed({ card: JavelotAquos.name })
+        const animation = AbilityCardFailed({ abilityKey: JavelotAquos.key })
 
         if (!roomState) return animation
         if (JavelotAquos.activationConditions && !JavelotAquos.activationConditions({ roomState, userId })) return animation
@@ -29,7 +27,7 @@ export const JavelotAquos: exclusiveAbilitiesType = {
 
         const request: AbilityCardsActions = {
             type: 'SELECT_SLOT',
-            message: 'Aquos Javelin : Select a slot',
+            message: { key: 'prompt_select_slot', params: { abilityKey: JavelotAquos.key } },
             slots: slotsIds
         }
 

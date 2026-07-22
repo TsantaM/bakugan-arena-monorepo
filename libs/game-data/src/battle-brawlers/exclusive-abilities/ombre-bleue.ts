@@ -4,8 +4,6 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const OmbreBleue: exclusiveAbilitiesType = {
     key: 'ombre-bleue',
-    name: 'Blue Stealth',
-    description: `Transfers 50 Gs from opponent Bakugan to the user and prevent the opponent from opening their Gate Card`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
@@ -29,7 +27,7 @@ export const OmbreBleue: exclusiveAbilitiesType = {
             }
             NewAdditionnalMessage({
                 roomState: roomState,
-                text: `Gate Card is blocked`
+                key: 'gate_blocked',
             })
         }
         return null

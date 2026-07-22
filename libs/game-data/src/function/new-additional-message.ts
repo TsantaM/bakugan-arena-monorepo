@@ -3,14 +3,18 @@ import { pushReplayAnimation } from "./replay/push-replay-animation.js";
 import { stateType } from "../type/room-types.js";
 
 type NewAdditionnalMessageType = {
-    text: string;
     roomState: stateType
+    text?: string
+    key?: string
+    params?: Record<string, string | number>
 }
 
-export function NewAdditionnalMessage({ roomState, text }: NewAdditionnalMessageType) {
+export function NewAdditionnalMessage({ roomState, text, key, params }: NewAdditionnalMessageType) {
 
     const message: Message = {
-        text: text,
+        text,
+        key,
+        params,
         turn: roomState.turnState.turnCount,
         description: false,
     }

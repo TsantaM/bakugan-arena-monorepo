@@ -3,17 +3,18 @@ import type { attribut } from './game-data-types.js'
 
 /**
  * Battle / system message shown in the gameboard dialog and Next battle log.
- * - Prefer `key` + `params` for new server messages (clients translate).
- * - `text` remains for: legacy replays, player chat, and game-data passthrough.
+ * - Prefer `key` + `params` (`battle` namespace). Clients translate via resolveBattleMessage.
+ * - Params should prefer stable ids later; for now entity display names may still be EN strings.
+ * - `text` remains for: legacy replays, player chat, and untranslated card descriptions.
  */
 export type Message = {
     userName?: string,
     turn: number,
     description?: boolean,
-    /** i18n key in the `battle` namespace (e.g. `gate_card_set`) */
+    /** i18n key in the `battle` namespace (e.g. `gate_card_set`, `bakugan_join_battle`) */
     key?: string,
     params?: Record<string, string | number>,
-    /** Legacy / user-authored / game-data raw string */
+    /** Legacy / user-authored / card description passthrough */
     text?: string,
 }
 

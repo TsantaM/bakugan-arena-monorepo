@@ -3,9 +3,7 @@ import { exclusiveAbilitiesType } from "../../type/type-index.js";
 
 export const SpitPointer: exclusiveAbilitiesType = {
     key: 'spit-pointer',
-    name: 'Spit Pointer',
     maxInDeck: 1,
-    description: 'Add 100Gs to the user and substract 100 Gs to all opponents',
     usable_if_user_not_on_domain: false,
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {

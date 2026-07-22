@@ -21,7 +21,8 @@ export const SetBakuganAndAddRenfortAnimationDirective: AddRenfortAnimationDirec
         },
         resolved: false,
         message: [{
-            text: `${BakuganList.find((b) => bakugan.key === b.key)?.name || ''} join the battle !`,
+            key: 'bakugan_join_battle',
+            params: { name: BakuganList.find((b) => bakugan.key === b.key)?.name || '' },
             turn: turn
         }]
     }
@@ -41,7 +42,8 @@ export const AddRenfortAnimationDirective: AddRenfortAnimationDirectiveType = ({
         },
         resolved: false,
         message: [{
-            text: `${Bakugans[bakugan.key].name} join the battle !`,
+            key: 'bakugan_join_battle',
+            params: { name: Bakugans[bakugan.key].name },
             turn: turn
         }]
     }

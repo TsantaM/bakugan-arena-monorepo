@@ -24,14 +24,19 @@ import { toast } from "sonner"
 import { AddGateCardToDeck } from "@/src/actions/deck-builder/edit-deck-action"
 import { GateCardsList } from "@bakugan-arena/game-data"
 import { BakuganList } from "@bakugan-arena/game-data"
-import { useTranslations } from "next-intl"
+import { resolveGateCard } from "@bakugan-arena/i18n"
+import { useLocale, useTranslations } from "next-intl"
 
 export default function ManageGateCardsInDeckEditor({ deckId, gateCards, bakugans }: { deckId: string, gateCards: string[], bakugans: string[] }) {
     const t = useTranslations('deckBuilder')
     const tCommon = useTranslations('common')
+    const locale = useLocale()
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState("")
     const queryClient = useQueryClient()
+
+    const resolveCard = (c: (typeof GateCardsList)[number]) =>
+        resolveGateCard(c.key, locale)
 
     const deckCards = gateCards ? gateCards?.map((c) => GateCardsList.find(card => card.key === c)) : []
     const cardInDeck = GateCardsList.filter((c) => gateCards.includes(c.key))
@@ -87,16 +92,14 @@ export default function ManageGateCardsInDeckEditor({ deckId, gateCards, bakugan
                                     {value ? (
                                         (() => {
                                             const selectedCard = notInDeckCards.find(
-                                                (b) => b.name === value
+                                                (b) => resolveCard(b).name === value || b.key === value
                                             )
 
                                             if (!selectedCard) return t('select.gateCards')
 
-                                            const { name } = selectedCard
-
                                             return (
                                                 <>
-                                                    {`${name}`}
+                                                    {resolveCard(selectedCard).name}
                                                 </>
                                             )
                                         })()
@@ -112,17 +115,19 @@ export default function ManageGateCardsInDeckEditor({ deckId, gateCards, bakugan
                                     <CommandList>
                                         <CommandEmpty>{tCommon('empty.noCardFound')}</CommandEmpty>
                                         <CommandGroup>
-                                            {notInDeckCards.map((b, index) => (
+                                            {notInDeckCards.map((b, index) => {
+                                                const displayName = resolveCard(b).name
+                                                return (
                                                 <CommandItem
                                                     key={index}
-                                                    value={b.name}
+                                                    value={displayName}
                                                     onSelect={(currentValue) => {
                                                         setValue(currentValue === value ? "" : currentValue)
                                                         setOpen(false)
                                                         addGateToDeckMutation.mutate(b.key)
                                                     }}
                                                 >
-                                                    {b.name}
+                                                    {displayName}
                                                     <Check
                                                         className={cn(
                                                             "ml-auto",
@@ -130,7 +135,7 @@ export default function ManageGateCardsInDeckEditor({ deckId, gateCards, bakugan
                                                         )}
                                                     />
                                                 </CommandItem>
-                                            ))}
+                                            )})}
                                         </CommandGroup>
                                     </CommandList>
                                 </Command>
@@ -143,7 +148,12 @@ export default function ManageGateCardsInDeckEditor({ deckId, gateCards, bakugan
 
                 <CardContent className={deckCards && deckCards.length > 0 ? "grid grid-cols-1 md:grid-cols-2 gap-3" : ""}>
                     {
-                        deckCards && deckCards.length > 0 ? deckCards.map((b, index) => <GateCardPreviewDeckEditor key={index} id={b ? b.key : ''} nom={b ? b.name : ''} deckId={deckId} description={b ? b.description : ''} />)
+                        deckCards && deckCards.length > 0 ? deckCards.map((b, index) => {
+                            const resolved = b
+                                ? resolveCard(b)
+                                : { name: '', description: '' }
+                            return <GateCardPreviewDeckEditor key={index} id={b ? b.key : ''} nom={resolved.name} deckId={deckId} description={resolved.description} />
+                        })
 
                             : <p className='text-center'>{t('emptyStates.noGateCards')}</p>
                     }

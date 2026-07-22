@@ -4,8 +4,6 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const DStrikeExtreme: exclusiveAbilitiesType = {
     key: 'd-strike-extreme',
-    name: 'D Strike Extreme',
-    description: `A Fusion Ability that adds an additional +200 Gs if D Strike Attack is activated.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

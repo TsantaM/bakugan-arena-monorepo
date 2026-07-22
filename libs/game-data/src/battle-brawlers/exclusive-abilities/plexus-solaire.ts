@@ -4,9 +4,7 @@ import { GateCardsList } from "../gate-gards.js"
 
 export const PlexusSolaire: exclusiveAbilitiesType = {
     key: 'plexus-solaire',
-    name: 'Solar Plexus',
     maxInDeck: 1,
-    description: `Nullifies opponents Gate Card and substract 50 Gs to opponent`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {

@@ -3,8 +3,6 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const AmunRa: exclusiveAbilitiesType = {
     key: 'amun-ra',
-    name: 'Amun Ra',
-    description: `Add 100 G to Manion.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

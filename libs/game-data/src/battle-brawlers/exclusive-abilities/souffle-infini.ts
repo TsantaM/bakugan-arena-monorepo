@@ -6,14 +6,12 @@ import type { bakuganToMoveType2 as bakuganToMoveType } from "../../type/type-in
 
 export const SouffleInfini: exclusiveAbilitiesType = {
     key: 'souffle-infini',
-    name: 'Souffle Infini',
     maxInDeck: 1,
-    description: `Attire un bakugan sur la même carte portail que l'utilisateur et retire 50G à la cible`,
     extraInputs: ['drag-bakugan'],
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        const animation = AbilityCardFailed({ card: SouffleInfini.name })
+        const animation = AbilityCardFailed({ abilityKey: SouffleInfini.key })
 
         if (!roomState) return animation
 
@@ -39,7 +37,7 @@ export const SouffleInfini: exclusiveAbilitiesType = {
 
         const request: AbilityCardsActions = {
             type: 'SELECT_BAKUGAN_ON_DOMAIN',
-            message: 'Souffre Infini : Choissez un Bakugan à attirer',
+            message: { key: 'prompt_select_bakugan_drag', params: { abilityKey: SouffleInfini.key } },
             bakugans: bakugans
         }
 

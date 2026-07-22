@@ -6,8 +6,6 @@ import { gateCardType } from "../../../type/game-data-types.js"
 
 export const Androstasis: gateCardType = {
     key: 'androstasis',
-    name: 'Androstasis',
-    description: `If the user loses the current battle, their defeated Bakugan remains in the game.`,
     image: GateCardImages.command,
     maxInDeck: 1,
     activeOnBattleEnd: {
@@ -42,7 +40,8 @@ export const Androstasis: gateCardType = {
                         bakuganUserId: portalCard.userId,
                     },
                     message: [{
-                        text: `${bakugan.bakuganData.name} revived`,
+                        key: 'bakugan_revived',
+                        params: { name: bakugan.bakuganData.name },
                         turn: roomState.turnState.turnCount,
                     }]
                 }

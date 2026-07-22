@@ -39,10 +39,8 @@ export const AlphaHydranoidDarkus: bakuganType = {
 
 export const HydranoidGateCard: gateCardType = {
     key: 'hydranoid-gate-card',
-    name: 'Charachter: Hydranoid',
     maxInDeck: 1,
     family: 'Hydranoid',
-    description: `When this card is activated, it doubles the level of all Hydranoid on it.`,
     image: 'caracter-gate-cards/hydranoid-darkus.jpg',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'hydranoid-gate-card')

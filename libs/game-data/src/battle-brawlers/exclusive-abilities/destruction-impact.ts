@@ -5,8 +5,6 @@ import { GateCardsList } from "../gate-gards.js"
 
 export const DestructionImpact: exclusiveAbilitiesType = {
     key: 'destruction-impact',
-    name: 'Destruction Impact',
-    description: `A Fusion Ability that adds an additional +200 Gs and negate the gate card if Dual Gazer is activated.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

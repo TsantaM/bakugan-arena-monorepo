@@ -41,10 +41,8 @@ export const UltimateDragonoid: bakuganType = {
 
 export const DragonoidGateCard: gateCardType = {
     key: 'dragonoid-gate-card',
-    name: 'Charachter: Dragonoid',
     maxInDeck: 1,
     image: 'caracter-gate-cards/dragonoid-pyrus.jpg',
-    description: `When this card is activated, it doubles the level of all Dragonoid on it.`,
     family: 'Dragonoid',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'dragonoid-gate-card')
@@ -110,10 +108,8 @@ export const DragonoidGateCard: gateCardType = {
 
 export const DragonoidDeltaGateCard: gateCardType = {
     key: 'dragonoid-gate-card',
-    name: 'Charachter: Dragonoid Delta',
     maxInDeck: 1,
     image: 'caracter-gate-cards/dragonoid-pyrus.jpg',
-    description: `When this card is activated, it doubles the level of all Delta Dragonoid on it.`,
     family: 'Dragonoid',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'dragonoid-gate-card')

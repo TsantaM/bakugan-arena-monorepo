@@ -13,7 +13,8 @@ export function ElimineBakuganEffect({ bakugan, roomState, gateCardProtection }:
         if (bakugan.statut.protected || bakugan.statut.protectedAgainstGate) {
             NewAdditionnalMessage({
                 roomState: roomState,
-                text: `${Bakugans[bakugan.key].name} is protected`
+                key: 'bakugan_protected',
+                params: { name: Bakugans[bakugan.key].name },
             })
             return
         }

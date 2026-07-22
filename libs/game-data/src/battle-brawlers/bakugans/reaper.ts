@@ -16,10 +16,8 @@ export const ReaperDarkus: bakuganType = {
 
 export const ReaperGateCard: gateCardType = {
     key: 'reaper-gate-card',
-    name: 'Charachter: Reaper',
     maxInDeck: 1,
     family: 'Reaper',
-    description: `When this card is activated, it doubles the level of all Reaper on it.`,
     image: 'caracter-gate-cards/reaper-darkus.jpg',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'reaper-gate-card')

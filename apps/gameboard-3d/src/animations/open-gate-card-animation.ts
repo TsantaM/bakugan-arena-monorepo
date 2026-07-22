@@ -1,9 +1,11 @@
 import { GateCardsList, type portalSlotsTypeElement } from "@bakugan-arena/game-data";
+import { resolveGateCard } from "@bakugan-arena/i18n";
 import gsap from "gsap";
 import * as THREE from "three";
 import { getAttributColor } from "../functions/get-attrubut-color";
 import type { SlotMeshUsersData } from "../meshes/slot.mesh";
 import { GetCharacterCardImage } from "../functions/get-character-card-image";
+import { getGameboardLocale } from "../i18n/locale";
 
 export async function OpenGateCardAnimation({
   mesh,
@@ -32,7 +34,7 @@ export async function OpenGateCardAnimation({
     mesh.parent?.add(overlay);
     overlay.position.copy(mesh.position);
     const data = mesh.userData as SlotMeshUsersData
-    data.cardName = card.name
+    data.cardName = resolveGateCard(card.key, getGameboardLocale()).name
 
     const timeline = gsap.timeline({
       onComplete: () => {

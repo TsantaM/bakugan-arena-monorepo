@@ -12,15 +12,13 @@ import { GateCardsList } from "../gate-gards.js";
 
 export const RapideHaos: abilityCardsType = {
     key: 'rapide-haos',
-    name: 'Rapide Haos',
     attribut: 'Haos',
-    description: `Permet à l'utilisateur d'ajouter un bakugan en plus sur le terrain s'il y a déjà un bakugan Haos sur la carte`,
     maxInDeck: 1,
     usable_in_neutral: false,
     extraInputs: ['add-bakugan'],
     image: StandardCardsImages.haos,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        const animation = AbilityCardFailed({ card: RapideHaos.name })
+        const animation = AbilityCardFailed({ abilityKey: RapideHaos.key })
 
         if (!roomState) return animation
 
@@ -55,15 +53,13 @@ export const RapideHaos: abilityCardsType = {
 
 export const EclatSoudain: abilityCardsType = {
     key: 'eclat-soudain',
-    name: 'Rapid Haos',
     attribut: 'Haos',
     maxInDeck: 1,
-    description: `Adds another Bakugan to the Battle, it work only if there is minimum 2 haos bakugans on field`,
     usable_in_neutral: false,
     image: StandardCardsImages.haos,
     extraInputs: ['add-bakugan'],
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        const animation = AbilityCardFailed({ card: EclatSoudain.name })
+        const animation = AbilityCardFailed({ abilityKey: EclatSoudain.key })
 
         if (!roomState) return animation
 
@@ -84,7 +80,7 @@ export const EclatSoudain: abilityCardsType = {
         const bakugans = deck.bakugans.filter((bakugan) => bakugan && bakugan.bakuganData.onDomain === false && bakugan.bakuganData.elimined === false).filter((bakugan) => bakugan !== undefined && bakugan !== null)
         const request: AbilityCardsActions = {
             type: 'SELECT_BAKUGAN_TO_SET',
-            message: 'Rapid Haos: Select a Bakugan to set ?',
+            message: { key: 'prompt_select_bakugan_set', params: { abilityKey: EclatSoudain.key } },
             bakugans: bakugans
         }
         return request
@@ -212,10 +208,8 @@ export const EclatSoudain: abilityCardsType = {
 
 export const LumiereDivine: abilityCardsType = {
     key: 'lumiere-divine',
-    name: 'Lumière Divine',
     maxInDeck: 1,
     attribut: 'Haos',
-    description: `Permet de redonner vie à un Bakugan qui a été vaincu au combat`,
     image: StandardCardsImages.haos,
     usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -247,8 +241,6 @@ export const LumiereDivine: abilityCardsType = {
 export const ContreMaitrise: abilityCardsType = {
     key: 'contre-maîtrise',
     attribut: 'Haos',
-    name: 'Ability Counter',
-    description: `Nullifies the opponent's ability`,
     maxInDeck: 3,
     image: StandardCardsImages.haos,
     usable_in_neutral: false,
@@ -298,10 +290,8 @@ export const ContreMaitrise: abilityCardsType = {
 
 export const HaosImmobilisation: abilityCardsType = {
     key: 'haos-immobilisation',
-    name: 'Haos Stasis',
     attribut: 'Haos',
     maxInDeck: 1,
-    description: `If two Haos Bakugans are on the field, the user's power get 100 G and allow the player to reuse any of their Ability Cards`,
     image: StandardCardsImages.haos,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -327,7 +317,11 @@ export const HaosImmobilisation: abilityCardsType = {
                     player.usable_abilitys = 3
                     NewAdditionnalMessage({
                         roomState: roomState,
-                        text: `${player.username} can user ${player.usable_abilitys} now.`
+                        key: 'abilities_usable_now',
+                        params: {
+                            username: player.username,
+                            count: player.usable_abilitys,
+                        },
                     })
 
                 }
@@ -380,9 +374,7 @@ export const HaosImmobilisation: abilityCardsType = {
 
 export const SupportLight: abilityCardsType = {
     key: 'support-light',
-    name: 'Support Light',
     attribut: 'Haos',
-    description: `Nullifies the opponent's Gate Card`,
     maxInDeck: 2,
     usable_in_neutral: false,
     image: StandardCardsImages.haos,
@@ -445,11 +437,9 @@ export const SupportLight: abilityCardsType = {
 export const TornadeEclair: abilityCardsType = {
     key: 'tornade-eclair',
     attribut: 'Haos',
-    name: 'Lightning Tornado',
     maxInDeck: 1,
     image: StandardCardsImages.haos,
     usable_in_neutral: false,
-    description: `Adds 100 Gs to the user and decrease opponent power by 100 Gs`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)

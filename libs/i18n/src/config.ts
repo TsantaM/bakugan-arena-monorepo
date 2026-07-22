@@ -21,6 +21,7 @@ export const namespaces = [
   'ladder',
   'battlefield',
   'battle',
+  'gameData',
   'replay',
   'tutorial',
   'admin',

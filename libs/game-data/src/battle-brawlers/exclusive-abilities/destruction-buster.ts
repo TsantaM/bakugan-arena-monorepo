@@ -5,8 +5,6 @@ import { GateCardsList } from "../gate-gards.js"
 
 export const DestructionBuster: exclusiveAbilitiesType = {
     key: 'destruction-buster',
-    name: 'Destruction Buster',
-    description: `A Fusion Ability that adds an additional +100 Gs and negate the gate card if Chaos of Darkness is activated.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

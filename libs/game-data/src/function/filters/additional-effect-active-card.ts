@@ -30,7 +30,10 @@ export function AdditionalEffectActiveCard({ resolution, roomState, opponentsBak
         resolve: false,
         message: [
             {
-                text: `Ability Card Activate : ${card.name}`,
+                key: 'ability_activate',
+                params: {
+                    abilityKey: card.key,
+                },
                 userName: GetUserName({
                     roomData: roomState,
                     userId: cardOwnerId
@@ -38,7 +41,8 @@ export function AdditionalEffectActiveCard({ resolution, roomState, opponentsBak
                 turn: roomState.turnState.turnCount
             },
             {
-                text: `${card.description}`,
+                key: 'ability_description',
+                params: { abilityKey: card.key },
                 turn: roomState.turnState.turnCount,
                 description: true
             }
@@ -66,7 +70,11 @@ export function AdditionalEffectActiveCard({ resolution, roomState, opponentsBak
         player.usable_abilitys = player.usable_abilitys - 1
         NewAdditionnalMessage({
             roomState,
-            text: `${player.username} has ${player.usable_abilitys} ability card(s) left`
+            key: 'abilities_remaining',
+            params: {
+                username: player.username,
+                count: player.usable_abilitys,
+            },
         })
     }
 

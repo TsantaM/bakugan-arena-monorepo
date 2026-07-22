@@ -34,7 +34,7 @@ export function SwipeGateCardEffect({ roomData, selectedSlotId, userSlotId, baku
             slot2: structuredClone(userSlot)
         },
         message: [{
-            text: 'Gate Cards Swiped',
+            key: 'gate_cards_swiped',
             turn: roomData.turnState.turnCount
         }],
         resolve: false,

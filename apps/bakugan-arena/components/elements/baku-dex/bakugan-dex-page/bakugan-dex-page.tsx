@@ -5,10 +5,12 @@ import { bakuganType } from "@bakugan-arena/game-data"
 import { BakuganList } from "@bakugan-arena/game-data";
 import { ExclusiveAbilitiesList } from "@bakugan-arena/game-data";
 import { AbilityCardsList } from "@bakugan-arena/game-data";
-import { getTranslations } from "next-intl/server";
+import { resolveAbilityCard } from "@bakugan-arena/i18n";
+import { getLocale, getTranslations } from "next-intl/server";
 
 export default async function BakuganDex({ data }: { data: bakuganType }) {
     const t = await getTranslations('bakuDex')
+    const locale = await getLocale()
 
     const bakugan = BakuganList.find((b) => b.key === data.key)
     const exclusiveAbilities = ExclusiveAbilitiesList.filter((c) => bakugan?.exclusiveAbilities.includes(c.key))
@@ -46,7 +48,10 @@ export default async function BakuganDex({ data }: { data: bakuganType }) {
                         </CardHeader>
                         <CardContent>
                             {
-                                exclusiveAbilities.map((c, index) => <ExclusiveAbilityCardDexPreview key={index} nom={c.name} description={c.description} max={c.maxInDeck} />)
+                                exclusiveAbilities.map((c, index) => {
+                                    const resolved = resolveAbilityCard(c.key, locale)
+                                    return <ExclusiveAbilityCardDexPreview key={index} nom={resolved.name} description={resolved.description} max={c.maxInDeck} />
+                                })
                             }
                         </CardContent>
                     </Card>
@@ -59,7 +64,10 @@ export default async function BakuganDex({ data }: { data: bakuganType }) {
                         </CardHeader>
                         <CardContent>
                             {
-                                abilityCards.map((c, index) => <ExclusiveAbilityCardDexPreview key={index} nom={c.name} description={c.description} max={c.maxInDeck} attribut={c.attribut} />)
+                                abilityCards.map((c, index) => {
+                                    const resolved = resolveAbilityCard(c.key, locale)
+                                    return <ExclusiveAbilityCardDexPreview key={index} nom={resolved.name} description={resolved.description} max={c.maxInDeck} attribut={c.attribut} />
+                                })
                             }
                         </CardContent>
                     </Card>

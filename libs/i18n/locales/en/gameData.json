@@ -1,0 +1,721 @@
+{
+  "bakugans": {},
+  "abilities": {
+    "mur-de-feu": {
+      "name": "Fire Wall",
+      "description": "Subtracts 50 Gs from opponents and protects the user against opponent's abilities"
+    },
+    "jet-enflamme": {
+      "name": "Rapid Fire",
+      "description": "Adds another Bakugan to the battle if there are 2 or more Pyrus Bakugan on the field"
+    },
+    "tourbillon-de-feu": {
+      "name": "Fire Tornado",
+      "description": "Adds 100 Gs to the user and reduces the opponent's power by 100 Gs"
+    },
+    "mirage-aquatique": {
+      "name": "Dive Mirage",
+      "description": "Move an Aquos Bakugan from one gate card to another, also it prevents the opponent's gate card from opening"
+    },
+    "barrage-d'eau": {
+      "name": "Water Refrain",
+      "description": "This card prevents all players from using any abilities for 1 turn."
+    },
+    "plongee-en-eau-profonde": {
+      "name": "Deap Sea Dive",
+      "description": "Add 100 Gs to all Aquos Bakugans, substract 100 Gs to all not Aquos Bakugans."
+    },
+    "magma-supreme": {
+      "name": "Magma Prominence",
+      "description": "Changes the Gate Card attribute to Subterra"
+    },
+    "earth-power": {
+      "name": "Earth Power",
+      "description": "Adds 100 G to all of the user's Subterra Bakugan on the same Gate Card"
+    },
+    "eclat-soudain": {
+      "name": "Rapid Haos",
+      "description": "Adds another Bakugan to the Battle, it work only if there is minimum 2 haos bakugans on field"
+    },
+    "haos-immobilisation": {
+      "name": "Haos Stasis",
+      "description": "If two Haos Bakugans are on the field, the user's power get 100 G and allow the player to reuse any of their Ability Cards"
+    },
+    "vengeance-a-l'italienne": {
+      "name": "Auragano Revenge",
+      "description": "Subtracts 100 G from each opponent and adds 100 G to the user"
+    },
+    "combat-aerien": {
+      "name": "Air Battle",
+      "description": "Allows Ventus Bakugan to fly beyond Gate Cards and nullifies the Gate Card they land on"
+    },
+    "souffle-tout": {
+      "name": "Blow Away",
+      "description": "Moves the opponent to another Gate Card"
+    },
+    "retour-d-air": {
+      "name": "Backdraft",
+      "description": "Removes the user from the field"
+    },
+    "tectonic-swipe": {
+      "name": "Tectonic Swipe",
+      "description": "Cancel Gate card and Switches Gate Card with the one next to it"
+    },
+    "tornade-extreme": {
+      "name": "Scarlet Twister",
+      "description": "Attract one Bakugan from another Gate Card to user's Gate Card"
+    },
+    "retro-action": {
+      "name": "Back Fire",
+      "description": "Nullifies the opponent's Gate Card"
+    },
+    "depth-dive": {
+      "name": "Depth Dive",
+      "description": "Nullifies the opponent's Gate Card"
+    },
+    "earth-shatter": {
+      "name": "Earth Shatter",
+      "description": "Nullifies the opponent's Gate Card"
+    },
+    "support-light": {
+      "name": "Support Light",
+      "description": "Nullifies the opponent's Gate Card"
+    },
+    "coup-de-grace": {
+      "name": "Grand Down",
+      "description": "Nullifies the opponent's Gate Card"
+    },
+    "tornade-chaos-total": {
+      "name": "Storm Breaker",
+      "description": "Nullifies the opponent's Gate Card"
+    },
+    "blaze-reversal": {
+      "name": "Blaze Reversal",
+      "description": "Nullifies the opponent's ability"
+    },
+    "flow-interference": {
+      "name": "Flow Interference",
+      "description": "Nullifies the opponent's ability"
+    },
+    "terra-lockdown": {
+      "name": "Terra Lockdown",
+      "description": "Nullifies the opponent's ability"
+    },
+    "contre-maîtrise": {
+      "name": "Ability Counter",
+      "description": "Nullifies the opponent's ability"
+    },
+    "shadow-reversal": {
+      "name": "Shadow Reversal",
+      "description": "Nullifies the opponent's ability"
+    },
+    "storm-cancel": {
+      "name": "Storm Cancel",
+      "description": "Nullifies the opponent's ability"
+    },
+    "combination-subterra-pyrus": {
+      "name": "Correlation : Subterra - Pyrus",
+      "description": "If a Pyrus Bakugan battles a Subterra Bakugan, this card increases its power by 100 Gs"
+    },
+    "combination-subterra-haos": {
+      "name": "Correlation : Subterra - Haos",
+      "description": "If a Haos Bakugan battles a Subterra Bakugan, this card increases its power by 100 Gs"
+    },
+    "combination-haos-darkus": {
+      "name": "Correlation : Haos - Darkus",
+      "description": "If a Darkus Bakugan battles a Haos Bakugan, this card increases its power by 100 Gs"
+    },
+    "combination-darkus-aquos": {
+      "name": "Correlation : Darkus - Aquos",
+      "description": "If a Aquos Bakugan battles a Darkus Bakugan, this card increases its power by 100 Gs"
+    },
+    "combination-aquos-ventus": {
+      "name": "Correlation : Aquos - Ventus",
+      "description": "If a Ventus Bakugan battles a Aquos Bakugan, this card increases its power by 100 Gs"
+    },
+    "combination-ventus-pyrus": {
+      "name": "Correlation : Ventus - Pyrus",
+      "description": "If a Pyrus Bakugan battles a Ventus Bakugan, this card increases its power by 100 Gs"
+    },
+    "diagonal-combination-pyrus-darkus": {
+      "name": "Diagonal Correlation : Pyrus - Darkus",
+      "description": "If the user is of the Pyrus attribut, they gain a 100 Gs bonus if a Darkus Bakugan is present anywhere on the field"
+    },
+    "diagonal-combination-darkus-pyrus": {
+      "name": "Diagonal Correlation : Pyrus - Darkus",
+      "description": "If the user is of the Pyrus attribut, they gain a 100 Gs bonus if a Darkus Bakugan is present anywhere on the field"
+    },
+    "diagonal-combination-ventus-haos": {
+      "name": "Diagonal Correlation : Ventus - Haos",
+      "description": "If the user is of the Ventus attribut, they gain a 100 Gs bonus if a Haos Bakugan is present anywhere on the field"
+    },
+    "diagonal-combination-haos-ventus": {
+      "name": "Diagonal Correlation : Ventus - Haos",
+      "description": "If the user is of the Ventus attribut, they gain a 100 Gs bonus if a Haos Bakugan is present anywhere on the field"
+    },
+    "diagonal-combination-aquos-subterra": {
+      "name": "Diagonal Correlation : Aquos - Subterra",
+      "description": "If the user is of the Aquos attribut, they gain a 100 Gs bonus if a Subterra Bakugan is present anywhere on the field"
+    },
+    "diagonal-combination-subterra-aquos": {
+      "name": "Diagonal Correlation : Aquos - Subterra",
+      "description": "If the user is of the Aquos attribut, they gain a 100 Gs bonus if a Subterra Bakugan is present anywhere on the field"
+    },
+    "tripple-combination-pyrus-aquos-haos": {
+      "name": "Triple Correlation : Pyrus - Aquos - Haos",
+      "description": "If during the battle a player plays a combination of Pyrus, Aquos and Haos, this card increases the G-Power of each of their Bakugans by 200 Gs"
+    },
+    "tripple-combination-ventus-subterra-darkus": {
+      "name": "Triple Correlation : Ventus - Subterra - Darkus",
+      "description": "If during the battle a player plays a combination of Ventus, Subterra and Darkus, this card increases the G-Power of each of their Bakugans by 200 Gs"
+    },
+    "heat-wave": {
+      "name": "Heat Wave",
+      "description": "Cancel the gate card and decrease all opponents power by 50 Gs"
+    },
+    "gate-building": {
+      "name": "Gate Building",
+      "description": "The user may set another Subterra Gate Card."
+    },
+    "rapide-haos": {
+      "name": "Rapide Haos",
+      "description": "Permet à l'utilisateur d'ajouter un bakugan en plus sur le terrain s'il y a déjà un bakugan Haos sur la carte"
+    },
+    "lumiere-divine": {
+      "name": "Lumière Divine",
+      "description": "Permet de redonner vie à un Bakugan qui a été vaincu au combat"
+    },
+    "tornade-eclair": {
+      "name": "Lightning Tornado",
+      "description": "Adds 100 Gs to the user and decrease opponent power by 100 Gs"
+    },
+    "epices-mortelles": {
+      "name": "Epices Mortelles",
+      "description": "Ajoute 100 G de puissance à l'utilisateur et en retire autant a les adversaires."
+    },
+    "poivre-des-cayenne": {
+      "name": "Poivre des Cayenne",
+      "description": "Annule toutes les capacité de l'adversaire et retire 50 G à l'adversaire"
+    },
+    "copie-conforme": {
+      "name": "Copycat",
+      "description": "Copies an ability that the opponent used or is using"
+    },
+    "bouclier-aquos": {
+      "name": "Bouclier Aquos",
+      "description": "Protège contre toute capacité adverse pendant le tour"
+    }
+  },
+  "gates": {
+    "reacteur-pyrus": {
+      "name": "Reactor Pyrus",
+      "description": "Add 100 G to all Pyrus Bakugan on the card"
+    },
+    "reacteur-haos": {
+      "name": "Reactor Haos",
+      "description": "Add 100 G to all Haos Bakugan on the card"
+    },
+    "reacteur-ventus": {
+      "name": "Reactor Ventus",
+      "description": "Add 100 G to all Ventus Bakugan on the card"
+    },
+    "reacteur-aquos": {
+      "name": "Reactor Aquos",
+      "description": "Add 100 G to all Aquos Bakugan on the card"
+    },
+    "reacteur-subterra": {
+      "name": "Reactor Subterra",
+      "description": "Add 100 G to all Subterra Bakugan on the card"
+    },
+    "reacteur-darkus": {
+      "name": "Reactor Darkus",
+      "description": "Add 100 G to all Darkus Bakugan on the card"
+    },
+    "mine-fantome": {
+      "name": "Mine Ghost",
+      "description": "When two or more Bakugan are on the card, regardless of their side, they all lose"
+    },
+    "echange": {
+      "name": "Trade Off",
+      "description": "If a Bakugan has 400 G or more, it automatically loses"
+    },
+    "super-pyrus": {
+      "name": "Super Pyrus",
+      "description": "Swaps your Bakugan G-Power with your opponent. (Opens automatically at the end of battle)"
+    },
+    "aspirateur-de-puissance": {
+      "name": "Energy Merge",
+      "description": "Transfers 100 Gs from the last Bakugan on the card to the first"
+    },
+    "rechargement": {
+      "name": "Reloaded",
+      "description": "Adds 100 Gs to your Bakugan for each Bakugan on the field with the same attribute"
+    },
+    "triple-combat": {
+      "name": "Tripple Battle",
+      "description": "Brings your weakest Bakugan into the battle"
+    },
+    "quatuor-de-combat": {
+      "name": "Quartet Battle",
+      "description": "Brings one Bakugan from each player to join the battle"
+    },
+    "armistice": {
+      "name": "Peacemaker",
+      "description": "Returns all battling Bakugan on this Gate Card to their owners"
+    },
+    "magma-fuse": {
+      "name": "Magma Fuse",
+      "description": "After the battle ends, every Gate Card is destroyed and all Bakugan on the field are returned to their owners"
+    },
+    "androstasis": {
+      "name": "Androstasis",
+      "description": "If the user loses the current battle, their defeated Bakugan stays in the game"
+    },
+    "revive": {
+      "name": "Revive",
+      "description": "If the user wins, all their defeated Bakugan can be used again"
+    },
+    "grand-esprit": {
+      "name": "Grand Spirit",
+      "description": "Adds 50 Gs to your Bakugan for every gate card on the field"
+    },
+    "centipod-gate-card": {
+      "name": "Character: Centipod",
+      "description": "When this card is activated, it doubles the level of all Centipod on it"
+    },
+    "cycloid-gate-card": {
+      "name": "Character: Cycloid",
+      "description": "When this card is activated, it doubles the level of all Cycloid on it"
+    },
+    "dragonoid-gate-card": {
+      "name": "Character: Dragonoid",
+      "description": "When this card is activated, it doubles the level of all Dragonoid on it"
+    },
+    "el-condor-gate-card": {
+      "name": "Character: El Condor",
+      "description": "When this card is activated, it doubles the level of all El Condor on it"
+    },
+    "falconeer-gate-card": {
+      "name": "Character: Falconeer",
+      "description": "When this card is activated, it doubles the level of all Falconeer on it"
+    },
+    "fear-reaper-gate-card": {
+      "name": "Character: Fear Ripper",
+      "description": "When this card is activated, it doubles the level of all Fear Ripper on it"
+    },
+    "fortress-gate-card": {
+      "name": "Character: Fortress",
+      "description": "When this card is activated, it doubles the level of all Fortress on it"
+    },
+    "garganoid-gate-card": {
+      "name": "Character: Garganoid",
+      "description": "When this card is activated, it doubles the level of all Garganoid on it"
+    },
+    "gorem-gate-card": {
+      "name": "Character: Gorem",
+      "description": "When this card is activated, it doubles the level of all Gorem on it"
+    },
+    "griffin-gate-card": {
+      "name": "Character: Griffin",
+      "description": "When this card is activated, it doubles the level of all Griffin on it"
+    },
+    "limulus-gate-card": {
+      "name": "Character: Limulus",
+      "description": "When this card is activated, it doubles the level of all Limulus on it"
+    },
+    "monarus-gate-card": {
+      "name": "Character: Monarus",
+      "description": "When this card is activated, it doubles the level of all Monarus on it"
+    },
+    "preyas-gate-card": {
+      "name": "Character: Preyas",
+      "description": "When this card is activated, it doubles the level of all Preyas on it"
+    },
+    "diablo-gate-card": {
+      "name": "Character: Diablo",
+      "description": "When this card is activated, it doubles the level of all Diablo on it"
+    },
+    "angelo-gate-card": {
+      "name": "Character: Angelo",
+      "description": "When this card is activated, it doubles the level of all Angelo on it"
+    },
+    "ravenoid-gate-card": {
+      "name": "Character: Ravenoid",
+      "description": "When this card is activated, it doubles the level of all Ravenoid on it"
+    },
+    "saurus-gate-card": {
+      "name": "Character: Saurus",
+      "description": "When this card is activated, it doubles the level of all Saurus on it"
+    },
+    "stinglash-gate-card": {
+      "name": "Character: Stinglash",
+      "description": "When this card is activated, it doubles the level of all Stinglash on it"
+    },
+    "wormquake-gate-card": {
+      "name": "Character: Wormquake",
+      "description": "When this card is activated, it doubles the level of all Wormquake on it"
+    },
+    "juggernoid-gate-card": {
+      "name": "Character: Juggernoid",
+      "description": "When this card is activated, it doubles the level of all Juggernoid on it"
+    },
+    "bee-striker-gate-card": {
+      "name": "Character: Bee Striker",
+      "description": "When this card is activated, it doubles the level of all Bee Striker on it"
+    },
+    "tuskor-gate-card": {
+      "name": "Character: Tuskor",
+      "description": "When this card is activated, it doubles the level of all Tuskor on it"
+    },
+    "laserman-gate-card": {
+      "name": "Character: Laserman",
+      "description": "When this card is activated, it doubles the level of all Laserman on it"
+    },
+    "manion-gate-card": {
+      "name": "Character: Manion",
+      "description": "When this card is activated, it doubles the level of all Manion on it"
+    },
+    "reaper-gate-card": {
+      "name": "Character: Reaper",
+      "description": "When this card is activated, it doubles the level of all Reaper on it"
+    },
+    "hydranoid-gate-card": {
+      "name": "Character: Hydranoid",
+      "description": "When this card is activated, it doubles the level of all Hydranoid on it"
+    },
+    "mantris-gate-card": {
+      "name": "Character: Mantris",
+      "description": "When this card is activated, it doubles the level of all Mantris on it"
+    },
+    "robotallion-gate-card": {
+      "name": "Character: Robotallion",
+      "description": "When this card is activated, it doubles the level of all Robotallion on it"
+    },
+    "siege-gate-card": {
+      "name": "Character: Siege",
+      "description": "When this card is activated, it doubles the level of all Siege on it"
+    },
+    "sirenoid-gate-card": {
+      "name": "Character: Sirenoid",
+      "description": "When this card is activated, it doubles the level of all Sirenoid on it"
+    },
+    "skyress-gate-card": {
+      "name": "Character: Skyress",
+      "description": "When this card is activated, it doubles the level of all Skyress on it"
+    },
+    "tentaclear-gate-card": {
+      "name": "Character: Tentaclear",
+      "description": "When this card is activated, it doubles the level of all Tentaclear on it"
+    },
+    "tigrerra-gate-card": {
+      "name": "Character: Tigrerra",
+      "description": "When this card is activated, it doubles the level of all Tigrerra on it"
+    },
+    "cadenas": {
+      "name": "Lock Down",
+      "description": "Cancel all opponents abilities."
+    },
+    "peril-pyrus": {
+      "name": "Péril Pyrus",
+      "description": "Transforme l'attribut de tous les Bakugans présents sur cette carte en Pyrus"
+    },
+    "peril-aquos": {
+      "name": "Péril Aquos",
+      "description": "Transforme l'attribut de tous les Bakugans présents sur cette carte en Aquos"
+    },
+    "peril-ventus": {
+      "name": "Péril Ventus",
+      "description": "Transforme l'attribut de tous les Bakugans présents sur cette carte en Ventus"
+    },
+    "peril-subterra": {
+      "name": "Péril Subterra",
+      "description": "Transforme l'attribut de tous les Bakugans présents sur cette carte en Subterra"
+    },
+    "peril-haos": {
+      "name": "Péril Haos",
+      "description": "Transforme l'attribut de tous les Bakugans présents sur cette carte en Haos"
+    },
+    "peril-darkus": {
+      "name": "Péril Darkus",
+      "description": "Transforme l'attribut de tous les Bakugans présents sur cette carte en Darkus"
+    },
+    "fusion-marine": {
+      "name": "Fusion Marine",
+      "description": "Transforme l'attribut de tous les Bakugans présents en Aquos sauf les Bakugans Subterra"
+    },
+    "fusion-aerienne": {
+      "name": "Fusion Aérienne",
+      "description": "Transforme l'attribut de tous les Bakugans présents en Ventus sauf les Bakugans Haos"
+    },
+    "fusion-tenebreuse": {
+      "name": "Fusion Ténébreuse",
+      "description": "Transforme l'attribut de tous les Bakugans présents en Darkus sauf les Bakugans Pyrus"
+    },
+    "fusion-terrestre": {
+      "name": "Fusion Terrestre",
+      "description": "Transforme l'attribut de tous les Bakugans présents en Subterra sauf les Bakugans Aquos"
+    },
+    "fusion-lumineuse": {
+      "name": "Fusion Lumineuse",
+      "description": "Transforme l'attribut de tous les Bakugans présents en Haos sauf les Bakugans Ventus"
+    },
+    "fusion-enflammee": {
+      "name": "Fusion Enflammée",
+      "description": "Transforme l'attribut de tous les Bakugans présents en Pyrus sauf les Bakugans Darkus"
+    },
+    "retour-d-air": {
+      "name": "Retour d'assenceur",
+      "description": "Oblige le Bakugan de l'adversaire mis en jeu à revenir immédiatement entre les main de son propriétaire"
+    },
+    "bouc-emissaire": {
+      "name": "Bouc Emissaire",
+      "description": "Le propriétaire du premier Bakugan placé sur la carte peut décider de continuer le combat ou d'y mettre fin"
+    },
+    "harpus-gate-card": {
+      "name": "Charachter: Gorem",
+      "description": "When this card is activated, it doubles the level of all Harpus on it."
+    }
+  },
+  "exclusiveAbilities": {
+    "javelot-aquos": {
+      "name": "Aquos Javelin",
+      "description": "Cancel Gate card and Switches Gate Card with the one next to it"
+    },
+    "force-d'attraction": {
+      "name": "Attractor",
+      "description": "Attract one Bakugan from another Gate Card to user's Gate Card"
+    },
+    "gauche-gigantesque": {
+      "name": "Left Giganti",
+      "description": "Nullifies the opponent's Gate Card"
+    },
+    "ombre-bleue": {
+      "name": "Blue Stealth",
+      "description": "Transfers 50 Gs from the opposing Bakugan to the user and prevents the opponent from opening their Gate Card"
+    },
+    "tsunami": {
+      "name": "Tsunami Wave",
+      "description": "When three allied Aquos Bakugan, including Aquos Siege, are present on the field, this card eliminates all Bakugan on the field except Aquos Siege. (Cannot be used if a battle is in process or paused)"
+    },
+    "dragonoid-plus": {
+      "name": "Boosted Dragon",
+      "description": "Adds 100 Gs to the user for the entire duration of the game, as long as the card is not canceled."
+    },
+    "aile-enflammee": {
+      "name": "Wing Burst",
+      "description": "Transfers 50 Gs from the opponent to the user"
+    },
+    "visage-de-joie": {
+      "name": "Face of Joy",
+      "description": "Nullifies the opponent's Gate Card if it is open and prevents it from opening if it is not"
+    },
+    "visage-du-chagrin": {
+      "name": "Face of Grief",
+      "description": "Prevents the opponent from activating abilities."
+    },
+    "visage-de-la-fureur": {
+      "name": "Face of Rage",
+      "description": "Adds 50 Gs to the user and removes 100 Gs from each opponent"
+    },
+    "sabre-de-la-mort": {
+      "name": "Cut in Saber",
+      "description": "Adds Tigrerra to the battle"
+    },
+    "solar-ray": {
+      "name": "Solar Ray",
+      "description": "Adds 100 G to Tentaclear and cancels all opponent's abilities on the same Gate Card"
+    },
+    "gamma-ray": {
+      "name": "Gamma Ray",
+      "description": "Cancels all opponent's abilities on the field"
+    },
+    "flare-blinder": {
+      "name": "Flare Blinder",
+      "description": "Prevents the opponent from activating abilities on the same slot as the user"
+    },
+    "mega-flare-blinder": {
+      "name": "Mega Flare Blinder",
+      "description": "Adds 100 G to Tentaclear and prevents the opponent from opening the Gate Card on the same slot as the user"
+    },
+    "guardian-field": {
+      "name": "Guardian Field",
+      "description": "Protects all allied Bakugan on the field against ability and gate card effects"
+    },
+    "dimmension-four": {
+      "name": "Dimmension Four",
+      "description": "Nullifies the opponent's Attribute Gate Card (cannot nullify character, command or trap Gate Cards)"
+    },
+    "bouclier-fusion": {
+      "name": "Merge Shield",
+      "description": "If the opposing Bakugan has gained Gs: the user gains G-Power equal to the amount gained"
+    },
+    "chaos-of-darkness": {
+      "name": "Chaos of Darkness",
+      "description": "Adds 100 Gs to the user for the entire duration of the game, as long as the card is not canceled, and reduces the selected Bakugan power by 100 Gs"
+    },
+    "leap-sting": {
+      "name": "Leap Sting",
+      "description": "Subtracts 100 Gs from all opponents on the field"
+    },
+    "furry-of-wind": {
+      "name": "Fury of Wind",
+      "description": "When three allied Ventus Bakugan, including Ventus Skyress, are present on the field, this card eliminates all opposing Bakugan on the battlefield. Also allows the user to return their own Bakugan to their hand. If activated during a battle, the current Gate Card is removed from the game"
+    },
+    "life-drew": {
+      "name": "Life Drew",
+      "description": "Adds 50 Gs to all allied Bakugans on the field"
+    },
+    "trappe-de-sable": {
+      "name": "Sand Trap",
+      "description": "Attracts one Bakugan from another Gate Card to the user's Gate Card and decreases its power by 50 Gs"
+    },
+    "chambre-de-gravité": {
+      "name": "Gravity Chamber",
+      "description": "Attracts all opposing Bakugans on the Gate Cards adjacent to the one where Hydranoid is located that have a lower power level, and eliminates immediately."
+    },
+    "anti-muse": {
+      "name": "Anthemusa",
+      "description": "Attracts all opposing Bakugans on the Gate Cards adjacent to the one where Sirenoid is located that have a lower power level, and eliminates immediately."
+    },
+    "vent-violent-de-noblesse-verte": {
+      "name": "Green Nobility - Soar Violent Winds",
+      "description": "Adds 100 Gs to the user"
+    },
+    "tempête-de-plume": {
+      "name": "Feather Storm",
+      "description": "Adds 100 Gs to the user"
+    },
+    "vent-cinglant": {
+      "name": "Forcement Wave",
+      "description": "Adds 100 Gs to the user"
+    },
+    "maitre-des-profondeurs": {
+      "name": "Abyss Ruler",
+      "description": "Adds 100 Gs to the user"
+    },
+    "massue-gigantesque": {
+      "name": "Right Giganti",
+      "description": "Adds 100 Gs to the user"
+    },
+    "lance-de-feu": {
+      "name": "Fire Sword",
+      "description": "Adds 100 Gs to the user"
+    },
+    "robotalion-execution": {
+      "name": "Robotalion Enforcement",
+      "description": "Adds 50 Gs to the user"
+    },
+    "slash-zero": {
+      "name": "Slash Zero",
+      "description": "Adds 50 Gs to the user"
+    },
+    "impact-majeur": {
+      "name": "Mega Impact",
+      "description": "Adds 50 Gs to the user and subtracts 100 Gs from all opposing Bakugans"
+    },
+    "spit-pointer": {
+      "name": "Spit Pointer",
+      "description": "Adds 50 Gs to the user and subtracts 100 Gs from all opposing Bakugans"
+    },
+    "holograph-divide": {
+      "name": "Holograph Divide",
+      "description": "Adds the opponent's G-Power to the user"
+    },
+    "obstruction": {
+      "name": "Dragoon",
+      "description": "Adds the opponent's G-Power to the user"
+    },
+    "reaper-of-the-chaos": {
+      "name": "Reaper of the Chaos",
+      "description": "Adds 100 Gs to Reaper"
+    },
+    "machettes-jumelles": {
+      "name": "Twin Machete",
+      "description": "Adds 100 Gs to Mantris"
+    },
+    "depth-tornado": {
+      "name": "Depth Tornado",
+      "description": "Adds 100 Gs to Juggernoid"
+    },
+    "amun-ra": {
+      "name": "Amun Ra",
+      "description": "Adds 100 Gs to Manion"
+    },
+    "spirit-hole": {
+      "name": "Spirit Hole",
+      "description": "Adds 50 Gs to your Bakugan for every gate card on the field"
+    },
+    "marionnette": {
+      "name": "Marionnette",
+      "description": "Mantris can move any Bakugan to any Gate Card chosen by its owner"
+    },
+    "lance-eclair": {
+      "name": "Sling Blazer",
+      "description": "Allows Mantris to move any Bakugan to any adjacent Gate Card chosen by its owner"
+    },
+    "plexus-solaire": {
+      "name": "Solar Plexus",
+      "description": "Nullifies the opponent's Gate Card and subtracts 50 Gs from the opponent"
+    },
+    "effaceur-d'ombre": {
+      "name": "Shadow Scratch",
+      "description": "Nullifies the opponent's Gate Card and subtracts 50 Gs from the opponent"
+    },
+    "noise-slap": {
+      "name": "Noise Slap",
+      "description": "Decreases the selected Bakugan power by 100 Gs"
+    },
+    "melt-flare": {
+      "name": "Melt Flare",
+      "description": "A Fusion Ability that adds an additional +150 Gs if Boosted Dragon is activated."
+    },
+    "destruction-buster": {
+      "name": "Destruction Buster",
+      "description": "A Fusion Ability that adds an additional +100 Gs and negate the gate card if Chaos of Darkness is activated."
+    },
+    "d-strike-attack": {
+      "name": "D Strike Attack",
+      "description": "Adds 200 Gs to the user for the entire duration of the game, as long as the card is not canceled."
+    },
+    "d-strike-extreme": {
+      "name": "D Strike Extreme",
+      "description": "A Fusion Ability that adds an additional +200 Gs if D Strike Attack is activated."
+    },
+    "dragonic-execution": {
+      "name": "Dragonic Enforcement",
+      "description": "Adds 50 Gs to the user"
+    },
+    "dual-gazer": {
+      "name": "Dual Gazer",
+      "description": "Adds 100 Gs to the user for the entire duration of the game, as long as the card is not canceled, decrease 100Gs to the opponent and decrease the selected bakugan's power by 100 Gs but if Hydranoid is your last alive bakugan the target is eliminated."
+    },
+    "destruction-impact": {
+      "name": "Destruction Impact",
+      "description": "A Fusion Ability that adds an additional +200 Gs and negate the gate card if Dual Gazer is activated."
+    },
+    "gust-of-wind-blow-destruction-meteor-storm": {
+      "name": "Gust of Wind Blow - Destruction Meteor Storm",
+      "description": "Adds 200 Gs to the user"
+    },
+    "grand-impact": {
+      "name": "Grand Impact",
+      "description": "Transfers 100 Gs from the opponent to Hammer Gorem. And prevents the opponent's Gate Card from opening"
+    },
+    "velocity-fang": {
+      "name": "Velocity Fang",
+      "description": "Nullifies the opponent's ability, also subtracts 100 Gs from the opponent."
+    },
+    "souffle-infini": {
+      "name": "Souffle Infini",
+      "description": "Attire un bakugan sur la même carte portail que l'utilisateur et retire 50G à la cible"
+    },
+    "cape de feu": {
+      "name": "Cape de Feu",
+      "description": "Ajoute 100 G en plus à l'utilisateur"
+    },
+    "regain-subit": {
+      "name": "Regain Subit",
+      "description": "Retire 100 G à tous les bakugans adverse et ajoute 100 G à l'utilisateur"
+    }
+  }
+}

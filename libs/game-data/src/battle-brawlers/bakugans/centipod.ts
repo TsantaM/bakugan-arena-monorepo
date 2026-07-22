@@ -56,10 +56,8 @@ export const CentipodSubterra: bakuganType = {
 
 export const CentipodGateCard: gateCardType = {
     key: 'centipod-gate-card',
-    name: 'Charachter: Centipod',
     maxInDeck: 1,
     family: 'Centipod',
-    description: `When this card is activated, it doubles the level of all Centipods on it.`,
     image: GateCardImages.caracter,
     imageByAttribut: {
         Darkus: CharacterCardByAttribut('centipod', 'Darkus'),

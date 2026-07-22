@@ -8,16 +8,14 @@ import { AbilityCardsList, ExclusiveAbilitiesList } from "../index.js";
 
 export const CombatAerien: abilityCardsType = {
     key: 'combat-aerien',
-    name: 'Air Battle',
     attribut: 'Ventus',
-    description: `Allow Ventus bakugan to fly beyond Gate Cards and nullifies the Gate Card that it land on`,
     maxInDeck: 1,
     extraInputs: ["move-self"],
     usable_in_neutral: true,
     image: StandardCardsImages.ventus,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
 
-        const animation = AbilityCardFailed({ card: CombatAerien.name })
+        const animation = AbilityCardFailed({ abilityKey: CombatAerien.key })
 
         if (!roomState) return animation
 
@@ -44,7 +42,7 @@ export const CombatAerien: abilityCardsType = {
 
         const request: AbilityCardsActions = {
             type: 'SELECT_SLOT',
-            message: 'Air Battle : Select a slot',
+            message: { key: 'prompt_select_slot', params: { abilityKey: CombatAerien.key } },
             slots: slots
         }
 
@@ -90,10 +88,8 @@ export const CombatAerien: abilityCardsType = {
 
 export const TornadeChaosTotal: abilityCardsType = {
     key: 'tornade-chaos-total',
-    name: 'Storm Breaker',
     maxInDeck: 1,
     attribut: 'Ventus',
-    description: `Nullifies the opponent's Gate Card`,
     image: StandardCardsImages.ventus,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -152,15 +148,13 @@ export const TornadeChaosTotal: abilityCardsType = {
 
 export const SouffleTout: abilityCardsType = {
     key: 'souffle-tout',
-    name: 'Blow Away',
     attribut: 'Ventus',
-    description: `Move the opponent to another Gate Card`,
     maxInDeck: 3,
     extraInputs: ["move-opponent"],
     image: StandardCardsImages.ventus,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        const animation = AbilityCardFailed({ card: SouffleTout.name })
+        const animation = AbilityCardFailed({ abilityKey: SouffleTout.key })
 
         if (!roomState) return animation
 
@@ -189,7 +183,7 @@ export const SouffleTout: abilityCardsType = {
 
         const request: AbilityCardsActions = {
             type: 'MOVE_BAKUGAN_TO_ANOTHER_SLOT',
-            message: 'Blow Away : Select the Bakugan to move and his destination',
+            message: { key: 'prompt_select_bakugan_move', params: { abilityKey: SouffleTout.key } },
             bakugans: bakugans,
             slots: slots
         }
@@ -226,10 +220,8 @@ export const SouffleTout: abilityCardsType = {
 
 export const RetourDair: abilityCardsType = {
     key: 'retour-d-air',
-    name: `Backdraft`,
     attribut: 'Ventus',
     maxInDeck: 1,
-    description: `Remove the selected bakugan from the field`,
     image: StandardCardsImages.ventus,
     usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -253,7 +245,7 @@ export const RetourDair: abilityCardsType = {
 
                     const request: AbilityCardsActions = {
                         type: 'SELECT_BAKUGAN_ON_DOMAIN',
-                        message: 'Back Draft : Select a target',
+                        message: { key: 'prompt_select_target', params: { abilityKey: RetourDair.key } },
                         bakugans: bakugans
                     }
 
@@ -308,15 +300,13 @@ export const RetourDair: abilityCardsType = {
 
 export const TornadeExtreme: abilityCardsType = {
     key: 'tornade-extreme',
-    name: 'Scarlet Twister',
     attribut: 'Ventus',
-    description: `Attract one Bakugan from another Gate Card to user's Gate Card`,
     maxInDeck: 1,
     extraInputs: ['drag-bakugan'],
     image: StandardCardsImages.ventus,
     usable_in_neutral: true,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        const animation = AbilityCardFailed({ card: TornadeExtreme.name })
+        const animation = AbilityCardFailed({ abilityKey: TornadeExtreme.key })
 
         if (!roomState) return animation
 
@@ -346,7 +336,7 @@ export const TornadeExtreme: abilityCardsType = {
 
         const request: AbilityCardsActions = {
             type: 'SELECT_BAKUGAN_ON_DOMAIN',
-            message: 'Scarlet Twister : Select a Bakugan to drag',
+            message: { key: 'prompt_select_bakugan_drag', params: { abilityKey: TornadeExtreme.key } },
             bakugans: bakugans
         }
 
@@ -378,8 +368,6 @@ export const TornadeExtreme: abilityCardsType = {
 export const StormCancel: abilityCardsType = {
     key: 'storm-cancel',
     attribut: 'Ventus',
-    name: 'Storm Cancel',
-    description: `Nullifies the opponent's ability`,
     maxInDeck: 3,
     image: StandardCardsImages.haos,
     usable_in_neutral: false,

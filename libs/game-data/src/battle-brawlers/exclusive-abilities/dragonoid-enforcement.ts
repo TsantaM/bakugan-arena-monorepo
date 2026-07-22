@@ -4,9 +4,7 @@ import { activateAbilities } from "../../type/room-types.js"
 
 export const DragonicExecution: exclusiveAbilitiesType = {
     key: "dragonic-execution",
-    name: 'Dragonic Enforcement',
     maxInDeck: 1,
-    description: `Adds 50 Gs to the user`,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {

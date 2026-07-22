@@ -3,8 +3,6 @@ import { BlockAbilityCardsEffect, RemoveAbilityCardsBlockEffect } from "../../fu
 
 export const VisageDuChagrin: exclusiveAbilitiesType = {
     key: 'visage-du-chagrin',
-    name: 'Face of Grief',
-    description: `Prevents the opponent from activationg abilities`,
     maxInDeck: 1,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,

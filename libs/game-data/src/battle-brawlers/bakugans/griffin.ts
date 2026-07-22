@@ -40,10 +40,8 @@ export const GriffinAquos: bakuganType = {
 
 export const GriffinGateCard: gateCardType = {
     key: 'griffin-gate-card',
-    name: 'Charachter: Griffin',
     maxInDeck: 1,
     family: 'griffin',
-    description: `When this card is activated, it doubles the level of all Griffin on it.`,
     image: GateCardImages.caracter,
     imageByAttribut: {
         Haos: CharacterCardByAttribut('griffin', 'Haos'),

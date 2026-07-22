@@ -1,5 +1,5 @@
 import type { Message } from "@bakugan-arena/game-data";
-import { resolveBattleMessage } from "@bakugan-arena/i18n";
+import { resolveBattleMessage, type BattleMessageInput } from "@bakugan-arena/i18n";
 import gsap from "gsap";
 import { getGameboardLocale } from "../i18n/locale";
 
@@ -77,14 +77,16 @@ export function EndGameMessage({ message }: { message: Message | undefined }) {
     newDialogBoxAnimation(newDialogBox)
 }
 
-export function AdditionalEffectMessage({ message }: { message: string }) {
+export function AdditionalEffectMessage({ message }: { message: string | BattleMessageInput }) {
 
     const newDialogBox = document.createElement('div')
     newDialogBox.classList.add('dialog-box')
     newDialogBox.id = 'additional-effect-dialog-box'
     document.body.appendChild(newDialogBox)
 
-    const textContent = `${message}`
+    const textContent = typeof message === 'string'
+        ? message
+        : resolveBattleMessage(message, getGameboardLocale())
     const messageContainer = document.createElement('p')
     messageContainer.textContent = textContent
     newDialogBox.appendChild(messageContainer)

@@ -3,12 +3,10 @@ import type { abilityCardsType, attribut } from "../../type/type-index.js";
 
 export const PyrusAquosHaos: abilityCardsType = {
     key: 'tripple-combination-pyrus-aquos-haos',
-    name: 'Triple Correlation : Pyrus - Aquos - Haos',
-    description: `If during the battle a player plays a combination of Fire (Pyrus), Water (Aquos) and Light (Haos), this card increases the G-Power of each of their Bakugans by 200 Gs`,
     maxInDeck: 1,
     usable_in_neutral: true,
     onActivate({ roomState, userId }) {
-        const failed = AbilityCardFailed({ card: PyrusAquosHaos.name })
+        const failed = AbilityCardFailed({ abilityKey: PyrusAquosHaos.key })
 
         if (PyrusAquosHaos.activationConditions) {
             const checker = PyrusAquosHaos.activationConditions({ roomState, userId })
@@ -52,12 +50,10 @@ export const PyrusAquosHaos: abilityCardsType = {
 
 export const VentusSubterraDarkus: abilityCardsType = {
     key: 'tripple-combination-ventus-subterra-darkus',
-    name: 'Triple Correlation : Ventus - Subterra - Darkus',
-    description: `If during the battle a player plays a combination of Wind (Ventus), Earth (Subterra) and Darkness (Darkus), this card increases the G-Power of each of their Bakugans by 200 Gs`,
     maxInDeck: 1,
     usable_in_neutral: true,
     onActivate({ roomState, userId }) {
-        const failed = AbilityCardFailed({ card: VentusSubterraDarkus.name })
+        const failed = AbilityCardFailed({ abilityKey: VentusSubterraDarkus.key })
 
         if (VentusSubterraDarkus.activationConditions) {
             const checker = VentusSubterraDarkus.activationConditions({ roomState, userId })

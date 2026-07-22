@@ -5,8 +5,6 @@ import { gateCardType } from "../../../type/game-data-types.js"
 
 export const Magma: gateCardType = {
     key: 'magma-fuse',
-    name: "Magma Fuse",
-    description: `After the battle is over, every Gate Card is destroyed and all Bakugans on the field are sent back to their owners.`,
     image: GateCardImages.command,
     maxInDeck: 1,
     activeOnBattleEnd: {

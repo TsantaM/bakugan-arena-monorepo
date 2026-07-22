@@ -32,10 +32,12 @@ export type bakuganType = {
 }
 
 export type abilityCardsType = {
-    name: string,
+    /** @deprecated Display via i18n `gameData` catalogs (`resolveAbilityCard`). */
+    name?: string,
     attribut?: attribut,
     key: string,
-    description: string,
+    /** @deprecated Display via i18n `gameData` catalogs (`resolveAbilityCard`). */
+    description?: string,
     maxInDeck: number,
     extraInputs?: ExtraInputsTypes[],
     usable_in_neutral: boolean,
@@ -58,8 +60,10 @@ export type abilityCardsType = {
 
 export type exclusiveAbilitiesType = {
     key: string;
-    name: string;
-    description: string;
+    /** @deprecated Display via i18n `gameData` catalogs (`resolveAbilityCard`). */
+    name?: string;
+    /** @deprecated Display via i18n `gameData` catalogs (`resolveAbilityCard`). */
+    description?: string;
     maxInDeck: number;
     extraInputs?: ExtraInputsTypes[],
     usable_in_neutral: boolean,
@@ -86,8 +90,10 @@ export type turnActionLauncher = {
 
 export type gateCardType = {
     key: string,
-    name: string,
-    description: string,
+    /** @deprecated Display via i18n `gameData` catalogs (`resolveGateCard`). */
+    name?: string,
+    /** @deprecated Display via i18n `gameData` catalogs (`resolveGateCard`). */
+    description?: string,
     maxInDeck: number,
     attribut?: attribut,
     family?: string,

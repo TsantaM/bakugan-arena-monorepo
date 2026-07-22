@@ -4,9 +4,7 @@ import { TentaclearHaos } from "../bakugans/tentacleer.js"
 
 export const FlareBlinder: exclusiveAbilitiesType = {
     key: 'flare-blinder',
-    name: 'Flare Blinder',
     maxInDeck: 1,
-    description: `Prevent the opponent from activating abilities on the same slot as the user.`,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {

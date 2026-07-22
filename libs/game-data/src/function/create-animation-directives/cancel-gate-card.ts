@@ -21,7 +21,7 @@ export const CancelGateCardDirectiveAnimation: CancelGateCardDirectiveAnimationT
         },
         resolved: false,
         message: [{
-            text: `Gate Card nullified`,
+            key: 'gate_nullified',
             turn: turn
         }]
     }

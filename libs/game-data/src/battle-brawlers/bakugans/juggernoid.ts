@@ -30,10 +30,8 @@ export const JuggernoidHaos: bakuganType = {
 
 export const JuggernoidGateCard: gateCardType = {
     key: 'juggernoid-gate-card',
-    name: 'Charachter: Juggernoid',
     maxInDeck: 1,
     family: family,
-    description: `When this card is activated, it doubles the level of all Juggernoid on it.`,
     image: 'juggernoid.png',
     imageByAttribut: {
         Aquos: CharacterCardByAttribut('juggernoid', 'Aquos'),

@@ -1,8 +1,10 @@
 import { GateCardsList, Slots, type portalSlotsTypeElement } from '@bakugan-arena/game-data'
+import { resolveGateCard } from '@bakugan-arena/i18n'
 import * as THREE from 'three'
 import { getSlotMeshPosition } from '../functions/get-slot-mesh-position'
 import { GetCharacterCardImage } from '../functions/get-character-card-image'
 import { killGateCardTweens, removeFromGateCardMeshs } from '../animations/remove-gate-card-animation'
+import { getGameboardLocale } from '../i18n/locale'
 
 type SlotMeshUsersData = {
     cardName: string | undefined,
@@ -67,7 +69,7 @@ function createSlotMesh({ slot, plane, userId, gateCardMeshs, isSpectator = fals
         if (slot.state.open === true) {
             const texture = new THREE.TextureLoader().load(`./../images/cards/${cardImage ? cardImage : card.image}`)
             mesh.material.map = texture
-            data.cardName = card.name
+            data.cardName = resolveGateCard(card.key, getGameboardLocale()).name
             data.state.open = true
         } else {
             const texture = new THREE.TextureLoader().load(`./../images/cards/portal_card.png`)
@@ -78,7 +80,7 @@ function createSlotMesh({ slot, plane, userId, gateCardMeshs, isSpectator = fals
                 data.state.open = false
             } else {
                 if (slot.portalCard.userId === userId) {
-                    data.cardName = card.name
+                    data.cardName = resolveGateCard(card.key, getGameboardLocale()).name
                 }
                 data.state.open = false
             }

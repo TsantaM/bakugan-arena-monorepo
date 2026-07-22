@@ -4,11 +4,9 @@ import type { AbilityCardsActions, bakuganToMoveType2 as bakuganToMoveType, excl
 
 export const Marionnette: exclusiveAbilitiesType = {
     key: 'marionnette',
-    name: 'Marionnette',
     maxInDeck: 1,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
-    description: "Mantris can move any Bakugan to any Gate Card that it's owner chose",
     extraInputs: ['move-bakugan'],
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
 
@@ -39,7 +37,7 @@ export const Marionnette: exclusiveAbilitiesType = {
 
         const request: AbilityCardsActions = {
             type: 'MOVE_BAKUGAN_TO_ANOTHER_SLOT',
-            message: 'Marionnette : Select a Bakugan to move and his destination',
+            message: { key: 'prompt_select_bakugan_move', params: { abilityKey: Marionnette.key } },
             bakugans: bakugans,
             slots: slots
         }

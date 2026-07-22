@@ -11,8 +11,10 @@ export type SelectableBakuganAction = {
 
 export type SelectableGateCardAction = {
     key: string,
-    name: string,
-    description: string,
+    /** Optional EN fallback; clients should resolve via i18n. */
+    name?: string,
+    /** Optional EN fallback; clients should resolve via i18n. */
+    description?: string,
     image: string
 }
 
@@ -22,8 +24,8 @@ export type onBoardBakugans = {
     attribut: attribut,
     abilities: {
         key: string,
-        name: string,
-        description: string,
+        name?: string,
+        description?: string,
         image: string
     }[]
 }
@@ -32,8 +34,8 @@ export type notOnBoardBakugans = {
     bakuganKey: string,
     abilities: {
         key: string,
-        name: string,
-        description: string,
+        name?: string,
+        description?: string,
         image: string
     }[]
 }
@@ -181,47 +183,55 @@ export type bakuganToMoveType2 = {
     slot: slots_id
 }
 
+/** Action-request prompt: clients resolve via battle + gameData catalogs. */
+export type LocalizedActionMessage = {
+    key?: string
+    params?: Record<string, string | number>
+    text?: string
+}
+
 export type AbilityCardsActions = {
     type: 'SELECT_SLOT',
     target?: string // Le joueur qui va recevoir l'action request,
-    message: string,
+    message: LocalizedActionMessage,
     skipable?: boolean,
     slots: slots_id[],
     emptySlot?: boolean
 } | {
     type: 'SELECT_BAKUGAN_TO_SET',
     target?: string // Le joueur qui va recevoir l'action request,
-    message: string,
+    message: LocalizedActionMessage,
     skipable?: boolean,
     bakugans: bakuganInDeck[],
 } | {
     type: 'MOVE_BAKUGAN_TO_ANOTHER_SLOT',
     target?: string // Le joueur qui va recevoir l'action request,
-    message: string,
+    message: LocalizedActionMessage,
     bakugans: bakuganToMoveType2[],
     skipable?: boolean,
     slots: slots_id[]
 } | {
     type: 'SELECT_BAKUGAN_ON_DOMAIN',
     target?: string // Le joueur qui va recevoir l'action request,
-    message: string,
+    message: LocalizedActionMessage,
     skipable?: boolean,
     bakugans: bakuganToMoveType2[],
 } | {
     type: 'ATTRACT_BAKUGAN',
     target?: string // Le joueur qui va recevoir l'action request,
-    message: string,
+    message: LocalizedActionMessage,
     skipable?: boolean,
     bakugans: bakuganToMoveType2[]
 } | {
     type: 'CARD_FAILED',
     skipable?: boolean,
-    message: string,
+    message: LocalizedActionMessage,
+    abilityKey?: string,
     target?: string // Le joueur qui va recevoir l'action request,
 } | {
     type: 'SELECT_ABILITY_CARD',
     target?: string,// Le joueur qui va recevoir l'action request,
-    message: string,
+    message: LocalizedActionMessage,
     skipable?: boolean,
     data: SelectableGateCardAction[]
 }
@@ -265,7 +275,7 @@ export type resolutionDataType = {
 export type gateCardAdditionalRequest = {
     type: 'SELECT_BAKUGAN_TO_SET',
     target?: string // Le joueur qui va recevoir l'action request,
-    message: string,
+    message: LocalizedActionMessage,
     skipable?: boolean,
     bakugans: bakuganInDeck[],
 } | {
@@ -273,7 +283,7 @@ export type gateCardAdditionalRequest = {
     target?: string // Le joueur qui va recevoir l'action request,
     type: 'SELECT_ABILITY_CARD',
     data: SelectableGateCardAction[],
-    message: string,
+    message: LocalizedActionMessage,
 
 } | {
     type: 'TURN_ACTION_LAUNCHER'

@@ -52,10 +52,8 @@ export const SiegeDarkus: bakuganType = {
 
 export const SiegeGateCard: gateCardType = {
     key: 'siege-gate-card',
-    name: 'Charachter: Siege',
     maxInDeck: 1,
     family: 'Siege',
-    description: `When this card is activated, it doubles the level of all Siege on it.`,
     image: 'siege.png',
     imageByAttribut: {
         Pyrus: CharacterCardByAttribut('siege', 'Pyrus'),

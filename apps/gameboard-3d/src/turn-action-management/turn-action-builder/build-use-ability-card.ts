@@ -3,8 +3,8 @@ import { CreateAbilityCardSelecter } from "../../functions/create-selecters";
 
 export type AbilityCard = {
     key: string;
-    name: string;
-    description: string;
+    name?: string;
+    description?: string;
     image: string;
 }
 

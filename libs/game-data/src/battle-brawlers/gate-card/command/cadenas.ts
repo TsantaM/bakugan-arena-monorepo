@@ -5,9 +5,7 @@ import { gateCardType } from "../../../type/game-data-types.js"
 
 export const Cadenas: gateCardType = {
     key: "cadenas",
-    name: "Lock Down",
     maxInDeck: 1,
-    description: "Cancel all opponents abilities.",
     image: GateCardImages.command,
     onOpen({ roomState, slot }) {
 

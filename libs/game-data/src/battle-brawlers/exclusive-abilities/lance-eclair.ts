@@ -3,15 +3,13 @@ import type { AbilityCardsActions, bakuganToMoveType2 as bakuganToMoveType, excl
 
 export const LanceEclair: exclusiveAbilitiesType = {
     key: 'lance-eclair',
-    name: 'Sling Blazer',
-    description: `Enable Mantris to move any bakugan to any adjacent Gate Card that its owner chooses`,
     maxInDeck: 1,
     extraInputs: ["move-opponent"],
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
 
-        const animation = AbilityCardFailed({ card: LanceEclair.name })
+        const animation = AbilityCardFailed({ abilityKey: LanceEclair.key })
 
         if (!roomState) return animation
 
@@ -40,7 +38,7 @@ export const LanceEclair: exclusiveAbilitiesType = {
 
         const request: AbilityCardsActions = {
             type: 'MOVE_BAKUGAN_TO_ANOTHER_SLOT',
-            message: 'Sling Blazer : Select a Bakugan to move and his destination',
+            message: { key: 'prompt_select_bakugan_move', params: { abilityKey: LanceEclair.key } },
             bakugans: bakugans,
             slots: slots
         }

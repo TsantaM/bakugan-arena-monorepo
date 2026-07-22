@@ -77,9 +77,7 @@ function EchangeMainEffect({ roomState, slotOfGate, userId }: { roomState: state
 
 export const Echange: gateCardType = {
     key: 'echange',
-    name: 'Trade Off',
     maxInDeck: 1,
-    description: `If a Bakugan has 400 G-Power or more, it automaticaly lose`,
     image: GateCardImages.command,
     onOpen: ({ roomState, slot, userId }) => {
 

@@ -62,8 +62,6 @@ export function UseAbilityCardActionRequest({ roomState }: { roomState: stateTyp
 
             }).map((ability) => ({
                 key: ability!.key,
-                name: ability!.name,
-                description: ability!.description,
                 image: AbilityCardsList.find((card) => card.key === ability.key)?.image || `special_ability_card_${bakugan.attribut.toUpperCase()}.jpg`
             })),
             selectAbilitiesResult && selectAbilitiesResult.usableExclusives && selectAbilitiesResult.usableExclusives.filter((ability) => ability !== undefined).filter((ability) => {
@@ -76,8 +74,6 @@ export function UseAbilityCardActionRequest({ roomState }: { roomState: stateTyp
 
             }).map((ability) => ({
                 key: ability.key,
-                name: ability.name,
-                description: ability!.description,
                 image: ExclusiveAbilitiesList.find((card) => card.key === ability!.key)?.image || `special_ability_card_${bakugan.attribut.toUpperCase()}.jpg`
             }))].flat().filter((ability) => ability !== undefined)
 

@@ -30,10 +30,8 @@ export const WormquakeDarkus: bakuganType = {
 
 export const WormquakeGateCard: gateCardType = {
     key: 'wormquake-gate-card',
-    name: 'Charachter: Wormquake',
     maxInDeck: 1,
     family: 'Wormquake',
-    description: `When this card is activated, it doubles the level of all Wormquake on it.`,
     image: GateCardImages.caracter,
     imageByAttribut: {
         Darkus: CharacterCardByAttribut('wormquake', 'Darkus'),

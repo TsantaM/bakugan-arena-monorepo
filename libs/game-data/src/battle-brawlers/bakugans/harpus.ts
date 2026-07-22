@@ -15,10 +15,8 @@ export const HarpusVentus: bakuganType = {
 
 export const HarpusGateCard: gateCardType = {
     key: 'harpus-gate-card',
-    name: 'Charachter: Gorem',
     maxInDeck: 1,
     family: 'Harpus',
-    description: `When this card is activated, it doubles the level of all Harpus on it.`,
     image: 'caracter-gate-cards/harpus-ventus.jpg',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'harpus-gate-card')

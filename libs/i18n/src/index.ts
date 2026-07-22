@@ -17,3 +17,11 @@ export {
   resolveBattleMessage,
   type BattleMessageInput,
 } from './resolve-battle-message.js'
+
+export {
+  resolveAbilityCard,
+  resolveGameDataDescription,
+  resolveGameDataName,
+  resolveGateCard,
+  type GameDataEntityKind,
+} from './resolve-game-data.js'

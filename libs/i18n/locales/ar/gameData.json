@@ -1,0 +1,721 @@
+{
+  "bakugans": {},
+  "abilities": {
+    "mur-de-feu": {
+      "name": "جدار النار",
+      "description": "تطرح 50 درجة من الخصوم وتحمي المستخدم من طاقات الخصم"
+    },
+    "jet-enflamme": {
+      "name": "النار الملتهبة",
+      "description": "تضيف باكوغان اخر الى المعركة اذا كان هناك 2 باكوغان نار او اكثر في الميدان"
+    },
+    "tourbillon-de-feu": {
+      "name": "اعصار النار",
+      "description": "تضيف 100 درجة للمستخدم وتقلل قوة الخصم 100 درجة"
+    },
+    "mirage-aquatique": {
+      "name": "سراب الغطس",
+      "description": "تنقل باكوغان ماء من بطاقة بوابة الى اخرى، كما تمنع بطاقة بوابة الخصم من الفتح"
+    },
+    "barrage-d'eau": {
+      "name": "حصار الماء",
+      "description": "تمنع هذه البطاقة جميع اللاعبين من استخدام الطاقات لمدة دور 1"
+    },
+    "plongee-en-eau-profonde": {
+      "name": "غوص اعماق البحر",
+      "description": "تضيف 100 درجة لجميع باكوغانات الماء، تطرح 100 درجة من جميع الباكوغانات غير المائية"
+    },
+    "magma-supreme": {
+      "name": "هجوم الحمم البركانية",
+      "description": "تبدل عنصر بطاقة البوابة الى الارض"
+    },
+    "earth-power": {
+      "name": "التراب المميز",
+      "description": "تضيف 100 درجة لجميع باكوغانات الارض الخاصة بالمستخدم على نفس بطاقة البوابة"
+    },
+    "eclat-soudain": {
+      "name": "الضوء السريع",
+      "description": "تضيف باكوغان اخر الى المعركة، تعمل فقط اذا كان هناك على الاقل 2 باكوغان ضوء في الميدان"
+    },
+    "haos-immobilisation": {
+      "name": "طاقة الضوء",
+      "description": "اذا كان هناك اثنان باكوغان ضوء في الميدان، تزداد قوة المستخدم 100 درجة وتسمح للاعب بإعادة استخدام احدى بطاقات الطاقة الخاصة به"
+    },
+    "vengeance-a-l'italienne": {
+      "name": "الانتقام الاخير",
+      "description": "تطرح 100 درجة من كل خصم وتضيف 100 درجة للمستخدم"
+    },
+    "combat-aerien": {
+      "name": "المعركة الجوية",
+      "description": "تسمح لباكوغان الرياح بالطيران فوق بطاقات البوابة وتلغي بطاقة البوابة التي يهبط عليها"
+    },
+    "souffle-tout": {
+      "name": "الاعصار المدمر",
+      "description": "تنقل الخصم الى بطاقة بوابة اخرى"
+    },
+    "retour-d-air": {
+      "name": "الانسحاب الخلفي",
+      "description": "تزيل المستخدم من الميدان"
+    },
+    "tectonic-swipe": {
+      "name": "المسحة التكتونية",
+      "description": "تلغي بطاقة البوابة وتبدلها مع الموجودة بجانبها"
+    },
+    "tornade-extreme": {
+      "name": "الاعصار الدوار",
+      "description": "تجذب باكوغان واحدا من بطاقة بوابة اخرى الى بطاقة بوابة المستخدم"
+    },
+    "retro-action": {
+      "name": "ارتداد النار",
+      "description": "تلغي بطاقة بوابة الخصم"
+    },
+    "depth-dive": {
+      "name": "غوص الاعماق",
+      "description": "تلغي بطاقة بوابة الخصم"
+    },
+    "earth-shatter": {
+      "name": "تحطم الارض",
+      "description": "تلغي بطاقة بوابة الخصم"
+    },
+    "support-light": {
+      "name": "ضوء الدعم",
+      "description": "تلغي بطاقة بوابة الخصم"
+    },
+    "coup-de-grace": {
+      "name": "الساحب الاكبر",
+      "description": "تلغي بطاقة بوابة الخصم"
+    },
+    "tornade-chaos-total": {
+      "name": "كسارة العاصفة",
+      "description": "تلغي بطاقة بوابة الخصم"
+    },
+    "blaze-reversal": {
+      "name": "انعكاس اللهب",
+      "description": "تلغي طاقة الخصم"
+    },
+    "flow-interference": {
+      "name": "تداخل التدفق",
+      "description": "تلغي طاقة الخصم"
+    },
+    "terra-lockdown": {
+      "name": "اغلاق تيرا",
+      "description": "تلغي طاقة الخصم"
+    },
+    "contre-maîtrise": {
+      "name": "الهجمة المضادة",
+      "description": "تلغي طاقة الخصم"
+    },
+    "shadow-reversal": {
+      "name": "انعكاس الظل",
+      "description": "تلغي طاقة الخصم"
+    },
+    "storm-cancel": {
+      "name": "الغاء العاصفة",
+      "description": "تلغي طاقة الخصم"
+    },
+    "combination-subterra-pyrus": {
+      "name": "Subterra - Pyrus : اتحاد",
+      "description": "اذا قاتل باكوغان Pyrus باكوغان Subterra، هذه البطاقة تزيد قوته 100 درجة"
+    },
+    "combination-subterra-haos": {
+      "name": "Subterra - Haos : اتحاد",
+      "description": "اذا قاتل باكوغان Haos باكوغان Subterra، هذه البطاقة تزيد قوته 100 درجة"
+    },
+    "combination-haos-darkus": {
+      "name": "Haos - Darkus : اتحاد",
+      "description": "اذا قاتل باكوغان Darkus باكوغان Haos، هذه البطاقة تزيد قوته 100 درجة"
+    },
+    "combination-darkus-aquos": {
+      "name": "Darkus - Aquos : اتحاد",
+      "description": "اذا قاتل باكوغان Aquos باكوغان Darkus، هذه البطاقة تزيد قوته 100 درجة"
+    },
+    "combination-aquos-ventus": {
+      "name": "Aquos - Ventus : اتحاد",
+      "description": "اذا قاتل باكوغان Ventus باكوغان Aquos، هذه البطاقة تزيد قوته 100 درجة"
+    },
+    "combination-ventus-pyrus": {
+      "name": "Ventus - Pyrus : اتحاد",
+      "description": "اذا قاتل باكوغان Pyrus باكوغان Ventus، هذه البطاقة تزيد قوته 100 درجة"
+    },
+    "diagonal-combination-pyrus-darkus": {
+      "name": "Pyrus - Darkus : العلاقة القطرية",
+      "description": "اذا كان المستخدم من عنصر Pyrus، فإنه يحصل على 100 درجة اذا كان هناك باكوغان Darkus موجود في اي مكان في الميدان"
+    },
+    "diagonal-combination-darkus-pyrus": {
+      "name": "Pyrus - Darkus : العلاقة القطرية",
+      "description": "اذا كان المستخدم من عنصر Pyrus، فإنه يحصل على 100 درجة اذا كان هناك باكوغان Darkus موجود في اي مكان في الميدان"
+    },
+    "diagonal-combination-ventus-haos": {
+      "name": "Ventus - Haos : العلاقة القطرية",
+      "description": "اذا كان المستخدم من عنصر Ventus، فإنه يحصل على 100 درجة اذا كان هناك باكوغان Haos موجود في اي مكان في الميدان"
+    },
+    "diagonal-combination-haos-ventus": {
+      "name": "Ventus - Haos : العلاقة القطرية",
+      "description": "اذا كان المستخدم من عنصر Ventus، فإنه يحصل على 100 درجة اذا كان هناك باكوغان Haos موجود في اي مكان في الميدان"
+    },
+    "diagonal-combination-aquos-subterra": {
+      "name": "Aquos - Subterra : العلاقة القطرية",
+      "description": "اذا كان المستخدم من عنصر Aquos، فإنه يحصل على 100 درجة اذا كان هناك باكوغان Subterra موجود في اي مكان في الميدان"
+    },
+    "diagonal-combination-subterra-aquos": {
+      "name": "Aquos - Subterra : العلاقة القطرية",
+      "description": "اذا كان المستخدم من عنصر Aquos، فإنه يحصل على 100 درجة اذا كان هناك باكوغان Subterra موجود في اي مكان في الميدان"
+    },
+    "tripple-combination-pyrus-aquos-haos": {
+      "name": "العقد الثلاث Pyrus – Aquos – Haos:",
+      "description": "اذا استخدم اللاعب اثناء المعركة مزيجا من Pyrus، Aquos، و Haos، هذه البطاقة تزيد قوة 200 درجة لكل باكوغان لديه"
+    },
+    "tripple-combination-ventus-subterra-darkus": {
+      "name": "العقد الثلاث Ventus – Subterra – Darkus:",
+      "description": "اذا استخدم اللاعب اثناء المعركة مزيجا من Ventus، Subterra، و Darkus، هذه البطاقة تزيد قوة 200 درجة لكل باكوغان لديه"
+    },
+    "heat-wave": {
+      "name": "موجة الحر",
+      "description": "تلغي بطاقة البوابة وتقلل قوة جميع الخصوم بمقدار 50 درجة"
+    },
+    "gate-building": {
+      "name": "بناء البوابة",
+      "description": "يسمح للمستخدم بوضع بطاقة بوابة ارض اخرى."
+    },
+    "rapide-haos": {
+      "name": "Rapide Haos",
+      "description": "Permet à l'utilisateur d'ajouter un bakugan en plus sur le terrain s'il y a déjà un bakugan Haos sur la carte"
+    },
+    "lumiere-divine": {
+      "name": "Lumière Divine",
+      "description": "Permet de redonner vie à un Bakugan qui a été vaincu au combat"
+    },
+    "tornade-eclair": {
+      "name": "Lightning Tornado",
+      "description": "Adds 100 Gs to the user and decrease opponent power by 100 Gs"
+    },
+    "epices-mortelles": {
+      "name": "Epices Mortelles",
+      "description": "Ajoute 100 G de puissance à l'utilisateur et en retire autant a les adversaires."
+    },
+    "poivre-des-cayenne": {
+      "name": "Poivre des Cayenne",
+      "description": "Annule toutes les capacité de l'adversaire et retire 50 G à l'adversaire"
+    },
+    "copie-conforme": {
+      "name": "Copycat",
+      "description": "Copies an ability that the opponent used or is using"
+    },
+    "bouclier-aquos": {
+      "name": "Bouclier Aquos",
+      "description": "Protège contre toute capacité adverse pendant le tour"
+    }
+  },
+  "gates": {
+    "reacteur-pyrus": {
+      "name": "المفاعل Pyrus",
+      "description": "تضيف 100 درجة لجميع باكوغانات Pyrus على البطاقة"
+    },
+    "reacteur-haos": {
+      "name": "المفاعل Haos",
+      "description": "تضيف 100 درجة لجميع باكوغانات Haos على البطاقة"
+    },
+    "reacteur-ventus": {
+      "name": "المفاعل Ventus",
+      "description": "تضيف 100 درجة لجميع باكوغانات Ventus على البطاقة"
+    },
+    "reacteur-aquos": {
+      "name": "المفاعل Aquos",
+      "description": "تضيف 100 درجة لجميع باكوغانات Aquos على البطاقة"
+    },
+    "reacteur-subterra": {
+      "name": "المفاعل Subterra",
+      "description": "تضيف 100 درجة لجميع باكوغانات Subterra على البطاقة"
+    },
+    "reacteur-darkus": {
+      "name": "المفاعل Darkus",
+      "description": "تضيف 100 درجة لجميع باكوغانات Darkus على البطاقة"
+    },
+    "mine-fantome": {
+      "name": "شبح المناجم",
+      "description": "عندما يوجد باكوغان اثنان او اكثر على البطاقة، بغض النظر عن الجهة التي ينتمون اليها، جميعهم يخسرون"
+    },
+    "echange": {
+      "name": "المقايضة",
+      "description": "اذا كان لدى باكوغان 400 درجة او اكثر، فإنه يخسر تلقائيا"
+    },
+    "super-pyrus": {
+      "name": "سوبر بايرس",
+      "description": "تبدل درجة باكوغانك مع الخصم. (تفتح تلقائيا عند نهاية المعركة)"
+    },
+    "aspirateur-de-puissance": {
+      "name": "دمج الطاقة",
+      "description": "تنقل 100 درجة من اخر باكوغان على البطاقة الى الاول"
+    },
+    "rechargement": {
+      "name": "اعادة التحميل",
+      "description": "تضيف 100 درجة لباكوغانك لكل باكوغان في الميدان بنفس العنصر"
+    },
+    "triple-combat": {
+      "name": "المعركة الثلاثية",
+      "description": "تجلب اضعف باكوغان لديك للمعركة"
+    },
+    "quatuor-de-combat": {
+      "name": "المعركة الرباعية",
+      "description": "تجلب باكوغان واحد من كل لاعب للانضمام للمعركة"
+    },
+    "armistice": {
+      "name": "صانع السلام",
+      "description": "تعيد جميع الباكوغانات المتقاتلين على بطاقة البوابة هذه الى اصحابهم"
+    },
+    "magma-fuse": {
+      "name": "المقص الفاتك",
+      "description": "بعد انتهاء المعركة، كل بطاقة بوابة تدمر وكل الباكوغانات في الميدان ترجع الى اصحابها"
+    },
+    "androstasis": {
+      "name": "سحب الطاقة",
+      "description": "اذا خسر المستخدم المعركة الحالية، باكوغانه المهزوم يبقى في اللعبة"
+    },
+    "revive": {
+      "name": "استرجاع الوحوش",
+      "description": "اذا فاز المستخدم، كل باكوغاناته المهزومة يمكن استخدامها مرة اخرى"
+    },
+    "grand-esprit": {
+      "name": "القوة العظمى",
+      "description": "تضيف 50 درجة لباكوغانك لكل بطاقة بوابة في الميدان"
+    },
+    "centipod-gate-card": {
+      "name": "البطاقة الشخصية سنتيبود :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع سنتيبود عليها"
+    },
+    "cycloid-gate-card": {
+      "name": "البطاقة الشخصية سيكلويد :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع سيكلويد عليها"
+    },
+    "dragonoid-gate-card": {
+      "name": "البطاقة الشخصية دراجونويد :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع دراجونويد عليها"
+    },
+    "el-condor-gate-card": {
+      "name": "البطاقة الشخصية ال كوندور :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع ال كوندور عليها"
+    },
+    "falconeer-gate-card": {
+      "name": "البطاقة الشخصية فالكونير :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع فالكونير عليها"
+    },
+    "fear-reaper-gate-card": {
+      "name": "البطاقة الشخصية فير ريبر :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع فير ريبر عليها"
+    },
+    "fortress-gate-card": {
+      "name": "البطاقة الشخصية فورتريس :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع فورتريس عليها"
+    },
+    "garganoid-gate-card": {
+      "name": "البطاقة الشخصية غارغانويد :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع غارغانويد عليها"
+    },
+    "gorem-gate-card": {
+      "name": "البطاقة الشخصية غورم :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع غورم عليها"
+    },
+    "griffin-gate-card": {
+      "name": "البطاقة الشخصية غريفين :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع غريفين عليها"
+    },
+    "limulus-gate-card": {
+      "name": "البطاقة الشخصية ليمولوس :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع ليمولوس عليها"
+    },
+    "monarus-gate-card": {
+      "name": "البطاقة الشخصية موناروس :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع موناروس عليها"
+    },
+    "preyas-gate-card": {
+      "name": "البطاقة الشخصية بريياس :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع بريياس عليها"
+    },
+    "diablo-gate-card": {
+      "name": "البطاقة الشخصية ديابلو :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع ديابلو عليها"
+    },
+    "angelo-gate-card": {
+      "name": "البطاقة الشخصية انجيلو :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع انجيلو عليها"
+    },
+    "ravenoid-gate-card": {
+      "name": "البطاقة الشخصية رافينويد :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع رافينويد عليها"
+    },
+    "saurus-gate-card": {
+      "name": "البطاقة الشخصية سوروس :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع سوروس عليها"
+    },
+    "stinglash-gate-card": {
+      "name": "البطاقة الشخصية ستينغلاش :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع ستينغلاش عليها"
+    },
+    "wormquake-gate-card": {
+      "name": "البطاقة الشخصية وورمكويك :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع وورمكويك عليها"
+    },
+    "juggernoid-gate-card": {
+      "name": "البطاقة الشخصية جاغرنويد :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع جاغرنويد عليها"
+    },
+    "bee-striker-gate-card": {
+      "name": "البطاقة الشخصية بي سترايكر :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع بي سترايكر عليها"
+    },
+    "tuskor-gate-card": {
+      "name": "البطاقة الشخصية تاسكور :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع تاسكور عليها"
+    },
+    "laserman-gate-card": {
+      "name": "البطاقة الشخصية لايزرمان :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع لايزرمان عليها"
+    },
+    "manion-gate-card": {
+      "name": "البطاقة الشخصية مانيون :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع مانيون عليها"
+    },
+    "reaper-gate-card": {
+      "name": "البطاقة الشخصية ريبر :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع ريبر عليها"
+    },
+    "hydranoid-gate-card": {
+      "name": "البطاقة الشخصية Hydranoid :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع Hydranoid عليها"
+    },
+    "mantris-gate-card": {
+      "name": "البطاقة الشخصية Mantris :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع Mantris عليها"
+    },
+    "robotallion-gate-card": {
+      "name": "البطاقة الشخصية Robotallion :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع Robotallion عليها"
+    },
+    "siege-gate-card": {
+      "name": "البطاقة الشخصية Siege :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع Siege عليها"
+    },
+    "sirenoid-gate-card": {
+      "name": "البطاقة الشخصية Sirenoid :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع Sirenoid عليها"
+    },
+    "skyress-gate-card": {
+      "name": "البطاقة الشخصية Skyress :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع Skyress عليها"
+    },
+    "tentaclear-gate-card": {
+      "name": "البطاقة الشخصية Tentaclear :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع Tentaclear عليها"
+    },
+    "tigrerra-gate-card": {
+      "name": "البطاقة الشخصية Tigrerra :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع Tigrerra عليها"
+    },
+    "cadenas": {
+      "name": "الاغلاق",
+      "description": "تلغي جميع طاقات الخصوم."
+    },
+    "peril-pyrus": {
+      "name": "Péril Pyrus",
+      "description": "Transforme l'attribut de tous les Bakugans présents sur cette carte en Pyrus"
+    },
+    "peril-aquos": {
+      "name": "Péril Aquos",
+      "description": "Transforme l'attribut de tous les Bakugans présents sur cette carte en Aquos"
+    },
+    "peril-ventus": {
+      "name": "Péril Ventus",
+      "description": "Transforme l'attribut de tous les Bakugans présents sur cette carte en Ventus"
+    },
+    "peril-subterra": {
+      "name": "Péril Subterra",
+      "description": "Transforme l'attribut de tous les Bakugans présents sur cette carte en Subterra"
+    },
+    "peril-haos": {
+      "name": "Péril Haos",
+      "description": "Transforme l'attribut de tous les Bakugans présents sur cette carte en Haos"
+    },
+    "peril-darkus": {
+      "name": "Péril Darkus",
+      "description": "Transforme l'attribut de tous les Bakugans présents sur cette carte en Darkus"
+    },
+    "fusion-marine": {
+      "name": "Fusion Marine",
+      "description": "Transforme l'attribut de tous les Bakugans présents en Aquos sauf les Bakugans Subterra"
+    },
+    "fusion-aerienne": {
+      "name": "Fusion Aérienne",
+      "description": "Transforme l'attribut de tous les Bakugans présents en Ventus sauf les Bakugans Haos"
+    },
+    "fusion-tenebreuse": {
+      "name": "Fusion Ténébreuse",
+      "description": "Transforme l'attribut de tous les Bakugans présents en Darkus sauf les Bakugans Pyrus"
+    },
+    "fusion-terrestre": {
+      "name": "Fusion Terrestre",
+      "description": "Transforme l'attribut de tous les Bakugans présents en Subterra sauf les Bakugans Aquos"
+    },
+    "fusion-lumineuse": {
+      "name": "Fusion Lumineuse",
+      "description": "Transforme l'attribut de tous les Bakugans présents en Haos sauf les Bakugans Ventus"
+    },
+    "fusion-enflammee": {
+      "name": "Fusion Enflammée",
+      "description": "Transforme l'attribut de tous les Bakugans présents en Pyrus sauf les Bakugans Darkus"
+    },
+    "retour-d-air": {
+      "name": "Retour d'assenceur",
+      "description": "Oblige le Bakugan de l'adversaire mis en jeu à revenir immédiatement entre les main de son propriétaire"
+    },
+    "bouc-emissaire": {
+      "name": "Bouc Emissaire",
+      "description": "Le propriétaire du premier Bakugan placé sur la carte peut décider de continuer le combat ou d'y mettre fin"
+    },
+    "harpus-gate-card": {
+      "name": "Charachter: Gorem",
+      "description": "When this card is activated, it doubles the level of all Harpus on it."
+    }
+  },
+  "exclusiveAbilities": {
+    "javelot-aquos": {
+      "name": "الرمح المائي",
+      "description": "تلغي بطاقة البوابة وتبدلها مع الموجودة بجانبها"
+    },
+    "force-d'attraction": {
+      "name": "الجاذب",
+      "description": "تجذب باكوغان واحدا من بطاقة بوابة اخرى الى بطاقة بوابة المستخدم"
+    },
+    "gauche-gigantesque": {
+      "name": "القبضة الساحقة",
+      "description": "تلغي بطاقة بوابة الخصم"
+    },
+    "ombre-bleue": {
+      "name": "المتسلل الازرق",
+      "description": "تنقل 50 درجة من باكوغان الخصم الى المستخدم وتمنع الخصم من فتح بطاقة البوابة الخاصة به"
+    },
+    "tsunami": {
+      "name": "موجة الطوفان",
+      "description": "عندما يكون هناك ثلاثة باكوغان ماء حلفاء، بما في ذلك سييج الماء، على الميدان، هذه البطاقة تقصي جميع الباكوغانات في الميدان ما عدا فارس الماء. (لا يمكن استخدامها اذا كانت المعركة جارية او متوقفة مؤقتا)"
+    },
+    "dragonoid-plus": {
+      "name": "التنين المعزز",
+      "description": "تضيف 100 درجة للمستخدم طوال مدة اللعبة، طالما لم يتم الغاء البطاقة"
+    },
+    "aile-enflammee": {
+      "name": "جناح النار",
+      "description": "تنقل 50 درجة من الخصم الى المستخدم"
+    },
+    "visage-de-joie": {
+      "name": "وجه الفرح",
+      "description": "تلغي بطاقة بوابة الخصم اذا كانت مفتوحة وتمنعها من الفتح اذا لم تكن كذلك"
+    },
+    "visage-du-chagrin": {
+      "name": "الوجه الحزين",
+      "description": "تمنع الخصم من تفعيل الطاقات"
+    },
+    "visage-de-la-fureur": {
+      "name": "وجه الغضب",
+      "description": "تضيف 50 درجة للمستخدم وتزيل 100 درجة من كل خصم"
+    },
+    "sabre-de-la-mort": {
+      "name": "السيف القاطع",
+      "description": "تضيف تيغررا الى المعركة"
+    },
+    "solar-ray": {
+      "name": "الحصيرة الشمسية",
+      "description": "تضيف 100 درجة الى  تينتاكلير وتلغي جميع طاقات الخصم على نفس بطاقة البوابة"
+    },
+    "gamma-ray": {
+      "name": "شعاع غاما",
+      "description": "تلغي جميع طاقات الخصم على الميدان"
+    },
+    "flare-blinder": {
+      "name": "الوهج المعمي",
+      "description": "يمنع الخصم من تفعيل الطاقات في نفس الموقع الذي يوجد فيه المستخدم"
+    },
+    "mega-flare-blinder": {
+      "name": "تشغيل المكتشف",
+      "description": "يضيف 100 درجة الى تينتاكلير ويمنع الخصم من فتح بطاقة البوابة في نفس الموقع الذي يوجد فيه المستخدم"
+    },
+    "guardian-field": {
+      "name": "حقل الحراسة",
+      "description": "يحمي جميع الباكوغانات الحلفاء في الميدان من تأثيرات الطاقات وبطاقات البوابة"
+    },
+    "dimmension-four": {
+      "name": "البعد الرابع",
+      "description": "تلغي بطاقة بوابة العنصر للخصم (لا يمكنها الغاء بطاقات البوابة الشخصية، التنشيط او الفخ)"
+    },
+    "bouclier-fusion": {
+      "name": "درع الظلام",
+      "description": "اذا حصل باكوغان الخصم على درجات: المستخدم يحصل على قوة مساوية"
+    },
+    "chaos-of-darkness": {
+      "name": "فوضى الظلام",
+      "description": "يضيف 100 درجة للمستخدم طوال مدة اللعبة، طالما لم يتم الغاء البطاقة ويقلل قوة الباكوغان المحدد بمقدار 100 درجة"
+    },
+    "leap-sting": {
+      "name": "المدفع الرشاش",
+      "description": "تطرح 100 درجة من جميع الخصوم في الميدان"
+    },
+    "furry-of-wind": {
+      "name": "رياح الغضب",
+      "description": "عندما يكون هناك ثلاثة باكوغان رياح حلفاء، بما في ذلك سكايريس، على الميدان، هذه البطاقة تقصي على جميع باكوغانات الخصم في ساحة المعركة. اضافة، تسمح للاعب بارجاع باكوغاناته الى يده. اذا تم تفعيل هذه البطاقة اثناء معركة، تتم ازالة بطاقة البوابة الحالية من اللعبة"
+    },
+    "life-drew": {
+      "name": "سحب الحياة",
+      "description": "تضيف 50 درجة الى جميع الباكوغانات الحلفاء في الميدان"
+    },
+    "trappe-de-sable": {
+      "name": "الرمال المتحركة",
+      "description": "تجذب باكوغان واحد من بطاقة بوابة اخرى الى بطاقة بوابة المستخدم وتقلل قوته بمقدار 50 درجة"
+    },
+    "chambre-de-gravité": {
+      "name": "حجرة الجاذبية",
+      "description": "تجذب جميع باكوغانات الخصم على بطاقات البوابة المجاورة لتلك التي يوجد عليها هايدرانويد/سيرينويد الذين لديهم مستوى قوة اقل، وتقوم بإقصائهم فورا"
+    },
+    "anti-muse": {
+      "name": "لحن الوداع",
+      "description": "تجذب جميع باكوغانات الخصم على بطاقات البوابة المجاورة لتلك التي يوجد عليها هايدرانويد/سيرينويد الذين لديهم مستوى قوة اقل، وتقوم بإقصائهم فورا"
+    },
+    "vent-violent-de-noblesse-verte": {
+      "name": "الرياح الخضراء العاتية",
+      "description": "تضيف 100 درجة للمستخدم"
+    },
+    "tempête-de-plume": {
+      "name": "عاصفة الريش",
+      "description": "تضيف 100 درجة للمستخدم"
+    },
+    "vent-cinglant": {
+      "name": "رياح الاجبار",
+      "description": "تضيف 100 درجة للمستخدم"
+    },
+    "maitre-des-profondeurs": {
+      "name": "حاكم الهاوية",
+      "description": "تضيف 100 درجة للمستخدم"
+    },
+    "massue-gigantesque": {
+      "name": "المطرقة الحديدية",
+      "description": "تضيف 100 درجة للمستخدم"
+    },
+    "lance-de-feu": {
+      "name": "سيف النار",
+      "description": "تضيف 100 درجة للمستخدم"
+    },
+    "robotalion-execution": {
+      "name": "دعم روبوتاليون",
+      "description": "تضيف 50 درجة للمستخدم"
+    },
+    "slash-zero": {
+      "name": "ضربة الصفر",
+      "description": "تضيف 50 درجة للمستخدم"
+    },
+    "impact-majeur": {
+      "name": "الصدمة الكبرى",
+      "description": "تضيف 50 درجة للمستخدم وتطرح 100 درجة من جميع باكوغانات الخصم"
+    },
+    "spit-pointer": {
+      "name": "النقطة القاذفة",
+      "description": "تضيف 50 درجة للمستخدم وتطرح 100 درجة من جميع باكوغانات الخصم"
+    },
+    "holograph-divide": {
+      "name": "درع الحماية",
+      "description": "تضيف قوة الخصم الى المستخدم"
+    },
+    "obstruction": {
+      "name": "سلاح الفرسان",
+      "description": "تضيف قوة الخصم الى المستخدم"
+    },
+    "reaper-of-the-chaos": {
+      "name": "حاصد الفوضى",
+      "description": "تضيف 100 درجة الى Reaper"
+    },
+    "machettes-jumelles": {
+      "name": "المنجل المزدوج",
+      "description": "تضيف 100 درجة الى Mantris"
+    },
+    "depth-tornado": {
+      "name": "اعصار الاعماق",
+      "description": "تضيف 100 درجة الى Juggernoid"
+    },
+    "amun-ra": {
+      "name": "امون رع",
+      "description": "تضيف 100 درجة الى Manion"
+    },
+    "spirit-hole": {
+      "name": "وادي القوة",
+      "description": "تضيف 50 درجة لباكوغانك لكل بطاقة بوابة في الميدان"
+    },
+    "marionnette": {
+      "name": "مناورة الدمى المتحركة",
+      "description": "يمكن لمانتريس نقل اي باكوغان الى اي بطاقة بوابة يختارها مالكه"
+    },
+    "lance-eclair": {
+      "name": "النصل القاطع",
+      "description": "تسمح لمانتريس بنقل اي باكوغان الى اي بطاقة بوابة مجاورة يختارها مالكه"
+    },
+    "plexus-solaire": {
+      "name": "الشبكة الشمسية",
+      "description": "تلغي بطاقة بوابة الخصم وتطرح 50 درجة من الخصم"
+    },
+    "effaceur-d'ombre": {
+      "name": "خدش الظل",
+      "description": "تلغي بطاقة بوابة الخصم وتطرح 50 درجة من الخصم"
+    },
+    "noise-slap": {
+      "name": "ضربة الخرطوم",
+      "description": "تقلل قوة الباكوغان المحدد 100 درجة"
+    },
+    "melt-flare": {
+      "name": "الشعلة الذائبة",
+      "description": "قدرة اندماج تضيف 150 درجة اضافية اذا تم تفعيل التنين المعزز."
+    },
+    "destruction-buster": {
+      "name": "مدمر الدمار",
+      "description": "قدرة اندماج تضيف 100 درجة اضافية وتلغي بطاقة البوابة اذا تم تفعيل فوضى الظلام."
+    },
+    "d-strike-attack": {
+      "name": "ضربة دي سترايك",
+      "description": "تضيف 200 درجة للمستخدم طوال مدة اللعبة، طالما لم يتم الغاء البطاقة."
+    },
+    "d-strike-extreme": {
+      "name": "دي سترايك القصوى",
+      "description": "قدرة اندماج تضيف 200 درجة اضافية اذا تم تفعيل ضربة دي سترايك."
+    },
+    "dragonic-execution": {
+      "name": "التعزيز التنيني",
+      "description": "تضيف 50 درجة للمستخدم"
+    },
+    "dual-gazer": {
+      "name": "النظرة المزدوجة",
+      "description": "تضيف 100 درجة للمستخدم طوال مدة اللعبة طالما لم يتم الغاء البطاقة، وتطرح 100 درجة من الخصم وتقلل قوة الباكوغان المحدد 100 درجة، واذا كان هايدرانويد اخر باكوغان حي لديك يتم اقصاء الهدف."
+    },
+    "destruction-impact": {
+      "name": "صدمة الدمار",
+      "description": "قدرة اندماج تضيف 200 درجة اضافية وتلغي بطاقة البوابة اذا تم تفعيل النظرة المزدوجة."
+    },
+    "gust-of-wind-blow-destruction-meteor-storm": {
+      "name": "عاصفة الرياح - عاصفة النيازك المدمرة",
+      "description": "تضيف 200 درجة للمستخدم"
+    },
+    "grand-impact": {
+      "name": "الصدمة العظمى",
+      "description": "تنقل 100 درجة من الخصم الى هامر غورم. وتمنع فتح بطاقة بوابة الخصم"
+    },
+    "velocity-fang": {
+      "name": "ناب السرعة",
+      "description": "تلغي طاقة الخصم وتطرح ايضا 100 درجة من الخصم."
+    },
+    "souffle-infini": {
+      "name": "Souffle Infini",
+      "description": "Attire un bakugan sur la même carte portail que l'utilisateur et retire 50G à la cible"
+    },
+    "cape de feu": {
+      "name": "Cape de Feu",
+      "description": "Ajoute 100 G en plus à l'utilisateur"
+    },
+    "regain-subit": {
+      "name": "Regain Subit",
+      "description": "Retire 100 G à tous les bakugans adverse et ajoute 100 G à l'utilisateur"
+    }
+  }
+}

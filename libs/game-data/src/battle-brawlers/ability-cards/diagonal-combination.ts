@@ -3,15 +3,13 @@ import type { abilityCardsType, attribut } from "../../type/type-index.js";
 
 export const PyrusDarkus: abilityCardsType = {
     key: 'diagonal-combination-pyrus-darkus',
-    name: 'Diagonal Correlation : Pyrus - Darkus',
     attribut: 'Pyrus',
-    description: `If the user is of the Pyrus attribut, they gain a 100 Gs bonus if a Darkus Bakugan is present anywhere on the field`,
     maxInDeck: 1,
     usable_in_neutral: true,
     image: "pyrus-darkus.jpg",
     onActivate({ roomState, userId, bakuganKey, slot }) {
 
-        const failed = AbilityCardFailed({ card: PyrusDarkus.name })
+        const failed = AbilityCardFailed({ abilityKey: PyrusDarkus.key })
 
         if (PyrusDarkus.activationConditions) {
             const checker = PyrusDarkus.activationConditions({ roomState, userId })
@@ -56,14 +54,12 @@ export const PyrusDarkus: abilityCardsType = {
 
 export const DarkusPyrus: abilityCardsType = {
     key: 'diagonal-combination-darkus-pyrus',
-    name: 'Diagonal Correlation : Pyrus - Darkus',
     attribut: 'Darkus',
-    description: `If the user is of the Darkus attribut, they gain a 100 Gs bonus if a Pyrus Bakugan is present anywhere on the field`,
     maxInDeck: 1,
     usable_in_neutral: true,
     image: "pyrus-darkus.jpg",
     onActivate({ roomState, userId, bakuganKey, slot }) {
-        const failed = AbilityCardFailed({ card: DarkusPyrus.name })
+        const failed = AbilityCardFailed({ abilityKey: DarkusPyrus.key })
 
         if (DarkusPyrus.activationConditions) {
             const checker = DarkusPyrus.activationConditions({ roomState, userId })
@@ -109,13 +105,11 @@ export const DarkusPyrus: abilityCardsType = {
 
 export const VentusHaos: abilityCardsType = {
     key: 'diagonal-combination-ventus-haos',
-    name: 'Diagonal Correlation : Ventus - Haos',
     attribut: 'Ventus',
-    description: `If the user is of the Ventus attribut, they gain a 100 Gs bonus if a Haos Bakugan is present anywhere on the field`,
     maxInDeck: 1,
     usable_in_neutral: true,
     onActivate({ roomState, userId, bakuganKey, slot }) {
-        const failed = AbilityCardFailed({ card: VentusHaos.name })
+        const failed = AbilityCardFailed({ abilityKey: VentusHaos.key })
 
         if (VentusHaos.activationConditions) {
             const checker = VentusHaos.activationConditions({ roomState, userId })
@@ -161,13 +155,11 @@ export const VentusHaos: abilityCardsType = {
 
 export const HaosVentus: abilityCardsType = {
     key: 'diagonal-combination-haos-ventus',
-    name: 'Diagonal Correlation : Ventus - Haos',
     attribut: 'Haos',
-    description: `If the user is of the Haos attribut, they gain a 100 Gs bonus if a Ventus Bakugan is present anywhere on the field`,
     maxInDeck: 1,
     usable_in_neutral: true,
     onActivate({ roomState, userId, bakuganKey, slot }) {
-        const failed = AbilityCardFailed({ card: HaosVentus.name })
+        const failed = AbilityCardFailed({ abilityKey: HaosVentus.key })
 
         if (HaosVentus.activationConditions) {
             const checker = HaosVentus.activationConditions({ roomState, userId })
@@ -212,13 +204,11 @@ export const HaosVentus: abilityCardsType = {
 
 export const AquosSubterra: abilityCardsType = {
     key: 'diagonal-combination-aquos-subterra',
-    name: 'Diagonal Correlation : Aquos - Subterra',
     attribut: 'Aquos',
-    description: `If the user is of the Aquos attribut, they gain a 100 Gs bonus if a Subterra Bakugan is present anywhere on the field`,
     maxInDeck: 1,
     usable_in_neutral: true,
     onActivate({ roomState, userId, bakuganKey, slot }) {
-        const failed = AbilityCardFailed({ card: AquosSubterra.name })
+        const failed = AbilityCardFailed({ abilityKey: AquosSubterra.key })
 
         if (AquosSubterra.activationConditions) {
             const checker = AquosSubterra.activationConditions({ roomState, userId })
@@ -264,13 +254,11 @@ export const AquosSubterra: abilityCardsType = {
 
 export const SubterraAquos: abilityCardsType = {
     key: 'diagonal-combination-subterra-aquos',
-    name: 'Diagonal Correlation : Aquos - Subterra',
     attribut: 'Aquos',
-    description: `If the user is of the Subterra attribut, they gain a 100 Gs bonus if a Aquos Bakugan is present anywhere on the field`,
     maxInDeck: 1,
     usable_in_neutral: true,
     onActivate({ roomState, userId, bakuganKey, slot }) {
-        const failed = AbilityCardFailed({ card: SubterraAquos.name })
+        const failed = AbilityCardFailed({ abilityKey: SubterraAquos.key })
 
         if (SubterraAquos.activationConditions) {
             const checker = SubterraAquos.activationConditions({ roomState, userId })

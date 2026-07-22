@@ -36,13 +36,21 @@ function buildFinishedMessage(state: stateType): Message | undefined {
         const { loser, winner } = state.status.elo
 
         return {
-            text: `Game is over ! The winner is ${winnerName} : ${winnerName} : ${winner.newElo}(+${winner.bonus}) / ${loserName} : ${loser.newElo}(-${loser.malus})`,
+            key: 'game_over_winner_ranked',
+            params: {
+                winnerName,
+                winnerElo: winner.newElo,
+                winnerBonus: winner.bonus,
+                loserName,
+                loserElo: loser.newElo,
+                loserMalus: loser.malus,
+            },
             turn: state.turnState.turnCount,
         }
     }
 
     return {
-        text: "Game is over ! Equality !",
+        key: 'game_over_draw',
         turn: state.turnState.turnCount,
     }
 }

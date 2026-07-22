@@ -6,8 +6,6 @@ import { activateAbilities } from "../../type/room-types.js";
 
 export const ChaosOfDarkness: exclusiveAbilitiesType = {
     key: 'chaos-of-darkness',
-    name: 'Chaos of Darkness',
-    description: `Adds 100 Gs to the user for the entire duration of the game, as long as the card is not canceled and decrease the selected bakugan's power by 100 Gs but if Hydranoid is your last alive bakugan the target is eliminated.`,
     maxInDeck: 1,
     usable_if_user_not_on_domain: false,
     usable_in_neutral: false,
@@ -54,7 +52,7 @@ export const ChaosOfDarkness: exclusiveAbilitiesType = {
 
                 const request: AbilityCardsActions = {
                     type: 'SELECT_BAKUGAN_ON_DOMAIN',
-                    message: 'Chaos of Darkness : Select a Bakugan to target',
+                    message: { key: 'prompt_select_bakugan_target', params: { abilityKey: ChaosOfDarkness.key } },
                     bakugans: bakugans
                 }
 

@@ -24,14 +24,19 @@ import { toast } from "sonner"
 import { AddExclusiveAbilityCardToDeck } from "@/src/actions/deck-builder/edit-deck-action"
 import { BakuganList } from "@bakugan-arena/game-data"
 import { ExclusiveAbilitiesList } from "@bakugan-arena/game-data"
-import { useTranslations } from "next-intl"
+import { resolveAbilityCard } from "@bakugan-arena/i18n"
+import { useLocale, useTranslations } from "next-intl"
 
 export default function ManageExclusiveAbilityCardsInDeck({ deckId, bakugans, countBakugans, exclusiveAbilities }: { deckId: string, bakugans: string[], countBakugans: number, exclusiveAbilities: string[] | undefined }) {
     const t = useTranslations('deckBuilder')
     const tCommon = useTranslations('common')
+    const locale = useLocale()
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState("")
     const queryClient = useQueryClient()
+
+    const resolveCard = (c: (typeof ExclusiveAbilitiesList)[number]) =>
+        resolveAbilityCard(c.key, locale)
 
     const bakuganInDeck = BakuganList.filter((b) => bakugans.includes(b.key))
     const abilities = bakuganInDeck.map((b) => b.exclusiveAbilities).flat()
@@ -85,16 +90,14 @@ export default function ManageExclusiveAbilityCardsInDeck({ deckId, bakugans, co
                                     {value ? (
                                         (() => {
                                             const selectedCard = notInDeckExclusiveAbilities.find(
-                                                (b) => b.name === value
+                                                (b) => resolveCard(b).name === value || b.key === value
                                             )
 
                                             if (!selectedCard) return t('select.abilityCards')
 
-                                            const { name } = selectedCard
-
                                             return (
                                                 <>
-                                                    {`${name}`}
+                                                    {resolveCard(selectedCard).name}
                                                 </>
                                             )
                                         })()
@@ -110,17 +113,19 @@ export default function ManageExclusiveAbilityCardsInDeck({ deckId, bakugans, co
                                     <CommandList>
                                         <CommandEmpty>{tCommon('empty.noCardFound')}</CommandEmpty>
                                         <CommandGroup>
-                                            {notInDeckExclusiveAbilities.map((b, index) => (
+                                            {notInDeckExclusiveAbilities.map((b, index) => {
+                                                const displayName = resolveCard(b).name
+                                                return (
                                                 <CommandItem
                                                     key={index}
-                                                    value={b.name}
+                                                    value={displayName}
                                                     onSelect={(currentValue) => {
                                                         setValue(currentValue === value ? "" : currentValue)
                                                         setOpen(false)
                                                         addCardToDeckMutation.mutate(b.key)
                                                     }}
                                                 >
-                                                    {b.name}
+                                                    {displayName}
                                                     <Check
                                                         className={cn(
                                                             "ml-auto",
@@ -128,7 +133,7 @@ export default function ManageExclusiveAbilityCardsInDeck({ deckId, bakugans, co
                                                         )}
                                                     />
                                                 </CommandItem>
-                                            ))}
+                                            )})}
                                         </CommandGroup>
                                     </CommandList>
                                 </Command>
@@ -138,7 +143,12 @@ export default function ManageExclusiveAbilityCardsInDeck({ deckId, bakugans, co
                 </CardHeader>
                 <CardContent className={exclusiveAbilities && exclusiveAbilities?.length > 0 ? "grid grid-cols-1 md:grid-cols-2 gap-3" : ""}>
                     {
-                        deckCards.length > 0 ? deckCards?.map((c, index) => <ExclusiveAbilityCardPreviewDeckEditor key={index} nom={c ? c.name : ''} description={c ? c.description : ''} id={c ? c.key : ''} deckId={deckId} />)
+                        deckCards.length > 0 ? deckCards?.map((c, index) => {
+                            const resolved = c
+                                ? resolveCard(c)
+                                : { name: '', description: '' }
+                            return <ExclusiveAbilityCardPreviewDeckEditor key={index} nom={resolved.name} description={resolved.description} id={c ? c.key : ''} deckId={deckId} />
+                        })
                             : <p className="text-center">{t('emptyStates.noExclusiveCards')}</p>
                     }
                 </CardContent>

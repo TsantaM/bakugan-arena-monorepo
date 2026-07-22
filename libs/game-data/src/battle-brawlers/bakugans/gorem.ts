@@ -27,10 +27,8 @@ export const HammerGoremSubterra: bakuganType = {
 
 export const GoremGateCard: gateCardType = {
     key: 'gorem-gate-card',
-    name: 'Charachter: Gorem',
     maxInDeck: 1,
     family: 'Gorem',
-    description: `When this card is activated, it doubles the level of all Gorem on it.`,
     image: 'caracter-gate-cards/gorem-subterra.jpg',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'gorem-gate-card')

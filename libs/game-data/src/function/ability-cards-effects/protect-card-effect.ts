@@ -1,7 +1,5 @@
 import { Bakugans } from "../../battle-brawlers/bakugans.js"
 import { pushReplayAnimation } from "../replay/push-replay-animation.js";
-import { GateCards } from "../../battle-brawlers/gate-gards.js"
-import { AbilityCards, ExclusiveAbilities } from "../../battle-brawlers/index.js"
 import { AnimationDirectivesTypes, Message } from "../../type/animations-directives.js"
 import { bakuganOnSlot, stateType } from "../../type/room-types.js"
 import { NewAdditionnalMessage } from "../new-additional-message.js"
@@ -14,19 +12,24 @@ type ProtectCardEffectType = {
     protectionType: 'ABILITY' | 'GATE' | 'BOTH'
 }
 
+function protectionSourceParams(check: { key: string; origin: 'GATE' | 'ABILITY' }): Record<string, string | number> {
+    return check.origin === 'GATE'
+        ? { gateKey: check.key }
+        : { abilityKey: check.key }
+}
+
 export function ProtectCardEffect({ bakugan, cardKey, origin, roomState, protectionType }: ProtectCardEffectType) {
 
     const check = protectionType === 'GATE' ? bakugan.statut.protectedAgainstGate : protectionType === 'ABILITY' ? bakugan.statut.protectedAgainstAbility : bakugan.statut.protected
 
     if (check) {
-        const text: string = `${Bakugans[bakugan.key].name} is already protected by ${check.origin === 'GATE'
-            ? GateCards[check.key].name
-            : AbilityCards[check.key].name || ExclusiveAbilities[check.key].name
-            }`;
-
         NewAdditionnalMessage({
             roomState: roomState,
-            text: text,
+            key: 'bakugan_already_protected_by',
+            params: {
+                name: Bakugans[bakugan.key].name,
+                ...protectionSourceParams(check),
+            },
         })
 
     } else {
@@ -36,10 +39,16 @@ export function ProtectCardEffect({ bakugan, cardKey, origin, roomState, protect
             origin: origin
         }
 
-        const text = `${Bakugans[bakugan.key].name} is protected against ${protectionType === 'GATE' ? 'gate cards' : protectionType === 'ABILITY' ? 'abilities' : 'gate cards and abilities'} `
+        const key =
+            protectionType === 'GATE'
+                ? 'bakugan_protected_against_gates'
+                : protectionType === 'ABILITY'
+                    ? 'bakugan_protected_against_abilities'
+                    : 'bakugan_protected_against_both'
 
         const message: Message = {
-            text: text,
+            key,
+            params: { name: Bakugans[bakugan.key].name },
             turn: roomState.turnState.turnCount,
             description: false
         }
@@ -81,7 +90,8 @@ export function RemoveProtectionCardEffect({ bakugan, cardKey, origin, protectio
         }
 
         const message: Message = {
-            text: `${Bakugans[bakugan.key].name} is not protected anymore`,
+            key: 'bakugan_protection_ended',
+            params: { name: Bakugans[bakugan.key].name },
             turn: roomState.turnState.turnCount,
             description: false,
         }
@@ -101,11 +111,10 @@ export function RemoveProtectionCardEffect({ bakugan, cardKey, origin, protectio
         pushReplayAnimation(roomState, animation)
 
     } else {
-        const text: string = `${Bakugans[bakugan.key].name} isn't protected.`;
-
         NewAdditionnalMessage({
             roomState: roomState,
-            text: text,
+            key: 'bakugan_not_protected',
+            params: { name: Bakugans[bakugan.key].name },
         })
     }
 

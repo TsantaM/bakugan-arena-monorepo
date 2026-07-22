@@ -6,8 +6,6 @@ import type { bakuganToMoveType2 as bakuganToMoveType } from "../../type/type-in
 
 export const TrappeDeSable: exclusiveAbilitiesType = {
     key: 'trappe-de-sable',
-    name: 'Sand Trap',
-    description: `Attract one Bakugan from another Gate Card to user's Gate Card and decrease his power by 50 Gs`,
     maxInDeck: 1,
     extraInputs: ['drag-bakugan'],
     usable_in_neutral: true,
@@ -31,7 +29,7 @@ export const TrappeDeSable: exclusiveAbilitiesType = {
 
         const request: AbilityCardsActions = {
             type: 'SELECT_BAKUGAN_ON_DOMAIN',
-            message: 'Sand Trap : Select a Bakugan to drag',
+            message: { key: 'prompt_select_bakugan_drag', params: { abilityKey: TrappeDeSable.key } },
             bakugans: bakugans
         }
 

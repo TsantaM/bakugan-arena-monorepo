@@ -26,7 +26,8 @@ export function CancelAbilityCardEffect({ roomState, slotOfGate, ability }: Canc
             attribut: user.attribut
         },
         message: [{
-            text: `${abilityData.name} of ${BakuganName} as been nullified !`,
+            key: 'ability_nullified',
+            params: { abilityKey: ability.key, bakugan: BakuganName },
             turn: roomState?.turnState.turnCount
         }],
         resolve: false

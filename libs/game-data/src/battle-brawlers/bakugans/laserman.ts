@@ -17,10 +17,8 @@ export const LasermanDarkus: bakuganType = {
 
 export const LasermanGateCard: gateCardType = {
     key: 'laserman-gate-card',
-    name: 'Charachter: Laserman',
     maxInDeck: 1,
     family: family,
-    description: `When this card is activated, it doubles the level of all Laserman on it.`,
     image: 'laserman.png',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'laserman-gate-card')

@@ -6,8 +6,6 @@ import { gateCardType } from "../../../type/game-data-types.js"
 
 export const Revive: gateCardType = {
     key: 'revive',
-    name: 'Revive',
-    description: `If the user wins, all of their defeated Bakugan can be used again.`,
     image: GateCardImages.command,
     maxInDeck: 1,
     activeOnBattleEnd: {
@@ -49,7 +47,8 @@ export const Revive: gateCardType = {
                         bakuganUserId: userId,
                     },
                     message: [{
-                        text: `${b.bakuganData.name} revived`,
+                        key: 'bakugan_revived',
+                        params: { name: b.bakuganData.name },
                         turn: roomState.turnState.turnCount,
                     }]
                 }

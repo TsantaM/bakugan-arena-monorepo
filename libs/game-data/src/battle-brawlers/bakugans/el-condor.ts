@@ -41,7 +41,6 @@ export const ElCondorSubterra: bakuganType = {
 
 export const ElCondorGateCard: gateCardType = {
     key: 'el-condor-gate-card',
-    name: 'Charachter: El Condor',
     maxInDeck: 1,
     image: GateCardImages.caracter,
     imageByAttribut: {
@@ -49,7 +48,6 @@ export const ElCondorGateCard: gateCardType = {
         Haos: CharacterCardByAttribut('el-condor', 'Haos'),
         Ventus: CharacterCardByAttribut('el-condor', 'Ventus')
     },
-    description: `When this card is activated, it doubles the level of all El Condor on it.`,
     family: 'El Condor',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'el-condor-gate-card')

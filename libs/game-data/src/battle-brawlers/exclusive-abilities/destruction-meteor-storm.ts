@@ -3,8 +3,6 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const GustOfWindBlow: exclusiveAbilitiesType = {
     key: 'gust-of-wind-blow-destruction-meteor-storm',
-    name: 'Gust of Wind Blow - Destruction Meteor Storm',
-    description: `Adds 200 Gs to the user`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

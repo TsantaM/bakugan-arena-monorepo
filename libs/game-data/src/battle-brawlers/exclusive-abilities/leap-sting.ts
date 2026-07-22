@@ -5,14 +5,12 @@ import { portalSlotsTypeElement } from "../../type/room-types.js";
 
 export const LeapSting: exclusiveAbilitiesType = {
     key: 'leap-sting',
-    name: 'Leap Sting',
-    description: 'Subtract 100 Gs to all opponent on the field',
     maxInDeck: 1,
     usable_if_user_not_on_domain: false,
     usable_in_neutral: true,
     onActivate({ roomState, userId, bakuganKey, slot }) {
 
-        const animation = AbilityCardFailed({card: LeapSting.name})
+        const animation = AbilityCardFailed({ abilityKey: LeapSting.key })
 
         const slots = roomState.protalSlots
         const slotOfGate: portalSlotsTypeElement = slots[Slots.indexOf(slot)]

@@ -61,8 +61,6 @@ export function AddAbilities({ roomState, request, bakugan, slot, userId, attrib
 
             return {
                 key: ability.key,
-                name: ability.name,
-                description: ability.description,
                 image: fullCard.image || ''
             }
         }),
@@ -78,8 +76,6 @@ export function AddAbilities({ roomState, request, bakugan, slot, userId, attrib
 
             return {
                 key: ability.key,
-                name: ability.name,
-                description: ability.description,
                 image: fullCard.image || ''
             }
         })

@@ -3,9 +3,7 @@ import { GateCardImages } from "../../../store/gate-card-images.js";
 
 export const AspirateurDePuissance: gateCardType = {
     key: 'aspirateur-de-puissance',
-    name: 'Energy Merge',
     maxInDeck: 1,
-    description: `transfers 100 Gs from the last Bakugan Stand on the card to the first one`,
     image: GateCardImages.command,
     onOpen: ({ roomState, slot }) => {
         if (!roomState) return null

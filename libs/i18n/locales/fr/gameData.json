@@ -1,0 +1,721 @@
+{
+  "bakugans": {},
+  "abilities": {
+    "mur-de-feu": {
+      "name": "Mur de Feu",
+      "description": "Soustrait 50 Gs aux adversaires et protège l'utilisateur contre les capacités de l'adversaire"
+    },
+    "jet-enflamme": {
+      "name": "Feu Rapide",
+      "description": "Ajoute un autre Bakugan au combat s'il y a 2 Bakugan Pyrus ou plus sur le terrain"
+    },
+    "tourbillon-de-feu": {
+      "name": "Tornade de Feu",
+      "description": "Ajoute 100 Gs à l'utilisateur et réduit la puissance de l'adversaire de 100 Gs"
+    },
+    "mirage-aquatique": {
+      "name": "Mirage Aquatique",
+      "description": "Déplace un Bakugan Aquos d'une carte portail à une autre, elle empêche également la carte portail de l'adversaire de s'ouvrir"
+    },
+    "barrage-d'eau": {
+      "name": "Barrage d'Eau",
+      "description": "Cette carte empêche tous les joueurs d'utiliser des capacités pendant 1 tour"
+    },
+    "plongee-en-eau-profonde": {
+      "name": "Plongée en Mer Profonde",
+      "description": "Ajoute 100 Gs à tous les Bakugan Aquos, soustrait 100 Gs à tous les Bakugan non-Aquos"
+    },
+    "magma-supreme": {
+      "name": "Magma Suprême",
+      "description": "Change l'attribut de la Carte Portail en Subterra"
+    },
+    "earth-power": {
+      "name": "Force de la Terre",
+      "description": "Ajoute 100 G à tous les Bakugan Subterra de l'utilisateur sur la même carte portail"
+    },
+    "eclat-soudain": {
+      "name": "Rapide Haos",
+      "description": "Ajoute un autre Bakugan au Combat, fonctionne uniquement s'il y a au minimum 2 bakugan haos sur le terrain"
+    },
+    "haos-immobilisation": {
+      "name": "Haos Immobilisation",
+      "description": "Si deux Bakugan Haos sont sur le terrain, la puissance de l'utilisateur augmente de 100 G et permet au joueur de réutiliser l'une de ses Cartes Capacité"
+    },
+    "vengeance-a-l'italienne": {
+      "name": "Vengeance à l'Italienne",
+      "description": "Soustrait 100 G à chaque adversaire et ajoute 100 G à l'utilisateur"
+    },
+    "combat-aerien": {
+      "name": "Combat Aérienne",
+      "description": "Permet aux bakugan Ventus de voler au-delà des Cartes Portail et annule la Carte Portail sur laquelle ils atterrissent"
+    },
+    "souffle-tout": {
+      "name": "Souffle Doux",
+      "description": "Déplace l'adversaire vers une autre Carte Portail"
+    },
+    "retour-d-air": {
+      "name": "Retour d'Air",
+      "description": "Retire l'utilisateur du terrain"
+    },
+    "tectonic-swipe": {
+      "name": "Balayage Tectonique",
+      "description": "Annule la Carte Portail et l'échange avec celle à côté"
+    },
+    "tornade-extreme": {
+      "name": "Tornade Extrême",
+      "description": "Attire un Bakugan d'une autre Carte Portail vers la Carte Portail de l'utilisateur"
+    },
+    "retro-action": {
+      "name": "Retour de Feu",
+      "description": "Annule la Carte Portail de l'adversaire"
+    },
+    "depth-dive": {
+      "name": "Plongée des Profondeurs",
+      "description": "Annule la Carte Portail de l'adversaire"
+    },
+    "earth-shatter": {
+      "name": "Fissure de la Terre",
+      "description": "Annule la Carte Portail de l'adversaire"
+    },
+    "support-light": {
+      "name": "Lumière de Support",
+      "description": "Annule la Carte Portail de l'adversaire"
+    },
+    "coup-de-grace": {
+      "name": "Coup de Grâce",
+      "description": "Annule la Carte Portail de l'adversaire"
+    },
+    "tornade-chaos-total": {
+      "name": "Étouffeur de vent",
+      "description": "Annule la Carte Portail de l'adversaire"
+    },
+    "blaze-reversal": {
+      "name": "Renversement de Flamme",
+      "description": "Annule la capacité de l'adversaire"
+    },
+    "flow-interference": {
+      "name": "Interférence du Flux",
+      "description": "Annule la capacité de l'adversaire"
+    },
+    "terra-lockdown": {
+      "name": "Verrouillage Terra",
+      "description": "Annule la capacité de l'adversaire"
+    },
+    "contre-maîtrise": {
+      "name": "Contre Maîtrise",
+      "description": "Annule la capacité de l'adversaire"
+    },
+    "shadow-reversal": {
+      "name": "Renversement d'Ombre",
+      "description": "Annule la capacité de l'adversaire"
+    },
+    "storm-cancel": {
+      "name": "Annulation de Tempête",
+      "description": "Annule la capacité de l'adversaire"
+    },
+    "combination-subterra-pyrus": {
+      "name": "Corrélation : Subterra – Pyrus",
+      "description": "Si un Bakugan Pyrus combat un Bakugan Subterra, cette carte augmente sa puissance de 100 Gs"
+    },
+    "combination-subterra-haos": {
+      "name": "Corrélation : Subterra – Haos",
+      "description": "Si un Bakugan Haos combat un Bakugan Subterra, cette carte augmente sa puissance de 100 Gs"
+    },
+    "combination-haos-darkus": {
+      "name": "Corrélation : Haos – Darkus",
+      "description": "Si un Bakugan Darkus combat un Bakugan Haos, cette carte augmente sa puissance de 100 Gs"
+    },
+    "combination-darkus-aquos": {
+      "name": "Corrélation : Darkus – Aquos",
+      "description": "Si un Bakugan Aquos combat un Bakugan Darkus, cette carte augmente sa puissance de 100 Gs"
+    },
+    "combination-aquos-ventus": {
+      "name": "Corrélation : Aquos – Ventus",
+      "description": "Si un Bakugan Ventus combat un Bakugan Aquos, cette carte augmente sa puissance de 100 Gs"
+    },
+    "combination-ventus-pyrus": {
+      "name": "Corrélation : Ventus – Pyrus",
+      "description": "Si un Bakugan Pyrus combat un Bakugan Ventus, cette carte augmente sa puissance de 100 Gs"
+    },
+    "diagonal-combination-pyrus-darkus": {
+      "name": "Corrélation Diagonale : Pyrus - Darkus",
+      "description": "Si l'utilisateur est de l'attribut Pyrus, il gagne 100 Gs si un Bakugan Darkus est présent n'importe où sur le terrain"
+    },
+    "diagonal-combination-darkus-pyrus": {
+      "name": "Corrélation Diagonale : Pyrus - Darkus",
+      "description": "Si l'utilisateur est de l'attribut Pyrus, il gagne 100 Gs si un Bakugan Darkus est présent n'importe où sur le terrain"
+    },
+    "diagonal-combination-ventus-haos": {
+      "name": "Corrélation Diagonale : Ventus - Haos",
+      "description": "Si l'utilisateur est de l'attribut Ventus, il gagne 100 Gs si un Bakugan Haos est présent n'importe où sur le terrain"
+    },
+    "diagonal-combination-haos-ventus": {
+      "name": "Corrélation Diagonale : Ventus - Haos",
+      "description": "Si l'utilisateur est de l'attribut Ventus, il gagne 100 Gs si un Bakugan Haos est présent n'importe où sur le terrain"
+    },
+    "diagonal-combination-aquos-subterra": {
+      "name": "Corrélation Diagonale : Aquos - Subterra",
+      "description": "Si l'utilisateur est de l'attribut Aquos, il gagne 100 Gs si un Bakugan Subterra est présent n'importe où sur le terrain"
+    },
+    "diagonal-combination-subterra-aquos": {
+      "name": "Corrélation Diagonale : Aquos - Subterra",
+      "description": "Si l'utilisateur est de l'attribut Aquos, il gagne 100 Gs si un Bakugan Subterra est présent n'importe où sur le terrain"
+    },
+    "tripple-combination-pyrus-aquos-haos": {
+      "name": "Triple Attaque: Pyrus – Aquos – Haos",
+      "description": "Si pendant le combat un joueur utilise une combinaison de Pyrus, Aquos et Haos, cette carte augmente la Puissance G de chacun de ses Bakugan de 200 G"
+    },
+    "tripple-combination-ventus-subterra-darkus": {
+      "name": "Triple Attaque: Ventus – Subterra – Darkus",
+      "description": "Si pendant le combat un joueur utilise une combinaison de Ventus, Subterra et Darkus, cette carte augmente la Puissance G de chacun de ses Bakugan de 200 G"
+    },
+    "heat-wave": {
+      "name": "Vague de Chaleur",
+      "description": "Annule la carte portail et réduit la puissance de tous les adversaires de 50 Gs"
+    },
+    "gate-building": {
+      "name": "Nouveau Portail",
+      "description": "L'utilisateur peut poser une autre Carte Portail Subterra."
+    },
+    "rapide-haos": {
+      "name": "Rapide Haos",
+      "description": "Permet à l'utilisateur d'ajouter un bakugan en plus sur le terrain s'il y a déjà un bakugan Haos sur la carte"
+    },
+    "lumiere-divine": {
+      "name": "Lumière Divine",
+      "description": "Permet de redonner vie à un Bakugan qui a été vaincu au combat"
+    },
+    "tornade-eclair": {
+      "name": "Lightning Tornado",
+      "description": "Adds 100 Gs to the user and decrease opponent power by 100 Gs"
+    },
+    "epices-mortelles": {
+      "name": "Epices Mortelles",
+      "description": "Ajoute 100 G de puissance à l'utilisateur et en retire autant a les adversaires."
+    },
+    "poivre-des-cayenne": {
+      "name": "Poivre des Cayenne",
+      "description": "Annule toutes les capacité de l'adversaire et retire 50 G à l'adversaire"
+    },
+    "copie-conforme": {
+      "name": "Copycat",
+      "description": "Copies an ability that the opponent used or is using"
+    },
+    "bouclier-aquos": {
+      "name": "Bouclier Aquos",
+      "description": "Protège contre toute capacité adverse pendant le tour"
+    }
+  },
+  "gates": {
+    "reacteur-pyrus": {
+      "name": "Réacteur Pyrus",
+      "description": "Ajoute 100 G à tous les Bakugan Pyrus sur la carte"
+    },
+    "reacteur-haos": {
+      "name": "Réacteur Haos",
+      "description": "Ajoute 100 G à tous les Bakugan Haos sur la carte"
+    },
+    "reacteur-ventus": {
+      "name": "Réacteur Ventus",
+      "description": "Ajoute 100 G à tous les Bakugan Ventus sur la carte"
+    },
+    "reacteur-aquos": {
+      "name": "Réacteur Aquos",
+      "description": "Ajoute 100 G à tous les Bakugan Aquos sur la carte"
+    },
+    "reacteur-subterra": {
+      "name": "Réacteur Subterra",
+      "description": "Ajoute 100 G à tous les Bakugan Subterra sur la carte"
+    },
+    "reacteur-darkus": {
+      "name": "Réacteur Darkus",
+      "description": "Ajoute 100 G à tous les Bakugan Darkus sur la carte"
+    },
+    "mine-fantome": {
+      "name": "Mine Phantom",
+      "description": "Lorsque deux Bakugan ou plus se trouvent sur la carte, peu importe leur camp, ils perdent tous"
+    },
+    "echange": {
+      "name": "Échange",
+      "description": "Si un Bakugan a 400 G ou plus, il perd automatiquement"
+    },
+    "super-pyrus": {
+      "name": "Super Pyrus",
+      "description": "Échange la puissance G de votre Bakugan avec celle de votre adversaire. (S’ouvre automatiquement à la fin du combat)"
+    },
+    "aspirateur-de-puissance": {
+      "name": "Fusion d’Énergie",
+      "description": "Transfère 100 Gs du dernier Bakugan Sur la carte vers le premier"
+    },
+    "rechargement": {
+      "name": "Rechargement",
+      "description": "Ajoute 100 Gs à votre Bakugan pour chaque Bakugan sur le terrain avec le même attribut"
+    },
+    "triple-combat": {
+      "name": "Triple Combat",
+      "description": "Amène votre Bakugan le plus faible dans le combat"
+    },
+    "quatuor-de-combat": {
+      "name": "Quatuor de combat",
+      "description": "Amène un bakugan de chaque joueur pour rejoindre le combat"
+    },
+    "armistice": {
+      "name": "Armistice",
+      "description": "Renvoie tous les Bakugan en combat sur cette Carte Portail à leur propriétaire"
+    },
+    "magma-fuse": {
+      "name": "Magma",
+      "description": "Après la fin du combat, chaque Carte Portail est détruite et tous les Bakugan sur le terrain sont renvoyés à leurs propriétaires"
+    },
+    "androstasis": {
+      "name": "Engourdissement",
+      "description": "Si l’utilisateur perd le combat en cours, son Bakugan vaincu reste dans le jeu"
+    },
+    "revive": {
+      "name": "Renaissance",
+      "description": "Si l’utilisateur gagne, tous ses Bakugan vaincus peuvent être utilisés à nouveau"
+    },
+    "grand-esprit": {
+      "name": "Grand Esprit",
+      "description": "Ajoute 50 Gs à votre Bakugan pour chaque carte portail sur le terrain"
+    },
+    "centipod-gate-card": {
+      "name": "Personnage : Centipod",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Centipod présents dessus"
+    },
+    "cycloid-gate-card": {
+      "name": "Personnage : Cycloid",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Cycloid présents dessus"
+    },
+    "dragonoid-gate-card": {
+      "name": "Personnage : Dragonoid",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Dragonoid présents dessus"
+    },
+    "el-condor-gate-card": {
+      "name": "Personnage : El Condor",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les El Condor présents dessus"
+    },
+    "falconeer-gate-card": {
+      "name": "Personnage : Falconeer",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Falconeer présents dessus"
+    },
+    "fear-reaper-gate-card": {
+      "name": "Personnage : Fear Ripper",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Fear Ripper présents dessus"
+    },
+    "fortress-gate-card": {
+      "name": "Personnage : Fortress",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Fortress présents dessus"
+    },
+    "garganoid-gate-card": {
+      "name": "Personnage : Garganoid",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Garganoid présents dessus"
+    },
+    "gorem-gate-card": {
+      "name": "Personnage : Gorem",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Gorem présents dessus"
+    },
+    "griffin-gate-card": {
+      "name": "Personnage : Griffin",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Griffin présents dessus"
+    },
+    "limulus-gate-card": {
+      "name": "Personnage : Limulus",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Limulus présents dessus"
+    },
+    "monarus-gate-card": {
+      "name": "Personnage : Monarus",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Monarus présents dessus"
+    },
+    "preyas-gate-card": {
+      "name": "Personnage : Preyas",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Preyas présents dessus"
+    },
+    "diablo-gate-card": {
+      "name": "Personnage : Diablo",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Diablo présents dessus"
+    },
+    "angelo-gate-card": {
+      "name": "Personnage : Angelo",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Angelo présents dessus"
+    },
+    "ravenoid-gate-card": {
+      "name": "Personnage : Ravenoid",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Ravenoid présents dessus"
+    },
+    "saurus-gate-card": {
+      "name": "Personnage : Saurus",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Saurus présents dessus"
+    },
+    "stinglash-gate-card": {
+      "name": "Personnage : Stinglash",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Stinglash présents dessus"
+    },
+    "wormquake-gate-card": {
+      "name": "Personnage : Wormquake",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Wormquake présents dessus"
+    },
+    "juggernoid-gate-card": {
+      "name": "Personnage : Juggernoid",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Juggernoid présents dessus"
+    },
+    "bee-striker-gate-card": {
+      "name": "Personnage : Bee Striker",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Bee Striker présents dessus"
+    },
+    "tuskor-gate-card": {
+      "name": "Personnage : Tuskor",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Tuskor présents dessus"
+    },
+    "laserman-gate-card": {
+      "name": "Personnage : Laserman",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Laserman présents dessus"
+    },
+    "manion-gate-card": {
+      "name": "Personnage : Manion",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Manion présents dessus"
+    },
+    "reaper-gate-card": {
+      "name": "Personnage : Reaper",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Reaper présents dessus"
+    },
+    "hydranoid-gate-card": {
+      "name": "Personnage : Hydranoid",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Hydranoid présents dessus"
+    },
+    "mantris-gate-card": {
+      "name": "Personnage : Mantris",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Mantris présents dessus"
+    },
+    "robotallion-gate-card": {
+      "name": "Personnage : Robotallion",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Robotallion présents dessus"
+    },
+    "siege-gate-card": {
+      "name": "Personnage : Siege",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Siege présents dessus"
+    },
+    "sirenoid-gate-card": {
+      "name": "Personnage : Sirenoid",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Sirenoid présents dessus"
+    },
+    "skyress-gate-card": {
+      "name": "Personnage : Skyress",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Skyress présents dessus"
+    },
+    "tentaclear-gate-card": {
+      "name": "Personnage : Tentaclear",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Tentaclear présents dessus"
+    },
+    "tigrerra-gate-card": {
+      "name": "Personnage : Tigrerra",
+      "description": "Lorsque cette carte est activée, elle double le niveau de tous les Tigrerra présents dessus"
+    },
+    "cadenas": {
+      "name": "Cadenas",
+      "description": "Annule toutes les capacités adverses."
+    },
+    "peril-pyrus": {
+      "name": "Péril Pyrus",
+      "description": "Transforme l'attribut de tous les Bakugans présents sur cette carte en Pyrus"
+    },
+    "peril-aquos": {
+      "name": "Péril Aquos",
+      "description": "Transforme l'attribut de tous les Bakugans présents sur cette carte en Aquos"
+    },
+    "peril-ventus": {
+      "name": "Péril Ventus",
+      "description": "Transforme l'attribut de tous les Bakugans présents sur cette carte en Ventus"
+    },
+    "peril-subterra": {
+      "name": "Péril Subterra",
+      "description": "Transforme l'attribut de tous les Bakugans présents sur cette carte en Subterra"
+    },
+    "peril-haos": {
+      "name": "Péril Haos",
+      "description": "Transforme l'attribut de tous les Bakugans présents sur cette carte en Haos"
+    },
+    "peril-darkus": {
+      "name": "Péril Darkus",
+      "description": "Transforme l'attribut de tous les Bakugans présents sur cette carte en Darkus"
+    },
+    "fusion-marine": {
+      "name": "Fusion Marine",
+      "description": "Transforme l'attribut de tous les Bakugans présents en Aquos sauf les Bakugans Subterra"
+    },
+    "fusion-aerienne": {
+      "name": "Fusion Aérienne",
+      "description": "Transforme l'attribut de tous les Bakugans présents en Ventus sauf les Bakugans Haos"
+    },
+    "fusion-tenebreuse": {
+      "name": "Fusion Ténébreuse",
+      "description": "Transforme l'attribut de tous les Bakugans présents en Darkus sauf les Bakugans Pyrus"
+    },
+    "fusion-terrestre": {
+      "name": "Fusion Terrestre",
+      "description": "Transforme l'attribut de tous les Bakugans présents en Subterra sauf les Bakugans Aquos"
+    },
+    "fusion-lumineuse": {
+      "name": "Fusion Lumineuse",
+      "description": "Transforme l'attribut de tous les Bakugans présents en Haos sauf les Bakugans Ventus"
+    },
+    "fusion-enflammee": {
+      "name": "Fusion Enflammée",
+      "description": "Transforme l'attribut de tous les Bakugans présents en Pyrus sauf les Bakugans Darkus"
+    },
+    "retour-d-air": {
+      "name": "Retour d'assenceur",
+      "description": "Oblige le Bakugan de l'adversaire mis en jeu à revenir immédiatement entre les main de son propriétaire"
+    },
+    "bouc-emissaire": {
+      "name": "Bouc Emissaire",
+      "description": "Le propriétaire du premier Bakugan placé sur la carte peut décider de continuer le combat ou d'y mettre fin"
+    },
+    "harpus-gate-card": {
+      "name": "Charachter: Gorem",
+      "description": "When this card is activated, it doubles the level of all Harpus on it."
+    }
+  },
+  "exclusiveAbilities": {
+    "javelot-aquos": {
+      "name": "Javelot Aquos",
+      "description": "Annule la Carte Portail et l'échange avec celle à côté"
+    },
+    "force-d'attraction": {
+      "name": "Attraction",
+      "description": "Attire un Bakugan d'une autre Carte Portail vers la Carte Portail de l'utilisateur"
+    },
+    "gauche-gigantesque": {
+      "name": "Gauche Gigantesque",
+      "description": "Annule la Carte Portail de l'adversaire"
+    },
+    "ombre-bleue": {
+      "name": "Ombre Blue",
+      "description": "Transfère 50 Gs du Bakugan adverse vers l'utilisateur et empêche l'adversaire d'ouvrir sa Carte Portail"
+    },
+    "tsunami": {
+      "name": "Tsunami",
+      "description": "Lorsque trois Bakugan Aquos alliés, dont Aquos Siege, sont présents sur le terrain, cette carte élimine tous les Bakugan sur le terrain sauf Aquos Siege. (Ne peut pas être utilisée si un combat est en cours ou en pause)"
+    },
+    "dragonoid-plus": {
+      "name": "Dragon Puissance Ultime",
+      "description": "Ajoute 100 Gs à l'utilisateur pendant toute la durée du jeu, tant que la carte n'est pas annulée"
+    },
+    "aile-enflammee": {
+      "name": "Aile Enflammée",
+      "description": "Transfère 50 Gs de l'adversaire vers l'utilisateur"
+    },
+    "visage-de-joie": {
+      "name": "Visage du Joie",
+      "description": "Annule la carte Portail de l'adversaire si elle est ouverte et l'empêche de s'ouvrir si elle ne l'est pas"
+    },
+    "visage-du-chagrin": {
+      "name": "Visage du Chagrin",
+      "description": "Empêche l'adversaire d'activer des capacités."
+    },
+    "visage-de-la-fureur": {
+      "name": "Visage de la Fureur",
+      "description": "Ajoute 50 Gs à l'utilisateur et retire 100 Gs à chaque adversaire"
+    },
+    "sabre-de-la-mort": {
+      "name": "Sabre de la Mort",
+      "description": "Ajoute Tigrerra au combat"
+    },
+    "solar-ray": {
+      "name": "Rayon Solaire",
+      "description": "Ajoute 100 G à Tentaclear et annule toutes les capacités de l'adversaire sur la même Carte Portail"
+    },
+    "gamma-ray": {
+      "name": "Rayon Gamma",
+      "description": "Annule toutes les capacités de l'adversaire sur le terrain"
+    },
+    "flare-blinder": {
+      "name": "Lumière Aveuglante",
+      "description": "Empêche l'adversaire d'activer des capacités sur le même emplacement que l'utilisateur"
+    },
+    "mega-flare-blinder": {
+      "name": "Mega Aveuglement",
+      "description": "Ajoute 100 G à Tentaclear et empêche l'adversaire d'ouvrir la Carte Portail sur le même emplacement que l'utilisateur"
+    },
+    "guardian-field": {
+      "name": "Champ Gardien",
+      "description": "Protège tous les Bakugan alliés sur le terrain contre les effets des capacités et cartes portail"
+    },
+    "dimmension-four": {
+      "name": "Dimension Quatre",
+      "description": "Annule la carte Portail d'Attribut de l'adversaire (ne peut pas annuler les cartes Portail de personnage, commande ou piège)"
+    },
+    "bouclier-fusion": {
+      "name": "Bouclier de Fusion",
+      "description": "Si le Bakugan adverse a gagné des Gs : l’utilisateur gagne une Puissance G égale à la quantité gagnée"
+    },
+    "chaos-of-darkness": {
+      "name": "Chaos des Ténèbres",
+      "description": "Ajoute 100 Gs à l'utilisateur pour toute la durée du jeu, tant que la carte n'est pas annulée et réduit la puissance du bakugan sélectionné de 100 Gs"
+    },
+    "leap-sting": {
+      "name": "Rafale de G",
+      "description": "Soustrait 100 Gs à tous les adversaires sur le terrain"
+    },
+    "furry-of-wind": {
+      "name": "Vent Furieux",
+      "description": "Lorsque trois Bakugan Ventus alliés, dont Ventus Skyress, sont présents sur le terrain, cette carte élimine tous les Bakugan adverses sur le champ de bataille. Également, elle permet à l'utilisateur de renvoyer ses propres Bakugan dans sa main. Si cette carte est activée pendant un combat, la carte Portail en cours est retirée du jeu"
+    },
+    "life-drew": {
+      "name": "Drain de Vie",
+      "description": "Ajoute 50 Gs à tous les Bakugans alliés sur le terrain"
+    },
+    "trappe-de-sable": {
+      "name": "Trap de Sable",
+      "description": "Attire un Bakugan d'une autre Carte Portail vers la Carte Portail de l'utilisateur et réduit sa puissance de 50 Gs"
+    },
+    "chambre-de-gravité": {
+      "name": "Chambre de Gravité",
+      "description": "Attire tous les Bakugan adverses dans les Cartes Portail adjacentes à celle où se trouve Hydranoid/Sirenoid qui ont un niveau de puissance inférieur, et les élimine immédiatement"
+    },
+    "anti-muse": {
+      "name": "Anthemusa",
+      "description": "Attire tous les Bakugan adverses dans les Cartes Portail adjacentes à celle où se trouve Hydranoid/Sirenoid qui ont un niveau de puissance inférieur, et les élimine immédiatement"
+    },
+    "vent-violent-de-noblesse-verte": {
+      "name": "Vent Violent de Noblesse Verte",
+      "description": "Ajoute 100 Gs à l'utilisateur"
+    },
+    "tempête-de-plume": {
+      "name": "Tempête de Plumes",
+      "description": "Ajoute 100 Gs à l'utilisateur"
+    },
+    "vent-cinglant": {
+      "name": "Vent Sanglant",
+      "description": "Ajoute 100 Gs à l'utilisateur"
+    },
+    "maitre-des-profondeurs": {
+      "name": "Maître des Profondeurs",
+      "description": "Ajoute 100 Gs à l'utilisateur"
+    },
+    "massue-gigantesque": {
+      "name": "Assaut Gigantesque",
+      "description": "Ajoute 100 Gs à l'utilisateur"
+    },
+    "lance-de-feu": {
+      "name": "Épée de Feu",
+      "description": "Ajoute 100 Gs à l'utilisateur"
+    },
+    "robotalion-execution": {
+      "name": "Robotalion Exécution",
+      "description": "Ajoute 50 Gs à l'utilisateur"
+    },
+    "slash-zero": {
+      "name": "Attack Zero",
+      "description": "Ajoute 50 Gs à l'utilisateur"
+    },
+    "impact-majeur": {
+      "name": "Impact Majeur",
+      "description": "Ajoute 50 Gs à l’utilisateur et soustrait 100 Gs à tous les Bakugans adverses"
+    },
+    "spit-pointer": {
+      "name": "Pointe Cracheuse",
+      "description": "Ajoute 50 Gs à l’utilisateur et soustrait 100 Gs à tous les Bakugans adverses"
+    },
+    "holograph-divide": {
+      "name": "Division Holographique",
+      "description": "Ajoute la puissance G de l'adversaire à l'utilisateur"
+    },
+    "obstruction": {
+      "name": "Obstruction",
+      "description": "Ajoute la puissance G de l'adversaire à l'utilisateur"
+    },
+    "reaper-of-the-chaos": {
+      "name": "Faucheur du Chaos",
+      "description": "Ajoute 100 Gs à Reaper"
+    },
+    "machettes-jumelles": {
+      "name": "Machette Jumelle",
+      "description": "Ajoute 100 Gs à Mantris"
+    },
+    "depth-tornado": {
+      "name": "Tornade Déchaînée",
+      "description": "Ajoute 100 Gs à Juggernoid"
+    },
+    "amun-ra": {
+      "name": "Amun Ra",
+      "description": "Ajoute 100 Gs à Manion"
+    },
+    "spirit-hole": {
+      "name": "Coffre de l'Esprit",
+      "description": "Ajoute 50 Gs à votre Bakugan pour chaque carte portail sur le terrain"
+    },
+    "marionnette": {
+      "name": "Marionnette",
+      "description": "Mantris peut déplacer n'importe quel Bakugan vers n'importe quelle Carte Portail choisie par son propriétaire"
+    },
+    "lance-eclair": {
+      "name": "Lancé Éclaire",
+      "description": "Permet à Mantris de déplacer n'importe quel Bakugan vers n'importe quelle Carte Portail adjacente choisie par son propriétaire"
+    },
+    "plexus-solaire": {
+      "name": "Plexus Solaire",
+      "description": "Annule la Carte Portail de l'adversaire et soustrait 50 Gs à l'adversaire"
+    },
+    "effaceur-d'ombre": {
+      "name": "Effaceur d'Ombre",
+      "description": "Annule la Carte Portail de l'adversaire et soustrait 50 Gs à l'adversaire"
+    },
+    "noise-slap": {
+      "name": "Giffle Nasale",
+      "description": "Réduit la puissance du Bakugan sélectionné de 100 Gs"
+    },
+    "melt-flare": {
+      "name": "Torrent de Feu",
+      "description": "Capacité Fusion qui ajoute +150 Gs supplémentaires si Dragon Puissance Ultime est activé."
+    },
+    "destruction-buster": {
+      "name": "Rétroacteur Fulgurant",
+      "description": "Capacité Fusion qui ajoute +100 Gs supplémentaires et annule la carte portail si Chaos des Ténèbres est activé."
+    },
+    "d-strike-attack": {
+      "name": "Attaque Puissance D",
+      "description": "Ajoute 200 Gs à l'utilisateur pendant toute la durée du jeu, tant que la carte n'est pas annulée."
+    },
+    "d-strike-extreme": {
+      "name": "Puissance D Extrême",
+      "description": "Capacité Fusion qui ajoute +200 Gs supplémentaires si Attaque D-Strike est activée."
+    },
+    "dragonic-execution": {
+      "name": "Exécution Dragonienne",
+      "description": "Ajoute 50 Gs à l'utilisateur"
+    },
+    "dual-gazer": {
+      "name": "Charge du Tonnerre",
+      "description": "Ajoute 100 Gs à l'utilisateur pour toute la durée du jeu tant que la carte n'est pas annulée, retire 100 Gs à l'adversaire et réduit de 100 Gs la puissance du Bakugan sélectionné ; si Hydranoid est votre dernier Bakugan en vie, la cible est éliminée."
+    },
+    "destruction-impact": {
+      "name": "Anéantissement Total",
+      "description": "Capacité Fusion qui ajoute +200 Gs supplémentaires et annule la carte portail si Charge du Tonnerre est activé."
+    },
+    "gust-of-wind-blow-destruction-meteor-storm": {
+      "name": "Assaut Météorique Surpuissant",
+      "description": "Ajoute 200 Gs à l'utilisateur"
+    },
+    "grand-impact": {
+      "name": "Impact Majeur",
+      "description": "Transfère 100 Gs de l'adversaire vers Hammer Gorem. Empêche également l'ouverture de la Carte Portail adverse."
+    },
+    "velocity-fang": {
+      "name": "Croc Véloce",
+      "description": "Annule la capacité de l'adversaire et soustrait également 100 Gs à l'adversaire."
+    },
+    "souffle-infini": {
+      "name": "Souffle Infini",
+      "description": "Attire un bakugan sur la même carte portail que l'utilisateur et retire 50G à la cible"
+    },
+    "cape de feu": {
+      "name": "Cape de Feu",
+      "description": "Ajoute 100 G en plus à l'utilisateur"
+    },
+    "regain-subit": {
+      "name": "Regain Subit",
+      "description": "Retire 100 G à tous les bakugans adverse et ajoute 100 G à l'utilisateur"
+    }
+  }
+}

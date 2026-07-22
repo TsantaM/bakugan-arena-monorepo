@@ -4,13 +4,11 @@ import { AbilityCardFailed, CancelGateCardDirectiveAnimation, getJuxtaposablesSl
 import { NewAdditionnalMessage } from "../../function/new-additional-message.js";
 import { Slots, StandardCardsImages } from "../../store/store-index.js";
 import type { AbilityCardsActions, abilityCardsType, ActionType, AnimationDirectivesTypes } from "../../type/type-index.js";
-import { GateCards, GateCardsList } from "../gate-gards.js";
+import { GateCardsList } from "../gate-gards.js";
 import { AbilityCardsList, ExclusiveAbilitiesList } from "../index.js";
 
 export const MagmaSupreme: abilityCardsType = {
     key: 'magma-supreme',
-    name: 'Magma Prominence',
-    description: `Changes the Gate Card's attribute to Subterra.`,
     attribut: 'Subterra',
     maxInDeck: 1,
     usable_in_neutral: false,
@@ -59,7 +57,8 @@ export const MagmaSupreme: abilityCardsType = {
 
                 NewAdditionnalMessage({
                     roomState: roomState,
-                    text: `Gate Card became ${GateCards['reacteur-subterra'].name}.`
+                    key: 'gate_card_became',
+                    params: { gateKey: 'reacteur-subterra' },
                 })
 
                 // Keep the current battle running when the card is used during battle.
@@ -93,13 +92,11 @@ export const MagmaSupreme: abilityCardsType = {
 
 export const TectonicSwipe: abilityCardsType = {
     key: 'tectonic-swipe',
-    name: 'Tectonic Swipe',
     maxInDeck: 1,
-    description: `Cancel Gate card and Switches Gate Card with the one next to it`,
     usable_in_neutral: false,
     attribut: 'Subterra',
     onActivate: ({ roomState, userId, slot }) => {
-        const animation = AbilityCardFailed({ card: TectonicSwipe.name })
+        const animation = AbilityCardFailed({ abilityKey: TectonicSwipe.key })
 
         if (!roomState) return animation
         if (TectonicSwipe.activationConditions && !TectonicSwipe.activationConditions({ roomState, userId })) return animation
@@ -114,7 +111,7 @@ export const TectonicSwipe: abilityCardsType = {
 
         const request: AbilityCardsActions = {
             type: 'SELECT_SLOT',
-            message: 'Tectonic Swipe : Select a slot',
+            message: { key: 'prompt_select_slot', params: { abilityKey: TectonicSwipe.key } },
             slots: slotsIds
         }
 
@@ -163,9 +160,7 @@ export const TectonicSwipe: abilityCardsType = {
 export const EarthPower: abilityCardsType = {
     key: 'earth-power',
     attribut: 'Subterra',
-    name: 'Earth Power',
     maxInDeck: 2,
-    description: `Add 100 G to all of the user's Subterra Bakugans on the same gate card.`,
     image: StandardCardsImages.subterra,
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
@@ -226,10 +221,8 @@ export const EarthPower: abilityCardsType = {
 
 export const CopieConforme: abilityCardsType = {
     key: 'copie-conforme',
-    name: 'Copycat',
     attribut: 'Subterra',
     maxInDeck: 1,
-    description: `Copies an ability that the opponent used or is using`,
     image: StandardCardsImages.subterra,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -257,9 +250,7 @@ export const CopieConforme: abilityCardsType = {
 
 export const EarthShatter: abilityCardsType = {
     key: 'earth-shatter',
-    name: 'Earth Shatter',
     attribut: 'Subterra',
-    description: `Nullifies the opponent's Gate Card`,
     maxInDeck: 2,
     usable_in_neutral: false,
     image: StandardCardsImages.subterra,
@@ -320,8 +311,6 @@ export const EarthShatter: abilityCardsType = {
 export const TerraLockdown: abilityCardsType = {
     key: 'terra-lockdown',
     attribut: 'Subterra',
-    name: 'Terra Lockdown',
-    description: `Nullifies the opponent's ability`,
     maxInDeck: 3,
     image: StandardCardsImages.subterra,
     usable_in_neutral: false,
@@ -371,13 +360,11 @@ export const TerraLockdown: abilityCardsType = {
 export const GateBuilding: abilityCardsType = {
     key: 'gate-building',
     attribut: 'Subterra',
-    name: 'Gate Building',
-    description: `The user may set another Subterra Gate Card.`,
     maxInDeck: 1,
     image: StandardCardsImages.subterra,
     usable_in_neutral: true,
     onActivate({ roomState, userId }) {
-        const animation = AbilityCardFailed({ card: GateBuilding.name })
+        const animation = AbilityCardFailed({ abilityKey: GateBuilding.key })
 
         if (!roomState) return animation
 
@@ -413,7 +400,7 @@ export const GateBuilding: abilityCardsType = {
             },
             resolved: false,
             message: [{
-                text: 'Gate Card Builded',
+                key: 'gate_card_built',
                 turn: roomState.turnState.turnCount
             }]
         }

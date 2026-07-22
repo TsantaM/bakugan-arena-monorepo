@@ -31,8 +31,6 @@ export function SetGateCardActionRequest({ roomState }: { roomState: stateType }
         data: {
             cards: usableGates.map((card) => ({
                 key: card.key,
-                name: card.name,
-                description: card.description,
                 image: GateCardsList.find((gate) => gate.key === card.key)?.image || ''
             })),
             slots: usableSlots.map((slot) => slot.id),
@@ -91,8 +89,6 @@ export function SelectGateCardActionRequest({ roomState }: { roomState: stateTyp
         type: 'SELECT_GATE_CARD',
         data: usableGates.map((card) => ({
             key: card.key,
-            name: card.name,
-            description: card.description,
             image: GateCardsList.find((gate) => gate.key === card.key)?.image || ''
         }))
     }
@@ -103,8 +99,6 @@ export function SelectGateCardActionRequest({ roomState }: { roomState: stateTyp
         type: 'SELECT_GATE_CARD',
         data: inactivesPlayerGates.map((card) => ({
             key: card.key,
-            name: card.name,
-            description: card.description,
             image: GateCardsList.find((gate) => gate.key === card.key)?.image || ''
         }))
     }

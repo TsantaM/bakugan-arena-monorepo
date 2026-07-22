@@ -5,8 +5,6 @@ import { GateCardsList } from "../gate-gards.js"
 
 export const VisageDeJoie: exclusiveAbilitiesType = {
     key: 'visage-de-joie',
-    name: 'Face of Joy',
-    description: `Nullifies opponent's gate card if it's open and prevent it to open if it doesn't`,
     maxInDeck: 1,
     usable_in_neutral: true,
     usable_if_user_not_on_domain: false,
@@ -38,7 +36,7 @@ export const VisageDeJoie: exclusiveAbilitiesType = {
 
                 NewAdditionnalMessage({
                     roomState: roomState,
-                    text: `Gate Card is blocked`
+                    key: 'gate_blocked',
                 })
             }
         }
@@ -53,7 +51,7 @@ export const VisageDeJoie: exclusiveAbilitiesType = {
             if(slotOfGate.state.blocked && slotOfGate.state.blocked.blockedWith === 'ABILITY' && slotOfGate.state.blocked.key === VisageDeJoie.key) {
                 NewAdditionnalMessage({
                     roomState: roomState,
-                    text: `Gate Card is unblocked`
+                    key: 'gate_unblocked',
                 })
             }
             slotOfGate.state.blocked = false

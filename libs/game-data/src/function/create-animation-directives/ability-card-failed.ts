@@ -1,10 +1,13 @@
 import { AbilityCardsActions } from "../../type/actions-serveur-requests.js";
 
-export function AbilityCardFailed({card} : {card: string}) {
-    const animation: AbilityCardsActions = {
+/** Ability activation failed — clients translate via `ability_failed` + abilityKey. */
+export function AbilityCardFailed({ abilityKey }: { abilityKey: string }): AbilityCardsActions {
+    return {
         type: "CARD_FAILED",
-        message: `${card} failed`
+        abilityKey,
+        message: {
+            key: 'ability_failed',
+            params: { abilityKey },
+        },
     }
-
-    return animation
 }

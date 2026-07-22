@@ -34,7 +34,11 @@ export function ElementaryCardCancelerEffect({ roomState, userId, slot, cardToCa
                     attribut: cardUser.attribut
                 },
                 message: [{
-                    text: `${card?.name || 'Ability Card'} of ${cardUser.name} as been nullified !`,
+                    key: 'ability_nullified',
+                    params: {
+                        abilityKey: ability.key,
+                        bakugan: cardUser.name,
+                    },
                     turn: roomState?.turnState.turnCount
                 }],
                 resolve: false

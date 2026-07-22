@@ -3,9 +3,7 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const Obstruction: exclusiveAbilitiesType = {
     key: 'obstruction',
-    name: 'Dragoon',
     maxInDeck: 1,
-    description: `Adds the opponent's G-Power to user`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {

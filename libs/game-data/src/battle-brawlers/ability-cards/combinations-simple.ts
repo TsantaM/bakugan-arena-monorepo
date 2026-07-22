@@ -3,15 +3,13 @@ import { type abilityCardsType } from "../../type/type-index.js";
 
 export const SubterraPyrus: abilityCardsType = {
     key: 'combination-subterra-pyrus',
-    name: 'Correlation : Subterra - Pyrus',
-    description: `If a Pyrus Bakugan bettles a Subterra Bakugan, this card increases its power by 100 Gs`,
     attribut: 'Pyrus',
     maxInDeck: 1,
     usable_in_neutral: false,
     image: 'CorrelationPyrusSubterra.png',
     onActivate({ roomState, userId, bakuganKey, slot }) {
 
-        const failed = AbilityCardFailed({ card: SubterraPyrus.name })
+        const failed = AbilityCardFailed({ abilityKey: SubterraPyrus.key })
 
         if (SubterraPyrus.activationConditions) {
             const checker = SubterraPyrus.activationConditions({ roomState, userId })
@@ -48,13 +46,11 @@ export const SubterraPyrus: abilityCardsType = {
 
 export const SubterraHaos: abilityCardsType = {
     key: 'combination-subterra-haos',
-    name: 'Correlation : Subterra - Haos',
-    description: `If a Subterra Bakugan bettles Haos Bakugan, this card increases its power by 100 Gs`,
     attribut: 'Subterra',
     maxInDeck: 1,
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
-        const failed = AbilityCardFailed({ card: SubterraHaos.name })
+        const failed = AbilityCardFailed({ abilityKey: SubterraHaos.key })
 
         if (SubterraHaos.activationConditions) {
             const checker = SubterraHaos.activationConditions({ roomState, userId })
@@ -89,13 +85,11 @@ export const SubterraHaos: abilityCardsType = {
 
 export const HaosDarkus: abilityCardsType = {
     key: 'combination-haos-darkus',
-    name: 'Correlation : Haos - Darkus',
-    description: `If a Haos Bakugan bettles a Darkus Bakugan, this card increases its power by 100 Gs`,
     attribut: 'Haos',
     maxInDeck: 1,
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
-        const failed = AbilityCardFailed({ card: HaosDarkus.name })
+        const failed = AbilityCardFailed({ abilityKey: HaosDarkus.key })
 
         if (HaosDarkus.activationConditions) {
             const checker = HaosDarkus.activationConditions({ roomState, userId })
@@ -130,13 +124,11 @@ export const HaosDarkus: abilityCardsType = {
 
 export const DarkusAquos: abilityCardsType = {
     key: 'combination-darkus-aquos',
-    name: 'Correlation : Darkus - Aquos',
-    description: `If a Darkus Bakugan bettles a Aquos Bakugan, this card increases its power by 100 Gs`,
     attribut: 'Darkus',
     maxInDeck: 1,
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
-        const failed = AbilityCardFailed({ card: DarkusAquos.name })
+        const failed = AbilityCardFailed({ abilityKey: DarkusAquos.key })
 
         if (DarkusAquos.activationConditions) {
             const checker = DarkusAquos.activationConditions({ roomState, userId })
@@ -171,13 +163,11 @@ export const DarkusAquos: abilityCardsType = {
 
 export const AquosVentus: abilityCardsType = {
     key: 'combination-aquos-ventus',
-    name: 'Correlation : Aquos - Ventus',
-    description: `If a Aquos Bakugan bettles a Ventus Bakugan, this card increases its power by 100 Gs`,
     attribut: 'Aquos',
     maxInDeck: 1,
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
-        const failed = AbilityCardFailed({ card: AquosVentus.name })
+        const failed = AbilityCardFailed({ abilityKey: AquosVentus.key })
 
         if (AquosVentus.activationConditions) {
             const checker = AquosVentus.activationConditions({ roomState, userId })
@@ -212,13 +202,11 @@ export const AquosVentus: abilityCardsType = {
 
 export const VentusPyrus: abilityCardsType = {
     key: 'combination-ventus-pyrus',
-    name: 'Correlation : Ventus - Pyrus',
-    description: `If a Ventus Bakugan bettles a Pyrus Bakugan, this card increases its power by 100 Gs`,
     attribut: 'Pyrus',
     maxInDeck: 1,
     usable_in_neutral: false,
     onActivate({ roomState, userId, bakuganKey, slot }) {
-        const failed = AbilityCardFailed({ card: VentusPyrus.name })
+        const failed = AbilityCardFailed({ abilityKey: VentusPyrus.key })
 
         if (VentusPyrus.activationConditions) {
             const checker = VentusPyrus.activationConditions({ roomState, userId })

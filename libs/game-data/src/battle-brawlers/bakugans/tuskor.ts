@@ -44,10 +44,8 @@ export const TuskorDarkus: bakuganType = {
 
 export const TuskorGateCard: gateCardType = {
     key: 'tuskor-gate-card',
-    name: 'Charachter: Tuskor',
     maxInDeck: 1,
     family: 'Tuskor',
-    description: `When this card is activated, it doubles the level of all Tuskor on it.`,
     image: 'caracter-gate-cards/tuskor-pyrus.jpg',
     imageByAttribut: {
         Darkus: CharacterCardByAttribut('tuskor', 'Darkus'),

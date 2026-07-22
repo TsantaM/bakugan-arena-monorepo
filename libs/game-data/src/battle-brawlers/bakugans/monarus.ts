@@ -16,10 +16,8 @@ export const MonarusVentus: bakuganType = {
 
 export const MonarusGateCard: gateCardType = {
     key: 'monarus-gate-card',
-    name: 'Charachter: Monarus',
     maxInDeck: 1,
     family: 'Monarus',
-    description: `When this card is activated, it doubles the level of all Monarus on it.`,
     image: 'monarus.png',
     imageByAttribut: {
         Ventus: CharacterCardByAttribut('monarus', 'Ventus')

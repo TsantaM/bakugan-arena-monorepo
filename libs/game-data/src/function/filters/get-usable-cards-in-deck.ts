@@ -42,14 +42,17 @@ export function GetUsableCardsInDeck({ roomState, cardsList, slotOfGate }: Props
             type: 'SELECT_ABILITY_CARD',
             data: cards.map((card) => ({
                 key: card.key,
-                description: card.description,
                 image:
                     [...AbilityCardsList, ...ExclusiveAbilitiesList]
                         .find((ability) => ability.key === card.key)
                         ?.image || '',
-                name: card.name
             })),
-            message: `Mine Ghost : Select one ability card`,
+            message: {
+                key: 'prompt_select_ability_card',
+                params: {
+                    gateKey: slotOfGate.portalCard?.key ?? 'trade-off',
+                },
+            },
             skipable: true,
             target: otherPlayerId
         }

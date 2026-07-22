@@ -41,10 +41,8 @@ export const SaurusHaos: bakuganType = {
 
 export const SaurusGateCard: gateCardType = {
     key: 'saurus-gate-card',
-    name: 'Charachter: Saurus',
     maxInDeck: 1,
     family: 'Saurus',
-    description: `When this card is activated, it doubles the level of all Saurus on it.`,
     image: GateCardImages.caracter,
     imageByAttribut: {
         Pyrus: CharacterCardByAttribut('saurus', 'Pyrus'),

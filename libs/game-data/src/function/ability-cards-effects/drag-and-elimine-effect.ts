@@ -9,7 +9,8 @@ export function DragAndElimineBakuganEffect({ bakugan, roomState, cardUser, init
     if (bakugan.statut.trapped || bakugan.statut.protectedAgainstAbility || bakugan.statut.protected) {
         NewAdditionnalMessage({
             roomState: roomState,
-            text: `${Bakugans[bakugan.key].name} is protected.`
+            key: 'bakugan_protected',
+            params: { name: Bakugans[bakugan.key].name },
         })
         return
     }

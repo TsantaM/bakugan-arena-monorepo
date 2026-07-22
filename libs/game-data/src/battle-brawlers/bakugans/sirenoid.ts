@@ -16,10 +16,8 @@ export const SirenoidAquos: bakuganType = {
 
 export const SirenoidGateCard: gateCardType = {
     key: 'sirenoid-gate-card',
-    name: 'Charachter: Sirenoid',
     maxInDeck: 1,
     family: 'sirenoid',
-    description: `When this card is activated, it doubles the level of all Sirenoid on it.`,
     image: 'caracter-gate-cards/sirenoid-aquos.jpg',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'sirenoid-gate-card')

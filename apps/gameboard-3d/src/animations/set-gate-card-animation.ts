@@ -1,7 +1,9 @@
 import * as THREE from 'three'
 import gsap from 'gsap'
 import { GateCardsList } from '@bakugan-arena/game-data'
+import { resolveGateCard } from '@bakugan-arena/i18n'
 import { getSlotMeshPosition } from '../functions/get-slot-mesh-position'
+import { getGameboardLocale } from '../i18n/locale'
 
 export async function SetGateCardAnimation({
     cardMesh,
@@ -26,7 +28,7 @@ export async function SetGateCardAnimation({
         if (!position) return resolve()
 
         if(card.userId === userId) {
-            cardMesh.userData.cardName = cardData.name
+            cardMesh.userData.cardName = resolveGateCard(cardData.key, getGameboardLocale()).name
         }
 
         for (let i = gateCardMeshs.length - 1; i >= 0; i--) {

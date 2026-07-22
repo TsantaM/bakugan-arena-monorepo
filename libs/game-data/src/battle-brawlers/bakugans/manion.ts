@@ -41,10 +41,8 @@ export const ManionVentus: bakuganType = {
 
 export const ManionGateCard: gateCardType = {
     key: 'manion-gate-card',
-    name: 'Charachter: Manion',
     maxInDeck: 1,
     family: family,
-    description: `When this card is activated, it doubles the level of all Manion on it.`,
     image: 'caracter-gate-cards/manion-subterra.jpg',
     // imageByAttribut: {
     //     Subterra: CharacterCardByAttribut('manion', 'Subterra'),

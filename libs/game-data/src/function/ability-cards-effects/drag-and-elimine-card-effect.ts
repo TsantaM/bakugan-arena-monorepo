@@ -50,7 +50,7 @@ export function DragAndElimineOnOpen({ roomState, userId, bakuganKey, slot, card
     card: exclusiveAbilitiesType | abilityCardsType
 }): null | AbilityCardsActions {
 
-    const animation = AbilityCardFailed({ card: card.name })
+    const animation = AbilityCardFailed({ abilityKey: card.key })
     if (!roomState) return animation
     if (card.activationConditions && !card.activationConditions({ roomState, userId })) return animation
 
@@ -80,11 +80,12 @@ export function DragAndElimineOnOpen({ roomState, userId, bakuganKey, slot, card
                 type: 'SELECT_ABILITY_CARD',
                 data: cards.map((card) => ({
                     key: card.key,
-                    description: card.description,
                     image: [...AbilityCardsList, ...ExclusiveAbilitiesList].find((ability) => ability.key === card.key)?.image || '',
-                    name: card.name
                 })),
-                message: `${card.name} : Select one ability card`,
+                message: {
+                    key: 'prompt_select_ability_card',
+                    params: { abilityKey: card.key },
+                },
                 target: opponentId,
                 skipable: true
             }
@@ -145,14 +146,18 @@ export function DragAndElimineOnAdditional({ resolution, roomData, cardData }: {
         },
         resolve: false,
         message: [{
-            text: `Ability Card Activate : ${card.name}`,
+            key: 'ability_activate',
+            params: {
+                abilityKey: ability.key,
+            },
             userName: GetUserName({
                 roomData: roomData,
                 userId: cardOwnerId,
             }),
             turn: roomData.turnState.turnCount
         }, {
-            text: `${ability.description}`,
+            key: 'ability_description',
+            params: { abilityKey: ability.key },
             turn: roomData.turnState.turnCount,
             description: true
         }]

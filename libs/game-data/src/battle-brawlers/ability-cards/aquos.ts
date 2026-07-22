@@ -9,15 +9,13 @@ import { ElementaryCardCancelerEffect } from "../../function/ability-cards-effec
 
 export const MirageAquatique: abilityCardsType = {
     key: 'mirage-aquatique',
-    name: 'Dive Mirage',
     attribut: 'Aquos',
-    description: `Move an Aquos Bakugan from one gate card to another, also it prevents the opponent's gate card from opening`,
     maxInDeck: 2,
     extraInputs: ["move-self"],
     usable_in_neutral: true,
     image: 'mirage-aquatique.jpg',
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        const animation = AbilityCardFailed({ card: MirageAquatique.name })
+        const animation = AbilityCardFailed({ abilityKey: MirageAquatique.key })
 
         if (!roomState) return animation
 
@@ -44,7 +42,7 @@ export const MirageAquatique: abilityCardsType = {
 
         const request: AbilityCardsActions = {
             type: 'SELECT_SLOT',
-            message: 'Dive Mirage : Select a slot',
+            message: { key: 'prompt_select_slot', params: { abilityKey: MirageAquatique.key } },
             slots: slots
         }
 
@@ -73,7 +71,7 @@ export const MirageAquatique: abilityCardsType = {
 
         NewAdditionnalMessage({
             roomState: roomState,
-            text: `Card card is unblocked.`
+            key: 'gate_unblocked',
         })
 
 
@@ -101,12 +99,10 @@ export const MirageAquatique: abilityCardsType = {
 
 export const BarrageDeau: abilityCardsType = {
     key: `barrage-d'eau`,
-    name: `Water Refrain`,
     maxInDeck: 1,
     attribut: 'Aquos',
     usable_in_neutral: true,
     image: StandardCardsImages.aquos,
-    description: `This card prevents all players from using any abilities for 1 turn.`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
         BlockAbilityCardsEffect({ roomState, userId, bakuganKey, slot, card: BarrageDeau, turns: 1 })
@@ -122,9 +118,7 @@ export const BarrageDeau: abilityCardsType = {
 export const BouclierAquos: abilityCardsType = {
     key: 'bouclier-aquos',
     attribut: 'Aquos',
-    description: 'Protège contre toute capacité adverse pendant le tour',
     maxInDeck: 2,
-    name: 'Bouclier Aquos',
     image: StandardCardsImages.aquos,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -143,12 +137,10 @@ export const BouclierAquos: abilityCardsType = {
 
 export const PlongeeEnEauProfonde: abilityCardsType = {
     key: 'plongee-en-eau-profonde',
-    name: 'Deap Sea Dive',
     attribut: 'Aquos',
     maxInDeck: 1,
     usable_in_neutral: false,
     image: StandardCardsImages.aquos,
-    description: `Add 100 Gs to all Aquos Bakugans, substract 100 Gs to all not Aquos Bakugans.`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -195,9 +187,7 @@ export const PlongeeEnEauProfonde: abilityCardsType = {
 
 export const DepthDive: abilityCardsType = {
     key: 'depth-dive',
-    name: 'Depth Dive',
     attribut: 'Aquos',
-    description: `Nullifies the opponent's Gate Card`,
     maxInDeck: 2,
     usable_in_neutral: false,
     image: StandardCardsImages.haos,
@@ -258,8 +248,6 @@ export const DepthDive: abilityCardsType = {
 export const FlowInterference: abilityCardsType = {
     key: 'flow-interference',
     attribut: 'Aquos',
-    name: 'Flow Interference',
-    description: `Nullifies the opponent's ability`,
     maxInDeck: 3,
     image: StandardCardsImages.haos,
     usable_in_neutral: false,

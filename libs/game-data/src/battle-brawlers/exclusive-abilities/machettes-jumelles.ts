@@ -3,9 +3,7 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const MachettesJumelles: exclusiveAbilitiesType = {
     key: 'machettes-jumelles',
-    name: 'Twin Machete',
     maxInDeck: 1,
-    description: `Adds 100 Gs to Mantris`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {

@@ -6,8 +6,6 @@ import { bakuganOnSlot, stateType } from "../../../type/room-types.js"
 
 export const QuatuorDeCombat: gateCardType = {
     key: 'quatuor-de-combat',
-    name: 'Quartet Battle',
-    description: `Drag one bakugan from each player to join de battle`,
     image: GateCardImages.command,
     maxInDeck: 1,
     onOpen: ({ roomState, slot, userId }) => {

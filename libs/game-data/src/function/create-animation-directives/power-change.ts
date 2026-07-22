@@ -28,7 +28,11 @@ export const PowerChangeDirectiveAnumation: PowerChangeDirectiveAnumationType = 
         },
         resolved: false,
         message: bakugansSnapshot.map((b) => ({
-            text: malus ? `${BakuganList.find((bakugan) => bakugan.key === b.key)?.name || ''} power decreased of ${powerChange} Gs !` : `${BakuganList.find((bakugan) => bakugan.key === b.key)?.name || ''} power increased of ${powerChange} Gs !`,
+            key: malus ? 'power_decreased' : 'power_increased',
+            params: {
+                name: BakuganList.find((bakugan) => bakugan.key === b.key)?.name || '',
+                amount: powerChange,
+            },
             turn: turn
         }))
     }

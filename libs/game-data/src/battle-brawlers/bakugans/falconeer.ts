@@ -28,10 +28,8 @@ export const FalconeerVentus: bakuganType = {
 
 export const FalconeerGateCard: gateCardType = {
     key: 'falconeer-gate-card',
-    name: 'Charachter: Falconeer',
     maxInDeck: 1,
     image: 'falconeer.png',
-    description: `When this card is activated, it doubles the level of all Falconeer on it.`,
     family: 'Falconeer',
     imageByAttribut: {
         Pyrus: CharacterCardByAttribut('falconeer', 'Pyrus'),

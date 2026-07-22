@@ -5,8 +5,6 @@ import { GateCards } from "../gate-gards.js"
 
 export const DimmensionQuatre: exclusiveAbilitiesType = {
     key: 'dimmension-four',
-    name: 'Dimmension Four',
-    description: `Nullifies the opponent's Attribute Gate Card (unable to nullify character, commend or trap gate card)`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

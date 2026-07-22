@@ -52,10 +52,8 @@ export const MantrisSubterra: bakuganType = {
 
 export const MantrisGateCard: gateCardType = {
     key: 'mantris-gate-card',
-    name: 'Charachter: Mantris',
     maxInDeck: 1,
     family: 'Mantris',
-    description: `When this card is activated, it doubles the level of all Mantris on it.`,
     image: GateCardImages.caracter,
     imageByAttribut: {
         Haos: CharacterCardByAttribut('mantris', 'Haos'),

@@ -7,9 +7,7 @@ import { AbilityCardsList, ExclusiveAbilitiesList } from "../index.js";
 
 export const CoupDeGrace: abilityCardsType = {
     key: 'coup-de-grace',
-    name: 'Grand Down',
     attribut: 'Darkus',
-    description: `Nullifies the opponent's Gate Card`,
     maxInDeck: 2,
     usable_in_neutral: false,
     image: StandardCardsImages.darkus,
@@ -77,10 +75,8 @@ export const CoupDeGrace: abilityCardsType = {
 
 export const EpicesMortelles: abilityCardsType = {
     key: 'epices-mortelles',
-    name: 'Epices Mortelles',
     maxInDeck: 1,
     attribut: 'Darkus',
-    description: `Ajoute 100 G de puissance à l'utilisateur et en retire autant a les adversaires.`,
     image: StandardCardsImages.darkus,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -152,10 +148,8 @@ export const EpicesMortelles: abilityCardsType = {
 
 export const VengeanceAlItalienne: abilityCardsType = {
     key: `vengeance-a-l'italienne`,
-    name: `Auragano Revenge`,
     attribut: 'Darkus',
     maxInDeck: 1,
-    description: `Substract 100 Gs from each opponent and adds 100 Gs to the user`,
     image: StandardCardsImages.darkus,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
@@ -190,10 +184,8 @@ export const VengeanceAlItalienne: abilityCardsType = {
 
 export const PoivreDesCayenne: abilityCardsType = {
     key: 'poivre-des-cayenne',
-    name: 'Poivre des Cayenne',
     attribut: 'Darkus',
     maxInDeck: 2,
-    description: `Annule toutes les capacité de l'adversaire et retire 50 G à l'adversaire`,
     image: StandardCardsImages.darkus,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, slot }) => {
@@ -235,8 +227,6 @@ export const PoivreDesCayenne: abilityCardsType = {
 export const ShadowReversal: abilityCardsType = {
     key: 'shadow-reversal',
     attribut: 'Darkus',
-    name: 'Shadow Reversal',
-    description: `Nullifies the opponent's ability`,
     maxInDeck: 3,
     image: StandardCardsImages.haos,
     usable_in_neutral: false,

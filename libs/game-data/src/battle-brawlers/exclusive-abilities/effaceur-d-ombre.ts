@@ -4,8 +4,6 @@ import { GateCardsList } from "../gate-gards.js"
 
 export const EffecteurdOmbre: exclusiveAbilitiesType = {
     key: `effaceur-d'ombre`,
-    description: `Substract 50 Gs to the opponent and nullifies his Gate Card`,
-    name: `Shadow Scratch`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

@@ -15,10 +15,8 @@ export const TentaclearHaos: bakuganType = {
 
 export const TentaclearGateCard: gateCardType = {
     key: 'tentaclear-gate-card',
-    name: 'Charachter: Tentaclear',
     maxInDeck: 1,
     family: 'Tentaclear',
-    description: `When this card is activated, it doubles the level of all Tentaclear on it.`,
     image: 'caracter-gate-cards/tentaclear-haos.jpg',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'tentaclear-gate-card')

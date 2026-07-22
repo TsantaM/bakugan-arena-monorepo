@@ -1,6 +1,8 @@
 import type { SelectableBakuganAction, SelectableGateCardAction } from "@bakugan-arena/game-data";
 import type { AbilityCard } from "../turn-action-management/turn-action-builder/build-use-ability-card";
 import type { attribut } from "@bakugan-arena/game-data";
+import { resolveAbilityCard, resolveGateCard } from "@bakugan-arena/i18n";
+import { getGameboardLocale } from "../i18n/locale";
 import { setImageWithFallback } from "./set-image-with-fallback";
 import tippy from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
@@ -27,9 +29,11 @@ export function CreateGateCardSelecter({
 
     cardElement.appendChild(cardImage)
 
+    const resolved = resolveGateCard(card.key, getGameboardLocale())
+
     // 🔥 Tooltip content (HTML)
 
-    const tooltipContent = `<strong class='text-lg' >${card.name}</strong><br/>${card.description}`
+    const tooltipContent = `<strong class='text-lg' >${resolved.name}</strong><br/>${resolved.description}`
 
     // ✅ Tippy attaché à la carte
     tippy(cardElement, {
@@ -80,8 +84,10 @@ export function CreateAbilityCardSelecter({
 
     cardElement.appendChild(cardImage)
 
+    const resolved = resolveAbilityCard(card.key, getGameboardLocale())
+
     // 🔥 Tooltip content
-    const tooltipContent = `<strong class='text-lg'>${card.name}</strong><br/>${card.description}`
+    const tooltipContent = `<strong class='text-lg'>${resolved.name}</strong><br/>${resolved.description}`
 
     // ✅ Tippy attaché
     tippy(cardElement, {

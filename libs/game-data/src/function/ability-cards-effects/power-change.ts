@@ -16,11 +16,10 @@ export function PowerChange({ roomState, bakugan, G, malus }: PowerChangeType) {
     if (malus) {
         if (bakugan.statut.protected || bakugan.statut.protectedAgainstAbility) {
 
-            const text: string = `${Bakugans[bakugan.key].name} is protected.`
-
             NewAdditionnalMessage({
                 roomState: roomState,
-                text: text
+                key: 'bakugan_protected',
+                params: { name: Bakugans[bakugan.key].name },
             })
 
             // messages.push(message)

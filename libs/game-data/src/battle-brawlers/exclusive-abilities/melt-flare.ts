@@ -4,8 +4,6 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const MeltFlare: exclusiveAbilitiesType = {
     key: 'melt-flare',
-    name: 'Melt Flare',
-    description: `A Fusion Ability that adds an additional +150 Gs if Boosted Dragon is activated.`,
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,

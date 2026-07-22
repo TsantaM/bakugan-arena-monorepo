@@ -3,9 +3,7 @@ import { GateCardImages } from "../../../store/gate-card-images.js";
 
 export const Rechargement: gateCardType = {
     key: 'rechargement',
-    name: 'Reloaded',
     maxInDeck: 1,
-    description: `Adds 100 Gs to your Bakugan for each Bakugan on field with the same attribut`,
     image: GateCardImages.command,
     onOpen: ({ roomState, slot, bakuganKey, userId }) => {
         if (!roomState) return null

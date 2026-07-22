@@ -17,10 +17,8 @@ export const BeeStrikerVentus: bakuganType = {
 
 export const BeeStrikerGateCard: gateCardType = {
     key: 'bee-striker-gate-card',
-    name: 'Charachter: Bee Striker',
     maxInDeck: 1,
     family: family,
-    description: `When this card is activated, it doubles the level of all Bee Striker on it.`,
     image: 'caracter-gate-cards/bee-striker-ventus.jpg',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'bee-striker-gate-card')

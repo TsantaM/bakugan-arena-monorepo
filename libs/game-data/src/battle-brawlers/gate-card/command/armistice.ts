@@ -4,9 +4,7 @@ import { gateCardType } from "../../../type/game-data-types.js"
 
 export const Armistice: gateCardType = {
     key: 'armistice',
-    name: 'Peacemaker',
     maxInDeck: 1,
-    description: `Returns all battling Bakugan on this Gate Card to their player`,
     image: GateCardImages.command,
     onOpen({ roomState, slot }) {
         if (!roomState) return null

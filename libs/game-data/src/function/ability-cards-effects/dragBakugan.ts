@@ -39,7 +39,8 @@ export function dragBakuganToUserSlot({
     if (bakuganToDrag.statut.protected || bakuganToDrag.statut.protectedAgainstAbility) {
         NewAdditionnalMessage({
             roomState: roomState,
-            text: `${Bakugans[bakuganToDrag.key].name} is protected.`
+            key: 'bakugan_protected',
+            params: { name: Bakugans[bakuganToDrag.key].name },
         })
         return
     }

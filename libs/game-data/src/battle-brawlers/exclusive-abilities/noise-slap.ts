@@ -5,13 +5,11 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js";
 
 export const NoiseSlap: exclusiveAbilitiesType = {
     key: 'noise-slap',
-    name: 'Noise Slap',
-    description: `Decrease the selected bakugan's power by 100 Gs.`,
     maxInDeck: 1,
     usable_if_user_not_on_domain: false,
     usable_in_neutral: true,
     onActivate({ roomState, userId, bakuganKey, slot }) {
-        const animation = AbilityCardFailed({ card: NoiseSlap.name })
+        const animation = AbilityCardFailed({ abilityKey: NoiseSlap.key })
 
         if (!roomState) return animation
 
@@ -39,7 +37,7 @@ export const NoiseSlap: exclusiveAbilitiesType = {
 
         const request: AbilityCardsActions = {
             type: 'SELECT_BAKUGAN_ON_DOMAIN',
-            message: 'Noise Slap : Select a Bakugan to target',
+            message: { key: 'prompt_select_bakugan_target', params: { abilityKey: NoiseSlap.key } },
             bakugans: bakugans
         }
 

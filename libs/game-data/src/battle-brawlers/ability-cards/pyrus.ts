@@ -10,9 +10,7 @@ import { AbilityCardsList, ExclusiveAbilitiesList } from "../index.js";
 
 export const MurDeFeu: abilityCardsType = {
     key: "mur-de-feu",
-    name: "Fire Wall",
     attribut: "Pyrus",
-    description: "Substract 50 Gs from the opponents and protect the user against opponent's abilities",
     maxInDeck: 3,
     usable_in_neutral: false,
     image: 'FireWall.png',
@@ -83,16 +81,14 @@ export const MurDeFeu: abilityCardsType = {
 
 export const JetEnflamme: abilityCardsType = {
     key: 'jet-enflamme',
-    name: 'Rapid Fire',
     attribut: 'Pyrus',
     maxInDeck: 1,
-    description: `Adds another Bakugan to the battle if there are 2 or more Pyrus bakugan on the field`,
     extraInputs: ['add-bakugan'],
     image: StandardCardsImages.pyrus,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
 
-        const animation = AbilityCardFailed({ card: JetEnflamme.name })
+        const animation = AbilityCardFailed({ abilityKey: JetEnflamme.key })
 
         if (!roomState) return animation
 
@@ -113,7 +109,7 @@ export const JetEnflamme: abilityCardsType = {
         const bakugans = deck.bakugans.filter((bakugan) => bakugan && bakugan.bakuganData.onDomain === false && bakugan.bakuganData.elimined === false).filter((bakugan) => bakugan !== undefined && bakugan !== null)
         const request: AbilityCardsActions = {
             type: 'SELECT_BAKUGAN_TO_SET',
-            message: 'Rapid Fire: Select a Bakugan to set ?',
+            message: { key: 'prompt_select_bakugan_set', params: { abilityKey: JetEnflamme.key } },
             bakugans: bakugans
         }
         return request
@@ -237,10 +233,8 @@ export const RetroAction: abilityCardsType = {
     key: 'retro-action',
     maxInDeck: 2,
     attribut: 'Pyrus',
-    name: 'Back Fire',
     image: StandardCardsImages.pyrus,
     usable_in_neutral: false,
-    description: `Nullifies opponent's Gate Card`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -301,11 +295,9 @@ export const RetroAction: abilityCardsType = {
 export const TourbillonDeFeu: abilityCardsType = {
     key: 'tourbillon-de-feu',
     attribut: 'Pyrus',
-    name: 'Fire Tornado',
     maxInDeck: 1,
     image: 'FireTornado.png',
     usable_in_neutral: false,
-    description: `Adds 100 Gs to the user and decrease opponent power by 100 Gs`,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
@@ -362,8 +354,6 @@ export const TourbillonDeFeu: abilityCardsType = {
 export const BlazeReversal: abilityCardsType = {
     key: 'blaze-reversal',
     attribut: 'Pyrus',
-    name: 'Blaze Reversal',
-    description: `Nullifies the opponent's ability`,
     maxInDeck: 3,
     image: StandardCardsImages.haos,
     usable_in_neutral: false,
@@ -412,14 +402,12 @@ export const BlazeReversal: abilityCardsType = {
 
 export const HeatWave: abilityCardsType = {
     key: 'heat-wave',
-    name: 'Heat Wave',
-    description: 'Cancel the gate card and decrease all opponents power by 50 Gs',
     maxInDeck: 1,
     usable_in_neutral: false,
     attribut: 'Pyrus',
     onActivate({ roomState, userId, bakuganKey, slot }) {
 
-        const failed = AbilityCardFailed({ card: HeatWave.name })
+        const failed = AbilityCardFailed({ abilityKey: HeatWave.key })
 
         const slotOfGate = roomState.protalSlots[Slots.indexOf(slot)]
         if (slotOfGate.portalCard === null) return failed

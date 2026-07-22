@@ -16,10 +16,8 @@ export const PreyasAquos: bakuganType = {
 
 export const PreyasGateCard: gateCardType = {
     key: 'preyas-gate-card',
-    name: 'Charachter: Preyas',
     maxInDeck: 1,
     family: 'Preyas',
-    description: `When this card is activated, it doubles the level of all Preyas on it.`,
     image: 'caracter-gate-cards/preyas-aquos.jpg',
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'preyas-gate-card')
@@ -97,10 +95,8 @@ export const DiabloAquos: bakuganType = {
 
 export const DiabloGateCard: gateCardType = {
     key: 'diablo-gate-card',
-    name: 'Charachter: Diablo',
     maxInDeck: 1,
     family: 'Diablo',
-    description: `When this card is activated, it doubles the level of all Diablo on it.`,
     image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'diablo-gate-card')
@@ -183,10 +179,8 @@ export const AngeloAquos: bakuganType = {
 
 export const AngeloGateCard: gateCardType = {
     key: 'angelo-gate-card',
-    name: 'Charachter: Angelo',
     maxInDeck: 1,
     family: 'Angelo',
-    description: `When this card is activated, it doubles the level of all Angelo on it.`,
     image: GateCardImages.caracter,
     onOpen({ roomState, slot }) {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot && s.portalCard?.key === 'angelo-gate-card')

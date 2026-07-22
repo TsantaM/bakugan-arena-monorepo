@@ -3,9 +3,7 @@ import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const BouclierFusion: exclusiveAbilitiesType = {
     key: 'bouclier-fusion',
-    name: 'Merge Shield',
     maxInDeck: 1,
-    description: `If opponent Bakugan has gained Gs : the user gains G-Power equal to the amount gained`,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {

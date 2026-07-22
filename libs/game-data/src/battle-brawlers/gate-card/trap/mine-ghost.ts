@@ -48,9 +48,7 @@ function MineGhostMainEffect({
 
 export const MineFantome: gateCardType = {
     key: 'mine-fantome',
-    name: 'Mine Ghost',
     maxInDeck: 1,
-    description: `When two ore Bakugan stand on the Card, no matter wich side they are on, they both lose`,
     image: GateCardImages.command,
     onOpen: ({ roomState, slot }) => {
 
