@@ -8,7 +8,8 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         test: resolve(__dirname, 'test.html'),
         viewer: resolve(__dirname, 'viewer.html'),
-        replay: resolve(__dirname, 'replay.html')
+        replay: resolve(__dirname, 'replay.html'),
+        sandbox: resolve(__dirname, 'sandbox.html'),
       }
     }
   }

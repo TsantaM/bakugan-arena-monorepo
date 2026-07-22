@@ -1,6 +1,86 @@
 {
   "title": "الإدارة",
   "backToAdmin": "العودة إلى الإدارة",
+  "sandbox": {
+    "cardTitle": "صندوق اختبار",
+    "cardDesc": "ابنِ مواقف لعب يدويًا (بوابات، باكوغان، قدرات) واعرضها على اللوحة ثلاثية الأبعاد.",
+    "open": "فتح صندوق الاختبار",
+    "pageTitle": "صندوق اختبار",
+    "pageDesc": "محرر لحالة اللعبة لإعادة إنشاء المعارك واختبار البطاقات وإعداد السيناريوهات.",
+    "iframeTitle": "لوحة صندوق الاختبار",
+    "openConfig": "تهيئة",
+    "manualMode": "الوضع اليدوي",
+    "drawerTitle": "إعداد الحالة",
+    "drawerDesc": "اختر الخانات والبوابات والباكوغان وبطاقات الإجراءات للعرض.",
+    "tabs": {
+      "replay": "إعادة التشغيل",
+      "board": "اللوحة",
+      "turn": "الدور / القتال",
+      "actions": "واجهة الإجراءات"
+    },
+    "replay": {
+      "intro": "استورد ملف JSON أو اختر إعادة تشغيل من قاعدة البيانات، ثم تنقّل بين الأدوار لتحليل الحالة.",
+      "source": "مصدر إعادة التشغيل",
+      "empty": "لم يتم تحميل أي إعادة تشغيل بعد.",
+      "loaded": "إعادة التشغيل {roomId}",
+      "turnsAvailable": "تم اكتشاف {n} دور/أدوار",
+      "turn": "الدور للعرض",
+      "turnOption": "الدور {n} · turnCount {turnCount} · {player}",
+      "turnHint": "الحالة في بداية الدور (turnCount {turnCount}، اللاعب النشط: {player}).",
+      "loadTurn": "إعادة تحميل هذا الدور",
+      "prevTurn": "الدور السابق",
+      "nextTurn": "الدور التالي",
+      "clear": "إزالة إعادة التشغيل",
+      "loadedBanner": "إعادة التشغيل {roomId} · الدور {turn}",
+      "loadSuccess": "تم تحميل الدور {turn} من إعادة التشغيل {roomId}"
+    },
+    "owners": {
+      "user": "اللاعب (يسار)",
+      "opponent": "الخصم (يمين)"
+    },
+    "fields": {
+      "gate": "بطاقة البوابة",
+      "gateOwner": "مالك البوابة",
+      "open": "بوابة مفتوحة",
+      "canSet": "can_set",
+      "addBakugan": "إضافة باكوغان",
+      "owner": "المالك",
+      "power": "القوة الحالية",
+      "abilityBlock": "Ability block",
+      "activeAbilities": "القدرات النشطة (الحالة)",
+      "turnOwner": "الدور الحالي",
+      "turnCount": "رقم الدور",
+      "setNewGate": "يمكن وضع بوابة",
+      "setNewBakugan": "يمكن وضع باكوغان",
+      "useAbilityCard": "يمكن استخدام قدرة",
+      "battleInProcess": "قتال جارٍ",
+      "battleSlot": "خانة القتال",
+      "battleTurns": "أدوار القتال",
+      "battlePaused": "قتال متوقف",
+      "eliminatedUser": "مستبعدون (لاعب)",
+      "eliminatedOpponent": "مستبعدون (خصم)",
+      "showActionUi": "إظهار واجهة الإجراءات",
+      "showActionUiHint": "يعيد قائمة اختيار القدرة كما في test.ts."
+    },
+    "placeholders": {
+      "gate": "اختر بوابة…",
+      "bakugan": "اختر باكوغان…",
+      "ability": "اختر قدرة…",
+      "slot": "اختر خانة…",
+      "turn": "اختر دورًا…",
+      "search": "بحث…",
+      "empty": "لا نتائج",
+      "noGate": "بدون بوابة"
+    },
+    "actions": {
+      "add": "إضافة",
+      "addAbilityAction": "إضافة قدرة للواجهة",
+      "remove": "إزالة",
+      "apply": "تطبيق على اللوحة",
+      "reset": "إعادة تعيين",
+      "close": "إغلاق"
+    }
+  },
   "botTraining": {
     "cardTitle": "تدريب البوتات",
     "cardDesc": "اختر عمليات إعادة التشغيل، ودرّب أوزان التقييم، وانشرها على البوتات الحية.",
