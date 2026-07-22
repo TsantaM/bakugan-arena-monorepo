@@ -1,0 +1,28 @@
+{
+  "title": "Thanks",
+  "intro": "Bakugan Arena exists thanks to the people and communities who support the project. Here are some of the people we want to thank.",
+  "sections": [
+    {
+      "title": "Community",
+      "description": "Players, testers and fans who help the game grow.",
+      "entries": [
+        {
+          "name": "Discord community",
+          "role": "Players & testers",
+          "message": "For the feedback, bug reports and the energy shared every day."
+        }
+      ]
+    },
+    {
+      "title": "Inspiration",
+      "description": "What made this project possible.",
+      "entries": [
+        {
+          "name": "Bakugan Battle Brawlers",
+          "role": "Original franchise",
+          "message": "For the universe that inspired this fan game."
+        }
+      ]
+    }
+  ]
+}

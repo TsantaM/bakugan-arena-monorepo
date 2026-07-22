@@ -26,6 +26,8 @@ export default async function Header() {
         { name: tNav('home'), href: '/' },
         { name: tNav('bakuDex'), href: '/baku-dex' },
         { name: tNav('patchNotes'), href: '/patch-notes' },
+        { name: tNav('thanks'), href: '/thanks' },
+        { name: tNav('legal'), href: '/legal' },
     ]
 
     return (

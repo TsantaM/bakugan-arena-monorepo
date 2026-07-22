@@ -26,6 +26,8 @@ export const namespaces = [
   'tutorial',
   'admin',
   'patchNotes',
+  'thanks',
+  'legal',
   'ui',
 ] as const
 

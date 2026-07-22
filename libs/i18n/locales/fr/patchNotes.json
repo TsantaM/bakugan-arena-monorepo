@@ -1,32 +1,369 @@
 {
   "title": "Notes de patch Bakugan Arena",
-  "release1": {
-    "heading": "Note de patch 1 : 02 - 02 - 2026 :",
-    "items": {
-      "1": {
-        "title": "1 – Traduction des cartes",
-        "body": "Toutes les cartes restantes en français ont été traduites en anglais."
-      },
-      "2": {
-        "title": "2 – Corrections et améliorations du constructeur de deck",
-        "body": "Correction d'un bug empêchant les joueurs de créer plusieurs decks. Interface du constructeur de deck désormais entièrement responsive sur mobile."
-      },
-      "3": {
-        "title": "3 – Carte Mantris Marionette",
-        "body": "Résolution d'un problème de tours lors de l'utilisation de la carte Mantris Marionette."
-      },
-      "4": {
-        "title": "4 – Tour fantôme",
-        "body": "Le jeu n'affiche plus l'interface à un joueur qui ne peut pas agir pendant son tour. Désormais, s'il ne peut effectuer aucune action, le jeu lui demande simplement de terminer son tour."
-      },
-      "5": {
-        "title": "5 – Corrections landing page et tableau de bord",
-        "body": "Correction de plusieurs problèmes d'intégration affectant la landing page et le tableau de bord."
-      },
-      "6": {
-        "title": "6 – Lien Discord ajouté",
-        "body": "Ajout d'un lien direct vers le serveur Discord officiel du jeu sur la landing page."
-      }
+  "selectLabel": "Choisir un patch",
+  "selectPlaceholder": "Sélectionner une note de patch",
+  "releases": [
+    {
+      "id": "2026-06-07",
+      "date": "07/06/2026",
+      "title": "Évolutions et tutoriel",
+      "items": [
+        {
+          "title": "Bakugans évolués",
+          "body": "Ajout des Bakugans évolués et des capacités de fusion pour enrichir le late game."
+        },
+        {
+          "title": "Changement d'attribut",
+          "body": "Possibilité de changer l'attribut d'un Bakugan en combat, avec animation dédiée et niveaux de puissance mis à jour."
+        },
+        {
+          "title": "Tutoriel",
+          "body": "Ajout d'une page tutoriel in-game avec contenu d'aide et liens externes pour les nouveaux joueurs."
+        },
+        {
+          "title": "Cartes capacité et Gate Building",
+          "body": "Amélioration de plusieurs effets de cartes capacité et correction de la sélection de slots / animations de Gate Building."
+        },
+        {
+          "title": "Équilibrage",
+          "body": "Buff de Backdraft."
+        }
+      ]
+    },
+    {
+      "id": "2026-05-25",
+      "date": "25/05/2026",
+      "title": "Spectateurs et partage de decks",
+      "items": [
+        {
+          "title": "Spectateurs",
+          "body": "Les matchs supportent désormais les spectateurs, y compris les salles que vous regardez."
+        },
+        {
+          "title": "Import / export de deck",
+          "body": "Les decks peuvent être partagés via encode et decode."
+        },
+        {
+          "title": "Lock Down",
+          "body": "Ajout de la carte portail Lock Down."
+        },
+        {
+          "title": "Cartes portail",
+          "body": "Amélioration de la logique d'activation des cartes portail, notamment le déclenchement automatique de combat quand deux Bakugans sont présents."
+        },
+        {
+          "title": "Visionnage de match",
+          "body": "Correction de problèmes sur le match viewer."
+        }
+      ]
+    },
+    {
+      "id": "2026-05-21",
+      "date": "21/05/2026",
+      "title": "Mise à jour des pièges",
+      "items": [
+        {
+          "title": "Nouveaux pièges",
+          "body": "Ajout de nouvelles cartes portail piège, dont Mine Ghost."
+        },
+        {
+          "title": "Nouvelles capacités",
+          "body": "Ajout de Heat Wave, Cadenas et d'autres cartes capacité / commande."
+        },
+        {
+          "title": "Conditions d'activation",
+          "body": "Affinage des conditions d'activation et des vérifications de cartes utilisables."
+        }
+      ]
+    },
+    {
+      "id": "2026-05-11",
+      "date": "11/05/2026",
+      "title": "Extension du roster et chat global",
+      "items": [
+        {
+          "title": "Nouveaux Bakugans",
+          "body": "Ajout des familles Tuskor et Manion avec leurs capacités."
+        },
+        {
+          "title": "Capacités annulables",
+          "body": "Extension du support des capacités annulables et de la gestion associée."
+        },
+        {
+          "title": "Chat global",
+          "body": "Ajout d'un chat global avec gestion des messages dans le lobby."
+        },
+        {
+          "title": "Statut ladder",
+          "body": "Indicateurs de connexion en ligne / hors ligne sur le classement."
+        },
+        {
+          "title": "Équilibrage",
+          "body": "Nerf de Plongée en eau profonde et clarification de sa description."
+        },
+        {
+          "title": "Discord",
+          "body": "Ajout d'un lien Discord avec logo dans le layout."
+        }
+      ]
+    },
+    {
+      "id": "2026-05-05",
+      "date": "05/05/2026",
+      "title": "Protections et Bee Striker",
+      "items": [
+        {
+          "title": "Bee Striker",
+          "body": "Ajout de Bee Striker Ventus et de ses capacités. Fear Reaper renommé Fear Ripper."
+        },
+        {
+          "title": "Effets de protection",
+          "body": "Ajout du blocage / protection contre les capacités. Fire Wall protège désormais contre les capacités, et Guardian Field arrive pour Juggernoid."
+        },
+        {
+          "title": "Life Drew",
+          "body": "Ajout de la carte capacité Life Drew. Les capacités existantes respectent mieux le statut de protection."
+        },
+        {
+          "title": "Annulateurs de portail",
+          "body": "Ajout de capacités d'annulation de portail, mise à jour de Cut in Saber, et nouveaux visuels de cartes portail sur le terrain."
+        },
+        {
+          "title": "Équilibrage et corrections",
+          "body": "Ajustement de la puissance de Limulus (350 → 310), Tsunami inutilisable en combat, et correction des actions des joueurs inactifs après ouverture d'une carte portail."
+        }
+      ]
+    },
+    {
+      "id": "2026-04-25",
+      "date": "25/04/2026",
+      "title": "Nouveaux Bakugans et stabilité",
+      "items": [
+        {
+          "title": "Nouveaux Bakugans",
+          "body": "Ajout de Limulus et Robotallion avec capacités mises à jour."
+        },
+        {
+          "title": "Vérificateur de deck",
+          "body": "Ajout d'un deck checker côté front et correction de la validation des meta decks."
+        },
+        {
+          "title": "Corrections de combat",
+          "body": "Correction des combats nuls, des Bakugans dupliqués, d'Anthemusa, Gravity Chamber, de l'annulation de Grand Spirit et des bugs d'interface liés à Fire Tornado."
+        },
+        {
+          "title": "Feedback",
+          "body": "Amélioration de la détection de fin de partie et des animations de changement de puissance."
+        }
+      ]
+    },
+    {
+      "id": "2026-04-14",
+      "date": "14/04/2026",
+      "title": "QoL et contenu Subterra",
+      "items": [
+        {
+          "title": "Abandon",
+          "body": "Possibilité d'abandonner un match. Watch Battle gagne une recherche par nom et une liste de salles en fin de combat."
+        },
+        {
+          "title": "Tooltips",
+          "body": "Ajout de tooltips Tippy au survol des Bakugans, cartes portail et actions de tour sur le plateau 3D."
+        },
+        {
+          "title": "Capacités Subterra",
+          "body": "Ajout de Tectonic Swipe, Earth Power, Sand Trap et Spirit Hole."
+        },
+        {
+          "title": "Chat en partie",
+          "body": "Refonte de la fenêtre de messages en jeu et possibilité d'envoyer des messages pendant un match."
+        },
+        {
+          "title": "Salles et matchmaking",
+          "body": "Le timer démarre à la création de salle, nettoyage automatique des salles, et amélioration du matchmaking / des défis."
+        },
+        {
+          "title": "Corrections",
+          "body": "Correction des capacités de drag, Tsunami Wave, Fury of Wind, Mantris Marionette, Bakugans morts restant en main, et équilibrage de Tentaclear."
+        }
+      ]
+    },
+    {
+      "id": "2026-04-05",
+      "date": "05/04/2026",
+      "title": "Chat et défis",
+      "items": [
+        {
+          "title": "Système de chat",
+          "body": "Ajout d'un chat avec recherche de joueurs, indicateurs en ligne, stores d'utilisateurs connectés, et corrections mobile."
+        },
+        {
+          "title": "Défis",
+          "body": "Possibilité de défier depuis la fenêtre de chat, avec annulation et refus de défi."
+        },
+        {
+          "title": "Matchmaking",
+          "body": "Refactor du matchmaking et uniformisation des listeners socket."
+        }
+      ]
+    },
+    {
+      "id": "2026-03-28",
+      "date": "28/03/2026",
+      "title": "Ladder classé et spectating",
+      "items": [
+        {
+          "title": "Elo et ladder",
+          "body": "Ajout du système Elo et d'une page de classement."
+        },
+        {
+          "title": "Spectating",
+          "body": "Ajout du visionnage de matchs avec une page viewer 3D dédiée."
+        },
+        {
+          "title": "Capacités persistantes",
+          "body": "Introduction des capacités persistantes. Boosted Dragon (Drago Pyrus) devient une capacité persistante."
+        },
+        {
+          "title": "UI du plateau",
+          "body": "Polish du fond 3D, des sélecteurs, de la taille du texte de puissance et des descriptions au survol."
+        },
+        {
+          "title": "Équilibrage",
+          "body": "Mise à jour de conditions de cartes et nerf de Face of Grief."
+        }
+      ]
+    },
+    {
+      "id": "2026-03-17",
+      "date": "17/03/2026",
+      "title": "Vague de nouvelles cartes",
+      "items": [
+        {
+          "title": "Nouvelles capacités",
+          "body": "Ajout de Flare Blinder, Mega Flare Blinder et Super Pyrus, ainsi qu'un helper de power swipe."
+        },
+        {
+          "title": "Magma Fuse",
+          "body": "Ajout de la carte portail Magma Fuse avec animation de revive."
+        },
+        {
+          "title": "Mises à jour de cartes",
+          "body": "Gravity Chamber et Anthemusa traînent désormais les Bakugans plus faibles puis les éliminent. Dragoon et Shield Merge passent en capacités exclusives."
+        },
+        {
+          "title": "Requêtes de tour",
+          "body": "Correction des requêtes d'action après pose de carte portail et lors du clear des domain forms."
+        }
+      ]
+    },
+    {
+      "id": "2026-03-09",
+      "date": "09/03/2026",
+      "title": "Audio, annulations et nouvelles capacités",
+      "items": [
+        {
+          "title": "Musique de combat",
+          "body": "Ajout d'un lecteur d'OST pendant les combats avec contrôle du volume."
+        },
+        {
+          "title": "Annulation de capacités",
+          "body": "Ajout des animations d'annulation, des propriétés de blocage et mise à jour du compteur Haos."
+        },
+        {
+          "title": "Nouvelles cartes",
+          "body": "Ajout de Tsunami Wave et Fury of Wind. Les cartes élémentaires / personnage ajoutent ou retirent des boosts au déplacement ou à la pose."
+        },
+        {
+          "title": "Animations plateau",
+          "body": "Ajout des animations remove-reinforcement, move-gate et swipe-gate."
+        },
+        {
+          "title": "UI messages",
+          "body": "Nettoyage du design de la fenêtre de messages de match."
+        }
+      ]
+    },
+    {
+      "id": "2026-02-26",
+      "date": "26/02/2026",
+      "title": "Messages de combat et tours",
+      "items": [
+        {
+          "title": "Messages de jeu",
+          "body": "Ajout d'une fenêtre de messages de jeu et d'une liste de salles sur le dashboard."
+        },
+        {
+          "title": "Système de tour",
+          "body": "Refactor et uniformisation de la résolution des actions de tour et de l'interface associée."
+        },
+        {
+          "title": "Corrections UI",
+          "body": "Augmentation du z-index des dialog boxes et boutons d'action de tour sur le plateau 3D."
+        },
+        {
+          "title": "Équilibrage",
+          "body": "Mise à jour des niveaux de puissance et de la capacité Centipod Attractor."
+        }
+      ]
+    },
+    {
+      "id": "2026-02-14",
+      "date": "14/02/2026",
+      "title": "Timer et conditions de capacités",
+      "items": [
+        {
+          "title": "Timer de combat",
+          "body": "Ajout d'un timer de partie (sauf au premier tour de sélection de carte portail). Le timer s'arrête correctement en fin de partie."
+        },
+        {
+          "title": "Conditions de capacités",
+          "body": "Les capacités utilisent désormais des conditions d'activation et un paramètre can-use. Les échecs d'activation ont une animation dédiée."
+        },
+        {
+          "title": "Compteur de capacités",
+          "body": "Ajout d'un compteur de capacités en combat."
+        },
+        {
+          "title": "Liste de salles",
+          "body": "Uniformisation des listeners socket au lancement de combat et ajout d'une liste de salles sur le dashboard."
+        }
+      ]
+    },
+    {
+      "id": "2026-02-02",
+      "date": "02/02/2026",
+      "title": "Patch de lancement",
+      "items": [
+        {
+          "title": "Traduction des cartes",
+          "body": "Toutes les cartes restantes en français ont été traduites en anglais."
+        },
+        {
+          "title": "Constructeur de deck",
+          "body": "Correction d'un bug empêchant de créer plusieurs decks. Interface désormais entièrement responsive sur mobile."
+        },
+        {
+          "title": "Mantris Marionette",
+          "body": "Résolution des problèmes de tours liés à Mantris Marionette."
+        },
+        {
+          "title": "Tour fantôme",
+          "body": "Un joueur qui ne peut pas agir ne voit plus l'interface complète : le jeu lui demande simplement de terminer son tour."
+        },
+        {
+          "title": "Landing et dashboard",
+          "body": "Correction de plusieurs problèmes d'intégration sur la landing page et le tableau de bord."
+        },
+        {
+          "title": "Discord",
+          "body": "Ajout d'un lien direct vers le Discord officiel sur la landing page."
+        },
+        {
+          "title": "Contrôles 3D",
+          "body": "Correction des contrôles souris et tactile sur le plateau 3D."
+        }
+      ]
     }
-  }
+  ]
 }

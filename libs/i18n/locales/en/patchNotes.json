@@ -1,32 +1,369 @@
 {
   "title": "Bakugan Arena patch notes",
-  "release1": {
-    "heading": "Patch Note 1 : 02 - 02 - 2026 :",
-    "items": {
-      "1": {
-        "title": "1 – Card Translation",
-        "body": "All remaining French cards have been translated into English."
-      },
-      "2": {
-        "title": "2 – Deck Builder Fixes & Improvements",
-        "body": "Fixed a bug preventing players from creating multiple decks. Updated the Deck Builder interface to be fully responsive on mobile devices."
-      },
-      "3": {
-        "title": "3 – Mantris Marionette Card",
-        "body": "Resolved an issue causing turn-related problems when using the Mantris Marionette card."
-      },
-      "4": {
-        "title": "4 – Phantom Turn",
-        "body": "The game no longer displays the interface to a player who cannot act during their turn. Now, if you cannot perform any action, the game simply prompts you to end your turn."
-      },
-      "5": {
-        "title": "5 – Landing Page & Dashboard Fixes",
-        "body": "Fixed multiple integration issues affecting the landing page and the dashboard."
-      },
-      "6": {
-        "title": "6 – Discord Link Added",
-        "body": "Added a direct link to the game's official Discord server on the landing page."
-      }
+  "selectLabel": "Select a patch",
+  "selectPlaceholder": "Choose a patch note",
+  "releases": [
+    {
+      "id": "2026-06-07",
+      "date": "07/06/2026",
+      "title": "Evolutions & tutorial",
+      "items": [
+        {
+          "title": "Evolved Bakugans",
+          "body": "Added evolved Bakugans and fusion abilities to expand late-game strategies."
+        },
+        {
+          "title": "Attribute change",
+          "body": "Players can now change a Bakugan's attribute in battle, with a dedicated animation and updated power levels."
+        },
+        {
+          "title": "Tutorial",
+          "body": "Added an in-game tutorial page with help content and external links for new players."
+        },
+        {
+          "title": "Ability cards & Gate Building",
+          "body": "Improved several ability card effects and fixed Gate Building slot selection and animations."
+        },
+        {
+          "title": "Balance",
+          "body": "Buffed Backdraft."
+        }
+      ]
+    },
+    {
+      "id": "2026-05-25",
+      "date": "25/05/2026",
+      "title": "Spectators & deck sharing",
+      "items": [
+        {
+          "title": "Spectators",
+          "body": "Matches now support spectators, including rooms where you are watching a game."
+        },
+        {
+          "title": "Deck import / export",
+          "body": "Decks can be shared through encode and decode import/export."
+        },
+        {
+          "title": "Lock Down",
+          "body": "Added the Lock Down Gate Card."
+        },
+        {
+          "title": "Gate cards",
+          "body": "Improved gate card activation logic, including auto-battle checks when two Bakugans are present."
+        },
+        {
+          "title": "Match viewer",
+          "body": "Fixed issues with the match viewer."
+        }
+      ]
+    },
+    {
+      "id": "2026-05-21",
+      "date": "21/05/2026",
+      "title": "Trap cards update",
+      "items": [
+        {
+          "title": "New trap cards",
+          "body": "Added new trap Gate Cards, including Mine Ghost."
+        },
+        {
+          "title": "New abilities",
+          "body": "Added Heat Wave, Cadenas and other ability/command cards."
+        },
+        {
+          "title": "Activation logic",
+          "body": "Refined ability activation conditions and usable-card checks."
+        }
+      ]
+    },
+    {
+      "id": "2026-05-11",
+      "date": "11/05/2026",
+      "title": "Roster expansion & global chat",
+      "items": [
+        {
+          "title": "New Bakugans",
+          "body": "Added the Tuskor and Manion families with their abilities."
+        },
+        {
+          "title": "Cancelable abilities",
+          "body": "Expanded cancelable ability support and related card management."
+        },
+        {
+          "title": "Global chat",
+          "body": "Added a global chat with message handling across the lobby."
+        },
+        {
+          "title": "Ladder status",
+          "body": "Players now show online/offline connection indicators on the ladder."
+        },
+        {
+          "title": "Balance",
+          "body": "Nerfed Deep Sea Dive and clarified its description."
+        },
+        {
+          "title": "Discord",
+          "body": "Added a Discord link with logo in the layout."
+        }
+      ]
+    },
+    {
+      "id": "2026-05-05",
+      "date": "05/05/2026",
+      "title": "Protections & Bee Striker",
+      "items": [
+        {
+          "title": "Bee Striker",
+          "body": "Added Ventus Bee Striker and its abilities. Fear Reaper was renamed Fear Ripper."
+        },
+        {
+          "title": "Protection effects",
+          "body": "Added ability-block / protection support. Fire Wall now protects against abilities, and Guardian Field was added for Juggernoid."
+        },
+        {
+          "title": "Life Drew",
+          "body": "Added the Life Drew ability card. Existing abilities now better respect protection status."
+        },
+        {
+          "title": "Gate nullifiers",
+          "body": "Added gate nullifier abilities, updated Cut in Saber, and refreshed gate card visuals on the field."
+        },
+        {
+          "title": "Balance & fixes",
+          "body": "Adjusted Limulus power (350 → 310), prevented Tsunami from being used during battles, and fixed inactive-player actions after opening a gate card."
+        }
+      ]
+    },
+    {
+      "id": "2026-04-25",
+      "date": "25/04/2026",
+      "title": "New Bakugans & stability",
+      "items": [
+        {
+          "title": "New Bakugans",
+          "body": "Added Limulus and Robotallion with updated abilities."
+        },
+        {
+          "title": "Deck checker",
+          "body": "Added a frontend deck checker and fixed meta deck validation."
+        },
+        {
+          "title": "Combat fixes",
+          "body": "Fixed draw battles, duplicate Bakugans, Anthemusa, Gravity Chamber, Grand Spirit canceling, and Fire Tornado turn-interface issues."
+        },
+        {
+          "title": "Feedback",
+          "body": "Improved game-finished checks and power-change number animations."
+        }
+      ]
+    },
+    {
+      "id": "2026-04-14",
+      "date": "14/04/2026",
+      "title": "QoL & Subterra content",
+      "items": [
+        {
+          "title": "Forfeit",
+          "body": "Players can now forfeit a match. Watch Battle gained a name search bar and a rooms list at battle end."
+        },
+        {
+          "title": "Tooltips",
+          "body": "Added Tippy tooltips when hovering Bakugans, gate cards and turn actions on the 3D board."
+        },
+        {
+          "title": "Subterra abilities",
+          "body": "Added Tectonic Swipe, Earth Power, Sand Trap and Spirit Hole."
+        },
+        {
+          "title": "In-game chat",
+          "body": "Redesigned the in-game messages window and allowed sending messages during a match."
+        },
+        {
+          "title": "Rooms & matchmaking",
+          "body": "Timers now start when a room is created, rooms are cleaned up automatically, and matchmaking/challenge flow was improved."
+        },
+        {
+          "title": "Bug fixes",
+          "body": "Fixed drag abilities, Tsunami Wave, Fury of Wind, Mantris Marionette, dead Bakugans remaining in hand, and Tentaclear balance."
+        }
+      ]
+    },
+    {
+      "id": "2026-04-05",
+      "date": "05/04/2026",
+      "title": "Chat & challenges",
+      "items": [
+        {
+          "title": "Chat system",
+          "body": "Added a global find-user chat, online player checks, connected-user stores, and mobile message layout fixes."
+        },
+        {
+          "title": "Challenges",
+          "body": "Players can challenge others from the chat window, and challenges can be canceled or rejected."
+        },
+        {
+          "title": "Matchmaking",
+          "body": "Refactored the matchmaking system and unified socket listeners."
+        }
+      ]
+    },
+    {
+      "id": "2026-03-28",
+      "date": "28/03/2026",
+      "title": "Ranked ladder & spectating",
+      "items": [
+        {
+          "title": "Elo & ladder",
+          "body": "Added the Elo system and a ladder page to track rankings."
+        },
+        {
+          "title": "Watch matches",
+          "body": "Added match spectating with a dedicated 3D viewer page."
+        },
+        {
+          "title": "Persistent abilities",
+          "body": "Introduced persistent abilities. Boosted Dragon (Pyrus Drago) now works as a persistent ability."
+        },
+        {
+          "title": "Board UI",
+          "body": "Polished the 3D board background, selectors, power text size and hover descriptions."
+        },
+        {
+          "title": "Balance",
+          "body": "Updated several card conditions and nerfed Face of Grief."
+        }
+      ]
+    },
+    {
+      "id": "2026-03-17",
+      "date": "17/03/2026",
+      "title": "New cards expansion",
+      "items": [
+        {
+          "title": "New ability cards",
+          "body": "Added Flare Blinder, Mega Flare Blinder and Super Pyrus, plus a power swipe helper."
+        },
+        {
+          "title": "Magma Fuse",
+          "body": "Added the Magma Fuse Gate Card with a revive Bakugan animation."
+        },
+        {
+          "title": "Card updates",
+          "body": "Gravity Chamber and Anthemusa now drag weaker Bakugans and eliminate them. Dragoon and Shield Merge moved to exclusive abilities."
+        },
+        {
+          "title": "Turn requests",
+          "body": "Fixed turn action requests after setting a gate card and when clearing domain forms."
+        }
+      ]
+    },
+    {
+      "id": "2026-03-09",
+      "date": "09/03/2026",
+      "title": "Audio, cancels & new abilities",
+      "items": [
+        {
+          "title": "Battle music",
+          "body": "Added an OST player during battles with a volume controller."
+        },
+        {
+          "title": "Cancel abilities",
+          "body": "Added cancel-ability animations, ability-block properties and Haos counter updates."
+        },
+        {
+          "title": "New cards",
+          "body": "Added Tsunami Wave and Fury of Wind. Elemental and character cards now add/remove boosts when Bakugans move or are set."
+        },
+        {
+          "title": "Board animations",
+          "body": "Added remove-reinforcement, move-gate and swipe-gate animations."
+        },
+        {
+          "title": "Messages UI",
+          "body": "Cleaned up the match messages window design."
+        }
+      ]
+    },
+    {
+      "id": "2026-02-26",
+      "date": "26/02/2026",
+      "title": "Battle messages & turns",
+      "items": [
+        {
+          "title": "Game messages",
+          "body": "Added a game message window and a rooms list on the dashboard."
+        },
+        {
+          "title": "Turn system",
+          "body": "Refactored and unified turn action resolution and the turn interface."
+        },
+        {
+          "title": "UI fixes",
+          "body": "Increased z-index for dialog boxes and turn action buttons on the 3D board."
+        },
+        {
+          "title": "Balance",
+          "body": "Updated Bakugan power levels and the Centipod Attractor ability."
+        }
+      ]
+    },
+    {
+      "id": "2026-02-14",
+      "date": "14/02/2026",
+      "title": "Timer & ability conditions",
+      "items": [
+        {
+          "title": "Battle timer",
+          "body": "Added a game timer (except on the first gate card selection turn). The timer now correctly stops when a game ends."
+        },
+        {
+          "title": "Ability conditions",
+          "body": "Abilities now use activation conditions and a can-use parameter. Failed activations show a dedicated animation."
+        },
+        {
+          "title": "Ability counter",
+          "body": "Added an ability counter to battles."
+        },
+        {
+          "title": "Rooms list",
+          "body": "Unified battle-start socket listeners and added a rooms list on the dashboard."
+        }
+      ]
+    },
+    {
+      "id": "2026-02-02",
+      "date": "02/02/2026",
+      "title": "Launch patch",
+      "items": [
+        {
+          "title": "Card translation",
+          "body": "All remaining French cards have been translated into English."
+        },
+        {
+          "title": "Deck Builder",
+          "body": "Fixed a bug preventing players from creating multiple decks. The Deck Builder is now fully responsive on mobile."
+        },
+        {
+          "title": "Mantris Marionette",
+          "body": "Resolved turn-related issues when using the Mantris Marionette card."
+        },
+        {
+          "title": "Phantom turn",
+          "body": "Players who cannot act no longer see a full action interface; they are simply prompted to end their turn."
+        },
+        {
+          "title": "Landing & dashboard",
+          "body": "Fixed multiple integration issues on the landing page and dashboard."
+        },
+        {
+          "title": "Discord",
+          "body": "Added a direct link to the official Discord server on the landing page."
+        },
+        {
+          "title": "3D controls",
+          "body": "Fixed mouse and touch controls on the 3D gameboard."
+        }
+      ]
     }
-  }
+  ]
 }
