@@ -1,6 +1,86 @@
 {
   "title": "Administration",
   "backToAdmin": "Retour à l'administration",
+  "sandbox": {
+    "cardTitle": "Sandbox de test",
+    "cardDesc": "Construisez des situations de jeu à la main (gates, bakugans, abilities) et prévisualisez-les sur le plateau 3D.",
+    "open": "Ouvrir le sandbox",
+    "pageTitle": "Sandbox de test",
+    "pageDesc": "Éditeur de game state pour reproduire des combats, tester des cartes et préparer des scénarios.",
+    "iframeTitle": "Plateau sandbox",
+    "openConfig": "Configurer",
+    "manualMode": "Mode manuel",
+    "drawerTitle": "Paramétrage du state",
+    "drawerDesc": "Choisissez les slots, gates, bakugans et cartes d'action à afficher.",
+    "tabs": {
+      "replay": "Replay",
+      "board": "Plateau",
+      "turn": "Tour / Combat",
+      "actions": "Actions UI"
+    },
+    "replay": {
+      "intro": "Importez un fichier JSON ou sélectionnez un replay en base, puis naviguez entre les tours pour analyser le state.",
+      "source": "Source du replay",
+      "empty": "Aucun replay chargé pour le moment.",
+      "loaded": "Replay {roomId}",
+      "turnsAvailable": "{n} tour(s) détecté(s)",
+      "turn": "Tour à afficher",
+      "turnOption": "Tour {n} · turnCount {turnCount} · {player}",
+      "turnHint": "State au début du tour (turnCount {turnCount}, joueur actif : {player}).",
+      "loadTurn": "Recharger ce tour",
+      "prevTurn": "Tour précédent",
+      "nextTurn": "Tour suivant",
+      "clear": "Retirer le replay",
+      "loadedBanner": "Replay {roomId} · tour {turn}",
+      "loadSuccess": "Tour {turn} du replay {roomId} chargé"
+    },
+    "owners": {
+      "user": "Joueur (gauche)",
+      "opponent": "Adversaire (droite)"
+    },
+    "fields": {
+      "gate": "Gate card",
+      "gateOwner": "Propriétaire de la gate",
+      "open": "Gate ouverte",
+      "canSet": "can_set",
+      "addBakugan": "Ajouter un bakugan",
+      "owner": "Propriétaire",
+      "power": "Power actuelle",
+      "abilityBlock": "Ability block",
+      "activeAbilities": "Abilities actives (state)",
+      "turnOwner": "Tour actuel",
+      "turnCount": "Numéro de tour",
+      "setNewGate": "Peut poser une gate",
+      "setNewBakugan": "Peut poser un bakugan",
+      "useAbilityCard": "Peut jouer une ability",
+      "battleInProcess": "Combat en cours",
+      "battleSlot": "Slot du combat",
+      "battleTurns": "Tours de combat",
+      "battlePaused": "Combat en pause",
+      "eliminatedUser": "Éliminés (joueur)",
+      "eliminatedOpponent": "Éliminés (adversaire)",
+      "showActionUi": "Afficher l'UI d'action",
+      "showActionUiHint": "Reproduit le menu de sélection d'ability comme dans test.ts."
+    },
+    "placeholders": {
+      "gate": "Choisir une gate…",
+      "bakugan": "Choisir un bakugan…",
+      "ability": "Choisir une ability…",
+      "slot": "Choisir un slot…",
+      "turn": "Choisir un tour…",
+      "search": "Rechercher…",
+      "empty": "Aucun résultat",
+      "noGate": "Aucune gate"
+    },
+    "actions": {
+      "add": "Ajouter",
+      "addAbilityAction": "Ajouter une ability à l'UI",
+      "remove": "Retirer",
+      "apply": "Appliquer au plateau",
+      "reset": "Réinitialiser",
+      "close": "Fermer"
+    }
+  },
   "botTraining": {
     "cardTitle": "Entraînement des bots",
     "cardDesc": "Sélectionnez des replays, entraînez les poids de scoring et déployez-les sur les bots en ligne.",

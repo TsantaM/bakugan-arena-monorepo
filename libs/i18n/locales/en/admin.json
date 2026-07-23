@@ -1,6 +1,86 @@
 {
   "title": "Administration",
   "backToAdmin": "Back to admin",
+  "sandbox": {
+    "cardTitle": "Test sandbox",
+    "cardDesc": "Build game situations by hand (gates, bakugans, abilities) and preview them on the 3D board.",
+    "open": "Open sandbox",
+    "pageTitle": "Test sandbox",
+    "pageDesc": "Game-state editor to reproduce battles, test cards, and prepare scenarios.",
+    "iframeTitle": "Sandbox board",
+    "openConfig": "Configure",
+    "manualMode": "Manual mode",
+    "drawerTitle": "State setup",
+    "drawerDesc": "Pick slots, gates, bakugans and action cards to display.",
+    "tabs": {
+      "replay": "Replay",
+      "board": "Board",
+      "turn": "Turn / Battle",
+      "actions": "Action UI"
+    },
+    "replay": {
+      "intro": "Import a JSON file or pick a replay from the database, then browse turns to inspect the state.",
+      "source": "Replay source",
+      "empty": "No replay loaded yet.",
+      "loaded": "Replay {roomId}",
+      "turnsAvailable": "{n} turn(s) detected",
+      "turn": "Turn to display",
+      "turnOption": "Turn {n} · turnCount {turnCount} · {player}",
+      "turnHint": "State at the start of the turn (turnCount {turnCount}, active player: {player}).",
+      "loadTurn": "Reload this turn",
+      "prevTurn": "Previous turn",
+      "nextTurn": "Next turn",
+      "clear": "Clear replay",
+      "loadedBanner": "Replay {roomId} · turn {turn}",
+      "loadSuccess": "Turn {turn} from replay {roomId} loaded"
+    },
+    "owners": {
+      "user": "Player (left)",
+      "opponent": "Opponent (right)"
+    },
+    "fields": {
+      "gate": "Gate card",
+      "gateOwner": "Gate owner",
+      "open": "Gate open",
+      "canSet": "can_set",
+      "addBakugan": "Add bakugan",
+      "owner": "Owner",
+      "power": "Current power",
+      "abilityBlock": "Ability block",
+      "activeAbilities": "Active abilities (state)",
+      "turnOwner": "Current turn",
+      "turnCount": "Turn count",
+      "setNewGate": "Can set gate",
+      "setNewBakugan": "Can set bakugan",
+      "useAbilityCard": "Can use ability",
+      "battleInProcess": "Battle in progress",
+      "battleSlot": "Battle slot",
+      "battleTurns": "Battle turns",
+      "battlePaused": "Battle paused",
+      "eliminatedUser": "Eliminated (player)",
+      "eliminatedOpponent": "Eliminated (opponent)",
+      "showActionUi": "Show action UI",
+      "showActionUiHint": "Replays the ability selection menu like test.ts."
+    },
+    "placeholders": {
+      "gate": "Choose a gate…",
+      "bakugan": "Choose a bakugan…",
+      "ability": "Choose an ability…",
+      "slot": "Choose a slot…",
+      "turn": "Choose a turn…",
+      "search": "Search…",
+      "empty": "No results",
+      "noGate": "No gate"
+    },
+    "actions": {
+      "add": "Add",
+      "addAbilityAction": "Add ability to UI",
+      "remove": "Remove",
+      "apply": "Apply to board",
+      "reset": "Reset",
+      "close": "Close"
+    }
+  },
   "botTraining": {
     "cardTitle": "Bot training",
     "cardDesc": "Curate replays, train scoring weights, and deploy them to live bots.",

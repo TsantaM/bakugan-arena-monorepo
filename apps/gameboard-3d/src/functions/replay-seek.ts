@@ -1,6 +1,12 @@
 import gsap from "gsap"
-import type { replayEntryType } from "@bakugan-arena/game-data"
+import {
+    findNextTurnStart,
+    findPrevTurnStart,
+    getTurnStarts,
+} from "@bakugan-arena/game-data"
 import { isReplayPaused, wakePauseWaiters } from "./replay-pause"
+
+export { findNextTurnStart, findPrevTurnStart, getTurnStarts }
 
 let seekTarget: number | null = null
 let seekAbortResolvers: Array<() => void> = []
@@ -56,42 +62,4 @@ export function abortReplayPlayback() {
     killActiveAnimations()
     wakePauseWaiters()
     notifySeekAbort()
-}
-
-export function getTurnStarts(replay: replayEntryType[]): number[] {
-    const starts = [0]
-    for (let i = 0; i < replay.length; i++) {
-        if (replay[i].marker === "turn_end" && i + 1 < replay.length) {
-            starts.push(i + 1)
-        }
-    }
-    return starts
-}
-
-export function findNextTurnStart(
-    replay: replayEntryType[],
-    currentIndex: number
-): number | null {
-    const starts = getTurnStarts(replay)
-    return starts.find((start) => start > currentIndex) ?? null
-}
-
-export function findPrevTurnStart(
-    replay: replayEntryType[],
-    currentIndex: number
-): number | null {
-    const starts = getTurnStarts(replay)
-    let currentStart = 0
-
-    for (const start of starts) {
-        if (start <= currentIndex) currentStart = start
-        else break
-    }
-
-    // Au milieu d'un tour → début de ce tour ; déjà au début → tour précédent
-    if (currentIndex > currentStart) return currentStart
-
-    const idx = starts.indexOf(currentStart)
-    if (idx <= 0) return null
-    return starts[idx - 1]
 }
