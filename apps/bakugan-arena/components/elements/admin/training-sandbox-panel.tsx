@@ -11,7 +11,7 @@ import {
     SANDBOX_USER_ID,
 } from "@bakugan-arena/game-data"
 import { toast } from "sonner"
-import SandboxConfigModal from "./sandbox/sandbox-config-modal"
+import SandboxConfigDrawer from "./sandbox/sandbox-config-drawer"
 import { draftToActionRequest, draftToSandboxSnapshot } from "./sandbox/sandbox-draft"
 import {
     createEmptySandboxDraft,
@@ -174,7 +174,7 @@ export default function TrainingSandboxPanel() {
                     window.setTimeout(() => setIframeReady(true), 300)
                 }}
             />
-            <SandboxConfigModal
+            <SandboxConfigDrawer
                 open={configOpen}
                 onOpenChange={setConfigOpen}
                 draft={draft}
