@@ -1,4 +1,4 @@
-import Header from "@/components/elements/header/Header"
+// import Header from "@/components/elements/header/Header"
 import Section from "@/components/ui/section"
 import { getTranslations } from "next-intl/server"
 
@@ -8,7 +8,7 @@ export default async function LegalPage() {
 
     return (
         <>
-            <Header />
+            {/* <Header /> */}
             <Section className="max-w-3xl pb-12">
                 <h1 className="uppercase font-black text-red-500">{t('title')}</h1>
 
