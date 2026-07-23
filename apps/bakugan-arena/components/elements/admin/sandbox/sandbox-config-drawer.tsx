@@ -11,7 +11,7 @@ import {
     DrawerFooter,
     DrawerHeader,
     DrawerTitle,
-} from "@/components/ui/drawer"
+} from "@/components/ui/drawer.client"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
