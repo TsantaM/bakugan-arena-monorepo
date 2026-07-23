@@ -11,7 +11,7 @@ import {
     SANDBOX_USER_ID,
 } from "@bakugan-arena/game-data"
 import { toast } from "sonner"
-import SandboxConfigDrawer from "./sandbox/sandbox-config-drawer"
+import SandboxConfigModal from "./sandbox/sandbox-config-modal"
 import { draftToActionRequest, draftToSandboxSnapshot } from "./sandbox/sandbox-draft"
 import {
     createEmptySandboxDraft,
@@ -24,7 +24,7 @@ export default function TrainingSandboxPanel() {
     const locale = useLocale()
     const iframeRef = useRef<HTMLIFrameElement>(null)
     const [draft, setDraft] = useState<SandboxDraft>(() => createEmptySandboxDraft())
-    const [drawerOpen, setDrawerOpen] = useState(true)
+    const [configOpen, setConfigOpen] = useState(true)
     const [iframeReady, setIframeReady] = useState(false)
     const [loadedReplayLabel, setLoadedReplayLabel] = useState<string | null>(null)
     const [replay, setReplay] = useState<replayDataType | null>(null)
@@ -135,7 +135,7 @@ export default function TrainingSandboxPanel() {
                     {loadedReplayLabel ?? t("manualMode")}
                 </p>
                 <div className="flex flex-wrap gap-2 justify-end">
-                    <Button type="button" size="sm" onClick={() => setDrawerOpen(true)}>
+                    <Button type="button" size="sm" onClick={() => setConfigOpen(true)}>
                         <Settings2 />
                         {t("openConfig")}
                     </Button>
@@ -174,9 +174,9 @@ export default function TrainingSandboxPanel() {
                     window.setTimeout(() => setIframeReady(true), 300)
                 }}
             />
-            <SandboxConfigDrawer
-                open={drawerOpen}
-                onOpenChange={setDrawerOpen}
+            <SandboxConfigModal
+                open={configOpen}
+                onOpenChange={setConfigOpen}
                 draft={draft}
                 onDraftChange={setDraft}
                 onApply={() => {

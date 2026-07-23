@@ -4,14 +4,14 @@ import { BakuganList, Bakugans, GateCardsList, AbilityCardsList, ExclusiveAbilit
 import { resolveAbilityCard, resolveGateCard, resolveGameDataName } from "@bakugan-arena/i18n"
 import { Button } from "@/components/ui/button"
 import {
-    Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-} from "@/components/ui/drawer"
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -38,7 +38,7 @@ import {
 } from "./sandbox-types"
 import type { replayDataType } from "@bakugan-arena/game-data"
 
-type SandboxConfigDrawerProps = {
+type SandboxConfigModalProps = {
     open: boolean
     onOpenChange: (open: boolean) => void
     draft: SandboxDraft
@@ -68,7 +68,7 @@ function updateSlot(
     }
 }
 
-export default function SandboxConfigDrawer({
+export default function SandboxConfigModal({
     open,
     onOpenChange,
     draft,
@@ -81,7 +81,7 @@ export default function SandboxConfigDrawer({
     onReplayChange,
     onSelectedReplayEntryIndexChange,
     onClearReplay,
-}: SandboxConfigDrawerProps) {
+}: SandboxConfigModalProps) {
     const t = useTranslations("admin.sandbox")
     const locale = useLocale()
 
@@ -138,14 +138,14 @@ export default function SandboxConfigDrawer({
     }
 
     return (
-        <Drawer open={open} onOpenChange={onOpenChange} direction="right">
-            <DrawerContent className="data-[vaul-drawer-direction=right]:w-full data-[vaul-drawer-direction=right]:sm:max-w-lg">
-                <DrawerHeader>
-                    <DrawerTitle>{t("drawerTitle")}</DrawerTitle>
-                    <DrawerDescription>{t("drawerDesc")}</DrawerDescription>
-                </DrawerHeader>
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent className="flex max-h-[90vh] w-full max-w-[calc(100%-2rem)] flex-col gap-0 overflow-hidden p-0 sm:max-w-lg">
+                <DialogHeader className="shrink-0 border-b px-6 py-4 pr-12">
+                    <DialogTitle>{t("drawerTitle")}</DialogTitle>
+                    <DialogDescription>{t("drawerDesc")}</DialogDescription>
+                </DialogHeader>
 
-                <div className="flex-1 overflow-y-auto px-4 pb-4">
+                <div className="min-h-0 flex-1 overflow-y-auto px-6 py-4">
                     <Tabs defaultValue="replay">
                         <TabsList className="mb-4 grid h-auto w-full grid-cols-2 gap-1 sm:grid-cols-4">
                             <TabsTrigger value="replay">{t("tabs.replay")}</TabsTrigger>
@@ -877,13 +877,14 @@ export default function SandboxConfigDrawer({
                     </Tabs>
                 </div>
 
-                <DrawerFooter>
-                    <Button type="button" onClick={onApply}>
+                <DialogFooter className="shrink-0 border-t px-6 py-4 sm:justify-stretch">
+                    <Button type="button" className="sm:flex-1" onClick={onApply}>
                         {t("actions.apply")}
                     </Button>
                     <Button
                         type="button"
                         variant="outline"
+                        className="sm:flex-1"
                         onClick={() => {
                             onDraftChange(createEmptySandboxDraft())
                             onReset()
@@ -891,13 +892,13 @@ export default function SandboxConfigDrawer({
                     >
                         {t("actions.reset")}
                     </Button>
-                    <DrawerClose asChild>
-                        <Button type="button" variant="ghost">
+                    <DialogClose asChild>
+                        <Button type="button" variant="ghost" className="sm:flex-1">
                             {t("actions.close")}
                         </Button>
-                    </DrawerClose>
-                </DrawerFooter>
-            </DrawerContent>
-        </Drawer>
+                    </DialogClose>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     )
 }
