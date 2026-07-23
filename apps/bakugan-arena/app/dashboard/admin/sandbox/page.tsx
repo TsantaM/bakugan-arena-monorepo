@@ -3,8 +3,6 @@ import Section from "@/components/ui/section"
 import Link from "next/link"
 import { getTranslations } from "next-intl/server"
 
-export const dynamic = "force-dynamic"
-
 export default async function AdminSandboxPage() {
     const t = await getTranslations("admin")
 

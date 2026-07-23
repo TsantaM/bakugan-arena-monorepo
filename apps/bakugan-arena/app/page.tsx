@@ -1,5 +1,3 @@
-'use server'
-
 import Header from "@/components/elements/header/Header";
 import { SignInModal } from "@/components/elements/sign-in/Sign-in";
 import { SignUpModal } from "@/components/elements/sign-up/Sign-up";

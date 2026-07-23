@@ -14,9 +14,7 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // vaul utilise createContext au top-level : doit être correctement
-  // traité comme module client (évite createContext is not a function sur Vercel)
-  transpilePackages: ['@bakugan-arena/i18n', 'vaul'],
+  transpilePackages: ['@bakugan-arena/i18n'],
   images: {
     remotePatterns: [
       {

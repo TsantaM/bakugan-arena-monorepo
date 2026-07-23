@@ -1,7 +1,6 @@
 "use client"
 
 import { useCallback, useEffect, useRef, useState } from "react"
-import dynamic from "next/dynamic"
 import { useLocale, useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { FlaskConical, RefreshCw, Settings2 } from "lucide-react"
@@ -12,18 +11,13 @@ import {
     SANDBOX_USER_ID,
 } from "@bakugan-arena/game-data"
 import { toast } from "sonner"
+import SandboxConfigDrawer from "./sandbox/sandbox-config-drawer"
 import { draftToActionRequest, draftToSandboxSnapshot } from "./sandbox/sandbox-draft"
 import {
     createEmptySandboxDraft,
     type SandboxDraft,
 } from "./sandbox/sandbox-types"
 import type { SandboxReplayLoadPayload } from "./sandbox/sandbox-replay-tab"
-
-/** Charge vaul uniquement côté navigateur (pas pendant le SSR / page data). */
-const SandboxConfigDrawer = dynamic(
-    () => import("./sandbox/sandbox-config-drawer"),
-    { ssr: false },
-)
 
 export default function TrainingSandboxPanel() {
     const t = useTranslations("admin.sandbox")
