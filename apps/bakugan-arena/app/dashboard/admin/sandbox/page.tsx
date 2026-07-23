@@ -1,4 +1,4 @@
-import TrainingSandboxPanel from "@/components/elements/admin/training-sandbox-panel"
+import TrainingSandboxPanelLoader from "@/components/elements/admin/training-sandbox-panel-loader"
 import Section from "@/components/ui/section"
 import Link from "next/link"
 import { getTranslations } from "next-intl/server"
@@ -20,7 +20,7 @@ export default async function AdminSandboxPage() {
                     {t("backToAdmin")}
                 </Link>
             </div>
-            <TrainingSandboxPanel />
+            <TrainingSandboxPanelLoader />
         </Section>
     )
 }
