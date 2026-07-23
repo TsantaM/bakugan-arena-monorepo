@@ -16,7 +16,8 @@
       "replay": "Replay",
       "board": "Board",
       "turn": "Turn / Battle",
-      "actions": "Action UI"
+      "actions": "Action UI",
+      "animLab": "Animations"
     },
     "replay": {
       "intro": "Import a JSON file or pick a replay from the database, then browse turns to inspect the state.",
@@ -60,7 +61,7 @@
       "eliminatedUser": "Eliminated (player)",
       "eliminatedOpponent": "Eliminated (opponent)",
       "showActionUi": "Show action UI",
-      "showActionUiHint": "Replays the ability selection menu like test.ts."
+      "showActionUiHint": "Replays the turn menu (abilities, set bakugan / gate) like test.ts."
     },
     "placeholders": {
       "gate": "Choose a gate…",
@@ -75,10 +76,51 @@
     "actions": {
       "add": "Add",
       "addAbilityAction": "Add ability to UI",
+      "addBakuganAction": "Add bakugan to set",
+      "addGateAction": "Add gate to set",
+      "bakuganActionLabel": "Bakugan (SET_BAKUGAN)",
+      "gateActionLabel": "Gate (SET_GATE_CARD_ACTION)",
       "remove": "Remove",
       "apply": "Apply to board",
       "reset": "Reset",
       "close": "Close"
+    },
+    "animLab": {
+      "intro": "Pick a card: its animations (same as live via onActivate / onOpen) are computed from the sandbox game state, then played on the board.",
+      "mode": "Test type",
+      "modes": {
+        "ability": "Ability / Exclusive",
+        "gate": "Gate card (open)",
+        "changeAttribut": "Attribute change",
+        "custom": "Raw custom animation"
+      },
+      "ability": "Ability card",
+      "customKey": "Custom animation",
+      "gateSlot": "Slot with gate",
+      "targetAttribut": "New attribute",
+      "sourceBakugan": "Source bakugan",
+      "sourceBakuganOptional": "Bakugan (optional, onOpen context)",
+      "queueTitle": "Animations added to state",
+      "queueEmpty": "Select a card and bakugan: the queue fills with ACTIVE_ABILITY_CARD + effects (CUSTOM_ANIMATION, POWER_CHANGE, …).",
+      "noRegistry": "No custom animations in the gameboard registry (restart Vite if needed).",
+      "play": "Apply state and play",
+      "playSuccess": "{count} directive(s) pushed into state then played",
+      "hint": "Place bakugans/gates first (e.g. an opponent on the same slot for Visage de la Fureur). Play syncs the board then runs the queue via playAnimation.",
+      "placeholders": {
+        "custom": "Choose a custom animation…",
+        "bakugan": "Choose a bakugan…",
+        "attribut": "Choose an attribute…"
+      },
+      "errors": {
+        "cardRequired": "Pick a card or animation.",
+        "sourceRequired": "Place and select a source bakugan on the board.",
+        "placeBakugan": "Add bakugans in the Board tab first, then Apply.",
+        "slotRequired": "Choose a slot.",
+        "gateRequired": "Place a gate on a slot (Board tab).",
+        "attributRequired": "Pick the target attribute.",
+        "unknownCustom": "This key is not in the 3D registry.",
+        "nothingToPlay": "No animations generated: check state (bakugan, opponent on slot, open gate, etc.)."
+      }
     }
   },
   "botTraining": {

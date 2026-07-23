@@ -16,7 +16,8 @@
       "replay": "Replay",
       "board": "Plateau",
       "turn": "Tour / Combat",
-      "actions": "Actions UI"
+      "actions": "Actions UI",
+      "animLab": "Animations"
     },
     "replay": {
       "intro": "Importez un fichier JSON ou sélectionnez un replay en base, puis naviguez entre les tours pour analyser le state.",
@@ -60,7 +61,7 @@
       "eliminatedUser": "Éliminés (joueur)",
       "eliminatedOpponent": "Éliminés (adversaire)",
       "showActionUi": "Afficher l'UI d'action",
-      "showActionUiHint": "Reproduit le menu de sélection d'ability comme dans test.ts."
+      "showActionUiHint": "Reproduit le menu de tour (abilities, pose bakugan / gate) comme dans test.ts."
     },
     "placeholders": {
       "gate": "Choisir une gate…",
@@ -75,10 +76,51 @@
     "actions": {
       "add": "Ajouter",
       "addAbilityAction": "Ajouter une ability à l'UI",
+      "addBakuganAction": "Ajouter un bakugan à poser",
+      "addGateAction": "Ajouter une gate à poser",
+      "bakuganActionLabel": "Bakugan (SET_BAKUGAN)",
+      "gateActionLabel": "Gate (SET_GATE_CARD_ACTION)",
       "remove": "Retirer",
       "apply": "Appliquer au plateau",
       "reset": "Réinitialiser",
       "close": "Fermer"
+    },
+    "animLab": {
+      "intro": "Choisis une carte : ses animations (comme en combat via onActivate / onOpen) sont calculées depuis le game state du sandbox, puis jouées sur le plateau.",
+      "mode": "Type de test",
+      "modes": {
+        "ability": "Ability / Exclusive",
+        "gate": "Gate card (ouverture)",
+        "changeAttribut": "Changement d'attribut",
+        "custom": "Custom animation brute"
+      },
+      "ability": "Carte ability",
+      "customKey": "Animation custom",
+      "gateSlot": "Slot avec gate",
+      "targetAttribut": "Nouvel attribut",
+      "sourceBakugan": "Bakugan source",
+      "sourceBakuganOptional": "Bakugan (optionnel, contexte onOpen)",
+      "queueTitle": "Animations ajoutées au state",
+      "queueEmpty": "Sélectionne une carte et un bakugan : la file se remplit avec ACTIVE_ABILITY_CARD + effets (CUSTOM_ANIMATION, POWER_CHANGE, …).",
+      "noRegistry": "Aucune custom animation dans le registry du gameboard (redémarre Vite si besoin).",
+      "play": "Appliquer le state et jouer",
+      "playSuccess": "{count} directive(s) poussée(s) dans le state puis jouée(s)",
+      "hint": "Place d'abord les bakugans/gates (ex. adversaire sur le même slot pour Visage de la Fureur). Le Play synchronise le plateau puis exécute la file via playAnimation.",
+      "placeholders": {
+        "custom": "Choisir une custom animation…",
+        "bakugan": "Choisir un bakugan…",
+        "attribut": "Choisir un attribut…"
+      },
+      "errors": {
+        "cardRequired": "Choisissez une carte ou une animation.",
+        "sourceRequired": "Placez et sélectionnez un bakugan source sur le plateau.",
+        "placeBakugan": "Ajoutez d'abord des bakugans dans l'onglet Plateau, puis Appliquer.",
+        "slotRequired": "Choisissez un slot.",
+        "gateRequired": "Placez une gate sur un slot (onglet Plateau).",
+        "attributRequired": "Choisissez l'attribut cible.",
+        "unknownCustom": "Cette clé n'existe pas dans le registry 3D.",
+        "nothingToPlay": "Aucune animation générée : vérifie le state (bakugan, adversaire sur le slot, gate ouverte, etc.)."
+      }
     }
   },
   "botTraining": {

@@ -6,6 +6,8 @@ import {
     createEmptySandboxSnapshot,
     ExclusiveAbilities,
     ExclusiveAbilitiesList,
+    GateCardsList,
+    type ActionType,
     type ActivePlayerActionRequestType,
     type activateAbilities,
     type attribut,
@@ -104,6 +106,8 @@ export function snapshotToSandboxDraft(
         eliminatedUser: snapshot.eliminated.user,
         eliminatedOpponent: snapshot.eliminated.opponnent,
         actionAbilities: [],
+        actionBakugans: [],
+        actionGates: [],
         showActionUi: false,
     }
 }
@@ -184,73 +188,145 @@ export function draftToSandboxSnapshot(draft: SandboxDraft): replaySnapshotType 
     }
 }
 
+function resolveSetableSlots(draft: SandboxDraft): slots_id[] {
+    const canSet = draft.slots.filter((slot) => slot.canSet).map((slot) => slot.id)
+    if (canSet.length > 0) return canSet
+    return draft.slots.map((slot) => slot.id)
+}
+
+function resolveGateSlots(draft: SandboxDraft): slots_id[] {
+    const free = draft.slots
+        .filter((slot) => slot.canSet || !slot.gateKey)
+        .map((slot) => slot.id)
+    if (free.length > 0) return free
+    return draft.slots.map((slot) => slot.id)
+}
+
 export function draftToActionRequest(
     draft: SandboxDraft,
 ): ActivePlayerActionRequestType | null {
-    if (!draft.showActionUi || draft.actionAbilities.length === 0) {
+    if (!draft.showActionUi) {
         return null
     }
 
-    const grouped = new Map<
-        string,
-        {
-            attribut: attribut
-            bakuganKey: string
-            slot: slots_id
-            abilities: {
-                key: string
-                name: string
-                description: string
-                image: string
-            }[]
+    const mustDo: ActionType[] = []
+    const optional: ActionType[] = []
+
+    if (draft.actionAbilities.length > 0) {
+        const grouped = new Map<
+            string,
+            {
+                attribut: attribut
+                bakuganKey: string
+                slot: slots_id
+                abilities: {
+                    key: string
+                    name: string
+                    description: string
+                    image: string
+                }[]
+            }
+        >()
+
+        for (const entry of draft.actionAbilities) {
+            const card = resolveAbilityCardData(entry.abilityKey)
+            if (!card) continue
+
+            const bakugan = Bakugans[entry.bakuganKey]
+            const attributValue: attribut =
+                card.attribut ?? bakugan?.attribut ?? "Darkus"
+            const image =
+                card.image ?? `ability_card_${attributValue.toUpperCase()}`
+
+            const groupKey = `${entry.slotId}:${entry.bakuganKey}`
+            const abilityPayload = {
+                key: card.key,
+                name: card.key,
+                description: "",
+                image,
+            }
+
+            const existing = grouped.get(groupKey)
+            if (existing) {
+                existing.abilities.push(abilityPayload)
+            } else {
+                grouped.set(groupKey, {
+                    attribut: attributValue,
+                    bakuganKey: entry.bakuganKey,
+                    slot: entry.slotId,
+                    abilities: [abilityPayload],
+                })
+            }
         }
-    >()
 
-    for (const entry of draft.actionAbilities) {
-        const card = resolveAbilityCardData(entry.abilityKey)
-        if (!card) continue
-
-        const bakugan = Bakugans[entry.bakuganKey]
-        const attributValue: attribut =
-            card.attribut ?? bakugan?.attribut ?? "Darkus"
-        const image =
-            card.image ?? `ability_card_${attributValue.toUpperCase()}`
-
-        const groupKey = `${entry.slotId}:${entry.bakuganKey}`
-        const abilityPayload = {
-            key: card.key,
-            name: card.key,
-            description: "",
-            image,
-        }
-
-        const existing = grouped.get(groupKey)
-        if (existing) {
-            existing.abilities.push(abilityPayload)
-        } else {
-            grouped.set(groupKey, {
-                attribut: attributValue,
-                bakuganKey: entry.bakuganKey,
-                slot: entry.slotId,
-                abilities: [abilityPayload],
+        const data = [...grouped.values()]
+        if (data.length > 0) {
+            mustDo.push({
+                type: "USE_ABILITY_CARD",
+                data,
             })
         }
     }
 
-    const data = [...grouped.values()]
-    if (data.length === 0) return null
+    if (draft.actionBakugans.length > 0) {
+        const bakugans = draft.actionBakugans
+            .map((entry) => {
+                const catalog = Bakugans[entry.bakuganKey]
+                if (!catalog) return null
+                return {
+                    key: catalog.key,
+                    name: catalog.key,
+                    currentPower: catalog.powerLevel,
+                    attribut: catalog.attribut,
+                    image: catalog.image,
+                }
+            })
+            .filter((b): b is NonNullable<typeof b> => b !== null)
+
+        if (bakugans.length > 0) {
+            mustDo.push({
+                type: "SET_BAKUGAN",
+                data: {
+                    bakugans,
+                    setableSlots: resolveSetableSlots(draft),
+                },
+            })
+        }
+    }
+
+    if (draft.actionGates.length > 0) {
+        const cards = draft.actionGates
+            .map((entry) => {
+                const catalog = GateCardsList.find((g) => g.key === entry.gateKey)
+                if (!catalog) return null
+                return {
+                    key: catalog.key,
+                    image: catalog.image || "",
+                }
+            })
+            .filter((c): c is NonNullable<typeof c> => c !== null)
+
+        if (cards.length > 0) {
+            optional.push({
+                type: "SET_GATE_CARD_ACTION",
+                data: {
+                    cards,
+                    slots: resolveGateSlots(draft),
+                },
+            })
+        }
+    }
+
+    if (mustDo.length === 0 && optional.length === 0) {
+        return null
+    }
 
     return {
         target: "ACTIVE_PLAYER",
         actions: {
-            mustDo: [
-                {
-                    type: "USE_ABILITY_CARD",
-                    data,
-                },
-            ],
+            mustDo,
             mustDoOne: [],
-            optional: [],
+            optional,
         },
     }
 }

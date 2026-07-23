@@ -16,7 +16,8 @@
       "replay": "إعادة التشغيل",
       "board": "اللوحة",
       "turn": "الدور / القتال",
-      "actions": "واجهة الإجراءات"
+      "actions": "واجهة الإجراءات",
+      "animLab": "الحركات"
     },
     "replay": {
       "intro": "استورد ملف JSON أو اختر إعادة تشغيل من قاعدة البيانات، ثم تنقّل بين الأدوار لتحليل الحالة.",
@@ -60,7 +61,7 @@
       "eliminatedUser": "مستبعدون (لاعب)",
       "eliminatedOpponent": "مستبعدون (خصم)",
       "showActionUi": "إظهار واجهة الإجراءات",
-      "showActionUiHint": "يعيد قائمة اختيار القدرة كما في test.ts."
+      "showActionUiHint": "يعيد قائمة الدور (قدرات، وضع باكوغان / بوابة) كما في test.ts."
     },
     "placeholders": {
       "gate": "اختر بوابة…",
@@ -75,10 +76,51 @@
     "actions": {
       "add": "إضافة",
       "addAbilityAction": "إضافة قدرة للواجهة",
+      "addBakuganAction": "إضافة باكوغان للوضع",
+      "addGateAction": "إضافة بوابة للوضع",
+      "bakuganActionLabel": "باكوغان (SET_BAKUGAN)",
+      "gateActionLabel": "بوابة (SET_GATE_CARD_ACTION)",
       "remove": "إزالة",
       "apply": "تطبيق على اللوحة",
       "reset": "إعادة تعيين",
       "close": "إغلاق"
+    },
+    "animLab": {
+      "intro": "اختر بطاقة: تُحسب حركاتها (كما في القتال عبر onActivate / onOpen) من حالة صندوق الاختبار ثم تُشغَّل على اللوحة.",
+      "mode": "نوع الاختبار",
+      "modes": {
+        "ability": "قدرة / حصرية",
+        "gate": "بطاقة بوابة (فتح)",
+        "changeAttribut": "تغيير السمة",
+        "custom": "حركة مخصصة خام"
+      },
+      "ability": "بطاقة القدرة",
+      "customKey": "حركة مخصصة",
+      "gateSlot": "خانة ببوابة",
+      "targetAttribut": "السمة الجديدة",
+      "sourceBakugan": "باكوغان المصدر",
+      "sourceBakuganOptional": "باكوغان (اختياري، سياق onOpen)",
+      "queueTitle": "الحركات المضافة إلى الحالة",
+      "queueEmpty": "اختر بطاقة وباكوغان: تمتلئ القائمة بـ ACTIVE_ABILITY_CARD والتأثيرات.",
+      "noRegistry": "لا توجد حركات مخصصة في سجل اللوحة (أعد تشغيل Vite إذا لزم).",
+      "play": "تطبيق الحالة والتشغيل",
+      "playSuccess": "تم دفع {count} توجيه/توجيهات إلى الحالة ثم تشغيلها",
+      "hint": "ضع الباكوغان/البوابات أولاً ثم شغّل. تتم مزامنة اللوحة ثم تشغيل القائمة عبر playAnimation.",
+      "placeholders": {
+        "custom": "اختر حركة مخصصة…",
+        "bakugan": "اختر باكوغان…",
+        "attribut": "اختر سمة…"
+      },
+      "errors": {
+        "cardRequired": "اختر بطاقة أو حركة.",
+        "sourceRequired": "ضع واختر باكوغان مصدر على اللوحة.",
+        "placeBakugan": "أضف باكوغان في تبويب اللوحة أولاً ثم طبّق.",
+        "slotRequired": "اختر خانة.",
+        "gateRequired": "ضع بوابة على خانة (تبويب اللوحة).",
+        "attributRequired": "اختر السمة الهدف.",
+        "unknownCustom": "هذا المفتاح غير موجود في السجل ثلاثي الأبعاد.",
+        "nothingToPlay": "لم تُنشأ حركات: تحقق من الحالة (باكوغان، خصم على الخانة، بوابة مفتوحة…)."
+      }
     }
   },
   "botTraining": {

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { FlaskConical, RefreshCw, Settings2 } from "lucide-react"
 import {
     type ActivePlayerActionRequestType,
+    type AnimationDirectivesTypes,
     type replayDataType,
     type replaySnapshotType,
     SANDBOX_USER_ID,
@@ -29,6 +30,7 @@ export default function TrainingSandboxPanel() {
     const [loadedReplayLabel, setLoadedReplayLabel] = useState<string | null>(null)
     const [replay, setReplay] = useState<replayDataType | null>(null)
     const [selectedReplayEntryIndex, setSelectedReplayEntryIndex] = useState(0)
+    const [customAnimationKeys, setCustomAnimationKeys] = useState<string[]>([])
     const GAMEBOARD_URL = process.env.NEXT_PUBLIC_3D_GAMEBOARD_URL
 
     const sandboxUrl = (() => {
@@ -43,10 +45,12 @@ export default function TrainingSandboxPanel() {
             snapshot,
             perspectiveUserId,
             actionRequest,
+            animationsToPlay,
         }: {
             snapshot: replaySnapshotType
             perspectiveUserId: string
             actionRequest?: ActivePlayerActionRequestType | null
+            animationsToPlay?: AnimationDirectivesTypes[]
         }) => {
             const iframe = iframeRef.current
             if (!iframe?.contentWindow) return
@@ -58,6 +62,10 @@ export default function TrainingSandboxPanel() {
                         snapshot,
                         perspectiveUserId,
                         actionRequest: actionRequest ?? null,
+                        animationsToPlay:
+                            animationsToPlay && animationsToPlay.length > 0
+                                ? animationsToPlay
+                                : undefined,
                     },
                 },
                 GAMEBOARD_URL ?? "*",
@@ -67,11 +75,12 @@ export default function TrainingSandboxPanel() {
     )
 
     const pushDraft = useCallback(
-        (nextDraft: SandboxDraft) => {
+        (nextDraft: SandboxDraft, animationsToPlay?: AnimationDirectivesTypes[]) => {
             pushBoardState({
                 snapshot: draftToSandboxSnapshot(nextDraft),
                 perspectiveUserId: nextDraft.userId || SANDBOX_USER_ID,
                 actionRequest: draftToActionRequest(nextDraft),
+                animationsToPlay,
             })
         },
         [pushBoardState],
@@ -81,6 +90,10 @@ export default function TrainingSandboxPanel() {
         const onMessage = (event: MessageEvent) => {
             if (event.data?.type === "SANDBOX_READY") {
                 setIframeReady(true)
+                const keys = event.data?.payload?.customAnimationKeys
+                if (Array.isArray(keys)) {
+                    setCustomAnimationKeys(keys.filter((k): k is string => typeof k === "string"))
+                }
             }
         }
 
@@ -192,6 +205,14 @@ export default function TrainingSandboxPanel() {
                 onReplayChange={setReplay}
                 onSelectedReplayEntryIndexChange={setSelectedReplayEntryIndex}
                 onClearReplay={clearReplaySession}
+                customAnimationKeys={customAnimationKeys}
+                onPlayAnimations={(animations) => {
+                    setConfigOpen(false)
+                    // Laisse le drawer se fermer avant de jouer l'animation sur le plateau
+                    window.setTimeout(() => {
+                        pushDraft(draft, animations)
+                    }, 320)
+                }}
             />
         </div>
     )

@@ -29,6 +29,7 @@ import SandboxCatalogPicker from "./sandbox-catalog-picker"
 import SandboxReplayTab, {
     type SandboxReplayLoadPayload,
 } from "./sandbox-replay-tab"
+import SandboxAnimationLabTab from "./sandbox-animation-lab-tab"
 import {
     createEmptySandboxDraft,
     type SandboxBakuganDraft,
@@ -36,7 +37,7 @@ import {
     type SandboxOwner,
     type SandboxSlotDraft,
 } from "./sandbox-types"
-import type { replayDataType } from "@bakugan-arena/game-data"
+import type { AnimationDirectivesTypes, replayDataType } from "@bakugan-arena/game-data"
 
 type SandboxConfigDrawerProps = {
     open: boolean
@@ -51,6 +52,8 @@ type SandboxConfigDrawerProps = {
     onReplayChange: (replay: replayDataType | null) => void
     onSelectedReplayEntryIndexChange: (entryIndex: number) => void
     onClearReplay: () => void
+    customAnimationKeys: string[]
+    onPlayAnimations: (animations: AnimationDirectivesTypes[]) => void
 }
 
 function newLocalId() {
@@ -81,6 +84,8 @@ export default function SandboxConfigDrawer({
     onReplayChange,
     onSelectedReplayEntryIndexChange,
     onClearReplay,
+    customAnimationKeys,
+    onPlayAnimations,
 }: SandboxConfigDrawerProps) {
     const t = useTranslations("admin.sandbox")
     const locale = useLocale()
@@ -147,11 +152,12 @@ export default function SandboxConfigDrawer({
 
                 <div className="flex-1 overflow-y-auto px-4 pb-4">
                     <Tabs defaultValue="replay">
-                        <TabsList className="mb-4 grid h-auto w-full grid-cols-2 gap-1 sm:grid-cols-4">
+                        <TabsList className="mb-4 grid h-auto w-full grid-cols-2 gap-1 sm:grid-cols-5">
                             <TabsTrigger value="replay">{t("tabs.replay")}</TabsTrigger>
                             <TabsTrigger value="board">{t("tabs.board")}</TabsTrigger>
                             <TabsTrigger value="turn">{t("tabs.turn")}</TabsTrigger>
                             <TabsTrigger value="actions">{t("tabs.actions")}</TabsTrigger>
+                            <TabsTrigger value="animLab">{t("tabs.animLab")}</TabsTrigger>
                         </TabsList>
 
                         <TabsContent value="replay">
@@ -873,6 +879,147 @@ export default function SandboxConfigDrawer({
                                     </Button>
                                 </div>
                             ))}
+
+                            <Button
+                                type="button"
+                                variant="outline"
+                                className="w-full"
+                                onClick={() =>
+                                    onDraftChange({
+                                        ...draft,
+                                        actionBakugans: [
+                                            ...draft.actionBakugans,
+                                            {
+                                                localId: newLocalId(),
+                                                bakuganKey: bakuganOptions[0]?.value ?? "",
+                                            },
+                                        ],
+                                        showActionUi: true,
+                                    })
+                                }
+                            >
+                                <Plus className="size-4" />
+                                {t("actions.addBakuganAction")}
+                            </Button>
+
+                            {draft.actionBakugans.map((entry) => (
+                                <div
+                                    key={entry.localId}
+                                    className="space-y-2 rounded-md border border-border p-3"
+                                >
+                                    <Label>{t("actions.bakuganActionLabel")}</Label>
+                                    <SandboxCatalogPicker
+                                        value={entry.bakuganKey || null}
+                                        onChange={(bakuganKey) =>
+                                            onDraftChange({
+                                                ...draft,
+                                                actionBakugans: draft.actionBakugans.map((b) =>
+                                                    b.localId === entry.localId
+                                                        ? {
+                                                              ...b,
+                                                              bakuganKey: bakuganKey ?? "",
+                                                          }
+                                                        : b,
+                                                ),
+                                            })
+                                        }
+                                        options={bakuganOptions}
+                                        placeholder={t("placeholders.bakugan")}
+                                        searchPlaceholder={t("placeholders.search")}
+                                        emptyLabel={t("placeholders.empty")}
+                                        allowClear={false}
+                                    />
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        className="w-full"
+                                        onClick={() =>
+                                            onDraftChange({
+                                                ...draft,
+                                                actionBakugans: draft.actionBakugans.filter(
+                                                    (b) => b.localId !== entry.localId,
+                                                ),
+                                            })
+                                        }
+                                    >
+                                        <Trash2 className="size-4" />
+                                        {t("actions.remove")}
+                                    </Button>
+                                </div>
+                            ))}
+
+                            <Button
+                                type="button"
+                                variant="outline"
+                                className="w-full"
+                                onClick={() =>
+                                    onDraftChange({
+                                        ...draft,
+                                        actionGates: [
+                                            ...draft.actionGates,
+                                            {
+                                                localId: newLocalId(),
+                                                gateKey: gateOptions[0]?.value ?? "",
+                                            },
+                                        ],
+                                        showActionUi: true,
+                                    })
+                                }
+                            >
+                                <Plus className="size-4" />
+                                {t("actions.addGateAction")}
+                            </Button>
+
+                            {draft.actionGates.map((entry) => (
+                                <div
+                                    key={entry.localId}
+                                    className="space-y-2 rounded-md border border-border p-3"
+                                >
+                                    <Label>{t("actions.gateActionLabel")}</Label>
+                                    <SandboxCatalogPicker
+                                        value={entry.gateKey || null}
+                                        onChange={(gateKey) =>
+                                            onDraftChange({
+                                                ...draft,
+                                                actionGates: draft.actionGates.map((g) =>
+                                                    g.localId === entry.localId
+                                                        ? { ...g, gateKey: gateKey ?? "" }
+                                                        : g,
+                                                ),
+                                            })
+                                        }
+                                        options={gateOptions}
+                                        placeholder={t("placeholders.gate")}
+                                        searchPlaceholder={t("placeholders.search")}
+                                        emptyLabel={t("placeholders.empty")}
+                                        allowClear={false}
+                                    />
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        className="w-full"
+                                        onClick={() =>
+                                            onDraftChange({
+                                                ...draft,
+                                                actionGates: draft.actionGates.filter(
+                                                    (g) => g.localId !== entry.localId,
+                                                ),
+                                            })
+                                        }
+                                    >
+                                        <Trash2 className="size-4" />
+                                        {t("actions.remove")}
+                                    </Button>
+                                </div>
+                            ))}
+                        </TabsContent>
+
+                        <TabsContent value="animLab">
+                            <SandboxAnimationLabTab
+                                draft={draft}
+                                customAnimationKeys={customAnimationKeys}
+                                onPlay={onPlayAnimations}
+                            />
                         </TabsContent>
                     </Tabs>
                 </div>

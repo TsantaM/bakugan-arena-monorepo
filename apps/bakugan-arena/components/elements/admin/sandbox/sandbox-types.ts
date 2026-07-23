@@ -37,6 +37,16 @@ export type SandboxActionAbilityDraft = {
     slotId: slots_id
 }
 
+export type SandboxActionBakuganDraft = {
+    localId: string
+    bakuganKey: string
+}
+
+export type SandboxActionGateDraft = {
+    localId: string
+    gateKey: string
+}
+
 export type SandboxDraft = {
     userId: string
     opponentId: string
@@ -54,6 +64,10 @@ export type SandboxDraft = {
     eliminatedOpponent: number
     /** Cartes d'abilité proposées dans l'UI d'action (comme test.ts) */
     actionAbilities: SandboxActionAbilityDraft[]
+    /** Bakugans proposés dans l'UI SET_BAKUGAN */
+    actionBakugans: SandboxActionBakuganDraft[]
+    /** Gates proposées dans l'UI SET_GATE_CARD_ACTION */
+    actionGates: SandboxActionGateDraft[]
     showActionUi: boolean
 }
 
@@ -98,6 +112,8 @@ export function createEmptySandboxDraft(): SandboxDraft {
         eliminatedUser: 0,
         eliminatedOpponent: 0,
         actionAbilities: [],
+        actionBakugans: [],
+        actionGates: [],
         showActionUi: false,
     }
 }

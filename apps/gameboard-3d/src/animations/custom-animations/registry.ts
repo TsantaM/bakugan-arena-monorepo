@@ -13,3 +13,6 @@ export const CustomAnimationsRegistry: Partial<Record<string, CustomAnimFn>> = {
     "dual-gazer": DualGazerAnimation,
     "coup-de-grace": CoupDeGraceAnimation,
 }
+
+/** Keys with a dedicated 3D custom animation (kept in sync for sandbox Animation Lab). */
+export const CUSTOM_ANIMATION_KEYS = Object.keys(CustomAnimationsRegistry)

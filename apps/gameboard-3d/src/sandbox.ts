@@ -8,6 +8,7 @@ import {
   replaySnapshotToRoomState,
   SANDBOX_USER_ID,
   type ActivePlayerActionRequestType,
+  type AnimationDirectivesTypes,
   type replaySnapshotType,
 } from '@bakugan-arena/game-data'
 import { InitGameState } from './functions/init-game-state'
@@ -17,6 +18,8 @@ import { clearTurnInterface } from './turn-action-management/turn-actions-resolu
 import { hideTooltip, initTooltip, showTooltip, tooltip } from './functions/tooltips-functions'
 import type { BakuganPreviewData } from './functions/create-bakugan-preview-hover'
 import { initGameboardLocaleFromUrl } from './i18n/locale'
+import { playAnimation } from './sockets/sockets-handlers'
+import { CUSTOM_ANIMATION_KEYS } from './animations/custom-animations/registry'
 import gsap from 'gsap'
 
 initGameboardLocaleFromUrl()
@@ -25,6 +28,8 @@ type SandboxPayload = {
   snapshot: replaySnapshotType
   perspectiveUserId?: string
   actionRequest?: ActivePlayerActionRequestType | null
+  /** Played after the board is applied (Animation Lab). */
+  animationsToPlay?: AnimationDirectivesTypes[]
 }
 
 const canvas = document.getElementById('gameboard-canvas')
@@ -42,6 +47,8 @@ const keepObjects: THREE.Object3D[] = []
 let renderer: THREE.WebGLRenderer | null = null
 let controls: OrbitControls | null = null
 let ready = false
+let perspectiveUserId = SANDBOX_USER_ID
+let playingAnimations = false
 
 function clearActiveAbilityOverlays() {
   document.querySelectorAll('.active-ability-image').forEach((element) => {
@@ -55,13 +62,14 @@ function clearActiveAbilityOverlays() {
 
 function applySandboxBoardState({
   snapshot,
-  perspectiveUserId,
+  perspectiveUserId: nextPerspectiveUserId,
   actionRequest,
 }: {
   snapshot: replaySnapshotType
   perspectiveUserId: string
   actionRequest?: ActivePlayerActionRequestType | null
 }) {
+  perspectiveUserId = nextPerspectiveUserId
   const keep = new Set(keepObjects)
 
   ;[...scene.children].forEach((child) => {
@@ -91,6 +99,26 @@ function applySandboxBoardState({
 
   if (actionRequest) {
     TurnActionInterfaceBuilder({ request: actionRequest })
+  }
+}
+
+async function playSandboxAnimations(animations: AnimationDirectivesTypes[]) {
+  if (!ready || playingAnimations || animations.length === 0) return
+
+  playingAnimations = true
+  try {
+    await playAnimation(
+      perspectiveUserId,
+      false,
+      camera,
+      scene,
+      plane,
+      bakugansMeshs,
+      gateCardMeshs,
+      animations,
+    )
+  } finally {
+    playingAnimations = false
   }
 }
 
@@ -237,21 +265,45 @@ function initScene() {
     perspectiveUserId: SANDBOX_USER_ID,
   })
 
-  window.parent.postMessage({ type: 'SANDBOX_READY' }, '*')
+  window.parent.postMessage(
+    {
+      type: 'SANDBOX_READY',
+      payload: {
+        customAnimationKeys: CUSTOM_ANIMATION_KEYS,
+      },
+    },
+    '*',
+  )
 }
 
 window.addEventListener('message', (event: MessageEvent) => {
-  if (event.data?.type !== 'LOAD_SANDBOX_STATE') return
   if (!ready) return
 
-  const payload = event.data.payload as SandboxPayload
-  if (!payload?.snapshot) return
+  if (event.data?.type === 'LOAD_SANDBOX_STATE') {
+    const payload = event.data.payload as SandboxPayload
+    if (!payload?.snapshot) return
 
-  applySandboxBoardState({
-    snapshot: payload.snapshot,
-    perspectiveUserId: payload.perspectiveUserId ?? SANDBOX_USER_ID,
-    actionRequest: payload.actionRequest,
-  })
+    applySandboxBoardState({
+      snapshot: payload.snapshot,
+      perspectiveUserId: payload.perspectiveUserId ?? SANDBOX_USER_ID,
+      actionRequest: payload.actionRequest,
+    })
+
+    const animationsToPlay = payload.animationsToPlay
+    if (animationsToPlay?.length) {
+      // Wait one frame so meshes from InitGameState exist before playAnimation.
+      requestAnimationFrame(() => {
+        void playSandboxAnimations(animationsToPlay)
+      })
+    }
+    return
+  }
+
+  if (event.data?.type === 'PLAY_SANDBOX_ANIMATIONS') {
+    const animations = event.data.payload?.animations as AnimationDirectivesTypes[] | undefined
+    if (!animations?.length) return
+    void playSandboxAnimations(animations)
+  }
 })
 
 initScene()
