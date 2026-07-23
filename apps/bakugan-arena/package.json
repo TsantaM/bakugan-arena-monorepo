@@ -10,10 +10,6 @@
     "deploy": "pnpm --filter @bakugan-arena/game-data build && pnpm --filter @bakugan-arena/drizzle-orm build && pnpm --filter @bakugan-arena/i18n build && next build"
   },
   "packageManager": "pnpm@10.15.0",
-  "peerDependencies": {
-    "next": "15.4.8",
-    "react": "19.1.0"
-  },
   "dependencies": {
     "@bakugan-arena/drizzle-orm": "workspace:*",
     "@bakugan-arena/game-data": "workspace:*",
@@ -43,10 +39,12 @@
     "gsap": "^3.13.0",
     "lucide-react": "^0.539.0",
     "lz-string": "^1.5.0",
+    "next": "15.4.8",
     "next-intl": "^4.13.3",
     "next-themes": "^0.4.6",
     "pg": "^8.17.2",
     "radix-ui": "^1.4.3",
+    "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.62.0",
     "react-howler": "^5.2.0",
