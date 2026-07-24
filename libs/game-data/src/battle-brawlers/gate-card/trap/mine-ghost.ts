@@ -17,7 +17,7 @@ function MineGhostMainEffect({
         ElimineBakuganEffect({
             bakugan,
             roomState,
-            gateCardProtection: true
+            origin: 'GATE',
         })
     })
 

@@ -21,7 +21,8 @@ export const Rechargement: gateCardType = {
                     bakugan: bakuganUser,
                     G: bonus,
                     malus: false,
-                    roomState: roomState
+                    roomState: roomState,
+                    origin: 'GATE',
                 })
             }
         }
@@ -46,7 +47,9 @@ export const Rechargement: gateCardType = {
                     bakugan: bakuganUser,
                     G: malus,
                     malus: true,
-                    roomState: roomState
+                    roomState: roomState,
+                    origin: 'GATE',
+                    ignoreProtection: true,
                 })
             }
         }

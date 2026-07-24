@@ -1,6 +1,9 @@
+import { Bakugans } from "../../battle-brawlers/bakugans.js";
 import { portalSlotsTypeElement, stateType } from "../../type/room-types.js";
 import { PowerChangeDirectiveAnumation } from "../create-animation-directives/index.js";
+import { NewAdditionnalMessage } from "../new-additional-message.js";
 import { ApplyAbsorbPowerBoost } from "./power-change.js";
+import { isProtectedAgainstGate } from "./protection-status.js";
 
 export function SwipePowerLevelsEffects({ roomState, slot, userId }: { roomState: stateType, slot: portalSlotsTypeElement, userId: string }) {
     if (!roomState) return
@@ -19,47 +22,51 @@ export function SwipePowerLevelsEffects({ roomState, slot, userId }: { roomState
 
     if (usersPower === opponentsPower) return
 
-    usersBakugans.forEach((bakugan) => {
-        PowerChangeDirectiveAnumation({
-            animations: roomState.animations,
-            bakugans: [bakugan],
-            powerChange: usersValue,
-            turn: roomState.turnState.turnCount,
-            malus: usersPower > opponentsPower,
-            roomState: roomState
+    const applySide = ({
+        bakugans,
+        value,
+        shouldMalus,
+    }: {
+        bakugans: typeof usersBakugans
+        value: number
+        shouldMalus: boolean
+    }) => {
+        bakugans.forEach((bakugan) => {
+            if (shouldMalus && isProtectedAgainstGate(bakugan)) {
+                NewAdditionnalMessage({
+                    roomState,
+                    key: 'bakugan_protected',
+                    params: { name: Bakugans[bakugan.key].name },
+                })
+                return
+            }
 
+            PowerChangeDirectiveAnumation({
+                animations: roomState.animations,
+                bakugans: [bakugan],
+                powerChange: value,
+                turn: roomState.turnState.turnCount,
+                malus: shouldMalus,
+                roomState: roomState
+            })
+
+            if (shouldMalus) {
+                bakugan.currentPower = bakugan.currentPower - value
+            } else {
+                bakugan.currentPower = bakugan.currentPower + value
+                ApplyAbsorbPowerBoost({ roomState, bakugan, G: value })
+            }
         })
+    }
+
+    applySide({
+        bakugans: usersBakugans,
+        value: usersValue,
+        shouldMalus: usersPower > opponentsPower,
     })
-
-    opponentsBakugans.forEach((bakugan) => {
-        PowerChangeDirectiveAnumation({
-            animations: roomState.animations,
-            bakugans: [bakugan],
-            powerChange: opponentsValue,
-            turn: roomState.turnState.turnCount,
-            malus: opponentsPower > usersPower,
-            roomState: roomState
-
-        })
-
+    applySide({
+        bakugans: opponentsBakugans,
+        value: opponentsValue,
+        shouldMalus: opponentsPower > usersPower,
     })
-
-    usersBakugans.forEach((bakugan) => {
-        if (usersPower > opponentsPower) {
-            bakugan.currentPower = bakugan.currentPower - usersValue
-        } else {
-            bakugan.currentPower = bakugan.currentPower + usersValue
-            ApplyAbsorbPowerBoost({ roomState, bakugan, G: usersValue })
-        }
-    })
-
-    opponentsBakugans.forEach((bakugan) => {
-        if (usersPower > opponentsPower) {
-            bakugan.currentPower = bakugan.currentPower + opponentsValue
-            ApplyAbsorbPowerBoost({ roomState, bakugan, G: opponentsValue })
-        } else {
-            bakugan.currentPower = bakugan.currentPower - opponentsValue
-        }
-    })
-
 }

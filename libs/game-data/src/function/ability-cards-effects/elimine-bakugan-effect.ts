@@ -2,22 +2,35 @@ import { Bakugans } from "../../battle-brawlers/bakugans.js"
 import { bakuganOnSlot, stateType } from "../../type/room-types.js"
 import { ElimineBakuganDirectiveAnimation } from "../create-animation-directives/index.js"
 import { NewAdditionnalMessage } from "../new-additional-message.js"
+import { type EffectOrigin, isProtectedAgainst } from "./protection-status.js"
 
-export function ElimineBakuganEffect({ bakugan, roomState, gateCardProtection }: { roomState: stateType, bakugan: bakuganOnSlot, gateCardProtection?: boolean }) {
+export function ElimineBakuganEffect({
+    bakugan,
+    roomState,
+    origin = 'ABILITY',
+    /** @deprecated Use `origin: 'GATE'` instead */
+    gateCardProtection,
+}: {
+    roomState: stateType
+    bakugan: bakuganOnSlot
+    origin?: EffectOrigin
+    gateCardProtection?: boolean
+}) {
     if (!roomState) return
 
     const slotOfGate = roomState.protalSlots.find((slot) => slot.id === bakugan.slot_id)
     if (!slotOfGate) return
 
-    if (gateCardProtection) {
-        if (bakugan.statut.protected || bakugan.statut.protectedAgainstGate) {
-            NewAdditionnalMessage({
-                roomState: roomState,
-                key: 'bakugan_protected',
-                params: { name: Bakugans[bakugan.key].name },
-            })
-            return
-        }
+    const effectOrigin: EffectOrigin =
+        gateCardProtection === true ? 'GATE' : origin
+
+    if (isProtectedAgainst(bakugan, effectOrigin)) {
+        NewAdditionnalMessage({
+            roomState: roomState,
+            key: 'bakugan_protected',
+            params: { name: Bakugans[bakugan.key].name },
+        })
+        return
     }
 
     ElimineBakuganDirectiveAnimation({
@@ -26,7 +39,6 @@ export function ElimineBakuganEffect({ bakugan, roomState, gateCardProtection }:
         slot: structuredClone(slotOfGate),
         turn: roomState.turnState.turnCount,
         roomState: roomState
-
     })
 
     const deck = roomState.decksState.find((d) => d.userId === bakugan.userId)
@@ -49,5 +61,4 @@ export function ElimineBakuganEffect({ bakugan, roomState, gateCardProtection }:
 
     bakuganOnSlotDeckState.bakuganData.onDomain = false
     bakuganOnSlotDeckState.bakuganData.elimined = true
-
 }

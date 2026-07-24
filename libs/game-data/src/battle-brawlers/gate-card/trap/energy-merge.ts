@@ -1,4 +1,4 @@
-import { AutoActivationDuringBattle, PowerChange, type gateCardType } from "../../../index.js";
+import { AutoActivationDuringBattle, PowerChange, isProtectedAgainstGate, type gateCardType } from "../../../index.js";
 import { GateCardImages } from "../../../store/gate-card-images.js";
 
 export const AspirateurDePuissance: gateCardType = {
@@ -13,20 +13,21 @@ export const AspirateurDePuissance: gateCardType = {
             const firstBakugan = slotOfGate.bakugans[0]
             const lastBakugan = slotOfGate.bakugans[slotOfGate.bakugans.length - 1]
 
-            if (lastBakugan.statut.protected) return null
-            if (lastBakugan.statut.protectedAgainstGate) return null
+            if (isProtectedAgainstGate(lastBakugan)) return null
 
             PowerChange({
                 roomState,
                 bakugan: firstBakugan,
                 G: 100,
                 malus: false,
+                origin: 'GATE',
             })
             PowerChange({
                 roomState,
                 bakugan: lastBakugan,
                 G: 100,
                 malus: true,
+                origin: 'GATE',
             })
             slotOfGate.state.open = true
         }
@@ -47,12 +48,15 @@ export const AspirateurDePuissance: gateCardType = {
                 bakugan: firstBakugan,
                 G: 100,
                 malus: true,
+                origin: 'GATE',
+                ignoreProtection: true,
             })
             PowerChange({
                 roomState,
                 bakugan: lastBakugan,
                 G: 100,
                 malus: false,
+                origin: 'GATE',
             })
             slotOfGate.state.canceled = true
         }

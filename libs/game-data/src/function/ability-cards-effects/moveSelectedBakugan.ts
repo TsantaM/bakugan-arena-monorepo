@@ -8,6 +8,7 @@ import { AddRenfortAnimationDirective } from "../create-animation-directives/add
 import { MoveToAnotherSlotDirectiveAnimation } from "../create-animation-directives/move-to-another-slot.js";
 import RemoveRenfortAnimationDirective from "../create-animation-directives/remove-renfort-animation-directive.js";
 import { NewAdditionnalMessage } from "../new-additional-message.js";
+import { isProtectedAgainstAbility } from "./protection-status.js";
 
 export function moveSelectedBakugan({
     resolution,
@@ -31,7 +32,7 @@ export function moveSelectedBakugan({
     );
 
     if (!bakugan) return;
-    if(bakugan.statut.protected || bakugan.statut.protectedAgainstAbility) {
+    if (isProtectedAgainstAbility(bakugan)) {
         NewAdditionnalMessage({
             roomState: roomState,
             key: 'bakugan_protected',

@@ -2,6 +2,7 @@ import { BakuganList } from "../../battle-brawlers/bakugans.js"
 import type { attribut, portalSlotsTypeElement, slots_id, stateType } from "../../type/type-index.js"
 import { PowerChangeDirectiveAnumation } from "../create-animation-directives/index.js"
 import { PowerChange } from "../ability-cards-effects/power-change.js"
+import { isProtectedAgainstGate } from "../ability-cards-effects/protection-status.js"
 
 export function ElementaryGateCardOnOpen({ roomState, slot, attribut }: { roomState: stateType, slot: slots_id, attribut: attribut }) {
     if (!roomState) return
@@ -18,6 +19,7 @@ export function ElementaryGateCardOnOpen({ roomState, slot, attribut }: { roomSt
                 bakugan: b,
                 G: 100,
                 malus: false,
+                origin: 'GATE',
             })
         })
     }
@@ -54,7 +56,10 @@ export function PerilGateCardOnOpen({ roomState, slot, attribut, exception }: { 
         const secondAttributs = BakuganList.filter((b) => keys.includes(b.key) && b.seconaryAttribut !== exception).map((b) => b.key)
         const bakuganOnGate = [slotOfGate.bakugans.filter((b) => b.attribut !== exception), slotOfGate.bakugans.filter((b) => secondAttributs.includes(b.key))].flat()
 
-        bakuganOnGate.forEach((b) => b.attribut = attribut)
+        bakuganOnGate.forEach((b) => {
+            if (isProtectedAgainstGate(b)) return
+            b.attribut = attribut
+        })
         slotOfGate.state.open = true
 
     }

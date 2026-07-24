@@ -19,7 +19,8 @@ export const GrandEsprit: gateCardType = {
                 bakugan: bakuganUser,
                 G: bonus,
                 malus: false,
-                roomState: roomState
+                roomState: roomState,
+                origin: 'GATE',
             })
         }
 
@@ -35,12 +36,14 @@ export const GrandEsprit: gateCardType = {
         if (slotOfGate && bakuganUser && gateCount && slotOfGate.state.open && !slotOfGate.state.canceled) {
             const malus = 50 * gateCount.length
             slotOfGate.state.canceled = true
-                PowerChange({
-                    bakugan: bakuganUser,
-                    G: malus,
-                    malus: true,
-                    roomState: roomState
-                })
+            PowerChange({
+                bakugan: bakuganUser,
+                G: malus,
+                malus: true,
+                roomState: roomState,
+                origin: 'GATE',
+                ignoreProtection: true,
+            })
         }
     },
 }

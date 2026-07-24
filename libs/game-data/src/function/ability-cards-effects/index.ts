@@ -11,6 +11,7 @@ export * from "./drag-and-elimine-effect.js"
 export * from './swipe-power-levels-effects.js'
 export * from './power-change.js'
 export * from './protect-card-effect.js'
+export * from './protection-status.js'
 export * from './swipe-gate-card-effect.js'
 export * from './cancel-ability-card-effect.js'
 export * from "./trap-gate-cards-additional.use-ability.js"

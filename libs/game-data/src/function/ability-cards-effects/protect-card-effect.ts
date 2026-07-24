@@ -1,7 +1,7 @@
 import { Bakugans } from "../../battle-brawlers/bakugans.js"
 import { pushReplayAnimation } from "../replay/push-replay-animation.js";
 import { AnimationDirectivesTypes, Message } from "../../type/animations-directives.js"
-import { bakuganOnSlot, stateType } from "../../type/room-types.js"
+import { bakuganOnSlot, onSlotStatutType, stateType } from "../../type/room-types.js"
 import { NewAdditionnalMessage } from "../new-additional-message.js"
 
 type ProtectCardEffectType = {
@@ -18,9 +18,31 @@ function protectionSourceParams(check: { key: string; origin: 'GATE' | 'ABILITY'
         : { abilityKey: check.key }
 }
 
-export function ProtectCardEffect({ bakugan, cardKey, origin, roomState, protectionType }: ProtectCardEffectType) {
+function getProtectionField(
+    bakugan: bakuganOnSlot,
+    protectionType: ProtectCardEffectType['protectionType'],
+): onSlotStatutType {
+    if (protectionType === 'GATE') return bakugan.statut.protectedAgainstGate
+    if (protectionType === 'ABILITY') return bakugan.statut.protectedAgainstAbility
+    return bakugan.statut.protected
+}
 
-    const check = protectionType === 'GATE' ? bakugan.statut.protectedAgainstGate : protectionType === 'ABILITY' ? bakugan.statut.protectedAgainstAbility : bakugan.statut.protected
+function setProtectionField(
+    bakugan: bakuganOnSlot,
+    protectionType: ProtectCardEffectType['protectionType'],
+    value: onSlotStatutType,
+) {
+    if (protectionType === 'GATE') {
+        bakugan.statut.protectedAgainstGate = value
+    } else if (protectionType === 'ABILITY') {
+        bakugan.statut.protectedAgainstAbility = value
+    } else {
+        bakugan.statut.protected = value
+    }
+}
+
+export function ProtectCardEffect({ bakugan, cardKey, origin, roomState, protectionType }: ProtectCardEffectType) {
+    const check = getProtectionField(bakugan, protectionType)
 
     if (check) {
         NewAdditionnalMessage({
@@ -31,63 +53,49 @@ export function ProtectCardEffect({ bakugan, cardKey, origin, roomState, protect
                 ...protectionSourceParams(check),
             },
         })
-
-    } else {
-        bakugan.statut.protectedAgainstAbility = {
-            check: true,
-            key: cardKey,
-            origin: origin
-        }
-
-        const key =
-            protectionType === 'GATE'
-                ? 'bakugan_protected_against_gates'
-                : protectionType === 'ABILITY'
-                    ? 'bakugan_protected_against_abilities'
-                    : 'bakugan_protected_against_both'
-
-        const message: Message = {
-            key,
-            params: { name: Bakugans[bakugan.key].name },
-            turn: roomState.turnState.turnCount,
-            description: false
-        }
-
-        const animation: AnimationDirectivesTypes = {
-            type: 'ACTIVE_PROTECTION',
-            resolve: false,
-            data: {
-                cardKey: cardKey,
-                origin: origin,
-                bakugan: bakugan
-            },
-            message: [message]
-        }
-
-        roomState.animations.push(animation)
-        pushReplayAnimation(roomState, animation)
-
-
+        return
     }
 
+    setProtectionField(bakugan, protectionType, {
+        check: true,
+        key: cardKey,
+        origin: origin,
+    })
 
+    const key =
+        protectionType === 'GATE'
+            ? 'bakugan_protected_against_gates'
+            : protectionType === 'ABILITY'
+                ? 'bakugan_protected_against_abilities'
+                : 'bakugan_protected_against_both'
 
+    const message: Message = {
+        key,
+        params: { name: Bakugans[bakugan.key].name },
+        turn: roomState.turnState.turnCount,
+        description: false
+    }
 
+    const animation: AnimationDirectivesTypes = {
+        type: 'ACTIVE_PROTECTION',
+        resolve: false,
+        data: {
+            cardKey: cardKey,
+            origin: origin,
+            bakugan: bakugan
+        },
+        message: [message]
+    }
+
+    roomState.animations.push(animation)
+    pushReplayAnimation(roomState, animation)
 }
 
 export function RemoveProtectionCardEffect({ bakugan, cardKey, origin, protectionType, roomState }: ProtectCardEffectType) {
-
-    const check = protectionType === 'GATE' ? bakugan.statut.protectedAgainstGate : protectionType === 'ABILITY' ? bakugan.statut.protectedAgainstAbility : bakugan.statut.protected
+    const check = getProtectionField(bakugan, protectionType)
 
     if (check && check.key === cardKey && check.origin === origin) {
-
-        if (origin === 'GATE') {
-            bakugan.statut.protectedAgainstGate = false
-        } else if (origin === 'ABILITY') {
-            bakugan.statut.protectedAgainstAbility = false
-        } else {
-            bakugan.statut.protected = false
-        }
+        setProtectionField(bakugan, protectionType, false)
 
         const message: Message = {
             key: 'bakugan_protection_ended',
@@ -109,13 +117,12 @@ export function RemoveProtectionCardEffect({ bakugan, cardKey, origin, protectio
 
         roomState.animations.push(animation)
         pushReplayAnimation(roomState, animation)
-
-    } else {
-        NewAdditionnalMessage({
-            roomState: roomState,
-            key: 'bakugan_not_protected',
-            params: { name: Bakugans[bakugan.key].name },
-        })
+        return
     }
 
+    NewAdditionnalMessage({
+        roomState: roomState,
+        key: 'bakugan_not_protected',
+        params: { name: Bakugans[bakugan.key].name },
+    })
 }

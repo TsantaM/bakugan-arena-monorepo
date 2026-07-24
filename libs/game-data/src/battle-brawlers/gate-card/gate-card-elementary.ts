@@ -33,6 +33,7 @@ export const ReacteurPyrus: gateCardType = {
             bakugan,
             G: 100,
             malus: false,
+            origin: 'GATE',
         })
 
     },
@@ -49,6 +50,7 @@ export const ReacteurPyrus: gateCardType = {
             bakugan,
             G: 100,
             malus: false,
+            origin: 'GATE',
         })
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
@@ -102,6 +104,7 @@ export const ReacteurHaos: gateCardType = {
             bakugan,
             G: 100,
             malus: false,
+            origin: 'GATE',
         })
     },
     onAttributChange({ bakugan, slot, attribut, roomState }) {
@@ -117,6 +120,7 @@ export const ReacteurHaos: gateCardType = {
             bakugan,
             G: 100,
             malus: false,
+            origin: 'GATE',
         })
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
@@ -179,6 +183,7 @@ export const ReacteurVentus: gateCardType = {
             bakugan,
             G: 100,
             malus: false,
+            origin: 'GATE',
         })
     },
     onAttributChange({ bakugan, slot, attribut, roomState }) {
@@ -194,6 +199,7 @@ export const ReacteurVentus: gateCardType = {
             bakugan,
             G: 100,
             malus: false,
+            origin: 'GATE',
         })
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
@@ -250,6 +256,7 @@ export const ReacteurAquos: gateCardType = {
             bakugan,
             G: 100,
             malus: false,
+            origin: 'GATE',
         })
     },
     onAttributChange({ bakugan, slot, attribut, roomState }) {
@@ -265,6 +272,7 @@ export const ReacteurAquos: gateCardType = {
             bakugan,
             G: 100,
             malus: false,
+            origin: 'GATE',
         })
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
@@ -321,6 +329,7 @@ export const ReacteurSubterra: gateCardType = {
             bakugan,
             G: 100,
             malus: false,
+            origin: 'GATE',
         })
     },
     onAttributChange({ bakugan, slot, attribut, roomState }) {
@@ -336,6 +345,7 @@ export const ReacteurSubterra: gateCardType = {
             bakugan,
             G: 100,
             malus: false,
+            origin: 'GATE',
         })
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {
@@ -392,6 +402,7 @@ export const ReacteurDarkus: gateCardType = {
             bakugan,
             G: 100,
             malus: false,
+            origin: 'GATE',
         })
     },
     onAttributChange({ bakugan, slot, attribut, roomState }) {
@@ -407,6 +418,7 @@ export const ReacteurDarkus: gateCardType = {
             bakugan,
             G: 100,
             malus: false,
+            origin: 'GATE',
         })
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {

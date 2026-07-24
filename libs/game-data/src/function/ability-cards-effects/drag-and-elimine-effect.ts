@@ -2,11 +2,12 @@ import { Bakugans } from "../../battle-brawlers/bakugans.js"
 import { bakuganOnSlot, portalSlotsTypeElement, stateType } from "../../type/room-types.js"
 import { DragAndElimineDirectiveAnimation } from "../create-animation-directives/index.js"
 import { NewAdditionnalMessage } from "../new-additional-message.js"
+import { isProtectedAgainstAbility } from "./protection-status.js"
 
 export function DragAndElimineBakuganEffect({ bakugan, roomState, cardUser, initialSlot }: { roomState: stateType, bakugan: bakuganOnSlot, cardUser: bakuganOnSlot, initialSlot: portalSlotsTypeElement }) {
     if (!roomState) return
 
-    if (bakugan.statut.trapped || bakugan.statut.protectedAgainstAbility || bakugan.statut.protected) {
+    if (bakugan.statut.trapped || isProtectedAgainstAbility(bakugan)) {
         NewAdditionnalMessage({
             roomState: roomState,
             key: 'bakugan_protected',

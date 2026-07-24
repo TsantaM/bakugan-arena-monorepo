@@ -8,17 +8,18 @@ import { CheckBattleStillInProcess } from "../check-battle-still-in-process.js";
 import { AddRenfortAnimationDirective } from "../create-animation-directives/add-renfort-directive.js";
 import { MoveToAnotherSlotDirectiveAnimation } from "../create-animation-directives/move-to-another-slot.js";
 import { NewAdditionnalMessage } from "../new-additional-message.js";
+import { isProtectedAgainst, type EffectOrigin } from "./protection-status.js";
 
 export function dragBakuganToUserSlot({
     resolution,
     roomState,
     trapped,
-    origin  // Certaines cartes (ex: AntiMuse) ne veulent PAS les renforts
+    origin = 'ABILITY'  // Certaines cartes (ex: AntiMuse) ne veulent PAS les renforts
 }: {
     resolution: resolutionType,
     roomState: stateType,
     trapped?: boolean,
-    origin?: 'GATE' | 'ABILITY'
+    origin?: EffectOrigin
 }) {
     if (!roomState) return;
     if (resolution.data.type !== "SELECT_BAKUGAN_ON_DOMAIN") return;
@@ -36,7 +37,7 @@ export function dragBakuganToUserSlot({
     const bakuganToDrag = slotTarget.bakugans.find(b => b.key === targetBakuganKey && b.userId === targetUserId);
 
     if (!bakuganToDrag) return;
-    if (bakuganToDrag.statut.protected || bakuganToDrag.statut.protectedAgainstAbility) {
+    if (isProtectedAgainst(bakuganToDrag, origin)) {
         NewAdditionnalMessage({
             roomState: roomState,
             key: 'bakugan_protected',

@@ -14,6 +14,7 @@ export function CaracterGateCardEffect({ roomState, slotOfGate, family }: { room
                 bakugan: b,
                 G: basePower,
                 malus: false,
+                origin: 'GATE',
             })
         })
         slotOfGate.state.open = true

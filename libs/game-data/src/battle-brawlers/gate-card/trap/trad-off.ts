@@ -16,7 +16,7 @@ function EchangeMainEffect({ roomState, slotOfGate, userId }: { roomState: state
             ElimineBakuganEffect({
                 bakugan: b,
                 roomState: roomState,
-                gateCardProtection: true
+                origin: 'GATE',
             })
         })
 
@@ -41,7 +41,7 @@ function EchangeMainEffect({ roomState, slotOfGate, userId }: { roomState: state
             ElimineBakuganEffect({
                 bakugan: b,
                 roomState: roomState,
-                gateCardProtection: true
+                origin: 'GATE',
             })
         })
 
