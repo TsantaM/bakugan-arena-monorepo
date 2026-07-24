@@ -14,6 +14,23 @@ import {
   isAdditionalRequestForUser,
 } from "./expand-legal-moves"
 import type { SimulateAction } from "./types"
+import {
+  applyMatchAdaptation,
+  buildMatchAdaptation,
+  mergePersonalities,
+  updateMatchMemory,
+  type MatchAdaptation,
+} from "./match-adaptation"
+import {
+  getBaseScoreWeights,
+  runWithScoreWeights,
+} from "./score-weights-runtime"
+import {
+  applyPhaseWeightOverlay,
+} from "@bakugan-arena/drizzle-orm"
+import {
+  resolveBotTrainingPhase,
+} from "@bakugan-arena/game-data"
 
 export type ScoredMove = {
   /** Action à jouer (prête pour simulateAction / emit socket) */
@@ -40,6 +57,13 @@ type EvaluateLegalMovesParams = {
   request?: TurnRequest
   /** Override personnalités (sinon lues depuis bot-data via `persolaty`) */
   personalities?: personalities[]
+  /** Si false, ignore l'adaptation de match (tests / debug). Défaut true. */
+  adaptToMatch?: boolean
+}
+
+export type EvaluateLegalMovesResult = {
+  moves: ScoredMove[]
+  adaptation: MatchAdaptation | null
 }
 
 const flattenTurnActions = (request: TurnRequest): ActionType[] => {
@@ -100,22 +124,12 @@ const toScoredMove = (
   }
 }
 
-/**
- * Énumère toutes les combinaisons légales, simule chaque coup,
- * et renvoie la liste scorée (meilleur score = meilleur coup).
- *
- * Priorité :
- * 1. Additional ability / gate en attente dans l'état
- * 2. Sinon actions du turn-action-request (+ TURN_SKIP si aucune mustDo)
- */
-export function evaluateLegalMoves({
-  state,
-  userId,
-  request,
-  personalities,
-}: EvaluateLegalMovesParams): ScoredMove[] {
-  const traits = personalities ?? getBotByUserId(userId)?.persolaty ?? []
-
+function scoreAllMoves(
+  state: stateType,
+  userId: string,
+  traits: personalities[],
+  request: TurnRequest | undefined
+): ScoredMove[] {
   const finalize = (moves: ScoredMove[]): ScoredMove[] =>
     moves
       .filter((move) => !move.rejected)
@@ -163,9 +177,93 @@ export function evaluateLegalMoves({
 }
 
 /**
+ * Énumère toutes les combinaisons légales, simule chaque coup,
+ * et renvoie la liste scorée (meilleur score = meilleur coup).
+ *
+ * Applique l'adaptation de match (poids + personnalités) par défaut.
+ */
+export function evaluateLegalMoves({
+  state,
+  userId,
+  request,
+  personalities,
+  adaptToMatch = true,
+}: EvaluateLegalMovesParams): ScoredMove[] {
+  return evaluateLegalMovesDetailed({
+    state,
+    userId,
+    request,
+    personalities,
+    adaptToMatch,
+  }).moves
+}
+
+export function evaluateLegalMovesDetailed({
+  state,
+  userId,
+  request,
+  personalities,
+  adaptToMatch = true,
+}: EvaluateLegalMovesParams): EvaluateLegalMovesResult {
+  const baseTraits = personalities ?? getBotByUserId(userId)?.persolaty ?? []
+
+  if (!adaptToMatch) {
+    return {
+      moves: scoreAllMoves(state, userId, baseTraits, request),
+      adaptation: null,
+    }
+  }
+
+  const memory = updateMatchMemory(state, userId)
+  const adaptation = buildMatchAdaptation(state, userId, memory)
+  const traits = mergePersonalities(baseTraits, adaptation.extraPersonalities)
+
+  const inBattle =
+    state.battleState.battleInProcess === true && state.battleState.paused !== true
+  const phase = resolveBotTrainingPhase(inBattle, state.battleState.turns ?? 0)
+
+  const adaptedWeights = applyPhaseWeightOverlay(
+    applyMatchAdaptation(getBaseScoreWeights(), adaptation),
+    phase
+  )
+
+  const moves = runWithScoreWeights(adaptedWeights, () =>
+    scoreAllMoves(state, userId, traits, request)
+  )
+
+  return { moves, adaptation }
+}
+
+/**
  * Retourne le meilleur coup selon le score (ou undefined si aucun coup valide).
  */
 export function pickBestMove(moves: ScoredMove[]): ScoredMove | undefined {
   if (moves.length === 0) return undefined
   return moves.reduce((best, move) => (move.score > best.score ? move : best))
+}
+
+/**
+ * Sélection softmax : favorise le meilleur coup tout en gardant une exploration légère.
+ * `temperature` bas → quasi déterministe ; haut → plus varié.
+ */
+export function pickMoveSoftmax(
+  moves: ScoredMove[],
+  temperature = 0.4
+): ScoredMove | undefined {
+  const valid = moves.filter((m) => Number.isFinite(m.score))
+  if (valid.length === 0) return undefined
+  if (valid.length === 1) return valid[0]
+
+  const temp = Math.max(0.05, temperature)
+  const maxScore = Math.max(...valid.map((m) => m.score))
+  const weights = valid.map((m) => Math.exp((m.score - maxScore) / temp))
+  const sum = weights.reduce((acc, w) => acc + w, 0)
+  if (!(sum > 0)) return pickBestMove(valid)
+
+  let cursor = Math.random() * sum
+  for (let i = 0; i < valid.length; i++) {
+    cursor -= weights[i]!
+    if (cursor <= 0) return valid[i]
+  }
+  return valid[valid.length - 1]
 }

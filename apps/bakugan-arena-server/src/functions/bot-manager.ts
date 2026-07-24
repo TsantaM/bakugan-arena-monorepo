@@ -124,6 +124,10 @@ export const getAvailableBot = async ({
   const deck = pickRandomBotDeck(bot)
   if (!deck) return undefined
 
+  console.log(
+    `[BOT] matchmaking pick ${bot.userId} deck="${deck.name}" (${getBotDeckDefinitions(bot).length} deck(s) available)`
+  )
+
   return {
     ...bot,
     deckId: deck.id,

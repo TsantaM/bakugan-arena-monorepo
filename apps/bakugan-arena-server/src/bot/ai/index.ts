@@ -15,11 +15,27 @@ export {
 export type { ScoreActionParams } from "./score-action"
 export {
   getScoreWeights,
+  getBaseScoreWeights,
+  runWithScoreWeights,
   refreshScoreWeightsFromDb,
   startScoreWeightsPolling,
 } from "./score-weights-runtime"
-export { evaluateLegalMoves, pickBestMove } from "./evaluate-legal-moves"
-export type { ScoredMove } from "./evaluate-legal-moves"
+export {
+  evaluateLegalMoves,
+  evaluateLegalMovesDetailed,
+  pickBestMove,
+  pickMoveSoftmax,
+} from "./evaluate-legal-moves"
+export type { ScoredMove, EvaluateLegalMovesResult } from "./evaluate-legal-moves"
+export {
+  buildMatchAdaptation,
+  applyMatchAdaptation,
+  updateMatchMemory,
+  clearMatchMemory,
+  getMatchMemory,
+  mergePersonalities,
+} from "./match-adaptation"
+export type { MatchAdaptation, MatchMemory, MatchPressure } from "./match-adaptation"
 export type {
   SimulateAction,
   SimulateActionOptions,

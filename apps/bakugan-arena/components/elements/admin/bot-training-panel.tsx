@@ -347,8 +347,14 @@ export default function BotTrainingPanel() {
                   </div>
                   <div className="text-muted-foreground text-xs">
                     {version.version} · {version.metrics.decisionsAnalyzed} decisions ·{" "}
-                    {version.metrics.replaysUsed} replays ·{" "}
-                    {new Date(version.createdAt).toLocaleString()}
+                    {version.metrics.replaysUsed} replays
+                    {typeof version.metrics.winsUsed === "number" && (
+                      <>
+                        {" "}
+                        · {version.metrics.winsUsed}W/{version.metrics.lossesUsed ?? 0}L
+                      </>
+                    )}{" "}
+                    · {new Date(version.createdAt).toLocaleString()}
                   </div>
                 </div>
                 <Button

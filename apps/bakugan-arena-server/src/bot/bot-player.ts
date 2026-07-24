@@ -9,7 +9,11 @@ import {
 } from "@bakugan-arena/game-data"
 import { BOT_ACCOUNTS, BotAccount } from "../functions/bot-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
-import { evaluateLegalMoves, pickBestMove } from "./ai"
+import {
+  clearMatchMemory,
+  evaluateLegalMovesDetailed,
+  pickMoveSoftmax,
+} from "./ai"
 import type { SimulateAction } from "./ai"
 
 const ACTION_DELAY_MS = 450
@@ -126,21 +130,24 @@ const playBestMove = (
     return false
   }
 
-  const moves = evaluateLegalMoves({ state, userId, request })
+  const { moves, adaptation } = evaluateLegalMovesDetailed({ state, userId, request })
+  const temperature = adaptation?.temperature ?? 0.4
 
-  // Tour 0 : gate card choisie au hasard parmi les poses légales
+  // Tour 0 : scorer les gates (softmax un peu plus exploratoire via temperature)
   if (state.turnState.turnCount === 0) {
     const gateMoves = moves.filter((m) => m.action.type === "SET_GATE")
     if (gateMoves.length > 0) {
-      const pick = gateMoves[Math.floor(Math.random() * gateMoves.length)]!
-      console.log(
-        `[BOT ${botLabel}] turn0 random gate ${pick.label} (${gateMoves.length} options)`
-      )
-      return emitSimulateAction(socket, roomId, pick.action)
+      const pick = pickMoveSoftmax(gateMoves, Math.max(temperature, 0.45))
+      if (pick) {
+        console.log(
+          `[BOT ${botLabel}] turn0 gate ${pick.label} (score=${pick.score.toFixed(2)}, options=${gateMoves.length}, adapt=${adaptation?.reason.join(",") ?? "-"})`
+        )
+        return emitSimulateAction(socket, roomId, pick.action)
+      }
     }
   }
 
-  const best = pickBestMove(moves)
+  const best = pickMoveSoftmax(moves, temperature)
 
   if (!best) {
     console.log(`[BOT ${botLabel}] no scored move → TURN_SKIP`)
@@ -149,7 +156,7 @@ const playBestMove = (
   }
 
   console.log(
-    `[BOT ${botLabel}] play ${best.label} (score=${best.score}, options=${moves.length})`
+    `[BOT ${botLabel}] play ${best.label} (score=${best.score.toFixed(2)}, options=${moves.length}, pressure=${adaptation?.pressure ?? "n/a"}, adapt=${adaptation?.reason.join(",") ?? "-"})`
   )
   return emitSimulateAction(socket, roomId, best.action)
 }
@@ -184,13 +191,16 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
 
   socket.on("disconnect", (reason) => {
     console.log(`[BOT ${bot.userId}] disconnected:`, reason)
+    if (roomId) clearMatchMemory(roomId, bot.userId)
     roomId = null
     pendingAdditionalRequests = 0
   })
 
   const joinRoom = (matchedRoomId: string) => {
+    if (roomId) clearMatchMemory(roomId, bot.userId)
     roomId = matchedRoomId
     pendingAdditionalRequests = 0
+    clearMatchMemory(matchedRoomId, bot.userId)
     // Un seul bootstrap : init-room-state suffit (évite un 2ᵉ turn-action-request)
     socket.emit("init-room-state", {
       roomId: matchedRoomId,
@@ -207,6 +217,7 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
 
   socket.on("game-finished", () => {
     console.log(`[BOT ${bot.userId}] game finished`)
+    if (roomId) clearMatchMemory(roomId, bot.userId)
     roomId = null
     pendingAdditionalRequests = 0
   })

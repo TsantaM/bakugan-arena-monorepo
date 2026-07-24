@@ -1,7 +1,12 @@
 import {
   BakuganList,
   GateCardsList,
+  boardFromRoomState,
   getPlayerDecksAndBakugans,
+  prefWeightKey,
+  resolveBotTrainingPhase,
+  scoreLearnableSignals,
+  simulateActionToPrefType,
   type bakuganOnSlot,
   type blockedCardSlotType,
   type portalSlotsTypeElement,
@@ -623,6 +628,8 @@ function scoreBattleResolved(
 
   score += scoreBattleAbilityEconomy(before, action, userId)
   score += scoreGlobalSpecialGates(before, after, action, userId)
+  score += scoreDynamicLearnedSignals(before, after, userId)
+  score += scorePhaseActionPreference(before, action)
 
   return score
 }
@@ -647,6 +654,43 @@ function scoreSetGatePlacementBonus(action: SimulateAction): number {
   return action.type === "SET_GATE" ? getScoreWeights().setGatePlacementBonus : 0
 }
 
+/**
+ * Applique les poids `dyn:` découverts à l'entraînement pour des situations
+ * non câblées explicitement dans les heuristiques historiques.
+ */
+function scoreDynamicLearnedSignals(
+  before: stateType,
+  after: stateType,
+  userId: string
+): number {
+  // Facteur pour ne pas noyer les heuristiques historiques avec la somme des dyn:
+  const DYNAMIC_SCORE_SCALE = 0.35
+  return (
+    scoreLearnableSignals(
+      boardFromRoomState(before),
+      boardFromRoomState(after),
+      userId,
+      getScoreWeights()
+    ) * DYNAMIC_SCORE_SCALE
+  )
+}
+
+/** Bonus d'imitation : types de coups préférés par phase (clés pref:). */
+function scorePhaseActionPreference(
+  before: stateType,
+  action: SimulateAction
+): number {
+  const inBattle =
+    before.battleState.battleInProcess === true && before.battleState.paused !== true
+  const phase = resolveBotTrainingPhase(inBattle, before.battleState.turns ?? 0)
+  const prefType = simulateActionToPrefType(action.type)
+  if (!prefType) return 0
+
+  const weight = getScoreWeights()[prefWeightKey(phase, prefType)]
+  if (typeof weight !== "number") return 0
+  return weight * 0.45
+}
+
 /** Scoring setup neutral (pas de bataille immédiate ni au tour suivant). */
 function scoreNeutralSetupResolved(
   before: stateType,
@@ -663,6 +707,8 @@ function scoreNeutralSetupResolved(
   score += scoreBakuganPlacementBonuses(action, after)
   score += scoreNeutralEffectActions(before, after, action, userId)
   score += scoreGlobalSpecialGates(before, after, action, userId)
+  score += scoreDynamicLearnedSignals(before, after, userId)
+  score += scorePhaseActionPreference(before, action)
 
   return score
 }

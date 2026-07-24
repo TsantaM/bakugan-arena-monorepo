@@ -242,6 +242,8 @@ export async function activateDefaultBotWeights() {
       metrics: {
         replaysUsed: 0,
         decisionsAnalyzed: 0,
+        winsUsed: 0,
+        lossesUsed: 0,
         featureRates: {},
       },
       isActive: true,
