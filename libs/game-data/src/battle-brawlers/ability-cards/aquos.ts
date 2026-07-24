@@ -112,7 +112,7 @@ export const BarrageDeau: abilityCardsType = {
         const bakugansOnBoard = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId)
         if (bakugansOnBoard.length === 0) return false
         const aquos = bakugansOnBoard.filter((bakugan) => bakugan.attribut === "Aquos")
-        if (aquos.length < 3) return false
+        if (aquos.length < 2) return false
         return true
     },
     onCanceled({ roomState }) {

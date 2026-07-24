@@ -104,23 +104,25 @@ export const DualGazer: exclusiveAbilitiesType = {
             })
         }
 
-        const deck = roomData.decksState.find((d) => d.userId === resolution.userId)
-        const aliveCount = deck?.bakugans.filter((b) => !b.bakuganData.elimined).length || 0
+        const userDeck = roomData.decksState.find((d) => d.userId === resolution.userId)
+        const opponentDeck = roomData.decksState.find((d) => d.userId === userId)
+        const userAliveCount = userDeck?.bakugans.filter((b) => !b.bakuganData.elimined).length || 0
+        const opponentAliveCount = opponentDeck?.bakugans.filter((b) => !b.bakuganData.elimined).length || 0
 
-        if (!deck || aliveCount > 1) {
+        const shouldEliminate = userAliveCount === 1 || opponentAliveCount > userAliveCount
+
+        if (shouldEliminate) {
+            ElimineBakuganEffect({
+                bakugan: target,
+                roomState: roomData
+            })
+        } else {
             PowerChange({
                 bakugan: target,
                 G: 100,
                 malus: true,
                 roomState: roomData
             })
-        } else {
-            if(aliveCount === 1) {
-                ElimineBakuganEffect({
-                    bakugan: target,
-                    roomState: roomData
-                })
-            }
         }
 
     },
