@@ -54,5 +54,20 @@
   "prompt_select_bakugan_drag": "{name} : Select a Bakugan to drag",
   "prompt_select_bakugan_target": "{name} : Select a Bakugan to target",
   "prompt_select_target": "{name} : Select a target",
-  "prompt_select_ability_card": "{name} : Select one ability card"
+  "prompt_select_ability_card": "{name} : Select one ability card",
+
+  "tooltip_power": "Power: {power}",
+  "tooltip_gate_card": "Gate Card",
+  "tooltip_gate_open": "Open",
+  "tooltip_gate_canceled": "Nullified",
+  "tooltip_gate_blocked": "Blocked ({source})",
+  "tooltip_status_trapped": "Trapped ({source})",
+  "tooltip_status_not_retreat": "Cannot retreat ({source})",
+  "tooltip_status_poisoned": "Poisoned ({source})",
+  "tooltip_status_protected": "Protected ({source})",
+  "tooltip_status_protected_against_gate": "Protected vs gates ({source})",
+  "tooltip_status_protected_against_ability": "Protected vs abilities ({source})",
+  "tooltip_status_absorb": "Absorbing power boosts ({source})",
+  "tooltip_status_ability_block": "Abilities blocked",
+  "tooltip_status_assist": "Reinforcement ({source})"
 }

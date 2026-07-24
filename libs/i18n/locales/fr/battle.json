@@ -54,5 +54,20 @@
   "prompt_select_bakugan_drag": "{name} : Sélectionnez un Bakugan à attirer",
   "prompt_select_bakugan_target": "{name} : Sélectionnez un Bakugan cible",
   "prompt_select_target": "{name} : Sélectionnez une cible",
-  "prompt_select_ability_card": "{name} : Sélectionnez une carte capacité"
+  "prompt_select_ability_card": "{name} : Sélectionnez une carte capacité",
+
+  "tooltip_power": "Puissance : {power}",
+  "tooltip_gate_card": "Carte portail",
+  "tooltip_gate_open": "Ouverte",
+  "tooltip_gate_canceled": "Annulée",
+  "tooltip_gate_blocked": "Bloquée ({source})",
+  "tooltip_status_trapped": "Piégé ({source})",
+  "tooltip_status_not_retreat": "Ne peut pas battre en retraite ({source})",
+  "tooltip_status_poisoned": "Empoisonné ({source})",
+  "tooltip_status_protected": "Protégé ({source})",
+  "tooltip_status_protected_against_gate": "Protégé contre les cartes portail ({source})",
+  "tooltip_status_protected_against_ability": "Protégé contre les capacités ({source})",
+  "tooltip_status_absorb": "Absorption de puissance ({source})",
+  "tooltip_status_ability_block": "Capacités bloquées",
+  "tooltip_status_assist": "Renfort ({source})"
 }

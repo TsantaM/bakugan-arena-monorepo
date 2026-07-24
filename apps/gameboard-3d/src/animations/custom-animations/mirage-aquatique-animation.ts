@@ -7,7 +7,7 @@ import gsap from "gsap"
 import * as THREE from "three"
 import { getAttributColor } from "../../functions/get-attrubut-color"
 import { GetSpritePosition } from "../../functions/get-sprite-position"
-import type { SpriteUserData } from "../../meshes/bakugan.mesh"
+import { buildSpriteUserData } from "../../functions/mesh-status-user-data"
 import { MoveBakugan } from "../move-bakugan-animation"
 import type { CustomAnimationContext } from "./types"
 
@@ -320,14 +320,10 @@ export async function MirageAquatiqueAnimation({
             tween(material, { opacity: 1, duration: 0.35, ease: "power2.out" }),
         ])
 
-        bakuganMesh.userData = {
-            attribut: bakugan.attribut,
-            bakuganKey: bakugan.key,
-            image: bakugan.image,
-            powerLevel: bakugan.currentPower,
-            slot: newSlot.id,
-            userId: bakugan.userId,
-        } satisfies SpriteUserData
+        bakuganMesh.userData = buildSpriteUserData({
+            ...bakugan,
+            slot_id: newSlot.id,
+        })
 
         const alliesOnNew = newSlot.bakugans.filter(
             (b) => b.userId === bakugan.userId && b.key !== bakugan.key,

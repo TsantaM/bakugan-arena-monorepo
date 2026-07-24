@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import gsap from 'gsap';
 import { FontLoader, TextGeometry } from 'three/examples/jsm/Addons.js';
 import type { bakuganOnSlot, slots_id } from '@bakugan-arena/game-data';
-import type { SpriteUserData } from '../meshes/bakugan.mesh';
+import { syncBakuganMeshUserData } from '../functions/mesh-status-user-data';
 
 // ✅ On charge la police une seule fois (à l’extérieur de la fonction)
 const loader = new FontLoader();
@@ -38,12 +38,10 @@ export async function PowerChangeAnimation({
     bakuganMesh.add(powerChangeMesh);
     powerChangeMesh.lookAt(camera.position);
 
-    const data = bakuganMesh.userData as SpriteUserData
-
     const timeline = gsap.timeline({
       onComplete: () => {
         powerChangeMesh.removeFromParent();
-        data.powerLevel = bakugan.currentPower
+        syncBakuganMeshUserData(scene, bakugan)
         resolve(); // ✅ l’animation est terminée
       }
     }).timeScale(1.5);

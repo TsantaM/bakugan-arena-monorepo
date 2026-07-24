@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import gsap from 'gsap'
 import { GetSpritePosition } from '../functions/get-sprite-position'
 import { Slots, type bakuganOnSlot, type portalSlotsTypeElement } from '@bakugan-arena/game-data'
-import type { SpriteUserData } from '../meshes/bakugan.mesh'
+import { buildSpriteUserData } from '../functions/mesh-status-user-data'
 
 type MoveBakuganProps = {
   scene: THREE.Scene
@@ -29,14 +29,7 @@ export async function MoveBakugan({
     const bakuganMesh = scene.getObjectByName(`${bakugan.key}-${bakugan.userId}`)
     if (!bakuganMesh || !newPosition) return resolve()
 
-    const userData: SpriteUserData = {
-      attribut: bakugan.attribut,
-      bakuganKey: bakugan.key,
-      image: bakugan.image,
-      powerLevel: bakugan.currentPower,
-      slot: bakugan.slot_id,
-      userId: bakugan.userId
-    }
+    const userData = buildSpriteUserData(bakugan)
 
     const timeline = gsap.timeline({
       onComplete: () => {

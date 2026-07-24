@@ -3,7 +3,6 @@ import './style.css'
 import * as THREE from 'three'
 import { PlaneMesh } from './meshes/plane.mesh'
 import {
-  Bakugans,
   createEmptySandboxSnapshot,
   replaySnapshotToRoomState,
   SANDBOX_USER_ID,
@@ -16,11 +15,13 @@ import { applyReplaySnapshotUi } from './functions/apply-replay-snapshot-ui'
 import { TurnActionInterfaceBuilder } from './turn-action-management/turn-interface-builder'
 import { clearTurnInterface } from './turn-action-management/turn-actions-resolution/action-scope'
 import { hideTooltip, initTooltip, showTooltip, tooltip } from './functions/tooltips-functions'
-import type { BakuganPreviewData } from './functions/create-bakugan-preview-hover'
 import { initGameboardLocaleFromUrl } from './i18n/locale'
 import { playAnimation } from './sockets/sockets-handlers'
 import { CUSTOM_ANIMATION_KEYS } from './animations/custom-animations/registry'
 import gsap from 'gsap'
+import { buildBakuganTooltipContent, buildSlotTooltipContent } from './functions/mesh-tooltip-content'
+import type { SpriteUserData } from './meshes/bakugan.mesh'
+import type { SlotMeshUsersData } from './meshes/slot.mesh'
 
 initGameboardLocaleFromUrl()
 
@@ -203,13 +204,8 @@ function initScene() {
       if (hoveredMesh !== currentMesh) {
         hoveredMesh = currentMesh
 
-        const data = currentMesh.userData as BakuganPreviewData
-        const bakuganName = Bakugans[data.bakuganKey]?.name ?? data.bakuganKey
-
-        showTooltip(`
-                <strong>${bakuganName}</strong><br/>
-                Power: ${data.powerLevel}
-                `)
+        const data = currentMesh.userData as SpriteUserData
+        showTooltip(buildBakuganTooltipContent(data))
       }
 
       hoveredSlot = null
@@ -226,8 +222,9 @@ function initScene() {
       if (hoveredSlot !== currentMesh) {
         hoveredSlot = currentMesh
 
-        if (currentMesh.userData.cardName) {
-          showTooltip(`<strong>${currentMesh.userData.cardName}</strong>`)
+        const content = buildSlotTooltipContent(currentMesh.userData as SlotMeshUsersData)
+        if (content) {
+          showTooltip(content)
         } else {
           hideTooltip()
         }

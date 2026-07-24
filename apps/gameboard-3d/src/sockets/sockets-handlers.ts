@@ -37,6 +37,53 @@ import { applySkipTimeScaleIfNeeded, clearAnimationSkip, setAnimationsActive } f
 import { GateCardAdditionalRequestResolution } from "../abiliity-additional-request/gate-card-additional-request"
 import { ChangeAttributAnimation } from "../animations/change-attribut-animation"
 import { CustomAnimationsRegistry } from "../animations/custom-animations/registry"
+import {
+    getPortalSlotsFromState,
+    syncBakuganMeshUserData,
+    syncBoardMeshesFromPortalSlots,
+    syncSlotMeshUserData,
+} from "../functions/mesh-status-user-data"
+
+function syncMeshesFromAnimationData({
+    scene,
+    plane,
+    animation,
+}: {
+    scene: THREE.Scene
+    plane: THREE.Mesh
+    animation: AnimationDirectivesTypes
+}) {
+    const data = 'data' in animation ? animation.data : undefined
+    if (!data || typeof data !== 'object') return
+
+    const maybeBakugan = (value: unknown) => {
+        if (!value || typeof value !== 'object') return
+        if (!('key' in value) || !('userId' in value) || !('statut' in value)) return
+        syncBakuganMeshUserData(scene, value as Parameters<typeof syncBakuganMeshUserData>[1])
+    }
+
+    const maybeSlot = (value: unknown) => {
+        if (!value || typeof value !== 'object') return
+        if (!('id' in value) || !('state' in value)) return
+        syncSlotMeshUserData(plane, value as Parameters<typeof syncSlotMeshUserData>[1])
+    }
+
+    if ('bakugan' in data) {
+        const bakugan = data.bakugan
+        if (Array.isArray(bakugan)) bakugan.forEach(maybeBakugan)
+        else maybeBakugan(bakugan)
+    }
+    if ('cardUser' in data) maybeBakugan(data.cardUser)
+    if ('sourceBakugan' in data) maybeBakugan(data.sourceBakugan)
+    if ('targetBakugans' in data && Array.isArray(data.targetBakugans)) {
+        data.targetBakugans.forEach(maybeBakugan)
+    }
+    if ('slot' in data) maybeSlot(data.slot)
+    if ('newSlot' in data) maybeSlot(data.newSlot)
+    if ('initialSlot' in data) maybeSlot(data.initialSlot)
+    if ('slot1' in data) maybeSlot(data.slot1)
+    if ('slot2' in data) maybeSlot(data.slot2)
+}
 
 let animationQueue: AnimationDirectivesTypes[] = []
 let isProcessingAnimations = false
@@ -138,6 +185,15 @@ export async function playAnimation(
                     if (!mesh) return
                     mesh.userData.powerLevel = powerLevel
                 })
+
+                for (const anim of group) {
+                    if (anim.type !== 'POWER_CHANGE') continue
+                    syncMeshesFromAnimationData({
+                        scene,
+                        plane,
+                        animation: anim,
+                    })
+                }
 
                 continue;
             }
@@ -437,6 +493,12 @@ export async function playAnimation(
                 }
             }
 
+            syncMeshesFromAnimationData({
+                scene,
+                plane,
+                animation: current,
+            })
+
             i++; // avancer à l'animation suivante
         }
     } finally {
@@ -554,6 +616,17 @@ export function registerSocketHandlers(
 
     socket.on("turn-action", (state: roomStateType) => {
         syncLocalTurnFromState(state)
+        const slots = getPortalSlotsFromState(state)
+        if (slots) {
+            syncBoardMeshesFromPortalSlots({ scene, plane, slots })
+        }
+    })
+
+    socket.on("update-room-state", (state: roomStateType & { protalSlots?: roomStateType['portalSlots'] }) => {
+        const slots = getPortalSlotsFromState(state)
+        if (slots) {
+            syncBoardMeshesFromPortalSlots({ scene, plane, slots })
+        }
     })
 
     socket.on("turn-action-request", async (request: ActivePlayerActionRequestType | InactivePlayerActionRequestType) => {
@@ -742,6 +815,20 @@ export function registerSocketHandlersViewers(socket: Socket,
     socket.on("animations", (animations: AnimationDirectivesTypes[]) => {
         animationQueue.push(...animations)
         currentAnimationPromise = processAnimationQueue(player1, true, camera, scene, plane, bakugansMeshs, gateCardMeshs)
+    })
+
+    socket.on("update-room-state", (state: roomStateType & { protalSlots?: roomStateType['portalSlots'] }) => {
+        const slots = getPortalSlotsFromState(state)
+        if (slots) {
+            syncBoardMeshesFromPortalSlots({ scene, plane, slots })
+        }
+    })
+
+    socket.on("turn-action", (state: roomStateType) => {
+        const slots = getPortalSlotsFromState(state)
+        if (slots) {
+            syncBoardMeshesFromPortalSlots({ scene, plane, slots })
+        }
     })
 
     socket.on('player-timer', (timer: { userId: string, remaining: number }) => {

@@ -1,17 +1,23 @@
-import { GateCardsList, Slots, type portalSlotsTypeElement } from '@bakugan-arena/game-data'
+import {
+    GateCardsList,
+    Slots,
+    type blockedCardSlotType,
+    type portalSlotsTypeElement,
+} from '@bakugan-arena/game-data'
 import { resolveGateCard } from '@bakugan-arena/i18n'
 import * as THREE from 'three'
 import { getSlotMeshPosition } from '../functions/get-slot-mesh-position'
 import { GetCharacterCardImage } from '../functions/get-character-card-image'
 import { killGateCardTweens, removeFromGateCardMeshs } from '../animations/remove-gate-card-animation'
 import { getGameboardLocale } from '../i18n/locale'
+import { cloneSlotMeshState } from '../functions/mesh-status-user-data'
 
 type SlotMeshUsersData = {
-    cardName: string | undefined,
+    cardName: string | undefined
     state: {
-        open: boolean,
-        canceled: boolean,
-        blocked: boolean
+        open: boolean
+        canceled: boolean
+        blocked: blockedCardSlotType
     }
 }
 
@@ -19,7 +25,7 @@ const slotMesh = new THREE.Mesh(
     new THREE.PlaneGeometry(4, 6),
     new THREE.MeshStandardMaterial({
         side: THREE.DoubleSide,
-    })
+    }),
 )
 
 function clearExistingSlotMeshes({
@@ -33,7 +39,7 @@ function clearExistingSlotMeshes({
 }) {
     const existing = plane.children.filter(
         (child): child is THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap> =>
-            child.name === slotId && (child as THREE.Mesh).isMesh
+            child.name === slotId && (child as THREE.Mesh).isMesh,
     )
 
     for (const mesh of existing) {
@@ -44,30 +50,44 @@ function clearExistingSlotMeshes({
     removeFromGateCardMeshs(slotId, gateCardMeshs)
 }
 
-function createSlotMesh({ slot, plane, userId, gateCardMeshs, isSpectator = false }: { slot: portalSlotsTypeElement, plane: THREE.Mesh, userId: string, isSpectator: boolean, gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[] }) {
+function createSlotMesh({
+    slot,
+    plane,
+    userId,
+    gateCardMeshs,
+    isSpectator = false,
+}: {
+    slot: portalSlotsTypeElement
+    plane: THREE.Mesh
+    userId: string
+    isSpectator: boolean
+    gateCardMeshs: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>[]
+}) {
     const mesh = new THREE.Mesh(
         new THREE.PlaneGeometry(4, 6),
         new THREE.MeshStandardMaterial({
             side: THREE.DoubleSide,
-        })
+        }),
     )
 
-    let data: SlotMeshUsersData = {
+    const data: SlotMeshUsersData = {
         cardName: undefined,
-        state: {
-            blocked: false,
-            canceled: false,
-            open: false
-        }
+        state: cloneSlotMeshState(slot.state),
     }
 
     const index = Slots.indexOf(slot.id)
     if (slot.portalCard !== null) {
         const card = GateCardsList.find((card) => card.key === slot.portalCard?.key)
         if (!card) return
-        const cardImage = card.imageByAttribut ? GetCharacterCardImage(card, slot) ? GetCharacterCardImage(card, slot) : card.image : card.image
+        const cardImage = card.imageByAttribut
+            ? GetCharacterCardImage(card, slot)
+                ? GetCharacterCardImage(card, slot)
+                : card.image
+            : card.image
         if (slot.state.open === true) {
-            const texture = new THREE.TextureLoader().load(`./../images/cards/${cardImage ? cardImage : card.image}`)
+            const texture = new THREE.TextureLoader().load(
+                `./../images/cards/${cardImage ? cardImage : card.image}`,
+            )
             mesh.material.map = texture
             data.cardName = resolveGateCard(card.key, getGameboardLocale()).name
             data.state.open = true
@@ -92,7 +112,6 @@ function createSlotMesh({ slot, plane, userId, gateCardMeshs, isSpectator = fals
         }
 
         gateCardMeshs.push(mesh)
-
     } else {
         mesh.material.transparent = true
         mesh.material.visible = false
@@ -104,7 +123,6 @@ function createSlotMesh({ slot, plane, userId, gateCardMeshs, isSpectator = fals
     mesh.name = slot.id
     mesh.userData = data
     plane.add(mesh)
-
 }
 
 export { slotMesh, createSlotMesh, clearExistingSlotMeshes, type SlotMeshUsersData }

@@ -3,6 +3,7 @@ import * as THREE from "three"
 import { getSlotMeshPosition } from "../functions/get-slot-mesh-position"
 import gsap from "gsap"
 import { type SlotMeshUsersData } from "../meshes/slot.mesh"
+import { cloneSlotMeshState } from "../functions/mesh-status-user-data"
 
 type SwipeGateCardsProps = {
     plane: THREE.Mesh
@@ -29,11 +30,11 @@ export async function SwipeGateCards({ slot2, plane, slot1 }: SwipeGateCardsProp
         // Snapshot before either onComplete mutates the shared userData objects
         const slot1DataSnapshot: SlotMeshUsersData = {
             cardName: slot1MeshData.cardName,
-            state: { ...slot1MeshData.state },
+            state: cloneSlotMeshState(slot1MeshData.state),
         }
         const slot2DataSnapshot: SlotMeshUsersData = {
             cardName: slot2MeshData.cardName,
-            state: { ...slot2MeshData.state },
+            state: cloneSlotMeshState(slot2MeshData.state),
         }
 
         let completed = 0
@@ -43,11 +44,11 @@ export async function SwipeGateCards({ slot2, plane, slot1 }: SwipeGateCardsProp
 
             slot1Mesh.name = slot2.id
             slot1MeshData.cardName = slot2DataSnapshot.cardName
-            slot1MeshData.state = { ...slot2DataSnapshot.state }
+            slot1MeshData.state = cloneSlotMeshState(slot2DataSnapshot.state)
 
             slot2Mesh.name = slot1.id
             slot2MeshData.cardName = slot1DataSnapshot.cardName
-            slot2MeshData.state = { ...slot1DataSnapshot.state }
+            slot2MeshData.state = cloneSlotMeshState(slot1DataSnapshot.state)
 
             resolve()
         }

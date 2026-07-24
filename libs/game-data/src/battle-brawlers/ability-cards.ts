@@ -4,7 +4,7 @@ import { PyrusAquosHaos, VentusSubterraDarkus } from "./ability-cards/combinatio
 import { AquosVentus, DarkusAquos, HaosDarkus, SubterraHaos, SubterraPyrus, VentusPyrus } from "./ability-cards/combinations-simple.js";
 import { CoupDeGrace, ShadowReversal, VengeanceAlItalienne } from "./ability-cards/darkus.js";
 import { AquosSubterra, DarkusPyrus, HaosVentus, PyrusDarkus, SubterraAquos, VentusHaos } from "./ability-cards/diagonal-combination.js";
-import { ContreMaitrise, EclatSoudain, HaosImmobilisation, SupportLight } from "./ability-cards/haos.js";
+import { ContreMaitrise, EclatSoudain, HaosImmobilisation, SupportLight, TornadeEclair } from "./ability-cards/haos.js";
 import { BlazeReversal, HeatWave, JetEnflamme, MurDeFeu, RetroAction, TourbillonDeFeu } from "./ability-cards/pyrus.js";
 import { EarthPower, EarthShatter, GateBuilding, MagmaSupreme, TectonicSwipe, TerraLockdown } from "./ability-cards/subterra.js";
 import { CombatAerien, RetourDair, SouffleTout, StormCancel, TornadeChaosTotal, TornadeExtreme } from "./ability-cards/ventus.js";
@@ -79,7 +79,8 @@ export const AbilityCards: Record<string, abilityCardsType> = {
     // Combination Triple
     [PyrusAquosHaos.key]: PyrusAquosHaos,
     [VentusSubterraDarkus.key]: VentusSubterraDarkus,
-    [GateBuilding.key]: GateBuilding
+    [GateBuilding.key]: GateBuilding,
+    [TornadeEclair.key]: TornadeEclair
 }
 
 export const AbilityCardsList: abilityCardsType[] = Object.values(AbilityCards)

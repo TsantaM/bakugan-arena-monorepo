@@ -2,14 +2,16 @@ import { OrbitControls } from 'three/examples/jsm/Addons.js'
 import './style.css'
 import * as THREE from 'three'
 import { PlaneMesh } from './meshes/plane.mesh'
-import { type BakuganPreviewData } from './functions/create-bakugan-preview-hover'
-import { Bakugans, type ActivePlayerActionRequestType, type portalSlotsTypeElement, type roomStateType } from '@bakugan-arena/game-data'
+import { type ActivePlayerActionRequestType, type portalSlotsTypeElement, type roomStateType } from '@bakugan-arena/game-data'
 import { InitGameState } from './functions/init-game-state'
 import { DragAndElimineAnimation } from './animations/drag-and-elimine-animation'
 import { ReviveBakuganAnimation } from './animations/revive-animation'
 import { TurnActionInterfaceBuilder } from './turn-action-management/turn-interface-builder'
 import { hideTooltip, initTooltip, showTooltip, tooltip } from './functions/tooltips-functions'
 import { initGameboardLocaleFromUrl } from './i18n/locale'
+import { buildBakuganTooltipContent, buildSlotTooltipContent } from './functions/mesh-tooltip-content'
+import type { SpriteUserData } from './meshes/bakugan.mesh'
+import type { SlotMeshUsersData } from './meshes/slot.mesh'
 
 initGameboardLocaleFromUrl()
 
@@ -583,13 +585,8 @@ if (canvas) {
             if (hoveredMesh !== currentMesh) {
                 hoveredMesh = currentMesh
 
-                const data = currentMesh.userData as BakuganPreviewData
-                const bakuganName = Bakugans[data.bakuganKey].name
-
-                showTooltip(`
-                <strong>${bakuganName}</strong><br/>
-                Power: ${data.powerLevel}
-                `)
+                const data = currentMesh.userData as SpriteUserData
+                showTooltip(buildBakuganTooltipContent(data))
             }
 
             // ⚠️ IMPORTANT → empêcher le gate card de overwrite
@@ -606,8 +603,9 @@ if (canvas) {
             if (hoveredSlot !== currentMesh) {
                 hoveredSlot = currentMesh as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>
 
-                if (currentMesh.userData.cardName) {
-                    showTooltip(`<strong>${currentMesh.userData.cardName}</strong>`)
+                const content = buildSlotTooltipContent(currentMesh.userData as SlotMeshUsersData)
+                if (content) {
+                    showTooltip(content)
                 } else {
                     hideTooltip()
                 }

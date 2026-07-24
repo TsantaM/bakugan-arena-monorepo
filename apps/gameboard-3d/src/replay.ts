@@ -4,10 +4,10 @@ import * as THREE from 'three'
 import { PlaneMesh } from './meshes/plane.mesh'
 // import { createSocket } from './sockets/create-socket'
 // import { registerSocketHandlersViewers } from './sockets/sockets-handlers'
-import { type BakuganPreviewData } from './functions/create-bakugan-preview-hover'
+import { type SpriteUserData } from './meshes/bakugan.mesh'
 import { setImageWithFallback } from './functions/set-image-with-fallback'
 import { hideTooltip, initTooltip, showTooltip, tooltip } from './functions/tooltips-functions'
-import { Bakugans, normalizeReplayData } from '@bakugan-arena/game-data'
+import { normalizeReplayData } from '@bakugan-arena/game-data'
 import type { replayDataType, replayEntryType } from "@bakugan-arena/game-data"
 import { playAnimation } from './sockets/sockets-handlers'
 import { applyReplaySnapshotUi } from './functions/apply-replay-snapshot-ui'
@@ -25,6 +25,8 @@ import {
   waitForSeekAbort,
 } from './functions/replay-seek'
 import { initGameboardLocaleFromUrl } from './i18n/locale'
+import { buildBakuganTooltipContent, buildSlotTooltipContent } from './functions/mesh-tooltip-content'
+import type { SlotMeshUsersData } from './meshes/slot.mesh'
 
 initGameboardLocaleFromUrl()
 
@@ -205,13 +207,8 @@ async function initReplay(replayPayload: replayDataType) {
           if (hoveredMesh !== currentMesh) {
             hoveredMesh = currentMesh
 
-            const data = currentMesh.userData as BakuganPreviewData
-            const bakuganName = Bakugans[data.bakuganKey].name
-
-            showTooltip(`
-                <strong>${bakuganName}</strong><br/>
-                Power: ${data.powerLevel}
-                `)
+            const data = currentMesh.userData as SpriteUserData
+            showTooltip(buildBakuganTooltipContent(data))
           }
 
           // ⚠️ IMPORTANT → empêcher le gate card de overwrite
@@ -227,9 +224,10 @@ async function initReplay(replayPayload: replayDataType) {
 
           if (hoveredSlot !== currentMesh) {
             hoveredSlot = currentMesh as THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial, THREE.Object3DEventMap>
-            console.log('hovered slot', hoveredSlot.userData.cardName)
-            if (currentMesh.userData.cardName) {
-              showTooltip(`<strong>${currentMesh.userData.cardName}</strong>`)
+
+            const content = buildSlotTooltipContent(currentMesh.userData as SlotMeshUsersData)
+            if (content) {
+              showTooltip(content)
             } else {
               hideTooltip()
             }

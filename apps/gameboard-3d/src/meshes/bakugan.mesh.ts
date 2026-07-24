@@ -1,41 +1,59 @@
 import * as THREE from 'three'
-import { type attribut, type bakuganOnSlot, type portalSlotsTypeElement, type slots_id } from '@bakugan-arena/game-data'
+import {
+    type attribut,
+    type bakuganOnSlot,
+    type portalSlotsTypeElement,
+    type slots_id,
+} from '@bakugan-arena/game-data'
 import { getAttributColor } from '../functions/get-attrubut-color'
 import { GetSpritePosition } from '../functions/get-sprite-position'
+import { buildSpriteUserData } from '../functions/mesh-status-user-data'
 
 type SpriteUserData = {
-    attribut: attribut,
-    bakuganKey: string,
-    powerLevel: number,
-    image: string,
-    userId: string,
+    attribut: attribut
+    bakuganKey: string
+    powerLevel: number
+    image: string
+    userId: string
     slot: slots_id
+    abilityBlock: boolean
+    assist: bakuganOnSlot['assist']
+    statut: bakuganOnSlot['statut']
 }
 
-function createSprite({ bakugan, scene, slot, slotIndex, userId, bakugansMeshs }: { bakugan: bakuganOnSlot, scene: THREE.Scene, slot: portalSlotsTypeElement, slotIndex: number, userId: string, bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[] }) {
-    const bakuganTexture = new THREE.TextureLoader().load(`./../images/bakugans/sphere/${bakugan.image}/${bakugan.attribut.toUpperCase()}.png`)
+function createSprite({
+    bakugan,
+    scene,
+    slot,
+    slotIndex,
+    userId,
+    bakugansMeshs,
+}: {
+    bakugan: bakuganOnSlot
+    scene: THREE.Scene
+    slot: portalSlotsTypeElement
+    slotIndex: number
+    userId: string
+    bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[]
+}) {
+    const bakuganTexture = new THREE.TextureLoader().load(
+        `./../images/bakugans/sphere/${bakugan.image}/${bakugan.attribut.toUpperCase()}.png`,
+    )
 
     const bakuganMesh = new THREE.Sprite(
-        new THREE.SpriteMaterial({ map: bakuganTexture, transparent: true })
+        new THREE.SpriteMaterial({ map: bakuganTexture, transparent: true }),
     )
 
     bakuganMesh.scale.set(2, 2, 1)
     bakuganMesh.position.set(0, 0.75, 0)
     bakuganMesh.name = `${bakugan.key}-${bakugan.userId}`
-    bakuganMesh.userData = {
-        attribut: bakugan.attribut,
-        bakuganKey: bakugan.key,
-        powerLevel: bakugan.currentPower,
-        image: bakugan.image,
-        userId: userId,
-        slot: slot.id
-    } as SpriteUserData
+    bakuganMesh.userData = buildSpriteUserData(bakugan)
 
     const position = GetSpritePosition({
         bakugan: bakugan,
         slot: slot,
         slotIndex: slotIndex,
-        userId: userId
+        userId: userId,
     })
 
     if (!position) return
@@ -52,11 +70,10 @@ function createSprite({ bakugan, scene, slot, slotIndex, userId, bakugansMeshs }
     scene.add(bakuganMesh)
 }
 
-function createSphere({ bakugan, scene }: { bakugan: bakuganOnSlot, scene: THREE.Scene }) {
-
+function createSphere({ bakugan, scene }: { bakugan: bakuganOnSlot; scene: THREE.Scene }) {
     const sphereMesh = new THREE.Mesh(
         new THREE.SphereGeometry(0.5, 64, 64),
-        new THREE.MeshStandardMaterial({ color: getAttributColor(bakugan.attribut) })
+        new THREE.MeshStandardMaterial({ color: getAttributColor(bakugan.attribut) }),
     )
 
     sphereMesh.name = `${bakugan.key}-${bakugan.userId}-sphere`
@@ -64,9 +81,4 @@ function createSphere({ bakugan, scene }: { bakugan: bakuganOnSlot, scene: THREE
     scene.add(sphereMesh)
 }
 
-
-export {
-    createSprite,
-    createSphere,
-    type SpriteUserData
-}
+export { createSprite, createSphere, type SpriteUserData }
