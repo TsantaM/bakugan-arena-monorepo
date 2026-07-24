@@ -1,6 +1,6 @@
 import { AbilityCardsActions, slots_id, type abilityCardsType } from "../../type/type-index.js";
 import { Slots, StandardCardsImages } from '../../store/store-index.js'
-import { AbilityCardFailed, BlockAbilityCardsEffect, CancelGateCardDirectiveAnimation, moveBakuganToSelectedSlot, PowerChange, RemoveAbilityCardsBlockEffect } from "../../function/index.js";
+import { AbilityCardFailed, BlockAbilityCardsEffect, CancelGateCardDirectiveAnimation, CustomAnimationDirective, moveBakuganToSelectedSlot, PowerChange, RemoveAbilityCardsBlockEffect } from "../../function/index.js";
 import { AbilityCardsList } from "../ability-cards.js";
 import { ExclusiveAbilitiesList } from "../exclusive-abilities.js";
 import { GateCardsList } from "../gate-gards.js";
@@ -105,6 +105,19 @@ export const BarrageDeau: abilityCardsType = {
     image: StandardCardsImages.aquos,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
+
+        const slotOfGate = roomState.protalSlots.find((s) => s.id === slot)
+        const sourceBakugan = slotOfGate?.bakugans.find(
+            (b) => b.key === bakuganKey && b.userId === userId,
+        )
+
+        CustomAnimationDirective({
+            roomState,
+            animationKey: BarrageDeau.key,
+            sourceBakugan,
+            slotId: slot,
+        })
+
         BlockAbilityCardsEffect({ roomState, userId, bakuganKey, slot, card: BarrageDeau, turns: 1 })
 
         return null
