@@ -3,6 +3,7 @@ import { BarrageDeauAnimation } from "./barrage-deau-animation"
 import { CoupDeGraceAnimation } from "./coup-de-grace-animation"
 import { DestructionMeteorStormAnimation } from "./destruction-meteor-storm-animation"
 import { DualGazerAnimation } from "./dual-gazer-animation"
+import { MirageAquatiqueAnimation } from "./mirage-aquatique-animation"
 import { VisageDeLaFureurAnimation } from "./visage-de-la-fureur-animation"
 
 /**
@@ -16,6 +17,7 @@ export const CustomAnimationsRegistry: Partial<Record<string, CustomAnimFn>> = {
     "coup-de-grace": CoupDeGraceAnimation,
     "gust-of-wind-blow-destruction-meteor-storm": DestructionMeteorStormAnimation,
     "barrage-d'eau": BarrageDeauAnimation,
+    "mirage-aquatique": MirageAquatiqueAnimation,
 }
 
 /** Keys with a dedicated 3D custom animation (kept in sync for sandbox Animation Lab). */

@@ -1,5 +1,5 @@
 import { ElementaryCardCancelerEffect } from "../../function/ability-cards-effects/elementary-card-canceler-effect.js";
-import { AbilityCardFailed, CancelGateCardDirectiveAnimation, CheckBattleStillInProcess, ComeBackBakuganDirectiveAnimation, dragBakuganToUserSlot, moveBakuganToSelectedSlot, moveSelectedBakugan } from "../../function/index.js";
+import { AbilityCardFailed, CancelGateCardDirectiveAnimation, CheckBattleStillInProcess, ComeBackBakuganDirectiveAnimation, dragBakuganToUserSlot, moveBakuganToSelectedSlot, moveSelectedBakugan, requestMoveSelfSlotSelection } from "../../function/index.js";
 import { StandardCardsImages } from "../../store/ability-cards-images.js";
 import { Slots } from "../../store/slots.js";
 import type { AbilityCardsActions, abilityCardsType, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, slots_id } from "../../type/type-index.js";
@@ -14,40 +14,14 @@ export const CombatAerien: abilityCardsType = {
     usable_in_neutral: true,
     image: StandardCardsImages.ventus,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-
-        const animation = AbilityCardFailed({ abilityKey: CombatAerien.key })
-
-        if (!roomState) return animation
-
-        if (CombatAerien.activationConditions) {
-            const checker = CombatAerien.activationConditions({ roomState, userId })
-            if (checker === false) return animation
-        }
-
-
-        const opponentsUsableBakugans = roomState.decksState.find((deck) => deck.userId !== userId)?.bakugans.filter((deck) => !deck?.bakuganData.elimined && !deck?.bakuganData.onDomain)
-        const opponentBakugansOnField = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.slot_id !== slot && bakugan.userId !== userId)
-
-        if ((opponentsUsableBakugans && opponentsUsableBakugans.length === 0 && opponentBakugansOnField.length === 0)) return animation
-
-        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        const deck = roomState?.decksState.find((d) => d.userId === userId)
-        const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
-
-        if (!slotOfGate && !deck && !userData) return animation
-
-        const slots: slots_id[] = opponentsUsableBakugans && opponentsUsableBakugans.length === 0 && opponentBakugansOnField.length > 0 ? opponentBakugansOnField.map((bakugan) => bakugan.slot_id) : roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot).map((slot) => slot.id)
-
-        if (slots.length <= 0) return animation
-
-        const request: AbilityCardsActions = {
-            type: 'SELECT_SLOT',
-            message: { key: 'prompt_select_slot', params: { abilityKey: CombatAerien.key } },
-            slots: slots
-        }
-
-        return request
-
+        return requestMoveSelfSlotSelection({
+            roomState,
+            userId,
+            bakuganKey,
+            slot,
+            abilityKey: CombatAerien.key,
+            activationConditions: CombatAerien.activationConditions,
+        })
     },
     onCanceled({ roomState, userId, bakuganKey, slot }) {
         if (!roomState) return null

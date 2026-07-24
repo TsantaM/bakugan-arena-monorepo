@@ -1,6 +1,6 @@
-import { AbilityCardsActions, slots_id, type abilityCardsType } from "../../type/type-index.js";
+import { type abilityCardsType } from "../../type/type-index.js";
 import { Slots, StandardCardsImages } from '../../store/store-index.js'
-import { AbilityCardFailed, BlockAbilityCardsEffect, CancelGateCardDirectiveAnimation, CustomAnimationDirective, moveBakuganToSelectedSlot, PowerChange, RemoveAbilityCardsBlockEffect } from "../../function/index.js";
+import { AbilityCardFailed, BlockAbilityCardsEffect, CancelGateCardDirectiveAnimation, CustomAnimationDirective, moveBakuganToSelectedSlot, PowerChange, RemoveAbilityCardsBlockEffect, requestMoveSelfSlotSelection } from "../../function/index.js";
 import { AbilityCardsList } from "../ability-cards.js";
 import { ExclusiveAbilitiesList } from "../exclusive-abilities.js";
 import { GateCardsList } from "../gate-gards.js";
@@ -15,44 +15,22 @@ export const MirageAquatique: abilityCardsType = {
     usable_in_neutral: true,
     image: 'mirage-aquatique.jpg',
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        const animation = AbilityCardFailed({ abilityKey: MirageAquatique.key })
-
-        if (!roomState) return animation
-
-        if (MirageAquatique.activationConditions) {
-            const checker = MirageAquatique.activationConditions({ roomState, userId })
-            if (checker === false) return animation
-        }
-
-
-        const opponentsUsableBakugans = roomState.decksState.find((deck) => deck.userId !== userId)?.bakugans.filter((deck) => !deck?.bakuganData.elimined && !deck?.bakuganData.onDomain)
-        const opponentBakugansOnField = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.slot_id !== slot && bakugan.userId !== userId)
-
-        if ((opponentsUsableBakugans && opponentsUsableBakugans.length === 0 && opponentBakugansOnField.length === 0)) return animation
-
-        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
-        const deck = roomState?.decksState.find((d) => d.userId === userId)
-        const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
-
-        if (!slotOfGate && !deck && !userData) return animation
-
-        const slots: slots_id[] = opponentsUsableBakugans && opponentsUsableBakugans.length === 0 && opponentBakugansOnField.length > 0 ? opponentBakugansOnField.map((bakugan) => bakugan.slot_id) : roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot).map((slot) => slot.id)
-
-        if (slots.length <= 0) return animation
-
-        const request: AbilityCardsActions = {
-            type: 'SELECT_SLOT',
-            message: { key: 'prompt_select_slot', params: { abilityKey: MirageAquatique.key } },
-            slots: slots
-        }
-
-        return request
-
+        return requestMoveSelfSlotSelection({
+            roomState,
+            userId,
+            bakuganKey,
+            slot,
+            abilityKey: MirageAquatique.key,
+            activationConditions: MirageAquatique.activationConditions,
+        })
     },
     onAdditionalEffect: ({ resolution, roomData }) => {
-
-        moveBakuganToSelectedSlot({ resolution: resolution, roomData: roomData, shouldBlockAlways: true })
-
+        moveBakuganToSelectedSlot({
+            resolution,
+            roomData,
+            shouldBlockAlways: true,
+            customAnimations: [{ animationKey: MirageAquatique.key }],
+        })
     },
     onCanceled({ roomState, userId, bakuganKey, slot }) {
         if (!roomState) return null
@@ -77,7 +55,7 @@ export const MirageAquatique: abilityCardsType = {
 
     },
     activationConditions({ roomState, userId }) {
-        
+
         if (!roomState) return false
         const slotWithGate = roomState.protalSlots.filter((slot) => slot.portalCard !== null)
 
@@ -89,9 +67,9 @@ export const MirageAquatique: abilityCardsType = {
 
         const slots = roomState.protalSlots.filter((slot) => slot.id !== bakugan.slot_id && slot.portalCard !== null)
 
-        if(slots.length === 0) return false
+        if (slots.length === 0) return false
         if (bakugan.statut.trapped) return false
-        
+
         return true
 
     },
@@ -106,6 +84,11 @@ export const BarrageDeau: abilityCardsType = {
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
 
+        const failed = AbilityCardFailed({ abilityKey: BarrageDeau.key })
+        if (BarrageDeau.activationConditions) {
+            const checker = BarrageDeau.activationConditions({ roomState, userId })
+            if (checker === false) return failed
+        }
         const slotOfGate = roomState.protalSlots.find((s) => s.id === slot)
         const sourceBakugan = slotOfGate?.bakugans.find(
             (b) => b.key === bakuganKey && b.userId === userId,
@@ -121,6 +104,16 @@ export const BarrageDeau: abilityCardsType = {
         BlockAbilityCardsEffect({ roomState, userId, bakuganKey, slot, card: BarrageDeau, turns: 1 })
 
         return null
+    },
+    activationConditions({ roomState, userId }) {
+
+
+        if (!roomState) return false
+        const bakugansOnBoard = roomState.protalSlots.map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === userId)
+        if (bakugansOnBoard.length === 0) return false
+        const aquos = bakugansOnBoard.filter((bakugan) => bakugan.attribut === "Aquos")
+        if (aquos.length < 3) return false
+        return true
     },
     onCanceled({ roomState }) {
         if (!roomState) return
