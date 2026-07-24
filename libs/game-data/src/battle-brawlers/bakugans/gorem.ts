@@ -1,4 +1,4 @@
-import { bakuganType, CancelCaracterGateCard, CaracterGateCardEffect, CheckTwoBakugansAndBattle, gateCardType, PowerChangeDirectiveAnumation } from "../../index.js"
+import { bakuganType, CancelCaracterGateCard, CaracterGateCardEffect, CheckTwoBakugansAndBattle, gateCardType, PowerChange, PowerChangeDirectiveAnumation } from "../../index.js"
 import { StarterBanList } from "../../store/store-index.js"
 
 export const GoremSubterra: bakuganType = {
@@ -56,15 +56,12 @@ export const GoremGateCard: gateCardType = {
 
         const basePower = structuredClone(bakugan.powerLevel)
         if (!basePower) return
-        bakugan.currentPower += basePower
-        PowerChangeDirectiveAnumation({
-            animations: roomState.animations,
-            bakugans: [bakugan],
-            powerChange: basePower,
+        PowerChange({
+            roomState,
+            bakugan,
+            G: basePower,
             malus: false,
-            turn: roomState.turnState.turnCount,
-            roomState: roomState
-            })
+        })
 
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {

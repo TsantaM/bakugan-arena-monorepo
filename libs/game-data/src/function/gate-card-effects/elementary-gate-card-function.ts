@@ -1,6 +1,7 @@
 import { BakuganList } from "../../battle-brawlers/bakugans.js"
-import type { attribut, bakuganOnSlot, portalSlotsTypeElement, slots_id, stateType } from "../../type/type-index.js"
+import type { attribut, portalSlotsTypeElement, slots_id, stateType } from "../../type/type-index.js"
 import { PowerChangeDirectiveAnumation } from "../create-animation-directives/index.js"
+import { PowerChange } from "../ability-cards-effects/power-change.js"
 
 export function ElementaryGateCardOnOpen({ roomState, slot, attribut }: { roomState: stateType, slot: slots_id, attribut: attribut }) {
     if (!roomState) return
@@ -11,19 +12,13 @@ export function ElementaryGateCardOnOpen({ roomState, slot, attribut }: { roomSt
         const secondAttributs = BakuganList.filter((b) => keys.includes(b.key) && b.seconaryAttribut === attribut).map((b) => b.key)
         const bakuganWithAttribut = [slotOfGate.bakugans.filter((b) => b.attribut === attribut), slotOfGate.bakugans.filter((b) => secondAttributs.includes(b.key))].flat()
         slotOfGate.state.open = true
-        let bakugans: bakuganOnSlot[] = []
         bakuganWithAttribut.forEach((b) => {
-            b.currentPower += 100
-            bakugans.push(b)
-        })
-        PowerChangeDirectiveAnumation({
-            animations: roomState.animations,
-            bakugans: bakugans,
-            powerChange: 100,
-            malus: false,
-            turn: roomState.turnState.turnCount,
-            roomState: roomState
-
+            PowerChange({
+                roomState,
+                bakugan: b,
+                G: 100,
+                malus: false,
+            })
         })
     }
 
@@ -37,14 +32,12 @@ export function ElementaryGateCardOnCancel({ roomState, slot, attribut }: { room
         const secondAttributs = BakuganList.filter((b) => keys.includes(b.key) && b.seconaryAttribut === attribut).map((b) => b.key)
         const bakuganWithAttribut = [slotOfGate.bakugans.filter((b) => b.attribut === attribut), slotOfGate.bakugans.filter((b) => secondAttributs.includes(b.key))].flat()
         slotOfGate.state.canceled = true
-        let bakugans: bakuganOnSlot[] = []
         bakuganWithAttribut.forEach((b) => {
             b.currentPower -= 100
-            bakugans.push(b)
         })
         PowerChangeDirectiveAnumation({
             animations: roomState.animations,
-            bakugans: bakugans,
+            bakugans: bakuganWithAttribut,
             powerChange: 100,
             malus: true,
             turn: roomState.turnState.turnCount,

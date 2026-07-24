@@ -156,7 +156,8 @@ export const JetEnflamme: abilityCardsType = {
                     poisoned: false,
                     protectedAgainstGate: false,
                     protectedAgainstAbility: false,
-                    protected: false
+                    protected: false,
+                    absorbPowerBoost: false
                 },
                 family: bakugan.bakuganData.family
             }

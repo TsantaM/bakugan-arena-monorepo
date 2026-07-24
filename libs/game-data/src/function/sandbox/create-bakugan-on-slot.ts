@@ -19,6 +19,7 @@ const defaultStatut = (): bakuganOnSlot["statut"] => ({
     protectedAgainstGate: false,
     protectedAgainstAbility: false,
     protected: false,
+    absorbPowerBoost: false
 })
 
 export function createBakuganOnSlot({

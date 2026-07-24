@@ -232,15 +232,12 @@ export const CopieConforme: abilityCardsType = {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
 
             if (user) {
-                user.currentPower += 100
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: [user],
-                    powerChange: 100,
+                PowerChange({
+                    roomState,
+                    bakugan: user,
+                    G: 100,
                     malus: false,
-                    turn: roomState.turnState.turnCount,
-                    roomState: roomState
-                    })
+                })
             }
         }
 

@@ -1,6 +1,6 @@
 import { BakuganList } from "../../battle-brawlers/bakugans.js"
 import type { AnimationDirectivesTypes, attribut, portalSlotsTypeElement, stateType } from "../../type/type-index.js"
-import { PowerChangeDirectiveAnumation } from "../create-animation-directives/power-change.js"
+import { PowerChange } from "./power-change.js"
 
 export function CombinationSimpleFunction({ roomState, animations, slotOfGate, bakuganKey, userId, attribut, attributWeak, turn} : { roomState: stateType, animations: AnimationDirectivesTypes[], slotOfGate: portalSlotsTypeElement, bakuganKey: string, userId: string, attribut: attribut, attributWeak: attribut, turn: number}) {
     const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
@@ -13,14 +13,11 @@ export function CombinationSimpleFunction({ roomState, animations, slotOfGate, b
 
     if (user && userAttribut && opponents && opponentsAttributs) {
         if (userAttribut.includes(attribut) && opponentsAttributs.includes(attributWeak)) {
-            user.currentPower += 100
-            PowerChangeDirectiveAnumation({
-                animations: animations,
-                bakugans: [user],
-                powerChange: 100,
+            PowerChange({
+                roomState,
+                bakugan: user,
+                G: 100,
                 malus: false,
-                turn: turn,
-                roomState: roomState,
             })
         }
     }

@@ -128,12 +128,18 @@ export const BouclierAquos: abilityCardsType = {
     image: StandardCardsImages.aquos,
     usable_in_neutral: false,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
-        const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
+        if (!roomState) return null
+        const slotOfGate = roomState.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
 
             if (user) {
-                user.currentPower += 100
+                PowerChange({
+                    roomState,
+                    bakugan: user,
+                    G: 100,
+                    malus: false,
+                })
             }
         }
 

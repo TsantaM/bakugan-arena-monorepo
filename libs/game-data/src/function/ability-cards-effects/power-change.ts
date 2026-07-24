@@ -6,24 +6,47 @@ import { NewAdditionnalMessage } from "../new-additional-message.js";
 type PowerChangeType = {
     roomState: stateType,
     bakugan: bakuganOnSlot,
-    // messages: Message[],
     G: number,
     malus: boolean
 }
 
-export function PowerChange({ roomState, bakugan, G, malus }: PowerChangeType) {
+/** Copies a power boost to bakugans on the same slot that have absorbPowerBoost. Only absorbs from opponents (different userId). */
+export function ApplyAbsorbPowerBoost({ roomState, bakugan, G }: {
+    roomState: stateType,
+    bakugan: bakuganOnSlot,
+    G: number
+}) {
+    if (G <= 0) return
 
+    const slot = roomState.protalSlots.find((s) => s.id === bakugan.slot_id)
+    if (!slot) return
+
+    slot.bakugans.forEach((b) => {
+        if (b === bakugan) return
+        if (b.userId === bakugan.userId) return
+        if (!b.statut.absorbPowerBoost) return
+
+        b.currentPower += G
+
+        PowerChangeDirectiveAnumation({
+            animations: roomState.animations,
+            bakugans: [b],
+            powerChange: G,
+            malus: false,
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+        })
+    })
+}
+
+export function PowerChange({ roomState, bakugan, G, malus }: PowerChangeType) {
     if (malus) {
         if (bakugan.statut.protected || bakugan.statut.protectedAgainstAbility) {
-
             NewAdditionnalMessage({
                 roomState: roomState,
                 key: 'bakugan_protected',
                 params: { name: Bakugans[bakugan.key].name },
             })
-
-            // messages.push(message)
-
         } else {
             bakugan.currentPower -= G
 
@@ -34,7 +57,6 @@ export function PowerChange({ roomState, bakugan, G, malus }: PowerChangeType) {
                 malus: true,
                 turn: roomState.turnState.turnCount,
                 roomState: roomState
-
             })
         }
     } else {
@@ -47,8 +69,8 @@ export function PowerChange({ roomState, bakugan, G, malus }: PowerChangeType) {
             malus: false,
             turn: roomState.turnState.turnCount,
             roomState: roomState
-
         })
-    }
 
+        ApplyAbsorbPowerBoost({ roomState, bakugan, G })
+    }
 }

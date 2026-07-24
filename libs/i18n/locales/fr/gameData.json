@@ -619,7 +619,7 @@
     },
     "holograph-divide": {
       "name": "Division Holographique",
-      "description": "Ajoute la puissance G de l'adversaire à l'utilisateur"
+      "description": "L'utilisateur absorbe les augmentations de puissance des Bakugans adverses présents sur la même carte portail"
     },
     "obstruction": {
       "name": "Obstruction",

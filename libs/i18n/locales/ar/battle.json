@@ -39,6 +39,7 @@
 
   "power_increased": "{name} power increased of {amount} Gs !",
   "power_decreased": "{name} power decreased of {amount} Gs !",
+  "absorb_power_boost_ready": "{bakugan} مستعد لامتصاص تغيرات قوة باكوغانات الخصم",
 
   "ability_failed": "{name} failed",
   "bakugan_already_protected_by": "{name} is already protected by {source}",

@@ -1,5 +1,5 @@
 import { CharacterCardByAttribut } from "../../function/caracter-cards-image-by-attribut.js"
-import { CancelCaracterGateCard, CaracterGateCardEffect, CheckTwoBakugansAndBattle, PowerChangeDirectiveAnumation, type bakuganType, type gateCardType } from "../../index.js"
+import { CancelCaracterGateCard, CaracterGateCardEffect, CheckTwoBakugansAndBattle, PowerChange, PowerChangeDirectiveAnumation, type bakuganType, type gateCardType } from "../../index.js"
 import { GateCardImages } from "../../store/gate-card-images.js"
 
 
@@ -76,15 +76,12 @@ export const StinglashGateCard: gateCardType = {
 
         const basePower = structuredClone(bakugan.powerLevel)
         if (!basePower) return
-        bakugan.currentPower += basePower
-        PowerChangeDirectiveAnumation({
-            animations: roomState.animations,
-            bakugans: [bakugan],
-            powerChange: basePower,
+        PowerChange({
+            roomState,
+            bakugan,
+            G: basePower,
             malus: false,
-            turn: roomState.turnState.turnCount,
-            roomState: roomState
-            })
+        })
 
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {

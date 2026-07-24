@@ -89,7 +89,8 @@ export type bakuganOnSlot = {
         poisoned: onSlotStatutType,
         protectedAgainstGate: onSlotStatutType,
         protectedAgainstAbility: onSlotStatutType,
-        protected: onSlotStatutType
+        protected: onSlotStatutType,
+        absorbPowerBoost: onSlotStatutType
     },
     family: string
 }

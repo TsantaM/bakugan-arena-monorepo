@@ -39,6 +39,7 @@
 
   "power_increased": "Hausse du niveau de puissance de {name} de {amount} Gs !",
   "power_decreased": "Baisse du niveau de puissance de {name} de {amount} Gs !",
+  "absorb_power_boost_ready": "{bakugan} est prêt à absorber les changements de puissance des bakugans adverses",
 
   "ability_failed": "{name} a échoué",
   "bakugan_already_protected_by": "{name} est déjà protégé par {source}",

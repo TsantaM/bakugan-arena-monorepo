@@ -45,7 +45,8 @@ export const SabreDeLaMort: exclusiveAbilitiesType = {
                                 trapped: false,
                                 protectedAgainstGate: false,
                                 protectedAgainstAbility: false,
-                                protected: false
+                                protected: false,
+                                absorbPowerBoost: false
                             },
                             family: tigrerra.bakuganData.family
                         }

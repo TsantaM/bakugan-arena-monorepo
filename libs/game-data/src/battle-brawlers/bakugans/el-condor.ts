@@ -1,5 +1,5 @@
 import { bakuganType, gateCardType } from "../../type/type-index.js"
-import { CancelCaracterGateCard, CaracterGateCardEffect, CheckTwoBakugansAndBattle, PowerChangeDirectiveAnumation } from '../../function/index.js'
+import { CancelCaracterGateCard, CaracterGateCardEffect, CheckTwoBakugansAndBattle, PowerChange, PowerChangeDirectiveAnumation } from '../../function/index.js'
 import { GateCardImages } from "../../store/store-index.js"
 import { CharacterCardByAttribut } from "../../function/caracter-cards-image-by-attribut.js"
 
@@ -75,15 +75,12 @@ export const ElCondorGateCard: gateCardType = {
 
         const basePower = structuredClone(bakugan.powerLevel)
         if (!basePower) return
-        bakugan.currentPower += basePower
-        PowerChangeDirectiveAnumation({
-            animations: roomState.animations,
-            bakugans: [bakugan],
-            powerChange: basePower,
+        PowerChange({
+            roomState,
+            bakugan,
+            G: basePower,
             malus: false,
-            turn: roomState.turnState.turnCount,
-            roomState: roomState
-            })
+        })
 
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {

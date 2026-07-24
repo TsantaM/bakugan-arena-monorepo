@@ -33,15 +33,11 @@ export const RapideHaos: abilityCardsType = {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
 
             if (user) {
-                user.currentPower += 100
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: [user],
-                    powerChange: 100,
+                PowerChange({
+                    roomState,
+                    bakugan: user,
+                    G: 100,
                     malus: false,
-                    turn: roomState.turnState.turnCount,
-                    roomState: roomState
-
                 })
             }
         }
@@ -127,7 +123,8 @@ export const EclatSoudain: abilityCardsType = {
                     poisoned: false,
                     protectedAgainstGate: false,
                     protectedAgainstAbility: false,
-                    protected: false
+                    protected: false,
+                    absorbPowerBoost: false
                 },
                 family: bakugan.bakuganData.family
             }
@@ -219,16 +216,11 @@ export const LumiereDivine: abilityCardsType = {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
 
             if (user) {
-                user.currentPower += 100
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: [user],
-                    powerChange: 100,
+                PowerChange({
+                    roomState,
+                    bakugan: user,
+                    G: 100,
                     malus: false,
-                    turn: roomState.turnState.turnCount,
-                    roomState: roomState
-
-
                 })
             }
         }

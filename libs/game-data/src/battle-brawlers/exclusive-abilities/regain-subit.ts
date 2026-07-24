@@ -1,4 +1,4 @@
-import { PowerChangeDirectiveAnumation } from "../../function/index.js"
+import { PowerChange } from "../../function/index.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const RegainSubit: exclusiveAbilitiesType = {
@@ -14,26 +14,20 @@ export const RegainSubit: exclusiveAbilitiesType = {
             const opponents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
 
             if (user && opponents.length > 0) {
-                user.currentPower += 100
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: [user],
-                    powerChange: 100,
+                PowerChange({
+                    roomState,
+                    bakugan: user,
+                    G: 100,
                     malus: false,
-                    turn: roomState.turnState.turnCount,
-                    roomState: roomState
-                    })
-                opponents.forEach((opponent) => {
-                    opponent.currentPower -= 100
                 })
-                PowerChangeDirectiveAnumation({
-                    animations: roomState?.animations,
-                    bakugans: opponents,
-                    powerChange: 100,
-                    malus: true,
-                    turn: roomState.turnState.turnCount,
-                    roomState: roomState
+                opponents.forEach((opponent) => {
+                    PowerChange({
+                        roomState,
+                        bakugan: opponent,
+                        G: 100,
+                        malus: true,
                     })
+                })
             }
         }
 

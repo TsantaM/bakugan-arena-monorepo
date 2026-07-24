@@ -1,4 +1,4 @@
-import { AutoActivationDuringBattle, PowerChangeDirectiveAnumation, type gateCardType } from "../../../index.js";
+import { AutoActivationDuringBattle, PowerChange, type gateCardType } from "../../../index.js";
 import { GateCardImages } from "../../../store/gate-card-images.js";
 
 export const AspirateurDePuissance: gateCardType = {
@@ -16,24 +16,18 @@ export const AspirateurDePuissance: gateCardType = {
             if (lastBakugan.statut.protected) return null
             if (lastBakugan.statut.protectedAgainstGate) return null
 
-            firstBakugan.currentPower = firstBakugan.currentPower + 100
-            PowerChangeDirectiveAnumation({
-                animations: roomState.animations,
-                bakugans: [firstBakugan],
-                powerChange: 100,
+            PowerChange({
+                roomState,
+                bakugan: firstBakugan,
+                G: 100,
                 malus: false,
-                turn: roomState.turnState.turnCount,
-                roomState: roomState
-                })
-            lastBakugan.currentPower = lastBakugan.currentPower - 100
-            PowerChangeDirectiveAnumation({
-                animations: roomState.animations,
-                bakugans: [lastBakugan],
-                powerChange: 100,
+            })
+            PowerChange({
+                roomState,
+                bakugan: lastBakugan,
+                G: 100,
                 malus: true,
-                turn: roomState.turnState.turnCount,
-                roomState: roomState
-                })
+            })
             slotOfGate.state.open = true
         }
 
@@ -48,24 +42,18 @@ export const AspirateurDePuissance: gateCardType = {
         if (slotOfGate && bakuganUser && bakuganOpponent && slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
             const firstBakugan = slotOfGate.bakugans[0]
             const lastBakugan = slotOfGate.bakugans[slotOfGate.bakugans.length - 1]
-            firstBakugan.currentPower = firstBakugan.currentPower - 100
-            PowerChangeDirectiveAnumation({
-                animations: roomState.animations,
-                bakugans: [firstBakugan],
-                powerChange: 100,
+            PowerChange({
+                roomState,
+                bakugan: firstBakugan,
+                G: 100,
                 malus: true,
-                turn: roomState.turnState.turnCount,
-                roomState: roomState
-                })
-            lastBakugan.currentPower = lastBakugan.currentPower + 100
-            PowerChangeDirectiveAnumation({
-                animations: roomState.animations,
-                bakugans: [lastBakugan],
-                powerChange: 100,
+            })
+            PowerChange({
+                roomState,
+                bakugan: lastBakugan,
+                G: 100,
                 malus: false,
-                turn: roomState.turnState.turnCount,
-                roomState: roomState
-                })
+            })
             slotOfGate.state.canceled = true
         }
     },

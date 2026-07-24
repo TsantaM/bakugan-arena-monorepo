@@ -1,4 +1,4 @@
-import { CancelCaracterGateCard, CaracterGateCardEffect, CheckTwoBakugansAndBattle, PowerChangeDirectiveAnumation, type bakuganType, type gateCardType } from "../../index.js"
+import { CancelCaracterGateCard, CaracterGateCardEffect, CheckTwoBakugansAndBattle, PowerChange, PowerChangeDirectiveAnumation, type bakuganType, type gateCardType } from "../../index.js"
 import { StarterBanList } from "../../store/starter-banlist.js"
 import { FurryOfWind } from "../exclusive-abilities/furry-of-wind.js"
 import { VentViolentDeNobelesseVerte } from "../exclusive-abilities/vent-violent.js"
@@ -58,15 +58,12 @@ export const SkyressGateCard: gateCardType = {
 
         const basePower = structuredClone(bakugan.powerLevel)
         if (!basePower) return
-        bakugan.currentPower += basePower
-        PowerChangeDirectiveAnumation({
-            animations: roomState.animations,
-            bakugans: [bakugan],
-            powerChange: basePower,
+        PowerChange({
+            roomState,
+            bakugan,
+            G: basePower,
             malus: false,
-            turn: roomState.turnState.turnCount,
-            roomState: roomState
-            })
+        })
 
     },
     onRemoveBakugan({ bakugan, slot, roomState }) {

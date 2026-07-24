@@ -72,7 +72,8 @@ export const QuatuorDeCombat: gateCardType = {
                             poisoned: false,
                             protectedAgainstGate: false,
                             protectedAgainstAbility: false,
-                            protected: false
+                            protected: false,
+                            absorbPowerBoost: false
                         },
                         family: userWeakest.bakuganData.family
                     }
@@ -117,7 +118,8 @@ export const QuatuorDeCombat: gateCardType = {
                             poisoned: false,
                             protectedAgainstGate: false,
                             protectedAgainstAbility: false,
-                            protected: false
+                            protected: false,
+                            absorbPowerBoost: false
 
                         },
                         family: opponentWeakest.bakuganData.family
