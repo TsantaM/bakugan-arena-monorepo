@@ -1,4 +1,4 @@
-import { PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js"
+import { CustomAnimationDirective, PowerChange } from "../../function/index.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const GustOfWindBlow: exclusiveAbilitiesType = {
@@ -11,8 +11,17 @@ export const GustOfWindBlow: exclusiveAbilitiesType = {
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (slotOfGate) {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+            const opponents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
 
             if (user) {
+                CustomAnimationDirective({
+                    roomState,
+                    animationKey: GustOfWindBlow.key,
+                    sourceBakugan: user,
+                    targetBakugans: opponents,
+                    slotId: slot,
+                })
+
                 PowerChange({
                     bakugan: user,
                     G: 200,
