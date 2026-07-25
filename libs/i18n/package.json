@@ -19,6 +19,7 @@
       "types": "./dist/server.d.ts",
       "default": "./dist/server.js"
     },
+    "./package.json": "./package.json",
     "./locales/*": "./locales/*"
   },
   "files": [
