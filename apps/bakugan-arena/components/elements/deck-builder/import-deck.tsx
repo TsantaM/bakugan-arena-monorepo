@@ -119,7 +119,7 @@ export default function ImportDeck() {
             }
         }}>
             <DialogTrigger asChild>
-                <Button variant='outline' className="cursor-pointer">
+                <Button variant='outline' className="cursor-pointer h-auto max-w-full whitespace-normal">
                     <Import /> {t('import.trigger')}
                 </Button>
             </DialogTrigger>

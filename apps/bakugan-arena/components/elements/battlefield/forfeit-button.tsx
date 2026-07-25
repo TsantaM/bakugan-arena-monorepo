@@ -58,7 +58,7 @@ export default function ForfeitButton() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="destructive">
+                <Button variant="destructive" size="sm" className="shrink-0 max-w-[9rem] truncate sm:max-w-none">
                     {t('label')}
                 </Button>
             </DialogTrigger>

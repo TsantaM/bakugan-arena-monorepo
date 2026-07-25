@@ -28,7 +28,7 @@ export default function DeckBuilerLanding() {
             <Section className="md:p-0">
                 <Card>
                     <CardHeader>
-                        <div className="flex items-center justify-end gap-2">
+                        <div className="flex flex-wrap items-center justify-end gap-2">
                             <CreateDeckButton />
                             <ImportDeck />
                         </div>

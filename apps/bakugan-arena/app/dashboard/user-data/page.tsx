@@ -27,11 +27,11 @@ export default async function DashboardPage() {
 
             <Card>
                 <CardHeader>
-                    <div className="flex items-center justify-between">
-                        <CardTitle>
+                    <div className="flex min-w-0 flex-wrap items-center justify-between gap-2">
+                        <CardTitle className="min-w-0 break-words">
                             {t('userData.title')}
                         </CardTitle>
-                        <Button variant='outline' asChild><Link href='/dashboard/edit-account'><Edit />{tCommon('actions.edit')}</Link></Button>
+                        <Button variant='outline' size="sm" className="shrink-0" asChild><Link href='/dashboard/edit-account'><Edit />{tCommon('actions.edit')}</Link></Button>
                     </div>
                 </CardHeader>
 

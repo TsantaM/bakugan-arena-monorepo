@@ -5,6 +5,7 @@
   "empty": "Aucun replay trouvé.",
   "upload": "Téléverser",
   "clear": "Effacer",
+  "controls": "Contrôles",
   "a11y": {
     "upload": "Téléverser le replay",
     "clear": "Vider le replay",
@@ -13,7 +14,8 @@
     "nextTurn": "Tour suivant",
     "play": "Lire le replay",
     "pause": "Mettre le replay en pause",
-    "download": "Télécharger le replay"
+    "download": "Télécharger le replay",
+    "openControls": "Ouvrir les contrôles du replay"
   },
   "toasts": {
     "importSuccess": "Importation réussie",

@@ -149,9 +149,9 @@ export default function AppSidebar({ role }: { role: RoleType | undefined }) {
                                 <SidebarMenu key={room.roomId}>
                                     <SidebarMenuItem>
                                         <SidebarMenuButton asChild>
-                                            <Link href={`/dashboard/battlefield?id=${room.roomId}`}>
+                                            <Link href={`/dashboard/battlefield?id=${room.roomId}`} className="min-w-0">
                                                 <KeyRound />
-                                                <span>{tCommon('labels.vs', { p1: room.p1, p2: room.p2 })}</span>
+                                                <span className="truncate">{tCommon('labels.vs', { p1: room.p1, p2: room.p2 })}</span>
                                             </Link>
                                         </SidebarMenuButton>
                                         <RemoveRoomButton

@@ -31,12 +31,12 @@ export default async function Header() {
     ]
 
     return (
-        <header className="w-screen flex justify-between items-center px-5 md:px-10 py-3 sticky top-0 left-0 z-20 bg-background">
-            <div className="flex items-center gap-10">
+        <header className="sticky top-0 left-0 z-20 flex w-full max-w-full items-center justify-between gap-2 bg-background px-5 py-3 md:px-10">
+            <div className="flex min-w-0 items-center gap-10">
                 <Logo height={50} width={50} />
 
                 <nav className='hidden md:block'>
-                    <ul className="flex items-center gap-3">
+                    <ul className="flex flex-wrap items-center gap-3">
                         {
                             links.map((l, index) => <li key={index}><Button asChild variant='link'><Link href={l.href}>{l.name}</Link></Button></li>)
                         }
@@ -44,7 +44,7 @@ export default async function Header() {
                 </nav>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex min-w-0 flex-wrap items-center justify-end gap-1.5 sm:gap-2">
                 <LanguageSwitcher />
                 <AnimatedThemeToggler />
                 {
@@ -52,7 +52,7 @@ export default async function Header() {
                         <Suspense fallback={<Skeleton />}>
                             <DropdownMenu>
                                 <DropdownMenuTrigger>
-                                    <Button variant='outline' asChild className="p-0">
+                                    <Button variant='outline' asChild className="p-0 shrink-0">
                                         <Avatar>
                                             {
                                                 user.image != undefined && <AvatarImage src={user.image} className="size-5" alt={user.name} />
@@ -94,7 +94,7 @@ export default async function Header() {
                 }
                 <DropdownMenu>
                     <DropdownMenuTrigger className="md:hidden" asChild>
-                        <Button variant='outline'>
+                        <Button variant='outline' size="icon" className="shrink-0">
                             <MenuIcon />
                         </Button>
                     </DropdownMenuTrigger>

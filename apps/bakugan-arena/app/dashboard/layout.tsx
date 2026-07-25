@@ -1,7 +1,5 @@
 import AppSidebar from "@/components/elements/app-sidebar/app-sidebar"
-import { SoundPlayerControls } from "@/components/elements/sound-player/sound-player"
-import LanguageSwitcher from "@/components/elements/language-switcher/language-switcher"
-import { AnimatedThemeToggler } from "@/components/magicui/theme-toggler"
+import DashboardSettingsMenu from "@/components/elements/dashboard/dashboard-settings-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -40,22 +38,20 @@ export default async function Layout({ children }: { children: React.ReactNode }
                 <AppSidebar role={role} />
                 <SidebarInset>
                     <main className="w-full flex-1 p-3 flex flex-col gap-3 min-h-0">
-                        <div className="w-full flex items-center justify-between">
-                            <SidebarTrigger />
-                            <div className="flex items-center gap-3">
+                        <div className="w-full flex items-center justify-between gap-2">
+                            <SidebarTrigger className="shrink-0" />
+                            <div className="flex min-w-0 items-center justify-end gap-1.5 sm:gap-2">
                                 <ForfeitButton />
                                 <BattleLogToggle context="battlefield" />
-                                <LanguageSwitcher />
-                                <Link href="https://discord.gg/8HfPK5RVuk" target="_blank">
+                                <Link href="https://discord.gg/8HfPK5RVuk" target="_blank" className="shrink-0">
                                     <img src="/discord.svg" alt={tCommon('a11y.discordLogo')} className="w-6 h-6" />
                                 </Link>
-                                <SoundPlayerControls />
-                                <AnimatedThemeToggler />
                                 <GlobalChat />
+                                <DashboardSettingsMenu />
                                 <Suspense fallback={<SidebarMenuSkeleton />}>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger>
-                                            <Button variant='outline' asChild className="p-0">
+                                            <Button variant='outline' asChild className="p-0 shrink-0">
                                                 <Avatar>
                                                     {
                                                         user?.image != undefined && <AvatarImage src={user.image} className="size-5" alt={user.name} />

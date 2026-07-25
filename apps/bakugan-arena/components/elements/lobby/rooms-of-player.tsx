@@ -28,9 +28,9 @@ export default function RoomsOfPlayer() {
                     <ul className="p-4 flex flex-col gap-3 w-full">
 
                         {rooms.map((room) => (
-                            <li key={room.roomId} className="w-full flex items-center gap-2">
-                                <Button variant={'outline'} className="flex-1" asChild>
-                                    <Link href={`/dashboard/battlefield?id=${room.roomId}`}>
+                            <li key={room.roomId} className="w-full flex min-w-0 items-center gap-2">
+                                <Button variant={'outline'} className="min-w-0 flex-1 justify-start overflow-hidden" asChild>
+                                    <Link href={`/dashboard/battlefield?id=${room.roomId}`} className="truncate">
                                         {tCommon('labels.vs', { p1: room.p1, p2: room.p2 })}
                                     </Link>
                                 </Button>
