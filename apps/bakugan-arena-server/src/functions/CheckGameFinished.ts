@@ -3,7 +3,7 @@ import { db } from "../lib/db"
 import { eq } from "drizzle-orm"
 import { schema } from "@bakugan-arena/drizzle-orm"
 import { CalculateAndUpdateElo } from "./ladder-functions/calculate-elo"
-import { Server } from "socket.io/dist"
+import { Server } from "socket.io"
 import { SendUserRooms } from "./send-user-rooms"
 import { StopPlayerTimer } from "./start-player-timer"
 

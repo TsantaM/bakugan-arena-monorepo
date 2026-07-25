@@ -1,4 +1,4 @@
-import { Server, Socket } from "socket.io/dist"
+import { Server, Socket } from "socket.io"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 import { initRoomState } from "../functions/init-game-room"
 import { CreateActionRequestFunction, Message, replayEntryType, replaySnapshotType } from "@bakugan-arena/game-data"

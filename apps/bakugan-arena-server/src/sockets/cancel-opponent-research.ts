@@ -1,4 +1,4 @@
-import { Server, Socket } from "socket.io/dist";
+import { Server, Socket } from "socket.io";
 import { removeFromQueue } from "./search-opponent";
 
 export function CancelOpponentResearch(io: Server, socket: Socket) {

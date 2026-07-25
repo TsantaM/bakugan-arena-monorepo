@@ -1,4 +1,4 @@
-import { Server } from "socket.io/dist";
+import { Server } from "socket.io";
 import { connectedUsers } from "../game-state/battle-brawlers-game-state";
 import { GetUsersRooms } from "./get-rooms-of-user";
 

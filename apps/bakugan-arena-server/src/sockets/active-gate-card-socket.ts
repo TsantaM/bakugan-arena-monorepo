@@ -1,4 +1,4 @@
-import { Server, Socket } from "socket.io/dist";
+import { Server, Socket } from "socket.io";
 import { ActiveGateCard } from "../functions/active-gate-card";
 import { activeGateCardProps, ActivePlayerActionRequestType, InactivePlayerActionRequestType, removeActionByType } from "@bakugan-arena/game-data";
 import { clearAnimationsInRoom } from "./clear-animations-socket";

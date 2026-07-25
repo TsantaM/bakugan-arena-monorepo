@@ -1,5 +1,5 @@
 import { ReceiveMessageSocketType, SendMessageSocketType } from "@bakugan-arena/game-data";
-import { Server, Socket } from "socket.io/dist";
+import { Server, Socket } from "socket.io";
 import { connectedUsers } from "../game-state/battle-brawlers-game-state";
 
 export function ChatMessageSocket(io: Server, socket: Socket) {

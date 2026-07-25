@@ -1,5 +1,5 @@
 import { Message, replayEntryType, replaySnapshotType, stateType } from "@bakugan-arena/game-data";
-import { Server } from "socket.io/dist";
+import { Server } from "socket.io";
 import { db } from "../lib/db"
 import { eq } from "drizzle-orm"
 import { schema } from "@bakugan-arena/drizzle-orm"

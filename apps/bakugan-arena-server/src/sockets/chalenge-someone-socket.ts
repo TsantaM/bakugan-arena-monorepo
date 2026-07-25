@@ -1,5 +1,5 @@
 import { CancelChalengeSocketPropsType, chalengeAcceptRedirectProps, chalengeAcceptSocketProps, chalengeSomeoneSocketProps, RejectChalengeSocketPropsType } from "@bakugan-arena/game-data";
-import { Server, Socket } from "socket.io/dist";
+import { Server, Socket } from "socket.io";
 import { Battle_Brawlers_Game_State, connectedUsers, intervalIds } from "../game-state/battle-brawlers-game-state";
 import { CreateRoom } from "../functions/create-room";
 import { createGameState } from "../functions/create-game-state";

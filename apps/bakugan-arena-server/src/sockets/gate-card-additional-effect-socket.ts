@@ -1,5 +1,5 @@
 import { GateCards, resolutionGateCardType } from "@bakugan-arena/game-data";
-import { Server, Socket } from "socket.io/dist";
+import { Server, Socket } from "socket.io";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { EmitMessage } from "../functions/emit-messages";

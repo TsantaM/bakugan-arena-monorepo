@@ -1,6 +1,6 @@
 import { AbilityCardsActionsRequestsType, AbilityCardsList, activateAbilities, ActivePlayerActionRequestType, AnimationDirectivesTypes, ExclusiveAbilitiesList, GetUserName, InactivePlayerActionRequestType, pushReplayAnimation, removeActionByType, useAbilityCardProps } from "@bakugan-arena/game-data";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
-import { Server } from "socket.io/dist";
+import { Server } from "socket.io";
 import { clearAnimationsInRoom } from "../sockets/clear-animations-socket";
 import { turnActionUpdater } from "../sockets/turn-action";
 import { EmitMessage } from "./emit-messages";

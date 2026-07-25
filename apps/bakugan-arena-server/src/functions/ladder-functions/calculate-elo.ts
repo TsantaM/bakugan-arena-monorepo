@@ -2,7 +2,7 @@ import { schema } from "@bakugan-arena/drizzle-orm"
 import { and, eq, inArray } from "drizzle-orm"
 import { db } from "../../lib/db"
 import { Message, replayEntryType, replaySnapshotType, stateType } from "@bakugan-arena/game-data"
-import { Server } from "socket.io/dist"
+import { Server } from "socket.io"
 
 function getK(elo: number): number {
 

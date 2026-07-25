@@ -1,4 +1,4 @@
-import { Server, Socket } from "socket.io/dist";
+import { Server, Socket } from "socket.io";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { SetBakuganOnGate } from "../functions/set-bakugan-server";
 import { AbilityCardsList, ActivePlayerActionRequestType, attribut, BakuganList, bakuganOnSlot, ChangeAttributActionRequest, ExclusiveAbilitiesList, InactivePlayerActionRequestType, onBoardBakugans, removeActionByType, SelectAbilityCardFilters, SelectAbilityCardInNeutralFilters, setBakuganProps, Slots, slots_id, stateType } from "@bakugan-arena/game-data";

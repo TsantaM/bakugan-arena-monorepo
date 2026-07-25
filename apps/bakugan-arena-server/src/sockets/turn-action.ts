@@ -1,4 +1,4 @@
-import { Server, Socket } from "socket.io/dist";
+import { Server, Socket } from "socket.io";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { CheckBattleStillInProcess, CreateActionRequestFunction, handleBattle, handleGateCards, Message, turnCountSocketProps, updateTurnState } from "@bakugan-arena/game-data";
 import { CheckGameFinished } from "../functions/CheckGameFinished";

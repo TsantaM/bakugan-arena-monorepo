@@ -1,4 +1,4 @@
-import { Server } from "socket.io/dist";
+import { Server } from "socket.io";
 import { connectedUsers, roomsSockets } from "../game-state/battle-brawlers-game-state";
 
 export function addOrUpdateConnectedUser(userId: string, socketId: string, io: Server) {

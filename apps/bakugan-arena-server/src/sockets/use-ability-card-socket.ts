@@ -1,5 +1,5 @@
 import type { useAbilityCardProps } from "@bakugan-arena/game-data";
-import { Server, Socket } from "socket.io/dist";
+import { Server, Socket } from "socket.io";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { useAbilityCardServer } from "../functions/use-abiliy-card";
 import { clearAnimationsInRoom } from "./clear-animations-socket";

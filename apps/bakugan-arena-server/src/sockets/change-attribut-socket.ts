@@ -1,5 +1,5 @@
 import { ActivePlayerActionRequestType, attribut, bakuganOnSlot, Bakugans, ChangeAttributAnimationDirective, GateCards, InactivePlayerActionRequestType, Message, removeActionByType, Slots } from "@bakugan-arena/game-data";
-import { Server, Socket } from "socket.io/dist";
+import { Server, Socket } from "socket.io";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
 import { clearAnimationsInRoom } from "./clear-animations-socket";

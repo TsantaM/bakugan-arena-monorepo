@@ -1,4 +1,4 @@
-import { Server, Socket } from "socket.io/dist";
+import { Server, Socket } from "socket.io";
 import { GlobalChatStore } from "../game-state/global-chat-store";
 import { v4 as uuidv4 } from 'uuid';
 import { GlobalChatMessage, SendedMessage } from "@bakugan-arena/game-data";

@@ -1,5 +1,5 @@
 import type { AnimationDirectivesTypes, stateType } from "@bakugan-arena/game-data";
-import { Server } from "socket.io/dist";
+import { Server } from "socket.io";
 
 export function EmitMessage({ roomState, animation, io }: { roomState: stateType, animation: AnimationDirectivesTypes, io: Server }) {
     const messages = animation.message

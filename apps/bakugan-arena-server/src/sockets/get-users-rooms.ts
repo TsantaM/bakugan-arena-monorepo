@@ -1,4 +1,4 @@
-import { Server, Socket } from "socket.io/dist";
+import { Server, Socket } from "socket.io";
 import { GetUsersRooms } from "../functions/get-rooms-of-user";
 
 export const getUsersRooms = (io: Server, socket: Socket) => {
