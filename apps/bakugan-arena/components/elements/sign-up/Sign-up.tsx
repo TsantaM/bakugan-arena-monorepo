@@ -213,7 +213,7 @@ export function SignUpModal({ triggerContent }: { triggerContent?: string }) {
 
             <Dialog>
                 <DialogTrigger asChild>
-                    <Button>
+                    <Button size="sm" className={triggerContent ? "h-auto max-w-full whitespace-normal text-center" : undefined}>
                         { triggerContent ? triggerContent : t('signUp.trigger')}
                     </Button>
                 </DialogTrigger>

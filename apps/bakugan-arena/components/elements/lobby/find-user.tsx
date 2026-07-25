@@ -52,7 +52,7 @@ export default function FindUserComponent() {
             }
         }}>
             <DialogTrigger asChild>
-                <Button className="w-full">{t('trigger')}</Button>
+                <Button className="h-auto w-full whitespace-normal">{t('trigger')}</Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogTitle>
@@ -90,7 +90,7 @@ export default function FindUserComponent() {
                                                     </AvatarFallback>
                                                 </Avatar>
 
-                                                <span className="text-sm">
+                                                <span className="min-w-0 truncate text-sm">
                                                     {u.displayUsername}
                                                 </span>
                                                 <span
@@ -106,6 +106,7 @@ export default function FindUserComponent() {
                                             <Button
                                                 disabled={connectedUsers.includes(u.id) ? false : true}
                                                 size="sm"
+                                                className="h-auto max-w-[8rem] whitespace-normal"
                                                 onClick={() => {
                                                     addChat({
                                                         targetId: u.id,

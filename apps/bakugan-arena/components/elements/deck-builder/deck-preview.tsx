@@ -51,20 +51,20 @@ export default function DeckPreview( {data} : {data: GetUserDeckType}) {
     return (
         <Card>
             <CardHeader>
-                <div className="flex items-center justify-between">
-                    <CardTitle>
+                <div className="flex min-w-0 items-center justify-between gap-2">
+                    <CardTitle className="min-w-0 truncate">
                         {data.name}
                     </CardTitle>
-                    <div className="flex items-center gap-3">
-                        <Button variant="outline" onClick={CopyToClipboard}>
+                    <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+                        <Button variant="outline" size="icon" onClick={CopyToClipboard}>
                             <Share2/>
                         </Button>
-                        <Button variant='outline' asChild ><Link href={`/dashboard/deck-builder/edit-deck?id=${data.id}`}><Edit/></Link></Button>
-                        <Button variant='destructive' onClick={() => deleteDeckMutation.mutate()}><Trash/></Button>
+                        <Button variant='outline' size="icon" asChild ><Link href={`/dashboard/deck-builder/edit-deck?id=${data.id}`}><Edit/></Link></Button>
+                        <Button variant='destructive' size="icon" onClick={() => deleteDeckMutation.mutate()}><Trash/></Button>
                     </div>
                 </div>
             </CardHeader>
-            <CardContent className="flex items-center gap-3">
+            <CardContent className="flex flex-wrap items-center gap-3">
                 { bakugans.length > 0 ? bakugans.map((b, index) => <Image key={index} alt={`${b.name} ${b.attribut}`} src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} width={50} height={50}/>) : t('preview.noBakugan')}
             </CardContent>
             <Toaster/>

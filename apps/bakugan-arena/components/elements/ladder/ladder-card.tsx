@@ -8,9 +8,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { ConnectedUsersStore } from "@/src/store/connected-users-store";
-
-import Image from "next/image"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { ConnectedUsersStore } from "@/src/store/connected-users-store"
 import { useTranslations } from "next-intl"
 
 export type LadderPlayer = {
@@ -40,25 +39,21 @@ export default function LadderTable({ players }: { players: LadderPlayer[] }) {
 
                 <TableBody>
                     {players.map((player, index) => {
-                        const imageLink = player.image ?? "/images/default-profil-picture.png"
-                        const alt = player.image
-                            ? (player.displayUsername ?? tCommon('fallback.player'))
-                            : tCommon('a11y.defaultProfilePicture')
+                        const displayName = player.displayUsername ?? tCommon('fallback.player')
+                        const fallbackInitial = displayName[0]?.toUpperCase() ?? "?"
 
                         return (
                             <TableRow key={index}>
                                 <TableCell className="font-extrabold">{index + 1}</TableCell>
 
                                 <TableCell>
-                                    {imageLink && (
-                                        <Image
-                                            src={imageLink}
-                                            alt={alt}
-                                            width={50}
-                                            height={50}
-                                            className="rounded-full"
+                                    <Avatar className="size-12">
+                                        <AvatarImage
+                                            src={player.image ?? "/images/default-profil-picture.png"}
+                                            alt={player.image ? displayName : tCommon('a11y.defaultProfilePicture')}
                                         />
-                                    )}
+                                        <AvatarFallback>{fallbackInitial}</AvatarFallback>
+                                    </Avatar>
                                 </TableCell>
 
                                 <TableCell className="font-extrabold">
@@ -69,7 +64,7 @@ export default function LadderTable({ players }: { players: LadderPlayer[] }) {
                                                 : "bg-gray-400"
                                                 }`} >
                                         </span>
-                                        {player.displayUsername ? player.displayUsername : tCommon('fallback.player')}
+                                        {displayName}
                                     </span>
                                 </TableCell>
 

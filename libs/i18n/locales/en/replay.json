@@ -5,6 +5,7 @@
   "empty": "No replay found.",
   "upload": "Upload",
   "clear": "Clear",
+  "controls": "Controls",
   "a11y": {
     "upload": "Upload replay",
     "clear": "Clear replay",
@@ -13,7 +14,8 @@
     "nextTurn": "Next turn",
     "play": "Play replay",
     "pause": "Pause replay",
-    "download": "Download replay"
+    "download": "Download replay",
+    "openControls": "Open replay controls"
   },
   "toasts": {
     "importSuccess": "Importation success",

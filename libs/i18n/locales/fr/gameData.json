@@ -50,7 +50,7 @@
       "description": "Permet aux bakugan Ventus de voler au-delà des Cartes Portail et annule la Carte Portail sur laquelle ils atterrissent"
     },
     "souffle-tout": {
-      "name": "Souffle Doux",
+      "name": "Souffle Toux",
       "description": "Déplace l'adversaire vers une autre Carte Portail"
     },
     "retour-d-air": {
@@ -66,11 +66,11 @@
       "description": "Attire un Bakugan d'une autre Carte Portail vers la Carte Portail de l'utilisateur"
     },
     "retro-action": {
-      "name": "Retour de Feu",
+      "name": "Rétro Action",
       "description": "Annule la Carte Portail de l'adversaire"
     },
     "depth-dive": {
-      "name": "Plongée des Profondeurs",
+      "name": "Plongée Abyssale",
       "description": "Annule la Carte Portail de l'adversaire"
     },
     "earth-shatter": {
@@ -78,7 +78,7 @@
       "description": "Annule la Carte Portail de l'adversaire"
     },
     "support-light": {
-      "name": "Lumière de Support",
+      "name": "Lumière Envahissante",
       "description": "Annule la Carte Portail de l'adversaire"
     },
     "coup-de-grace": {
@@ -186,8 +186,8 @@
       "description": "Permet de redonner vie à un Bakugan qui a été vaincu au combat"
     },
     "tornade-eclair": {
-      "name": "Lightning Tornado",
-      "description": "Adds 100 Gs to the user and decrease opponent power by 100 Gs"
+      "name": "Tornade Éclair",
+      "description": "Ajoute 100 Gs à l'utilisateur et réduit la puissance de l'adversaire de 100 Gs"
     },
     "epices-mortelles": {
       "name": "Epices Mortelles",
@@ -198,8 +198,8 @@
       "description": "Annule toutes les capacité de l'adversaire et retire 50 G à l'adversaire"
     },
     "copie-conforme": {
-      "name": "Copycat",
-      "description": "Copies an ability that the opponent used or is using"
+      "name": "Copie Conforme",
+      "description": "Copie une capacité que l'adversaire utilise ou utilise"
     },
     "bouclier-aquos": {
       "name": "Bouclier Aquos",
@@ -232,7 +232,7 @@
       "description": "Ajoute 100 G à tous les Bakugan Darkus sur la carte"
     },
     "mine-fantome": {
-      "name": "Mine Phantom",
+      "name": "Mine Fantôme",
       "description": "Lorsque deux Bakugan ou plus se trouvent sur la carte, peu importe leur camp, ils perdent tous"
     },
     "echange": {
@@ -244,7 +244,7 @@
       "description": "Échange la puissance G de votre Bakugan avec celle de votre adversaire. (S’ouvre automatiquement à la fin du combat)"
     },
     "aspirateur-de-puissance": {
-      "name": "Fusion d’Énergie",
+      "name": "Aspirateur de Puissance",
       "description": "Transfère 100 Gs du dernier Bakugan Sur la carte vers le premier"
     },
     "rechargement": {
@@ -554,7 +554,7 @@
       "description": "Ajoute 100 Gs à l'utilisateur pour toute la durée du jeu, tant que la carte n'est pas annulée et réduit la puissance du bakugan sélectionné de 100 Gs"
     },
     "leap-sting": {
-      "name": "Rafale de G",
+      "name": "Rafale de Tir",
       "description": "Soustrait 100 Gs à tous les adversaires sur le terrain"
     },
     "furry-of-wind": {
@@ -574,7 +574,7 @@
       "description": "Attire tous les Bakugan adverses dans les Cartes Portail adjacentes à celle où se trouve Hydranoid/Sirenoid qui ont un niveau de puissance inférieur, et les élimine immédiatement"
     },
     "anti-muse": {
-      "name": "Anthemusa",
+      "name": "Anti Muse",
       "description": "Attire tous les Bakugan adverses dans les Cartes Portail adjacentes à celle où se trouve Hydranoid/Sirenoid qui ont un niveau de puissance inférieur, et les élimine immédiatement"
     },
     "vent-violent-de-noblesse-verte": {
@@ -586,7 +586,7 @@
       "description": "Ajoute 100 Gs à l'utilisateur"
     },
     "vent-cinglant": {
-      "name": "Vent Sanglant",
+      "name": "Vent Cinglant",
       "description": "Ajoute 100 Gs à l'utilisateur"
     },
     "maitre-des-profondeurs": {
@@ -594,7 +594,7 @@
       "description": "Ajoute 100 Gs à l'utilisateur"
     },
     "massue-gigantesque": {
-      "name": "Assaut Gigantesque",
+      "name": "Massue Gigantesque",
       "description": "Ajoute 100 Gs à l'utilisateur"
     },
     "lance-de-feu": {
@@ -642,7 +642,7 @@
       "description": "Ajoute 100 Gs à Manion"
     },
     "spirit-hole": {
-      "name": "Coffre de l'Esprit",
+      "name": "Gouffre de l'Esprit",
       "description": "Ajoute 50 Gs à votre Bakugan pour chaque carte portail sur le terrain"
     },
     "marionnette": {
@@ -702,7 +702,7 @@
       "description": "Transfère 100 Gs de l'adversaire vers Hammer Gorem. Empêche également l'ouverture de la Carte Portail adverse."
     },
     "velocity-fang": {
-      "name": "Croc Véloce",
+      "name": "Crocs Fulgurants",
       "description": "Annule la capacité de l'adversaire et soustrait également 100 Gs à l'adversaire."
     },
     "souffle-infini": {

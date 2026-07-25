@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { cn } from '@/lib/utils'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
@@ -49,7 +50,7 @@ export default function LanguageSwitcher({
     >
       <SelectTrigger
         size="sm"
-        className={className}
+        className={cn("shrink-0", className)}
         aria-label={t('label')}
       >
         <SelectValue placeholder={t('label')} />
