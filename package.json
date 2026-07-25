@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "pnpm -r dev",
     "dev:apps": "pnpm -r --filter \"./apps/**\" dev",
-    "build:server": "pnpm --filter bakugan-arena-server build"
+    "build:server": "pnpm --filter bakugan-arena-server build",
+    "build:server:render": "pnpm install && pnpm --filter bakugan-arena-server build"
   },
   "keywords": [],
   "author": "",

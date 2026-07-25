@@ -1,6 +1,6 @@
 import { schema } from "@bakugan-arena/drizzle-orm"
 import { computeDecayedElo } from "@bakugan-arena/game-data"
-import { and, desc, eq } from "drizzle-orm"
+import { and, desc, eq, gt, or } from "drizzle-orm"
 import { db } from "../../lib/db"
 
 const { rooms, user } = schema
@@ -31,16 +31,18 @@ export async function getLastRankedGameDatesByUserId(): Promise<Map<string, Date
 }
 
 export async function getLastRankedGameDate(userId: string): Promise<Date | null> {
-    const room = await db.query.rooms.findFirst({
-        where: (r, { and, eq, or }) =>
+    const [room] = await db
+        .select({ createdAt: rooms.createdAt })
+        .from(rooms)
+        .where(
             and(
-                eq(r.ranked, true),
-                eq(r.finished, true),
-                or(eq(r.player1Id, userId), eq(r.player2Id, userId))
+                eq(rooms.ranked, true),
+                eq(rooms.finished, true),
+                or(eq(rooms.player1Id, userId), eq(rooms.player2Id, userId)),
             ),
-        orderBy: (r, { desc }) => [desc(r.createdAt)],
-        columns: { createdAt: true },
-    })
+        )
+        .orderBy(desc(rooms.createdAt))
+        .limit(1)
 
     return room?.createdAt ?? null
 }
@@ -57,10 +59,10 @@ export async function applyEloDecayForUser(userId: string, storedElo: number): P
 }
 
 export async function applyEloDecayToAllUsers(): Promise<void> {
-    const usersAboveMin = await db.query.user.findMany({
-        where: (u, { gt }) => gt(u.elo, 1000),
-        columns: { id: true, elo: true },
-    })
+    const usersAboveMin = await db
+        .select({ id: user.id, elo: user.elo })
+        .from(user)
+        .where(gt(user.elo, 1000))
 
     if (usersAboveMin.length === 0) return
 
