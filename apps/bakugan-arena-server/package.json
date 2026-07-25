@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "pnpm --filter @bakugan-arena/game-data build && pnpm --filter @bakugan-arena/i18n build && pnpm --filter @bakugan-arena/drizzle-orm build && tsc",
+    "build": "pnpm --filter @bakugan-arena/game-data build && pnpm --filter @bakugan-arena/i18n build && pnpm --filter @bakugan-arena/drizzle-orm build && pnpm exec tsc -p tsconfig.json",
     "dev": "nodemon src/index.ts --watch src --exec ts-node",
     "start": "node dist/index.js"
   },
@@ -21,6 +21,7 @@
     "pg": "^8.17.2",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
+    "typescript": "5.9.3",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
@@ -28,7 +29,6 @@
     "@types/lz-string": "^1.5.0",
     "@types/pg": "^8.16.0",
     "nodemon": "^3.1.10",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "ts-node": "^10.9.2"
   }
 }
