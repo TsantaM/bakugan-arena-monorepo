@@ -2,78 +2,124 @@
   "title": "Bakugan Arena – Official Tutorial",
   "overview": {
     "title": "1. Game Overview",
-    "body": "Bakugan Arena is a strategic turn-based battle game where players deploy Bakugans, use Ability Cards, and control Gate Cards to defeat their opponent.",
-    "objective": "The objective is simple: eliminate all enemy Bakugans or outlast your opponent through strategic play."
+    "body": "Bakugan Arena is a strategic turn-based battle game. You place Gate Cards, deploy Bakugans, and play Ability Cards to eliminate your opponent's Bakugans.",
+    "objective": "Goal: eliminate all 3 opposing Bakugans, or let the opponent's timer run out after Turn 0."
   },
-  "coreRules": {
-    "title": "2. Core Rules",
-    "intro": "Each player starts the game with:",
-    "bakugans": "3 Bakugans",
-    "abilityCards": "3 Ability Cards (maximum usable per game)",
-    "gateCards": "3 Gate Cards (maximum usable per game)"
+  "deck": {
+    "title": "2. Deck vs Match Resources",
+    "intro": "The deck you build and the resources you can actually spend in a match are not the same.",
+    "deckTitle": "Legal deck composition",
+    "deckBakugans": "Exactly 3 Bakugans (usually one family).",
+    "deckAbilities": "Between 3 and 6 normal Ability Cards, plus 0 to 3 exclusive abilities (at least 3 abilities total).",
+    "deckGates": "Between 3 and 5 Gate Cards.",
+    "matchTitle": "Limits during a match",
+    "matchBakugans": "All 3 Bakugans remain available until eliminated.",
+    "matchAbilities": "Only 3 Ability Cards can be used for the whole match (exclusives included) — choose carefully which ones to spend.",
+    "matchGates": "Only 3 Gate Cards can be placed for the whole match, even if your deck has more."
+  },
+  "setup": {
+    "title": "3. Turn 0 — Setup",
+    "intro": "Before regular play, both players must each place a first Gate Card.",
+    "mustPlace": "This is mandatory: both timers run in parallel.",
+    "timerDraw": "If a timer hits 0 during Turn 0, the match ends in a draw (no winner).",
+    "after": "Once both gates are down, the game enters the neutral phase and turns alternate normally."
   },
   "victory": {
-    "title": "3. Victory Conditions",
-    "intro": "A player wins the game if:",
-    "eliminate": "All 3 opponent Bakugans are eliminated",
-    "timer": "The opponent's timer reaches 0 (only after Turn 0 conditions are no longer active)"
+    "title": "4. Victory Conditions",
+    "intro": "You win if:",
+    "eliminate": "All 3 opposing Bakugans are eliminated.",
+    "timer": "The opponent's timer reaches 0 after Turn 0 (during their turn)."
   },
   "draw": {
-    "title": "4. Draw Conditions",
-    "intro": "A match ends in a draw if:",
-    "noGates": "No more Gate Cards can be placed by either player",
-    "mutualElimination": "All Bakugans from both players are eliminated in the same turn",
-    "timerTurn0": "A player's timer reaches 0 during Turn 0"
-  },
-  "battle": {
-    "title": "5. Battle System",
-    "intro": "A battle begins when two opposing Bakugans land on the same Gate Card.",
-    "duration": "Each battle lasts 2 turns:",
-    "turn1Title": "Turn 1",
-    "turn1First": "The player who first occupied the Gate Card acts first",
-    "turn1May": "They may:",
-    "turn1Ability": "Use an Ability Card",
-    "turn1Gate": "Activate the Gate Card (if they own it, and it is neither already activated nor blocked)",
-    "turn2Title": "Turn 2",
-    "turn2Body": "The opponent takes their turn with the same options",
-    "endTitle": "End of Battle Resolution",
-    "endIntro": "After both turns:",
-    "endGate": "The Gate Card effect is resolved (if applicable)",
-    "endEliminate": "The Bakugan with the lowest power level is eliminated"
-  },
-  "abilities": {
-    "title": "6. Ability Cards System",
-    "filter": "Ability Cards are automatically filtered by the game before being added to a player's hand.",
-    "unused": "If a card cannot be used in the current context, it is not given to the player.",
-    "examplesTitle": "Examples",
-    "airBattle": "Air Battle — Allows movement to another Gate Card. If no other Gate Cards exist, the card is not added to the hand.",
-    "marionette": "Marionette — Allows control/movement of enemy Bakugans. If no valid target exists (e.g., only one Bakugan remains on the field), the card is not added."
+    "title": "5. Draw Conditions",
+    "intro": "The match ends in a draw if:",
+    "noGates": "No more Gate Cards can be placed by either player (and no battle is in progress).",
+    "mutualElimination": "All Bakugans from both players are eliminated at the same time.",
+    "timerTurn0": "A timer reaches 0 during Turn 0."
   },
   "neutral": {
-    "title": "7. Neutral Phase (No Active Battle)",
-    "intro": "When no battle is currently occurring, players can perform one action per turn.",
-    "actionsTitle": "Available Actions",
-    "placeGateTitle": "1. Place a Gate Card",
-    "placeGateBody": "First possible action. Does not restrict other future actions during the turn.",
-    "deployTitle": "2. Deploy a Bakugan",
-    "deployBody": "Second possible action. If performed, the player can no longer place a Gate Card this turn.",
-    "abilityTitle": "3. Use an Ability Card",
-    "abilityBody": "Third possible action. Immediately ends the turn after use. Prevents any other action this turn."
+    "title": "6. Neutral Phase (No Battle)",
+    "intro": "Outside of battle, you usually get one main action per turn. Order and restrictions matter.",
+    "actionsTitle": "Available actions",
+    "placeGateTitle": "Place a Gate Card",
+    "placeGateBody": "Can be done first. Does not end the turn: you can still deploy a Bakugan afterward.",
+    "deployTitle": "Deploy a Bakugan",
+    "deployBody": "Places a Bakugan on a gate. After deploying, you can no longer place a gate this turn. Landing on an opposing Bakugan starts a battle.",
+    "abilityTitle": "Use an Ability Card",
+    "abilityBody": "Immediately ends the turn. Costs one of your 3 ability uses for the match.",
+    "attributeTitle": "Change attribute (special cases)",
+    "attributeBody": "Some Bakugans (e.g. Preyas) can change attribute once per presence on the board. This can retrigger synergies with an already-opened reactor."
+  },
+  "battle": {
+    "title": "7. Battle System",
+    "intro": "A battle starts as soon as two opposing Bakugans share the same Gate Card.",
+    "duration": "Each battle lasts 2 turns of ability / gate opening.",
+    "turn1Title": "Initiative",
+    "turn1First": "The player who placed their Bakugan last (the attacker) acts first — not the first occupant.",
+    "turn1May": "On a battle turn, a player may:",
+    "turn1Ability": "Use an Ability Card (if one is playable in that context).",
+    "turn1Gate": "Open the Gate Card if they own it, and it is neither already open nor blocked.",
+    "turn2Title": "Second turn",
+    "turn2Body": "The opponent then plays with the same options. After that, the battle resolves.",
+    "powerTitle": "Power comparison",
+    "powerBody": "At resolution, each player's total G (power) on the slot is compared. Multiple Bakugans for the same player (Triple / Quartet) add their G together.",
+    "whyAttack": "Why attack? Going second gives you initiative and often the first chance to open your own gate."
+  },
+  "afterBattle": {
+    "title": "8. After Battle — Board Cleanup",
+    "intro": "Battles never leave the board frozen. Understanding cleanup prevents nasty surprises.",
+    "losers": "Losing Bakugans are permanently eliminated.",
+    "winners": "Winning Bakugans return to hand (they do not stay on the gate).",
+    "tie": "On a power tie, nobody is eliminated: all Bakugans on the slot return to hand.",
+    "gateRemoved": "The battle's Gate Card is removed and the slot is reset (free for a new gate).",
+    "initiative": "The winner usually takes initiative for the next phase.",
+    "domainTitle": "Domain cleanup (Clear Domain)",
+    "domainWhy": "If no living Bakugan is left to deploy (all are already on the board or eliminated) and no battle is active, the game automatically returns every remaining Bakugan to hand.",
+    "domainPurpose": "Why? To avoid a softlock: with no Bakugan in reserve, nobody could place, and the match would stall. This is not elimination — only recirculation."
+  },
+  "gates": {
+    "title": "9. Gate Card Types",
+    "intro": "Not every gate plays the same way. Knowing their roles guides placement.",
+    "reactorTitle": "Reactors / Elementals",
+    "reactorBody": "On open, they often grant a power bonus (e.g. +100 G) to Bakugans whose attribute matches.",
+    "characterTitle": "Character",
+    "characterBody": "Double (or heavily boost) the power of Bakugans from the matching family. Ideal for forcing a favorable fight.",
+    "commandTitle": "Command",
+    "commandBody": "Special effects (movement, multi-battles, revive, etc.). Some activate automatically at battle end.",
+    "trapTitle": "Traps",
+    "trapBody": "Strong open effects (often direct elimination or a major swing). When a trap opens, the opponent may sometimes cancel it with a gate-cancel ability before the main effect applies.",
+    "openTiming": "You can only open your own gate, during battle, if it is not already open or blocked."
+  },
+  "abilities": {
+    "title": "10. Ability Cards",
+    "filter": "The game filters abilities automatically: a card that cannot be used in the current context does not appear in your hand.",
+    "unused": "Examples: a movement card is hidden if there is no other gate; an enemy-control card is hidden without a valid target.",
+    "exclusiveTitle": "Exclusive abilities",
+    "exclusiveBody": "Tied to a specific Bakugan. Some are only playable in the neutral phase; others only if your Bakugan is (or is not) on the board. They also spend from the 3-use counter.",
+    "persistentTitle": "Persistent abilities",
+    "persistentBody": "Some abilities stay active after use and re-apply when the Bakugan is redeployed (until cancelled or the effect ends).",
+    "ohkoTitle": "Out-of-battle eliminations",
+    "ohkoBody": "Traps or abilities can eliminate a Bakugan without a G comparison. Protections (vs ability, vs gate, or both) can stop those effects.",
+    "examplesTitle": "Filtering examples",
+    "airBattle": "Air Battle — Move to another gate. Missing from hand if no other gate exists.",
+    "marionette": "Marionette — Control / move enemies. Missing if there is no valid target."
   },
   "strategic": {
-    "title": "8. Strategic Note",
-    "intro": "Efficient play in Bakugan Arena is about resource timing and board control:",
-    "gate": "Gate placement defines battle opportunities",
-    "abilities": "Ability Cards can shift momentum but are limited",
-    "overextend": "Overextending early often leads to tactical disadvantage",
-    "outro": "Mastering the interaction between positioning and ability usage is key to victory."
+    "title": "11. Strategic Notes",
+    "intro": "Useful habits once the rules click:",
+    "gate": "Place gates to create (or avoid) favorable battles — Character and reactors completely change a trade.",
+    "abilities": "Each ability is scarce (3 max): save them for the decisive swing, not the first skirmish.",
+    "attackSecond": "Attacking second grants initiative: often better than sitting on an empty gate too early.",
+    "overextend": "Filling the board with all your Bakugans can trigger domain cleanup or leave you with no answer.",
+    "traps": "Traps are strong but counterable: do not always bank on their raw effect.",
+    "outro": "Victory comes from timing: positioning, gate opens, and ability-counter management."
   },
   "help": {
-    "title": "9. Need Help?",
-    "discord": "If you have any questions about the game or if certain rules are unclear, we invite you to join our Discord Community where players and staff members can help you.",
-    "refresh": "If you encounter an issue during a match, please try refreshing the page first, as this resolves most temporary problems.",
-    "report": "If the issue persists or if you discover a bug, please report it on our Discord server so we can investigate and fix it as quickly as possible.",
-    "thanks": "Thank you for playing Bakugan Arena, and most importantly:",
+    "title": "12. Need Help?",
+    "discord": "Rules questions? Join our Discord — players and staff can help.",
+    "refresh": "If something breaks mid-match, try refreshing the page first — that fixes most temporary issues.",
+    "report": "If it persists or you find a bug, report it on Discord so we can fix it quickly.",
+    "thanks": "Thanks for playing Bakugan Arena, and most importantly:",
     "outro": "Have fun and enjoy your battles!"
   }
 }

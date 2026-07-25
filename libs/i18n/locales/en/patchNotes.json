@@ -4,6 +4,57 @@
   "selectPlaceholder": "Choose a patch note",
   "releases": [
     {
+      "id": "2026-07-25",
+      "date": "25/07/2026",
+      "title": "Version 4",
+      "items": [
+        {
+          "title": "Multi-language",
+          "body": "Full French, English, and Arabic support (including RTL), with localized battle messages, lobby, deck builder, and legal copy."
+        },
+        {
+          "title": "Replays",
+          "body": "Matches can be replayed: animation directives and match state are stored so you can review a fight afterward."
+        },
+        {
+          "title": "Bot opponents",
+          "body": "If you stay alone in queue, a bot can join you. Bots have personalities (setup, control, finisher), simulate actions, and improve through replay-based training."
+        },
+        {
+          "title": "Sandbox & Animation Lab",
+          "body": "New sandbox space to test game scenarios, with a config drawer and an Animation Lab tab to preview effects."
+        },
+        {
+          "title": "Ladder",
+          "body": "Added ELO decay for ranked standings so ratings better reflect recent activity."
+        },
+        {
+          "title": "Card animations",
+          "body": "Large 3D animation wave: D-Strike Attack, Flare Blinder, Barrage d'Eau, Mirage Aquatique, Destruction Meteor Storm, Coup de Grâce, Dual Gazer, Visage de la Fureur, plus many elemental abilities (Pyrus, Aquos, Haos, Subterra, Ventus, Darkus) with new effects (meteors, tornados, impacts, auras, scene illumination)."
+        },
+        {
+          "title": "Rules & protections",
+          "body": "Reworked power-change handling, stronger protection mechanics, and card adjustments (Barrage d'Eau, Dual Gazer, traps, exclusive abilities)."
+        },
+        {
+          "title": "Deck builder",
+          "body": "Stricter, clearer deck validation: validity badges, detailed error messages, and a clearer split between deck composition and in-match usable resources."
+        },
+        {
+          "title": "Tutorial",
+          "body": "Tutorial rewritten: Turn 0, battle initiative order, board cleanup / Clear Domain, gate types (reactor, Character, Command, traps), exclusive and persistent abilities."
+        },
+        {
+          "title": "3D board",
+          "body": "Improved tooltips and mesh user data, plus polish on gate opens and Bakugan returns."
+        },
+        {
+          "title": "Matchmaking",
+          "body": "Better bot/human integration, shorter solo wait, and fixes around rooms and match start."
+        }
+      ]
+    },
+    {
       "id": "2026-06-07",
       "date": "07/06/2026",
       "title": "Evolutions & tutorial",

@@ -3,6 +3,24 @@
   "intro": "Bakugan Arena exists thanks to the people and communities who support the project. Here are some of the people we want to thank.",
   "sections": [
     {
+      "title": "Contributors",
+      "description": "People who helped enrich the game through their work.",
+      "entries": [
+        {
+          "name": "Hawkgirl",
+          "role": "Translation",
+          "message": "For the translation work.",
+          "url": "https://ar-traduction.com",
+          "urlLabel": "ar-traduction.com"
+        },
+        {
+          "name": "ZAMSK",
+          "role": "Illustrations",
+          "message": "For the new illustrations."
+        }
+      ]
+    },
+    {
       "title": "Community",
       "description": "Players, testers and fans who help the game grow.",
       "entries": [

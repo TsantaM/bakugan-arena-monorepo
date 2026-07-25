@@ -4,6 +4,57 @@
   "selectPlaceholder": "Sélectionner une note de patch",
   "releases": [
     {
+      "id": "2026-07-25",
+      "date": "25/07/2026",
+      "title": "Version 4",
+      "items": [
+        {
+          "title": "Multilingue",
+          "body": "Support complet français, anglais et arabe (dont sens de lecture RTL), avec localisation des messages de combat, du lobby, du deck builder et des textes légaux."
+        },
+        {
+          "title": "Replays",
+          "body": "Les matchs peuvent être rejoués : les directives d'animation et l'état de partie sont enregistrés pour revoir un combat après coup."
+        },
+        {
+          "title": "Adversaires bots",
+          "body": "Si vous restez seul en file, un bot peut vous rejoindre. Les bots ont des personnalités (setup, contrôle, finisher), simulent leurs actions et s'améliorent via l'entraînement sur des replays."
+        },
+        {
+          "title": "Sandbox & Animation Lab",
+          "body": "Nouvel espace sandbox pour tester des scénarios de jeu, avec un tiroir de configuration et un onglet Animation Lab pour prévisualiser les effets."
+        },
+        {
+          "title": "Ladder",
+          "body": "Ajout du decay ELO pour le classement classé, afin que les scores reflètent mieux l'activité récente."
+        },
+        {
+          "title": "Animations de cartes",
+          "body": "Vague d'animations 3D : D-Strike Attack, Flare Blinder, Barrage d'Eau, Mirage Aquatique, Destruction Meteor Storm, Coup de Grâce, Dual Gazer, Visage de la Fureur, et de nombreuses capacités élémentaires (Pyrus, Aquos, Haos, Subterra, Ventus, Darkus) avec nouveaux effets (météores, tornades, impacts, auras, illumination de scène)."
+        },
+        {
+          "title": "Règles et protections",
+          "body": "Refonte de la gestion des changements de puissance, renforcement des mécaniques de protection, et ajustements de cartes (Barrage d'Eau, Dual Gazer, pièges, capacités exclusives)."
+        },
+        {
+          "title": "Deck builder",
+          "body": "Validation de deck plus stricte et plus claire : badges de validité, messages d'erreur détaillés, et meilleure distinction entre composition de deck et ressources jouables en match."
+        },
+        {
+          "title": "Tutoriel",
+          "body": "Tutoriel réécrit : Tour 0, ordre d'initiative en combat, nettoyage de plateau / Clear Domain, types de portes (réacteur, Character, Command, pièges), capacités exclusives et persistantes."
+        },
+        {
+          "title": "Plateau 3D",
+          "body": "Amélioration des tooltips et des données de mesh, plus de polish sur les ouvertures de porte et les retours de Bakugan."
+        },
+        {
+          "title": "Matchmaking",
+          "body": "Meilleure intégration bots / humains, attente solo réduite, et corrections autour des salles et du lancement de partie."
+        }
+      ]
+    },
+    {
       "id": "2026-06-07",
       "date": "07/06/2026",
       "title": "Évolutions et tutoriel",

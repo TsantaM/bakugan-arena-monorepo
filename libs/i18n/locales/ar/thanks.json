@@ -3,6 +3,24 @@
   "intro": "يوجد Bakugan Arena بفضل الأشخاص والمجتمعات التي تدعم المشروع. إليكم بعض من نود شكرهم.",
   "sections": [
     {
+      "title": "المساهمون",
+      "description": "أشخاص أثروا اللعبة بعملهم.",
+      "entries": [
+        {
+          "name": "Hawkgirl",
+          "role": "الترجمة",
+          "message": "على عمل الترجمة.",
+          "url": "https://ar-traduction.com",
+          "urlLabel": "ar-traduction.com"
+        },
+        {
+          "name": "ZAMSK",
+          "role": "الرسوم التوضيحية",
+          "message": "على الرسوم التوضيحية الجديدة."
+        }
+      ]
+    },
+    {
       "title": "المجتمع",
       "description": "اللاعبون والمختبرون والمعجبون الذين يساعدون اللعبة على النمو.",
       "entries": [

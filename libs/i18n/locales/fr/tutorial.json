@@ -2,77 +2,123 @@
   "title": "Bakugan Arena – Tutoriel officiel",
   "overview": {
     "title": "1. Présentation du jeu",
-    "body": "Bakugan Arena est un jeu de combat stratégique au tour par tour où les joueurs déploient des Bakugans, utilisent des cartes capacité et contrôlent des cartes portail pour vaincre leur adversaire.",
-    "objective": "L'objectif est simple : éliminer tous les Bakugans ennemis ou survivre plus longtemps que votre adversaire grâce au jeu stratégique."
+    "body": "Bakugan Arena est un jeu de combat stratégique au tour par tour. Vous posez des cartes portail, déployez des Bakugans et jouez des cartes capacité pour éliminer les Bakugans adverses.",
+    "objective": "Objectif : éliminer les 3 Bakugans adverses, ou faire expirer le chronomètre adverse après le Tour 0."
   },
-  "coreRules": {
-    "title": "2. Règles de base",
-    "intro": "Chaque joueur commence la partie avec :",
-    "bakugans": "3 Bakugans",
-    "abilityCards": "3 cartes capacité (maximum utilisable par partie)",
-    "gateCards": "3 cartes portail (maximum utilisable par partie)"
+  "deck": {
+    "title": "2. Deck et ressources de match",
+    "intro": "Le deck que vous construisez et les ressources réellement jouables en match ne sont pas identiques.",
+    "deckTitle": "Composition d'un deck légal",
+    "deckBakugans": "Exactement 3 Bakugans (en général une seule famille).",
+    "deckAbilities": "Entre 3 et 6 cartes capacité normales, plus 0 à 3 capacités exclusives (au moins 3 capacités au total).",
+    "deckGates": "Entre 3 et 5 cartes portail.",
+    "matchTitle": "Limites pendant une partie",
+    "matchBakugans": "Vos 3 Bakugans sont tous disponibles jusqu'à élimination.",
+    "matchAbilities": "Seules 3 cartes capacité peuvent être utilisées dans toute la partie (exclusives comprises) — choisissez bien lesquelles brûler.",
+    "matchGates": "Seules 3 cartes portail peuvent être posées dans toute la partie, même si votre deck en contient davantage."
+  },
+  "setup": {
+    "title": "3. Tour 0 — Mise en place",
+    "intro": "Avant le vrai jeu, les deux joueurs doivent chacun poser une première carte portail.",
+    "mustPlace": "C'est une action obligatoire : les deux chronomètres tournent en parallèle.",
+    "timerDraw": "Si un chronomètre atteint 0 pendant le Tour 0, la partie se termine par une égalité (personne ne gagne).",
+    "after": "Une fois les deux portails posés, le jeu passe en phase neutre et les tours alternent normalement."
   },
   "victory": {
-    "title": "3. Conditions de victoire",
-    "intro": "Un joueur gagne la partie si :",
-    "eliminate": "Les 3 Bakugans adverses sont éliminés",
-    "timer": "Le chronomètre de l'adversaire atteint 0 (uniquement après que les conditions du Tour 0 ne soient plus actives)"
+    "title": "4. Conditions de victoire",
+    "intro": "Vous gagnez si :",
+    "eliminate": "Les 3 Bakugans adverses sont éliminés.",
+    "timer": "Le chronomètre de l'adversaire atteint 0 après le Tour 0 (pendant son tour de jeu)."
   },
   "draw": {
-    "title": "4. Conditions d'égalité",
-    "intro": "Un match se termine par une égalité si :",
-    "noGates": "Plus aucune carte portail ne peut être placée par aucun des joueurs",
-    "mutualElimination": "Tous les Bakugans des deux joueurs sont éliminés au même tour",
-    "timerTurn0": "Le chronomètre d'un joueur atteint 0 pendant le Tour 0"
-  },
-  "battle": {
-    "title": "5. Système de combat",
-    "intro": "Un combat commence lorsque deux Bakugans adverses atterrissent sur la même carte portail.",
-    "duration": "Chaque combat dure 2 tours :",
-    "turn1Title": "Tour 1",
-    "turn1First": "Le joueur qui a occupé la carte portail en premier agit en premier",
-    "turn1May": "Il peut :",
-    "turn1Ability": "Utiliser une carte capacité",
-    "turn1Gate": "Activer la carte portail (s'il la possède, et qu'elle n'est ni déjà activée ni bloquée)",
-    "turn2Title": "Tour 2",
-    "turn2Body": "L'adversaire joue son tour avec les mêmes options",
-    "endTitle": "Résolution de fin de combat",
-    "endIntro": "Après les deux tours :",
-    "endGate": "L'effet de la carte portail est résolu (le cas échéant)",
-    "endEliminate": "Le Bakugan avec le niveau de puissance le plus bas est éliminé"
-  },
-  "abilities": {
-    "title": "6. Système des cartes capacité",
-    "filter": "Les cartes capacité sont automatiquement filtrées par le jeu avant d'être ajoutées à la main d'un joueur.",
-    "unused": "Si une carte ne peut pas être utilisée dans le contexte actuel, elle n'est pas donnée au joueur.",
-    "examplesTitle": "Exemples",
-    "airBattle": "Air Battle — Permet de se déplacer vers une autre carte portail. S'il n'existe pas d'autre carte portail, la carte n'est pas ajoutée à la main.",
-    "marionette": "Marionette — Permet de contrôler/déplacer des Bakugans ennemis. S'il n'existe pas de cible valide (ex. : un seul Bakugan reste sur le terrain), la carte n'est pas ajoutée."
+    "title": "5. Conditions d'égalité",
+    "intro": "La partie se termine à égalité si :",
+    "noGates": "Plus aucune carte portail ne peut être placée par aucun des joueurs (et aucun combat n'est en cours).",
+    "mutualElimination": "Tous les Bakugans des deux joueurs sont éliminés au même moment.",
+    "timerTurn0": "Un chronomètre atteint 0 pendant le Tour 0."
   },
   "neutral": {
-    "title": "7. Phase neutre (aucun combat actif)",
-    "intro": "Lorsqu'aucun combat n'est en cours, les joueurs peuvent effectuer une action par tour.",
+    "title": "6. Phase neutre (aucun combat)",
+    "intro": "Hors combat, vous avez en général une action principale par tour. L'ordre et les contraintes comptent.",
     "actionsTitle": "Actions disponibles",
-    "placeGateTitle": "1. Placer une carte portail",
-    "placeGateBody": "Première action possible. Ne restreint pas les autres actions futures pendant le tour.",
-    "deployTitle": "2. Déployer un Bakugan",
-    "deployBody": "Deuxième action possible. Si elle est effectuée, le joueur ne peut plus placer de carte portail ce tour-ci.",
-    "abilityTitle": "3. Utiliser une carte capacité",
-    "abilityBody": "Troisième action possible. Termine immédiatement le tour après utilisation. Empêche toute autre action ce tour-ci."
+    "placeGateTitle": "Poser une carte portail",
+    "placeGateBody": "Possible en premier. Ne termine pas le tour : vous pouvez encore déployer un Bakugan ensuite.",
+    "deployTitle": "Déployer un Bakugan",
+    "deployBody": "Place un Bakugan sur une porte. Après un déploiement, vous ne pouvez plus poser de portail ce tour-ci. Si vous atterrissez sur un Bakugan adverse, un combat démarre.",
+    "abilityTitle": "Utiliser une carte capacité",
+    "abilityBody": "Termine immédiatement le tour. Coûte une de vos 3 utilisations de capacité pour la partie.",
+    "attributeTitle": "Changer d'attribut (cas spéciaux)",
+    "attributeBody": "Certains Bakugans (ex. Preyas) peuvent changer d'attribut une fois par présence sur le plateau. Cela peut réactiver des synergies avec un réacteur déjà ouvert."
+  },
+  "battle": {
+    "title": "7. Système de combat",
+    "intro": "Un combat commence dès que deux Bakugans adverses se trouvent sur la même carte portail.",
+    "duration": "Chaque combat dure 2 tours de capacité / d'ouverture de porte.",
+    "turn1Title": "Initiative",
+    "turn1First": "Le joueur qui a posé son Bakugan en dernier (l'attaquant) joue en premier — pas le premier occupant.",
+    "turn1May": "Pendant son tour de combat, un joueur peut :",
+    "turn1Ability": "Utiliser une carte capacité (si une est jouable dans ce contexte).",
+    "turn1Gate": "Ouvrir la carte portail s'il la possède, et si elle n'est ni déjà ouverte ni bloquée.",
+    "turn2Title": "Deuxième tour",
+    "turn2Body": "L'adversaire joue ensuite avec les mêmes options. Ensuite, le combat se résout.",
+    "powerTitle": "Comparaison de puissance",
+    "powerBody": "À la résolution, on compare la somme des niveaux de puissance (G) de chaque joueur sur le slot. Plusieurs Bakugans du même joueur (Triple / Quatuor) additionnent leurs G.",
+    "whyAttack": "Pourquoi attaquer ? Poser en second vous donne l'initiative et, souvent, la possibilité d'ouvrir votre propre porte en premier."
+  },
+  "afterBattle": {
+    "title": "8. Après le combat — nettoyage du plateau",
+    "intro": "Le combat ne laisse jamais le plateau « figé ». Comprendre le nettoyage évite les mauvaises surprises.",
+    "losers": "Les Bakugans perdants sont éliminés définitivement.",
+    "winners": "Les Bakugans gagnants reviennent en main (ils ne restent pas sur la porte).",
+    "tie": "En cas d'égalité de puissance, personne n'est éliminé : tous les Bakugans du slot reviennent en main.",
+    "gateRemoved": "La carte portail du combat est retirée et le slot est remis à zéro (libre pour une nouvelle porte).",
+    "initiative": "Le gagnant reprend en général l'initiative pour la phase suivante.",
+    "domainTitle": "Nettoyage de domaine (Clear Domain)",
+    "domainWhy": "Si plus aucun Bakugan vivant n'est disponible à déployer (tous sont déjà sur le plateau ou éliminés) et qu'il n'y a pas de combat, le jeu rapatrie automatiquement tous les Bakugans encore en vie vers la main.",
+    "domainPurpose": "Pourquoi ? Pour éviter un blocage total : sans Bakugan « en réserve », plus personne ne pourrait poser, et la partie resterait coincée. Ce n'est pas une élimination — uniquement un recircul."
+  },
+  "gates": {
+    "title": "9. Types de cartes portail",
+    "intro": "Toutes les portes ne se jouent pas de la même façon. Connaître leur rôle guide votre placement.",
+    "reactorTitle": "Réacteurs / élémentaires",
+    "reactorBody": "À l'ouverture, ils donnent souvent un bonus de puissance (ex. +100 G) aux Bakugans dont l'attribut correspond.",
+    "characterTitle": "Character",
+    "characterBody": "Doublent (ou boostent fortement) la puissance des Bakugans de la famille concernée. Idéales pour forcer un combat favorable.",
+    "commandTitle": "Command",
+    "commandBody": "Effets spéciaux (déplacements, multi-combats, resurrection, etc.). Certaines s'activent automatiquement en fin de combat.",
+    "trapTitle": "Pièges (Trap)",
+    "trapBody": "Effets puissants à l'ouverture (souvent élimination directe ou swing majeur). Quand un piège s'ouvre, l'adversaire peut parfois le contrer avec une capacité d'annulation de porte avant que l'effet principal ne s'applique.",
+    "openTiming": "Vous ne pouvez ouvrir que votre propre porte, pendant un combat, si elle n'est pas déjà ouverte ni bloquée."
+  },
+  "abilities": {
+    "title": "10. Cartes capacité",
+    "filter": "Le jeu filtre automatiquement les capacités : une carte inutilisable dans le contexte actuel n'apparaît pas dans votre main.",
+    "unused": "Exemples : une carte de déplacement n'apparaît pas s'il n'y a pas d'autre porte ; une carte de contrôle ennemi n'apparaît pas sans cible valide.",
+    "exclusiveTitle": "Capacités exclusives",
+    "exclusiveBody": "Liées à un Bakugan précis. Certaines ne sont jouables qu'en phase neutre, d'autres seulement si votre Bakugan est (ou n'est pas) sur le plateau. Elles consomment aussi le compteur de 3 utilisations.",
+    "persistentTitle": "Capacités persistantes",
+    "persistentBody": "Certaines capacités restent actives après usage et se réappliquent quand le Bakugan est redéployé (jusqu'à annulation ou fin d'effet).",
+    "ohkoTitle": "Éliminations hors combat",
+    "ohkoBody": "Des pièges ou capacités peuvent éliminer un Bakugan sans comparaison de G. Des protections (contre capacité, contre porte, ou les deux) peuvent empêcher ces effets.",
+    "examplesTitle": "Exemples de filtrage",
+    "airBattle": "Air Battle — Déplacement vers une autre porte. Absente de la main s'il n'existe pas d'autre porte.",
+    "marionette": "Marionette — Contrôle / déplacement d'ennemis. Absente s'il n'y a pas de cible valide."
   },
   "strategic": {
-    "title": "8. Note stratégique",
-    "intro": "Un jeu efficace dans Bakugan Arena repose sur le timing des ressources et le contrôle du plateau :",
-    "gate": "Le placement des portails définit les opportunités de combat",
-    "abilities": "Les cartes capacité peuvent faire basculer le momentum mais sont limitées",
-    "overextend": "Trop s'étendre tôt mène souvent à un désavantage tactique",
-    "outro": "Maîtriser l'interaction entre positionnement et utilisation des capacités est la clé de la victoire."
+    "title": "11. Notes stratégiques",
+    "intro": "Quelques réflexes utiles une fois les règles assimilées :",
+    "gate": "Posez vos portes pour créer (ou éviter) des combats favorables — Character et réacteurs changent complètement un échange.",
+    "abilities": "Chaque capacité est rare (3 max) : gardez-en pour le swing décisif, pas pour le premier accrochage.",
+    "attackSecond": "Attaquer en second donne l'initiative : c'est souvent mieux que d'occuper une porte « à vide » trop tôt.",
+    "overextend": "Remplir le plateau avec tous vos Bakugans peut déclencher le nettoyage de domaine ou vous laisser sans réponse.",
+    "traps": "Les pièges sont forts mais contreables : ne comptez pas toujours sur leur effet brut.",
+    "outro": "La victoire vient du timing : positionnement, ouverture de porte, et gestion du compteur de capacités."
   },
   "help": {
-    "title": "9. Besoin d'aide ?",
-    "discord": "Si vous avez des questions sur le jeu ou si certaines règles ne sont pas claires, nous vous invitons à rejoindre notre communauté Discord où joueurs et membres du staff pourront vous aider.",
-    "refresh": "Si vous rencontrez un problème pendant un match, essayez d'abord de rafraîchir la page, car cela résout la plupart des problèmes temporaires.",
-    "report": "Si le problème persiste ou si vous découvrez un bug, signalez-le sur notre serveur Discord afin que nous puissions l'examiner et le corriger rapidement.",
+    "title": "12. Besoin d'aide ?",
+    "discord": "Des questions sur les règles ? Rejoignez notre Discord : joueurs et staff pourront vous aider.",
+    "refresh": "En cas de souci en match, essayez d'abord de rafraîchir la page — cela corrige la plupart des problèmes temporaires.",
+    "report": "Si le problème persiste ou si vous trouvez un bug, signalez-le sur Discord pour qu'on le corrige vite.",
     "thanks": "Merci de jouer à Bakugan Arena, et surtout :",
     "outro": "Amusez-vous et profitez de vos combats !"
   }

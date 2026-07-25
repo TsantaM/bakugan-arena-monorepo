@@ -6,6 +6,8 @@ type ThanksEntry = {
     name: string
     role?: string
     message?: string
+    url?: string
+    urlLabel?: string
 }
 
 type ThanksSection = {
@@ -46,6 +48,18 @@ export default async function ThanksPage() {
                                         </p>
                                         {entry.message ? (
                                             <p className="mt-1 text-sm text-muted-foreground">{entry.message}</p>
+                                        ) : null}
+                                        {entry.url ? (
+                                            <p className="mt-1 text-sm">
+                                                <a
+                                                    href={entry.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-red-600 underline underline-offset-2 hover:text-red-500"
+                                                >
+                                                    {entry.urlLabel ?? entry.url}
+                                                </a>
+                                            </p>
                                         ) : null}
                                     </li>
                                 ))}
