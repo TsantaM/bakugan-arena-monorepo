@@ -1,4 +1,4 @@
-import { CancelAbilityCardEffect, PowerChange } from "../../function/index.js"
+import { CancelAbilityCardEffect, CustomAnimationDirective, PowerChange } from "../../function/index.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 import { activateAbilities } from "../../type/room-types.js"
 
@@ -29,6 +29,16 @@ export const DStrikeAttack: exclusiveAbilitiesType = {
 
                 roomState.persistantAbilities.push(activateAbility)
 
+                const opponents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
+
+                CustomAnimationDirective({
+                    roomState,
+                    animationKey: DStrikeAttack.key,
+                    sourceBakugan: user,
+                    targetBakugans: opponents,
+                    slotId: slot,
+                })
+
                 PowerChange({
                     bakugan: user,
                     G: 200,
@@ -49,6 +59,16 @@ export const DStrikeAttack: exclusiveAbilitiesType = {
 
         const user = slotOfUser.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
         if (!user) return
+
+        const opponents = slotOfUser.bakugans.filter((b) => b.userId !== userId)
+
+        CustomAnimationDirective({
+            roomState,
+            animationKey: DStrikeAttack.key,
+            sourceBakugan: user,
+            targetBakugans: opponents,
+            slotId: slot,
+        })
 
         PowerChange({
             bakugan: user,

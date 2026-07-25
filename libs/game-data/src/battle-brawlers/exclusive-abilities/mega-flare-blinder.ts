@@ -1,4 +1,4 @@
-import { PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js"
+import { CustomAnimationDirective, PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js"
 import { NewAdditionnalMessage } from "../../function/new-additional-message.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 import { TentaclearHaos } from "../bakugans/tentacleer.js"
@@ -14,7 +14,6 @@ export const MegaFlareBlinder: exclusiveAbilitiesType = {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (!slotOfGate) return null
-        // const opponent = slotOfGate.bakugans.filter((b) => b.userId !== userId)
 
         const { canceled, open } = slotOfGate.state
 
@@ -32,12 +31,15 @@ export const MegaFlareBlinder: exclusiveAbilitiesType = {
 
         }
 
-        // opponent.forEach((bakugan) => {
-        //     bakugan.abilityBlock = true
-        // })
-
         const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
         if (!user) return null
+
+        CustomAnimationDirective({
+            roomState,
+            animationKey: MegaFlareBlinder.key,
+            sourceBakugan: user,
+            slotId: slot,
+        })
 
         PowerChange({
             bakugan: user,
@@ -53,7 +55,6 @@ export const MegaFlareBlinder: exclusiveAbilitiesType = {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)
         if (!slotOfGate) return null
-        const opponent = slotOfGate.bakugans.filter((b) => b.userId !== userId)
 
         const { blocked } = slotOfGate.state
         if (blocked) {

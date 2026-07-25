@@ -5,9 +5,11 @@ import { DarkusPowerAuraAnimation } from "./darkus-power-aura-animation"
 import { DepthDiveAnimation } from "./depth-dive-animation"
 import { DestructionMeteorStormAnimation } from "./destruction-meteor-storm-animation"
 import { DualGazerAnimation } from "./dual-gazer-animation"
+import { DStrikeAttackAnimation } from "./d-strike-attack-animation"
 import { EarthPowerAnimation } from "./earth-power-animation"
 import { EarthShatterAnimation } from "./earth-shatter-animation"
 import { EclatSoudainAnimation } from "./eclat-soudain-animation"
+import { FlareBlinderAnimation } from "./flare-blinder-animation"
 import { HaosImmobilisationAnimation } from "./haos-immobilisation-animation"
 import { HolographDivideAnimation } from "./holograph-divide-animation"
 import { JetEnflammeAnimation } from "./jet-enflamme-animation"
@@ -36,10 +38,13 @@ export const CustomAnimationsRegistry: Partial<Record<string, CustomAnimFn>> = {
     "vengeance-a-l'italienne": DarkusPowerAuraAnimation,
     "poivre-des-cayenne": DarkusPowerAuraAnimation,
     "gust-of-wind-blow-destruction-meteor-storm": DestructionMeteorStormAnimation,
+    "d-strike-attack": DStrikeAttackAnimation,
     "barrage-d'eau": BarrageDeauAnimation,
     "mirage-aquatique": MirageAquatiqueAnimation,
     "holograph-divide": HolographDivideAnimation,
     "eclat-soudain": EclatSoudainAnimation,
+    "flare-blinder": FlareBlinderAnimation,
+    "mega-flare-blinder": FlareBlinderAnimation,
     "haos-immobilisation": HaosImmobilisationAnimation,
     "support-light": SupportLightAnimation,
     "tornade-eclair": TornadeEclairAnimation,

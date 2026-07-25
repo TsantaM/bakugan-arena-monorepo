@@ -1,5 +1,5 @@
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
-import { BlockAbilityCardsEffect, RemoveAbilityCardsBlockEffect } from "../../function/index.js"
+import { BlockAbilityCardsEffect, CustomAnimationDirective, RemoveAbilityCardsBlockEffect } from "../../function/index.js"
 import { TentaclearHaos } from "../bakugans/tentacleer.js"
 
 export const FlareBlinder: exclusiveAbilitiesType = {
@@ -11,6 +11,17 @@ export const FlareBlinder: exclusiveAbilitiesType = {
 
         if (bakuganKey !== TentaclearHaos.key) return null
         if (!roomState) return null
+
+        const slotOfGate = roomState.protalSlots.find((s) => s.id === slot)
+        const user = slotOfGate?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+
+        CustomAnimationDirective({
+            roomState,
+            animationKey: FlareBlinder.key,
+            sourceBakugan: user,
+            slotId: slot,
+        })
+
         BlockAbilityCardsEffect({ roomState, userId, bakuganKey, slot, card: FlareBlinder, turns: 1 })
 
         return null

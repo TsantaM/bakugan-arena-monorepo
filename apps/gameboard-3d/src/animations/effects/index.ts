@@ -35,9 +35,21 @@ export {
     type RockFallShape,
 } from "./rock-fall-impact"
 export {
+    playMeteorRain,
+    type MeteorRainHandle,
+    type MeteorRainOptions,
+    type MeteorRainColors,
+    type MeteorRainShape,
+} from "./meteor-rain"
+export {
     playWindTornado,
     type WindTornadoHandle,
     type WindTornadoOptions,
     type WindTornadoColors,
     type WindTornadoShape,
 } from "./wind-tornado"
+export {
+    playSceneIlluminate,
+    type SceneIlluminateHandle,
+    type SceneIlluminateOptions,
+} from "./scene-illuminate"
