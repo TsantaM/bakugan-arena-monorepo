@@ -90,7 +90,7 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
                                     variant="outline"
                                     role="combobox"
                                     aria-expanded={open}
-                                    className="w-full lg:w-75 justify-between"
+                                    className="w-full max-w-full lg:w-75 justify-between gap-2 overflow-hidden"
                                     disabled={addCardToDeckMutation.isPending || abilityCards?.length === 6 || countBakugans === 0 ? true : false}
                                 >
                                     {notInDeckAbilities && value ? (
@@ -114,7 +114,7 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
                                     ) : (
                                         t('select.abilityCard')
                                     )}
-                                    <ChevronsUpDown className="opacity-50" />
+                                    <ChevronsUpDown className="shrink-0 opacity-50" />
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-full lg:w-75 p-0">

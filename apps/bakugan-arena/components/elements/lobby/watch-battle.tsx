@@ -67,7 +67,7 @@ export default function WatchBattle() {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button className="w-full">{t('trigger')}</Button>
+                <Button className="h-auto w-full whitespace-normal">{t('trigger')}</Button>
             </DialogTrigger>
 
             <DialogContent className="max-w-md">
@@ -84,8 +84,8 @@ export default function WatchBattle() {
                         <div className="flex justify-center items-center flex-col gap-3 w-full">
                             {filteredRooms.length > 0 ? (
                                 filteredRooms.map((r, index) => (
-                                    <Button key={index} className="w-full" variant={'outline'} asChild>
-                                        <Link href={`/dashboard/battlefield?id=${r.roomId}`} className="italic w-full">
+                                    <Button key={index} className="h-auto w-full max-w-full overflow-hidden" variant={'outline'} asChild>
+                                        <Link href={`/dashboard/battlefield?id=${r.roomId}`} className="w-full truncate italic text-center">
                                             {tCommon('labels.vs', { p1: r.p1, p2: r.p2 })}
                                         </Link>
                                     </Button>

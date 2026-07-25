@@ -10,7 +10,7 @@ export default function BakuganPreview({data} : {data: bakuganType}) {
                 <div className="size-20 m-auto relative">
                     <Image src={`/images/bakugans/sphere/${data.image}/${data.attribut.toUpperCase()}.png`} alt={`${data.name} ${data.attribut}`} fill/>
                 </div>
-                <CardTitle className="text-center">
+                <CardTitle className="text-center break-words line-clamp-2">
                     {`${data.name} ${data.attribut}`}
                 </CardTitle>
             </CardHeader>

@@ -30,7 +30,7 @@ export default function CreateDeckButton() {
     })
 
     return (
-        <Button variant='outline' className="cursor-pointer" disabled={createNewDeckMutation.isPending ? true : false} onClick={() => createNewDeckMutation.mutate()}>
+        <Button variant='outline' className="h-auto max-w-full cursor-pointer whitespace-normal" disabled={createNewDeckMutation.isPending ? true : false} onClick={() => createNewDeckMutation.mutate()}>
             <Plus /> {t('newDeck')}
         </Button>
     )

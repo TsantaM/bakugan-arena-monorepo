@@ -86,7 +86,7 @@ export default function ManageGateCardsInDeckEditor({ deckId, gateCards, bakugan
                                     variant="outline"
                                     role="combobox"
                                     aria-expanded={open}
-                                    className="w-full lg:w-75 justify-between"
+                                    className="w-full max-w-full lg:w-75 justify-between gap-2 overflow-hidden"
                                     disabled={addGateToDeckMutation.isPending || gateCards.length === 5 ? true : false}
                                 >
                                     {value ? (
@@ -106,7 +106,7 @@ export default function ManageGateCardsInDeckEditor({ deckId, gateCards, bakugan
                                     ) : (
                                         t('select.gateCard')
                                     )}
-                                    <ChevronsUpDown className="opacity-50" />
+                                    <ChevronsUpDown className="shrink-0 opacity-50" />
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-50 lg:w-75 p-0">

@@ -6,7 +6,15 @@ import { GlobalChatMessage, SendedMessage } from "@bakugan-arena/game-data"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useGlobalChatMessageStore } from "./global-chat-store"
 import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import {
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetFooter,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Textarea } from "@/components/ui/textarea"
 import { MessagesSquare, Send } from "lucide-react"
@@ -82,7 +90,7 @@ export default function GlobalChat() {
 
     /*
     |--------------------------------------------------------------------------
-    | Load messages when dialog opens
+    | Load messages when sheet opens
     |--------------------------------------------------------------------------
     */
 
@@ -145,7 +153,7 @@ export default function GlobalChat() {
 
     /*
     |--------------------------------------------------------------------------
-    | Dialog opened effect
+    | Sheet opened effect
     |--------------------------------------------------------------------------
     */
 
@@ -159,105 +167,76 @@ export default function GlobalChat() {
         if (messagesToUpdate.length === 0) return
 
         socket.emit('on-open-update-messages', { userId, messagesToUpdate })
-        /*
-        --------------------------------------------------
-        Ajoute ici ta logique :
-        - marquer messages comme lus
-        - envoyer viewers au serveur
-        - scroll bottom
-        - analytics
-        etc...
-        --------------------------------------------------
-        */
 
-        console.log("Dialog opened")
-
-    }, [open, socket])
+    }, [open, socket, messages, userId])
 
     return (
-
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
+        <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
                 <Button
-                    variant='outline'
-                    className="relative"
+                    variant="outline"
+                    size="icon"
+                    className="relative shrink-0"
+                    aria-label={t('title')}
                 >
                     <MessagesSquare />
-                    {
-                        notificationCount > 0 && (
-                            <div className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full text-[10px] font-bold flex items-center justify-center bg-red-500 text-white">
-                                {notificationCount}
-                            </div>
-                        )
-                    }
-
+                    {notificationCount > 0 && (
+                        <div className="absolute -top-2 -right-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
+                            {notificationCount}
+                        </div>
+                    )}
                 </Button>
+            </SheetTrigger>
 
-            </DialogTrigger>
+            <SheetContent side="right" className="flex w-full flex-col gap-0 p-0 sm:max-w-md">
+                <SheetHeader className="border-b pr-12 text-left">
+                    <SheetTitle>{t('title')}</SheetTitle>
+                    <SheetDescription className={connectedUsers.length === 0 ? "text-muted-foreground" : "text-green-500"}>
+                        {tCommon('status.onlineCount', { count: connectedUsers.length })}
+                    </SheetDescription>
+                </SheetHeader>
 
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>
-                        {t('title')}
-                    </DialogTitle>
-                    <span className={`text-sm ${connectedUsers.length === 0 ? 'text-gray-500' : 'text-green-500'}`} >{tCommon('status.onlineCount', { count: connectedUsers.length })}</span>
-                </DialogHeader>
-
-                <ScrollArea className="h-100 overflow-y-hidden" scroll="bottom">
-                    <div>
-                        {
-                            messages.map((m) => (
-
-                                <p
-                                    key={m.id}
-                                    className={`
-                                        text-sm
-                                        leading-5
-                                        wrap-break-words
-                                    `}
-                                >
-                                    <span className={`font-semibold ${m.username === username ? 'text-blue-400' : 'text-emerald-500'
-                                        }`}>
-                                        {m.username} :
-                                    </span>
-                                    {" "}
-                                    <span>
-                                        {m.text}
-                                    </span>
-                                </p>
-                            ))
-                        }
+                <ScrollArea className="min-h-0 flex-1 px-4" scroll="bottom">
+                    <div className="flex flex-col gap-1 py-2">
+                        {messages.map((m) => (
+                            <p
+                                key={m.id}
+                                className="text-sm leading-5 wrap-break-words"
+                            >
+                                <span className={`font-semibold ${m.username === username ? 'text-blue-400' : 'text-emerald-500'}`}>
+                                    {m.username} :
+                                </span>
+                                {" "}
+                                <span>{m.text}</span>
+                            </p>
+                        ))}
                     </div>
                 </ScrollArea>
 
-                <div className="flex items-end gap-2 border rounded-2xl p-1 shadow-sm bg-background mt-2">
-                    <Textarea
-                        ref={textareaRef}
-                        placeholder={tCommon('placeholders.writeMessage')}
-                        className="min-h-10 max-h-30 max-w-100 resize-none border-0 focus-visible:ring-0"
-                        onKeyDown={(e) => {
+                <SheetFooter className="border-t">
+                    <div className="flex w-full items-end gap-2 rounded-2xl border bg-background p-1 shadow-sm">
+                        <Textarea
+                            ref={textareaRef}
+                            placeholder={tCommon('placeholders.writeMessage')}
+                            className="max-h-30 min-h-10 flex-1 resize-none border-0 focus-visible:ring-0"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" && !e.shiftKey) {
+                                    e.preventDefault()
+                                    onSubmit()
+                                }
+                            }}
+                        />
 
-                            if (e.key === "Enter" && !e.shiftKey) {
-
-                                e.preventDefault()
-
-                                onSubmit()
-                            }
-                        }}
-                    />
-
-                    <Button
-                        size="icon"
-                        onClick={onSubmit}
-                        className="rounded-full"
-                    >
-                        <Send className="w-4 h-4" />
-                    </Button>
-
-                </div>
-
-            </DialogContent>
-
-        </Dialog>
+                        <Button
+                            size="icon"
+                            onClick={onSubmit}
+                            className="shrink-0 rounded-full"
+                        >
+                            <Send className="h-4 w-4" />
+                        </Button>
+                    </div>
+                </SheetFooter>
+            </SheetContent>
+        </Sheet>
     )
 }

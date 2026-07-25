@@ -59,12 +59,14 @@ export default function LauchRanckedGate() {
                             variant="outline"
                             role="combobox"
                             aria-expanded={open}
-                            className="w-full justify-between"
+                            className="w-full max-w-full justify-between gap-2"
                         >
+                            <span className="min-w-0 truncate text-start">
                             {selectedDeck
                                 ? selectedDeck.name
                                 : t('selectDeck')}
-                            <ChevronsUpDown className="opacity-50" />
+                            </span>
+                            <ChevronsUpDown className="shrink-0 opacity-50" />
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent className="p-0 w-75">
@@ -73,7 +75,7 @@ export default function LauchRanckedGate() {
                                 <CommandEmpty>
                                     <div className="flex flex-col items-center gap-2 p-2">
                                         <p className="text-center text-sm text-muted-foreground">{t('noValidDeckHint')}</p>
-                                        <Button asChild variant='outline'><Link href='/dashboard/deck-builder'>{t('noDeckCta')}</Link></Button>
+                                        <Button asChild variant='outline' className="h-auto whitespace-normal text-center"><Link href='/dashboard/deck-builder'>{t('noDeckCta')}</Link></Button>
                                     </div>
                                 </CommandEmpty>
                                 <CommandGroup>
@@ -120,10 +122,10 @@ export default function LauchRanckedGate() {
                                     {selectedDeck.name}
                                 </CardTitle>
                             </CardHeader>
-                            <CardContent className="flex justify-center items-center gap-5">
+                            <CardContent className="flex flex-wrap justify-center items-center gap-3 sm:gap-5">
                                 {
                                     selectedDeckBakugansData.map((b, index) =>
-                                        <Image key={index} alt={`${b.name} ${b.attribut}`} src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} width={95} height={95} />
+                                        <Image key={index} alt={`${b.name} ${b.attribut}`} src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} width={95} height={95} className="size-16 sm:size-[95px]" />
                                     )
                                 }
                             </CardContent>
@@ -134,7 +136,7 @@ export default function LauchRanckedGate() {
             </CardContent>
 
             <CardFooter className="flex flex-col gap-3">
-                <Button disabled={!selectedDeckPlayable || waitingOpponent} className="w-full text-xl font-bold" onClick={() => emitPlayerData({ data, deck: selectedDeck, ranked: true })}>{waitingOpponent ? t('waitingOpponent') : !value || value === '' ? t('chooseDeck') : t('startBattle')}</Button>
+                <Button disabled={!selectedDeckPlayable || waitingOpponent} className="w-full h-auto whitespace-normal text-xl font-bold" onClick={() => emitPlayerData({ data, deck: selectedDeck, ranked: true })}>{waitingOpponent ? t('waitingOpponent') : !value || value === '' ? t('chooseDeck') : t('startBattle')}</Button>
                 <Button variant="destructive" className="w-full text-xl font-bold" onClick={() => {
                     cancelSearchOpponent(data.userId)
                     setValue('')

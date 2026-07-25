@@ -25,9 +25,9 @@ export default async function Home() {
 
       <section className="flex-1 min-h-0 w-full flex flex-col lg:flex-row items-center md:items-start justify-center lg:items-center px-10 py-5 gap-5 bg-background">
 
-        <div className="w-[95%] lg:w-full flex flex-col items-center md:items-start gap-5">
-          <div>
-            <h1 className="lg:max-w-[65%] text-5xl font-bold text-center md:text-start text-red-500">{t('title')}</h1>
+        <div className="w-[95%] lg:w-full flex flex-col items-center md:items-start gap-5 min-w-0">
+          <div className="w-full min-w-0">
+            <h1 className="w-full lg:max-w-[65%] text-3xl sm:text-4xl lg:text-5xl font-bold text-center md:text-start text-red-500 break-words">{t('title')}</h1>
             <p className="text-neutral-500 text-sm text-center md:text-start">{t('tagline')}</p>
           </div>
 
@@ -37,18 +37,18 @@ export default async function Home() {
             </Link>
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 w-full min-w-0">
             <p className='w-full md:max-w-[50%] text-center md:text-start'>{t('welcome')}</p>
             <p className='md:max-w-[50%] text-center md:text-start'>{t('ctaBody')}</p>
           </div>
 
-          <div className="w-full flex flex-col lg:flex-row items-center gap-2">
+          <div className="w-full min-w-0 flex flex-col lg:flex-row items-stretch lg:items-center gap-2">
 
             {
               !user ? <>
                 <SignInModal triggerContent={t('cta.signIn')} />
                 <SignUpModal triggerContent={t('cta.signUp')} />
-              </> : <Button asChild>
+              </> : <Button asChild className="h-auto whitespace-normal">
                 <Link href="/dashboard">{t('cta.alreadyLogged')}</Link>
               </Button>
             }

@@ -158,31 +158,33 @@ export default function ChatsCard() {
                 </CardTitle>
             </CardHeader>
             <CardContent>
-                <Tabs className="w-full" defaultValue={chats[0].targetId}>
+                <Tabs className="w-full min-w-0" defaultValue={chats[0].targetId}>
+                    <div className="w-full overflow-x-auto pb-1">
                     <TabsList>
                         {chats.map((chat) => (
                             <TabsTrigger
                                 key={chat.targetId}
                                 value={chat.targetId}
-                                className="flex items-center gap-2 pr-2"
+                                className="flex max-w-[9rem] shrink-0 items-center gap-2 pr-2 sm:max-w-[12rem]"
                             >
-                                <span className="truncate">{chat.targetName}</span>
+                                <span className="min-w-0 truncate">{chat.targetName}</span>
 
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation()
                                         closeTab(chat)
                                     }}
-                                    className="rounded-sm p-1 hover:bg-muted"
+                                    className="shrink-0 rounded-sm p-1 hover:bg-muted"
                                 >
                                     <X className="h-2 w-2" />
                                 </button>
                             </TabsTrigger>
                         ))}
                     </TabsList>
+                    </div>
 
                     {chats.map((chat) => (
-                        <TabsContent key={chat.targetId} value={chat.targetId} className="w-full">
+                        <TabsContent key={chat.targetId} value={chat.targetId} className="w-full min-w-0">
                             <ChatWindow chat={chat} />
                         </TabsContent>
                     ))}
