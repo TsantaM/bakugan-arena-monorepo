@@ -71,19 +71,21 @@ export default function OnChalengePopUp() {
                             variant="outline"
                             role="combobox"
                             aria-expanded={open}
-                            className="w-full justify-between"
+                            className="w-full max-w-full justify-between gap-2"
                         >
+                            <span className="min-w-0 truncate text-start">
                             {selectedDeck
                                 ? selectedDeck.name
                                 : tRanked('selectDeck')}
-                            <ChevronsUpDown className="opacity-50" />
+                            </span>
+                            <ChevronsUpDown className="shrink-0 opacity-50" />
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent className="p-0 w-full">
                         <Command>
                             <CommandList>
                                 <CommandEmpty>
-                                    <Button asChild variant='outline'><Link href='/dashboard/deck-builder'>{tRanked('noDeckCta')}</Link></Button>
+                                    <Button asChild variant='outline' className="h-auto whitespace-normal text-center"><Link href='/dashboard/deck-builder'>{tRanked('noDeckCta')}</Link></Button>
                                 </CommandEmpty>
                                 <CommandGroup>
                                     {decks.map((d) => {
@@ -124,10 +126,10 @@ export default function OnChalengePopUp() {
                                 {selectedDeck.name}
                             </CardTitle>
                         </CardHeader>
-                        <CardContent className="flex justify-center items-center gap-5">
+                        <CardContent className="flex flex-wrap justify-center items-center gap-3 sm:gap-5">
                             {
                                 selectedDeckBakugansData.map((b, index) =>
-                                    <Image key={index} alt={`${b.name} ${b.attribut}`} src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} width={95} height={95} />
+                                    <Image key={index} alt={`${b.name} ${b.attribut}`} src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} width={95} height={95} className="size-16 sm:size-[95px]" />
                                 )
                             }
                         </CardContent>

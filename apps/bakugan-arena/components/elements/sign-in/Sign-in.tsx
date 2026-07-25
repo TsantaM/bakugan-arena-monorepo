@@ -167,7 +167,7 @@ export function SignInModal({ triggerContent }: { triggerContent?: string }) {
         <Dialog>
 
             <DialogTrigger asChild>
-                <Button variant='outline'>
+                <Button variant='outline' size="sm" className={triggerContent ? "h-auto max-w-full whitespace-normal text-center" : undefined}>
                     { triggerContent ? triggerContent : t('signIn.trigger')}
                 </Button>
             </DialogTrigger>

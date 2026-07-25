@@ -43,6 +43,7 @@
   "a11y": {
     "toggleSidebar": "إظهار/إخفاء الشريط الجانبي",
     "toggleTheme": "تبديل السمة",
+    "openSettings": "فتح الإعدادات",
     "discordLogo": "شعار ديسكورد",
     "battleScreenshot": "لقطة-معركة",
     "defaultProfilePicture": "صورة الملف الشخصي الافتراضية"

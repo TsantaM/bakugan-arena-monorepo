@@ -63,7 +63,7 @@ export default function EditPassword() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>
+                <CardTitle className="break-words">
                     {t('password.title')}
                 </CardTitle>
             </CardHeader>
@@ -94,7 +94,7 @@ export default function EditPassword() {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit">{t('password.submit')}</Button>
+                        <Button type="submit" className="h-auto w-full whitespace-normal">{t('password.submit')}</Button>
                     </form>
                 </Form>
             </CardContent>

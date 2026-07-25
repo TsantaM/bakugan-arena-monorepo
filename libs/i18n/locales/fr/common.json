@@ -43,6 +43,7 @@
   "a11y": {
     "toggleSidebar": "Afficher/masquer la barre latérale",
     "toggleTheme": "Changer de thème",
+    "openSettings": "Ouvrir les paramètres",
     "discordLogo": "logo discord",
     "battleScreenshot": "capture-de-combat",
     "defaultProfilePicture": "Photo de profil par défaut"

@@ -43,6 +43,7 @@
   "a11y": {
     "toggleSidebar": "Toggle Sidebar",
     "toggleTheme": "Toggle theme",
+    "openSettings": "Open settings",
     "discordLogo": "discord logo",
     "battleScreenshot": "battle-screenshot",
     "defaultProfilePicture": "Default Profile Picture"

@@ -74,7 +74,7 @@ export default function ManageBakugansInDeck({ deckId, bakugans, problemCardKeys
                                     variant="outline"
                                     role="combobox"
                                     aria-expanded={open}
-                                    className="w-full lg:w-75 justify-between"
+                                    className="w-full max-w-full lg:w-75 justify-between gap-2 overflow-hidden"
                                     disabled={addBakuganToDeckMutation.isPending || bakugans?.length === 3 ? true : false}
                                 >
                                     {value ? (
@@ -98,7 +98,7 @@ export default function ManageBakugansInDeck({ deckId, bakugans, problemCardKeys
                                     ) : (
                                         t('select.bakugan')
                                     )}
-                                    <ChevronsUpDown className="opacity-50" />
+                                    <ChevronsUpDown className="shrink-0 opacity-50" />
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-full lg:w-75 p-0">

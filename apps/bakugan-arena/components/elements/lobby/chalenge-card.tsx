@@ -132,19 +132,21 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
                                     variant="outline"
                                     role="combobox"
                                     aria-expanded={open}
-                                    className="w-full justify-between"
+                                    className="w-full max-w-full justify-between gap-2"
                                 >
+                                    <span className="min-w-0 truncate text-start">
                                     {getUserDecksQuery.data && isChalenged?.deck
                                         ? decks.find((d) => d.id === isChalenged.deck)?.name
                                         : tRanked('selectDeck')}
-                                    <ChevronsUpDown className="opacity-50" />
+                                    </span>
+                                    <ChevronsUpDown className="shrink-0 opacity-50" />
                                 </Button>
                             </PopoverTrigger>
                                     <PopoverContent className="p-0 w-75">
                                         <Command>
                                             <CommandList>
                                                 <CommandEmpty>
-                                                    <Button asChild variant='outline'><Link href='/dashboard/deck-builder'>{tRanked('noDeckCta')}</Link></Button>
+                                                    <Button asChild variant='outline' className="h-auto whitespace-normal text-center"><Link href='/dashboard/deck-builder'>{tRanked('noDeckCta')}</Link></Button>
                                                 </CommandEmpty>
                                                 <CommandGroup>
                                                     {decks.map((d) => {
@@ -185,7 +187,7 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
                                         {getUserDecksQuery.data?.find((d) => d.id === isChalenged?.deck)?.name}
                                     </CardTitle>
                                 </CardHeader>
-                                <CardContent className="flex justify-center items-center gap-5">
+                                <CardContent className="flex flex-wrap justify-center items-center gap-3 sm:gap-5">
                                     {
                                         getUserDecksQuery.data
                                             ?.find((d) => d.id === isChalenged?.deck)
@@ -211,8 +213,8 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
 
                     </CardContent>
 
-                    <CardFooter className="flex justify-end gap-1">
-                        <Button disabled={!isChalenged?.deck || !decks.find((d) => d.id === isChalenged?.deck && isDeckPlayable(d)) ? true : false} className="font-bold" onClick={acceptChalenge}>
+                    <CardFooter className="flex flex-wrap justify-end gap-1">
+                        <Button disabled={!isChalenged?.deck || !decks.find((d) => d.id === isChalenged?.deck && isDeckPlayable(d)) ? true : false} className="h-auto max-w-full whitespace-normal font-bold" onClick={acceptChalenge}>
                             {!isChalenged?.deck ? t('choseDeck') : tCommon('actions.accept')}
                         </Button>
                         <Button variant="destructive" className="font-bold" onClick={rejectChalgenge}>{tCommon('actions.reject')}</Button>
@@ -226,19 +228,21 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
                                         variant="outline"
                                         role="combobox"
                                         aria-expanded={open}
-                                        className="w-full justify-between"
+                                        className="w-full max-w-full justify-between gap-2"
                                     >
+                                        <span className="min-w-0 truncate text-start">
                                         {getUserDecksQuery.data && chalenge?.deck
                                             ? decks.find((d) => d.id === chalenge.deck)?.name
                                             : tRanked('selectDeck')}
-                                        <ChevronsUpDown className="opacity-50" />
+                                        </span>
+                                        <ChevronsUpDown className="shrink-0 opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="p-0 w-75">
                                     <Command>
                                         <CommandList>
                                             <CommandEmpty>
-                                                <Button asChild variant='outline'><Link href='/dashboard/deck-builder'>{tRanked('noDeckCta')}</Link></Button>
+                                                <Button asChild variant='outline' className="h-auto whitespace-normal text-center"><Link href='/dashboard/deck-builder'>{tRanked('noDeckCta')}</Link></Button>
                                             </CommandEmpty>
                                             <CommandGroup>
                                                 {decks.map((d) => {
@@ -279,7 +283,7 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
                                             {decks.find((d) => d.id === chalenge.deck)?.name}
                                         </CardTitle>
                                     </CardHeader>
-                                    <CardContent className="flex justify-center items-center gap-5">
+                                    <CardContent className="flex flex-wrap justify-center items-center gap-3 sm:gap-5">
                                         {
                                             selectedDeckBakugansData.map((b, index) =>
                                                 <Image key={index} alt={`${b.name} ${b.attribut}`} src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} width={50} height={50} />
@@ -291,8 +295,8 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
 
                         </CardContent>
 
-                        <CardFooter className="flex justify-end gap-1">
-                            <Button disabled={!chalenge?.deck || chalenge?.waitingForResponse || !decks.find((d) => d.id === chalenge?.deck && isDeckPlayable(d)) ? true : false} className="font-bold" onClick={sendChalenge}>
+                        <CardFooter className="flex flex-wrap justify-end gap-1">
+                            <Button disabled={!chalenge?.deck || chalenge?.waitingForResponse || !decks.find((d) => d.id === chalenge?.deck && isDeckPlayable(d)) ? true : false} className="h-auto max-w-full whitespace-normal font-bold" onClick={sendChalenge}>
                                 {chalenge?.waitingForResponse ? t('waitingResponse') : !chalenge?.deck ? t('choseDeck') : t('send')}
                             </Button>
                             <Button variant="destructive" className="font-bold" onClick={() => {

@@ -109,6 +109,7 @@ export default function EditDeck({ id }: { id: string }) {
                                     />
                                     <Button type="submit"
                                         disabled={updateNameMutation.isPending ? true : false}
+                                        className="h-auto w-full whitespace-normal sm:w-auto"
                                     >
 
                                         {updateNameMutation.isPending ? t('edit.submitting') : t('edit.updateName')}

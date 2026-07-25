@@ -30,15 +30,16 @@ export default function BattleLogToggle({ context }: BattleLogToggleProps) {
     const switchId = `battle-log-toggle-${context}`
 
     return (
-        <div className="flex items-center gap-2 rounded-md border px-2 py-1.5">
+        <div className="flex shrink-0 items-center gap-2 rounded-md border px-2 py-1.5">
             <Switch
                 id={switchId}
                 checked={enabled}
                 onCheckedChange={setEnabled}
+                aria-label={t('battleLogs.label')}
             />
             <Label
                 htmlFor={switchId}
-                className="cursor-pointer text-sm whitespace-nowrap"
+                className="hidden cursor-pointer text-sm whitespace-nowrap sm:inline"
             >
                 {t('battleLogs.label')}
             </Label>

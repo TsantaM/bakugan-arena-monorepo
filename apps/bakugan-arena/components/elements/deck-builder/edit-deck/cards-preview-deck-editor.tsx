@@ -36,13 +36,13 @@ export default function CardPreviewDeckEditor({ id, deckId, nom, attribut, descr
 
             <Card className={cn(flagged && "border-destructive ring-1 ring-destructive/40")}>
                 <CardHeader>
-                    <div className='flex items-center justify-between'>
-                        <CardTitle className="flex items-center gap-2">
-                            {attribut && <Image src={`/images/attributs/${attribut.toUpperCase()}.png`} alt={attribut} width={25} height={25} />}
-                            {nom}
+                    <div className='flex min-w-0 items-start justify-between gap-2'>
+                        <CardTitle className="flex min-w-0 items-center gap-2">
+                            {attribut && <Image src={`/images/attributs/${attribut.toUpperCase()}.png`} alt={attribut} width={25} height={25} className="shrink-0" />}
+                            <span className="min-w-0 break-words">{nom}</span>
                         </CardTitle>
 
-                        <Button disabled={RemoveAbilityFromDeckMutation.isPending ? true : false} variant='outline' onClick={() => RemoveAbilityFromDeckMutation.mutate()}><Trash /> {tCommon('actions.remove')}</Button>
+                        <Button size="sm" className="shrink-0" disabled={RemoveAbilityFromDeckMutation.isPending ? true : false} variant='outline' onClick={() => RemoveAbilityFromDeckMutation.mutate()}><Trash /> <span className="hidden sm:inline">{tCommon('actions.remove')}</span></Button>
                     </div>
                 </CardHeader>
                 <CardContent>
@@ -85,9 +85,9 @@ export function ExclusiveAbilityCardPreviewDeckEditor({ id, deckId, nom, descrip
 
             <Card className={cn(flagged && "border-destructive ring-1 ring-destructive/40")}>
                 <CardHeader>
-                    <div className='flex items-center justify-between'>
-                        <CardTitle>{nom}</CardTitle>
-                        <Button disabled={RemoveExclusiveAbilityFromDeckMutation.isPending ? true : false} variant='outline' onClick={() => RemoveExclusiveAbilityFromDeckMutation.mutate()}><Trash /> {tCommon('actions.remove')}</Button>
+                    <div className='flex min-w-0 items-start justify-between gap-2'>
+                        <CardTitle className="min-w-0 break-words">{nom}</CardTitle>
+                        <Button size="sm" className="shrink-0" disabled={RemoveExclusiveAbilityFromDeckMutation.isPending ? true : false} variant='outline' onClick={() => RemoveExclusiveAbilityFromDeckMutation.mutate()}><Trash /> <span className="hidden sm:inline">{tCommon('actions.remove')}</span></Button>
                     </div>
                 </CardHeader>
                 <CardContent>
@@ -127,9 +127,9 @@ export function GateCardPreviewDeckEditor({ id, deckId, nom, description, flagge
 
             <Card className={cn(flagged && "border-destructive ring-1 ring-destructive/40")}>
                 <CardHeader>
-                    <div className='flex items-center justify-between'>
-                        <CardTitle>{nom}</CardTitle>
-                        <Button disabled={RemoveGateCardDeckMutation.isPending ? true : false} variant='outline' onClick={() => RemoveGateCardDeckMutation.mutate()}><Trash /> {tCommon('actions.remove')}</Button>
+                    <div className='flex min-w-0 items-start justify-between gap-2'>
+                        <CardTitle className="min-w-0 break-words">{nom}</CardTitle>
+                        <Button size="sm" className="shrink-0" disabled={RemoveGateCardDeckMutation.isPending ? true : false} variant='outline' onClick={() => RemoveGateCardDeckMutation.mutate()}><Trash /> <span className="hidden sm:inline">{tCommon('actions.remove')}</span></Button>
                     </div>
                 </CardHeader>
                 <CardContent>
