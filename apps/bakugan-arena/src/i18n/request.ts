@@ -1,8 +1,8 @@
 import { getTextDirection, isLocale } from '@bakugan-arena/i18n'
-import { getMessagesFlat } from '@bakugan-arena/i18n/server'
 import { getRequestConfig } from 'next-intl/server'
 import { cookies } from 'next/headers'
 import { defaultLocale, LOCALE_COOKIE_KEY, parseLocale } from './config'
+import { getMessagesFlat } from './messages-catalog'
 
 export default getRequestConfig(async () => {
   const cookieStore = await cookies()
