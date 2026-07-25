@@ -10,6 +10,8 @@
     "invalidBody": "The code you entered doesn't seem to be valid or may be corrupted. Please double-check and try again.",
     "readyTitle": "Deck ready to import",
     "readyBody": "Everything looks good. You can safely import this deck now.",
+    "legalWarningTitle": "Importable but not tournament-legal",
+    "legalWarningBody": "The code is valid, but this deck can't be used in matches until these issues are fixed:",
     "importing": "Importing...",
     "failed": "Failed to import deck"
   },
@@ -48,7 +50,26 @@
   },
   "checker": {
     "valid": "Valid deck",
-    "invalid": "No Valid Deck"
+    "invalid": "Invalid deck",
+    "issuesCount": "{count, plural, one {# issue} other {# issues}}",
+    "panelTitle": "Deck issues",
+    "panelHint": "Fix these points to be able to start a match.",
+    "fixDeck": "Fix",
+    "sections": {
+      "bakugans": "Bakugans",
+      "ability": "Ability cards",
+      "exclusiveAbilities": "Exclusive cards",
+      "gateCards": "Gate cards"
+    },
+    "issues": {
+      "banned": "{card} is banned in this format",
+      "illegalCombo": "Illegal combination: {cards}",
+      "overLimit": "{section}: {current}/{max} (over limit)",
+      "maxPerDeck": "{card}: {current} copies (max {max})",
+      "familyConflict": "Same family not allowed: {cards}",
+      "starterBan": "Incompatible Bakugan: {cards}",
+      "incomplete": "{section}: {current}/{min} minimum required"
+    }
   },
   "toasts": {
     "updated": "Deck has been updated",

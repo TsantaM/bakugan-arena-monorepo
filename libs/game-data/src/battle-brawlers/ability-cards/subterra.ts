@@ -1,6 +1,6 @@
 import { pushReplayAnimation } from "../../function/replay/push-replay-animation.js";
 import { ElementaryCardCancelerEffect } from "../../function/ability-cards-effects/elementary-card-canceler-effect.js";
-import { AbilityCardFailed, CancelGateCardDirectiveAnimation, getJuxtaposablesSlots, PowerChange, PowerChangeDirectiveAnumation, SwipeGateCardEffect } from "../../function/index.js";
+import { AbilityCardFailed, CancelGateCardDirectiveAnimation, CustomAnimationDirective, getJuxtaposablesSlots, PowerChange, PowerChangeDirectiveAnumation, SwipeGateCardEffect } from "../../function/index.js";
 import { NewAdditionnalMessage } from "../../function/new-additional-message.js";
 import { Slots, StandardCardsImages } from "../../store/store-index.js";
 import type { AbilityCardsActions, abilityCardsType, ActionType, AnimationDirectivesTypes } from "../../type/type-index.js";
@@ -122,6 +122,21 @@ export const TectonicSwipe: abilityCardsType = {
         if (!roomData) return;
         if (resolution.data.type !== "SELECT_SLOT") return;
 
+        const userSlot = roomData.protalSlots.find((s) => s.id === resolution.slot)
+        const sourceBakugan = userSlot?.bakugans.find(
+            (b) => b.key === resolution.bakuganKey && b.userId === resolution.userId,
+        )
+
+        CustomAnimationDirective({
+            roomState: roomData,
+            animationKey: TectonicSwipe.key,
+            sourceBakugan,
+            slotId: resolution.slot,
+            payload: {
+                targetSlotId: resolution.data.slot,
+            },
+        })
+
         SwipeGateCardEffect({
             bakuganKey: resolution.bakuganKey,
             roomData: roomData,
@@ -172,6 +187,14 @@ export const EarthPower: abilityCardsType = {
         if (!user) return null
 
         const SubterraBakugans = slotOfGate.bakugans.filter((b) => b.attribut === "Subterra" && b.userId === userId)
+
+        CustomAnimationDirective({
+            roomState,
+            animationKey: EarthPower.key,
+            sourceBakugan: user,
+            targetBakugans: SubterraBakugans,
+            slotId: slot,
+        })
 
         SubterraBakugans.forEach((bakugan) => {
             PowerChange({
@@ -259,12 +282,20 @@ export const EarthShatter: abilityCardsType = {
             const gate = slotOfGate.portalCard?.key
             if (user && gate && slotOfGate.state.open) {
                 const gateToCancel = GateCardsList.find((g) => g.key === gate)
+
+                CustomAnimationDirective({
+                    roomState,
+                    animationKey: EarthShatter.key,
+                    sourceBakugan: user,
+                    slotId: slot,
+                })
+
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
                     slot: slotOfGate,
                     turn: roomState.turnState.turnCount,
                     roomState: roomState
-                    })
+                })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
                 }

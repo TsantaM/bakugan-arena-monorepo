@@ -27,7 +27,7 @@ import { ExclusiveAbilitiesList } from "@bakugan-arena/game-data"
 import { resolveAbilityCard } from "@bakugan-arena/i18n"
 import { useLocale, useTranslations } from "next-intl"
 
-export default function ManageExclusiveAbilityCardsInDeck({ deckId, bakugans, countBakugans, exclusiveAbilities }: { deckId: string, bakugans: string[], countBakugans: number, exclusiveAbilities: string[] | undefined }) {
+export default function ManageExclusiveAbilityCardsInDeck({ deckId, bakugans, countBakugans, exclusiveAbilities, problemCardKeys }: { deckId: string, bakugans: string[], countBakugans: number, exclusiveAbilities: string[] | undefined, problemCardKeys?: Set<string> }) {
     const t = useTranslations('deckBuilder')
     const tCommon = useTranslations('common')
     const locale = useLocale()
@@ -147,7 +147,7 @@ export default function ManageExclusiveAbilityCardsInDeck({ deckId, bakugans, co
                             const resolved = c
                                 ? resolveCard(c)
                                 : { name: '', description: '' }
-                            return <ExclusiveAbilityCardPreviewDeckEditor key={index} nom={resolved.name} description={resolved.description} id={c ? c.key : ''} deckId={deckId} />
+                            return <ExclusiveAbilityCardPreviewDeckEditor key={index} nom={resolved.name} description={resolved.description} id={c ? c.key : ''} deckId={deckId} flagged={!!c && problemCardKeys?.has(c.key)} />
                         })
                             : <p className="text-center">{t('emptyStates.noExclusiveCards')}</p>
                     }

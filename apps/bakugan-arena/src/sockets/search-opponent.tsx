@@ -6,6 +6,7 @@ import { redirect } from "next/navigation"
 import { GetUserDeckType } from "../actions/deck-builder/get-deck-data"
 import { toast } from "sonner"
 import { useTranslations } from "next-intl"
+import { BBS1Rules, validateDeck } from "@bakugan-arena/game-data"
 
 
 type PlayerData = {
@@ -15,6 +16,7 @@ type PlayerData = {
 
 export default function UseSearchOpponent() {
     const t = useTranslations('lobby.toasts')
+    const tDeck = useTranslations('deckBuilder.checker')
     const socket = useSocket()
     const [waitingOpponent, setWaitingOpponent] = useState(false)
 
@@ -22,18 +24,13 @@ export default function UseSearchOpponent() {
         const { deckId, userId } = data
 
         if (socket && !waitingOpponent && data.deckId != '' && deck) {
-            const abilityCards = deck.ability.length + deck.exclusiveAbilities.length
-            const gateCards = deck.gateCards.length
-            if (gateCards >= 3) {
-                if (abilityCards >= 3) {
-                    socket?.emit('search-opponent', ({ userId, deckId, ranked }))
-                    setWaitingOpponent(true)
-                } else {
-                    toast.error(t('minAbilityCards'))
-                }
-            } else {
-                toast.error(t('minGateCards'))
+            if (!validateDeck(deck, BBS1Rules).valid) {
+                toast.error(tDeck('invalid'))
+                return
             }
+
+            socket.emit('search-opponent', ({ userId, deckId, ranked }))
+            setWaitingOpponent(true)
         }
     }
 

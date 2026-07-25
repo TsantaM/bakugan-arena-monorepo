@@ -3,6 +3,11 @@ import { AdditionalEffectActiveCard, CancelGateCardAbilities, CheckBattle, Check
 import { GateCardImages } from "../../../store/gate-card-images.js";
 
 function EchangeMainEffect({ roomState, slotOfGate, userId }: { roomState: stateType, slotOfGate: portalSlotsTypeElement, userId: string | undefined }) {
+    // Contre réussi avant l'effet : ne pas échanger / éliminer
+    if (slotOfGate.state.canceled) {
+        return
+    }
+
     const usersBakugan = slotOfGate.bakugans.filter((b) => b.userId === userId)
     const totalPowerUsersBakugans = usersBakugan.reduce((acc, bakugan) => acc + bakugan.currentPower, 0)
 
@@ -185,5 +190,9 @@ export const Echange: gateCardType = {
 
         // Vérifier si au moins un joueur atteint 400
         return Object.values(powerByUser).some(total => total >= 400)
-    }
+    },
+    /** Permet aux cancel abilities (canUse) de cibler cette trap même sans effet à inverser. */
+    onCanceled: () => {
+        return
+    },
 }

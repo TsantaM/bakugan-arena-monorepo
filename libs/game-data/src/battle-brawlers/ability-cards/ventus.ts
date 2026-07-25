@@ -1,5 +1,5 @@
 import { ElementaryCardCancelerEffect } from "../../function/ability-cards-effects/elementary-card-canceler-effect.js";
-import { AbilityCardFailed, CancelGateCardDirectiveAnimation, CheckBattleStillInProcess, ComeBackBakuganDirectiveAnimation, dragBakuganToUserSlot, moveBakuganToSelectedSlot, moveSelectedBakugan, requestMoveSelfSlotSelection } from "../../function/index.js";
+import { AbilityCardFailed, CancelGateCardDirectiveAnimation, CheckBattleStillInProcess, ComeBackBakuganDirectiveAnimation, CustomAnimationDirective, dragBakuganToUserSlot, moveBakuganToSelectedSlot, moveSelectedBakugan, requestMoveSelfSlotSelection } from "../../function/index.js";
 import { StandardCardsImages } from "../../store/ability-cards-images.js";
 import { Slots } from "../../store/slots.js";
 import type { AbilityCardsActions, abilityCardsType, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, slots_id } from "../../type/type-index.js";
@@ -74,12 +74,20 @@ export const TornadeChaosTotal: abilityCardsType = {
             const gate = slotOfGate.portalCard?.key
             if (user && gate && slotOfGate.state.open) {
                 const gateToCancel = GateCardsList.find((g) => g.key === gate)
+
+                CustomAnimationDirective({
+                    roomState,
+                    animationKey: TornadeChaosTotal.key,
+                    sourceBakugan: user,
+                    slotId: slot,
+                })
+
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
                     slot: slotOfGate,
                     turn: roomState.turnState.turnCount,
                     roomState: roomState
-                    })
+                })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
                 }
@@ -166,7 +174,12 @@ export const SouffleTout: abilityCardsType = {
 
     },
     onAdditionalEffect: ({ resolution, roomData: roomState }) => {
-        moveSelectedBakugan({ resolution: resolution, roomState: roomState, requireUserOnSlot: true })
+        moveSelectedBakugan({
+            resolution,
+            roomState,
+            requireUserOnSlot: true,
+            customAnimations: [{ animationKey: SouffleTout.key }],
+        })
     },
     activationConditions: ({ roomState, userId }) => {
         if (!roomState) return false
@@ -319,7 +332,11 @@ export const TornadeExtreme: abilityCardsType = {
 
     },
     onAdditionalEffect: ({ resolution, roomData: roomState }) => {
-        dragBakuganToUserSlot({ resolution: resolution, roomState: roomState })
+        dragBakuganToUserSlot({
+            resolution,
+            roomState,
+            customAnimations: [{ animationKey: TornadeExtreme.key }],
+        })
     },
     activationConditions: ({ roomState, userId }) => {
         if (!roomState) return false

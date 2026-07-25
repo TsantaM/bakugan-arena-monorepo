@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { RemoveBakuganInDeckAction } from "@/src/actions/deck-builder/edit-deck-action";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Trash } from "lucide-react";
@@ -10,7 +11,7 @@ import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 
 
-export default function BakuganPreviewDeckEditor({ nom, image, attribut, id, deckId }: { nom: string, image: string, attribut: string, id: string, deckId: string }) {
+export default function BakuganPreviewDeckEditor({ nom, image, attribut, id, deckId, flagged }: { nom: string, image: string, attribut: string, id: string, deckId: string, flagged?: boolean }) {
     const t = useTranslations('deckBuilder')
     const tCommon = useTranslations('common')
     const queryClient = useQueryClient();
@@ -36,7 +37,7 @@ export default function BakuganPreviewDeckEditor({ nom, image, attribut, id, dec
 
     return (
         <>
-            <Card>
+            <Card className={cn(flagged && "border-destructive ring-1 ring-destructive/40")}>
                 <CardHeader>
                     <Image src={`/images/bakugans/sphere/${image}/${attribut.toUpperCase()}.png`} alt={`${nom} ${attribut}`} width={75} height={75} />
 

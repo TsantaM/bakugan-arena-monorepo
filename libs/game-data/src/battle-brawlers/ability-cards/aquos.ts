@@ -159,6 +159,17 @@ export const PlongeeEnEauProfonde: abilityCardsType = {
         if (slotOfGate) {
             const AquosBakugans = slotOfGate.bakugans.filter((b) => b.attribut === "Aquos")
             const NotAquosBakugans = slotOfGate.bakugans.filter((b) => b.attribut !== "Aquos")
+            const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+
+            if (user) {
+                CustomAnimationDirective({
+                    roomState,
+                    animationKey: PlongeeEnEauProfonde.key,
+                    sourceBakugan: user,
+                    targetBakugans: NotAquosBakugans,
+                    slotId: slot,
+                })
+            }
 
             AquosBakugans.forEach((bakugan) => {
                 PowerChange({
@@ -211,6 +222,14 @@ export const DepthDive: abilityCardsType = {
             const gate = slotOfGate.portalCard?.key
             if (user && gate && slotOfGate.state.open) {
                 const gateToCancel = GateCardsList.find((g) => g.key === gate)
+
+                CustomAnimationDirective({
+                    roomState,
+                    animationKey: DepthDive.key,
+                    sourceBakugan: user,
+                    slotId: slot,
+                })
+
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
                     slot: slotOfGate,
@@ -219,8 +238,9 @@ export const DepthDive: abilityCardsType = {
                 })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
-                    slotOfGate.state.canceled = true
                 }
+
+                slotOfGate.state.canceled = true
 
 
             }

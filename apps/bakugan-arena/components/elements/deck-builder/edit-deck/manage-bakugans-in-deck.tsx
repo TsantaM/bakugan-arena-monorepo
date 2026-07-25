@@ -28,7 +28,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { useTranslations } from "next-intl"
 
-export default function ManageBakugansInDeck({ deckId, bakugans }: { deckId: string, bakugans: string[] | undefined }) {
+export default function ManageBakugansInDeck({ deckId, bakugans, problemCardKeys }: { deckId: string, bakugans: string[] | undefined, problemCardKeys?: Set<string> }) {
     const t = useTranslations('deckBuilder')
     const queryClient = useQueryClient()
     const [open, setOpen] = useState(false)
@@ -138,7 +138,7 @@ export default function ManageBakugansInDeck({ deckId, bakugans }: { deckId: str
 
                 <CardContent className={"grid grid-cols-1 lg:grid-cols-3 gap-3"}>
                     {
-                        bakugansInDeck.map((b, index) => <BakuganPreviewDeckEditor key={index} id={b.key} attribut={b.attribut} image={b.image} nom={b.name} deckId={deckId} />)
+                        bakugansInDeck.map((b, index) => <BakuganPreviewDeckEditor key={index} id={b.key} attribut={b.attribut} image={b.image} nom={b.name} deckId={deckId} flagged={problemCardKeys?.has(b.key)} />)
                     }
                 </CardContent>
 

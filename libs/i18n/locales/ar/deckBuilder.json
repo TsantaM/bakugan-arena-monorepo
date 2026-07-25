@@ -10,6 +10,8 @@
     "invalidBody": "الرمز الذي أدخلته لا يبدو صالحًا أو قد يكون تالفًا. يرجى التحقق والمحاولة مرة أخرى.",
     "readyTitle": "المجموعة جاهزة للاستيراد",
     "readyBody": "كل شيء يبدو جيدًا. يمكنك استيراد هذه المجموعة بأمان الآن.",
+    "legalWarningTitle": "قابلة للاستيراد لكنها غير مطابقة",
+    "legalWarningBody": "الرمز صالح، لكن لا يمكن استخدام هذه المجموعة في المباريات حتى يتم إصلاح هذه المشاكل:",
     "importing": "جاري الاستيراد...",
     "failed": "فشل استيراد المجموعة"
   },
@@ -48,7 +50,26 @@
   },
   "checker": {
     "valid": "مجموعة صالحة",
-    "invalid": "مجموعة غير صالحة"
+    "invalid": "مجموعة غير صالحة",
+    "issuesCount": "{count, plural, one {مشكلة واحدة} other {# مشاكل}}",
+    "panelTitle": "مشاكل المجموعة",
+    "panelHint": "أصلِح هذه النقاط لتتمكن من بدء مباراة.",
+    "fixDeck": "إصلاح",
+    "sections": {
+      "bakugans": "الباكوجان",
+      "ability": "بطاقات القدرة",
+      "exclusiveAbilities": "البطاقات الحصرية",
+      "gateCards": "بطاقات البوابة"
+    },
+    "issues": {
+      "banned": "{card} محظورة في هذا التنسيق",
+      "illegalCombo": "تركيبة غير قانونية: {cards}",
+      "overLimit": "{section}: {current}/{max} (تجاوز الحد)",
+      "maxPerDeck": "{card}: {current} نسخ (الحد {max})",
+      "familyConflict": "نفس العائلة غير مسموح: {cards}",
+      "starterBan": "باكوجان غير متوافق: {cards}",
+      "incomplete": "{section}: {current}/{min} الحد الأدنى المطلوب"
+    }
   },
   "toasts": {
     "updated": "تم تحديث المجموعة",

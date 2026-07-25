@@ -10,6 +10,8 @@
     "invalidBody": "Le code saisi ne semble pas valide ou est peut-être corrompu. Vérifiez-le et réessayez.",
     "readyTitle": "Deck prêt à importer",
     "readyBody": "Tout semble correct. Vous pouvez importer ce deck en toute sécurité.",
+    "legalWarningTitle": "Deck importable mais non conforme",
+    "legalWarningBody": "Le code est valide, mais ce deck ne pourra pas être utilisé en partie tant que ces problèmes ne sont pas corrigés :",
     "importing": "Importation...",
     "failed": "Échec de l'importation du deck"
   },
@@ -48,7 +50,26 @@
   },
   "checker": {
     "valid": "Deck valide",
-    "invalid": "Deck non valide"
+    "invalid": "Deck non valide",
+    "issuesCount": "{count, plural, one {# problème} other {# problèmes}}",
+    "panelTitle": "Problèmes du deck",
+    "panelHint": "Corrigez ces points pour pouvoir lancer une partie.",
+    "fixDeck": "Corriger",
+    "sections": {
+      "bakugans": "Bakugans",
+      "ability": "Cartes capacité",
+      "exclusiveAbilities": "Cartes exclusives",
+      "gateCards": "Cartes portail"
+    },
+    "issues": {
+      "banned": "{card} est bannie dans ce format",
+      "illegalCombo": "Combinaison interdite : {cards}",
+      "overLimit": "{section} : {current}/{max} (limite dépassée)",
+      "maxPerDeck": "{card} : {current} exemplaires (max {max})",
+      "familyConflict": "Même famille interdite : {cards}",
+      "starterBan": "Bakugans incompatibles : {cards}",
+      "incomplete": "{section} : {current}/{min} minimum requis"
+    }
   },
   "toasts": {
     "updated": "Le deck a été mis à jour",

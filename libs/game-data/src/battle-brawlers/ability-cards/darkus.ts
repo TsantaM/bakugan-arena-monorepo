@@ -35,8 +35,9 @@ export const CoupDeGrace: abilityCardsType = {
                 })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
-                    slotOfGate.state.canceled = true
                 }
+
+                slotOfGate.state.canceled = true
 
 
             }
@@ -87,6 +88,14 @@ export const EpicesMortelles: abilityCardsType = {
             const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
 
             if (user && opponent) {
+                CustomAnimationDirective({
+                    roomState,
+                    animationKey: EpicesMortelles.key,
+                    sourceBakugan: user,
+                    targetBakugans: [user, opponent],
+                    slotId: slot,
+                })
+
                 PowerChange({
                     roomState,
                     bakugan: user,
@@ -143,6 +152,14 @@ export const VengeanceAlItalienne: abilityCardsType = {
             const opponents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
 
             if (user && opponents.length > 0) {
+                CustomAnimationDirective({
+                    roomState,
+                    animationKey: VengeanceAlItalienne.key,
+                    sourceBakugan: user,
+                    targetBakugans: [user, ...opponents],
+                    slotId: slot,
+                })
+
                 PowerChange({
                     bakugan: user,
                     G: 100,
@@ -178,6 +195,13 @@ export const PoivreDesCayenne: abilityCardsType = {
             const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
 
             if (opponent) {
+                CustomAnimationDirective({
+                    roomState,
+                    animationKey: PoivreDesCayenne.key,
+                    targetBakugans: [opponent],
+                    slotId: slot,
+                })
+
                 PowerChange({
                     bakugan: opponent,
                     G: 50,

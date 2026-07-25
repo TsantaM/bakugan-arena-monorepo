@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Toaster } from "@/components/ui/sonner";
+import { cn } from "@/lib/utils";
 import { RemoveAbilityCardFromDeck, RemoveExclusiveAbilityCardFromDeck, RemoveGateCardFromDeck } from "@/src/actions/deck-builder/edit-deck-action";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Trash } from "lucide-react";
@@ -10,7 +11,7 @@ import Image from "next/image";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 
-export default function CardPreviewDeckEditor({ id, deckId, nom, attribut, description }: { id: string, deckId: string, nom: string, attribut?: string, description: string }) {
+export default function CardPreviewDeckEditor({ id, deckId, nom, attribut, description, flagged }: { id: string, deckId: string, nom: string, attribut?: string, description: string, flagged?: boolean }) {
     const t = useTranslations('deckBuilder')
     const tCommon = useTranslations('common')
     const queryClient = useQueryClient()
@@ -33,7 +34,7 @@ export default function CardPreviewDeckEditor({ id, deckId, nom, attribut, descr
     return (
         <>
 
-            <Card>
+            <Card className={cn(flagged && "border-destructive ring-1 ring-destructive/40")}>
                 <CardHeader>
                     <div className='flex items-center justify-between'>
                         <CardTitle className="flex items-center gap-2">
@@ -56,7 +57,7 @@ export default function CardPreviewDeckEditor({ id, deckId, nom, attribut, descr
     )
 }
 
-export function ExclusiveAbilityCardPreviewDeckEditor({ id, deckId, nom, description }: { id: string, deckId: string, nom: string, description: string }) {
+export function ExclusiveAbilityCardPreviewDeckEditor({ id, deckId, nom, description, flagged }: { id: string, deckId: string, nom: string, description: string, flagged?: boolean }) {
     const t = useTranslations('deckBuilder')
     const tCommon = useTranslations('common')
     const queryClient = useQueryClient()
@@ -82,7 +83,7 @@ export function ExclusiveAbilityCardPreviewDeckEditor({ id, deckId, nom, descrip
     return (
         <>
 
-            <Card>
+            <Card className={cn(flagged && "border-destructive ring-1 ring-destructive/40")}>
                 <CardHeader>
                     <div className='flex items-center justify-between'>
                         <CardTitle>{nom}</CardTitle>
@@ -101,7 +102,7 @@ export function ExclusiveAbilityCardPreviewDeckEditor({ id, deckId, nom, descrip
     )
 }
 
-export function GateCardPreviewDeckEditor({ id, deckId, nom, description }: { id: string, deckId: string, nom: string, description: string }) {
+export function GateCardPreviewDeckEditor({ id, deckId, nom, description, flagged }: { id: string, deckId: string, nom: string, description: string, flagged?: boolean }) {
     const t = useTranslations('deckBuilder')
     const tCommon = useTranslations('common')
     const queryClient = useQueryClient()
@@ -124,7 +125,7 @@ export function GateCardPreviewDeckEditor({ id, deckId, nom, description }: { id
     return (
         <>
 
-            <Card>
+            <Card className={cn(flagged && "border-destructive ring-1 ring-destructive/40")}>
                 <CardHeader>
                     <div className='flex items-center justify-between'>
                         <CardTitle>{nom}</CardTitle>

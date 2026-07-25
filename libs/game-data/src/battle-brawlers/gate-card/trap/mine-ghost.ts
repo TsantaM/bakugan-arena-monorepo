@@ -1,4 +1,4 @@
-import { AbilityCardsList, AnimationDirectivesTypes, CancelGateCardAbilities, CheckBattle, CheckBattleStillInProcess, ElimineBakuganEffect, ExclusiveAbilitiesList, gateCardAdditionalRequest, GetUserName, portalSlotsTypeElement, RemoveGateCardDirectiveAnimation, ResetSlot, resolutionGateCardType, ResolveTrapCardAdditionalRequest, ResolveTrapCardOnOpen, Slots, stateType, type gateCardType } from "../../../index.js";
+import { CancelGateCardAbilities, CheckBattle, CheckBattleStillInProcess, ElimineBakuganEffect, gateCardAdditionalRequest, portalSlotsTypeElement, RemoveGateCardDirectiveAnimation, ResetSlot, ResolveTrapCardAdditionalRequest, ResolveTrapCardOnOpen, Slots, stateType, type gateCardType } from "../../../index.js";
 import { GateCardImages } from "../../../store/gate-card-images.js";
 
 type MineGhostEffectParams = {
@@ -12,6 +12,13 @@ function MineGhostMainEffect({
     slotOfGate,
     otherPlayerId
 }: MineGhostEffectParams): null | gateCardAdditionalRequest {
+
+    // Contre réussi avant l'élimination : ne rien éliminer
+    if (slotOfGate.state.canceled) {
+        return {
+            type: 'TURN_ACTION_LAUNCHER'
+        }
+    }
 
     slotOfGate.bakugans.forEach((bakugan) => {
         ElimineBakuganEffect({
@@ -122,6 +129,10 @@ export const MineFantome: gateCardType = {
                 })
             }
         })
+    },
+    /** Permet aux cancel abilities (canUse) de cibler cette trap même sans effet à inverser. */
+    onCanceled: () => {
+        return
     },
     autoActivationCheck: ({ portalSlot }) => {
         const bakugansOnSlot = portalSlot.bakugans.length

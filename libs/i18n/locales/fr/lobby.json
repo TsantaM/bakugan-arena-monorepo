@@ -4,6 +4,8 @@
     "title": "Choisissez un deck et lancez une partie",
     "selectDeck": "Sélectionner un deck...",
     "noDeckCta": "Pas de deck ! Aller au constructeur de deck",
+    "invalidDeck": "Non valide",
+    "noValidDeckHint": "Aucun deck valide. Corrigez un deck dans le constructeur.",
     "waitingOpponent": "En attente d'un adversaire...",
     "chooseDeck": "Choisir un deck",
     "startBattle": "Lancer le combat !",

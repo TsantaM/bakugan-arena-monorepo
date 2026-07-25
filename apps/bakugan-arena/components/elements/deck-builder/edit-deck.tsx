@@ -19,6 +19,9 @@ import ManageExclusiveAbilityCardsInDeck from "./edit-deck/manage-exclusive-abil
 import ManageGateCardsInDeckEditor from "./edit-deck/manage-gate-cards-in-deck"
 import DeckChecker from "./deck-checker"
 import { useTranslations } from "next-intl"
+import { BBS1Rules, validateDeck } from "@bakugan-arena/game-data"
+import { getProblemCardKeys } from "./format-deck-issue"
+import { useMemo } from "react"
 
 export type editDeckName_type = z.infer<typeof EditDeckNameSchema>
 
@@ -35,6 +38,10 @@ export default function EditDeck({ id }: { id: string }) {
         queryFn: deckData,
     })
 
+    const problemCardKeys = useMemo(() => {
+        if (!getDeckData.data) return new Set<string>()
+        return getProblemCardKeys(validateDeck(getDeckData.data, BBS1Rules).issues)
+    }, [getDeckData.data])
 
     const EditDeckNameForm = useForm({
         resolver: zodResolver(EditDeckNameSchema), defaultValues: {
@@ -77,11 +84,11 @@ export default function EditDeck({ id }: { id: string }) {
                     <CardTitle>
                         {getDeckData.data?.name}
                     </CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-3">
                     {
                         getDeckData.data && <DeckChecker deck={getDeckData.data}/>
                     }
-                </CardHeader>
-                <CardContent className="flex flex-col gap-3">
                     <Card>
                         <CardContent>
                             <Form {...EditDeckNameForm}>
@@ -112,13 +119,13 @@ export default function EditDeck({ id }: { id: string }) {
                         </CardContent>
                     </Card>
 
-                    <ManageBakugansInDeck deckId={id} bakugans={getDeckData.data?.bakugans}/> 
+                    <ManageBakugansInDeck deckId={id} bakugans={getDeckData.data?.bakugans} problemCardKeys={problemCardKeys}/> 
 
-                    <ManageAbilityCardsInDeck deckId={id} abilityCards={getDeckData.data?.ability} bakugans={getDeckData.data?.bakugans ? getDeckData.data?.bakugans : []} countBakugans={getDeckData.data?.bakugans.length ? getDeckData.data?.bakugans.length : 0 }/>
+                    <ManageAbilityCardsInDeck deckId={id} abilityCards={getDeckData.data?.ability} bakugans={getDeckData.data?.bakugans ? getDeckData.data?.bakugans : []} countBakugans={getDeckData.data?.bakugans.length ? getDeckData.data?.bakugans.length : 0 } problemCardKeys={problemCardKeys}/>
 
-                    <ManageExclusiveAbilityCardsInDeck deckId={id} exclusiveAbilities={getDeckData.data?.exclusiveAbilities ? getDeckData.data?.exclusiveAbilities : []} bakugans={getDeckData.data?.bakugans ? getDeckData.data?.bakugans : []} countBakugans={getDeckData.data?.bakugans.length ? getDeckData.data?.bakugans.length : 0}/>
+                    <ManageExclusiveAbilityCardsInDeck deckId={id} exclusiveAbilities={getDeckData.data?.exclusiveAbilities ? getDeckData.data?.exclusiveAbilities : []} bakugans={getDeckData.data?.bakugans ? getDeckData.data?.bakugans : []} countBakugans={getDeckData.data?.bakugans.length ? getDeckData.data?.bakugans.length : 0} problemCardKeys={problemCardKeys}/>
 
-                    <ManageGateCardsInDeckEditor deckId={id} bakugans={getDeckData.data?.bakugans ? getDeckData.data?.bakugans : []} gateCards={getDeckData.data?.gateCards ? getDeckData.data?.gateCards : []}/>
+                    <ManageGateCardsInDeckEditor deckId={id} bakugans={getDeckData.data?.bakugans ? getDeckData.data?.bakugans : []} gateCards={getDeckData.data?.gateCards ? getDeckData.data?.gateCards : []} problemCardKeys={problemCardKeys}/>
 
                 </CardContent>
 

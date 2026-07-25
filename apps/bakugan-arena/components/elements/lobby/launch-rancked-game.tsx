@@ -4,11 +4,12 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import DeckSelectValidityLabel, { isDeckPlayable } from "@/components/elements/deck-builder/deck-select-validity-label"
 import { cn } from "@/lib/utils"
 import { GetUserDecks } from "@/src/actions/deck-builder/get-deck-data"
 import { authClient } from "@/src/lib/auth-client"
 import UseSearchOpponent from "@/src/sockets/search-opponent"
-import { BakuganList, BBS1Rules, validateDeck } from "@bakugan-arena/game-data"
+import { BakuganList } from "@bakugan-arena/game-data"
 import { useQuery } from "@tanstack/react-query"
 import { Check, ChevronsUpDown } from "lucide-react"
 import Image from "next/image"
@@ -30,23 +31,16 @@ export default function LauchRanckedGate() {
         deckId: value
     }
 
-    const getUserDecks = async () => {
-
-        const decks = await GetUserDecks()
-        const Rules = BBS1Rules
-        const filteredDecks = decks?.filter((deck) => validateDeck(deck, Rules).valid)
-
-        return filteredDecks
-    }
-
     const getUserDecksQuery = useQuery({
         queryKey: ['get-user-decks'],
-        queryFn: getUserDecks
+        queryFn: GetUserDecks
     })
 
-    const selectedDeckBakugans = getUserDecksQuery.data?.find((d) => d.id === value)?.bakugans
-    const selectedDeckBakugansData = BakuganList.filter((b) => selectedDeckBakugans?.includes(b.key))
-    const deck = getUserDecksQuery.data?.find((d) => d.id === value)
+    const decks = getUserDecksQuery.data ?? []
+    const selectedDeck = decks.find((d) => d.id === value)
+    const selectedDeckPlayable = selectedDeck ? isDeckPlayable(selectedDeck) : false
+    const selectedDeckBakugansData = BakuganList.filter((b) => selectedDeck?.bakugans.includes(b.key))
+    const hasValidDeck = decks.some(isDeckPlayable)
 
     return (<>
 
@@ -67,8 +61,8 @@ export default function LauchRanckedGate() {
                             aria-expanded={open}
                             className="w-full justify-between"
                         >
-                            {getUserDecksQuery.data && value
-                                ? getUserDecksQuery.data.find((d) => d.id === value)?.name
+                            {selectedDeck
+                                ? selectedDeck.name
                                 : t('selectDeck')}
                             <ChevronsUpDown className="opacity-50" />
                         </Button>
@@ -77,54 +71,70 @@ export default function LauchRanckedGate() {
                         <Command>
                             <CommandList>
                                 <CommandEmpty>
-                                    <Button asChild variant='outline'><Link href='/dashboard/deck-builder'>{t('noDeckCta')}</Link></Button>
+                                    <div className="flex flex-col items-center gap-2 p-2">
+                                        <p className="text-center text-sm text-muted-foreground">{t('noValidDeckHint')}</p>
+                                        <Button asChild variant='outline'><Link href='/dashboard/deck-builder'>{t('noDeckCta')}</Link></Button>
+                                    </div>
                                 </CommandEmpty>
                                 <CommandGroup>
-                                    {getUserDecksQuery.data && getUserDecksQuery.data.map((d, index) => (
-                                        <CommandItem
-                                            key={index}
-                                            value={d.id}
-                                            onSelect={(currentValue) => {
-                                                setValue(currentValue === value ? "" : currentValue)
-                                                setOpen(false)
-                                            }}
-                                        >
-                                            {d.name}
-                                            <Check
-                                                className={cn(
-                                                    "ml-auto",
-                                                    value === d.id ? "opacity-100" : "opacity-0"
+                                    {decks.map((d) => {
+                                        const playable = isDeckPlayable(d)
+                                        return (
+                                            <CommandItem
+                                                key={d.id}
+                                                value={d.id}
+                                                disabled={!playable}
+                                                onSelect={(currentValue) => {
+                                                    if (!playable) return
+                                                    setValue(currentValue === value ? "" : currentValue)
+                                                    setOpen(false)
+                                                }}
+                                            >
+                                                <DeckSelectValidityLabel deck={d} />
+                                                {playable && (
+                                                    <Check
+                                                        className={cn(
+                                                            "ms-1 shrink-0",
+                                                            value === d.id ? "opacity-100" : "opacity-0"
+                                                        )}
+                                                    />
                                                 )}
-                                            />
-                                        </CommandItem>
-                                    ))}
+                                            </CommandItem>
+                                        )
+                                    })}
                                 </CommandGroup>
                             </CommandList>
                         </Command>
                     </PopoverContent>
                 </Popover>
 
+                {!hasValidDeck && decks.length > 0 && (
+                    <p className="text-center text-sm text-muted-foreground">{t('noValidDeckHint')}</p>
+                )}
+
                 {
-                    value && <Card>
-                        <CardHeader>
-                            <CardTitle className="text-center">
-                                {getUserDecksQuery.data?.find((d) => d.id === value)?.name}
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="flex justify-center items-center gap-5">
-                            {
-                                selectedDeckBakugansData.map((b, index) =>
-                                    <Image key={index} alt={`${b.name} ${b.attribut}`} src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} width={95} height={95} />
-                                )
-                            }
-                        </CardContent>
-                    </Card>
+                    selectedDeck && (
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="text-center">
+                                    {selectedDeck.name}
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="flex justify-center items-center gap-5">
+                                {
+                                    selectedDeckBakugansData.map((b, index) =>
+                                        <Image key={index} alt={`${b.name} ${b.attribut}`} src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} width={95} height={95} />
+                                    )
+                                }
+                            </CardContent>
+                        </Card>
+                    )
                 }
 
             </CardContent>
 
             <CardFooter className="flex flex-col gap-3">
-                <Button disabled={!value || value === '' ? true : false} className="w-full text-xl font-bold" onClick={() => emitPlayerData({ data, deck, ranked: true })}>{waitingOpponent ? t('waitingOpponent') : !value || value === '' ? t('chooseDeck') : t('startBattle')}</Button>
+                <Button disabled={!selectedDeckPlayable || waitingOpponent} className="w-full text-xl font-bold" onClick={() => emitPlayerData({ data, deck: selectedDeck, ranked: true })}>{waitingOpponent ? t('waitingOpponent') : !value || value === '' ? t('chooseDeck') : t('startBattle')}</Button>
                 <Button variant="destructive" className="w-full text-xl font-bold" onClick={() => {
                     cancelSearchOpponent(data.userId)
                     setValue('')

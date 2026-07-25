@@ -1,25 +1,36 @@
 import { Bakugans } from "../../battle-brawlers/bakugans.js";
 import { GateCardsList } from "../../battle-brawlers/gate-gards.js";
 import { resolutionType } from "../../type/actions-serveur-requests.js";
-import { bakuganOnSlot, stateType } from "../../type/room-types.js";
+import { Message } from "../../type/animations-directives.js";
+import { bakuganOnSlot, slots_id, stateType } from "../../type/room-types.js";
 import { OpenGateCardActionRequest } from "../action-request-functions/open-gate-card-action-request.js";
-import { CheckBattle } from "../check-battle-in-process.js";
-import { CheckBattleStillInProcess } from "../check-battle-still-in-process.js";
 import { AddRenfortAnimationDirective } from "../create-animation-directives/add-renfort-directive.js";
+import { CustomAnimationDirective } from "../create-animation-directives/custom-animation.js";
 import { MoveToAnotherSlotDirectiveAnimation } from "../create-animation-directives/move-to-another-slot.js";
 import { NewAdditionnalMessage } from "../new-additional-message.js";
 import { isProtectedAgainst, type EffectOrigin } from "./protection-status.js";
+
+type DragCustomAnimation = {
+    animationKey: string
+    sourceBakugan?: bakuganOnSlot
+    targetBakugans?: bakuganOnSlot[]
+    slotId?: slots_id
+    payload?: Record<string, unknown>
+    message?: Message[]
+}
 
 export function dragBakuganToUserSlot({
     resolution,
     roomState,
     trapped,
-    origin = 'ABILITY'  // Certaines cartes (ex: AntiMuse) ne veulent PAS les renforts
+    origin = 'ABILITY',  // Certaines cartes (ex: AntiMuse) ne veulent PAS les renforts
+    customAnimations,
 }: {
     resolution: resolutionType,
     roomState: stateType,
     trapped?: boolean,
     origin?: EffectOrigin
+    customAnimations?: DragCustomAnimation[]
 }) {
     if (!roomState) return;
     if (resolution.data.type !== "SELECT_BAKUGAN_ON_DOMAIN") return;
@@ -33,10 +44,10 @@ export function dragBakuganToUserSlot({
 
     if (!slotOfGate || !slotTarget || !targetBakuganKey) return;
 
-    const targetIndex = slotTarget.bakugans.findIndex(b => b.key === targetBakuganKey);
+    const targetIndex = slotTarget.bakugans.findIndex(b => b.key === targetBakuganKey && b.userId === targetUserId);
     const bakuganToDrag = slotTarget.bakugans.find(b => b.key === targetBakuganKey && b.userId === targetUserId);
 
-    if (!bakuganToDrag) return;
+    if (!bakuganToDrag || targetIndex < 0) return;
     if (isProtectedAgainst(bakuganToDrag, origin)) {
         NewAdditionnalMessage({
             roomState: roomState,
@@ -81,14 +92,32 @@ export function dragBakuganToUserSlot({
     slotTarget.bakugans.splice(targetIndex, 1);
 
     // --- Animation ---
-    MoveToAnotherSlotDirectiveAnimation({
-        animations: roomState.animations,
-        bakugan: structuredClone(bakuganToDrag),
-        initialSlot: structuredClone(slotTarget),
-        newSlot: structuredClone(slotOfGate),
-        turn: roomState.turnState.turnCount,
-        roomState: roomState
-    });
+    if (customAnimations && customAnimations.length > 0) {
+        customAnimations.forEach((animation) => {
+            CustomAnimationDirective({
+                roomState,
+                animationKey: animation.animationKey,
+                sourceBakugan: animation.sourceBakugan ?? structuredClone(user),
+                targetBakugans: animation.targetBakugans ?? [structuredClone(bakuganToDrag)],
+                slotId: animation.slotId ?? slotOfGate.id,
+                payload: animation.payload ?? {
+                    bakugan: structuredClone(bakuganToDrag),
+                    initialSlot: structuredClone(slotTarget),
+                    newSlot: structuredClone(slotOfGate),
+                },
+                message: animation.message,
+            })
+        })
+    } else {
+        MoveToAnotherSlotDirectiveAnimation({
+            animations: roomState.animations,
+            bakugan: structuredClone(bakuganToDrag),
+            initialSlot: structuredClone(slotTarget),
+            newSlot: structuredClone(slotOfGate),
+            turn: roomState.turnState.turnCount,
+            roomState: roomState
+        });
+    }
 
     // --- Gate Card Effect on Set bakugan
     const landingGate = GateCardsList.find((card) => card.key === slotOfGate.portalCard?.key)

@@ -1,7 +1,7 @@
 import { CancelAbilityCardEffect } from "../../function/ability-cards-effects/cancel-ability-card-effect.js";
 import { ElementaryCardCancelerEffect } from "../../function/ability-cards-effects/elementary-card-canceler-effect.js";
 import RemoveRenfortAnimationDirective from "../../function/create-animation-directives/remove-renfort-animation-directive.js";
-import { AbilityCardFailed, CancelGateCardDirectiveAnimation, ComeBackBakuganDirectiveAnimation, PowerChange, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective } from "../../function/index.js";
+import { AbilityCardFailed, AddRenfortAnimationDirective, CancelGateCardDirectiveAnimation, ComeBackBakuganDirectiveAnimation, CustomAnimationDirective, PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js";
 import { NewAdditionnalMessage } from "../../function/new-additional-message.js";
 import { Slots, StandardCardsImages } from "../../store/store-index.js";
 import type { AbilityCardsActions, abilityCardsType, AnimationDirectivesTypes, bakuganOnSlot } from "../../type/type-index.js";
@@ -132,13 +132,21 @@ export const EclatSoudain: abilityCardsType = {
             if (user && haosOnDomain && haosOnDomain.length >= 2) {
                 slotOfGate.bakugans.push(newBakugan)
                 bakugan.bakuganData.onDomain = true
-                SetBakuganAndAddRenfortAnimationDirective({
+                CustomAnimationDirective({
+                    roomState,
+                    animationKey: EclatSoudain.key,
+                    sourceBakugan: newBakugan,
+                    slotId: slot,
+                    payload: {
+                        slot: structuredClone(slotOfGate),
+                    },
+                })
+                AddRenfortAnimationDirective({
                     animations: roomState.animations,
-                    
-                    roomState: roomState,
+                    roomState,
                     bakugan: newBakugan,
                     slot: slotOfGate,
-                    turn: roomState.turnState.turnCount
+                    turn: roomState.turnState.turnCount,
                 })
             }
         }
@@ -298,6 +306,21 @@ export const HaosImmobilisation: abilityCardsType = {
                 const player = roomState?.players.find((p) => p.userId === userId)
 
                 if (user && player) {
+                    const haosBakugans = roomState.protalSlots
+                        .flatMap((s) => s.bakugans)
+                        .filter((b) => b.attribut === 'Haos')
+
+                    CustomAnimationDirective({
+                        roomState,
+                        animationKey: HaosImmobilisation.key,
+                        sourceBakugan: user,
+                        targetBakugans: haosBakugans,
+                        slotId: slot,
+                        payload: {
+                            ownerUserId: userId,
+                            cardCount: 3,
+                        },
+                    })
 
                     PowerChange({
                         bakugan: user,
@@ -378,6 +401,14 @@ export const SupportLight: abilityCardsType = {
             const gate = slotOfGate.portalCard?.key
             if (user && gate && slotOfGate.state.open) {
                 const gateToCancel = GateCardsList.find((g) => g.key === gate)
+
+                CustomAnimationDirective({
+                    roomState,
+                    animationKey: SupportLight.key,
+                    sourceBakugan: user,
+                    slotId: slot,
+                })
+
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
                     slot: slotOfGate,
@@ -387,8 +418,9 @@ export const SupportLight: abilityCardsType = {
                 })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
-                    slotOfGate.state.canceled = true
                 }
+
+                slotOfGate.state.canceled = true
 
 
             }
@@ -439,6 +471,14 @@ export const TornadeEclair: abilityCardsType = {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
             const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
             if (user && opponent) {
+                CustomAnimationDirective({
+                    roomState,
+                    animationKey: TornadeEclair.key,
+                    sourceBakugan: user,
+                    targetBakugans: [opponent],
+                    slotId: slot,
+                })
+
                 PowerChange({
                     bakugan: user,
                     G: 100,

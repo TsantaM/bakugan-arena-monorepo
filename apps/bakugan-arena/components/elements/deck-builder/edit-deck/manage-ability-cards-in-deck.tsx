@@ -29,7 +29,7 @@ import { resolveAbilityCard } from "@bakugan-arena/i18n"
 import { useLocale, useTranslations } from "next-intl"
 
 
-export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBakugans, bakugans }: { deckId: string, abilityCards: string[] | undefined, countBakugans: number, bakugans: string[] }) {
+export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBakugans, bakugans, problemCardKeys }: { deckId: string, abilityCards: string[] | undefined, countBakugans: number, bakugans: string[], problemCardKeys?: Set<string> }) {
     const t = useTranslations('deckBuilder')
     const tCommon = useTranslations('common')
     const locale = useLocale()
@@ -159,7 +159,7 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
                             const resolved = c
                                 ? resolveCard(c)
                                 : { name: '', description: '' }
-                            return <CardPreviewDeckEditor key={index} nom={resolved.name} description={resolved.description} attribut={c && c.attribut} id={c ? c.key : ''} deckId={deckId} />
+                            return <CardPreviewDeckEditor key={index} nom={resolved.name} description={resolved.description} attribut={c && c.attribut} id={c ? c.key : ''} deckId={deckId} flagged={!!c && problemCardKeys?.has(c.key)} />
                         })
 
                             : <p className='text-center'>{t('emptyStates.noAbilityCards')}</p>

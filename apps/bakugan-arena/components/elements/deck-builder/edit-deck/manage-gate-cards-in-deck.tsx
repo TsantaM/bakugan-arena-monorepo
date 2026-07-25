@@ -27,7 +27,7 @@ import { BakuganList } from "@bakugan-arena/game-data"
 import { resolveGateCard } from "@bakugan-arena/i18n"
 import { useLocale, useTranslations } from "next-intl"
 
-export default function ManageGateCardsInDeckEditor({ deckId, gateCards, bakugans }: { deckId: string, gateCards: string[], bakugans: string[] }) {
+export default function ManageGateCardsInDeckEditor({ deckId, gateCards, bakugans, problemCardKeys }: { deckId: string, gateCards: string[], bakugans: string[], problemCardKeys?: Set<string> }) {
     const t = useTranslations('deckBuilder')
     const tCommon = useTranslations('common')
     const locale = useLocale()
@@ -152,7 +152,7 @@ export default function ManageGateCardsInDeckEditor({ deckId, gateCards, bakugan
                             const resolved = b
                                 ? resolveCard(b)
                                 : { name: '', description: '' }
-                            return <GateCardPreviewDeckEditor key={index} id={b ? b.key : ''} nom={resolved.name} deckId={deckId} description={resolved.description} />
+                            return <GateCardPreviewDeckEditor key={index} id={b ? b.key : ''} nom={resolved.name} deckId={deckId} description={resolved.description} flagged={!!b && problemCardKeys?.has(b.key)} />
                         })
 
                             : <p className='text-center'>{t('emptyStates.noGateCards')}</p>

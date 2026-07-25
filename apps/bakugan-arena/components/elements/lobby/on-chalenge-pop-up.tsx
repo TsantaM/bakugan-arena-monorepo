@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { BakuganList } from "@bakugan-arena/game-data";
 import { useTranslations } from "next-intl";
+import DeckSelectValidityLabel, { isDeckPlayable } from "@/components/elements/deck-builder/deck-select-validity-label";
 
 export default function OnChalengePopUp() {
     const t = useTranslations('lobby.challenge')
@@ -26,24 +27,20 @@ export default function OnChalengePopUp() {
     const [value, setValue] = useState('')
     const [open, setOpen] = useState(false)
     const user = authClient.useSession()
-    const id = user.data ? user.data?.user.id : ''
     const [chalenge, setChalenge] = useState<{
         chalengerName: string,
         chalengerId: string
     } | undefined>(undefined)
 
-    const getUserDecks = async () => {
-        return await GetUserDecks()
-    }
-
     const getUserDecksQuery = useQuery({
         queryKey: ['get-user-decks'],
-        queryFn: getUserDecks
+        queryFn: GetUserDecks
     })
 
-    const selectedDeckBakugans = getUserDecksQuery.data?.find((d) => d.id === value)?.bakugans
-    const selectedDeckBakugansData = BakuganList.filter((b) => selectedDeckBakugans?.includes(b.key))
-
+    const decks = getUserDecksQuery.data ?? []
+    const selectedDeck = decks.find((d) => d.id === value)
+    const selectedDeckPlayable = selectedDeck ? isDeckPlayable(selectedDeck) : false
+    const selectedDeckBakugansData = BakuganList.filter((b) => selectedDeck?.bakugans.includes(b.key))
 
     useEffect(() => {
         if (!socket) return
@@ -76,8 +73,8 @@ export default function OnChalengePopUp() {
                             aria-expanded={open}
                             className="w-full justify-between"
                         >
-                            {getUserDecksQuery.data && value
-                                ? getUserDecksQuery.data.find((d) => d.id === value)?.name
+                            {selectedDeck
+                                ? selectedDeck.name
                                 : tRanked('selectDeck')}
                             <ChevronsUpDown className="opacity-50" />
                         </Button>
@@ -89,24 +86,31 @@ export default function OnChalengePopUp() {
                                     <Button asChild variant='outline'><Link href='/dashboard/deck-builder'>{tRanked('noDeckCta')}</Link></Button>
                                 </CommandEmpty>
                                 <CommandGroup>
-                                    {getUserDecksQuery.data && getUserDecksQuery.data.map((d, index) => (
-                                        <CommandItem
-                                            key={index}
-                                            value={d.id}
-                                            onSelect={(currentValue) => {
-                                                setValue(currentValue === value ? "" : currentValue)
-                                                setOpen(false)
-                                            }}
-                                        >
-                                            {d.name}
-                                            <Check
-                                                className={cn(
-                                                    "ml-auto",
-                                                    value === d.id ? "opacity-100" : "opacity-0"
+                                    {decks.map((d) => {
+                                        const playable = isDeckPlayable(d)
+                                        return (
+                                            <CommandItem
+                                                key={d.id}
+                                                value={d.id}
+                                                disabled={!playable}
+                                                onSelect={(currentValue) => {
+                                                    if (!playable) return
+                                                    setValue(currentValue === value ? "" : currentValue)
+                                                    setOpen(false)
+                                                }}
+                                            >
+                                                <DeckSelectValidityLabel deck={d} />
+                                                {playable && (
+                                                    <Check
+                                                        className={cn(
+                                                            "ms-1 shrink-0",
+                                                            value === d.id ? "opacity-100" : "opacity-0"
+                                                        )}
+                                                    />
                                                 )}
-                                            />
-                                        </CommandItem>
-                                    ))}
+                                            </CommandItem>
+                                        )
+                                    })}
                                 </CommandGroup>
                             </CommandList>
                         </Command>
@@ -114,10 +118,10 @@ export default function OnChalengePopUp() {
                 </Popover>
 
                 {
-                    value && <Card>
+                    selectedDeck && <Card>
                         <CardHeader>
                             <CardTitle className="text-center">
-                                {getUserDecksQuery.data?.find((d) => d.id === value)?.name}
+                                {selectedDeck.name}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="flex justify-center items-center gap-5">
@@ -132,7 +136,7 @@ export default function OnChalengePopUp() {
 
                 <DialogFooter>
                     <Button onClick={() => {
-                        if (value === '') return
+                        if (!selectedDeckPlayable) return
                         if (!chalenge) return
                         if (!socket) return
                         const data: chalengeAcceptSocketProps = {
@@ -144,7 +148,7 @@ export default function OnChalengePopUp() {
                         setChalenge(undefined)
                         setValue('')
 
-                    }}>{tCommon('actions.accept')}</Button>
+                    }} disabled={!selectedDeckPlayable}>{tCommon('actions.accept')}</Button>
                     <DialogClose asChild>
                         <Button variant='destructive'>{tCommon('actions.reject')}</Button>
                     </DialogClose>

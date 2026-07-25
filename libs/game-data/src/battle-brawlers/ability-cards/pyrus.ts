@@ -1,4 +1,4 @@
-import { AbilityCardFailed, CancelGateCardDirectiveAnimation, ComeBackBakuganDirectiveAnimation, PowerChangeDirectiveAnumation, SetBakuganAndAddRenfortAnimationDirective } from "../../function/index.js";
+import { AbilityCardFailed, AddRenfortAnimationDirective, CancelGateCardDirectiveAnimation, ComeBackBakuganDirectiveAnimation, CustomAnimationDirective, PowerChangeDirectiveAnumation } from "../../function/index.js";
 import { AbilityCardsActions, bakuganOnSlot, type abilityCardsType } from "../../type/type-index.js";
 import { GateCards, GateCardsList } from "../gate-gards.js";
 import { Slots, StandardCardsImages } from "../../store/store-index.js";
@@ -22,6 +22,14 @@ export const MurDeFeu: abilityCardsType = {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
             const opponents = slotOfGate.bakugans.filter((b) => b.userId !== userId)
             if (user) {
+                CustomAnimationDirective({
+                    roomState,
+                    animationKey: MurDeFeu.key,
+                    sourceBakugan: user,
+                    targetBakugans: opponents,
+                    slotId: slot,
+                })
+
                 opponents.forEach((b) => {
                     PowerChange({
                         bakugan: b,
@@ -165,14 +173,21 @@ export const JetEnflamme: abilityCardsType = {
             if (user && haosOnDomain && haosOnDomain.length >= 2) {
                 slotOfGate.bakugans.push(newBakugan)
                 bakugan.bakuganData.onDomain = true
-                SetBakuganAndAddRenfortAnimationDirective({
+                CustomAnimationDirective({
+                    roomState,
+                    animationKey: JetEnflamme.key,
+                    sourceBakugan: newBakugan,
+                    slotId: slot,
+                    payload: {
+                        slot: structuredClone(slotOfGate),
+                    },
+                })
+                AddRenfortAnimationDirective({
                     animations: roomState.animations,
-                    
-                    roomState: roomState,
+                    roomState,
                     bakugan: newBakugan,
                     slot: slotOfGate,
-                    turn: roomState.turnState.turnCount
-
+                    turn: roomState.turnState.turnCount,
                 })
             }
         }
@@ -243,15 +258,20 @@ export const RetroAction: abilityCardsType = {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
             const gate = slotOfGate.portalCard?.key
             if (user && gate && slotOfGate.state.open) {
-                console.log('la card lancée')
                 const gateToCancel = GateCardsList.find((g) => g.key === gate)
+
+                CustomAnimationDirective({
+                    roomState,
+                    animationKey: RetroAction.key,
+                    sourceBakugan: user,
+                    slotId: slot,
+                })
+
                 CancelGateCardDirectiveAnimation({
                     animations: roomState.animations,
                     slot: structuredClone(slotOfGate),
                     turn: roomState.turnState.turnCount,
                     roomState: roomState
-
-
                 })
                 if (gateToCancel && gateToCancel.onCanceled) {
                     gateToCancel.onCanceled({ roomState, slot, userId: userId, bakuganKey: bakuganKey })
@@ -306,6 +326,14 @@ export const TourbillonDeFeu: abilityCardsType = {
             const user = slotOfGate.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
             const opponent = slotOfGate.bakugans.find((b) => b.userId !== userId)
             if (user && opponent) {
+                CustomAnimationDirective({
+                    roomState,
+                    animationKey: TourbillonDeFeu.key,
+                    sourceBakugan: user,
+                    targetBakugans: [opponent],
+                    slotId: slot,
+                })
+
                 PowerChange({
                     bakugan: user,
                     G: 100,

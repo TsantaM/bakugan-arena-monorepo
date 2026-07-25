@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import DeckSelectValidityLabel, { isDeckPlayable } from "@/components/elements/deck-builder/deck-select-validity-label"
 import { cn } from "@/lib/utils"
 import { useChatStore } from "@/src/store/chat-window-store"
-import { BakuganList, BBS1Rules, CancelChalengeSocketPropsType, chalengeAcceptSocketProps, chalengeSomeoneSocketProps, RejectChalengeSocketPropsType, validateDeck } from "@bakugan-arena/game-data"
+import { BakuganList, CancelChalengeSocketPropsType, chalengeAcceptSocketProps, chalengeSomeoneSocketProps, RejectChalengeSocketPropsType } from "@bakugan-arena/game-data"
 import { Check, ChevronsUpDown } from "lucide-react"
 import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
@@ -43,12 +44,7 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
     const [open, setOpen] = useState(false)
     const [show, setShow] = useState(false)
     const getUserDecks = async () => {
-
-        const decks = await GetUserDecks()
-        const Rules = BBS1Rules
-        const filteredDecks = decks?.filter((deck) => validateDeck(deck, Rules).valid)
-
-        return filteredDecks
+        return await GetUserDecks()
     }
 
     const getUserDecksQuery = useQuery({
@@ -56,12 +52,15 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
         queryFn: getUserDecks
     })
 
-    const selectedDeckBakugans = getUserDecksQuery.data?.find((d) => d.id === chalenge?.deck)?.bakugans
+    const decks = getUserDecksQuery.data ?? []
+    const selectedDeckBakugans = decks.find((d) => d.id === chalenge?.deck)?.bakugans
     const selectedDeckBakugansData = BakuganList.filter((b) => selectedDeckBakugans?.includes(b.key))
 
     const sendChalenge: () => void = () => {
         if (!socket) return
         if (!chalenge?.deck) return
+        const selected = decks.find((d) => d.id === chalenge.deck)
+        if (!selected || !isDeckPlayable(selected)) return
         if (!userId) return
         const data: chalengeSomeoneSocketProps = {
             userId: userId,
@@ -77,6 +76,8 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
         if (!socket) return
         if (!isChalenged) return
         if (!isChalenged?.deck) return
+        const selected = decks.find((d) => d.id === isChalenged.deck)
+        if (!selected || !isDeckPlayable(selected)) return
         if (!userId) return
 
         const data: chalengeAcceptSocketProps = {
@@ -134,40 +135,47 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
                                     className="w-full justify-between"
                                 >
                                     {getUserDecksQuery.data && isChalenged?.deck
-                                        ? getUserDecksQuery.data.find((d) => d.id === isChalenged.deck)?.name
+                                        ? decks.find((d) => d.id === isChalenged.deck)?.name
                                         : tRanked('selectDeck')}
                                     <ChevronsUpDown className="opacity-50" />
                                 </Button>
                             </PopoverTrigger>
-                            <PopoverContent className="p-0 w-75">
-                                <Command>
-                                    <CommandList>
-                                        <CommandEmpty>
-                                            <Button asChild variant='outline'><Link href='/dashboard/deck-builder'>{tRanked('noDeckCta')}</Link></Button>
-                                        </CommandEmpty>
-                                        <CommandGroup>
-                                            {getUserDecksQuery.data && getUserDecksQuery.data.map((d, index) => (
-                                                <CommandItem
-                                                    key={index}
-                                                    value={d.id}
-                                                    onSelect={(currentValue) => {
-                                                        toggleDeckInIsChalenged(targetId, currentValue)
-                                                        setOpen(false)
-                                                    }}
-                                                >
-                                                    {d.name}
-                                                    <Check
-                                                        className={cn(
-                                                            "ml-auto",
-                                                            isChalenged?.deck === d.id ? "opacity-100" : "opacity-0"
-                                                        )}
-                                                    />
-                                                </CommandItem>
-                                            ))}
-                                        </CommandGroup>
-                                    </CommandList>
-                                </Command>
-                            </PopoverContent>
+                                    <PopoverContent className="p-0 w-75">
+                                        <Command>
+                                            <CommandList>
+                                                <CommandEmpty>
+                                                    <Button asChild variant='outline'><Link href='/dashboard/deck-builder'>{tRanked('noDeckCta')}</Link></Button>
+                                                </CommandEmpty>
+                                                <CommandGroup>
+                                                    {decks.map((d) => {
+                                                        const playable = isDeckPlayable(d)
+                                                        return (
+                                                            <CommandItem
+                                                                key={d.id}
+                                                                value={d.id}
+                                                                disabled={!playable}
+                                                                onSelect={(currentValue) => {
+                                                                    if (!playable) return
+                                                                    toggleDeckInIsChalenged(targetId, currentValue)
+                                                                    setOpen(false)
+                                                                }}
+                                                            >
+                                                                <DeckSelectValidityLabel deck={d} />
+                                                                {playable && (
+                                                                    <Check
+                                                                        className={cn(
+                                                                            "ms-1 shrink-0",
+                                                                            isChalenged?.deck === d.id ? "opacity-100" : "opacity-0"
+                                                                        )}
+                                                                    />
+                                                                )}
+                                                            </CommandItem>
+                                                        )
+                                                    })}
+                                                </CommandGroup>
+                                            </CommandList>
+                                        </Command>
+                                    </PopoverContent>
                         </Popover>
 
                         {
@@ -204,7 +212,7 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
                     </CardContent>
 
                     <CardFooter className="flex justify-end gap-1">
-                        <Button disabled={!isChalenged?.deck ? true : false} className="font-bold" onClick={acceptChalenge}>
+                        <Button disabled={!isChalenged?.deck || !decks.find((d) => d.id === isChalenged?.deck && isDeckPlayable(d)) ? true : false} className="font-bold" onClick={acceptChalenge}>
                             {!isChalenged?.deck ? t('choseDeck') : tCommon('actions.accept')}
                         </Button>
                         <Button variant="destructive" className="font-bold" onClick={rejectChalgenge}>{tCommon('actions.reject')}</Button>
@@ -221,7 +229,7 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
                                         className="w-full justify-between"
                                     >
                                         {getUserDecksQuery.data && chalenge?.deck
-                                            ? getUserDecksQuery.data.find((d) => d.id === chalenge.deck)?.name
+                                            ? decks.find((d) => d.id === chalenge.deck)?.name
                                             : tRanked('selectDeck')}
                                         <ChevronsUpDown className="opacity-50" />
                                     </Button>
@@ -233,24 +241,31 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
                                                 <Button asChild variant='outline'><Link href='/dashboard/deck-builder'>{tRanked('noDeckCta')}</Link></Button>
                                             </CommandEmpty>
                                             <CommandGroup>
-                                                {getUserDecksQuery.data && getUserDecksQuery.data.map((d, index) => (
-                                                    <CommandItem
-                                                        key={index}
-                                                        value={d.id}
-                                                        onSelect={(currentValue) => {
-                                                            toggleDeck(targetId, currentValue)
-                                                            setOpen(false)
-                                                        }}
-                                                    >
-                                                        {d.name}
-                                                        <Check
-                                                            className={cn(
-                                                                "ml-auto",
-                                                                chalenge?.deck === d.id ? "opacity-100" : "opacity-0"
+                                                {decks.map((d) => {
+                                                    const playable = isDeckPlayable(d)
+                                                    return (
+                                                        <CommandItem
+                                                            key={d.id}
+                                                            value={d.id}
+                                                            disabled={!playable}
+                                                            onSelect={(currentValue) => {
+                                                                if (!playable) return
+                                                                toggleDeck(targetId, currentValue)
+                                                                setOpen(false)
+                                                            }}
+                                                        >
+                                                            <DeckSelectValidityLabel deck={d} />
+                                                            {playable && (
+                                                                <Check
+                                                                    className={cn(
+                                                                        "ms-1 shrink-0",
+                                                                        chalenge?.deck === d.id ? "opacity-100" : "opacity-0"
+                                                                    )}
+                                                                />
                                                             )}
-                                                        />
-                                                    </CommandItem>
-                                                ))}
+                                                        </CommandItem>
+                                                    )
+                                                })}
                                             </CommandGroup>
                                         </CommandList>
                                     </Command>
@@ -261,7 +276,7 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
                                 chalenge?.deck && <Card>
                                     <CardHeader>
                                         <CardTitle className="text-center">
-                                            {getUserDecksQuery.data?.find((d) => d.id === chalenge.deck)?.name}
+                                            {decks.find((d) => d.id === chalenge.deck)?.name}
                                         </CardTitle>
                                     </CardHeader>
                                     <CardContent className="flex justify-center items-center gap-5">
@@ -277,7 +292,7 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
                         </CardContent>
 
                         <CardFooter className="flex justify-end gap-1">
-                            <Button disabled={!chalenge?.deck || chalenge?.waitingForResponse ? true : false} className="font-bold" onClick={sendChalenge}>
+                            <Button disabled={!chalenge?.deck || chalenge?.waitingForResponse || !decks.find((d) => d.id === chalenge?.deck && isDeckPlayable(d)) ? true : false} className="font-bold" onClick={sendChalenge}>
                                 {chalenge?.waitingForResponse ? t('waitingResponse') : !chalenge?.deck ? t('choseDeck') : t('send')}
                             </Button>
                             <Button variant="destructive" className="font-bold" onClick={() => {

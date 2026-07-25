@@ -4,6 +4,8 @@
     "title": "Choose a deck and launch a game",
     "selectDeck": "Select deck...",
     "noDeckCta": "No deck ! Go to deck builder",
+    "invalidDeck": "Invalid",
+    "noValidDeckHint": "No valid deck. Fix one in the deck builder.",
     "waitingOpponent": "Waiting opponent ...",
     "chooseDeck": "Choose a deck",
     "startBattle": "Start Battle !",
