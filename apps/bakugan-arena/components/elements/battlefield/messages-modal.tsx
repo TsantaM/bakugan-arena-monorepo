@@ -1,7 +1,14 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import {
+    Sheet,
+    SheetContent,
+    SheetFooter,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Textarea } from "@/components/ui/textarea"
 import { useSocket } from "@/src/providers/socket-provider"
@@ -218,64 +225,72 @@ export default function MessagesModal({
                 return battleLog
             })()}
 
-            <Dialog>
-                <DialogTrigger asChild>
+            <Sheet>
+                <SheetTrigger asChild>
                     <Button
                         variant="outline"
+                        size="icon"
                         aria-label={t('messages.aria')}
                         className={
                             embedded
-                                ? undefined
+                                ? "shrink-0"
                                 : !isReplay
-                                    ? "absolute bottom-2 left-[50%] z-30 translate-x-[-50%]"
-                                    : "absolute bottom-2 left-[calc(50%-9.5rem)] z-30"
+                                    ? "absolute bottom-2 left-[50%] z-30 shrink-0 translate-x-[-50%]"
+                                    : "absolute bottom-2 left-[calc(50%-9.5rem)] z-30 shrink-0"
                         }
                     >
                         <MessagesSquare />
                     </Button>
-                </DialogTrigger>
+                </SheetTrigger>
 
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>{tCommon('labels.vs', { p1: player ?? '', p2: opponent ?? '' })}</DialogTitle>
-                    </DialogHeader>
-                    <ScrollArea className="h-100" scroll="bottom">
-                        {[...messagesContainer]
-                            .sort((a, b) => a.turn - b.turn)
-                            .map((m) => (
-                                <TurnMessagesContainer
-                                    messages={m.messages}
-                                    turn={m.turn}
-                                    key={m.turn}
-                                />
-                            ))}
+                <SheetContent side="right" className="flex w-full flex-col gap-0 p-0 sm:max-w-md">
+                    <SheetHeader className="border-b pr-12 text-left">
+                        <SheetTitle className="truncate">
+                            {tCommon('labels.vs', { p1: player ?? '', p2: opponent ?? '' })}
+                        </SheetTitle>
+                    </SheetHeader>
+
+                    <ScrollArea className="min-h-0 flex-1 px-4" scroll="bottom">
+                        <div className="flex flex-col gap-2 py-2">
+                            {[...messagesContainer]
+                                .sort((a, b) => a.turn - b.turn)
+                                .map((m) => (
+                                    <TurnMessagesContainer
+                                        messages={m.messages}
+                                        turn={m.turn}
+                                        key={m.turn}
+                                    />
+                                ))}
+                        </div>
                     </ScrollArea>
 
                     {!isReplay && (
-                        <div className="flex items-end gap-2 border rounded-2xl p-1 shadow-sm bg-background mt-2">
-                            <Textarea
-                                ref={textareaRef}
-                                placeholder={tCommon('placeholders.writeMessage')}
-                                className="min-h-10 max-h-30 resize-none border-0 focus-visible:ring-0"
-                                onKeyDown={(e) => {
-                                    if (e.key === "Enter" && !e.shiftKey) {
-                                        e.preventDefault()
-                                        onSubmit()
-                                    }
-                                }}
-                            />
+                        <SheetFooter className="border-t">
+                            <div className="flex w-full items-end gap-2 rounded-2xl border bg-background p-1 shadow-sm">
+                                <Textarea
+                                    ref={textareaRef}
+                                    placeholder={tCommon('placeholders.writeMessage')}
+                                    className="max-h-30 min-h-10 flex-1 resize-none border-0 focus-visible:ring-0"
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter" && !e.shiftKey) {
+                                            e.preventDefault()
+                                            onSubmit()
+                                        }
+                                    }}
+                                />
 
-                            <Button
-                                size="icon"
-                                onClick={onSubmit}
-                                className="rounded-full"
-                            >
-                                <Send className="w-4 h-4" />
-                            </Button>
-                        </div>
+                                <Button
+                                    size="icon"
+                                    onClick={onSubmit}
+                                    className="shrink-0 rounded-full"
+                                >
+                                    <Send className="h-4 w-4" />
+                                </Button>
+                            </div>
+                        </SheetFooter>
                     )}
-                </DialogContent>
-            </Dialog>
+                </SheetContent>
+            </Sheet>
         </>
     )
 }

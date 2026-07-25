@@ -7,18 +7,17 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { useGlobalChatMessageStore } from "./global-chat-store"
 import { Button } from "@/components/ui/button"
 import {
-    Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerTrigger,
-} from "@/components/ui/drawer"
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetFooter,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Textarea } from "@/components/ui/textarea"
-import { MessagesSquare, Send, X } from "lucide-react"
+import { MessagesSquare, Send } from "lucide-react"
 import { ConnectedUsersStore } from "@/src/store/connected-users-store"
 import { useTranslations } from "next-intl"
 
@@ -91,7 +90,7 @@ export default function GlobalChat() {
 
     /*
     |--------------------------------------------------------------------------
-    | Load messages when drawer opens
+    | Load messages when sheet opens
     |--------------------------------------------------------------------------
     */
 
@@ -154,7 +153,7 @@ export default function GlobalChat() {
 
     /*
     |--------------------------------------------------------------------------
-    | Drawer opened effect
+    | Sheet opened effect
     |--------------------------------------------------------------------------
     */
 
@@ -168,22 +167,12 @@ export default function GlobalChat() {
         if (messagesToUpdate.length === 0) return
 
         socket.emit('on-open-update-messages', { userId, messagesToUpdate })
-        /*
-        --------------------------------------------------
-        Ajoute ici ta logique :
-        - marquer messages comme lus
-        - envoyer viewers au serveur
-        - scroll bottom
-        - analytics
-        etc...
-        --------------------------------------------------
-        */
 
     }, [open, socket, messages, userId])
 
     return (
-        <Drawer open={open} onOpenChange={setOpen} direction="right">
-            <DrawerTrigger asChild>
+        <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
                 <Button
                     variant="outline"
                     size="icon"
@@ -197,28 +186,15 @@ export default function GlobalChat() {
                         </div>
                     )}
                 </Button>
-            </DrawerTrigger>
+            </SheetTrigger>
 
-            <DrawerContent className="flex h-full max-h-none flex-col data-[vaul-drawer-direction=right]:w-full data-[vaul-drawer-direction=right]:sm:max-w-md">
-                <DrawerHeader className="flex flex-row items-start justify-between gap-2 border-b pb-4 text-left">
-                    <div className="min-w-0 flex-1">
-                        <DrawerTitle>{t('title')}</DrawerTitle>
-                        <DrawerDescription className={connectedUsers.length === 0 ? "text-muted-foreground" : "text-green-500"}>
-                            {tCommon('status.onlineCount', { count: connectedUsers.length })}
-                        </DrawerDescription>
-                    </div>
-                    <DrawerClose asChild>
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="shrink-0"
-                            aria-label={tCommon('actions.close')}
-                        >
-                            <X />
-                        </Button>
-                    </DrawerClose>
-                </DrawerHeader>
+            <SheetContent side="right" className="flex w-full flex-col gap-0 p-0 sm:max-w-md">
+                <SheetHeader className="border-b pr-12 text-left">
+                    <SheetTitle>{t('title')}</SheetTitle>
+                    <SheetDescription className={connectedUsers.length === 0 ? "text-muted-foreground" : "text-green-500"}>
+                        {tCommon('status.onlineCount', { count: connectedUsers.length })}
+                    </SheetDescription>
+                </SheetHeader>
 
                 <ScrollArea className="min-h-0 flex-1 px-4" scroll="bottom">
                     <div className="flex flex-col gap-1 py-2">
@@ -237,7 +213,7 @@ export default function GlobalChat() {
                     </div>
                 </ScrollArea>
 
-                <DrawerFooter className="border-t pt-4">
+                <SheetFooter className="border-t">
                     <div className="flex w-full items-end gap-2 rounded-2xl border bg-background p-1 shadow-sm">
                         <Textarea
                             ref={textareaRef}
@@ -259,8 +235,8 @@ export default function GlobalChat() {
                             <Send className="h-4 w-4" />
                         </Button>
                     </div>
-                </DrawerFooter>
-            </DrawerContent>
-        </Drawer>
+                </SheetFooter>
+            </SheetContent>
+        </Sheet>
     )
 }
