@@ -106,7 +106,7 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
 
                                             return (
                                                 <>
-                                                    <Image src={imageUrl} alt={`${attribut}`} width={20} height={20} />
+                                                    <Image src={imageUrl} alt={`${attribut}`} width={20} height={20} unoptimized />
                                                     {resolveCard(selectedCard).name}
                                                 </>
                                             )
@@ -135,8 +135,10 @@ export default function ManageAbilityCardsInDeck({ deckId, abilityCards, countBa
                                                         addCardToDeckMutation.mutate(b.key)
                                                     }}
                                                 >
-                                                    {b.attribut && <Image src={`/images/attributs/${b.attribut?.toUpperCase()}.png`} alt={b.attribut} width={20} height={20} />
-                                                    }                                                        {displayName}
+                                                    {b.attribut && (
+                                                        <Image src={`/images/attributs/${b.attribut.toUpperCase()}.png`} alt={b.attribut} width={20} height={20} unoptimized />
+                                                    )}
+                                                    {displayName}
                                                     <Check
                                                         className={cn(
                                                             "ml-auto",

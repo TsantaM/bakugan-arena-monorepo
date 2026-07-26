@@ -22,6 +22,7 @@ import { useTranslations } from "next-intl"
 import { BBS1Rules, validateDeck } from "@bakugan-arena/game-data"
 import { getProblemCardKeys } from "./format-deck-issue"
 import { useMemo } from "react"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export type editDeckName_type = z.infer<typeof EditDeckNameSchema>
 
@@ -29,13 +30,10 @@ export type editDeckName_type = z.infer<typeof EditDeckNameSchema>
 export default function EditDeck({ id }: { id: string }) {
     const t = useTranslations('deckBuilder')
     const queryClient = useQueryClient()
-    const deckData = async () => {
-        return await GetDeckData(id)
-    }
 
     const getDeckData = useQuery({
-        queryKey: ['get-deck-data'],
-        queryFn: deckData,
+        queryKey: ['get-deck-data', id],
+        queryFn: () => GetDeckData(id),
     })
 
     const problemCardKeys = useMemo(() => {
@@ -61,7 +59,7 @@ export default function EditDeck({ id }: { id: string }) {
             EditDeckNameForm.reset()
             
             queryClient.invalidateQueries({
-                queryKey: ['get-deck-data']
+                queryKey: ['get-deck-data', id]
             })
             toast.success(t('toasts.updated'))
         },
@@ -74,6 +72,21 @@ export default function EditDeck({ id }: { id: string }) {
 
     const onUpdateDeckName = (formData: editDeckName_type) => {
         updateNameMutation.mutate(formData)
+    }
+
+    if (getDeckData.isLoading && !getDeckData.data) {
+        return (
+            <Card>
+                <CardHeader>
+                    <Skeleton className="h-8 w-48" />
+                </CardHeader>
+                <CardContent className="flex flex-col gap-3">
+                    <Skeleton className="h-32 w-full" />
+                    <Skeleton className="h-40 w-full" />
+                    <Skeleton className="h-40 w-full" />
+                </CardContent>
+            </Card>
+        )
     }
 
     return (

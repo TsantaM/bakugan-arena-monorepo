@@ -15,7 +15,6 @@ import FindUserComponent from "./find-user"
 import ChatsCard from "./chats-cards"
 import { useTranslations } from "next-intl"
 
-
 export default function Lobby() {
     const t = useTranslations('lobby')
     const tNav = useTranslations('nav')
@@ -27,7 +26,6 @@ export default function Lobby() {
         socket.on('chalenge-accept-redirect', (roomId) => {
             redirect(`/dashboard/battlefield?id=${roomId}`)
         })
-        
     }, [socket])
 
     return (
@@ -55,5 +53,4 @@ export default function Lobby() {
             <Toaster />
         </>
     )
-
 }

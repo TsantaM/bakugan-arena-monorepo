@@ -1,14 +1,12 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import Section from "@/components/ui/section"
-import { Skeleton } from "@/components/ui/skeleton"
 import { getUser } from "@/src/actions/getUserSession"
 import { auth } from "@/src/lib/auth"
 import { Edit, LogOut } from "lucide-react"
 import { headers } from "next/headers"
 import Link from "next/link"
 import { redirect, unauthorized } from "next/navigation"
-import { Suspense } from "react";
 import { getTranslations } from "next-intl/server"
 
 
@@ -39,15 +37,11 @@ export default async function DashboardPage() {
                     <div className="grid gap-5">
                         <div className="flex flex-col">
                             <span className="text-sm text-muted-foreground">{tCommon('labels.username')}</span>
-                            <Suspense fallback={<Skeleton className="w-full" />}>
-                                <span className='capitalize'>{user.username}</span>
-                            </Suspense>
+                            <span className='capitalize'>{user.username}</span>
                         </div>
                         <div className="flex flex-col">
                             <span className="text-sm text-muted-foreground">{tCommon('labels.displayUsername')}</span>
-                            <Suspense fallback={<Skeleton className="w-full" />}>
-                                <span className='capitalize'>{user.displayUsername}</span>
-                            </Suspense>
+                            <span className='capitalize'>{user.displayUsername}</span>
                         </div>
                         <div className="flex flex-col">
                             <span className="text-sm text-muted-foreground">{tCommon('labels.email')}</span>

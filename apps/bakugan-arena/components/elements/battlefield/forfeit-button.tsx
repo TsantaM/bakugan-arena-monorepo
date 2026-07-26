@@ -25,8 +25,9 @@ export default function ForfeitButton() {
     const socket = useSocket()
     const pathname = usePathname()
     const searchParams = useSearchParams()
-    const username = authClient.useSession().data?.user.displayUsername
-    const userId = authClient.useSession().data?.user.id
+    const session = authClient.useSession().data?.user
+    const username = session?.displayUsername
+    const userId = session?.id
     const rooms = useRoomsStore((state) => state.rooms)
     const roomId = searchParams.get("id")
 

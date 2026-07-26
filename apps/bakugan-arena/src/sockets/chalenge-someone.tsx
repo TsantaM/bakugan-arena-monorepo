@@ -10,8 +10,9 @@ export default function ChalengeSomeone() {
 
     const { clearChallenge, chats, addMessage, onReceiveChallenge, upsertChat, setFocused, clearIsChalenged } = useChatStore()
     const socket = useSocket()
-    const userId = authClient.useSession().data?.user.id
-    const username = authClient.useSession().data?.user.displayUsername
+    const sessionUser = authClient.useSession().data?.user
+    const userId = sessionUser?.id
+    const username = sessionUser?.displayUsername
 
 
     useEffect(() => {

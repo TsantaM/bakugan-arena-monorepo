@@ -33,8 +33,9 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
     const tRanked = useTranslations('lobby.ranked')
     const tCommon = useTranslations('common')
 
-    const username = authClient.useSession().data?.user.displayUsername
-    const userId = authClient.useSession().data?.user.id
+    const sessionUser = authClient.useSession().data?.user
+    const username = sessionUser?.displayUsername
+    const userId = sessionUser?.id
     const socket = useSocket()
     const toggleDeck = useChatStore((state) => state.toggleDeck)
     const clearIsChalenged = useChatStore((state) => state.clearIsChalenged)
@@ -286,7 +287,7 @@ export default function ChalengeCard({ chalenge, targetId, isChalenged }: {
                                     <CardContent className="flex flex-wrap justify-center items-center gap-3 sm:gap-5">
                                         {
                                             selectedDeckBakugansData.map((b, index) =>
-                                                <Image key={index} alt={`${b.name} ${b.attribut}`} src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} width={50} height={50} />
+                                                <Image key={index} alt={`${b.name} ${b.attribut}`} src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} width={50} height={50} sizes="50px" />
                                             )
                                         }
                                     </CardContent>

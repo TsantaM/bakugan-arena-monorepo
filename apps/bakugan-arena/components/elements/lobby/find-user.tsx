@@ -2,49 +2,40 @@
 
 import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-// import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-// import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-// import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 import { FindUser } from "@/src/actions/get-users-data";
 import { useChatStore } from "@/src/store/chat-window-store";
 import { ConnectedUsersStore } from "@/src/store/connected-users-store";
 import { Avatar } from "@radix-ui/react-avatar";
 import { useQuery } from "@tanstack/react-query";
-// import { Check, ChevronsUpDown } from "lucide-react";
-// import Link from "next/link";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
 
 export default function FindUserComponent() {
     const t = useTranslations('lobby.findUser')
     const tCommon = useTranslations('common')
     const [displayUserName, setDisplayUserName] = useState('')
-    // const [open, setOpen] = useState(false)
     const [open, setOpen] = useState(false)
-
-    const findUserClientSide = async () => {
-        return await FindUser({ displayUserName })
-    }
+    const debouncedName = useDebouncedValue(displayUserName.trim(), 300)
 
     const findUser = useQuery({
-        queryKey: ['find-user-deck', displayUserName],
-        queryFn: findUserClientSide
+        queryKey: ['find-user', debouncedName],
+        queryFn: () => FindUser({ displayUserName: debouncedName }),
+        enabled: open && debouncedName.length >= 2,
     })
 
     const addChat = useChatStore((state) => state.upsertChat)
     const setFocused = useChatStore((state) => state.setFocused)
     const connectedUsers = ConnectedUsersStore((state) => state.users)
 
+    const users = findUser.data ?? []
 
-
-    const users = findUser?.data?.map((d) => d)
-
-    return (<>
-
+    return (
         <Dialog open={open} onOpenChange={(isOpen) => {
             setOpen(isOpen)
             if (!isOpen) {
@@ -66,7 +57,12 @@ export default function FindUserComponent() {
                 />
 
                 <ScrollArea className="min-h-14 max-h-60">
-                    {users && users.length > 0 ? (
+                    {findUser.isFetching ? (
+                        <div className="flex flex-col gap-2 py-2">
+                            <Skeleton className="h-10 w-full" />
+                            <Skeleton className="h-10 w-full" />
+                        </div>
+                    ) : users.length > 0 ? (
                         <Table>
                             <TableHeader>
                                 <TableRow>
@@ -76,8 +72,8 @@ export default function FindUserComponent() {
                             </TableHeader>
 
                             <TableBody>
-                                {users.map((u, index: number) => (
-                                    <TableRow key={index}>
+                                {users.map((u) => (
+                                    <TableRow key={u.id}>
                                         <TableCell>
                                             <div className="flex items-center gap-3">
                                                 <Avatar className="h-8 w-8">
@@ -124,7 +120,7 @@ export default function FindUserComponent() {
                             </TableBody>
                         </Table>
                     ) : (
-                        displayUserName && (
+                        debouncedName.length >= 2 && (
                             <p className="text-sm text-neutral-500 text-center py-4">
                                 {t('empty')}
                             </p>
@@ -133,9 +129,5 @@ export default function FindUserComponent() {
                 </ScrollArea>
             </DialogContent>
         </Dialog>
-
-
-    </>)
-
-
+    )
 }

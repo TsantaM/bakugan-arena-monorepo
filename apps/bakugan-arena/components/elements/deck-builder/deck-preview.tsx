@@ -29,7 +29,7 @@ export default function DeckPreview( {data} : {data: GetUserDeckType}) {
         mutationFn: deleteDeckFunction,
         onSuccess: () => {
             toast.success(t('toasts.deleted'))
-            queryClient.invalidateQueries({queryKey: ['get-users-deck']})
+            queryClient.invalidateQueries({queryKey: ['get-user-decks']})
         },
         onError: (err) => {
             toast.error(t('toasts.deleteError', { err: String(err) }))
@@ -65,7 +65,16 @@ export default function DeckPreview( {data} : {data: GetUserDeckType}) {
                 </div>
             </CardHeader>
             <CardContent className="flex flex-wrap items-center gap-3">
-                { bakugans.length > 0 ? bakugans.map((b, index) => <Image key={index} alt={`${b.name} ${b.attribut}`} src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} width={50} height={50}/>) : t('preview.noBakugan')}
+                { bakugans.length > 0 ? bakugans.map((b) => (
+                    <Image
+                        key={b.key}
+                        alt={`${b.name} ${b.attribut}`}
+                        src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`}
+                        width={50}
+                        height={50}
+                        sizes="50px"
+                    />
+                )) : t('preview.noBakugan')}
             </CardContent>
             <Toaster/>
         </Card>
