@@ -15,5 +15,33 @@
   "turn": "الدور {turn}",
   "a11y": {
     "skipAnimations": "تخطي الرسوم المتحركة"
+  },
+    "turnActions": {
+    "pickTarget": "اختر هدفًا على اللوحة",
+    "cancel": "إلغاء",
+    "passTurn": "تمرير الدور",
+    "nothingToDo": "لا يوجد إجراء — مرّر دورك",
+    "openGate": "فتح البوابة ({slot})",
+    "activateGate": "تفعيل البوابة ({slot})",
+    "slideOf": "{current} / {count}",
+    "confirmSelection": "تأكيد",
+    "waitingForTurn": "في انتظار دورك…",
+    "tabs": {
+      "SET_BAKUGAN": "باكوغان",
+      "SET_GATE_CARD_ACTION": "بوابة",
+      "USE_ABILITY_CARD": "قدرة",
+      "CHANGE_ATTRIBUTE": "سمة",
+      "SELECT_BAKUGAN": "اختر باكوغان",
+      "SELECT_GATE_CARD": "اختر بوابة",
+      "SELECT_ABILITY_CARD": "اختر قدرة"
+    }
+  },
+  "additionalActions": {
+    "pickSlot": "اختر خانة على اللوحة",
+    "pickBakugan": "اختر باكوغان على اللوحة",
+    "pickBakuganThenSlot": "اختر باكوغان ثم خانة",
+    "confirmSelection": "تأكيد",
+    "skip": "تخطي",
+    "slideOf": "{current} / {count}"
   }
 }

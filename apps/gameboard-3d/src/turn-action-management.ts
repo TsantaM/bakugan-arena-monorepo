@@ -1,67 +1,38 @@
-import type { ActionRequestAnswerType, ActivePlayerActionRequestType, InactivePlayerActionRequestType } from "@bakugan-arena/game-data";
-import { TurnActionInterfaceBuilder } from "./turn-action-management/turn-interface-builder";
+import type {
+    ActivePlayerActionRequestType,
+    InactivePlayerActionRequestType,
+} from '@bakugan-arena/game-data'
 import * as THREE from 'three'
-import type { Socket } from "socket.io-client";
-import { TurnInteractionController } from "./turn-action-management/turn-actions-resolution/turn-action-controllers";
+import type { Socket } from 'socket.io-client'
+import { handleTurnActionRequest } from './turn-action-management/turn-action-bridge'
 
-export function TurnActionBuilder({ request, userId, camera, scene, plane, roomId, socket }: {
-    request: ActivePlayerActionRequestType | InactivePlayerActionRequestType, userId: string, camera: THREE.PerspectiveCamera,
-    scene: THREE.Scene<THREE.Object3DEventMap>, plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>, roomId: string, socket: Socket
+/**
+ * Entrée live du tour : forward vers Next + écoute ciblage/commit.
+ * L'UI de sélection bakugan/cartes vit désormais dans bakugan-arena.
+ */
+export function TurnActionBuilder({
+    request,
+    userId,
+    camera,
+    scene,
+    plane,
+    roomId,
+    socket,
+}: {
+    request: ActivePlayerActionRequestType | InactivePlayerActionRequestType
+    userId: string
+    camera: THREE.PerspectiveCamera
+    scene: THREE.Scene
+    plane: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>
+    roomId: string
+    socket: Socket
 }) {
-
-    let SelectedActions: ActionRequestAnswerType = [
-        {
-            type: 'SELECT_GATE_CARD',
-            data: undefined
-        },
-        {
-            type: 'SELECT_BAKUGAN',
-            data: undefined
-        },
-        {
-            type: 'SELECT_ABILITY_CARD',
-            data: undefined
-        },
-        {
-            type: 'SET_BAKUGAN',
-            data: undefined
-        },
-        {
-            type: 'SET_GATE_CARD_ACTION',
-            data: undefined
-        },
-        {
-            type: "USE_ABILITY_CARD",
-            data: undefined
-        },
-        {
-            type: 'ACTIVE_GATE_CARD',
-            data: undefined
-        },
-        {
-            type: 'CHANGE_ATTRIBUTE',
-            data: undefined
-        }
-    ]
-
-    SelectedActions.forEach((action) => {
-        if (action.data !== undefined)
-            action.data = undefined
-    })
-
-    const actions = [request.actions.mustDo, request.actions.mustDoOne, request.actions.optional].flat();
-
-    TurnActionInterfaceBuilder({ request: request })
-    
-    TurnInteractionController({
-        socket: socket,
-        SelectedActions: SelectedActions,
-        userId: userId,
-        actions: actions,
-        camera: camera,
-        scene: scene,
-        plane: plane,
-        roomId: roomId,
-        request: request
+    handleTurnActionRequest(request, {
+        socket,
+        userId,
+        roomId,
+        camera,
+        scene,
+        plane,
     })
 }

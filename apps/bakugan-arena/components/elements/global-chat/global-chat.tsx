@@ -188,7 +188,16 @@ export default function GlobalChat() {
                 </Button>
             </SheetTrigger>
 
-            <SheetContent side="right" className="flex w-full flex-col gap-0 p-0 sm:max-w-md">
+            <SheetContent
+                side="right"
+                className="flex flex-col gap-0 p-0 sm:max-w-md"
+                onOpenAutoFocus={(e) => {
+                    // Mobile : ne pas focus le textarea (évite d'ouvrir le clavier)
+                    if (window.matchMedia('(max-width: 767px)').matches) {
+                        e.preventDefault()
+                    }
+                }}
+            >
                 <SheetHeader className="border-b pr-12 text-left">
                     <SheetTitle>{t('title')}</SheetTitle>
                     <SheetDescription className={connectedUsers.length === 0 ? "text-muted-foreground" : "text-green-500"}>
