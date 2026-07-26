@@ -6,9 +6,7 @@ import { OnBattleStartFunctionAnimation } from "../scene-modifications-functions
 import { clearTurnInterface } from "../turn-action-management/turn-actions-resolution/action-scope"
 import { setEliminatedCircles } from "./set-eliminated-circle"
 import * as THREE from 'three'
-import dayjs from "dayjs"
-import duration from "dayjs/plugin/duration";
-import relativeTime from "dayjs/plugin/relativeTime";
+import { applyTimerSnapshots, setLocalTimerUserId } from "./player-timer-ui"
 
 export function InitGameState({ state, plane, scene, userId, bakugansMeshs, gateCardMeshs, isSpectator }: {
     state: roomStateType, scene: THREE.Scene,
@@ -85,26 +83,7 @@ export function InitGameState({ state, plane, scene, userId, bakugansMeshs, gate
     const data = turnState.battleTurn !== undefined ? `${turnState.turnCount}T (${turnState.battleTurn})` : `${turnState.turnCount}T`
     turnCounter.textContent = data
 
-    // INIT TIMERS
-    state.timers.forEach((t) => {
-        const { userId: user, timer } = t
-        // console.log(`${user}: ${remaining}`)
-        dayjs.extend(duration);
-        dayjs.extend(relativeTime);
-        const d = dayjs.duration(timer, 'seconds');
-        const time = `${String(d.minutes()).padStart(2, "0")}:${String(d.seconds()).padStart(2, "0")}`;
-
-        // console.log(`${user} : ${time}`)
-
-        if (user === userId) {
-            const timer = document.getElementById('left-timer')
-            if (!timer) return
-            timer.textContent = time
-        } else {
-            const timer = document.getElementById('right-timer')
-            if (!timer) return
-            timer.textContent = time
-        }
-    })
+    setLocalTimerUserId(userId)
+    applyTimerSnapshots(state.timers)
 
 }

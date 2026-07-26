@@ -4,6 +4,7 @@ import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-s
 import { useAbilityCardServer } from "../functions/use-abiliy-card";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { CheckTurnPermissions } from "../functions/ckeck-turn-permissions";
+import { grantActionIncrement } from "../functions/start-player-timer";
 
 export const socketUseAbilityCard = (io: Server, socket: Socket) => {
     socket.on('use-ability-card', ({ roomId, abilityId, slot, userId, bakuganKey }: useAbilityCardProps) => {
@@ -26,6 +27,7 @@ export const socketUseAbilityCard = (io: Server, socket: Socket) => {
 
         clearAnimationsInRoom(roomId)
 
+        grantActionIncrement({ roomState: state, userId, io })
         useAbilityCardServer({ abilityId: abilityId, bakuganKey: bakuganKey, roomId: roomId, slot: slot, userId: userId, io: io })
 
         console.log("after card", state.persistantAbilities)

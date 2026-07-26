@@ -5,7 +5,7 @@ import { CheckGameFinished } from "../functions/CheckGameFinished";
 import { onBattleEnd } from "../functions/on-battle-end";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { ClearDomain } from "../functions/clear-domain";
-import { UpdatePlayerTimer } from "../functions/start-player-timer";
+import { UpdatePlayerTimer, grantActionIncrement, syncClocks } from "../functions/start-player-timer";
 import { EmitMessage } from "../functions/emit-messages";
 import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
 import { ActiveGateCard } from "../functions/active-gate-card";
@@ -42,7 +42,10 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
                 io: io
             })
             // Additional en cours OU tour déjà avancé en interne → ne pas continuer
-            if (result === 'additional' || result === 'turn_advanced') return
+            if (result === 'additional' || result === 'turn_advanced') {
+                syncClocks({ roomState: roomData, io })
+                return
+            }
         }
     }
 
@@ -85,35 +88,33 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
     if (activeSocket && !roomData.status.finished && roomData.gateCardActionRequest.length === 0 && roomData.AbilityAditionalRequest.length === 0) {
 
         const checker = CheckTurnActionRequest({ roomState: roomData, userId: userId })
-        if (!checker) return
-
-        const request = roomData.ActivePlayerActionRequest
-        io.to(activeSocket.gameboardSocket).emit('turn-action-request', request)
+        if (checker) {
+            const request = roomData.ActivePlayerActionRequest
+            io.to(activeSocket.gameboardSocket).emit('turn-action-request', request)
+        }
     }
 
     if (inactiveSocket && !roomData.status.finished && roomData.gateCardActionRequest.length === 0 && roomData.AbilityAditionalRequest.length === 0) {
 
         const checker = CheckTurnActionRequest({ roomState: roomData, userId: userId })
-        if (!checker) return
+        if (checker) {
+            const request = roomData.InactivePlayerActionRequest
+            const merged = [
+                request.actions.mustDo,
+                request.actions.mustDoOne,
+                request.actions.optional
+            ].flat()
 
-        const request = roomData.InactivePlayerActionRequest
-        const merged = [
-            request.actions.mustDo,
-            request.actions.mustDoOne,
-            request.actions.optional
-        ].flat()
-
-        if (merged.length > 0) {
-            io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', request)
+            if (merged.length > 0) {
+                io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', request)
+            }
         }
-
     }
 
     UpdatePlayerTimer({
         io: io,
         roomState: roomData
     })
-    
 }
 
 export const socketTurn = (io: Server, socket: Socket) => {
@@ -121,6 +122,10 @@ export const socketTurn = (io: Server, socket: Socket) => {
     // FR: On écoute l'événement "turn-action" envoyé par un joueur
     // ENG: Listen for the "turn-action" event triggered by a player
     socket.on('turn-action', ({ roomId, userId }: { roomId: string, userId: string }) => {
+        const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
+        if (roomData && !roomData.status.finished) {
+            grantActionIncrement({ roomState: roomData, userId, io })
+        }
         turnActionUpdater({ roomId, userId, io })
     })
 

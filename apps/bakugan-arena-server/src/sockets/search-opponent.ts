@@ -6,7 +6,7 @@ import { GetUsersRooms } from "../functions/get-rooms-of-user";
 import { db } from "../lib/db";
 import { eq } from "drizzle-orm";
 import { findOpponent } from "../functions/matchmaking-functions/find-opponent";
-import { StartTwoTimers, UpdatePlayerTimer } from "../functions/start-player-timer";
+import { syncClocks } from "../functions/start-player-timer";
 import { getAvailableBot, getBotSocketId, isBotUserId } from "../functions/bot-manager";
 import { applyEloDecayForUser } from "../functions/ladder-functions/elo-decay";
 
@@ -119,14 +119,16 @@ const matchPlayerWithBot = async (io: Server, player: QueuePlayer) => {
 
     intervalIds.push({
         roomId: state.roomId,
+        finishing: false,
         players: state.players.map((p) => ({
             userId: p.userId,
-            intervalId: null
+            timeoutId: null,
+            deadlineAt: null,
         }))
     })
 
     const roomState = Battle_Brawlers_Game_State[Battle_Brawlers_Game_State.indexOf(state)]
-    StartTwoTimers({ io: io, roomState: roomState, roomId: roomState.roomId })
+    syncClocks({ io: io, roomState: roomState })
 
     io.to(player.socketId).emit('match-found', room.id)
     io.to(player.socketId).emit('get-rooms-user-id', GetUsersRooms(player.userId))
@@ -200,14 +202,16 @@ export const processMatchmaking = async (io: Server) => {
 
                 intervalIds.push({
                     roomId: state.roomId,
+                    finishing: false,
                     players: state.players.map(p => ({
                         userId: p.userId,
-                        intervalId: null
+                        timeoutId: null,
+                        deadlineAt: null,
                     }))
                 })
 
                 const roomState = Battle_Brawlers_Game_State[Battle_Brawlers_Game_State.indexOf(state)]
-                StartTwoTimers({ io: io, roomState: roomState, roomId: roomState.roomId })
+                syncClocks({ io: io, roomState: roomState })
 
                 const matchedPlayers = [p1, p2]
 

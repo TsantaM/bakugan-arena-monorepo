@@ -6,7 +6,7 @@ import { turnActionUpdater } from "../sockets/turn-action";
 import { EmitMessage } from "./emit-messages";
 import { CheckTurnActionRequest } from "./check-turn-action-request-permissions";
 import { CheckGameFinished } from "./CheckGameFinished";
-import { StartPlayerTime, StopPlayerTimer } from "./start-player-timer";
+import { syncClocks } from "./start-player-timer";
 
 export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganKey, io }: useAbilityCardProps & { io: Server }) => {
     // FR: On récupère les données de la salle en cours avec son roomId
@@ -163,7 +163,10 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
             if (!requests) return
             if (requests.length <= 0) return
             const socket = requests[0].data.target ? roomData.connectedsUsers.get(requests[0].data.target) : roomData.connectedsUsers.get(requests[0].userId)
-            if (!socket) return
+            if (!socket) {
+                syncClocks({ roomState: roomData, io })
+                return
+            }
 
             const animations = Battle_Brawlers_Game_State[roomIndex].animations
             io.to(roomId).emit('update-room-state', state)
@@ -172,23 +175,7 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
             animations.forEach((animation) => EmitMessage({ roomState: state, animation, io }))
 
             io.to(socket.gameboardSocket).emit('ability-additional-request', requests[0])
-            roomData.players.forEach((p) => {
-
-                const targetId = requests[0].data.target ? requests[0].data.target : requests[0].userId
-
-                if ( p.userId !== targetId) {
-                    StopPlayerTimer({
-                        roomState: roomData,
-                        userId: p.userId
-                    })
-                } else {
-                    StartPlayerTime({
-                        roomState: roomData,
-                        userId: p.userId,
-                        io: io
-                    })
-                }
-            })
+            syncClocks({ roomState: roomData, io })
 
         } else if (abilityReturn !== null && abilityReturn.type === 'CARD_FAILED') {
             const animation: AnimationDirectivesTypes = {
@@ -237,6 +224,7 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
                 const merged = [Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
                 if (merged.length > 0) {
                     io.to(activeSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
+                    syncClocks({ roomState: state, io })
                 } else {
                     clearAnimationsInRoom(roomId)
                     turnActionUpdater({ roomId, userId, io })
@@ -259,8 +247,12 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
 
 
                 const merged = [Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.optional].flat()
-                if (merged.length <= 0) return
+                if (merged.length <= 0) {
+                    syncClocks({ roomState: state, io })
+                    return
+                }
                 io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
+                syncClocks({ roomState: state, io })
             }
 
         } else {
@@ -299,6 +291,7 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
                 const merged = [Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
                 if (merged.length > 0) {
                     io.to(activeSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
+                    syncClocks({ roomState: state, io })
                 } else {
                     clearAnimationsInRoom(roomId)
                     turnActionUpdater({ roomId, userId, io })
@@ -321,8 +314,12 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
 
 
                 const merged = [Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.optional].flat()
-                if (merged.length <= 0) return
+                if (merged.length <= 0) {
+                    syncClocks({ roomState: state, io })
+                    return
+                }
                 io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
+                syncClocks({ roomState: state, io })
             }
 
         }

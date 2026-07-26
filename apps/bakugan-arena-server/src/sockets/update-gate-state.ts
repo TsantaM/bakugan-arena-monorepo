@@ -7,7 +7,7 @@ import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { EmitMessage } from "../functions/emit-messages";
 import { CheckTurnPermissions } from "../functions/ckeck-turn-permissions";
 import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
-import { StopPlayerTimer } from "../functions/start-player-timer";
+import { grantActionIncrement, syncClocks } from "../functions/start-player-timer";
 
 export const socketUpdateGateState = (io: Server, socket: Socket) => {
     socket.on('set-gate', ({ roomId, gateId, slot, userId }: setGateCardProps) => {
@@ -74,7 +74,8 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
 
             const gateCardOnFieldCount = Battle_Brawlers_Game_State[roomIndex].protalSlots.filter((slot) => slot.portalCard !== null).length
 
-            StopPlayerTimer({ roomState: state, userId: userId })
+            grantActionIncrement({ roomState: state, userId, io })
+            syncClocks({ roomState: state, io })
 
             if (gateCardOnFieldCount === 2) {
                 turnActionUpdater({
@@ -87,6 +88,7 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
             console.log('turn count after set gate', state.turnState.turnCount)
 
         } else {
+            grantActionIncrement({ roomState: state, userId, io })
             if (state.turnState.turn === userId) {
                 const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
                 if (roomIndex === -1) return
@@ -97,10 +99,14 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
                 SetBakuganActionRequest({ roomState: state })
 
                 const checker = CheckTurnActionRequest({ roomState: state, userId: userId })
-                if (!checker) return
+                if (!checker) {
+                    syncClocks({ roomState: state, io })
+                    return
+                }
 
                 Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
                 io.to(activeSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
+                syncClocks({ roomState: state, io })
 
             }
 
@@ -115,10 +121,17 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
                 const merged = [Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
 
                 const checker = CheckTurnActionRequest({ roomState: state, userId: userId })
-                if (!checker) return
+                if (!checker) {
+                    syncClocks({ roomState: state, io })
+                    return
+                }
 
-                if (merged.length <= 0) return
+                if (merged.length <= 0) {
+                    syncClocks({ roomState: state, io })
+                    return
+                }
                 io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
+                syncClocks({ roomState: state, io })
             }
         }
 
