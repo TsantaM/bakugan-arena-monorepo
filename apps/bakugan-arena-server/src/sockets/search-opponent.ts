@@ -32,9 +32,9 @@ export const waitingMap = new Map<string, QueuePlayer>() // anti doublon
 let isProcessing = false
 
 /** Seul joueur humain connecté → délai avant bot */
-const BOT_WAIT_ALONE_MS = 10_000
+const BOT_WAIT_ALONE_MS = 5_000
 /** D'autres humains en ligne → délai plus long, on privilégie un vrai match */
-const BOT_WAIT_OTHERS_ONLINE_MS = 60_000
+const BOT_WAIT_OTHERS_ONLINE_MS = 15_000
 
 const hasOtherHumansOnline = (searcherUserId: string) => {
     return connectedUsers.some(
