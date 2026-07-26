@@ -1,7 +1,7 @@
 import { pgTable, text, timestamp, boolean, pgEnum, uuid, jsonb } from "drizzle-orm/pg-core"
 import { relations } from "drizzle-orm"
 import { user } from "./auth-schema.js"
-import { type replayDataType } from "@bakugan-arena/game-data"
+import { type replayDataType, type replayMetaType } from "@bakugan-arena/game-data"
 import type { BotScoreWeights, BotTrainingMetrics } from "../bot-score-weights.js"
 
 // ================== ENUM ROLES ==================
@@ -61,8 +61,12 @@ export const replay = pgTable("replay", {
         .references(() => rooms.id, { onDelete: "cascade" }),
 
     replayData: jsonb("replay_data")
-        .$type<replayDataType>()
-        .notNull(),
+        .$type<replayDataType>(),
+
+    blobUrl: text("blob_url"),
+
+    replayMeta: jsonb("replay_meta")
+        .$type<replayMetaType>(),
 
     createdAt: timestamp("created_at")
         .defaultNow()

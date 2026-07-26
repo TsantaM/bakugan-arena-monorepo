@@ -10,7 +10,8 @@ export async function GetReplays() {
             roomId: true,
             title: true,
             createdAt: true,
-            replayData: true
+            blobUrl: true,
+            replayMeta: true,
         },
         orderBy: (replay, { desc }) => [desc(replay.createdAt)]
     })

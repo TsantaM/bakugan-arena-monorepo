@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react"
 import ImportReplay from "./import-replay-input"
-import { replayDataType } from "@bakugan-arena/game-data"
 import SelectUploadedReplay from "./select-uploaded-replay"
 import ReactHowler from "react-howler"
 import { useAudioStore } from "@/src/store/sounds-store"
@@ -20,6 +19,8 @@ import { Loader2, Menu, Pause, Play, RotateCcw, SkipBack, SkipForward, Upload, X
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { ReplayExistsByRoomId } from "@/src/actions/replay/replay-exists-by-room-id"
 import { UploadReplay } from "@/src/actions/replay/uploard-raplay-action"
+import { uploadReplayToBlob } from "@/src/lib/replay/replay-blob"
+import type { LoadedReplay } from "@/src/lib/replay/loaded-replay"
 import { toast } from "sonner"
 import { useReplayBattleLogStore } from "@/src/store/replay-battle-log-store"
 import { useLocale, useTranslations } from "next-intl"
@@ -36,13 +37,16 @@ export default function ReplayPage() {
     const tCommon = useTranslations('common')
     const locale = useLocale()
 
-    const [replay, setReplay] = useState<replayDataType | null>(null)
+    const [loadedReplay, setLoadedReplay] = useState<LoadedReplay | null>(null)
     const [isPaused, setIsPaused] = useState(true)
     const battleLogEnabled = useReplayBattleLogStore((state) => state.enabled)
     const { volume, track } = useAudioStore()
     const iframeRef = useRef<HTMLIFrameElement>(null)
     const GAMEBOARD_URL = process.env.NEXT_PUBLIC_3D_GAMEBOARD_URL
     const queryClient = useQueryClient()
+
+    const replay = loadedReplay?.data ?? null
+    const replayBlobUrl = loadedReplay?.blobUrl ?? null
 
     const existsQuery = useQuery({
         queryKey: ["replay-exists", replay?.roomId],
@@ -56,12 +60,13 @@ export default function ReplayPage() {
                 throw new Error("Missing data for upload")
             }
 
+            const blobUrl = replayBlobUrl ?? await uploadReplayToBlob(replay)
+
             return await UploadReplay({
                 roomId: replay.roomId,
                 player1: replay.player1,
                 player2: replay.player2,
-                replay: replay.replay,
-                initialSnapshot: replay.initialSnapshot,
+                blobUrl,
             })
         },
         onSuccess: async () => {
@@ -104,7 +109,7 @@ export default function ReplayPage() {
     }
 
     const clearReplay = () => {
-        setReplay(null)
+        setLoadedReplay(null)
         setIsPaused(true)
     }
 
@@ -117,6 +122,17 @@ export default function ReplayPage() {
         setIsPaused(true)
 
         const sendReplay = () => {
+            if (replayBlobUrl) {
+                iframe.contentWindow?.postMessage(
+                    {
+                        type: "LOAD_REPLAY_URL",
+                        url: replayBlobUrl,
+                    },
+                    GAMEBOARD_URL ?? "*"
+                )
+                return
+            }
+
             iframe.contentWindow?.postMessage(
                 {
                     type: "LOAD_REPLAY",
@@ -132,7 +148,7 @@ export default function ReplayPage() {
         return () => {
             iframe.removeEventListener("load", sendReplay)
         }
-    }, [replay, GAMEBOARD_URL])
+    }, [replay, replayBlobUrl, GAMEBOARD_URL])
 
     const link = buildGameboardLink("replay.html")
     const matchLabel = replay?.player1 && replay?.player2
@@ -145,8 +161,8 @@ export default function ReplayPage() {
 
     const renderToolbarControls = (className: string) => (
         <div className={className}>
-            <ImportReplay setReplay={setReplay} />
-            <SelectUploadedReplay setReplay={setReplay} />
+            <ImportReplay setReplay={setLoadedReplay} />
+            <SelectUploadedReplay setReplay={setLoadedReplay} />
             <BattleLogToggle context="replay" />
             {showUploadButton && (
                 <Button

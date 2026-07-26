@@ -413,11 +413,30 @@ async function initReplay(replayPayload: replayDataType) {
 
 function startReplay(rawReplay: unknown) {
   const replayPayload = normalizeReplayData(rawReplay)
-  initReplay(replayPayload)
+  void initReplay(replayPayload)
+}
+
+async function startReplayFromUrl(url: string) {
+  const response = await fetch(url)
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch replay (${response.status})`)
+  }
+
+  const rawReplay: unknown = await response.json()
+  startReplay(rawReplay)
 }
 
 window.addEventListener('message', (event) => {
   if (!event.data?.type) return
+
+  if (event.data.type === 'LOAD_REPLAY_URL') {
+    setReplayPaused(true)
+    void startReplayFromUrl(event.data.url as string).catch((error) => {
+      console.error(error)
+    })
+    return
+  }
 
   if (event.data.type === 'LOAD_REPLAY') {
     setReplayPaused(true)

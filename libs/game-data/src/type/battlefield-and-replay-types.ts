@@ -29,6 +29,11 @@ export type BattleFieldPageProps = {
     isPlayer: boolean
 }
 
+export type replayMetaType = {
+    player1: playerDataType;
+    player2: playerDataType;
+}
+
 export type replayDataType = {
     roomId: string;
     player1: playerDataType;
