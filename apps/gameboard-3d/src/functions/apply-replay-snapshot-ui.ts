@@ -1,9 +1,7 @@
 import type { replaySnapshotType } from "@bakugan-arena/game-data"
 import { resolveEliminatedForPerspective } from "@bakugan-arena/game-data"
 import { setEliminatedCircles } from "./set-eliminated-circle"
-import dayjs from "dayjs"
-import duration from "dayjs/plugin/duration"
-import relativeTime from "dayjs/plugin/relativeTime"
+import { applyTimerSnapshots, setLocalTimerUserId } from "./player-timer-ui"
 
 export function applyReplaySnapshotUi(snapshot: replaySnapshotType, perspectiveUserId: string) {
     // Toujours recalculer depuis decksState pour la perspective visuelle (player1),
@@ -31,20 +29,13 @@ export function applyReplaySnapshotUi(snapshot: replaySnapshotType, perspectiveU
         turnCounter.textContent = data
     }
 
-    dayjs.extend(duration)
-    dayjs.extend(relativeTime)
-
-    snapshot.timers.forEach((timerData) => {
-        const { userId: user, timer } = timerData
-        const d = dayjs.duration(timer, "seconds")
-        const time = `${String(d.minutes()).padStart(2, "0")}:${String(d.seconds()).padStart(2, "0")}`
-
-        if (user === perspectiveUserId) {
-            const timerElement = document.getElementById("left-timer")
-            if (timerElement) timerElement.textContent = time
-        } else {
-            const timerElement = document.getElementById("right-timer")
-            if (timerElement) timerElement.textContent = time
-        }
-    })
+    setLocalTimerUserId(perspectiveUserId)
+    applyTimerSnapshots(
+        snapshot.timers.map((t) => ({
+            userId: t.userId,
+            timer: t.timer,
+            deadlineAt: null,
+            running: false,
+        })),
+    )
 }

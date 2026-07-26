@@ -21,10 +21,8 @@ import { SetGateCardFunctionAndAnimation } from "../scene-modifications-function
 import { PowerChangeAnimation, PowerChangeNumberAnimation } from "../animations/power-change-animation"
 import { clearTurnInterface } from "../turn-action-management/turn-actions-resolution/action-scope"
 import { ActiveAbilityCardAnimation } from "../animations/active-ability-card"
-import dayjs from "dayjs"
-import duration from "dayjs/plugin/duration";
-import relativeTime from "dayjs/plugin/relativeTime";
 import { InitGameState } from "../functions/init-game-state"
+import { applyPlayerTimer, setLocalTimerUserId, type PlayerTimerEvent } from "../functions/player-timer-ui"
 import { RemoveRenforAnimation } from "../animations/remove-renfort-animation"
 import { MoveGateCard } from "../animations/move-gate-card-animation"
 import { SwipeGateCards } from "../animations/swipe-gate-cards"
@@ -718,26 +716,9 @@ export function registerSocketHandlers(
         notifyParentTurnEnd()
     })
 
-    socket.on('player-timer', (timer: { userId: string, remaining: number }) => {
-        const { userId: user, remaining } = timer
-        // console.log(`${user}: ${remaining}`)
-        dayjs.extend(duration);
-        dayjs.extend(relativeTime);
-        const d = dayjs.duration(remaining, 'seconds');
-        const time = `${String(d.minutes()).padStart(2, "0")}:${String(d.seconds()).padStart(2, "0")}`;
-
-        // console.log(`${user} : ${time}`)
-
-        if (user === userId) {
-            const timer = document.getElementById('left-timer')
-            if (!timer) return
-            timer.textContent = time
-        } else {
-            const timer = document.getElementById('right-timer')
-            if (!timer) return
-            timer.textContent = time
-        }
-
+    socket.on('player-timer', (timer: PlayerTimerEvent) => {
+        setLocalTimerUserId(userId)
+        applyPlayerTimer(timer)
     })
 
     socket.on('game-finished', (message: Message) => {
@@ -838,26 +819,9 @@ export function registerSocketHandlersViewers(socket: Socket,
         }
     })
 
-    socket.on('player-timer', (timer: { userId: string, remaining: number }) => {
-        const { userId: user, remaining } = timer
-        // console.log(`${user}: ${remaining}`)
-        dayjs.extend(duration);
-        dayjs.extend(relativeTime);
-        const d = dayjs.duration(remaining, 'seconds');
-        const time = `${String(d.minutes()).padStart(2, "0")}:${String(d.seconds()).padStart(2, "0")}`;
-
-        // console.log(`${user} : ${time}`)
-
-        if (user === player1) {
-            const timer = document.getElementById('left-timer')
-            if (!timer) return
-            timer.textContent = time
-        } else {
-            const timer = document.getElementById('right-timer')
-            if (!timer) return
-            timer.textContent = time
-        }
-
+    socket.on('player-timer', (timer: PlayerTimerEvent) => {
+        setLocalTimerUserId(player1)
+        applyPlayerTimer(timer)
     })
 
     socket.on('turn-count-updater', (turnState: turnCountSocketProps) => {

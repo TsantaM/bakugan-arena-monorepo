@@ -4,7 +4,7 @@ import { connectedUsers, intervalIds } from "../game-state/battle-brawlers-game-
 import { CreateRoom } from "../functions/create-room";
 import { createGameState } from "../functions/create-game-state";
 import { GetUsersRooms } from "../functions/get-rooms-of-user";
-import { StartTwoTimers, UpdatePlayerTimer } from "../functions/start-player-timer";
+import { syncClocks } from "../functions/start-player-timer";
 import { registerRoom } from "../functions/room-registry";
 
 type Challenge = {
@@ -171,9 +171,11 @@ export const ChalengeAcceptSocket = (io: Server, socket: Socket) => {
 
         intervalIds.push({
             roomId: newRoomState.roomId,
+            finishing: false,
             players: newRoomState.players.map(p => ({
                 userId: p.userId,
-                intervalId: null
+                timeoutId: null,
+                deadlineAt: null,
             }))
         })
 
@@ -191,7 +193,7 @@ export const ChalengeAcceptSocket = (io: Server, socket: Socket) => {
         io.to(chalengerSocket).emit('get-rooms-user-id', p1rooms)
         io.to(targetSocket).emit('get-rooms-user-id', p2rooms)
 
-        StartTwoTimers({ io: io, roomState: newRoomState, roomId: newRoomState.roomId })
+        syncClocks({ io: io, roomState: newRoomState })
     })
 }
 

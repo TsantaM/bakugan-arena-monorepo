@@ -6,7 +6,7 @@ import { GetUsersRooms } from "../functions/get-rooms-of-user";
 import { db } from "../lib/db";
 import { eq } from "drizzle-orm";
 import { findOpponent } from "../functions/matchmaking-functions/find-opponent";
-import { StartTwoTimers, UpdatePlayerTimer } from "../functions/start-player-timer";
+import { syncClocks } from "../functions/start-player-timer";
 import { getAvailableBot, getBotSocketId, isBotUserId } from "../functions/bot-manager";
 import { applyEloDecayForUser } from "../functions/ladder-functions/elo-decay";
 import { registerRoom } from "../functions/room-registry";
@@ -120,13 +120,15 @@ const matchPlayerWithBot = async (io: Server, player: QueuePlayer) => {
 
     intervalIds.push({
         roomId: state.roomId,
+        finishing: false,
         players: state.players.map((p) => ({
             userId: p.userId,
-            intervalId: null
+            timeoutId: null,
+            deadlineAt: null,
         }))
     })
 
-    StartTwoTimers({ io: io, roomState: state, roomId: state.roomId })
+    syncClocks({ io: io, roomState: state })
 
     io.to(player.socketId).emit('match-found', room.id)
     io.to(player.socketId).emit('get-rooms-user-id', GetUsersRooms(player.userId))
@@ -200,13 +202,15 @@ export const processMatchmaking = async (io: Server) => {
 
                 intervalIds.push({
                     roomId: state.roomId,
+                    finishing: false,
                     players: state.players.map(p => ({
                         userId: p.userId,
-                        intervalId: null
+                        timeoutId: null,
+                        deadlineAt: null,
                     }))
                 })
 
-                StartTwoTimers({ io: io, roomState: state, roomId: state.roomId })
+                syncClocks({ io: io, roomState: state })
 
                 const matchedPlayers = [p1, p2]
 

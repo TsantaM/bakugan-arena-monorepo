@@ -8,6 +8,7 @@ import {
     emitToUserGameboard,
     runRoomSocketAction,
 } from "../functions/room-runtime";
+import { grantActionIncrement, syncClocks } from "../functions/start-player-timer";
 
 export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
     socket.on('ability-additional-request', (resolution: resolutionType & { actionSeq?: number | string }) => {
@@ -49,10 +50,14 @@ export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
                 roomData.animations.forEach((animation) => EmitMessage({ roomState: roomData, animation, io }))
                 roomData.animations = []
 
+                const actingUserId = request.data.target ?? request.userId
+                grantActionIncrement({ roomState: roomData, userId: actingUserId, io })
+
                 if (roomData.AbilityAditionalRequest.length > 0) {
                     const next = roomData.AbilityAditionalRequest[0]
                     const targetId = next.data.target ? next.data.target : next.userId
                     emitToUserGameboard(io, roomData, targetId, 'ability-additional-request', next, socket.id)
+                    syncClocks({ roomState: roomData, io })
                     return
                 }
 
@@ -79,7 +84,10 @@ export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
                         roomData.ActivePlayerActionRequest.actions.optional,
                     ].flat()
 
-                    if (!CheckTurnActionRequest({ roomState: roomData, userId: resolution.userId })) return
+                    if (!CheckTurnActionRequest({ roomState: roomData, userId: resolution.userId })) {
+                        syncClocks({ roomState: roomData, io })
+                        return
+                    }
 
                     if (merged.length > 0) {
                         emitToUserGameboard(
@@ -90,6 +98,7 @@ export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
                             roomData.ActivePlayerActionRequest,
                             socket.id,
                         )
+                        syncClocks({ roomState: roomData, io })
                     } else if (!result?.turnActionLaucher) {
                         clearAnimationsInRoom(roomId)
                         turnActionUpdater({
@@ -98,6 +107,8 @@ export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
                             io,
                             fallbackSocketId: socket.id,
                         })
+                    } else {
+                        syncClocks({ roomState: roomData, io })
                     }
                 } else {
                     roomData.InactivePlayerActionRequest = removeActionByType(
@@ -105,14 +116,20 @@ export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
                         "USE_ABILITY_CARD",
                     ) as InactivePlayerActionRequestType
 
-                    if (!CheckTurnActionRequest({ roomState: roomData, userId: resolution.userId })) return
+                    if (!CheckTurnActionRequest({ roomState: roomData, userId: resolution.userId })) {
+                        syncClocks({ roomState: roomData, io })
+                        return
+                    }
 
                     const merged = [
                         roomData.InactivePlayerActionRequest.actions.mustDo,
                         roomData.InactivePlayerActionRequest.actions.mustDoOne,
                         roomData.InactivePlayerActionRequest.actions.optional,
                     ].flat()
-                    if (merged.length <= 0) return
+                    if (merged.length <= 0) {
+                        syncClocks({ roomState: roomData, io })
+                        return
+                    }
 
                     emitToUserGameboard(
                         io,
@@ -122,6 +139,7 @@ export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
                         roomData.InactivePlayerActionRequest,
                         socket.id,
                     )
+                    syncClocks({ roomState: roomData, io })
                 }
 
                 if (result?.turnActionLaucher) {

@@ -5,8 +5,7 @@ import { db } from "../lib/db";
 import { eq } from "drizzle-orm";
 import { forfeitSocketProps } from "@bakugan-arena/game-data";
 import { SendUserRooms } from "../functions/send-user-rooms";
-import { StopPlayerTimer } from "../functions/start-player-timer";
-import { getRoom } from "../functions/room-registry";
+import { stopAllRoomClocks } from "../functions/start-player-timer";
 import { runRoomSocketAction } from "../functions/room-runtime";
 
 export function forfeitSocket(io: Server, socket: Socket) {
@@ -30,7 +29,7 @@ export function forfeitSocket(io: Server, socket: Socket) {
                 const winner = players.find((p) => p.userId !== userId)
                 if (!winner || !loser) return
 
-                players.forEach((player) => StopPlayerTimer({ roomState: roomData, userId: player.userId }))
+                stopAllRoomClocks({ roomState: roomData, io })
                 roomData.status.finished = true
                 roomData.status.finisheAt = Date.now()
                 roomData.status.winner = winner.userId

@@ -14,7 +14,7 @@ import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { EmitMessage } from "../functions/emit-messages";
 import { CheckTurnPermissions } from "../functions/ckeck-turn-permissions";
 import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
-import { StopPlayerTimer } from "../functions/start-player-timer";
+import { grantActionIncrement, syncClocks } from "../functions/start-player-timer";
 import {
     emitRoomStateUpdate,
     emitToUserGameboard,
@@ -83,7 +83,8 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
                         (portalSlot) => portalSlot.portalCard !== null,
                     ).length
 
-                    StopPlayerTimer({ roomState: state, userId: userId })
+                    grantActionIncrement({ roomState: state, userId, io })
+                    syncClocks({ roomState: state, io })
 
                     if (gateCardOnFieldCount === 2) {
                         turnActionUpdater({
@@ -96,6 +97,8 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
                     return
                 }
 
+                grantActionIncrement({ roomState: state, userId, io })
+
                 if (state.turnState.turn === userId) {
                     const newState = removeActionByType(
                         state.ActivePlayerActionRequest,
@@ -104,7 +107,10 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
                     addSlotToSetBakugan(resolvedSlot, newState)
                     SetBakuganActionRequest({ roomState: state })
 
-                    if (!CheckTurnActionRequest({ roomState: state, userId: userId })) return
+                    if (!CheckTurnActionRequest({ roomState: state, userId: userId })) {
+                        syncClocks({ roomState: state, io })
+                        return
+                    }
 
                     state.ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
                     emitToUserGameboard(
@@ -115,6 +121,7 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
                         state.ActivePlayerActionRequest,
                         socket.id,
                     )
+                    syncClocks({ roomState: state, io })
                     return
                 }
 
@@ -131,8 +138,14 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
                     state.InactivePlayerActionRequest.actions.optional,
                 ].flat()
 
-                if (!CheckTurnActionRequest({ roomState: state, userId: userId })) return
-                if (merged.length <= 0) return
+                if (!CheckTurnActionRequest({ roomState: state, userId: userId })) {
+                    syncClocks({ roomState: state, io })
+                    return
+                }
+                if (merged.length <= 0) {
+                    syncClocks({ roomState: state, io })
+                    return
+                }
 
                 emitToUserGameboard(
                     io,
@@ -142,6 +155,7 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
                     state.InactivePlayerActionRequest,
                     socket.id,
                 )
+                syncClocks({ roomState: state, io })
             },
         })
     })

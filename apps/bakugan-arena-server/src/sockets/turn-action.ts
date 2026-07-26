@@ -4,7 +4,7 @@ import { CheckGameFinished } from "../functions/CheckGameFinished";
 import { onBattleEnd } from "../functions/on-battle-end";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { ClearDomain } from "../functions/clear-domain";
-import { UpdatePlayerTimer } from "../functions/start-player-timer";
+import { UpdatePlayerTimer, grantActionIncrement, syncClocks } from "../functions/start-player-timer";
 import { EmitMessage } from "../functions/emit-messages";
 import { ActiveGateCard } from "../functions/active-gate-card";
 import { getRoom } from "../functions/room-registry";
@@ -49,7 +49,10 @@ export function turnActionUpdater({
                 io: io
             })
             // Additional en cours OU tour déjà avancé en interne → ne pas continuer
-            if (result === 'additional' || result === 'turn_advanced') return
+            if (result === 'additional' || result === 'turn_advanced') {
+                syncClocks({ roomState: roomData, io })
+                return
+            }
         }
     }
 
@@ -103,7 +106,10 @@ export const socketTurn = (io: Server, socket: Socket) => {
             event: 'turn-action',
             actionSeq,
             userId,
-            handler: () => {
+            handler: (roomData) => {
+                if (!roomData.status.finished) {
+                    grantActionIncrement({ roomState: roomData, userId, io })
+                }
                 turnActionUpdater({
                     roomId,
                     userId,

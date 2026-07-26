@@ -2,9 +2,10 @@
  * Cleanup des rooms expirées / terminées.
  * Utilise `removeRoom` pour garder Map + tableau + runtime (queue/version) synchronisés.
  */
-import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
+import { Battle_Brawlers_Game_State, intervalIds } from "../game-state/battle-brawlers-game-state"
 import { removeRoom } from "./room-registry"
 import { clearRoomRuntime } from "./room-runtime"
+import { clearRoomTimers } from "./start-player-timer"
 
 const MAX_ROOM_AGE = 30 * 60 * 1000 // 30 min
 const FINISHED_ROOM_LIFETIME = 5 * 60 * 1000 // 5 min après fin
@@ -29,8 +30,18 @@ export function cleanGameStates() {
     }
 
     for (const roomId of toRemove) {
+        clearRoomTimers(roomId)
         removeRoom(roomId)
         clearRoomRuntime(roomId)
+    }
+
+    // Orphan timer entries (room already gone)
+    for (let i = intervalIds.length - 1; i >= 0; i--) {
+        const entry = intervalIds[i]
+        const stillExists = Battle_Brawlers_Game_State.some((r) => r?.roomId === entry.roomId)
+        if (!stillExists) {
+            clearRoomTimers(entry.roomId)
+        }
     }
 
     const removed = initialLength - Battle_Brawlers_Game_State.length

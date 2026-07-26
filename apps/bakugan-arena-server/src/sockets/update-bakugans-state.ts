@@ -27,6 +27,7 @@ import {
     emitToUserGameboard,
     runRoomSocketAction,
 } from "../functions/room-runtime";
+import { grantActionIncrement, syncClocks } from "../functions/start-player-timer";
 
 /**
  * Enrichit la request de tour avec les abilities utilisables après un pose bakugan.
@@ -161,11 +162,12 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
 
                 emitRoomStateUpdate(io, updatedState, "update-room-state")
 
-                // Ne plus early-return si pas d'animation : sinon turn-request jamais renvoyé.
                 if (animation && animation.length > 0) {
                     io.to(roomId).emit('animations', animation)
                     animation.forEach((a) => EmitMessage({ roomState: updatedState, animation: a, io }))
                 }
+
+                grantActionIncrement({ roomState: updatedState, userId, io })
 
                 if (updatedState.turnState.turn === userId) {
                     const newState = removeActionByType(updatedState.ActivePlayerActionRequest, "SET_BAKUGAN")
@@ -186,7 +188,10 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
                     ChangeAttributActionRequest({ roomState: updatedState })
 
                     const checker = CheckTurnActionRequest({ roomState: updatedState, userId: userId })
-                    if (!checker) return
+                    if (!checker) {
+                        syncClocks({ roomState: updatedState, io })
+                        return
+                    }
 
                     const merged = [
                         updatedState.ActivePlayerActionRequest.actions.mustDo,
@@ -203,6 +208,7 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
                             updatedState.ActivePlayerActionRequest,
                             socket.id,
                         )
+                        syncClocks({ roomState: updatedState, io })
                         return
                     }
 
@@ -216,7 +222,6 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
                     return
                 }
 
-                // Joueur inactif
                 const newState = removeActionByType(updatedState.InactivePlayerActionRequest, "SET_BAKUGAN")
                 updatedState.InactivePlayerActionRequest = newState as InactivePlayerActionRequestType
 
@@ -236,8 +241,14 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
                 ].flat()
 
                 const checker = CheckTurnActionRequest({ roomState: updatedState, userId: userId })
-                if (!checker) return
-                if (merged.length <= 0) return
+                if (!checker) {
+                    syncClocks({ roomState: updatedState, io })
+                    return
+                }
+                if (merged.length <= 0) {
+                    syncClocks({ roomState: updatedState, io })
+                    return
+                }
 
                 emitToUserGameboard(
                     io,
@@ -247,6 +258,7 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
                     updatedState.InactivePlayerActionRequest,
                     socket.id,
                 )
+                syncClocks({ roomState: updatedState, io })
             },
         })
     })

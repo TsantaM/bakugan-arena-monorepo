@@ -7,6 +7,7 @@ import {
     emitRoomStateUpdate,
     runRoomSocketAction,
 } from "../functions/room-runtime";
+import { grantActionIncrement } from "../functions/start-player-timer";
 
 export const socketUseAbilityCard = (io: Server, socket: Socket) => {
     socket.on('use-ability-card', (payload: useAbilityCardProps & { actionSeq?: number | string }) => {
@@ -36,6 +37,7 @@ export const socketUseAbilityCard = (io: Server, socket: Socket) => {
 
                 clearAnimationsInRoom(roomId)
 
+                grantActionIncrement({ roomState: state, userId, io })
                 useAbilityCardServer({
                     abilityId,
                     bakuganKey,

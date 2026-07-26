@@ -5,7 +5,7 @@ import { schema } from "@bakugan-arena/drizzle-orm"
 import { CalculateAndUpdateElo } from "./ladder-functions/calculate-elo"
 import { Server } from "socket.io"
 import { SendUserRooms } from "./send-user-rooms"
-import { StopPlayerTimer } from "./start-player-timer"
+import { stopAllRoomClocks } from "./start-player-timer"
 
 const rooms = schema.rooms
 
@@ -132,7 +132,7 @@ export const CheckGameFinished = async ({
     if (!result.finished) return
 
     const [p1, p2] = roomState.players
-    roomState.players.forEach((player) => StopPlayerTimer({ roomState: roomState, userId: player.userId }))
+    stopAllRoomClocks({ roomState, io })
 
     // 🧠 update mémoire FIRST (source de vérité)
     roomState.status.finished = true

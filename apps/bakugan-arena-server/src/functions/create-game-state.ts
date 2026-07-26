@@ -1,5 +1,6 @@
 import { AbilityCards, AbilityCardsList, BakuganList, Bakugans, ExclusiveAbilities, ExclusiveAbilitiesList, GateCards, GateCardsList, captureReplaySnapshot, portalSlotsType, SelectableGateCardAction, stateType, turnStateType } from "@bakugan-arena/game-data"
 import { getDecksData, getRoomPlayers } from "./get-room-data"
+import { TIMER_INITIAL_SECONDS } from "./start-player-timer"
 
 export const createGameState = async ({ roomId, ranked }: { roomId: string; ranked: boolean }) => {
     const decksData = await getDecksData({ roomId })
@@ -154,7 +155,7 @@ export const createGameState = async ({ roomId, ranked }: { roomId: string; rank
         },
     ];
 
-    const timer: number = 5 * 60
+    const timer: number = TIMER_INITIAL_SECONDS
 
     const playersState = [
         {
