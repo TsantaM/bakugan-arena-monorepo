@@ -15,5 +15,25 @@
   "turn": "Turn {turn}",
   "a11y": {
     "skipAnimations": "Skip animations"
+  },
+  "turnActions": {
+    "pickTarget": "Pick a target on the board",
+    "cancel": "Cancel",
+    "passTurn": "Pass turn",
+    "nothingToDo": "Nothing to do — pass your turn",
+    "openGate": "Open gate ({slot})",
+    "activateGate": "Activate gate ({slot})",
+    "slideOf": "{current} / {count}",
+    "confirmSelection": "Confirm",
+    "waitingForTurn": "Waiting for your turn…",
+    "tabs": {
+      "SET_BAKUGAN": "Bakugan",
+      "SET_GATE_CARD_ACTION": "Gate",
+      "USE_ABILITY_CARD": "Ability",
+      "CHANGE_ATTRIBUTE": "Attribute",
+      "SELECT_BAKUGAN": "Pick bakugan",
+      "SELECT_GATE_CARD": "Pick gate",
+      "SELECT_ABILITY_CARD": "Pick ability"
+    }
   }
 }

@@ -5,6 +5,7 @@ import type {
 import { type AnimationDirectivesTypes } from "@bakugan-arena/game-data"
 import * as THREE from "three"
 import { TurnActionBuilder } from "../turn-action-management"
+import { configureTurnActionBridge } from "../turn-action-management/turn-action-bridge"
 import type { Socket } from "socket.io-client"
 import { OnBattleStartFunctionAnimation } from "../scene-modifications-functions/on-battle-start-function-animation"
 import { AddRenfortToBattleAnimationFunction, SetBakuganAndAddRenfortAnimationAndFunction } from "../scene-modifications-functions/add-renfort-function-animation"
@@ -555,6 +556,16 @@ export function registerSocketHandlers(
     }
 ) {
     const { camera, plane, roomId, scene, userId, light, bakugansMeshs, gateCardMeshs } = ctx
+
+    // Bridge postMessage prêt dès l'init (PASS_TURN / COMMIT avant le 1er request)
+    configureTurnActionBridge({
+        socket,
+        userId,
+        roomId,
+        camera,
+        scene,
+        plane,
+    })
 
     socket.off() // 💣 purge TOTALE des anciens listeners
 

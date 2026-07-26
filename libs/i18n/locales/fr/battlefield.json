@@ -15,5 +15,25 @@
   "turn": "Tour {turn}",
   "a11y": {
     "skipAnimations": "Passer les animations"
+  },
+  "turnActions": {
+    "pickTarget": "Choisissez une cible sur le plateau",
+    "cancel": "Annuler",
+    "passTurn": "Passer le tour",
+    "nothingToDo": "Aucune action disponible — passez le tour",
+    "openGate": "Ouvrir la gate ({slot})",
+    "activateGate": "Activer la gate ({slot})",
+    "slideOf": "{current} / {count}",
+    "confirmSelection": "Confirmer",
+    "waitingForTurn": "En attente de votre tour…",
+    "tabs": {
+      "SET_BAKUGAN": "Bakugan",
+      "SET_GATE_CARD_ACTION": "Gate",
+      "USE_ABILITY_CARD": "Ability",
+      "CHANGE_ATTRIBUTE": "Attribut",
+      "SELECT_BAKUGAN": "Choisir bakugan",
+      "SELECT_GATE_CARD": "Choisir gate",
+      "SELECT_ABILITY_CARD": "Choisir ability"
+    }
   }
 }

@@ -85,7 +85,7 @@ export default function MessagesModal({
             setBattleLogRoot(null)
             return
         }
-        setBattleLogRoot(document.querySelector("[data-battlefield-root]"))
+        setBattleLogRoot(document.querySelector("[data-battlefield-iframe]"))
     }, [embedded])
 
     useEffect(() => {
@@ -243,7 +243,16 @@ export default function MessagesModal({
                     </Button>
                 </SheetTrigger>
 
-                <SheetContent side="right" className="flex w-full flex-col gap-0 p-0 sm:max-w-md">
+                <SheetContent
+                    side="right"
+                    className="flex flex-col gap-0 p-0 sm:max-w-md"
+                    onOpenAutoFocus={(e) => {
+                        // Mobile : ne pas focus le textarea (évite d'ouvrir le clavier)
+                        if (window.matchMedia('(max-width: 767px)').matches) {
+                            e.preventDefault()
+                        }
+                    }}
+                >
                     <SheetHeader className="border-b pr-12 text-left">
                         <SheetTitle className="truncate">
                             {tCommon('labels.vs', { p1: player ?? '', p2: opponent ?? '' })}
