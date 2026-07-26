@@ -6,6 +6,7 @@ import { turnActionUpdater } from "./turn-action";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { EmitMessage } from "../functions/emit-messages";
 import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
+import { grantActionIncrement, syncClocks } from "../functions/start-player-timer";
 
 
 export function AddAbilities({ roomState, request, bakugan, slot, userId, attribut, bakuganAttribut }: { roomState: stateType, request: ActivePlayerActionRequestType | InactivePlayerActionRequestType, bakugan: string, slot: slots_id, userId: string, attribut: attribut, bakuganAttribut?: attribut }) {
@@ -135,11 +136,16 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
         io.to(roomId).emit('animations', animation)
         animation.forEach((a) => EmitMessage({ roomState: updatedState, animation: a, io }))
 
+        grantActionIncrement({ roomState: updatedState, userId, io })
+
         const activeSocket = updatedState.connectedsUsers.get(updatedState.turnState.turn)
         const inactiveSocket = updatedState.connectedsUsers.get(updatedState.turnState.previous_turn || '')
 
         if (updatedState.turnState.turn === userId) {
-            if (!activeSocket) return
+            if (!activeSocket) {
+                syncClocks({ roomState: updatedState, io })
+                return
+            }
 
             const newState = removeActionByType(updatedState.ActivePlayerActionRequest, "SET_BAKUGAN")
             updatedState.ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
@@ -159,11 +165,15 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
             ChangeAttributActionRequest({ roomState: updatedState })
 
             const checker = CheckTurnActionRequest({ roomState: updatedState, userId: userId })
-            if (!checker) return
+            if (!checker) {
+                syncClocks({ roomState: updatedState, io })
+                return
+            }
 
             const merged = [updatedState.ActivePlayerActionRequest.actions.mustDo, updatedState.ActivePlayerActionRequest.actions.mustDoOne, updatedState.ActivePlayerActionRequest.actions.optional].flat()
             if (merged.length > 0) {
                 io.to(activeSocket.gameboardSocket).emit('turn-action-request', updatedState.ActivePlayerActionRequest)
+                syncClocks({ roomState: updatedState, io })
                 return
             } else {
                 clearAnimationsInRoom(roomId)
@@ -172,7 +182,10 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
         }
 
         if (updatedState.turnState.turn !== userId) {
-            if (!inactiveSocket) return
+            if (!inactiveSocket) {
+                syncClocks({ roomState: updatedState, io })
+                return
+            }
 
             const newState = removeActionByType(updatedState.InactivePlayerActionRequest, "SET_BAKUGAN")
             updatedState.InactivePlayerActionRequest = newState as InactivePlayerActionRequestType
@@ -189,10 +202,17 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
             const merged = [updatedState.InactivePlayerActionRequest.actions.mustDo, updatedState.InactivePlayerActionRequest.actions.mustDoOne, updatedState.InactivePlayerActionRequest.actions.optional].flat()
 
             const checker = CheckTurnActionRequest({ roomState: updatedState, userId: userId })
-            if (!checker) return
+            if (!checker) {
+                syncClocks({ roomState: updatedState, io })
+                return
+            }
 
-            if (merged.length <= 0) return
+            if (merged.length <= 0) {
+                syncClocks({ roomState: updatedState, io })
+                return
+            }
             io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', updatedState.InactivePlayerActionRequest)
+            syncClocks({ roomState: updatedState, io })
         }
 
     })

@@ -6,6 +6,7 @@ import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { turnActionUpdater } from "./turn-action";
 import { EmitMessage } from "../functions/emit-messages";
 import { AddAbilities } from "./update-bakugans-state";
+import { grantActionIncrement, syncClocks } from "../functions/start-player-timer";
 
 export function ChangeAttributSocket(io: Server, socket: Socket) {
     socket.on('change-attribut', ({ roomId, attribut, bakugan, userId }: { roomId: string, bakugan: bakuganOnSlot, attribut: attribut, userId: string }) => {
@@ -53,6 +54,8 @@ export function ChangeAttributSocket(io: Server, socket: Socket) {
             })
         }
 
+        grantActionIncrement({ roomState, userId, io })
+
         io.to(roomId).emit('animations', Battle_Brawlers_Game_State[roomIndex].animations)
         Battle_Brawlers_Game_State[roomIndex].animations.forEach((animation) => EmitMessage({ roomState: Battle_Brawlers_Game_State[roomIndex], animation, io }))
 
@@ -79,15 +82,21 @@ export function ChangeAttributSocket(io: Server, socket: Socket) {
             const merged = [Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest.actions.optional].flat()
 
             const checker = CheckTurnActionRequest({ roomState: Battle_Brawlers_Game_State[roomIndex], userId: userId })
-            if (!checker) return
+            if (!checker) {
+                syncClocks({ roomState, io })
+                return
+            }
 
             if (activeSocket) {
                 if (merged.length > 0) {
                     io.to(activeSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
+                    syncClocks({ roomState, io })
                 } else {
                     clearAnimationsInRoom(roomId)
                     turnActionUpdater({ roomId, userId, io })
                 }
+            } else {
+                syncClocks({ roomState, io })
             }
 
         }
@@ -99,15 +108,21 @@ export function ChangeAttributSocket(io: Server, socket: Socket) {
             const merged = [Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.optional].flat()
 
             const checker = CheckTurnActionRequest({ roomState: Battle_Brawlers_Game_State[roomIndex], userId: userId })
-            if (!checker) return
+            if (!checker) {
+                syncClocks({ roomState, io })
+                return
+            }
 
             if (inactiveSocket) {
                 if (merged.length > 0) {
                     io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
+                    syncClocks({ roomState, io })
                 } else {
                     clearAnimationsInRoom(roomId)
                     turnActionUpdater({ roomId, userId, io })
                 }
+            } else {
+                syncClocks({ roomState, io })
             }
 
         }

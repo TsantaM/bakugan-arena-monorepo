@@ -1,5 +1,6 @@
 import { Message, roomStateType } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
+import { getPlayerTimerSnapshots } from "./start-player-timer"
 
 const initRoomState:
     ({ roomId, userId }: { roomId: string, userId: string }) => roomStateType | undefined =
@@ -14,10 +15,7 @@ const initRoomState:
         const portalSlots = data.protalSlots
         const battleState = data.battleState
 
-        const timers = data.players.map((player) => ({
-            userId: player.userId,
-            timer: player.timer
-        }))
+        const timers = getPlayerTimerSnapshots(data)
 
         const usersBakugans = deck.find((d) => d.userId === userId)?.bakugans.map((b) => b?.bakuganData).filter((bakugan) => bakugan !== undefined).filter((b) => b.elimined).length
 

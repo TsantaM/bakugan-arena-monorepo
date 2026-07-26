@@ -23,9 +23,11 @@ export const roomsSockets: {
 
 
 export const intervalIds: {
-    roomId: string,
+    roomId: string
+    finishing: boolean
     players: {
-        userId: string,
-        intervalId: NodeJS.Timeout | null
+        userId: string
+        timeoutId: NodeJS.Timeout | null
+        deadlineAt: number | null
     }[]
 }[] = []

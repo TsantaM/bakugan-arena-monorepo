@@ -1,4 +1,5 @@
-import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
+import { Battle_Brawlers_Game_State, intervalIds } from "../game-state/battle-brawlers-game-state"
+import { clearRoomTimers } from "./start-player-timer"
 
 const MAX_ROOM_AGE = 30 * 60 * 1000 // 30 min
 const FINISHED_ROOM_LIFETIME = 5 * 60 * 1000 // 5 min après fin
@@ -20,7 +21,17 @@ export function cleanGameStates() {
             now - room.status.finisheAt > FINISHED_ROOM_LIFETIME
 
         if (isTooOld || isFinishedTooLong) {
+            clearRoomTimers(room.roomId)
             Battle_Brawlers_Game_State.splice(i, 1)
+        }
+    }
+
+    // Orphan timer entries (room already gone)
+    for (let i = intervalIds.length - 1; i >= 0; i--) {
+        const entry = intervalIds[i]
+        const stillExists = Battle_Brawlers_Game_State.some((r) => r?.roomId === entry.roomId)
+        if (!stillExists) {
+            clearRoomTimers(entry.roomId)
         }
     }
 

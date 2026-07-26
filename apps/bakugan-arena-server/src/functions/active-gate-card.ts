@@ -2,7 +2,7 @@ import { activeGateCardProps, AnimationDirectivesTypes, gateCardActionRequestsTy
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 import { turnActionUpdater } from "../sockets/turn-action"
 import { EmitMessage } from "./emit-messages"
-import { StartPlayerTime, StopPlayerTimer } from "./start-player-timer"
+import { syncClocks } from "./start-player-timer"
 
 /**
  * - false : rien ouvert
@@ -102,25 +102,13 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
     const targetSocket = requests[0].data.target
         ? roomData.connectedsUsers.get(requests[0].data.target)
         : roomData.connectedsUsers.get(requests[0].userId)
-    if (!targetSocket) return "additional"
+    if (!targetSocket) {
+        syncClocks({ roomState: roomData, io })
+        return "additional"
+    }
 
     io.to(targetSocket.gameboardSocket).emit("gate-card-additional-request", requests[0])
-    const targetId = requests[0].data.target ? requests[0].data.target : requests[0].userId
-
-    roomData.players.forEach((p) => {
-        if (p.userId !== targetId) {
-            StopPlayerTimer({
-                roomState: roomData,
-                userId: p.userId,
-            })
-        } else {
-            StartPlayerTime({
-                roomState: roomData,
-                userId: p.userId,
-                io: io,
-            })
-        }
-    })
+    syncClocks({ roomState: roomData, io })
 
     return "additional"
 }

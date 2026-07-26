@@ -224,6 +224,9 @@ export type roomStateType = {
     timers: {
         userId: string,
         timer: number
+        deadlineAt?: number | null
+        running?: boolean
+        serverNow?: number
     }[]
     eliminated: {
         user: number,
