@@ -2,8 +2,13 @@ import type { attribut } from './game-data-types.js'
 import type { bakuganOnSlot, portalSlotsType, slots_id } from './room-types.js'
 import type { AnimationDirectivesTypes } from './animations-directives.js'
 import type {
+    AbilityCardsActionsRequestsType,
     ActivePlayerActionRequestType,
+    bakuganToMoveType2,
+    gateCardActionRequestsType,
     InactivePlayerActionRequestType,
+    resolutionGateCardType,
+    resolutionType,
 } from './actions-serveur-requests.js'
 
 /** Sélection partielle Next → gameboard : démarre le ciblage 3D. */
@@ -72,6 +77,48 @@ export type TurnActionCommitPayload =
         slot: slots_id
     }
 
+/** Kind of pending additional effect request. */
+export type AdditionalActionKind = 'ability' | 'gate'
+
+/** Next → gameboard : démarre le ciblage 3D pour une additional request. */
+export type AdditionalPartialSelection =
+    | {
+        mode: 'SELECT_SLOT'
+        slots: slots_id[]
+        emptySlot?: boolean
+        attribut?: attribut
+    }
+    | {
+        mode: 'SELECT_BAKUGAN_ON_DOMAIN' | 'ATTRACT_BAKUGAN'
+        bakuganNames: string[]
+        bakugans: bakuganToMoveType2[]
+    }
+    | {
+        mode: 'MOVE_BAKUGAN'
+        bakuganNames: string[]
+        bakugans: bakuganToMoveType2[]
+        slots: slots_id[]
+    }
+
+/** Cible 3D choisie pour une additional → Next assemble la résolution. */
+export type AdditionalTargetResult =
+    | {
+        mode: 'SELECT_SLOT'
+        slot: slots_id
+    }
+    | {
+        mode: 'SELECT_BAKUGAN_ON_DOMAIN' | 'ATTRACT_BAKUGAN'
+        bakugan: bakuganToMoveType2
+    }
+    | {
+        mode: 'MOVE_BAKUGAN'
+        bakugan: bakuganToMoveType2
+        slot: slots_id
+    }
+
+export type AdditionalAbilityCommit = resolutionType
+export type AdditionalGateCommit = resolutionGateCardType
+
 /** Next → iframe */
 export type MessageToIframe =
     | {
@@ -111,6 +158,15 @@ export type MessageToIframe =
     | {
         type: 'CLEAR_TURN_UI'
     }
+    | {
+        type: 'ADDITIONAL_PARTIAL_SELECTION'
+        payload: AdditionalPartialSelection
+    }
+    | {
+        type: 'COMMIT_ADDITIONAL_ACTION'
+        kind: AdditionalActionKind
+        payload: AdditionalAbilityCommit | AdditionalGateCommit
+    }
 
 /** iframe → Next */
 export type MessageFromIframe =
@@ -143,4 +199,18 @@ export type MessageFromIframe =
     }
     | {
         type: 'ACTION_TARGET_CANCELLED'
+    }
+    | {
+        type: 'ADDITIONAL_ACTION_REQUEST'
+        kind: 'ability'
+        request: AbilityCardsActionsRequestsType
+    }
+    | {
+        type: 'ADDITIONAL_ACTION_REQUEST'
+        kind: 'gate'
+        request: gateCardActionRequestsType
+    }
+    | {
+        type: 'ADDITIONAL_TARGET_SELECTED'
+        payload: AdditionalTargetResult
     }

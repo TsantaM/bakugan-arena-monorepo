@@ -1,4 +1,7 @@
 import type {
+    AdditionalPartialSelection,
+    AdditionalTargetResult,
+    bakuganToMoveType2,
     slots_id,
     TurnActionCommitPayload,
     TurnActionPartialSelection,
@@ -9,6 +12,7 @@ import { SelectBakuganOnMouseMove } from './turn-actions-function/select-bakugan
 import {
     notifyParentActionTargetCancelled,
     notifyParentActionTargetSelected,
+    notifyParentAdditionalTargetSelected,
 } from '../functions/send-message-to-parent'
 import type { SpriteUserData } from '../meshes/bakugan.mesh'
 import {
@@ -17,6 +21,7 @@ import {
     highlightSelectableSlots,
     setSlotHoverEmphasis,
 } from './selectable-highlights'
+import { getAttributColor } from '../functions/get-attrubut-color'
 
 type TargetingContext = {
     camera: THREE.PerspectiveCamera
@@ -395,3 +400,176 @@ export function startTurnTargeting(
         }
     }
 }
+
+function emitAdditionalTarget(payload: AdditionalTargetResult, ctx: TargetingContext) {
+    cancelTurnTargeting(ctx, false)
+    notifyParentAdditionalTargetSelected(payload)
+}
+
+function bindBakuganPick({
+    camera,
+    scene,
+    bakuganNames,
+    onPick,
+}: {
+    camera: THREE.PerspectiveCamera
+    scene: THREE.Scene
+    bakuganNames: string[]
+    onPick: (sprite: THREE.Sprite) => void
+}) {
+    let bakugan: THREE.Sprite | null = null
+
+    mouseMoveHandler = (event) => {
+        bakugan = SelectBakuganOnMouseMove({
+            bakugan,
+            camera,
+            event,
+            scene,
+            names: bakuganNames,
+        })
+    }
+
+    clickHandler = (event) => {
+        const picked =
+            SelectBakuganOnMouseMove({
+                bakugan: null,
+                camera,
+                event,
+                scene,
+                names: bakuganNames,
+            }) ?? bakugan
+
+        if (!picked?.userData?.bakuganKey) return
+        onPick(picked)
+    }
+
+    window.addEventListener('pointermove', mouseMoveHandler)
+    window.addEventListener('pointerup', clickHandler)
+}
+
+function resolveBakuganFromSprite(
+    sprite: THREE.Sprite,
+    bakugans: bakuganToMoveType2[],
+): bakuganToMoveType2 | null {
+    const userData = sprite.userData as SpriteUserData
+    return (
+        bakugans.find(
+            (b) => b.key === userData.bakuganKey && b.userId === userData.userId,
+        ) ??
+        bakugans.find((b) => b.key === userData.bakuganKey) ??
+        null
+    )
+}
+
+/** Démarre le ciblage 3D pour une ability/gate additional request. */
+export function startAdditionalTargeting(
+    selection: AdditionalPartialSelection,
+    ctx: TargetingContext,
+) {
+    cancelTurnTargeting(ctx, false)
+
+    const { camera, scene, plane } = ctx
+
+    switch (selection.mode) {
+        case 'SELECT_SLOT': {
+            const { slots, emptySlot, attribut } = selection
+            activeSlots = [...slots]
+
+            if (!emptySlot) {
+                slots.forEach((slot) => {
+                    createOverableSlot(slot, plane, { key: '', image: '' }, true)
+                })
+            }
+            highlightSelectableSlots(plane, slots, attribut)
+
+            bindSlotTargeting({
+                camera,
+                plane,
+                slots,
+                onPick: (slot) => {
+                    emitAdditionalTarget({ mode: 'SELECT_SLOT', slot }, ctx)
+                },
+            })
+            break
+        }
+
+        case 'SELECT_BAKUGAN_ON_DOMAIN':
+        case 'ATTRACT_BAKUGAN': {
+            const { bakuganNames, bakugans, mode } = selection
+            dimmedBakuganNames = [...bakuganNames]
+            // Additional : cibles potentiellement adverses → pas de filtre owner
+            highlightSelectableBakugans(scene, bakuganNames)
+
+            bindBakuganPick({
+                camera,
+                scene,
+                bakuganNames,
+                onPick: (sprite) => {
+                    const bakugan = resolveBakuganFromSprite(sprite, bakugans)
+                    if (!bakugan) return
+                    emitAdditionalTarget({ mode, bakugan }, ctx)
+                },
+            })
+            break
+        }
+
+        case 'MOVE_BAKUGAN': {
+            const { bakuganNames, bakugans, slots } = selection
+            dimmedBakuganNames = [...bakuganNames]
+            highlightSelectableBakugans(scene, bakuganNames)
+
+            bindBakuganPick({
+                camera,
+                scene,
+                bakuganNames,
+                onPick: (sprite) => {
+                    const selected = resolveBakuganFromSprite(sprite, bakugans)
+                    if (!selected) return
+
+                    const color = new THREE.Color(
+                        getAttributColor(
+                            (sprite.userData as SpriteUserData).attribut,
+                        ),
+                    )
+                    ;(sprite.material as THREE.SpriteMaterial).color.set(color)
+
+                    // Phase 2 — sélection du slot (listeners remplacés)
+                    detachListeners()
+                    clearSelectableHighlights()
+                    restoreBakuganOpacity(scene, bakuganNames.filter(
+                        (n) => n !== `${selected.key}-${selected.userId}`,
+                    ))
+
+                    activeSlots = [...slots]
+                    slots.forEach((slot) => {
+                        createOverableSlot(slot, plane, { key: '', image: '' }, true)
+                    })
+                    highlightSelectableSlots(
+                        plane,
+                        slots,
+                        (sprite.userData as SpriteUserData).attribut,
+                    )
+
+                    bindSlotTargeting({
+                        camera,
+                        plane,
+                        slots,
+                        onPick: (slot) => {
+                            sprite.material.color.set('white')
+                            emitAdditionalTarget(
+                                {
+                                    mode: 'MOVE_BAKUGAN',
+                                    bakugan: selected,
+                                    slot,
+                                },
+                                ctx,
+                            )
+                        },
+                    })
+                },
+            })
+            break
+        }
+    }
+}
+

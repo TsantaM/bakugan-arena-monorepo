@@ -16,7 +16,7 @@
   "a11y": {
     "skipAnimations": "Skip animations"
   },
-  "turnActions": {
+    "turnActions": {
     "pickTarget": "Pick a target on the board",
     "cancel": "Cancel",
     "passTurn": "Pass turn",
@@ -35,5 +35,13 @@
       "SELECT_GATE_CARD": "Pick gate",
       "SELECT_ABILITY_CARD": "Pick ability"
     }
+  },
+  "additionalActions": {
+    "pickSlot": "Pick a slot on the board",
+    "pickBakugan": "Pick a bakugan on the board",
+    "pickBakuganThenSlot": "Pick a bakugan, then a slot",
+    "confirmSelection": "Confirm",
+    "skip": "Skip",
+    "slideOf": "{current} / {count}"
   }
 }

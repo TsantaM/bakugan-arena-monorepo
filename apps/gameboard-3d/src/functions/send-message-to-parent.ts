@@ -1,4 +1,7 @@
 import type {
+    AbilityCardsActionsRequestsType,
+    AdditionalTargetResult,
+    gateCardActionRequestsType,
     MessageFromIframe,
     TurnActionCommitPayload,
     TurnActionPartialSelection,
@@ -43,6 +46,28 @@ export function notifyParentTurnActionRequest(
     })
 }
 
+/** Forward d'une ability additional request vers Next. */
+export function notifyParentAbilityAdditionalRequest(
+    request: AbilityCardsActionsRequestsType,
+) {
+    postToParent({
+        type: 'ADDITIONAL_ACTION_REQUEST',
+        kind: 'ability',
+        request,
+    })
+}
+
+/** Forward d'une gate additional request vers Next. */
+export function notifyParentGateAdditionalRequest(
+    request: gateCardActionRequestsType,
+) {
+    postToParent({
+        type: 'ADDITIONAL_ACTION_REQUEST',
+        kind: 'gate',
+        request,
+    })
+}
+
 /** Cible 3D choisie → Next pour validation. */
 export function notifyParentActionTargetSelected(payload: TurnActionCommitPayload) {
     postToParent({
@@ -55,4 +80,12 @@ export function notifyParentActionTargetCancelled() {
     postToParent({ type: 'ACTION_TARGET_CANCELLED' })
 }
 
-export type { TurnActionPartialSelection, TurnActionCommitPayload }
+/** Cible 3D choisie pour une additional → Next. */
+export function notifyParentAdditionalTargetSelected(payload: AdditionalTargetResult) {
+    postToParent({
+        type: 'ADDITIONAL_TARGET_SELECTED',
+        payload,
+    })
+}
+
+export type { TurnActionPartialSelection, TurnActionCommitPayload, AdditionalTargetResult }

@@ -799,7 +799,7 @@ export default function TurnActionBar({
                                         <Button
                                             type="button"
                                             size="sm"
-                                            variant="secondary"
+                                            variant="destructive"
                                             className="mt-auto w-full shrink-0"
                                             onClick={passTurn}
                                             aria-label={t('passTurn')}

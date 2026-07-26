@@ -16,7 +16,7 @@
   "a11y": {
     "skipAnimations": "Passer les animations"
   },
-  "turnActions": {
+    "turnActions": {
     "pickTarget": "Choisissez une cible sur le plateau",
     "cancel": "Annuler",
     "passTurn": "Passer le tour",
@@ -35,5 +35,13 @@
       "SELECT_GATE_CARD": "Choisir gate",
       "SELECT_ABILITY_CARD": "Choisir ability"
     }
+  },
+  "additionalActions": {
+    "pickSlot": "Choisissez un emplacement sur le plateau",
+    "pickBakugan": "Choisissez un bakugan sur le plateau",
+    "pickBakuganThenSlot": "Choisissez un bakugan, puis un emplacement",
+    "confirmSelection": "Confirmer",
+    "skip": "Passer",
+    "slideOf": "{current} / {count}"
   }
 }

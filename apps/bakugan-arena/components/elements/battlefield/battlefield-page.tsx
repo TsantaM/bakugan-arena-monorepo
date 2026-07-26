@@ -15,7 +15,9 @@ import { Button } from "@/components/ui/button";
 import { SkipForward } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import TurnActionBar, { commitValidatedTarget } from "./turn-action-bar";
+import AdditionalActionBar, { commitAdditionalTarget } from "./additional-action-bar";
 import { useTurnActionStore } from "@/src/store/turn-action-store";
+import { useAdditionalActionStore } from "@/src/store/additional-action-store";
 import type { MessageFromIframe } from "@bakugan-arena/game-data";
 
 export default function BattleFieldPage({ player, opponent, roomId, userId, isPlayer }: BattleFieldPageProps) {
@@ -28,6 +30,10 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
     const { volume, track } = useAudioStore()
     const setTurnRequest = useTurnActionStore((s) => s.setRequest)
     const clearTurnActions = useTurnActionStore((s) => s.clear)
+    const additionalKind = useAdditionalActionStore((s) => s.kind)
+    const setAbilityAdditional = useAdditionalActionStore((s) => s.setAbilityRequest)
+    const setGateAdditional = useAdditionalActionStore((s) => s.setGateRequest)
+    const clearAdditional = useAdditionalActionStore((s) => s.clear)
 
     useEffect(() => {
         const randomIndex = Math.floor(Math.random() * OSTLists.length)
@@ -50,7 +56,17 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
             }
             if (data.type === "TURN_ACTION_REQUEST") {
                 if (!isPlayer) return
+                clearAdditional()
                 setTurnRequest(data.request)
+            }
+            if (data.type === "ADDITIONAL_ACTION_REQUEST") {
+                if (!isPlayer) return
+                clearTurnActions()
+                if (data.kind === 'ability') {
+                    setAbilityAdditional(data.request)
+                } else {
+                    setGateAdditional(data.request)
+                }
             }
             if (data.type === "ACTION_TARGET_SELECTED") {
                 commitValidatedTarget(
@@ -59,12 +75,21 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
                     gameboardOrigin,
                 )
             }
+            if (data.type === "ADDITIONAL_TARGET_SELECTED") {
+                commitAdditionalTarget(
+                    data.payload,
+                    iframeRef.current,
+                    gameboardOrigin,
+                )
+            }
             if (data.type === "ACTION_TARGET_CANCELLED") {
                 useTurnActionStore.getState().setPhase('choosing')
                 useTurnActionStore.getState().setSelectedKey(null)
+                useAdditionalActionStore.getState().setPhase('choosing')
             }
             if (data.type === "GAME_TURN_END") {
                 clearTurnActions()
+                clearAdditional()
             }
         }
 
@@ -72,8 +97,17 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
         return () => {
             window.removeEventListener("message", onMessage)
             clearTurnActions()
+            clearAdditional()
         }
-    }, [clearTurnActions, gameboardOrigin, isPlayer, setTurnRequest])
+    }, [
+        clearAdditional,
+        clearTurnActions,
+        gameboardOrigin,
+        isPlayer,
+        setAbilityAdditional,
+        setGateAdditional,
+        setTurnRequest,
+    ])
 
     if (!socket) return null
     const socketId = socket.id
@@ -178,11 +212,18 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
                 </div>
                 {isPlayer && (
                     <div className="min-h-0 flex-1 border-t border-border bg-background">
-                        <TurnActionBar
-                            iframeRef={iframeRef}
-                            userId={userId}
-                            gameboardOrigin={gameboardOrigin}
-                        />
+                        {additionalKind ? (
+                            <AdditionalActionBar
+                                iframeRef={iframeRef}
+                                gameboardOrigin={gameboardOrigin}
+                            />
+                        ) : (
+                            <TurnActionBar
+                                iframeRef={iframeRef}
+                                userId={userId}
+                                gameboardOrigin={gameboardOrigin}
+                            />
+                        )}
                     </div>
                 )}
             </div>

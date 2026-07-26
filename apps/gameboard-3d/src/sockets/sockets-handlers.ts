@@ -19,8 +19,6 @@ import { MoveToAnotherSlotFunctionAnimation } from "../scene-modifications-funct
 import { SetBakuganFunctionAnimation } from "../scene-modifications-functions/set-bakugan-function-animation"
 import { SetGateCardFunctionAndAnimation } from "../scene-modifications-functions/set-gate-card-function-animation"
 import { PowerChangeAnimation, PowerChangeNumberAnimation } from "../animations/power-change-animation"
-import { AdditionalRequestResolution } from "../abiliity-additional-request/additional-request-resolution"
-import { AdditionalEffectMessage } from "../animations/show-message-animation"
 import { clearTurnInterface } from "../turn-action-management/turn-actions-resolution/action-scope"
 import { ActiveAbilityCardAnimation } from "../animations/active-ability-card"
 import dayjs from "dayjs"
@@ -33,9 +31,8 @@ import { SwipeGateCards } from "../animations/swipe-gate-cards"
 import { CancelAbilityCardAnimation } from "../animations/cancel-ability-card-animation"
 import { DragAndElimineAnimation } from "../animations/drag-and-elimine-animation"
 import { ReviveBakuganAnimation } from "../animations/revive-animation"
-import { sendMessageToParent, notifyParentTurnEnd, notifyParentAnimationsDone, notifyParentAnimationsStart } from "../functions/send-message-to-parent"
+import { sendMessageToParent, notifyParentTurnEnd, notifyParentAnimationsDone, notifyParentAnimationsStart, notifyParentAbilityAdditionalRequest, notifyParentGateAdditionalRequest } from "../functions/send-message-to-parent"
 import { applySkipTimeScaleIfNeeded, clearAnimationSkip, setAnimationsActive } from "../functions/skip-animations"
-import { GateCardAdditionalRequestResolution } from "../abiliity-additional-request/gate-card-additional-request"
 import { ChangeAttributAnimation } from "../animations/change-attribut-animation"
 import { CustomAnimationsRegistry } from "../animations/custom-animations/registry"
 import {
@@ -679,38 +676,37 @@ export function registerSocketHandlers(
         if (!request.data.target && request.userId !== userId) return
         if (request.data.target && request.data.target !== userId) return
 
-
-        await currentAnimationPromise;
+        await currentAnimationPromise
 
         clearTurnInterface()
-        AdditionalRequestResolution({
-            request: request, camera: camera, plane: plane, socket: socket, scene: scene
+        configureTurnActionBridge({
+            socket,
+            userId,
+            roomId,
+            camera,
+            scene,
+            plane,
         })
-
-        AdditionalEffectMessage({
-            message: request.data.message
-        })
-
+        notifyParentAbilityAdditionalRequest(request)
     })
 
     socket.on('gate-card-additional-request', async (request: gateCardActionRequestsType) => {
-
-        // alert('request gate card' + request.data.type)
         if (!request.data.target && request.userId !== userId) return
         if (request.data.target && request.data.target !== userId) return
         if (request.data.type === 'TURN_ACTION_LAUNCHER') return
 
-        await currentAnimationPromise;
+        await currentAnimationPromise
+
         clearTurnInterface()
-
-        GateCardAdditionalRequestResolution({
-            request: request, camera: camera, plane: plane, socket: socket, scene: scene
+        configureTurnActionBridge({
+            socket,
+            userId,
+            roomId,
+            camera,
+            scene,
+            plane,
         })
-
-        AdditionalEffectMessage({
-            message: request.data.message
-        })
-
+        notifyParentGateAdditionalRequest(request)
     })
 
     socket.on('turn-count-updater', (turnState: turnCountSocketProps) => {

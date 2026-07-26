@@ -16,7 +16,7 @@
   "a11y": {
     "skipAnimations": "تخطي الرسوم المتحركة"
   },
-  "turnActions": {
+    "turnActions": {
     "pickTarget": "اختر هدفًا على اللوحة",
     "cancel": "إلغاء",
     "passTurn": "تمرير الدور",
@@ -35,5 +35,13 @@
       "SELECT_GATE_CARD": "اختر بوابة",
       "SELECT_ABILITY_CARD": "اختر قدرة"
     }
+  },
+  "additionalActions": {
+    "pickSlot": "اختر خانة على اللوحة",
+    "pickBakugan": "اختر باكوغان على اللوحة",
+    "pickBakuganThenSlot": "اختر باكوغان ثم خانة",
+    "confirmSelection": "تأكيد",
+    "skip": "تخطي",
+    "slideOf": "{current} / {count}"
   }
 }

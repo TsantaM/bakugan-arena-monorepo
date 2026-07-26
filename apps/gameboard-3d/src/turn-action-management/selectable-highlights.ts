@@ -208,15 +208,19 @@ export function styleGateOverlayAsSelectable(mesh: THREE.Mesh, colorHint?: attri
     blinkMaterial(mesh.material as AnyMaterial, resolveAccent(colorHint))
 }
 
-/** Bakugans éligibles : même clignotement ; les autres assombris. */
+/** Bakugans éligibles : même clignotement ; les autres assombris.
+ *  Si `ownerUserId` est fourni, ne touche que les sprites de ce joueur (tour abilities).
+ *  Sinon, considère tous les bakugans du plateau (additional requests).
+ */
 export function highlightSelectableBakugans(
     scene: THREE.Scene,
     eligibleNames: string[],
-    userId: string,
+    ownerUserId?: string,
 ) {
     scene.traverse((obj) => {
         if (!(obj instanceof THREE.Sprite)) return
-        if (!obj.name.endsWith(`-${userId}`)) return
+        if (!obj.userData?.bakuganKey) return
+        if (ownerUserId && !obj.name.endsWith(`-${ownerUserId}`)) return
 
         if (!snapshotSprite(obj)) return
         const mat = obj.material as THREE.SpriteMaterial

@@ -1,5 +1,7 @@
 import type {
     ActivePlayerActionRequestType,
+    AdditionalAbilityCommit,
+    AdditionalGateCommit,
     InactivePlayerActionRequestType,
     MessageToIframe,
     TurnActionCommitPayload,
@@ -11,6 +13,7 @@ import {
 } from '../functions/send-message-to-parent'
 import {
     cancelTurnTargeting,
+    startAdditionalTargeting,
     startTurnTargeting,
 } from './turn-targeting-controller'
 import { clearTurnInterface } from './turn-actions-resolution/action-scope'
@@ -29,6 +32,15 @@ let messageListenerAttached = false
 
 function getCtx(): BridgeContext | null {
     return ctx
+}
+
+function targetingFrom(current: BridgeContext) {
+    return {
+        camera: current.camera,
+        scene: current.scene,
+        plane: current.plane,
+        userId: current.userId,
+    }
 }
 
 function emitCommit(payload: TurnActionCommitPayload) {
@@ -88,6 +100,20 @@ function emitCommit(payload: TurnActionCommitPayload) {
     }
 }
 
+function emitAdditionalCommit(
+    kind: 'ability' | 'gate',
+    payload: AdditionalAbilityCommit | AdditionalGateCommit,
+) {
+    const current = getCtx()
+    if (!current) return
+
+    if (kind === 'ability') {
+        current.socket.emit('ability-additional-request', payload)
+    } else {
+        current.socket.emit('gate-card-additional-request', payload)
+    }
+}
+
 function onParentMessage(event: MessageEvent) {
     const data = event.data as MessageToIframe | undefined
     if (!data?.type) return
@@ -95,12 +121,7 @@ function onParentMessage(event: MessageEvent) {
     const current = getCtx()
     if (!current) return
 
-    const targetingCtx = {
-        camera: current.camera,
-        scene: current.scene,
-        plane: current.plane,
-        userId: current.userId,
-    }
+    const targetingCtx = targetingFrom(current)
 
     switch (data.type) {
         case 'ACTION_PARTIAL_SELECTION':
@@ -109,6 +130,14 @@ function onParentMessage(event: MessageEvent) {
         case 'COMMIT_ACTION':
             cancelTurnTargeting(targetingCtx, false)
             emitCommit(data.payload)
+            break
+        case 'ADDITIONAL_PARTIAL_SELECTION':
+            startAdditionalTargeting(data.payload, targetingCtx)
+            break
+        case 'COMMIT_ADDITIONAL_ACTION':
+            cancelTurnTargeting(targetingCtx, false)
+            clearTurnInterface()
+            emitAdditionalCommit(data.kind, data.payload)
             break
         case 'CANCEL_TARGETING':
             // Parent initie déjà le cancel : pas de notify pour éviter un race UI
@@ -153,14 +182,6 @@ export function handleTurnActionRequest(
 ) {
     configureTurnActionBridge(next)
     clearTurnInterface()
-    cancelTurnTargeting(
-        {
-            camera: next.camera,
-            scene: next.scene,
-            plane: next.plane,
-            userId: next.userId,
-        },
-        false,
-    )
+    cancelTurnTargeting(targetingFrom(next), false)
     notifyParentTurnActionRequest(request)
 }
