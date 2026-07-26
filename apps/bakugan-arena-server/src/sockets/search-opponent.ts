@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { CreateRoom } from "../functions/create-room";
 import { createGameState } from "../functions/create-game-state";
-import { connectedUsers, intervalIds } from "../game-state/battle-brawlers-game-state";
+import { Battle_Brawlers_Game_State, connectedUsers, intervalIds } from "../game-state/battle-brawlers-game-state";
 import { GetUsersRooms } from "../functions/get-rooms-of-user";
 import { db } from "../lib/db";
 import { eq } from "drizzle-orm";
@@ -9,7 +9,6 @@ import { findOpponent } from "../functions/matchmaking-functions/find-opponent";
 import { syncClocks } from "../functions/start-player-timer";
 import { getAvailableBot, getBotSocketId, isBotUserId } from "../functions/bot-manager";
 import { applyEloDecayForUser } from "../functions/ladder-functions/elo-decay";
-import { registerRoom } from "../functions/room-registry";
 
 export type waitingListElements = {
     socketId: string,
@@ -116,7 +115,7 @@ const matchPlayerWithBot = async (io: Server, player: QueuePlayer) => {
 
     if (!state) return false
 
-    registerRoom(state)
+    Battle_Brawlers_Game_State.push(state)
 
     intervalIds.push({
         roomId: state.roomId,
@@ -128,7 +127,8 @@ const matchPlayerWithBot = async (io: Server, player: QueuePlayer) => {
         }))
     })
 
-    syncClocks({ io: io, roomState: state })
+    const roomState = Battle_Brawlers_Game_State[Battle_Brawlers_Game_State.indexOf(state)]
+    syncClocks({ io: io, roomState: roomState })
 
     io.to(player.socketId).emit('match-found', room.id)
     io.to(player.socketId).emit('get-rooms-user-id', GetUsersRooms(player.userId))
@@ -198,7 +198,7 @@ export const processMatchmaking = async (io: Server) => {
 
                 if (!state) continue
 
-                registerRoom(state)
+                Battle_Brawlers_Game_State.push(state)
 
                 intervalIds.push({
                     roomId: state.roomId,
@@ -210,7 +210,8 @@ export const processMatchmaking = async (io: Server) => {
                     }))
                 })
 
-                syncClocks({ io: io, roomState: state })
+                const roomState = Battle_Brawlers_Game_State[Battle_Brawlers_Game_State.indexOf(state)]
+                syncClocks({ io: io, roomState: roomState })
 
                 const matchedPlayers = [p1, p2]
 

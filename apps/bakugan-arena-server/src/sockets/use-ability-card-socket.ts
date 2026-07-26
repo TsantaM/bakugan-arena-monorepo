@@ -1,54 +1,40 @@
 import type { useAbilityCardProps } from "@bakugan-arena/game-data";
 import { Server, Socket } from "socket.io";
+import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { useAbilityCardServer } from "../functions/use-abiliy-card";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { CheckTurnPermissions } from "../functions/ckeck-turn-permissions";
-import {
-    emitRoomStateUpdate,
-    runRoomSocketAction,
-} from "../functions/room-runtime";
 import { grantActionIncrement } from "../functions/start-player-timer";
 
 export const socketUseAbilityCard = (io: Server, socket: Socket) => {
-    socket.on('use-ability-card', (payload: useAbilityCardProps & { actionSeq?: number | string }) => {
-        const { roomId, abilityId, slot, userId, bakuganKey, actionSeq } = payload
+    socket.on('use-ability-card', ({ roomId, abilityId, slot, userId, bakuganKey }: useAbilityCardProps) => {
+        const state = Battle_Brawlers_Game_State.find((s) => s?.roomId === roomId)
+        if (!state) return
+        if (state.status.finished === true) return
 
-        runRoomSocketAction({
-            socket,
-            roomId,
-            event: 'use-ability-card',
-            actionSeq,
-            userId,
-            handler: (state) => {
-                if (state.status.finished === true) return
-
-                const checker = CheckTurnPermissions({
-                    roomState: state,
-                    userId: userId,
-                    response: {
-                        type: "USE_ABILITY_CARD",
-                        abilityId: abilityId,
-                        bakuganKey: bakuganKey,
-                        slot: slot
-                    }
-                })
-
-                if (!checker) return
-
-                clearAnimationsInRoom(roomId)
-
-                grantActionIncrement({ roomState: state, userId, io })
-                useAbilityCardServer({
-                    abilityId,
-                    bakuganKey,
-                    roomId,
-                    slot,
-                    userId,
-                    io,
-                })
-
-                emitRoomStateUpdate(io, state, "update-room-state")
-            },
+        const checker = CheckTurnPermissions({
+            roomState: state,
+            userId: userId,
+            response: {
+                type: "USE_ABILITY_CARD",
+                abilityId: abilityId,
+                bakuganKey: bakuganKey,
+                slot: slot
+            }
         })
+
+        if (!checker) return
+
+        clearAnimationsInRoom(roomId)
+
+        grantActionIncrement({ roomState: state, userId, io })
+        useAbilityCardServer({ abilityId: abilityId, bakuganKey: bakuganKey, roomId: roomId, slot: slot, userId: userId, io: io })
+
+        console.log("after card", state.persistantAbilities)
+
+        if (state) {
+            io.to(roomId).emit('update-room-state', state)
+        }
+
     })
 }

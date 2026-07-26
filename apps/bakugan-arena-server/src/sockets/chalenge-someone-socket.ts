@@ -1,11 +1,10 @@
 import { CancelChalengeSocketPropsType, chalengeAcceptRedirectProps, chalengeAcceptSocketProps, chalengeSomeoneSocketProps, RejectChalengeSocketPropsType } from "@bakugan-arena/game-data";
 import { Server, Socket } from "socket.io";
-import { connectedUsers, intervalIds } from "../game-state/battle-brawlers-game-state";
+import { Battle_Brawlers_Game_State, connectedUsers, intervalIds } from "../game-state/battle-brawlers-game-state";
 import { CreateRoom } from "../functions/create-room";
 import { createGameState } from "../functions/create-game-state";
 import { GetUsersRooms } from "../functions/get-rooms-of-user";
 import { syncClocks } from "../functions/start-player-timer";
-import { registerRoom } from "../functions/room-registry";
 
 type Challenge = {
     chalenger: {
@@ -167,7 +166,7 @@ export const ChalengeAcceptSocket = (io: Server, socket: Socket) => {
 
         if (!newRoomState) return
 
-        registerRoom(newRoomState)
+        Battle_Brawlers_Game_State.push(newRoomState)
 
         intervalIds.push({
             roomId: newRoomState.roomId,
@@ -193,7 +192,9 @@ export const ChalengeAcceptSocket = (io: Server, socket: Socket) => {
         io.to(chalengerSocket).emit('get-rooms-user-id', p1rooms)
         io.to(targetSocket).emit('get-rooms-user-id', p2rooms)
 
-        syncClocks({ io: io, roomState: newRoomState })
+        const roomState = Battle_Brawlers_Game_State[Battle_Brawlers_Game_State.indexOf(newRoomState)]
+
+        syncClocks({ io: io, roomState: roomState })
     })
 }
 

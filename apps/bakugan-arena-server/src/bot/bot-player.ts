@@ -16,7 +16,7 @@ import {
 } from "./ai"
 import type { SimulateAction } from "./ai"
 
-const ACTION_DELAY_MS = 200
+const ACTION_DELAY_MS = 450
 
 type TurnActionRequest = ActivePlayerActionRequestType | InactivePlayerActionRequestType
 

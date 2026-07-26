@@ -1,44 +1,109 @@
-/**
- * Handlers d’hydratation / resync room.
- *
- * `init-room-state` et `get-room-state` doivent TOUJOURS réécrire `gameboardSocket`
- * (iframe reconnectée = nouvel id). Sinon les turn-action-request partent vers
- * un socket mort et le client doit F5.
- */
 import { Server, Socket } from "socket.io"
+import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 import { initRoomState } from "../functions/init-game-room"
 import { CreateActionRequestFunction, Message, replayEntryType, replaySnapshotType } from "@bakugan-arena/game-data"
 import { SendAllMessages } from "../functions/emit-messages"
 import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions"
-import { getRoom } from "../functions/room-registry"
-import {
-    bindUserSockets,
-    emitPendingRequestsToSocket,
-    emitTurnActionRequests,
-} from "../functions/room-runtime"
+
+
+const roomState = ({ roomId }: { roomId: string }) => {
+    const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
+    return roomData
+}
 
 export const socketGetRoomState = (io: Server, socket: Socket) => {
     socket.on(
         'get-room-state',
-        ({ roomId, userId, parentSocket, isSpectator }: {
-            roomId: string
-            userId: string
-            parentSocket: string
-            isSpectator?: boolean
-        }) => {
-            const state = getRoom(roomId)
+        ({ roomId, userId, parentSocket, isSpectator }: { roomId: string; userId: string, parentSocket: string, isSpectator?: boolean }) => {
+            console.log('get-room parent socket', parentSocket)
+            const state = roomState({ roomId })
             if (!state) return
 
+            // On rattache / met à jour le socket du user
             socket.join(roomId)
-            bindUserSockets(state, userId, {
-                gameboardSocket: socket.id,
-                nextjsSocket: parentSocket,
-                isSpectator: !!isSpectator,
-            })
+            if (isSpectator) {
+                state.spectators.set(userId, {
+                    gameboardSocket: socket.id,
+                    nextjsSocket: parentSocket
+                })
+            } else {
+                state.connectedsUsers.set(userId, {
+                    gameboardSocket: socket.id,
+                    nextjsSocket: parentSocket
+                })
+            }
 
+            /**
+             * 1️⃣ Etat global de la room
+             * -> UNIQUEMENT pour le demandeur
+             */
             socket.emit('room-state', state)
             SendAllMessages({ roomState: state, io: io, socketNext: parentSocket })
-            emitPendingRequestsToSocket(io, state, userId, socket.id)
+
+            /**
+             * 2️⃣ Ability additional request
+             * -> seulement si CE user est concerné
+             */
+            const abilityRequest = state.AbilityAditionalRequest[0]
+            if (abilityRequest) {
+                const abilityTarget = abilityRequest.data.target
+                    ? abilityRequest.data.target
+                    : abilityRequest.userId
+                if (abilityTarget === userId) {
+                    socket.emit('ability-additional-request', abilityRequest)
+                    return
+                }
+            }
+
+            const gateRequest = state.gateCardActionRequest[0]
+            if (gateRequest) {
+                const gateTarget = gateRequest.data.target
+                    ? gateRequest.data.target
+                    : gateRequest.userId
+                if (gateTarget === userId) {
+                    socket.emit('gate-card-additional-request', gateRequest)
+                    return
+                }
+            }
+
+            /**
+             * 3️⃣ Turn action request
+             * -> dépend du rôle du joueur
+             */
+            const isActivePlayer = state.turnState.turn === userId
+            const isInactivePlayer =
+                state.turnState.previous_turn === userId
+
+            const checker = CheckTurnActionRequest({ roomState: state, userId: userId })
+            if (!checker) return
+
+            if (isActivePlayer) {
+                const request = state.ActivePlayerActionRequest
+                const merged = [
+                    request.actions.mustDo,
+                    request.actions.mustDoOne,
+                    request.actions.optional
+                ].flat()
+
+                if (merged.length > 0) {
+                    socket.emit('turn-action-request', request)
+                }
+                return
+            }
+
+            if (isInactivePlayer) {
+                const request = state.InactivePlayerActionRequest
+                const merged = [
+                    request.actions.mustDo,
+                    request.actions.mustDoOne,
+                    request.actions.optional
+                ].flat()
+
+                if (merged.length > 0) {
+                    socket.emit('turn-action-request', request)
+                }
+                return
+            }
         }
     )
 }
@@ -46,28 +111,36 @@ export const socketGetRoomState = (io: Server, socket: Socket) => {
 export const socketInitiRoomState = (io: Server, socket: Socket) => {
     socket.on(
         'init-room-state',
-        ({ roomId, userId, parentSocket, isSpectator = false }: {
-            roomId: string
-            userId: string
-            parentSocket: string
-            isSpectator?: boolean
-        }) => {
+        ({ roomId, userId, parentSocket, isSpectator = false }: { roomId: string; userId: string, parentSocket: string, isSpectator?: boolean }) => {
+            console.log('init-room parent socket', parentSocket)
             socket.join(roomId)
 
-            const roomData = getRoom(roomId)
+            const roomData = Battle_Brawlers_Game_State.find(
+                (room) => room?.roomId === roomId
+            )
             if (!roomData) return
 
-            bindUserSockets(roomData, userId, {
-                gameboardSocket: socket.id,
-                nextjsSocket: parentSocket,
-                isSpectator,
-            })
+            // Associer (ou réassocier) le socket au user
+            if (isSpectator) {
+                roomData.spectators.set(userId, {
+                    gameboardSocket: socket.id,
+                    nextjsSocket: parentSocket
+                })
+            } else {
+                roomData.connectedsUsers.set(userId, {
+                    gameboardSocket: socket.id,
+                    nextjsSocket: parentSocket
+                })
+            }
 
+            console.log('parent', parentSocket)
+
+            // Init state UNIQUEMENT pour le demandeur
             const state = initRoomState({ roomId, userId: userId })
             if (!state) return
             socket.emit('init-room-state', state)
             SendAllMessages({ roomState: roomData, io: io, socketNext: parentSocket })
-
+            // Turn state (info neutre, ok à renvoyer)
             socket.emit('turn-count-updater', {
                 turnCount: roomData.turnState.turnCount,
                 battleTurn: roomData.battleState.battleInProcess
@@ -76,32 +149,48 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
             })
 
             if (!roomData.status.finished) {
+
+                // Only connected users (not spectators) should receive action requests
                 if (isSpectator) {
                     return
                 }
-
+                /**
+                 * 1️⃣ Ability additional request
+                 * -> seulement si CE user est concerné
+                 */
                 const abilityRequest = roomData.AbilityAditionalRequest[0]
                 if (abilityRequest) {
+
                     if (!abilityRequest.data.target && abilityRequest.userId === userId) {
                         socket.emit('ability-additional-request', abilityRequest)
-                    } else if (abilityRequest.data.target === userId) {
-                        socket.emit('ability-additional-request', abilityRequest)
+                    } else {
+                        if (abilityRequest.data.target === userId) {
+                            socket.emit('ability-additional-request', abilityRequest)
+                        }
                     }
                     return
                 }
 
                 const gateRequest = roomData.gateCardActionRequest[0]
                 if (gateRequest) {
+
                     if (!gateRequest.data.target && gateRequest.userId) {
                         socket.emit('gate-card-additional-request', gateRequest)
-                    } else if (gateRequest.data.target === userId) {
-                        socket.emit('gate-card-additional-request', gateRequest)
+                    } else {
+                        if (gateRequest.data.target === userId) {
+                            socket.emit('gate-card-additional-request', gateRequest)
+                        }
                     }
                     return
                 }
 
+                /**
+                 * 2️⃣ Turn action request
+                 * -> déterminer si le joueur est actif ou non
+                 */
                 const isActivePlayer = roomData.turnState.turn === userId
-                const isInactivePlayer = roomData.turnState.previous_turn === userId
+                const isInactivePlayer =
+                    roomData.turnState.previous_turn === userId
                 const turn = roomData.turnState.turnCount
 
                 const checker = CheckTurnActionRequest({ roomState: roomData, userId: userId })
@@ -117,10 +206,36 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
 
                     if (merged.length > 0) {
                         socket.emit('turn-action-request', request)
-                    } else if (turn > 0) {
-                        // Requests vides après reconnect : régénère et redistribue.
-                        CreateActionRequestFunction({ roomState: roomData })
-                        emitTurnActionRequests(io, roomData, { fallbackSocketId: socket.id })
+                    } else {
+                        const activeRequest = roomData.ActivePlayerActionRequest
+                        const activeMerged = [
+                            activeRequest.actions.mustDo,
+                            activeRequest.actions.mustDoOne,
+                            activeRequest.actions.optional
+                        ].flat()
+
+                        if (activeMerged.length <= 0 && turn > 0) {
+                            CreateActionRequestFunction({ roomState: roomData })
+                            const activeSocket = roomData.connectedsUsers.get(roomData.turnState.turn)
+                            const inactiveSocket = roomData.connectedsUsers.get(roomData.turnState.previous_turn || '')
+                            const activeFilled = roomData.ActivePlayerActionRequest
+                            const inactiveFilled = roomData.InactivePlayerActionRequest
+
+                            // Ne jamais envoyer ActivePlayerActionRequest au joueur inactif
+                            if (activeSocket) {
+                                io.to(activeSocket.gameboardSocket).emit('turn-action-request', activeFilled)
+                            }
+                            if (inactiveSocket) {
+                                const inactiveMerged = [
+                                    inactiveFilled.actions.mustDo,
+                                    inactiveFilled.actions.mustDoOne,
+                                    inactiveFilled.actions.optional,
+                                ].flat()
+                                if (inactiveMerged.length > 0) {
+                                    io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', inactiveFilled)
+                                }
+                            }
+                        }
                     }
                     return
                 }
@@ -135,62 +250,86 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
 
                     if (merged.length > 0) {
                         socket.emit('turn-action-request', request)
-                    } else if (turn > 0) {
-                        CreateActionRequestFunction({ roomState: roomData })
-                        emitTurnActionRequests(io, roomData, { fallbackSocketId: socket.id })
+                    } else {
+
+                        const activeRequest = roomData.ActivePlayerActionRequest
+                        const activeMerged = [
+                            activeRequest.actions.mustDo,
+                            activeRequest.actions.mustDoOne,
+                            activeRequest.actions.optional
+                        ].flat()
+
+                        if (activeMerged.length <= 0 && turn > 0) {
+                            CreateActionRequestFunction({ roomState: roomData })
+                            const activeSocket = roomData.connectedsUsers.get(roomData.turnState.turn)
+                            const inactiveSocket = roomData.connectedsUsers.get(roomData.turnState.previous_turn || '')
+                            if (!activeSocket) return
+                            io.to(activeSocket.gameboardSocket).emit('turn-action-request', activeRequest)
+                            if (!inactiveSocket) return
+                            io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', request)
+                        }
+
+                    }
+                    return
+                }
+
+                const activeName = roomData.players.find((p) => p.userId === roomData.turnState.turn)?.username
+                const inactiveName = roomData.players.find((p) => p.userId === roomData.turnState.previous_turn || '')?.username
+                console.log('turn count', roomData.turnState.turnCount)
+                console.log('active socket', roomData.ActivePlayerActionRequest, activeName);
+                console.log('inactive socket', roomData.InactivePlayerActionRequest, inactiveName)
+
+            } else {
+
+                let message: Message
+
+                if (roomData.status.winner !== null) {
+                    const winner = roomData.players.find((p) => p.userId === roomData.status.winner)?.username ? roomData.players.find((p) => p.userId === roomData.status.winner)?.username : ''
+
+                    message = {
+                        key: 'game_over_winner',
+                        params: { winner: winner ?? '' },
+                        turn: roomData.turnState.turnCount
+                    }
+
+                } else {
+                    message = {
+                        key: 'game_over_draw',
+                        turn: roomData.turnState.turnCount
                     }
                 }
 
-                return
-            }
 
-            let message: Message
+                socket.emit('game-finished', message)
 
-            if (roomData.status.winner !== null) {
-                const winner = roomData.players.find((p) => p.userId === roomData.status.winner)?.username
-                    ? roomData.players.find((p) => p.userId === roomData.status.winner)?.username
-                    : ''
-
-                message = {
-                    key: 'game_over_winner',
-                    params: { winner: winner ?? '' },
-                    turn: roomData.turnState.turnCount
+                // ENVOI DES ANIMATIONS AUX JOUEURS POUR LE DOWNLOAD OU L'UPLOAD
+                const room: { p1: string, p2: string, roomId: string, finished: boolean, replay: replayEntryType[], initialSnapshot: replaySnapshotType } = {
+                    roomId: roomData.roomId,
+                    p1: roomData.players[0].userId,
+                    p2: roomData.players[1].userId,
+                    replay: roomData.animationsForReplay, initialSnapshot: roomData.initialReplaySnapshot,
+                    finished: roomData.status.finished
                 }
-            } else {
-                message = {
-                    key: 'game_over_draw',
-                    turn: roomData.turnState.turnCount
+
+                const player = roomData.connectedsUsers.get(userId)
+
+                if(player) {
+                    io.to(player.nextjsSocket).emit('final-room-state', room)
                 }
-            }
 
-            socket.emit('game-finished', message)
+                // ENVOI DES ANIMATIONS AUX JOUEURS POUR LE DOWNLOAD OU L'UPLOAD
 
-            const room: {
-                p1: string
-                p2: string
-                roomId: string
-                finished: boolean
-                replay: replayEntryType[]
-                initialSnapshot: replaySnapshotType
-            } = {
-                roomId: roomData.roomId,
-                p1: roomData.players[0].userId,
-                p2: roomData.players[1].userId,
-                replay: roomData.animationsForReplay,
-                initialSnapshot: roomData.initialReplaySnapshot,
-                finished: roomData.status.finished
-            }
-
-            const player = roomData.connectedsUsers.get(userId)
-            if (player?.nextjsSocket) {
-                io.to(player.nextjsSocket).emit('final-room-state', room)
-            }
-
-            roomData.connectedsUsers.forEach((s) => {
-                if (s.nextjsSocket) {
+                const sockets = roomData.connectedsUsers
+                sockets.forEach((s) => {
+                    console.log('parent-socket', s.nextjsSocket)
                     io.to(s.nextjsSocket).emit('game-messages', [message])
-                }
-            })
+                })
+
+            }
+
+
+
+
         }
     )
 }
