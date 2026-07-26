@@ -1,35 +1,42 @@
 import { Server, Socket } from "socket.io";
-import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
-import { CheckBattleStillInProcess, CreateActionRequestFunction, handleBattle, handleGateCards, Message, turnCountSocketProps, updateTurnState } from "@bakugan-arena/game-data";
+import { CheckBattleStillInProcess, CreateActionRequestFunction, handleBattle, handleGateCards, turnCountSocketProps, updateTurnState } from "@bakugan-arena/game-data";
 import { CheckGameFinished } from "../functions/CheckGameFinished";
 import { onBattleEnd } from "../functions/on-battle-end";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { ClearDomain } from "../functions/clear-domain";
 import { UpdatePlayerTimer } from "../functions/start-player-timer";
 import { EmitMessage } from "../functions/emit-messages";
-import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
 import { ActiveGateCard } from "../functions/active-gate-card";
+import { getRoom } from "../functions/room-registry";
+import {
+    emitRoomStateUpdate,
+    emitTurnActionRequests,
+    runRoomSocketAction,
+} from "../functions/room-runtime";
 
-export function turnActionUpdater({ roomId, userId, io, updateBattleState = true }: { roomId: string, userId: string, io: Server, updateBattleState?: boolean }) {
-    const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
-
-    // FR: On récupère aussi l'index de cette salle pour des modifications directes
-    // ENG: Also get the room index for direct state updates
-    const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
-
-    // FR: Si la salle n'existe pas ou que l'index est invalide, on arrête
-    // ENG: If the room does not exist or index is invalid, exit early
-    if (!roomData || roomIndex === -1) return
+/**
+ * Avance le tour / résout gates auto / broadcast état + turn-action-request.
+ * Les turn-request sont émis via `emitTurnActionRequests` (rebind + fallback socket).
+ */
+export function turnActionUpdater({
+    roomId,
+    userId,
+    io,
+    updateBattleState = true,
+    fallbackSocketId,
+}: {
+    roomId: string
+    userId: string
+    io: Server
+    updateBattleState?: boolean
+    fallbackSocketId?: string
+}) {
+    const roomData = getRoom(roomId)
+    if (!roomData) return
     if (roomData.status.finished === true) return
-    // FR: Mise à jour de l'état du tour (joueur actif, compteur, autorisations, etc.)
-    // ENG: Update the turn state (active player, counter, available actions, etc.)
 
-    // FR: Gestion de la logique des batailles (diminution de tours restants ou lancement de combat)
-    // ENG: Handle battle logic (decrease remaining turns or trigger a new battle)
     handleBattle(roomData, updateBattleState)
 
-    // FR: Vérification et activation automatique des cartes portail si leurs conditions sont remplies
-    // ENG: Check and auto-activate gate cards if their conditions are met
     const opennable = handleGateCards(roomData)
 
     if (opennable.length > 0) {
@@ -51,8 +58,6 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
         CheckGameFinished({ roomId, roomState: roomData, io })
     }
 
-    // FR: Vérification si la partie est terminée (conditions de victoire/défaite)
-    // ENG: Check if the game has ended (victory/defeat conditions)
     CheckGameFinished({ roomId, roomState: roomData, io })
 
     CheckBattleStillInProcess(roomData)
@@ -63,15 +68,10 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
 
     CreateActionRequestFunction({ roomState: roomData })
 
-    // FR: On envoie le nouvel état du jeu à tous les joueurs de la salle
-    // ENG: Emit the updated game state to all players in the room
     const animations = roomData.animations
-    io.to(roomId).emit("turn-action", roomData)
+    emitRoomStateUpdate(io, roomData, "turn-action")
     io.to(roomId).emit('animations', animations)
     roomData.animations.forEach((animation) => EmitMessage({ roomState: roomData, animation, io }))
-
-    const activeSocket = roomData.connectedsUsers.get(roomData.turnState.turn)
-    const inactiveSocket = roomData.connectedsUsers.get(roomData.turnState.previous_turn || '')
 
     const turnState: turnCountSocketProps = {
         turnCount: roomData.turnState.turnCount,
@@ -82,46 +82,35 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
 
     clearAnimationsInRoom(roomId)
 
-    if (activeSocket && !roomData.status.finished && roomData.gateCardActionRequest.length === 0 && roomData.AbilityAditionalRequest.length === 0) {
-
-        const checker = CheckTurnActionRequest({ roomState: roomData, userId: userId })
-        if (!checker) return
-
-        const request = roomData.ActivePlayerActionRequest
-        io.to(activeSocket.gameboardSocket).emit('turn-action-request', request)
-    }
-
-    if (inactiveSocket && !roomData.status.finished && roomData.gateCardActionRequest.length === 0 && roomData.AbilityAditionalRequest.length === 0) {
-
-        const checker = CheckTurnActionRequest({ roomState: roomData, userId: userId })
-        if (!checker) return
-
-        const request = roomData.InactivePlayerActionRequest
-        const merged = [
-            request.actions.mustDo,
-            request.actions.mustDoOne,
-            request.actions.optional
-        ].flat()
-
-        if (merged.length > 0) {
-            io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', request)
-        }
-
-    }
+    emitTurnActionRequests(io, roomData, { fallbackSocketId })
 
     UpdatePlayerTimer({
         io: io,
         roomState: roomData
     })
-    
 }
 
 export const socketTurn = (io: Server, socket: Socket) => {
-
-    // FR: On écoute l'événement "turn-action" envoyé par un joueur
-    // ENG: Listen for the "turn-action" event triggered by a player
-    socket.on('turn-action', ({ roomId, userId }: { roomId: string, userId: string }) => {
-        turnActionUpdater({ roomId, userId, io })
+    socket.on('turn-action', (payload: {
+        roomId: string
+        userId: string
+        actionSeq?: number | string
+    }) => {
+        const { roomId, userId, actionSeq } = payload
+        runRoomSocketAction({
+            socket,
+            roomId,
+            event: 'turn-action',
+            actionSeq,
+            userId,
+            handler: () => {
+                turnActionUpdater({
+                    roomId,
+                    userId,
+                    io,
+                    fallbackSocketId: socket.id,
+                })
+            },
+        })
     })
-
 }

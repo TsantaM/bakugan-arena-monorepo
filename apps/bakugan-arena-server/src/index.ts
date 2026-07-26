@@ -39,6 +39,13 @@ import { applyEloDecayToAllUsers } from "./functions/ladder-functions/elo-decay"
 
 
 const PORT = Number(process.env.PORT) || 3005
+
+/**
+ * Serveur Socket.IO du combat.
+ * Mutations room : passer par `runRoomSocketAction` / `enqueueRoomTask` (room-runtime)
+ * et enregistrer les rooms via `registerRoom` (room-registry).
+ * L’attente animations → UI tour reste côté gameboard-3d (comportement voulu).
+ */
 const io = new Server({
     cors: {
         origin: process.env.SOCKET_CORS_ORIGIN?.split(",") ?? "*",

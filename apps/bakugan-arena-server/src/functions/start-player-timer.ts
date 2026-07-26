@@ -9,6 +9,53 @@ import { SendUserRooms } from "./send-user-rooms";
 
 const rooms = schema.rooms
 
+/**
+ * Fin de partie sur timeout : marque l’état en mémoire tout de suite,
+ * puis DB + Elo en async pour ne pas geler les autres rooms sur l’event loop.
+ */
+function finalizeTimeoutLoss(opts: {
+    roomState: stateType
+    roomId: string
+    winner: string
+    looser: string
+    io?: Server
+}) {
+    const { roomState, roomId, winner, looser, io } = opts
+
+    roomState.status.finished = true
+    roomState.status.finisheAt = Date.now()
+    roomState.status.winner = winner
+
+    if (!io) return
+
+    void (async () => {
+        try {
+            await db
+                .update(rooms)
+                .set({
+                    winner,
+                    looser,
+                    finished: true,
+                })
+                .where(eq(rooms.id, roomId))
+
+            await CalculateAndUpdateElo({
+                loser: looser,
+                winner,
+                roomData: roomState,
+                io,
+                roomId,
+            })
+
+            roomState.players.forEach((user) => {
+                SendUserRooms({ userId: user.userId, io })
+            })
+        } catch (error) {
+            console.error(`[timer-timeout ${roomId}]`, error)
+        }
+    })()
+}
+
 export function StopPlayerTimer({
     roomState,
     userId
@@ -60,32 +107,13 @@ export function StartPlayerTime({ roomState, userId, io }: { roomState: stateTyp
             const winner = roomState.players.find((player) => player.userId !== looser)?.userId
             if (!winner) return
 
-            await db
-                .update(rooms)
-                .set({
-                    winner: winner,
-                    looser: looser,
-                    finished: true,
-                })
-                .where(eq(rooms.id, roomState.roomId))
-
-            roomState.status.finished = true
-            roomState.status.finisheAt = Date.now()
-            roomState.status.winner = winner
-
-            if (io) {
-                await CalculateAndUpdateElo({
-                    loser: looser,
-                    winner: winner,
-                    roomData: roomState,
-                    io,
-                    roomId: roomState.roomId,
-                })
-
-                roomState.players.forEach((user) => {
-                    SendUserRooms({ userId: user.userId, io })
-                })
-            }
+            finalizeTimeoutLoss({
+                roomState,
+                roomId: roomState.roomId,
+                winner,
+                looser,
+                io,
+            })
         }
     }, 1000)
 }
@@ -150,29 +178,12 @@ export function UpdatePlayerTimer({ roomState, io }: { roomState: stateType, io:
                     )?.userId
                     if (!winner) return
 
-                    await db
-                        .update(rooms)
-                        .set({
-                            winner: winner,
-                            looser: looser,
-                            finished: true,
-                        })
-                        .where(eq(rooms.id, roomId))
-
-                    roomState.status.finished = true
-                    roomState.status.finisheAt = Date.now()
-                    roomState.status.winner = winner
-
-                    await CalculateAndUpdateElo({
-                        loser: looser,
-                        winner: winner,
-                        roomData: roomState,
-                        io,
+                    finalizeTimeoutLoss({
+                        roomState,
                         roomId,
-                    })
-
-                    roomState.players.forEach((user) => {
-                        SendUserRooms({ userId: user.userId, io })
+                        winner,
+                        looser,
+                        io,
                     })
 
                     return
@@ -218,29 +229,12 @@ export function UpdatePlayerTimer({ roomState, io }: { roomState: stateType, io:
                     const winner = roomState.players.find((player) => player.userId !== userId)?.userId
                     if (!winner) return
 
-                    await db
-                        .update(rooms)
-                        .set({
-                            winner: winner,
-                            looser: looser,
-                            finished: true,
-                        })
-                        .where(eq(rooms.id, roomId))
-
-                    roomState.status.finished = true
-                    roomState.status.finisheAt = Date.now()
-                    roomState.status.winner = winner
-
-                    await CalculateAndUpdateElo({
-                        loser: looser,
-                        winner: winner,
-                        roomData: roomState,
-                        io,
+                    finalizeTimeoutLoss({
+                        roomState,
                         roomId,
-                    })
-
-                    roomState.players.forEach((user) => {
-                        SendUserRooms({ userId: user.userId, io })
+                        winner,
+                        looser,
+                        io,
                     })
 
                     return
@@ -299,12 +293,13 @@ export function StartTwoTimers({ roomState, io, roomId }: { roomState: stateType
                     StopPlayerTimer({ roomState: roomState, userId: user.userId })
                 })
 
-                await db
+                void db
                     .update(rooms)
                     .set({
                         finished: true,
                     })
                     .where(eq(rooms.id, roomId))
+                    .catch((error) => console.error(`[timer-draw ${roomId}]`, error))
 
                 const message: Message = {
                     key: 'game_over_draw',
