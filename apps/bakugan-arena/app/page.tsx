@@ -33,7 +33,7 @@ export default async function Home() {
 
           <div className="flex gap-4 items-center">
             <Link href="https://discord.gg/8HfPK5RVuk" target="_blank">
-              <img src="/discord.svg" alt={tCommon('a11y.discordLogo')} className="w-6 h-6" />
+              <Image src="/discord.svg" alt={tCommon('a11y.discordLogo')} width={24} height={24} className="w-6 h-6" unoptimized />
             </Link>
           </div>
 
@@ -58,7 +58,14 @@ export default async function Home() {
         </div>
 
         <div className='aspect-16/10 w-full lg:w-[65dvw] relative'>
-          <Image fill src='/images/landing-screenshot.png' alt={tCommon('a11y.battleScreenshot')} />
+          <Image
+            fill
+            src='/images/landing-screenshot.png'
+            alt={tCommon('a11y.battleScreenshot')}
+            priority
+            sizes="(max-width: 1024px) 95vw, 65vw"
+            className="object-contain"
+          />
         </div>
 
       </section>

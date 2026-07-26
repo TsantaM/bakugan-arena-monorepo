@@ -109,7 +109,14 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
         setTurnRequest,
     ])
 
-    if (!socket) return null
+    if (!socket) {
+        return (
+            <div className="flex h-full w-full flex-col gap-2">
+                <div className="h-[65%] w-full animate-pulse rounded-lg bg-accent md:h-[68%]" />
+                <div className="min-h-0 flex-1 animate-pulse rounded-lg bg-accent" />
+            </div>
+        )
+    }
     const socketId = socket.id
 
     if (socketId === undefined) {

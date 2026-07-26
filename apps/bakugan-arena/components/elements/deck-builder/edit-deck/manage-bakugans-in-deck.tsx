@@ -90,7 +90,7 @@ export default function ManageBakugansInDeck({ deckId, bakugans, problemCardKeys
 
                                             return (
                                                 <>
-                                                    <Image src={imageUrl} alt={`${name} ${attribut}`} width={20} height={20} />
+                                                    <Image src={imageUrl} alt={`${name} ${attribut}`} width={20} height={20} unoptimized />
                                                     {`${name} ${attribut}`}
                                                 </>
                                             )
@@ -117,7 +117,7 @@ export default function ManageBakugansInDeck({ deckId, bakugans, problemCardKeys
                                                         addBakuganToDeckMutation.mutate(b.key)
                                                     }}
                                                 >
-                                                    <Image src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} alt={`${b.name} ${b.attribut}`} width={20} height={20} />
+                                                    <Image src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} alt={`${b.name} ${b.attribut}`} width={20} height={20} unoptimized />
                                                     {`${b.name} ${b.attribut}`}
                                                     <Check
                                                         className={cn(

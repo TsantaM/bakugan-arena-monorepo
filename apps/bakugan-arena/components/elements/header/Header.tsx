@@ -8,8 +8,6 @@ import { auth } from "@/src/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { LogOutIcon, MenuIcon, User2 } from "lucide-react";
-import { Suspense } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
 import Logo from "@/components/ui/logo";
 import { AnimatedThemeToggler } from "@/components/magicui/theme-toggler";
 import { SignInModal } from "../sign-in/Sign-in";
@@ -49,43 +47,41 @@ export default async function Header() {
                 <AnimatedThemeToggler />
                 {
                     user ?
-                        <Suspense fallback={<Skeleton />}>
-                            <DropdownMenu>
-                                <DropdownMenuTrigger>
-                                    <Button variant='outline' asChild className="p-0 shrink-0">
-                                        <Avatar>
-                                            {
-                                                user.image != undefined && <AvatarImage src={user.image} className="size-5" alt={user.name} />
-                                            }
-                                            <AvatarFallback>{user.name[0].toUpperCase()}</AvatarFallback>
-                                        </Avatar>
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                    <DropdownMenuItem asChild>
-                                        <Link className="flex items-center gap-3" href='/dashboard'>
-                                            <User2 />
-                                            {tCommon('nav.account')}
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem>
-                                        <form className='w-full'>
-                                            <button className='w-full flex items-center gap-3' formAction={async () => {
-                                                'use server'
+                        <DropdownMenu>
+                            <DropdownMenuTrigger>
+                                <Button variant='outline' asChild className="p-0 shrink-0">
+                                    <Avatar>
+                                        {
+                                            user.image != undefined && <AvatarImage src={user.image} className="size-5" alt={user.name} />
+                                        }
+                                        <AvatarFallback>{user.name[0].toUpperCase()}</AvatarFallback>
+                                    </Avatar>
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem asChild>
+                                    <Link className="flex items-center gap-3" href='/dashboard'>
+                                        <User2 />
+                                        {tCommon('nav.account')}
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <form className='w-full'>
+                                        <button className='w-full flex items-center gap-3' formAction={async () => {
+                                            'use server'
 
-                                                await auth.api.signOut({
-                                                    headers: await headers()
-                                                })
+                                            await auth.api.signOut({
+                                                headers: await headers()
+                                            })
 
-                                                redirect('/')
-                                            }}>
-                                                <LogOutIcon /> {tCommon('nav.logOut')}
-                                            </button>
-                                        </form>
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </Suspense>
+                                            redirect('/')
+                                        }}>
+                                            <LogOutIcon /> {tCommon('nav.logOut')}
+                                        </button>
+                                    </form>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
 
                         : <>
                             <SignInModal />

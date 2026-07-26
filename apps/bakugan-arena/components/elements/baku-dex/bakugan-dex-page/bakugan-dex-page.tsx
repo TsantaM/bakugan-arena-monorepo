@@ -24,14 +24,29 @@ export default async function BakuganDex({ data }: { data: bakuganType }) {
                         <CardContent>
                             <div className="w-full lg:w-[50%] flex gap-5">
                                 <div className="relative size-32">
-                                    <Image src={`/images/bakugans/sphere/${bakugan?.image}/${bakugan?.attribut.toUpperCase()}.png`} alt={`${bakugan?.name} ${bakugan?.attribut}`} fill />
+                                    <Image
+                                        src={`/images/bakugans/sphere/${bakugan?.image}/${bakugan?.attribut.toUpperCase()}.png`}
+                                        alt={`${bakugan?.name} ${bakugan?.attribut}`}
+                                        fill
+                                        sizes="128px"
+                                        className="object-contain"
+                                        priority
+                                    />
                                 </div>
                                 <div className="flex flex-col gap-3">
                                     <CardTitle>
                                         {bakugan?.name} {bakugan?.attribut}
                                     </CardTitle>
                                     <ul className="flex flex-col gap-1">
-                                        <li className="relative size-10"><Image src={`/images/attributs/${bakugan?.attribut.toUpperCase()}.png`} alt={bakugan?.attribut ? bakugan?.attribut : ''} fill /></li>
+                                        <li className="relative size-10">
+                                            <Image
+                                                src={`/images/attributs/${bakugan?.attribut.toUpperCase()}.png`}
+                                                alt={bakugan?.attribut ? bakugan?.attribut : ''}
+                                                fill
+                                                sizes="40px"
+                                                unoptimized
+                                            />
+                                        </li>
                                         <li><span className='text-bold text-sm'>{t('detail.powerLevel')} </span><span className="text-sm">{bakugan?.powerLevel} G</span></li>
                                     </ul>
                                 </div>

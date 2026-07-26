@@ -19,8 +19,9 @@ function ChatWindow({ chat }: { chat: ChatWindowType }) {
     const t = useTranslations('lobby.chats')
     const tCommon = useTranslations('common')
 
-    const username = authClient.useSession().data?.user.displayUsername
-    const userId = authClient.useSession().data?.user.id
+    const sessionUser = authClient.useSession().data?.user
+    const username = sessionUser?.displayUsername
+    const userId = sessionUser?.id
     const { sendMessage } = useChat()
     const { messages, targetId, targetName } = chat
 

@@ -125,7 +125,7 @@ export default function LauchRanckedGate() {
                             <CardContent className="flex flex-wrap justify-center items-center gap-3 sm:gap-5">
                                 {
                                     selectedDeckBakugansData.map((b, index) =>
-                                        <Image key={index} alt={`${b.name} ${b.attribut}`} src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} width={95} height={95} className="size-16 sm:size-[95px]" />
+                                        <Image key={index} alt={`${b.name} ${b.attribut}`} src={`/images/bakugans/sphere/${b.image}/${b.attribut.toUpperCase()}.png`} width={95} height={95} sizes="(max-width: 640px) 64px, 95px" className="size-16 sm:size-[95px]" />
                                     )
                                 }
                             </CardContent>

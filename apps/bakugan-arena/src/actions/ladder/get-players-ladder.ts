@@ -30,6 +30,7 @@ async function GetPlayersLadder() {
             ),
         }))
         .sort((a, b) => b.elo - a.elo)
+        .slice(0, 100)
 }
 
 export { GetPlayersLadder }

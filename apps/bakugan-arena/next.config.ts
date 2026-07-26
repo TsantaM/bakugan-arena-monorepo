@@ -9,7 +9,6 @@ const appDir = path.dirname(fileURLToPath(import.meta.url));
 const monorepoRoot = path.join(appDir, '../..');
 
 const nextConfig: NextConfig = {
-  /* config options here */
   experimental: {
     authInterrupts: true,
     serverActions: {
@@ -30,11 +29,34 @@ const nextConfig: NextConfig = {
     ],
   },
   images: {
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 60 * 60 * 24 * 30,
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**',   // Autorise tous les domaines HTTPS
-        pathname: '/**',  // (optionnel) autorisation pour tous les chemins
+        hostname: '*.public.blob.vercel-storage.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.blob.vercel-storage.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        pathname: '/**',
+      },
+      // Fallback for user-uploaded / third-party avatar hosts
+      {
+        protocol: 'https',
+        hostname: '**',
+        pathname: '/**',
       },
     ],
   },
