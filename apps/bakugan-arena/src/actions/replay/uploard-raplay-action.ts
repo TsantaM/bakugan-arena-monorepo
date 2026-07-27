@@ -2,7 +2,8 @@
 
 import {
     playerDataType,
-    replayMetaType,
+    replayDataType,
+    replayEntryType,
 } from "@bakugan-arena/game-data"
 
 import { db } from "@/src/lib/db"
@@ -11,10 +12,11 @@ import { schema } from "@bakugan-arena/drizzle-orm"
 const replaySchema = schema.replay
 
 type Props = {
-    roomId: string
-    player1: playerDataType
+    replay: replayEntryType[],
+    initialSnapshot: replayDataType["initialSnapshot"],
+    roomId: string,
+    player1: playerDataType,
     player2: playerDataType
-    blobUrl: string
 }
 
 // ================== ERRORS ==================
@@ -34,7 +36,7 @@ class ReplayAlreadyExistsError extends ReplayError {
 
 class InvalidReplayDataError extends ReplayError {
     constructor() {
-        super("Invalid replay data (missing player or blob URL)")
+        super("Invalid replay data (missing player or replay)")
         this.name = "InvalidReplayDataError"
     }
 }
@@ -44,14 +46,17 @@ export async function UploadReplay({
     roomId,
     player1,
     player2,
-    blobUrl,
+    replay,
+    initialSnapshot,
 }: Props) {
 
     try {
-        if (!roomId || !player1 || !player2 || !blobUrl) {
+        // ---------- VALIDATION ----------
+        if (!roomId || !player1 || !player2 || !replay || !initialSnapshot) {
             throw new InvalidReplayDataError()
         }
 
+        // ---------- CHECK EXISTING REPLAY ----------
         const existing = await db.query.replay.findFirst({
             where: (replay, { eq }) => eq(replay.roomId, roomId)
         })
@@ -60,15 +65,23 @@ export async function UploadReplay({
             throw new ReplayAlreadyExistsError(roomId)
         }
 
-        const replayMeta: replayMetaType = { player1, player2 }
+        // ---------- BUILD DATA ----------
+        const data: replayDataType = {
+            roomId,
+            player1,
+            player2,
+            initialSnapshot,
+            replay,
+        }
+
         const title = `Bakugan-Arena-${player1.displayUsername}-VS-${player2.displayUsername}-${roomId}`
 
+        // ---------- INSERT ----------
         const result = await db.insert(replaySchema)
             .values({
+                replayData: data,
                 roomId,
-                title,
-                blobUrl,
-                replayMeta,
+                title
             })
             .returning()
 
@@ -76,10 +89,13 @@ export async function UploadReplay({
 
     } catch (error) {
 
+        // ---------- KNOWN ERRORS ----------
         if (error instanceof ReplayError) {
             throw error
         }
 
+        // ---------- POSTGRES UNIQUE VIOLATION SAFETY NET ----------
+        // (au cas où race condition)
         if (
             typeof error === "object" &&
             error !== null &&
@@ -89,6 +105,7 @@ export async function UploadReplay({
             throw new ReplayAlreadyExistsError(roomId)
         }
 
+        // ---------- UNKNOWN ERROR ----------
         throw new Error("Failed to upload replay")
     }
 }

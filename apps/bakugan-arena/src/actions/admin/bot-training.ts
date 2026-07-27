@@ -65,14 +65,6 @@ export async function addTrainingItemsFromDb(replayIds: string[]) {
 
   const rows = await db.query.replay.findMany({
     where: inArray(schema.replay.id, replayIds),
-    columns: {
-      id: true,
-      title: true,
-      roomId: true,
-      replayData: true,
-      blobUrl: true,
-      replayMeta: true,
-    },
     with: {
       room: {
         columns: {
@@ -88,17 +80,10 @@ export async function addTrainingItemsFromDb(replayIds: string[]) {
     throw new Error("Replays not found")
   }
 
-  const { fetchReplayDataFromStorage } = await import(
-    "@/src/lib/replay/fetch-replay-data-server"
-  )
-
-  const values = await Promise.all(rows.map(async (row) => {
-    const replayData = await fetchReplayDataFromStorage(row)
-
+  const values = rows.map((row) => {
     const learnFromUserId =
       row.room?.winner ??
-      replayData.player1?.id ??
-      row.replayMeta?.player1?.id ??
+      row.replayData.player1?.id ??
       row.room?.player1Id
 
     if (!learnFromUserId) {
@@ -110,10 +95,10 @@ export async function addTrainingItemsFromDb(replayIds: string[]) {
       source: "database" as const,
       replayId: row.id,
       roomId: row.roomId,
-      replayData,
+      replayData: row.replayData,
       learnFromUserId,
     }
-  }))
+  })
 
   await db.insert(schema.botTrainingItem).values(values)
 

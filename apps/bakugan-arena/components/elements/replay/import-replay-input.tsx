@@ -1,46 +1,36 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
-import { parseReplayJson, uploadReplayToBlob } from "@/src/lib/replay/replay-blob"
-import type { LoadedReplay } from "@/src/lib/replay/loaded-replay"
+import ImportReplayAction from "@/src/actions/replay/import-replay-action"
+import { replayDataType } from "@bakugan-arena/game-data"
+import { useMutation } from "@tanstack/react-query"
 import { FileJson, Loader2 } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { useRef, useState } from "react"
+import { useRef } from "react"
 import { toast, Toaster } from "sonner"
 
-export default function ImportReplay({
-    setReplay,
-}: {
-    setReplay: (loaded: LoadedReplay) => void
-}) {
+export default function ImportReplay({ setReplay }: { setReplay: (replay: replayDataType) => void }) {
     const t = useTranslations('replay')
     const inputRef = useRef<HTMLInputElement>(null)
-    const [isLoading, setIsLoading] = useState(false)
 
-    async function handleFile(file: File) {
-        setIsLoading(true)
-
-        try {
-            const text = await file.text()
-            const data = parseReplayJson(text)
-            const blobUrl = await uploadReplayToBlob(data)
-
+    const mutation = useMutation({
+        mutationFn: async (file: File) => {
+            return await ImportReplayAction(file)
+        },
+        onSuccess: (data) => {
             toast.success(t('toasts.importSuccess'))
-            setReplay({ data, blobUrl })
-
+            setReplay(data)
             if (inputRef.current) {
                 inputRef.current.value = ""
             }
-        } catch (error) {
+        },
+        onError: () => {
             toast.error(t('toasts.importFailed'))
             if (inputRef.current) {
                 inputRef.current.value = ""
             }
-            console.error(error)
-        } finally {
-            setIsLoading(false)
-        }
-    }
+        },
+    })
 
     return (
         <>
@@ -52,16 +42,16 @@ export default function ImportReplay({
                 onChange={(e) => {
                     const file = e.target.files?.[0]
                     if (!file) return
-                    void handleFile(file)
+                    mutation.mutate(file)
                 }}
             />
             <Button
                 type="button"
                 variant="outline"
-                disabled={isLoading}
+                disabled={mutation.isPending}
                 onClick={() => inputRef.current?.click()}
             >
-                {isLoading ? (
+                {mutation.isPending ? (
                     <Loader2 className="animate-spin" />
                 ) : (
                     <FileJson />

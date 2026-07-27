@@ -3,10 +3,9 @@
 import { Button } from "@/components/ui/button"
 import { ConvertReplayToJson } from "@/src/actions/battlefield/convert-replay-to-json"
 import { UploadReplay } from "@/src/actions/replay/uploard-raplay-action"
-import { uploadReplayToBlob } from "@/src/lib/replay/replay-blob"
 import { Room, useRoomsStore } from "@/src/store/rooms-store"
 import { useSocketStore } from "@/src/store/socket-id-store"
-import { playerDataType, replayDataType, replayEntryType, replaySnapshotType } from "@bakugan-arena/game-data"
+import { playerDataType, replayEntryType, replaySnapshotType } from "@bakugan-arena/game-data"
 import { useMutation } from "@tanstack/react-query"
 import { Download, Upload } from "lucide-react"
 import { useEffect, useState } from "react"
@@ -48,19 +47,6 @@ export default function DownloadAndUploadReplay({ roomId, player1, player2 }: {
         return {
             orderedPlayer1: roomP1IsPlayer1 ? player1 : player2,
             orderedPlayer2: roomP1IsPlayer1 ? player2 : player1,
-        }
-    }
-
-    function buildReplayData(
-        orderedPlayer1: NonNullable<playerDataType>,
-        orderedPlayer2: NonNullable<playerDataType>,
-    ): replayDataType {
-        return {
-            roomId,
-            player1: orderedPlayer1,
-            player2: orderedPlayer2,
-            initialSnapshot: initialSnapshot!,
-            replay: replay!,
         }
     }
 
@@ -109,17 +95,12 @@ export default function DownloadAndUploadReplay({ roomId, player1, player2 }: {
                 throw new Error("Missing players for upload")
             }
 
-            const replayData = buildReplayData(
-                ordered.orderedPlayer1,
-                ordered.orderedPlayer2,
-            )
-            const blobUrl = await uploadReplayToBlob(replayData)
-
             return await UploadReplay({
                 roomId,
                 player1: ordered.orderedPlayer1,
                 player2: ordered.orderedPlayer2,
-                blobUrl,
+                replay,
+                initialSnapshot,
             })
         },
         onSuccess: () => {

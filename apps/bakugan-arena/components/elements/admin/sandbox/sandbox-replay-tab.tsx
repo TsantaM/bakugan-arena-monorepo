@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/select"
 import ImportReplay from "@/components/elements/replay/import-replay-input"
 import SelectUploadedReplay from "@/components/elements/replay/select-uploaded-replay"
-import type { LoadedReplay } from "@/src/lib/replay/loaded-replay"
 import { useTranslations } from "next-intl"
 import { ChevronLeft, ChevronRight, Download, X } from "lucide-react"
 import { snapshotToSandboxDraft } from "./sandbox-draft"
@@ -92,10 +91,10 @@ export default function SandboxReplayTab({
     const selectedTurn =
         selectedTurnIndex >= 0 ? turnOptions[selectedTurnIndex] : turnOptions[0]
 
-    const handleSetReplay = (loaded: LoadedReplay) => {
-        onReplayChange(loaded.data)
+    const handleSetReplay = (next: replayDataType) => {
+        onReplayChange(next)
         onSelectedEntryIndexChange(0)
-        const payload = buildLoadPayload(loaded.data, 0)
+        const payload = buildLoadPayload(next, 0)
         if (payload) onLoad(payload)
     }
 
