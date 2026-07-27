@@ -29,6 +29,20 @@
       "when": 1753408800000,
       "tag": "0003_v4_from_main",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1774610400000,
+      "tag": "0004_replay_blob_storage",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1774690800000,
+      "tag": "0005_revert_replay_blob_storage",
+      "breakpoints": true
     }
   ]
 }
