@@ -46,11 +46,11 @@
       "description": "Soustrait 100 G à chaque adversaire et ajoute 100 G à l'utilisateur"
     },
     "combat-aerien": {
-      "name": "Combat Aérienne",
+      "name": "Combat Aérien",
       "description": "Permet aux bakugan Ventus de voler au-delà des Cartes Portail et annule la Carte Portail sur laquelle ils atterrissent"
     },
     "souffle-tout": {
-      "name": "Souffle Toux",
+      "name": "Souffle Tout",
       "description": "Déplace l'adversaire vers une autre Carte Portail"
     },
     "retour-d-air": {
