@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { Check, ChevronsUpDown, Loader2 } from 'lucide-react'
-import { replayDataType } from '@bakugan-arena/game-data'
 import { useQuery } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 
@@ -23,13 +22,14 @@ import {
 } from '@/components/ui/popover'
 
 import { GetReplays } from '@/src/actions/replay/get-replays'
-import { fetchReplayData } from '@/src/lib/replay/replay-api-client'
+import { loadReplaySelectionFromId } from '@/src/lib/replay/replay-api-client'
+import type { ReplaySelection } from '@/src/lib/replay/replay-selection'
 import { toast } from 'sonner'
 
-export default function SelectUploadedReplay({
+export default function SelectReplayFromDb({
     setReplay,
 }: {
-    setReplay: (replay: replayDataType) => void
+    setReplay: (replay: ReplaySelection) => void
 }) {
     const t = useTranslations('replay')
     const [open, setOpen] = useState(false)
@@ -53,8 +53,8 @@ export default function SelectUploadedReplay({
         setOpen(false)
 
         try {
-            const replayData = await fetchReplayData(replayId)
-            setReplay(replayData)
+            const selection = await loadReplaySelectionFromId(replayId)
+            setReplay(selection)
         } catch (error) {
             toast.error(t('toasts.importFailed'))
             console.error(error)

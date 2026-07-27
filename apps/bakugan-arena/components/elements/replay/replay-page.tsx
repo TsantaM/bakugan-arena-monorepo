@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useRef, useState } from "react"
-import ImportReplay from "./import-replay-input"
-import { replayDataType } from "@bakugan-arena/game-data"
-import SelectUploadedReplay from "./select-uploaded-replay"
+import { useEffect, useMemo, useRef, useState } from "react"
+import { useSearchParams } from "next/navigation"
+import ImportReplayReference from "./import-replay-reference-input"
+import SelectReplayFromDb from "./select-replay-from-db"
 import ReactHowler from "react-howler"
 import { useAudioStore } from "@/src/store/sounds-store"
 import MessagesModal from "../battlefield/messages-modal"
@@ -16,13 +16,12 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer"
-import { Loader2, Menu, Pause, Play, RotateCcw, SkipBack, SkipForward, Upload, X } from "lucide-react"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { ReplayExistsByRoomId } from "@/src/actions/replay/replay-exists-by-room-id"
-import { UploadReplay } from "@/src/actions/replay/uploard-raplay-action"
-import { toast } from "sonner"
+import { Menu, Pause, Play, RotateCcw, SkipBack, SkipForward, X } from "lucide-react"
+import type { ReplaySelection } from "@/src/lib/replay/replay-selection"
+import { loadReplaySelectionFromId } from "@/src/lib/replay/replay-api-client"
 import { useReplayBattleLogStore } from "@/src/store/replay-battle-log-store"
 import { useLocale, useTranslations } from "next-intl"
+import { toast } from "sonner"
 
 type ReplayControlMessage =
     | "REPLAY_PAUSE"
@@ -36,59 +35,40 @@ export default function ReplayPage() {
     const tCommon = useTranslations('common')
     const locale = useLocale()
 
-    const [replay, setReplay] = useState<replayDataType | null>(null)
+    const [replaySelection, setReplaySelection] = useState<ReplaySelection | null>(null)
     const [isPaused, setIsPaused] = useState(true)
+    const searchParams = useSearchParams()
+    const replayIdFromUrl = searchParams.get("replayId")
     const battleLogEnabled = useReplayBattleLogStore((state) => state.enabled)
     const { volume, track } = useAudioStore()
     const iframeRef = useRef<HTMLIFrameElement>(null)
     const GAMEBOARD_URL = process.env.NEXT_PUBLIC_3D_GAMEBOARD_URL
-    const queryClient = useQueryClient()
+    const REPLAY_API_ORIGIN = (process.env.NEXT_PUBLIC_SOCKET_URL ?? "http://localhost:3005").replace(/\/$/, "")
 
-    const existsQuery = useQuery({
-        queryKey: ["replay-exists", replay?.roomId],
-        queryFn: () => ReplayExistsByRoomId(replay!.roomId),
-        enabled: Boolean(replay?.roomId),
-    })
-
-    const uploadMutation = useMutation({
-        mutationFn: async () => {
-            if (!replay?.player1 || !replay?.player2 || !replay.initialSnapshot || !replay.replay) {
-                throw new Error("Missing data for upload")
-            }
-
-            return await UploadReplay({
-                roomId: replay.roomId,
-                player1: replay.player1,
-                player2: replay.player2,
-                replay: replay.replay,
-                initialSnapshot: replay.initialSnapshot,
-            })
-        },
-        onSuccess: async () => {
-            toast.success(t('toasts.uploadSuccess'))
-            await queryClient.invalidateQueries({ queryKey: ["replay-exists", replay?.roomId] })
-            await queryClient.invalidateQueries({ queryKey: ["get-replays"] })
-        },
-        onError: (error) => {
-            toast.error(t('toasts.uploadFailed', {
-                error: error instanceof Error ? error.message : String(error),
-            }))
-        },
-    })
-
-    const buildGameboardLink = (page: string) => {
+    const buildGameboardLink = (selection: ReplaySelection) => {
         const baseUrl = (GAMEBOARD_URL ?? "http://localhost:5173").replace(/\/$/, "")
-        const url = new URL(`${baseUrl}/${page}`)
+        const url = new URL(`${baseUrl}/replay.html`)
 
-        if (replay?.roomId) url.searchParams.set("roomId", replay.roomId)
-        if (replay?.player1?.id) url.searchParams.set("player1Id", replay.player1.id)
-        if (replay?.player1?.image) url.searchParams.set("player1Image", replay.player1.image)
-        if (replay?.player2?.id) url.searchParams.set("player2Id", replay.player2.id)
-        if (replay?.player2?.image) url.searchParams.set("player2Image", replay.player2.image)
+        url.searchParams.set("replayId", selection.id)
+        url.searchParams.set("replayApiOrigin", REPLAY_API_ORIGIN)
+        url.searchParams.set("roomId", selection.roomId)
+        url.searchParams.set("player1Id", selection.player1.id)
+        if (selection.player1.image) {
+            url.searchParams.set("player1Image", selection.player1.image)
+        }
+        url.searchParams.set("player2Id", selection.player2.id)
+        if (selection.player2.image) {
+            url.searchParams.set("player2Image", selection.player2.image)
+        }
         url.searchParams.set("locale", locale)
 
         return url.toString()
     }
+
+    const iframeSrc = useMemo(
+        () => (replaySelection ? buildGameboardLink(replaySelection) : null),
+        [replaySelection, REPLAY_API_ORIGIN, locale, GAMEBOARD_URL],
+    )
 
     const sendReplayControl = (type: ReplayControlMessage) => {
         iframeRef.current?.contentWindow?.postMessage(
@@ -104,68 +84,54 @@ export default function ReplayPage() {
     }
 
     const clearReplay = () => {
-        setReplay(null)
+        setReplaySelection(null)
+        setIsPaused(true)
+    }
+
+    const handleSelectReplay = (selection: ReplaySelection) => {
+        setReplaySelection(selection)
         setIsPaused(true)
     }
 
     useEffect(() => {
-        if (!replay) return
+        if (!replayIdFromUrl) return
 
-        const iframe = iframeRef.current
-        if (!iframe) return
+        let cancelled = false
 
-        setIsPaused(true)
-
-        const sendReplay = () => {
-            iframe.contentWindow?.postMessage(
-                {
-                    type: "LOAD_REPLAY",
-                    payload: replay,
-                },
-                GAMEBOARD_URL ?? "*"
-            )
-        }
-
-        iframe.addEventListener("load", sendReplay)
-        sendReplay()
+        void loadReplaySelectionFromId(replayIdFromUrl)
+            .then((selection) => {
+                if (!cancelled) {
+                    setReplaySelection(selection)
+                    setIsPaused(true)
+                }
+            })
+            .catch((error) => {
+                if (!cancelled) {
+                    toast.error(t('toasts.importFailed'))
+                    console.error(error)
+                }
+            })
 
         return () => {
-            iframe.removeEventListener("load", sendReplay)
+            cancelled = true
         }
-    }, [replay, GAMEBOARD_URL])
+    }, [replayIdFromUrl, t])
 
-    const link = buildGameboardLink("replay.html")
-    const matchLabel = replay?.player1 && replay?.player2
+    const matchLabel = replaySelection
         ? tCommon('labels.vs', {
-            p1: replay.player1.displayUsername ?? tCommon('fallback.player'),
-            p2: replay.player2.displayUsername ?? tCommon('fallback.player'),
+            p1: replaySelection.player1.displayUsername ?? tCommon('fallback.player'),
+            p2: replaySelection.player2.displayUsername ?? tCommon('fallback.player'),
         })
         : null
-    const showUploadButton = Boolean(replay) && existsQuery.isSuccess && existsQuery.data === false
 
     const renderToolbarControls = (className: string) => (
         <div className={className}>
-            <ImportReplay setReplay={setReplay} />
-            <SelectUploadedReplay setReplay={setReplay} />
+            <ImportReplayReference setReplay={handleSelectReplay} />
+            <SelectReplayFromDb setReplay={handleSelectReplay} />
             <BattleLogToggle context="replay" />
-            {showUploadButton && (
-                <Button
-                    variant="outline"
-                    disabled={uploadMutation.isPending}
-                    onClick={() => uploadMutation.mutate()}
-                    aria-label={t('a11y.upload')}
-                >
-                    {uploadMutation.isPending ? (
-                        <Loader2 className="animate-spin" />
-                    ) : (
-                        <Upload />
-                    )}
-                    {t('upload')}
-                </Button>
-            )}
             <Button
                 variant="outline"
-                disabled={!replay}
+                disabled={!replaySelection}
                 onClick={clearReplay}
                 aria-label={t('a11y.clear')}
             >
@@ -208,7 +174,7 @@ export default function ReplayPage() {
         </header>
 
         {
-            replay && replay.player1 && replay.player2 && <>
+            replaySelection && iframeSrc && <>
 
                 <ReactHowler
                     src={[`/sounds/OST/${track}`]}
@@ -217,14 +183,19 @@ export default function ReplayPage() {
                     playing={!isPaused}
                 />
                 <div className="relative h-[85%] w-full">
-                    <iframe ref={iframeRef} src={link} className="h-full w-full border-0"></iframe>
+                    <iframe
+                        ref={iframeRef}
+                        key={replaySelection.id}
+                        src={iframeSrc}
+                        className="h-full w-full border-0"
+                    />
                     <MessagesModal
                         isReplay={true}
                         battleLogEnabled={battleLogEnabled}
-                        player={replay.player1.displayUsername}
-                        opponent={replay.player2.displayUsername}
-                        roomId={replay.roomId}
-                        userId={replay.player1.id}
+                        player={replaySelection.player1.displayUsername}
+                        opponent={replaySelection.player2.displayUsername}
+                        roomId={replaySelection.roomId}
+                        userId={replaySelection.player1.id}
                     />
                     <div className="absolute bottom-2 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2">
                         <Button

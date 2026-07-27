@@ -21,6 +21,8 @@
     "importSuccess": "Importation réussie",
     "importFailed": "Échec de l'importation",
     "uploadSuccess": "Replay téléversé avec succès",
-    "uploadFailed": "Échec du téléversement du replay, {error}"
+    "uploadFailed": "Échec du téléversement du replay, {error}",
+    "downloadSuccess": "Replay enregistré et téléchargé",
+    "downloadFailed": "Échec du téléchargement du replay, {error}"
   }
 }

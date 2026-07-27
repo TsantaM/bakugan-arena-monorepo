@@ -45,6 +45,8 @@ const canvas = document.getElementById('gameboard-canvas')
 const params = new URLSearchParams(window.location.search)
 // const parentSocket = params.get('parentSocket')
 const roomId = params.get('roomId')
+const replayId = params.get('replayId')
+const replayApiOrigin = params.get('replayApiOrigin')
 const replayData = params.get('replayData')
 const player1Image = params.get('player1Image')
 const player2Image = params.get('player2Image')
@@ -58,6 +60,23 @@ plane.rotateX(-Math.PI / 2)
 
 if (!roomId) {
   throw new Error("roomId ou userId manquant")
+}
+
+function resolveReplayApiBase(apiOrigin: string | null): string {
+  return (apiOrigin || import.meta.env.VITE_SOCKET_URL || "http://localhost:3005").replace(/\/$/, "")
+}
+
+/** Même payload que GET /api/replay/:replayId (normalizeReplayData côté serveur). */
+async function fetchReplayData(id: string, apiOrigin: string | null): Promise<replayDataType> {
+  const baseUrl = resolveReplayApiBase(apiOrigin)
+  const response = await fetch(`${baseUrl}/api/replay/${id}`)
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch replay (${response.status})`)
+  }
+
+  const payload: unknown = await response.json()
+  return normalizeReplayData(payload)
 }
 
 // const socket = createSocket(userId, roomId)
@@ -413,8 +432,28 @@ async function initReplay(replayPayload: replayDataType) {
 
 function startReplay(rawReplay: unknown) {
   const replayPayload = normalizeReplayData(rawReplay)
-  initReplay(replayPayload)
+  void initReplay(replayPayload)
 }
+
+async function bootstrapReplayFromUrl() {
+  if (replayId) {
+    const replayPayload = await fetchReplayData(replayId, replayApiOrigin)
+    void initReplay(replayPayload)
+    return
+  }
+
+  if (replayData !== null) {
+    try {
+      startReplay(JSON.parse(decodeURIComponent(replayData)))
+    } catch {
+      startReplay(JSON.parse(replayData))
+    }
+  }
+}
+
+void bootstrapReplayFromUrl().catch((error) => {
+  console.error("Failed to bootstrap replay", error)
+})
 
 window.addEventListener('message', (event) => {
   if (!event.data?.type) return
@@ -454,12 +493,3 @@ window.addEventListener('message', (event) => {
     requestReplaySeek(0)
   }
 })
-
-if (replayData !== null) {
-  try {
-    startReplay(JSON.parse(decodeURIComponent(replayData)))
-  } catch {
-    startReplay(JSON.parse(replayData))
-  }
-}
-

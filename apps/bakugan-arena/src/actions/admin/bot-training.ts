@@ -65,6 +65,12 @@ export async function addTrainingItemsFromDb(replayIds: string[]) {
 
   const rows = await db.query.replay.findMany({
     where: inArray(schema.replay.id, replayIds),
+    columns: {
+      id: true,
+      title: true,
+      roomId: true,
+      replayData: true,
+    },
     with: {
       room: {
         columns: {
@@ -105,6 +111,52 @@ export async function addTrainingItemsFromDb(replayIds: string[]) {
   return { added: values.length }
 }
 
+export async function addTrainingItemFromReplayId(params: {
+  replayId: string
+  learnFrom: "player1" | "player2"
+  title?: string
+}) {
+  await requireAdmin()
+
+  const row = await db.query.replay.findFirst({
+    where: eq(schema.replay.id, params.replayId),
+    columns: {
+      id: true,
+      title: true,
+      roomId: true,
+      replayData: true,
+    },
+  })
+
+  if (!row?.replayData) {
+    throw new Error("Replay not found")
+  }
+
+  const learnFromUserId =
+    params.learnFrom === "player1"
+      ? row.replayData.player1?.id
+      : row.replayData.player2?.id
+
+  if (!learnFromUserId) {
+    throw new Error(`Missing ${params.learnFrom} id in replay`)
+  }
+
+  const [inserted] = await db
+    .insert(schema.botTrainingItem)
+    .values({
+      title: params.title?.trim() || row.title,
+      source: "import",
+      replayId: row.id,
+      roomId: row.roomId,
+      replayData: row.replayData,
+      learnFromUserId,
+    })
+    .returning({ id: schema.botTrainingItem.id })
+
+  return { id: inserted.id }
+}
+
+/** @deprecated use client import + addTrainingItemFromReplayId */
 export async function addTrainingItemFromImport(params: {
   title: string
   replayJson: string
@@ -119,7 +171,16 @@ export async function addTrainingItemFromImport(params: {
     throw new Error("Invalid JSON")
   }
 
-  const { normalizeReplayData } = await import("@bakugan-arena/game-data")
+  const { isReplayReference, normalizeReplayData } = await import("@bakugan-arena/game-data")
+
+  if (isReplayReference(parsed)) {
+    return addTrainingItemFromReplayId({
+      replayId: parsed.id,
+      learnFrom: params.learnFrom,
+      title: params.title,
+    })
+  }
+
   const replayData = normalizeReplayData(parsed)
 
   const learnFromUserId =

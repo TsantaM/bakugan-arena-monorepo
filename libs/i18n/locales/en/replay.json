@@ -21,6 +21,8 @@
     "importSuccess": "Importation success",
     "importFailed": "Importation failed",
     "uploadSuccess": "Replay upload success",
-    "uploadFailed": "Replay upload failed, {error}"
+    "uploadFailed": "Replay upload failed, {error}",
+    "downloadSuccess": "Replay saved and downloaded",
+    "downloadFailed": "Replay download failed, {error}"
   }
 }
