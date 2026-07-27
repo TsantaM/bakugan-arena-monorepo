@@ -21,6 +21,8 @@
     "importSuccess": "نجح الاستيراد",
     "importFailed": "فشل الاستيراد",
     "uploadSuccess": "تم رفع إعادة التشغيل بنجاح",
-    "uploadFailed": "فشل رفع إعادة التشغيل، {error}"
+    "uploadFailed": "فشل رفع إعادة التشغيل، {error}",
+    "downloadSuccess": "تم حفظ إعادة التشغيل وتنزيلها",
+    "downloadFailed": "فشل تنزيل إعادة التشغيل، {error}"
   }
 }

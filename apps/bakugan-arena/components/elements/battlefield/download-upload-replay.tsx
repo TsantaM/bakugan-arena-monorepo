@@ -1,14 +1,11 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
-import { ConvertReplayToJson } from "@/src/actions/battlefield/convert-replay-to-json"
-import { UploadReplay } from "@/src/actions/replay/uploard-raplay-action"
-import { uploadReplayToBlob } from "@/src/lib/replay/replay-blob"
+import { saveReplayToServer, serializeReplayReference } from "@/src/lib/replay/replay-api-client"
 import { Room, useRoomsStore } from "@/src/store/rooms-store"
 import { useSocketStore } from "@/src/store/socket-id-store"
-import { playerDataType, replayDataType, replayEntryType, replaySnapshotType } from "@bakugan-arena/game-data"
-import { useMutation } from "@tanstack/react-query"
-import { Download, Upload } from "lucide-react"
+import { playerDataType, replayEntryType, replaySnapshotType } from "@bakugan-arena/game-data"
+import { Download, Loader2, Upload } from "lucide-react"
 import { useEffect, useState } from "react"
 import { toast, Toaster } from "sonner"
 import { useTranslations } from "next-intl"
@@ -24,6 +21,8 @@ export default function DownloadAndUploadReplay({ roomId, player1, player2 }: {
     const socket = useSocketStore((state) => state.socket)
     const [replay, setReplay] = useState<replayEntryType[] | undefined>(undefined)
     const [initialSnapshot, setInitialSnapshot] = useState<replaySnapshotType | undefined>(undefined)
+    const [isDownloading, setIsDownloading] = useState(false)
+    const [isUploading, setIsUploading] = useState(false)
 
     useEffect(() => {
         if (!socket) return
@@ -37,10 +36,6 @@ export default function DownloadAndUploadReplay({ roomId, player1, player2 }: {
 
     }, [socket, updateRoom])
 
-    /**
-     * Aligne player1/player2 sur players[0]/players[1] (room.p1/p2),
-     * même perspective que la capture des snapshots eliminated.*.
-     */
     const getOrderedPlayers = () => {
         if (!player1 || !player2 || !room) return null
 
@@ -48,19 +43,6 @@ export default function DownloadAndUploadReplay({ roomId, player1, player2 }: {
         return {
             orderedPlayer1: roomP1IsPlayer1 ? player1 : player2,
             orderedPlayer2: roomP1IsPlayer1 ? player2 : player1,
-        }
-    }
-
-    function buildReplayData(
-        orderedPlayer1: NonNullable<playerDataType>,
-        orderedPlayer2: NonNullable<playerDataType>,
-    ): replayDataType {
-        return {
-            roomId,
-            player1: orderedPlayer1,
-            player2: orderedPlayer2,
-            initialSnapshot: initialSnapshot!,
-            replay: replay!,
         }
     }
 
@@ -74,66 +56,66 @@ export default function DownloadAndUploadReplay({ roomId, player1, player2 }: {
 
         const { orderedPlayer1, orderedPlayer2 } = ordered
 
-        const json = await ConvertReplayToJson({
-            replay,
-            initialSnapshot,
-            player1: orderedPlayer1,
-            player2: orderedPlayer2,
-            roomId,
-        })
+        setIsDownloading(true)
 
-        const blob = new Blob([json], {
-            type: "application/json"
-        })
+        try {
+            const savedReplay = await saveReplayToServer({
+                replay,
+                initialSnapshot,
+                player1: orderedPlayer1,
+                player2: orderedPlayer2,
+                roomId,
+            }, { ifExists: "return" })
 
-        const fileName: string = `Bakugan-Arena-${orderedPlayer1.displayUsername}-VS-${orderedPlayer2.displayUsername}-${roomId}.json`
+            const json = serializeReplayReference({
+                id: savedReplay.id,
+                roomId,
+                player1: orderedPlayer1,
+                player2: orderedPlayer2,
+            })
 
-        const url = URL.createObjectURL(blob)
+            const blob = new Blob([json], { type: "application/json" })
+            const fileName = `Bakugan-Arena-${orderedPlayer1.displayUsername}-VS-${orderedPlayer2.displayUsername}-${roomId}.json`
+            const url = URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url
+            a.download = fileName
+            a.click()
+            URL.revokeObjectURL(url)
 
-        const a = document.createElement('a');
-        a.href = url
-        a.download = fileName
-
-        a.click()
-        URL.revokeObjectURL(url)
+            toast.success(t('toasts.downloadSuccess'))
+        } catch (error) {
+            toast.error(t('toasts.downloadFailed', {
+                error: error instanceof Error ? error.message : String(error),
+            }))
+        } finally {
+            setIsDownloading(false)
+        }
     }
 
-    const uploadMutation = useMutation({
-        mutationFn: async () => {
-            if (!room || !replay || !initialSnapshot) {
-                throw new Error("Missing data for upload")
-            }
+    async function handleUpload() {
+        if (!room || !player1 || !player2 || !replay || !initialSnapshot) return
 
-            const ordered = getOrderedPlayers()
-            if (!ordered) {
-                throw new Error("Missing players for upload")
-            }
+        const ordered = getOrderedPlayers()
+        if (!ordered) return
 
-            const replayData = buildReplayData(
-                ordered.orderedPlayer1,
-                ordered.orderedPlayer2,
-            )
-            const blobUrl = await uploadReplayToBlob(replayData)
+        setIsUploading(true)
 
-            return await UploadReplay({
+        try {
+            await saveReplayToServer({
                 roomId,
                 player1: ordered.orderedPlayer1,
                 player2: ordered.orderedPlayer2,
-                blobUrl,
-            })
-        },
-        onSuccess: () => {
+                replay,
+                initialSnapshot,
+            }, { ifExists: "reject" })
+
             toast.success(t('toasts.uploadSuccess'))
-        },
-        onError: (error) => {
-           toast.error(t('toasts.uploadFailed', { error: String(error) }))
+        } catch (error) {
+            toast.error(t('toasts.uploadFailed', { error: String(error) }))
+        } finally {
+            setIsUploading(false)
         }
-    })
-
-
-    function handleUpload() {
-        if (!room || !player1 || !player2 || !replay || !initialSnapshot) return
-        uploadMutation.mutate()
     }
 
     if (!room) return null
@@ -146,16 +128,17 @@ export default function DownloadAndUploadReplay({ roomId, player1, player2 }: {
                 variant="outline"
                 onClick={handleDownload}
                 aria-label={t('a11y.download')}
+                disabled={isDownloading}
             >
-                <Download />
+                {isDownloading ? <Loader2 className="animate-spin" /> : <Download />}
             </Button>
             <Button
                 variant="outline"
                 onClick={handleUpload}
                 aria-label={t('a11y.upload')}
-                disabled={uploadMutation.isPending}
+                disabled={isUploading}
             >
-                <Upload />
+                {isUploading ? <Loader2 className="animate-spin" /> : <Upload />}
             </Button>
             <Toaster />
         </>

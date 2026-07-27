@@ -3,10 +3,11 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import Section from "@/components/ui/section"
+import { resolveReplayImportFromText } from "@/src/lib/replay/replay-api-client"
 import {
   activateBotWeightVersion,
   activateDefaultBotWeights,
-  addTrainingItemFromImport,
+  addTrainingItemFromReplayId,
   addTrainingItemsFromDb,
   clearBotTrainingSet,
   listBotTrainingItems,
@@ -67,10 +68,12 @@ export default function BotTrainingPanel() {
   const importMutation = useMutation({
     mutationFn: async (file: File) => {
       const text = await file.text()
-      return addTrainingItemFromImport({
-        title: file.name.replace(/\.json$/i, ""),
-        replayJson: text,
+      const selection = await resolveReplayImportFromText(text)
+
+      return addTrainingItemFromReplayId({
+        replayId: selection.id,
         learnFrom: importLearnFrom,
+        title: file.name.replace(/\.json$/i, ""),
       })
     },
     onSuccess: async () => {

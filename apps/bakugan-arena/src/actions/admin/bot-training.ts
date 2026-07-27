@@ -70,8 +70,6 @@ export async function addTrainingItemsFromDb(replayIds: string[]) {
       title: true,
       roomId: true,
       replayData: true,
-      blobUrl: true,
-      replayMeta: true,
     },
     with: {
       room: {
@@ -88,17 +86,10 @@ export async function addTrainingItemsFromDb(replayIds: string[]) {
     throw new Error("Replays not found")
   }
 
-  const { fetchReplayDataFromStorage } = await import(
-    "@/src/lib/replay/fetch-replay-data-server"
-  )
-
-  const values = await Promise.all(rows.map(async (row) => {
-    const replayData = await fetchReplayDataFromStorage(row)
-
+  const values = rows.map((row) => {
     const learnFromUserId =
       row.room?.winner ??
-      replayData.player1?.id ??
-      row.replayMeta?.player1?.id ??
+      row.replayData.player1?.id ??
       row.room?.player1Id
 
     if (!learnFromUserId) {
@@ -110,16 +101,62 @@ export async function addTrainingItemsFromDb(replayIds: string[]) {
       source: "database" as const,
       replayId: row.id,
       roomId: row.roomId,
-      replayData,
+      replayData: row.replayData,
       learnFromUserId,
     }
-  }))
+  })
 
   await db.insert(schema.botTrainingItem).values(values)
 
   return { added: values.length }
 }
 
+export async function addTrainingItemFromReplayId(params: {
+  replayId: string
+  learnFrom: "player1" | "player2"
+  title?: string
+}) {
+  await requireAdmin()
+
+  const row = await db.query.replay.findFirst({
+    where: eq(schema.replay.id, params.replayId),
+    columns: {
+      id: true,
+      title: true,
+      roomId: true,
+      replayData: true,
+    },
+  })
+
+  if (!row?.replayData) {
+    throw new Error("Replay not found")
+  }
+
+  const learnFromUserId =
+    params.learnFrom === "player1"
+      ? row.replayData.player1?.id
+      : row.replayData.player2?.id
+
+  if (!learnFromUserId) {
+    throw new Error(`Missing ${params.learnFrom} id in replay`)
+  }
+
+  const [inserted] = await db
+    .insert(schema.botTrainingItem)
+    .values({
+      title: params.title?.trim() || row.title,
+      source: "import",
+      replayId: row.id,
+      roomId: row.roomId,
+      replayData: row.replayData,
+      learnFromUserId,
+    })
+    .returning({ id: schema.botTrainingItem.id })
+
+  return { id: inserted.id }
+}
+
+/** @deprecated use client import + addTrainingItemFromReplayId */
 export async function addTrainingItemFromImport(params: {
   title: string
   replayJson: string
@@ -134,7 +171,16 @@ export async function addTrainingItemFromImport(params: {
     throw new Error("Invalid JSON")
   }
 
-  const { normalizeReplayData } = await import("@bakugan-arena/game-data")
+  const { isReplayReference, normalizeReplayData } = await import("@bakugan-arena/game-data")
+
+  if (isReplayReference(parsed)) {
+    return addTrainingItemFromReplayId({
+      replayId: parsed.id,
+      learnFrom: params.learnFrom,
+      title: params.title,
+    })
+  }
+
   const replayData = normalizeReplayData(parsed)
 
   const learnFromUserId =

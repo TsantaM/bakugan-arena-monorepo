@@ -1,11 +1,10 @@
-import ReplayPage from "@/components/elements/replay/replay-page";
+import ReplayPage from "@/components/elements/replay/replay-page"
+import { Suspense } from "react"
 
-export default async function Replay() {
-
-
+export default function Replay() {
     return (
-        <>
-            <ReplayPage/>
-        </>
+        <Suspense fallback={null}>
+            <ReplayPage />
+        </Suspense>
     )
 }

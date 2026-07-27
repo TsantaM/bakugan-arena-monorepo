@@ -7,7 +7,9 @@ process.on("uncaughtException", (err) => {
 })
 
 
+import http from "node:http"
 import { Server } from "socket.io";
+import { createExpressApp } from "./api/create-express-app";
 import { processMatchmaking, setupSearchOpponentSocket, waitingMap } from "./sockets/search-opponent";
 import { socketGetRoomState, socketInitiRoomState } from "./sockets/get-room-data";
 import { initializeBots } from "./functions/bot-manager";
@@ -39,9 +41,14 @@ import { applyEloDecayToAllUsers } from "./functions/ladder-functions/elo-decay"
 
 
 const PORT = Number(process.env.PORT) || 3005
-const io = new Server({
+const corsOrigins = process.env.SOCKET_CORS_ORIGIN?.split(",") ?? "*"
+
+const expressApp = createExpressApp()
+const httpServer = http.createServer(expressApp)
+
+const io = new Server(httpServer, {
     cors: {
-        origin: process.env.SOCKET_CORS_ORIGIN?.split(",") ?? "*",
+        origin: corsOrigins,
         methods: ["GET", "POST"]
     }
 });
@@ -119,8 +126,9 @@ const startServer = async () => {
 
     });
 
-    io.listen(PORT)
-    console.log("Server is running on PORT: ", PORT);
+    httpServer.listen(PORT, () => {
+        console.log("Server is running on PORT: ", PORT);
+    })
 
     // Bots JS intégrés : se connectent au serveur une fois qu'il écoute
     startBotPlayers(PORT)
