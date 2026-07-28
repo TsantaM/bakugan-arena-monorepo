@@ -1,4 +1,4 @@
-import { Message, replayEntryType, replaySnapshotType, stateType, logDiagnostic, buildActionRequestsSummary } from "@bakugan-arena/game-data";
+import { stateType, logDiagnostic, buildActionRequestsSummary } from "@bakugan-arena/game-data";
 import { Server } from "socket.io";
 import { db } from "../lib/db"
 import { eq } from "drizzle-orm"
@@ -9,7 +9,7 @@ import { SendUserRooms } from "./send-user-rooms";
 
 const rooms = schema.rooms
 
-export const TIMER_INITIAL_SECONDS = 5 * 60
+export const TIMER_INITIAL_SECONDS = 0.5 * 60
 export const TIMER_ACTION_INCREMENT_SECONDS = 5
 export const TIMER_MAX_SECONDS = 5 * 60
 
@@ -159,51 +159,6 @@ async function finishByTimeout({
     for (const player of roomState.players) {
         const entry = getPlayerTimerEntry(roomState.roomId, player.userId)
         if (entry) freezePlayerClock(player, entry, now)
-    }
-
-    const turnCount = roomState.turnState.turnCount
-
-    // Tour 0 : égalité
-    if (turnCount === 0) {
-        roomState.status.finished = true
-        roomState.status.finisheAt = now
-        roomState.status.winner = null
-
-        await db
-            .update(rooms)
-            .set({ finished: true })
-            .where(eq(rooms.id, roomState.roomId))
-
-        if (io) {
-            const message: Message = {
-                key: "game_over_draw",
-                turn: turnCount,
-            }
-            io.to(roomState.roomId).emit("game-finished", message)
-
-            const roomData: {
-                p1: string
-                p2: string
-                roomId: string
-                finished: boolean
-                replay: replayEntryType[]
-                initialSnapshot: replaySnapshotType
-            } = {
-                roomId: roomState.roomId,
-                p1: roomState.players[0].userId,
-                p2: roomState.players[1].userId,
-                replay: roomState.animationsForReplay,
-                initialSnapshot: roomState.initialReplaySnapshot,
-                finished: roomState.status.finished,
-            }
-            roomState.connectedsUsers.forEach((player) => {
-                io.to(player.nextjsSocket).emit("final-room-state", roomData)
-            })
-            roomState.players.forEach((user) => {
-                SendUserRooms({ userId: user.userId, io })
-            })
-        }
-        return
     }
 
     const looser = timedOutUserId

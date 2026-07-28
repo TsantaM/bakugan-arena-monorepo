@@ -12,9 +12,11 @@ import { logPermissionDenied, logSocketEvent } from "../functions/log-socket-eve
 
 export const socketUpdateGateState = (io: Server, socket: Socket) => {
     socket.on('set-gate', ({ roomId, gateId, slot, userId }: setGateCardProps) => {
-        const state = Battle_Brawlers_Game_State.find((s) => s?.roomId === roomId)
-        if (!state) return
-        if (state.status.finished === true) return
+        const roomIndex = Battle_Brawlers_Game_State.findIndex((s) => s?.roomId === roomId)
+        if (roomIndex === -1) return
+
+        let state = Battle_Brawlers_Game_State[roomIndex]
+        if (!state || state.status.finished === true) return
 
         const checker = CheckTurnPermissions({
             roomState: state,
@@ -45,23 +47,21 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
             const slot: slots_id = state.turnState.turn === userId ? 'slot-2' : 'slot-5'
 
             const animation = UpdateGate({ roomId, gateId, slot, userId })
-            if (state) {
-                io.to(roomId).emit('update-room-state', state)
-                if (!animation) return
-                io.to(roomId).emit('animations', animation)
-                animation.forEach((a) => EmitMessage({ roomState: state, animation: a, io }))
-
-            }
+            state = Battle_Brawlers_Game_State[roomIndex]
+            if (!state) return
+            io.to(roomId).emit('update-room-state', state)
+            if (!animation) return
+            io.to(roomId).emit('animations', animation)
+            animation.forEach((a) => EmitMessage({ roomState: state, animation: a, io }))
         } else {
 
             const animation = UpdateGate({ roomId, gateId, slot, userId })
-            if (state) {
-                io.to(roomId).emit('update-room-state', state)
-                if (!animation) return
-                io.to(roomId).emit('animations', animation)
-                animation.forEach((a) => EmitMessage({ roomState: state, animation: a, io }))
-
-            }
+            state = Battle_Brawlers_Game_State[roomIndex]
+            if (!state) return
+            io.to(roomId).emit('update-room-state', state)
+            if (!animation) return
+            io.to(roomId).emit('animations', animation)
+            animation.forEach((a) => EmitMessage({ roomState: state, animation: a, io }))
 
         }
 
@@ -69,19 +69,19 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
         const inactiveSocket = state.connectedsUsers.get(state.turnState.previous_turn || '')
 
         if (state.turnState.turnCount === 0) {
-            const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
-            if (roomIndex === -1) return
             if (!Battle_Brawlers_Game_State[roomIndex]) return
 
             if (state.turnState.turn === userId) {
-                const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest, "SELECT_GATE_CARD")
+                const newState = removeActionByType(state.ActivePlayerActionRequest, "SELECT_GATE_CARD")
                 Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest = newState as ActivePlayerActionRequestType
             } else {
-                const newState = removeActionByType(Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest, "SELECT_GATE_CARD")
+                const newState = removeActionByType(state.InactivePlayerActionRequest, "SELECT_GATE_CARD")
                 Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest = newState as InactivePlayerActionRequestType
             }
 
-            const gateCardOnFieldCount = Battle_Brawlers_Game_State[roomIndex].protalSlots.filter((slot) => slot.portalCard !== null).length
+            state = Battle_Brawlers_Game_State[roomIndex]
+
+            const gateCardOnFieldCount = state.protalSlots.filter((portalSlot) => portalSlot.portalCard !== null).length
 
             grantActionIncrement({ roomState: state, userId, io })
             syncClocks({ roomState: state, io })
