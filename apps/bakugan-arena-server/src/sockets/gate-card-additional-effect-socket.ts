@@ -1,4 +1,4 @@
-import { GateCards, resolutionGateCardType } from "@bakugan-arena/game-data";
+import { GateCards, logDiagnostic, resolutionGateCardType } from "@bakugan-arena/game-data";
 import { Server, Socket } from "socket.io";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
@@ -21,7 +21,15 @@ export function GateCardAdditionalEffectSocket(io: Server, socket: Socket) {
         const request = roomData.gateCardActionRequest.find((req) => req.cardKey === resolution.cardKey && req.userId === resolution.userId)
         const requestIndex = roomData.gateCardActionRequest.findIndex((req) => req.cardKey === resolution.cardKey && req.userId === resolution.userId)
 
-        if (!request) return
+        if (!request) {
+            logDiagnostic(roomData, {
+                handler: "gate-additional.resolved",
+                level: "warn",
+                message: "Résolution gate additional — requête introuvable",
+                input: resolution,
+            })
+            return
+        }
         if (requestIndex === -1) return
         if (!Battle_Brawlers_Game_State[roomIndex]) return
 
@@ -34,6 +42,18 @@ export function GateCardAdditionalEffectSocket(io: Server, socket: Socket) {
         })
 
         Battle_Brawlers_Game_State[roomIndex].gateCardActionRequest.splice(requestIndex, 1)
+
+        logDiagnostic(roomData, {
+            handler: "gate-additional.resolved",
+            message: "Résolution gate additional traitée",
+            output: {
+                cardKey: request.cardKey,
+                resolutionType: resolution.data.type,
+                remainingGateRequests:
+                    Battle_Brawlers_Game_State[roomIndex].gateCardActionRequest.length,
+                resultType: result === undefined ? "void" : typeof result,
+            },
+        })
 
         io.to(roomData.roomId).emit('animations', Battle_Brawlers_Game_State[roomIndex].animations)
         Battle_Brawlers_Game_State[roomIndex].animations.forEach((animation) => EmitMessage({ roomState: Battle_Brawlers_Game_State[roomIndex], animation, io }))

@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
-import { AbilityCardsList, ActivePlayerActionRequestType, ExclusiveAbilitiesList, InactivePlayerActionRequestType, removeActionByType, resolutionType } from "@bakugan-arena/game-data";
+import { AbilityCardsList, ActivePlayerActionRequestType, ExclusiveAbilitiesList, InactivePlayerActionRequestType, logDiagnostic, removeActionByType, resolutionType } from "@bakugan-arena/game-data";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { turnActionUpdater } from "./turn-action";
 import { EmitMessage } from "../functions/emit-messages";
@@ -20,7 +20,15 @@ export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
         const request = roomData.AbilityAditionalRequest.find((req) => req.bakuganKey === resolution.bakuganKey && req.cardKey === resolution.cardKey && req.userId === resolution.userId)
         const requestIndex = roomData.AbilityAditionalRequest.findIndex((req) => req.bakuganKey === resolution.bakuganKey && req.cardKey === resolution.cardKey && req.userId === resolution.userId)
 
-        if (!request) return
+        if (!request) {
+            logDiagnostic(roomData, {
+                handler: "ability-additional.resolved",
+                level: "warn",
+                message: "Résolution ability additional — requête introuvable",
+                input: resolution,
+            })
+            return
+        }
         if (requestIndex === -1) return
 
         if (!Battle_Brawlers_Game_State[roomIndex]) return
@@ -35,6 +43,18 @@ export function AbilitiesAdditionalEffectsSocket(io: Server, socket: Socket) {
         })
 
         Battle_Brawlers_Game_State[roomIndex].AbilityAditionalRequest.splice(requestIndex, 1)
+
+        logDiagnostic(roomData, {
+            handler: "ability-additional.resolved",
+            message: "Résolution ability additional traitée",
+            output: {
+                cardKey: request.cardKey,
+                bakuganKey: request.bakuganKey,
+                resolutionType: resolution.data.type,
+                remainingAbilityRequests:
+                    Battle_Brawlers_Game_State[roomIndex].AbilityAditionalRequest.length,
+            },
+        })
 
         io.to(roomData.roomId).emit('animations', Battle_Brawlers_Game_State[roomIndex].animations)
         Battle_Brawlers_Game_State[roomIndex].animations.forEach((animation) => EmitMessage({ roomState: Battle_Brawlers_Game_State[roomIndex], animation, io }))

@@ -1,4 +1,4 @@
-import { activeGateCardProps, AnimationDirectivesTypes, gateCardActionRequestsType, GateCardsList, GetUserName, pushReplayAnimation } from "@bakugan-arena/game-data"
+import { activeGateCardProps, AnimationDirectivesTypes, gateCardActionRequestsType, GateCardsList, GetUserName, logDiagnostic, pushReplayAnimation } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 import { turnActionUpdater } from "../sockets/turn-action"
 import { EmitMessage } from "./emit-messages"
@@ -99,15 +99,43 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
     const requests = roomData.gateCardActionRequest
     if (!requests.length) return "opened"
 
+    const targetUserId = requests[0].data.target ?? requests[0].userId
     const targetSocket = requests[0].data.target
         ? roomData.connectedsUsers.get(requests[0].data.target)
         : roomData.connectedsUsers.get(requests[0].userId)
+
     if (!targetSocket) {
+        logDiagnostic(roomData, {
+            handler: "gate-additional.created",
+            level: "warn",
+            message: "Gate additional créée mais socket cible absente",
+            output: {
+                cardKey: gateCard.key,
+                slot,
+                userId,
+                targetUserId,
+                requestType: openFunction.type,
+                emitted: false,
+            },
+        })
         syncClocks({ roomState: roomData, io })
         return "additional"
     }
 
     io.to(targetSocket.gameboardSocket).emit("gate-card-additional-request", requests[0])
+    logDiagnostic(roomData, {
+        handler: "gate-additional.created",
+        message: "Gate additional émise au client",
+        output: {
+            cardKey: gateCard.key,
+            slot,
+            userId,
+            targetUserId,
+            requestType: openFunction.type,
+            emitted: true,
+            gameboardSocket: targetSocket.gameboardSocket,
+        },
+    })
     syncClocks({ roomState: roomData, io })
 
     return "additional"

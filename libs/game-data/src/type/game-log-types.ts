@@ -13,6 +13,7 @@ export type GameLogCategory =
     | "bot"
     | "timer"
     | "system"
+    | "diagnostic"
 
 export type GameLogEvent = {
     id: string

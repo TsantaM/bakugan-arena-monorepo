@@ -10,7 +10,25 @@ Chaque partie produit une série de **bundles** (un par tour). Un bundle regroup
 - un **résumé d'état** au début et à la fin du tour ;
 - les **actions disponibles** pour les joueurs après le tour.
 
-Les logs sont accumulés **en mémoire** pendant la partie, puis **persistés en base** à la fin de la partie (victoire, forfait, match nul) ou lors du **cleanup** de la salle si la persistance n'a pas encore eu lieu.
+Les logs sont accumulés **en mémoire** pendant la partie, puis **persistés en base** à la fin de la partie (victoire, forfait, match nul) ou lors du **cleanup** de la salle.
+
+Seules les salles **ayant au moins un log persisté** apparaissent dans la recherche admin.
+
+## Interface admin
+
+### Recherche (`/dashboard/admin/game-logs`)
+
+- Filtres : ID de salle, pseudo joueur, statut (terminée / en cours).
+- Colonnes : joueurs, statut, **nombre de tours loggés**, date.
+- Seules les rooms avec logs en base sont listées.
+
+### Détail d'une salle (`/dashboard/admin/game-logs/[roomId]`)
+
+- **Sélecteur de tour** : `Tour {n} · turnCount {turnCount}`.
+- **Résumé du tour** : `summaryStart`, `summaryEnd`, `actionRequests`.
+- **Timeline des événements** : handler, catégorie, niveau, message, input/output JSON.
+- Les événements **`diagnostic`** sont surlignés en ambre dans la liste.
+- Bouton **Documentation** : ouvre cette référence dans un panneau latéral.
 
 ## Structure d'un tour (`TurnLogBundle`)
 
@@ -23,7 +41,7 @@ Les logs sont accumulés **en mémoire** pendant la partie, puis **persistés en
 | `events` | Liste chronologique des événements |
 | `summaryStart` | État résumé au début du tour |
 | `summaryEnd` | État résumé à la fin du tour |
-| `actionRequests` | Actions recalculées pour le tour suivant |
+| `actionRequests` | Actions recalculées après le tour |
 
 ### Résumé d'état (`TurnLogSummary`)
 
@@ -47,7 +65,7 @@ Les logs sont accumulés **en mémoire** pendant la partie, puis **persistés en
 | `level` | `info`, `warn`, `error` ou `debug` |
 | `message` | Résumé lisible |
 | `input` | Données reçues (payload socket, état avant…) |
-| `output` | Résultat de la fonction |
+| `output` | Résultat ou snapshot de décision |
 | `ts` | Horodatage (ms) |
 | `durationMs` | Durée d'exécution si mesurée |
 
@@ -60,58 +78,112 @@ Les logs sont accumulés **en mémoire** pendant la partie, puis **persistés en
 | `battle` | Combat (début, tours de bataille, fin) |
 | `permission` | Refus d'action (joueur ou action non autorisée) |
 | `bot` | Décision d'un bot (coup choisi, score, skip) |
-| `timer` | Horloges joueurs |
+| `timer` | Horloges joueurs (via diagnostics `syncClocks`) |
 | `system` | Initialisation de partie, événements système |
+| **`diagnostic`** | **Décisions du moteur : ce qui a été émis ou bloqué, et pourquoi** |
 
-## Handlers fréquents
+## Couche diagnostic
+
+Les événements `diagnostic` répondent à : *« pourquoi rien ne se passe ? »*. Ils sont en **`warn`** quand un blocage est suspect.
+
+### Handlers diagnostic
+
+| Handler | Signification |
+|---------|---------------|
+| `turn-action-request.emit` | Tentative d'émission des menus d'action aux clients |
+| `syncClocks` | Démarrage / arrêt des chronomètres |
+| `turnActionUpdater.earlyReturn` | Pipeline de tour interrompu (souvent gate additional) |
+| `gate-additional.created` | Création et envoi d'une résolution gate |
+| `gate-additional.resolved` | Réponse client à une gate additional |
+| `ability-additional.created` | Création et envoi d'une résolution ability |
+| `ability-additional.resolved` | Réponse client à une ability additional |
+| `bot.skip-turn-request` | Bot ignore un `turn-action-request` (additional en cours) |
+| `bot.play-failed` | Bot n'a pas pu émettre d'action |
+
+### `turn-action-request.emit` — champs clés
+
+```json
+{
+  "source": "turnActionUpdater",
+  "blockers": {
+    "finished": false,
+    "gateAdditionalPending": 1,
+    "abilityAdditionalPending": 0
+  },
+  "actionRequests": {
+    "active": { "mustDo": 1, "mustDoOne": 0, "optional": 2, "total": 3 },
+    "inactive": { "total": 0 }
+  },
+  "connectedUsers": [
+    { "userId": "...", "gameboardSocket": "...", "nextjsSocket": "..." }
+  ],
+  "results": [
+    {
+      "role": "active",
+      "userId": "...",
+      "emitted": false,
+      "reason": "additional request en attente",
+      "actionCounts": { "total": 3 }
+    }
+  ]
+}
+```
+
+**Raisons fréquentes (`reason`) :**
+- `socket actif absent` / `socket inactif absent` — client déconnecté ou mauvais socket
+- `additional request en attente` — gate/ability additional non résolue
+- `aucune action disponible (merged vide)` — moteur n'a rien à proposer à l'inactif
+- `émis` — OK
+
+### `syncClocks` — champs clés
+
+```json
+{
+  "shouldRun": ["userId_actif"],
+  "timerRegistryPresent": true,
+  "transitions": [
+    {
+      "userId": "...",
+      "before": true,
+      "after": false,
+      "remaining": 287,
+      "transition": "stopped"
+    }
+  ]
+}
+```
+
+- `shouldRun` vide + partie non finie → **timer arrêté car aucune action en cours**.
+- `timerRegistryPresent: false` → entrée timer manquante pour la room.
+
+## Handlers classiques (non diagnostic)
 
 ### Sockets joueur
 
-- **`set-gate`** — sélection ou pose d'une gate card
-- **`set-bakugan`** — pose d'un bakugan sur un slot
-- **`use-ability-card`** — utilisation d'une carte ability
-- **`turn-action`** — le joueur termine son tour
-- **`forfait`** — abandon / forfait
+- `set-gate`, `set-bakugan`, `use-ability-card`, `turn-action`, `forfait`
 
-### Moteur de jeu
+### Moteur
 
-- **`createGameState`** — initialisation de la partie
-- **`updateTurnState`** — fin d'un tour, passage au suivant
-- **`CreateActionRequestFunction`** — recalcul des actions autorisées
-- **`handleBattle`** — décrémentation ou déclenchement de combat
-- **`handleGateCards`** — gates éligibles à l'ouverture automatique
-- **`ActiveGateCard`** — activation d'une gate (auto ou manuelle)
-- **`onBattleEnd`** — résolution de fin de bataille
-- **`CheckGameFinished`** — détection de fin de partie
+- `createGameState`, `updateTurnState`, `CreateActionRequestFunction`
+- `handleBattle`, `handleGateCards`, `ActiveGateCard`, `onBattleEnd`, `CheckGameFinished`
 
 ### Bots
 
-- **`bot-play`** — coup joué ou `TURN_SKIP` si aucune action scorée
+- `bot-play` — coup joué ou `TURN_SKIP`
 
-## Cycle de vie d'un tour
+## Workflow de debug d'un blocage
 
-1. Le joueur (ou le bot) envoie des actions via socket → events `socket` / `bot`.
-2. À la fin du tour (`turn-action`), **`turnActionUpdater`** enchaîne :
-   - `handleBattle`
-   - `handleGateCards` / `ActiveGateCard`
-   - `updateTurnState` (finalise le bundle du tour)
-   - `CreateActionRequestFunction`
-3. Le bundle est stocké en mémoire dans `roomState.gameLog.turnLogs`.
-4. À la **fin de partie**, tous les bundles sont écrits en table `game_turn_log`.
+1. Ouvrir le **dernier tour** enregistré.
+2. Filtrer visuellement les événements **diagnostic** (surbrillance ambre).
+3. Vérifier le dernier `turn-action-request.emit` :
+   - `emitted: false` + actions `total > 0` → client n'a pas reçu le menu.
+4. Vérifier `syncClocks` :
+   - `shouldRun` vide → timer normallement arrêté.
+5. Chercher `earlyReturn` ou `gate/ability-additional.created` sans `.resolved` suivant → résolution bloquée.
+6. Pour un bot : `bot.skip-turn-request` ou absence de `bot-play` après un emit réussi.
 
 ## Persistance en base
 
-Table **`game_turn_log`** :
+Table **`game_turn_log`** : une ligne par tour, colonne `log_data` (JSONB).
 
-- une ligne par tour ;
-- colonne `log_data` (JSONB) = le `TurnLogBundle` complet ;
-- index unique `(room_id, turn_number)`.
-
-Les logs d'une partie **en cours** n'apparaissent pas encore en base : seules les parties terminées (ou nettoyées après timeout) sont consultables ici.
-
-## Conseils de debug
-
-- Comparez **`summaryStart`** et **`summaryEnd`** pour voir l'évolution du combat et du joueur actif.
-- Un event **`permission`** + `level: warn` indique un refus côté serveur.
-- Les events **`bot-play`** incluent le score et le label du coup choisi.
-- Si un tour semble vide, vérifiez le tour précédent : la finalisation se fait au **début** de `updateTurnState`.
+Les parties **en cours** n'apparaissent pas tant qu'elles ne sont pas terminées ou nettoyées.

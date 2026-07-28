@@ -171,6 +171,71 @@
     "confirmDesc": "لا يمكن التراجع عن هذا الإجراء. سيحذف ذلك جميع الغرف القديمة.",
     "confirm": "تأكيد الحذف"
   },
+  "gameLogs": {
+    "cardTitle": "سجلات المباراة",
+    "cardDesc": "ابحث عن غرفة وافحص أحداث المحرك دورًا بدور.",
+    "open": "فتح السجلات",
+    "pageTitle": "سجلات المباراة",
+    "detailTitle": "تفاصيل الغرفة",
+    "searchTitle": "البحث عن غرفة",
+    "searchDesc": "تصفية حسب معرف الغرفة أو اللاعب أو الحالة.",
+    "resultsTitle": "الغرف",
+    "resultsCount": "{n} غرفة(غرف) موجودة",
+    "loading": "جاري التحميل…",
+    "backToSearch": "العودة إلى البحث",
+    "emptyTurns": "لا توجد سجلات مسجلة لهذه الغرفة.",
+    "eventsTitle": "{n} حدث(أحداث)",
+    "summaryTitle": "ملخص الدور",
+    "fields": {
+      "roomId": "معرف الغرفة",
+      "player": "لاعب",
+      "status": "الحالة",
+      "turn": "الدور"
+    },
+    "placeholders": {
+      "roomId": "UUID الغرفة…",
+      "player": "اسم المستخدم…"
+    },
+    "filters": {
+      "all": "الكل",
+      "finished": "منتهية",
+      "ongoing": "جارية"
+    },
+    "actions": {
+      "search": "بحث",
+      "viewLogs": "عرض السجلات"
+    },
+    "table": {
+      "room": "الغرفة",
+      "players": "اللاعبون",
+      "status": "الحالة",
+      "turns": "الأدوار المسجلة",
+      "date": "التاريخ"
+    },
+    "status": {
+      "finished": "منتهية",
+      "ongoing": "جارية",
+      "ranked": "مصنّفة"
+    },
+    "turnOption": "الدور {n} · turnCount {turnCount}",
+    "meta": {
+      "created": "تاريخ الإنشاء",
+      "turnCount": "{n} دور(أدوار) مسجل(ة)"
+    },
+    "summary": {
+      "start": "بداية الدور",
+      "end": "نهاية الدور",
+      "actions": "الإجراءات المتاحة"
+    },
+    "events": {
+      "diagnosticHint": "حدث تشخيصي — يوضح سبب حظر إجراء أو تخطيه"
+    },
+    "documentation": {
+      "open": "التوثيق",
+      "title": "توثيق السجلات",
+      "desc": "مرجع لقراءة الأحداث والفئات والمعالجات."
+    }
+  },
   "toasts": {
     "ladderReset": "تمت إعادة تعيين الترتيب لـ {n} لاعب(ين)",
     "ladderResetFailed": "فشل إعادة تعيين الترتيب",

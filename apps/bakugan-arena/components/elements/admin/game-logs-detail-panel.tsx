@@ -32,10 +32,13 @@ function formatPlayerName(
 }
 
 function EventRow({ event }: { event: TurnLogBundle["events"][number] }) {
+    const t = useTranslations('admin.gameLogs')
+    const isDiagnostic = event.category === "diagnostic"
+
     return (
-        <div className="rounded-md border p-3 text-sm">
+        <div className={`rounded-md border p-3 text-sm ${isDiagnostic ? "border-amber-500/40 bg-amber-500/5" : ""}`}>
             <div className="mb-2 flex flex-wrap items-center gap-2">
-                <Badge variant="outline">{event.category}</Badge>
+                <Badge variant={isDiagnostic ? "default" : "outline"}>{event.category}</Badge>
                 <span className="font-medium">{event.handler}</span>
                 <Badge variant={event.level === "error" ? "destructive" : "secondary"}>
                     {event.level}
@@ -44,7 +47,16 @@ function EventRow({ event }: { event: TurnLogBundle["events"][number] }) {
                     {new Date(event.ts).toLocaleTimeString()}
                 </span>
             </div>
-            {event.message && <p className="mb-2">{event.message}</p>}
+            {event.message && (
+                <p className="mb-2">
+                    {event.message}
+                    {isDiagnostic && (
+                        <span className="text-muted-foreground ml-2 text-xs">
+                            ({t('events.diagnosticHint')})
+                        </span>
+                    )}
+                </p>
+            )}
             {event.input !== undefined && (
                 <pre className="bg-muted mb-2 overflow-x-auto rounded p-2 text-xs">
                     {JSON.stringify(event.input, null, 2)}

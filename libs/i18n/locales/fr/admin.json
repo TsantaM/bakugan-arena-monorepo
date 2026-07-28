@@ -227,6 +227,9 @@
       "end": "Fin du tour",
       "actions": "Actions disponibles"
     },
+    "events": {
+      "diagnosticHint": "Événement diagnostic — indique pourquoi une action a été bloquée ou omise"
+    },
     "documentation": {
       "open": "Documentation",
       "title": "Documentation des logs",

@@ -227,6 +227,9 @@
       "end": "Turn end",
       "actions": "Available actions"
     },
+    "events": {
+      "diagnosticHint": "Diagnostic event — explains why an action was blocked or skipped"
+    },
     "documentation": {
       "open": "Documentation",
       "title": "Log documentation",

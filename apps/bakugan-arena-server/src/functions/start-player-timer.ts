@@ -1,4 +1,4 @@
-import { Message, replayEntryType, replaySnapshotType, stateType } from "@bakugan-arena/game-data";
+import { Message, replayEntryType, replaySnapshotType, stateType, logDiagnostic, buildActionRequestsSummary } from "@bakugan-arena/game-data";
 import { Server } from "socket.io";
 import { db } from "../lib/db"
 import { eq } from "drizzle-orm"
@@ -316,7 +316,18 @@ export function StartPlayerTime({
 export function syncClocks({ roomState, io }: { roomState: stateType; io: Server }) {
     if (!roomState) return
     const roomTimers = getRoomTimers(roomState.roomId)
-    if (!roomTimers) return
+    if (!roomTimers) {
+        logDiagnostic(roomState, {
+            handler: "syncClocks",
+            level: "warn",
+            message: "Synchronisation impossible — entrée timer absente",
+            output: {
+                roomId: roomState.roomId,
+                timerRegistryPresent: false,
+            },
+        })
+        return
+    }
 
     const now = Date.now()
 
@@ -324,18 +335,56 @@ export function syncClocks({ roomState, io }: { roomState: stateType; io: Server
         for (const player of roomState.players) {
             stopPlayerClock({ roomState, userId: player.userId, io, now, emit: true })
         }
+        logDiagnostic(roomState, {
+            handler: "syncClocks",
+            message: "Chronomètres arrêtés — partie terminée",
+            output: { finished: true },
+        })
         return
     }
 
     const shouldRun = getRunningUserIds(roomState)
+    const timerTransitions: {
+        userId: string
+        before: boolean
+        after: boolean
+        remaining: number
+        deadlineAt: number | null
+        transition: string
+    }[] = []
 
     for (const player of roomState.players) {
+        const wasRunning = getPlayerTimerEntry(roomState.roomId, player.userId)?.deadlineAt != null
         if (shouldRun.has(player.userId)) {
             startPlayerClock({ roomState, userId: player.userId, io, now })
         } else {
             stopPlayerClock({ roomState, userId: player.userId, io, now, emit: true })
         }
+        const entry = getPlayerTimerEntry(roomState.roomId, player.userId)
+        const isRunning = entry?.deadlineAt != null
+        timerTransitions.push({
+            userId: player.userId,
+            before: wasRunning,
+            after: isRunning,
+            remaining: player.timer,
+            deadlineAt: entry?.deadlineAt ?? null,
+            transition: wasRunning === isRunning
+                ? (isRunning ? "unchanged_running" : "unchanged_stopped")
+                : (isRunning ? "started" : "stopped"),
+        })
     }
+
+    logDiagnostic(roomState, {
+        handler: "syncClocks",
+        message: "Synchronisation des chronomètres",
+        level: shouldRun.size === 0 ? "warn" : "info",
+        output: {
+            shouldRun: [...shouldRun],
+            timerRegistryPresent: true,
+            actionRequests: buildActionRequestsSummary(roomState),
+            transitions: timerTransitions,
+        },
+    })
 }
 
 /** Alias historique — redirige vers syncClocks. */

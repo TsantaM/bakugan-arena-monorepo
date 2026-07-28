@@ -5,6 +5,7 @@ import {
   gateCardActionRequestsType,
   InactivePlayerActionRequestType,
   logGameEvent,
+  logDiagnostic,
   resolutionType,
   stateType,
 } from "@bakugan-arena/game-data"
@@ -163,8 +164,8 @@ const playBestMove = (
     logGameEvent(state, {
       handler: "bot-play",
       category: "bot",
-      input: { botLabel },
-      output: { action: "TURN_SKIP" },
+      input: { botLabel, legalMoves: moves.length },
+      output: { action: "TURN_SKIP", adaptation: adaptation?.reason },
       message: `[BOT ${botLabel}] aucun coup → skip`,
     })
     socket.emit("turn-action", { roomId, userId })
@@ -253,10 +254,29 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
     const currentRoomId = roomId
     enqueue(() => {
       if (pendingAdditionalRequests > 0) {
-        console.log(`[BOT ${bot.userId}] skip turn-action-request (pending additional)`)
+        const state = getRoomState(currentRoomId)
+        if (state) {
+          logDiagnostic(state, {
+            handler: "bot.skip-turn-request",
+            level: "warn",
+            message: `[BOT ${bot.userId}] turn-action-request ignorée — additional en cours`,
+            output: { pendingAdditionalRequests, botUserId: bot.userId },
+          })
+        }
         return
       }
-      playBestMove(socket, currentRoomId, bot.userId, bot.userId, request)
+      const played = playBestMove(socket, currentRoomId, bot.userId, bot.userId, request)
+      if (!played) {
+        const state = getRoomState(currentRoomId)
+        if (state) {
+          logDiagnostic(state, {
+            handler: "bot.play-failed",
+            level: "warn",
+            message: `[BOT ${bot.userId}] playBestMove n'a rien émis`,
+            output: { botUserId: bot.userId, requestTarget: request.target },
+          })
+        }
+      }
     })
   })
 

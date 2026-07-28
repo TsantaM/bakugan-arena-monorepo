@@ -1,4 +1,4 @@
-import { AbilityCardsActionsRequestsType, AbilityCardsList, activateAbilities, ActivePlayerActionRequestType, AnimationDirectivesTypes, ExclusiveAbilitiesList, GetUserName, InactivePlayerActionRequestType, pushReplayAnimation, removeActionByType, useAbilityCardProps } from "@bakugan-arena/game-data";
+import { AbilityCardsActionsRequestsType, AbilityCardsList, activateAbilities, ActivePlayerActionRequestType, AnimationDirectivesTypes, ExclusiveAbilitiesList, GetUserName, InactivePlayerActionRequestType, logDiagnostic, pushReplayAnimation, removeActionByType, useAbilityCardProps } from "@bakugan-arena/game-data";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { Server } from "socket.io";
 import { clearAnimationsInRoom } from "../sockets/clear-animations-socket";
@@ -162,8 +162,23 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
             const requests = Battle_Brawlers_Game_State[roomIndex].AbilityAditionalRequest
             if (!requests) return
             if (requests.length <= 0) return
+            const targetUserId = requests[0].data.target ?? requests[0].userId
             const socket = requests[0].data.target ? roomData.connectedsUsers.get(requests[0].data.target) : roomData.connectedsUsers.get(requests[0].userId)
             if (!socket) {
+                logDiagnostic(roomData, {
+                    handler: "ability-additional.created",
+                    level: "warn",
+                    message: "Ability additional créée mais socket cible absente",
+                    output: {
+                        cardKey: abilityId,
+                        bakuganKey,
+                        slot,
+                        userId,
+                        targetUserId,
+                        requestType: abilityReturn.type,
+                        emitted: false,
+                    },
+                })
                 syncClocks({ roomState: roomData, io })
                 return
             }
@@ -175,6 +190,20 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
             animations.forEach((animation) => EmitMessage({ roomState: state, animation, io }))
 
             io.to(socket.gameboardSocket).emit('ability-additional-request', requests[0])
+            logDiagnostic(roomData, {
+                handler: "ability-additional.created",
+                message: "Ability additional émise au client",
+                output: {
+                    cardKey: abilityId,
+                    bakuganKey,
+                    slot,
+                    userId,
+                    targetUserId,
+                    requestType: abilityReturn.type,
+                    emitted: true,
+                    gameboardSocket: socket.gameboardSocket,
+                },
+            })
             syncClocks({ roomState: roomData, io })
 
         } else if (abilityReturn !== null && abilityReturn.type === 'CARD_FAILED') {

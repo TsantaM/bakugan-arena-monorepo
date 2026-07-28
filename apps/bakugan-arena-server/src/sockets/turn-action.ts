@@ -1,5 +1,5 @@
 import { Server, Socket } from "socket.io";
-import { attachActionRequestsToLastTurn, CheckBattleStillInProcess, CreateActionRequestFunction, handleBattle, handleGateCards, logGameEvent, Message, summarizeStateForLog, turnCountSocketProps, updateTurnState } from "@bakugan-arena/game-data";
+import { attachActionRequestsToLastTurn, CheckBattleStillInProcess, CreateActionRequestFunction, handleBattle, handleGateCards, logDiagnostic, logGameEvent, Message, summarizeStateForLog, turnCountSocketProps, updateTurnState } from "@bakugan-arena/game-data";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { CheckGameFinished } from "../functions/CheckGameFinished";
 import { onBattleEnd } from "../functions/on-battle-end";
@@ -7,8 +7,8 @@ import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { ClearDomain } from "../functions/clear-domain";
 import { UpdatePlayerTimer, grantActionIncrement, syncClocks } from "../functions/start-player-timer";
 import { EmitMessage } from "../functions/emit-messages";
-import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
 import { ActiveGateCard } from "../functions/active-gate-card";
+import { emitTurnActionRequestsWithDiagnostics } from "../functions/log-turn-action-requests";
 
 export function turnActionUpdater({ roomId, userId, io, updateBattleState = true }: { roomId: string, userId: string, io: Server, updateBattleState?: boolean }) {
     const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
@@ -60,6 +60,16 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
             })
 
             if (result === 'additional' || result === 'turn_advanced') {
+                logDiagnostic(roomData, {
+                    handler: "turnActionUpdater.earlyReturn",
+                    level: "warn",
+                    message: `Sortie anticipée après ActiveGateCard (${result})`,
+                    output: {
+                        reason: result,
+                        after: "ActiveGateCard",
+                        gateCard: card,
+                    },
+                })
                 syncClocks({ roomState: roomData, io })
                 return
             }
@@ -104,9 +114,6 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
     io.to(roomId).emit('animations', animations)
     roomData.animations.forEach((animation) => EmitMessage({ roomState: roomData, animation, io }))
 
-    const activeSocket = roomData.connectedsUsers.get(roomData.turnState.turn)
-    const inactiveSocket = roomData.connectedsUsers.get(roomData.turnState.previous_turn || '')
-
     const turnState: turnCountSocketProps = {
         turnCount: roomData.turnState.turnCount,
         battleTurn: roomData.battleState.battleInProcess ? roomData.battleState.turns : undefined
@@ -116,31 +123,12 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
 
     clearAnimationsInRoom(roomId)
 
-    if (activeSocket && !roomData.status.finished && roomData.gateCardActionRequest.length === 0 && roomData.AbilityAditionalRequest.length === 0) {
-
-        const checker = CheckTurnActionRequest({ roomState: roomData, userId: userId })
-        if (checker) {
-            const request = roomData.ActivePlayerActionRequest
-            io.to(activeSocket.gameboardSocket).emit('turn-action-request', request)
-        }
-    }
-
-    if (inactiveSocket && !roomData.status.finished && roomData.gateCardActionRequest.length === 0 && roomData.AbilityAditionalRequest.length === 0) {
-
-        const checker = CheckTurnActionRequest({ roomState: roomData, userId: userId })
-        if (checker) {
-            const request = roomData.InactivePlayerActionRequest
-            const merged = [
-                request.actions.mustDo,
-                request.actions.mustDoOne,
-                request.actions.optional
-            ].flat()
-
-            if (merged.length > 0) {
-                io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', request)
-            }
-        }
-    }
+    emitTurnActionRequestsWithDiagnostics({
+        roomState: roomData,
+        io,
+        userId,
+        source: "turnActionUpdater",
+    })
 
     UpdatePlayerTimer({
         io: io,
