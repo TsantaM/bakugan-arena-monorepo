@@ -226,6 +226,11 @@
       "start": "Début du tour",
       "end": "Fin du tour",
       "actions": "Actions disponibles"
+    },
+    "documentation": {
+      "open": "Documentation",
+      "title": "Documentation des logs",
+      "desc": "Référence pour lire les événements, catégories et handlers."
     }
   },
   "toasts": {

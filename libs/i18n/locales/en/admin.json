@@ -226,6 +226,11 @@
       "start": "Turn start",
       "end": "Turn end",
       "actions": "Available actions"
+    },
+    "documentation": {
+      "open": "Documentation",
+      "title": "Log documentation",
+      "desc": "Reference for reading events, categories, and handlers."
     }
   },
   "toasts": {

@@ -61,34 +61,42 @@ export async function searchGameLogRooms(input?: {
         )
     }
 
-    const roomRows = await db.query.rooms.findMany({
-        where: conditions.length > 0 ? and(...conditions) : undefined,
-        orderBy: [desc(rooms.createdAt)],
-        limit,
-    })
+    const roomRows = await db
+        .select({
+            id: rooms.id,
+            player1Id: rooms.player1Id,
+            player2Id: rooms.player2Id,
+            finished: rooms.finished,
+            ranked: rooms.ranked,
+            winner: rooms.winner,
+            createdAt: rooms.createdAt,
+            turnLogCount: sql<number>`count(${gameTurnLog.id})::int`,
+        })
+        .from(rooms)
+        .innerJoin(gameTurnLog, eq(gameTurnLog.roomId, rooms.id))
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .groupBy(
+            rooms.id,
+            rooms.player1Id,
+            rooms.player2Id,
+            rooms.finished,
+            rooms.ranked,
+            rooms.winner,
+            rooms.createdAt,
+        )
+        .orderBy(desc(rooms.createdAt))
+        .limit(limit)
 
     if (roomRows.length === 0) return []
 
-    const roomIds = roomRows.map((room) => room.id)
     const playerIds = [...new Set(roomRows.flatMap((room) => [room.player1Id, room.player2Id]))]
 
-    const [players, turnCounts] = await Promise.all([
-        db.query.user.findMany({
-            where: inArray(user.id, playerIds),
-            columns: { id: true, displayUsername: true, username: true },
-        }),
-        db
-            .select({
-                roomId: gameTurnLog.roomId,
-                count: sql<number>`count(*)::int`,
-            })
-            .from(gameTurnLog)
-            .where(inArray(gameTurnLog.roomId, roomIds))
-            .groupBy(gameTurnLog.roomId),
-    ])
+    const players = await db.query.user.findMany({
+        where: inArray(user.id, playerIds),
+        columns: { id: true, displayUsername: true, username: true },
+    })
 
     const playersById = new Map(players.map((player) => [player.id, player]))
-    const turnCountByRoom = new Map(turnCounts.map((row) => [row.roomId, row.count]))
 
     return roomRows.map((room) => {
         const player1 = playersById.get(room.player1Id)
@@ -104,7 +112,7 @@ export async function searchGameLogRooms(input?: {
             ranked: room.ranked,
             winner: room.winner,
             createdAt: room.createdAt,
-            turnLogCount: turnCountByRoom.get(room.id) ?? 0,
+            turnLogCount: room.turnLogCount,
         }
     })
 }

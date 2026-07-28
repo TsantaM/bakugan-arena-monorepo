@@ -15,11 +15,13 @@ import {
 } from "@/components/ui/select"
 import { ChevronLeft } from "lucide-react"
 import { useTranslations } from "next-intl"
+import GameLogsDocumentationSheet from "@/components/elements/admin/game-logs-documentation-sheet"
 
 type GameLogRoomDetail = NonNullable<Awaited<ReturnType<typeof import("@/src/actions/admin/game-logs").getGameTurnLogs>>>
 
 type GameLogsDetailPanelProps = {
     data: GameLogRoomDetail
+    documentation: string
 }
 
 function formatPlayerName(
@@ -57,7 +59,7 @@ function EventRow({ event }: { event: TurnLogBundle["events"][number] }) {
     )
 }
 
-export default function GameLogsDetailPanel({ data }: GameLogsDetailPanelProps) {
+export default function GameLogsDetailPanel({ data, documentation }: GameLogsDetailPanelProps) {
     const t = useTranslations('admin.gameLogs')
     const [selectedTurnNumber, setSelectedTurnNumber] = useState<string>(
         data.turns[0]?.turnNumber.toString() ?? "1",
@@ -72,13 +74,14 @@ export default function GameLogsDetailPanel({ data }: GameLogsDetailPanelProps) 
 
     return (
         <div className="flex flex-col gap-6">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-between gap-3">
                 <Button asChild variant="ghost" size="sm">
                     <Link href="/dashboard/admin/game-logs">
                         <ChevronLeft />
                         {t('backToSearch')}
                     </Link>
                 </Button>
+                <GameLogsDocumentationSheet documentation={documentation} />
             </div>
 
             <Card>
