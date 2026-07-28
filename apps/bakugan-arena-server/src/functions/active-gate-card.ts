@@ -3,6 +3,8 @@ import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-s
 import { turnActionUpdater } from "../sockets/turn-action"
 import { EmitMessage } from "./emit-messages"
 import { syncClocks } from "./start-player-timer"
+import { markAdditionalPending } from "./resume-room-flow"
+import { resumeRoomFlowWithAutoSkip } from "./resume-room-flow-defaults"
 
 /**
  * - false : rien ouvert
@@ -95,14 +97,13 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
     }
 
     roomData.gateCardActionRequest.push(request)
+    markAdditionalPending(roomData.roomId)
 
     const requests = roomData.gateCardActionRequest
     if (!requests.length) return "opened"
 
     const targetUserId = requests[0].data.target ?? requests[0].userId
-    const targetSocket = requests[0].data.target
-        ? roomData.connectedsUsers.get(requests[0].data.target)
-        : roomData.connectedsUsers.get(requests[0].userId)
+    const targetSocket = roomData.connectedsUsers.get(targetUserId)
 
     if (!targetSocket) {
         logDiagnostic(roomData, {
@@ -118,7 +119,12 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
                 emitted: false,
             },
         })
-        syncClocks({ roomState: roomData, io })
+        resumeRoomFlowWithAutoSkip({
+            roomState: roomData,
+            io,
+            userId: targetUserId,
+            source: "ActiveGateCard.missing-socket",
+        })
         return "additional"
     }
 

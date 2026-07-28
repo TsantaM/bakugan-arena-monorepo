@@ -4,6 +4,7 @@ import { initRoomState } from "../functions/init-game-room"
 import { CreateActionRequestFunction, Message, replayEntryType, replaySnapshotType } from "@bakugan-arena/game-data"
 import { SendAllMessages } from "../functions/emit-messages"
 import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions"
+import { resumeRoomFlowWithAutoSkip } from "../functions/resume-room-flow-defaults"
 
 
 const roomState = ({ roomId }: { roomId: string }) => {
@@ -168,19 +169,31 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
                             socket.emit('ability-additional-request', abilityRequest)
                         }
                     }
+                    resumeRoomFlowWithAutoSkip({
+                        roomState: roomData,
+                        io,
+                        userId,
+                        source: "init-room-state.ability-resync",
+                    })
                     return
                 }
 
                 const gateRequest = roomData.gateCardActionRequest[0]
                 if (gateRequest) {
 
-                    if (!gateRequest.data.target && gateRequest.userId) {
+                    if (!gateRequest.data.target && gateRequest.userId === userId) {
                         socket.emit('gate-card-additional-request', gateRequest)
                     } else {
                         if (gateRequest.data.target === userId) {
                             socket.emit('gate-card-additional-request', gateRequest)
                         }
                     }
+                    resumeRoomFlowWithAutoSkip({
+                        roomState: roomData,
+                        io,
+                        userId,
+                        source: "init-room-state.gate-resync",
+                    })
                     return
                 }
 

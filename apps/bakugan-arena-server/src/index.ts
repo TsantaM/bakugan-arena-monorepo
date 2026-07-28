@@ -37,6 +37,7 @@ import { CLEANUP_INTERVAL_GLOBAL_CHAT, cleanupOldMessages } from "./game-state/g
 import { GateCardAdditionalEffectSocket } from "./sockets/gate-card-additional-effect-socket";
 import { ChangeAttributSocket } from "./sockets/change-attribut-socket";
 import { applyEloDecayToAllUsers } from "./functions/ladder-functions/elo-decay";
+import { startRoomFlowWatchdog } from "./functions/room-flow-watchdog";
 
 
 
@@ -77,6 +78,8 @@ const startServer = async () => {
             console.error("ELO decay job error", err)
         })
     }, ELO_DECAY_INTERVAL_MS)
+
+    startRoomFlowWatchdog(io)
 
     io.on('connection', (socket) => {
         const { userId, roomId, socketType } = socket.handshake.auth

@@ -9,6 +9,7 @@ import { UpdatePlayerTimer, grantActionIncrement, syncClocks } from "../function
 import { EmitMessage } from "../functions/emit-messages";
 import { ActiveGateCard } from "../functions/active-gate-card";
 import { emitTurnActionRequestsWithDiagnostics } from "../functions/log-turn-action-requests";
+import { resumeRoomFlowWithAutoSkip } from "../functions/resume-room-flow-defaults";
 
 export function turnActionUpdater({ roomId, userId, io, updateBattleState = true }: { roomId: string, userId: string, io: Server, updateBattleState?: boolean }) {
     const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
@@ -70,7 +71,16 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
                         gateCard: card,
                     },
                 })
-                syncClocks({ roomState: roomData, io })
+                if (result === "additional") {
+                    resumeRoomFlowWithAutoSkip({
+                        roomState: roomData,
+                        io,
+                        userId: card.userId,
+                        source: "turnActionUpdater.afterActiveGateCard",
+                    })
+                } else {
+                    syncClocks({ roomState: roomData, io })
+                }
                 return
             }
         }

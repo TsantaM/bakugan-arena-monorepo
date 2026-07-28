@@ -7,6 +7,8 @@ import { EmitMessage } from "./emit-messages";
 import { CheckTurnActionRequest } from "./check-turn-action-request-permissions";
 import { CheckGameFinished } from "./CheckGameFinished";
 import { syncClocks } from "./start-player-timer";
+import { markAdditionalPending } from "./resume-room-flow";
+import { resumeRoomFlowWithAutoSkip } from "./resume-room-flow-defaults";
 
 export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganKey, io }: useAbilityCardProps & { io: Server }) => {
     // FR: On récupère les données de la salle en cours avec son roomId
@@ -159,11 +161,12 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
             }
 
             Battle_Brawlers_Game_State[roomIndex].AbilityAditionalRequest.push(request)
+            markAdditionalPending(roomId)
             const requests = Battle_Brawlers_Game_State[roomIndex].AbilityAditionalRequest
             if (!requests) return
             if (requests.length <= 0) return
             const targetUserId = requests[0].data.target ?? requests[0].userId
-            const socket = requests[0].data.target ? roomData.connectedsUsers.get(requests[0].data.target) : roomData.connectedsUsers.get(requests[0].userId)
+            const socket = roomData.connectedsUsers.get(targetUserId)
             if (!socket) {
                 logDiagnostic(roomData, {
                     handler: "ability-additional.created",
@@ -179,7 +182,12 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
                         emitted: false,
                     },
                 })
-                syncClocks({ roomState: roomData, io })
+                resumeRoomFlowWithAutoSkip({
+                    roomState: roomData,
+                    io,
+                    userId: targetUserId,
+                    source: "useAbilityCard.missing-socket",
+                })
                 return
             }
 
@@ -277,7 +285,8 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
 
                 const merged = [Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.optional].flat()
                 if (merged.length <= 0) {
-                    syncClocks({ roomState: state, io })
+                    clearAnimationsInRoom(roomId)
+                    turnActionUpdater({ roomId, userId, io })
                     return
                 }
                 io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
@@ -344,7 +353,8 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
 
                 const merged = [Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDo, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.mustDoOne, Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest.actions.optional].flat()
                 if (merged.length <= 0) {
-                    syncClocks({ roomState: state, io })
+                    clearAnimationsInRoom(roomId)
+                    turnActionUpdater({ roomId, userId, io })
                     return
                 }
                 io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)

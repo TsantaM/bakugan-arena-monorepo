@@ -193,6 +193,17 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
   let actionQueue: Promise<void> = Promise.resolve()
   /** Empêche un turn-action de passer pendant qu'une additional request est en cours */
   let pendingAdditionalRequests = 0
+  let deferredTurnActionRequest: TurnActionRequest | null = null
+
+  const replayDeferredTurnRequest = () => {
+    if (pendingAdditionalRequests > 0 || !deferredTurnActionRequest || !roomId) return
+    const request = deferredTurnActionRequest
+    deferredTurnActionRequest = null
+    const currentRoomId = roomId
+    enqueue(() => {
+      playBestMove(socket, currentRoomId, bot.userId, bot.userId, request)
+    })
+  }
 
   const enqueue = (task: () => void | Promise<void>) => {
     actionQueue = actionQueue
@@ -221,12 +232,14 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
     if (roomId) clearMatchMemory(roomId, bot.userId)
     roomId = null
     pendingAdditionalRequests = 0
+    deferredTurnActionRequest = null
   })
 
   const joinRoom = (matchedRoomId: string) => {
     if (roomId) clearMatchMemory(roomId, bot.userId)
     roomId = matchedRoomId
     pendingAdditionalRequests = 0
+    deferredTurnActionRequest = null
     clearMatchMemory(matchedRoomId, bot.userId)
     // Un seul bootstrap : init-room-state suffit (évite un 2ᵉ turn-action-request)
     socket.emit("init-room-state", {
@@ -247,6 +260,7 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
     if (roomId) clearMatchMemory(roomId, bot.userId)
     roomId = null
     pendingAdditionalRequests = 0
+    deferredTurnActionRequest = null
   })
 
   socket.on("turn-action-request", (request: TurnActionRequest) => {
@@ -254,6 +268,7 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
     const currentRoomId = roomId
     enqueue(() => {
       if (pendingAdditionalRequests > 0) {
+        deferredTurnActionRequest = request
         const state = getRoomState(currentRoomId)
         if (state) {
           logDiagnostic(state, {
@@ -305,6 +320,7 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
         }
       } finally {
         pendingAdditionalRequests = Math.max(0, pendingAdditionalRequests - 1)
+        replayDeferredTurnRequest()
       }
     })
   })
@@ -334,6 +350,7 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
         }
       } finally {
         pendingAdditionalRequests = Math.max(0, pendingAdditionalRequests - 1)
+        replayDeferredTurnRequest()
       }
     })
   })

@@ -32,6 +32,27 @@ export type PlayerTimerSnapshot = {
 type RoomTimerEntry = (typeof intervalIds)[number]
 type PlayerTimerEntry = RoomTimerEntry["players"][number]
 
+export function ensureRoomTimerRegistry(roomState: stateType) {
+    if (intervalIds.some((entry) => entry.roomId === roomState.roomId)) return
+
+    intervalIds.push({
+        roomId: roomState.roomId,
+        finishing: false,
+        players: roomState.players.map((player) => ({
+            userId: player.userId,
+            timeoutId: null,
+            deadlineAt: null,
+        })),
+    })
+
+    logDiagnostic(roomState, {
+        handler: "syncClocks",
+        level: "warn",
+        message: "Entrée timer recréée à la volée",
+        output: { roomId: roomState.roomId },
+    })
+}
+
 function getRoomTimers(roomId: string): RoomTimerEntry | undefined {
     return intervalIds.find((i) => i.roomId === roomId)
 }
@@ -315,19 +336,9 @@ export function StartPlayerTime({
  */
 export function syncClocks({ roomState, io }: { roomState: stateType; io: Server }) {
     if (!roomState) return
+    ensureRoomTimerRegistry(roomState)
     const roomTimers = getRoomTimers(roomState.roomId)
-    if (!roomTimers) {
-        logDiagnostic(roomState, {
-            handler: "syncClocks",
-            level: "warn",
-            message: "Synchronisation impossible — entrée timer absente",
-            output: {
-                roomId: roomState.roomId,
-                timerRegistryPresent: false,
-            },
-        })
-        return
-    }
+    if (!roomTimers) return
 
     const now = Date.now()
 
