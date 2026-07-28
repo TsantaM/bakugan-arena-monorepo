@@ -1,7 +1,7 @@
-import { pgTable, text, timestamp, boolean, pgEnum, uuid, jsonb } from "drizzle-orm/pg-core"
+import { pgTable, text, timestamp, boolean, pgEnum, uuid, jsonb, integer, uniqueIndex } from "drizzle-orm/pg-core"
 import { relations } from "drizzle-orm"
 import { user } from "./auth-schema.js"
-import { type replayDataType } from "@bakugan-arena/game-data"
+import { type replayDataType, type TurnLogBundle } from "@bakugan-arena/game-data"
 import type { BotScoreWeights, BotTrainingMetrics } from "../bot-score-weights.js"
 
 // ================== ENUM ROLES ==================
@@ -76,10 +76,38 @@ export const replayRelations = relations(replay, ({ one }) => ({
     }),
 }))
 
-export const roomsRelations = relations(rooms, ({ one }) => ({
+export const roomsRelations = relations(rooms, ({ one, many }) => ({
     replay: one(replay, {
         fields: [rooms.id],
         references: [replay.roomId],
+    }),
+    turnLogs: many(gameTurnLog),
+}))
+
+// ================== GAME TURN LOGS ==================
+export const gameTurnLog = pgTable("game_turn_log", {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    roomId: uuid("room_id")
+        .notNull()
+        .references(() => rooms.id, { onDelete: "cascade" }),
+
+    turnNumber: integer("turn_number").notNull(),
+    turnCount: integer("turn_count").notNull(),
+
+    logData: jsonb("log_data")
+        .$type<TurnLogBundle>()
+        .notNull(),
+
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+    uniqueIndex("game_turn_log_room_turn_unique").on(table.roomId, table.turnNumber),
+])
+
+export const gameTurnLogRelations = relations(gameTurnLog, ({ one }) => ({
+    room: one(rooms, {
+        fields: [gameTurnLog.roomId],
+        references: [rooms.id],
     }),
 }))
 

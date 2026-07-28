@@ -275,9 +275,6 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
 
                 const activeName = roomData.players.find((p) => p.userId === roomData.turnState.turn)?.username
                 const inactiveName = roomData.players.find((p) => p.userId === roomData.turnState.previous_turn || '')?.username
-                console.log('turn count', roomData.turnState.turnCount)
-                console.log('active socket', roomData.ActivePlayerActionRequest, activeName);
-                console.log('inactive socket', roomData.InactivePlayerActionRequest, inactiveName)
 
             } else {
 
@@ -321,7 +318,6 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
 
                 const sockets = roomData.connectedsUsers
                 sockets.forEach((s) => {
-                    console.log('parent-socket', s.nextjsSocket)
                     io.to(s.nextjsSocket).emit('game-messages', [message])
                 })
 

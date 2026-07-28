@@ -1,3 +1,4 @@
+export * from './game-log/index.js'
 export * from './replay/index.js'
 export * from './sandbox/index.js'
 export * from './bot/index.js'

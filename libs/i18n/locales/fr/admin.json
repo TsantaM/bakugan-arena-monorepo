@@ -171,6 +171,63 @@
     "confirmDesc": "Cette action est irréversible. Cela supprimera toutes les salles obsolètes.",
     "confirm": "Confirmer la suppression"
   },
+  "gameLogs": {
+    "cardTitle": "Logs de partie",
+    "cardDesc": "Recherchez une salle et inspectez les événements moteur tour par tour.",
+    "open": "Ouvrir les logs",
+    "pageTitle": "Logs de partie",
+    "detailTitle": "Détail de la salle",
+    "searchTitle": "Rechercher une salle",
+    "searchDesc": "Filtrez par identifiant de salle, joueur ou statut.",
+    "resultsTitle": "Salles",
+    "resultsCount": "{n} salle(s) trouvée(s)",
+    "loading": "Chargement…",
+    "backToSearch": "Retour à la recherche",
+    "emptyTurns": "Aucun log enregistré pour cette salle.",
+    "eventsTitle": "{n} événement(s)",
+    "summaryTitle": "Résumé du tour",
+    "fields": {
+      "roomId": "ID de salle",
+      "player": "Joueur",
+      "status": "Statut",
+      "turn": "Tour"
+    },
+    "placeholders": {
+      "roomId": "UUID de la salle…",
+      "player": "Pseudo ou nom…"
+    },
+    "filters": {
+      "all": "Toutes",
+      "finished": "Terminées",
+      "ongoing": "En cours"
+    },
+    "actions": {
+      "search": "Rechercher",
+      "viewLogs": "Voir les logs"
+    },
+    "table": {
+      "room": "Salle",
+      "players": "Joueurs",
+      "status": "Statut",
+      "turns": "Tours loggés",
+      "date": "Date"
+    },
+    "status": {
+      "finished": "Terminée",
+      "ongoing": "En cours",
+      "ranked": "Classée"
+    },
+    "turnOption": "Tour {n} · turnCount {turnCount}",
+    "meta": {
+      "created": "Créée le",
+      "turnCount": "{n} tour(s) enregistré(s)"
+    },
+    "summary": {
+      "start": "Début du tour",
+      "end": "Fin du tour",
+      "actions": "Actions disponibles"
+    }
+  },
   "toasts": {
     "ladderReset": "Classement réinitialisé pour {n} joueur(s)",
     "ladderResetFailed": "Échec de la réinitialisation du classement",

@@ -4,6 +4,7 @@ import {
   ActivePlayerActionRequestType,
   gateCardActionRequestsType,
   InactivePlayerActionRequestType,
+  logGameEvent,
   resolutionType,
   stateType,
 } from "@bakugan-arena/game-data"
@@ -139,9 +140,18 @@ const playBestMove = (
     if (gateMoves.length > 0) {
       const pick = pickMoveSoftmax(gateMoves, Math.max(temperature, 0.45))
       if (pick) {
-        console.log(
-          `[BOT ${botLabel}] turn0 gate ${pick.label} (score=${pick.score.toFixed(2)}, options=${gateMoves.length}, adapt=${adaptation?.reason.join(",") ?? "-"})`
-        )
+        logGameEvent(state, {
+          handler: "bot-play",
+          category: "bot",
+          input: { botLabel, phase: "turn0-gate" },
+          output: {
+            label: pick.label,
+            score: pick.score,
+            options: gateMoves.length,
+            adaptation: adaptation?.reason,
+          },
+          message: `[BOT ${botLabel}] gate tour 0 : ${pick.label}`,
+        })
         return emitSimulateAction(socket, roomId, pick.action)
       }
     }
@@ -150,14 +160,30 @@ const playBestMove = (
   const best = pickMoveSoftmax(moves, temperature)
 
   if (!best) {
-    console.log(`[BOT ${botLabel}] no scored move → TURN_SKIP`)
+    logGameEvent(state, {
+      handler: "bot-play",
+      category: "bot",
+      input: { botLabel },
+      output: { action: "TURN_SKIP" },
+      message: `[BOT ${botLabel}] aucun coup → skip`,
+    })
     socket.emit("turn-action", { roomId, userId })
     return true
   }
 
-  console.log(
-    `[BOT ${botLabel}] play ${best.label} (score=${best.score.toFixed(2)}, options=${moves.length}, pressure=${adaptation?.pressure ?? "n/a"}, adapt=${adaptation?.reason.join(",") ?? "-"})`
-  )
+  logGameEvent(state, {
+    handler: "bot-play",
+    category: "bot",
+    input: { botLabel },
+    output: {
+      label: best.label,
+      score: best.score,
+      options: moves.length,
+      pressure: adaptation?.pressure,
+      adaptation: adaptation?.reason,
+    },
+    message: `[BOT ${botLabel}] joue ${best.label}`,
+  })
   return emitSimulateAction(socket, roomId, best.action)
 }
 

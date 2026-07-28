@@ -4,9 +4,10 @@ import { schema } from "@bakugan-arena/drizzle-orm";
 import { CalculateAndUpdateElo } from "../functions/ladder-functions/calculate-elo";
 import { db } from "../lib/db";
 import { eq } from "drizzle-orm";
-import { forfeitSocketProps } from "@bakugan-arena/game-data";
+import { forfeitSocketProps, logGameEvent } from "@bakugan-arena/game-data";
 import { SendUserRooms } from "../functions/send-user-rooms";
 import { stopAllRoomClocks } from "../functions/start-player-timer";
+import { persistAllGameLogs } from "../functions/flush-turn-log";
 
 export function forfeitSocket(io: Server, socket: Socket) {
     const rooms = schema.rooms
@@ -27,6 +28,14 @@ export function forfeitSocket(io: Server, socket: Socket) {
         roomData.status.finisheAt = Date.now()
         roomData.status.winner = winner.userId
 
+        logGameEvent(roomData, {
+            handler: "forfait",
+            category: "socket",
+            input: { roomId, userId, loserId: loser.userId, winnerId: winner.userId },
+            message: "Forfait — fin de partie",
+        })
+
+        await persistAllGameLogs(roomData)
 
         await db
             .update(rooms)

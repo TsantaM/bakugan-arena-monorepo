@@ -1,10 +1,13 @@
 import { AbilityCardsList } from "../battle-brawlers/ability-cards.js";
 import { ExclusiveAbilitiesList } from "../battle-brawlers/exclusive-abilities.js";
 import { AnimationDirectivesTypes, type stateType } from "../type/type-index.js";
+import { finalizeTurnLog, logGameEvent } from "./game-log/game-logger.js";
 import { pushReplayAnimation, pushReplayMarker } from "./replay/push-replay-animation.js";
 
 export function updateTurnState(roomData: stateType) {
     if (!roomData) return
+
+    finalizeTurnLog(roomData)
 
     const { turnState, decksState, protalSlots } = roomData
 
@@ -69,6 +72,13 @@ export function updateTurnState(roomData: stateType) {
 
         console.log('block', blocked, turn, reason?.key)
 
+        logGameEvent(roomData, {
+            handler: "ability_card_block",
+            category: "engine",
+            input: { blocked, turn, reasonKey: reason?.key },
+            message: "Traitement du blocage de carte ability",
+        })
+
         if (turn > 0 && turnState.ability_card_block.blocked) {
             turnState.ability_card_block.turn = turnState.ability_card_block.turn -= 1
         }
@@ -84,4 +94,15 @@ export function updateTurnState(roomData: stateType) {
     }
 
     pushReplayMarker(roomData, "turn_end")
+
+    logGameEvent(roomData, {
+        handler: "updateTurnState",
+        category: "engine",
+        output: {
+            turnCount: roomData.turnState.turnCount,
+            activePlayerId: roomData.turnState.turn,
+            previousPlayerId: roomData.turnState.previous_turn,
+        },
+        message: `Début du tour ${roomData.turnState.turnCount}`,
+    })
 }

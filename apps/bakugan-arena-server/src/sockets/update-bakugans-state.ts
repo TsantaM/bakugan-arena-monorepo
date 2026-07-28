@@ -7,6 +7,7 @@ import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { EmitMessage } from "../functions/emit-messages";
 import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
 import { grantActionIncrement, syncClocks } from "../functions/start-player-timer";
+import { logSocketEvent } from "../functions/log-socket-event";
 
 
 export function AddAbilities({ roomState, request, bakugan, slot, userId, attribut, bakuganAttribut }: { roomState: stateType, request: ActivePlayerActionRequestType | InactivePlayerActionRequestType, bakugan: string, slot: slots_id, userId: string, attribut: attribut, bakuganAttribut?: attribut }) {
@@ -118,6 +119,13 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
         if (state.status.finished === true) return
 
         clearAnimationsInRoom(roomId)
+
+        logSocketEvent(state, {
+            handler: "set-bakugan",
+            userId,
+            input: { roomId, bakuganKey, slot },
+            message: "Pose de bakugan",
+        })
 
         const bakugan = BakuganList.find((b) => b.key === bakuganKey)
 

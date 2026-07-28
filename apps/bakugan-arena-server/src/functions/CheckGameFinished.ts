@@ -1,4 +1,4 @@
-import { bakuganInDeck, Message, replayEntryType, replaySnapshotType, stateType } from "@bakugan-arena/game-data"
+import { logGameEvent, Message, replayEntryType, replaySnapshotType, stateType } from "@bakugan-arena/game-data"
 import { db } from "../lib/db"
 import { eq } from "drizzle-orm"
 import { schema } from "@bakugan-arena/drizzle-orm"
@@ -6,6 +6,7 @@ import { CalculateAndUpdateElo } from "./ladder-functions/calculate-elo"
 import { Server } from "socket.io"
 import { SendUserRooms } from "./send-user-rooms"
 import { stopAllRoomClocks } from "./start-player-timer"
+import { persistAllGameLogs } from "./flush-turn-log"
 
 const rooms = schema.rooms
 
@@ -138,6 +139,15 @@ export const CheckGameFinished = async ({
     roomState.status.finished = true
     roomState.status.finisheAt = Date.now()
     roomState.status.winner = result.winner
+
+    logGameEvent(roomState, {
+      handler: "CheckGameFinished",
+      category: "engine",
+      output: result,
+      message: "Partie terminée",
+    })
+
+    await persistAllGameLogs(roomState)
 
     // 💾 DB
 

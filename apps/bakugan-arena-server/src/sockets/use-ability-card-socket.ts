@@ -5,6 +5,7 @@ import { useAbilityCardServer } from "../functions/use-abiliy-card";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { CheckTurnPermissions } from "../functions/ckeck-turn-permissions";
 import { grantActionIncrement } from "../functions/start-player-timer";
+import { logPermissionDenied, logSocketEvent } from "../functions/log-socket-event";
 
 export const socketUseAbilityCard = (io: Server, socket: Socket) => {
     socket.on('use-ability-card', ({ roomId, abilityId, slot, userId, bakuganKey }: useAbilityCardProps) => {
@@ -23,14 +24,22 @@ export const socketUseAbilityCard = (io: Server, socket: Socket) => {
             }
         })
 
-        if (!checker) return
+        if (!checker) {
+            logPermissionDenied(state, "use-ability-card", userId)
+            return
+        }
 
         clearAnimationsInRoom(roomId)
 
+        logSocketEvent(state, {
+            handler: "use-ability-card",
+            userId,
+            input: { roomId, abilityId, slot, bakuganKey },
+            message: "Utilisation d'une carte ability",
+        })
+
         grantActionIncrement({ roomState: state, userId, io })
         useAbilityCardServer({ abilityId: abilityId, bakuganKey: bakuganKey, roomId: roomId, slot: slot, userId: userId, io: io })
-
-        console.log("after card", state.persistantAbilities)
 
         if (state) {
             io.to(roomId).emit('update-room-state', state)

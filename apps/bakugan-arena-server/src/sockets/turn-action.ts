@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io";
+import { attachActionRequestsToLastTurn, CheckBattleStillInProcess, CreateActionRequestFunction, handleBattle, handleGateCards, logGameEvent, Message, summarizeStateForLog, turnCountSocketProps, updateTurnState } from "@bakugan-arena/game-data";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
-import { CheckBattleStillInProcess, CreateActionRequestFunction, handleBattle, handleGateCards, Message, turnCountSocketProps, updateTurnState } from "@bakugan-arena/game-data";
 import { CheckGameFinished } from "../functions/CheckGameFinished";
 import { onBattleEnd } from "../functions/on-battle-end";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
@@ -13,26 +13,35 @@ import { ActiveGateCard } from "../functions/active-gate-card";
 export function turnActionUpdater({ roomId, userId, io, updateBattleState = true }: { roomId: string, userId: string, io: Server, updateBattleState?: boolean }) {
     const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
 
-    // FR: On récupère aussi l'index de cette salle pour des modifications directes
-    // ENG: Also get the room index for direct state updates
     const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
 
-    // FR: Si la salle n'existe pas ou que l'index est invalide, on arrête
-    // ENG: If the room does not exist or index is invalid, exit early
     if (!roomData || roomIndex === -1) return
     if (roomData.status.finished === true) return
-    // FR: Mise à jour de l'état du tour (joueur actif, compteur, autorisations, etc.)
-    // ENG: Update the turn state (active player, counter, available actions, etc.)
 
-    // FR: Gestion de la logique des batailles (diminution de tours restants ou lancement de combat)
-    // ENG: Handle battle logic (decrease remaining turns or trigger a new battle)
+    const battleBefore = summarizeStateForLog(roomData)
     handleBattle(roomData, updateBattleState)
+    const battleAfter = summarizeStateForLog(roomData)
 
-    // FR: Vérification et activation automatique des cartes portail si leurs conditions sont remplies
-    // ENG: Check and auto-activate gate cards if their conditions are met
+    if (battleBefore.battleTurns !== battleAfter.battleTurns || battleBefore.battleInProcess !== battleAfter.battleInProcess) {
+        logGameEvent(roomData, {
+            handler: "handleBattle",
+            category: "battle",
+            input: battleBefore,
+            output: battleAfter,
+            message: "Mise à jour de l'état de bataille",
+        })
+    }
+
     const opennable = handleGateCards(roomData)
 
     if (opennable.length > 0) {
+        logGameEvent(roomData, {
+            handler: "handleGateCards",
+            category: "engine",
+            output: { autoOpenCount: opennable.length, gates: opennable },
+            message: `${opennable.length} gate(s) éligible(s) à l'ouverture auto`,
+        })
+
         for (const card of opennable) {
             const result = ActiveGateCard({
                 gateId: card.gateId,
@@ -41,7 +50,15 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
                 userId: card.userId,
                 io: io
             })
-            // Additional en cours OU tour déjà avancé en interne → ne pas continuer
+
+            logGameEvent(roomData, {
+                handler: "ActiveGateCard",
+                category: "engine",
+                input: card,
+                output: { result },
+                message: `Activation auto gate ${card.gateId}`,
+            })
+
             if (result === 'additional' || result === 'turn_advanced') {
                 syncClocks({ roomState: roomData, io })
                 return
@@ -50,13 +67,17 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
     }
 
     if (roomData && roomData.battleState.turns === 0 && roomData.battleState.battleInProcess && !roomData.battleState.paused) {
+        logGameEvent(roomData, {
+            handler: "onBattleEnd",
+            category: "battle",
+            message: "Fin de bataille déclenchée",
+        })
         onBattleEnd({ roomId })
         CheckGameFinished({ roomId, roomState: roomData, io })
     }
 
-    // FR: Vérification si la partie est terminée (conditions de victoire/défaite)
-    // ENG: Check if the game has ended (victory/defeat conditions)
     CheckGameFinished({ roomId, roomState: roomData, io })
+    if (roomData.status.finished) return
 
     CheckBattleStillInProcess(roomData)
 
@@ -66,8 +87,18 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
 
     CreateActionRequestFunction({ roomState: roomData })
 
-    // FR: On envoie le nouvel état du jeu à tous les joueurs de la salle
-    // ENG: Emit the updated game state to all players in the room
+    logGameEvent(roomData, {
+        handler: "CreateActionRequestFunction",
+        category: "engine",
+        output: {
+            active: roomData.ActivePlayerActionRequest.actions,
+            inactive: roomData.InactivePlayerActionRequest.actions,
+        },
+        message: "Actions disponibles recalculées",
+    })
+
+    attachActionRequestsToLastTurn(roomData)
+
     const animations = roomData.animations
     io.to(roomId).emit("turn-action", roomData)
     io.to(roomId).emit('animations', animations)
@@ -119,13 +150,18 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
 
 export const socketTurn = (io: Server, socket: Socket) => {
 
-    // FR: On écoute l'événement "turn-action" envoyé par un joueur
-    // ENG: Listen for the "turn-action" event triggered by a player
     socket.on('turn-action', ({ roomId, userId }: { roomId: string, userId: string }) => {
         const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
-        if (roomData && !roomData.status.finished) {
-            grantActionIncrement({ roomState: roomData, userId, io })
-        }
+        if (!roomData || roomData.status.finished) return
+
+        logGameEvent(roomData, {
+            handler: "turn-action",
+            category: "socket",
+            input: { roomId, userId },
+            message: "Le joueur termine son tour",
+        })
+
+        grantActionIncrement({ roomState: roomData, userId, io })
         turnActionUpdater({ roomId, userId, io })
     })
 

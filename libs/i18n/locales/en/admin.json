@@ -171,6 +171,63 @@
     "confirmDesc": "This action cannot be undone. This will delete all stale rooms.",
     "confirm": "Confirm Delete"
   },
+  "gameLogs": {
+    "cardTitle": "Game logs",
+    "cardDesc": "Find a room and inspect engine events turn by turn.",
+    "open": "Open logs",
+    "pageTitle": "Game logs",
+    "detailTitle": "Room detail",
+    "searchTitle": "Search rooms",
+    "searchDesc": "Filter by room ID, player, or status.",
+    "resultsTitle": "Rooms",
+    "resultsCount": "{n} room(s) found",
+    "loading": "Loading…",
+    "backToSearch": "Back to search",
+    "emptyTurns": "No logs recorded for this room.",
+    "eventsTitle": "{n} event(s)",
+    "summaryTitle": "Turn summary",
+    "fields": {
+      "roomId": "Room ID",
+      "player": "Player",
+      "status": "Status",
+      "turn": "Turn"
+    },
+    "placeholders": {
+      "roomId": "Room UUID…",
+      "player": "Username or display name…"
+    },
+    "filters": {
+      "all": "All",
+      "finished": "Finished",
+      "ongoing": "Ongoing"
+    },
+    "actions": {
+      "search": "Search",
+      "viewLogs": "View logs"
+    },
+    "table": {
+      "room": "Room",
+      "players": "Players",
+      "status": "Status",
+      "turns": "Logged turns",
+      "date": "Date"
+    },
+    "status": {
+      "finished": "Finished",
+      "ongoing": "Ongoing",
+      "ranked": "Ranked"
+    },
+    "turnOption": "Turn {n} · turnCount {turnCount}",
+    "meta": {
+      "created": "Created",
+      "turnCount": "{n} turn(s) recorded"
+    },
+    "summary": {
+      "start": "Turn start",
+      "end": "Turn end",
+      "actions": "Available actions"
+    }
+  },
   "toasts": {
     "ladderReset": "Ladder reset for {n} player(s)",
     "ladderResetFailed": "Failed to reset ladder",

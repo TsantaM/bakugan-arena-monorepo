@@ -8,6 +8,7 @@ import { EmitMessage } from "../functions/emit-messages";
 import { CheckTurnPermissions } from "../functions/ckeck-turn-permissions";
 import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
 import { grantActionIncrement, syncClocks } from "../functions/start-player-timer";
+import { logPermissionDenied, logSocketEvent } from "../functions/log-socket-event";
 
 export const socketUpdateGateState = (io: Server, socket: Socket) => {
     socket.on('set-gate', ({ roomId, gateId, slot, userId }: setGateCardProps) => {
@@ -25,11 +26,19 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
             }
         })
 
-        if (!checker) return
+        if (!checker) {
+            logPermissionDenied(state, "set-gate", userId)
+            return
+        }
 
         clearAnimationsInRoom(roomId)
 
-        console.log(state.turnState.turnCount)
+        logSocketEvent(state, {
+            handler: "set-gate",
+            userId,
+            input: { roomId, gateId, slot },
+            message: slot ? "Pose de gate card" : "Sélection de gate card",
+        })
 
 
         if (!slot) {
@@ -84,8 +93,6 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
                     userId: userId,
                 })
             }
-
-            console.log('turn count after set gate', state.turnState.turnCount)
 
         } else {
             grantActionIncrement({ roomState: state, userId, io })

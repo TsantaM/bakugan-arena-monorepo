@@ -1,4 +1,5 @@
 import type { AnimationDirectivesTypes, Message } from "./animations-directives.js";
+import type { GameLogState } from "./game-log-types.js";
 import type { replayEntryType, replaySnapshotType } from "./replay-snapshot-types.js";
 import { type attribut } from "./game-data-types.js"
 import type { AbilityCardsActionsRequestsType, ActivePlayerActionRequestType, gateCardActionRequestsType, InactivePlayerActionRequestType } from './actions-serveur-requests.js'
@@ -213,7 +214,8 @@ export type stateType = {
     ActivePlayerActionRequest: ActivePlayerActionRequestType,
     AbilityAditionalRequest: AbilityCardsActionsRequestsType[],
     gateCardActionRequest: gateCardActionRequestsType[],
-    createdAt: number
+    createdAt: number,
+    gameLog?: GameLogState
 }
 
 export type roomStateType = {
