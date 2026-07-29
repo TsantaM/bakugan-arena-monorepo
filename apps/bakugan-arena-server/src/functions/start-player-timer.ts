@@ -9,7 +9,7 @@ import { SendUserRooms } from "./send-user-rooms";
 
 const rooms = schema.rooms
 
-export const TIMER_INITIAL_SECONDS = 0.5 * 60
+export const TIMER_INITIAL_SECONDS = 5 * 60
 export const TIMER_ACTION_INCREMENT_SECONDS = 5
 export const TIMER_MAX_SECONDS = 5 * 60
 
