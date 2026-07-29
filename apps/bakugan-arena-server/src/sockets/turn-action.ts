@@ -97,7 +97,22 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
     }
 
     CheckGameFinished({ roomId, roomState: roomData, io })
-    if (roomData.status.finished) return
+    if (roomData.status.finished) {
+        const animations = roomData.animations
+        io.to(roomId).emit("turn-action", roomData)
+        if (animations.length > 0) {
+            io.to(roomId).emit('animations', animations)
+            animations.forEach((animation) => EmitMessage({ roomState: roomData, animation, io }))
+            clearAnimationsInRoom(roomId)
+        }
+
+        const turnState: turnCountSocketProps = {
+            turnCount: roomData.turnState.turnCount,
+            battleTurn: roomData.battleState.battleInProcess ? roomData.battleState.turns : undefined
+        }
+        io.to(roomId).emit('turn-count-updater', turnState)
+        return
+    }
 
     CheckBattleStillInProcess(roomData)
 
