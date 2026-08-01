@@ -49,7 +49,8 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
                 roomId: roomId,
                 slot: card.slot,
                 userId: card.userId,
-                io: io
+                io: io,
+                skipBattleTurnDecrement: true,
             })
 
             logGameEvent(roomData, {
@@ -166,6 +167,17 @@ export const socketTurn = (io: Server, socket: Socket) => {
     socket.on('turn-action', ({ roomId, userId }: { roomId: string, userId: string }) => {
         const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
         if (!roomData || roomData.status.finished) return
+
+        if (roomData.turnState.turn !== userId) {
+            logDiagnostic(roomData, {
+                handler: "turn-action.rejected",
+                level: "warn",
+                message: "turn-action refusé — seul le joueur actif peut terminer le tour",
+                input: { roomId, userId },
+                output: { activePlayerId: roomData.turnState.turn },
+            })
+            return
+        }
 
         logGameEvent(roomData, {
             handler: "turn-action",

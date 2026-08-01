@@ -27,6 +27,18 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 const getRoomState = (roomId: string): stateType | undefined =>
   Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
 
+/** Même logique que le gameboard : ignorer les requests destinées à l'autre rôle. */
+const isTurnRequestForBot = (
+  state: stateType,
+  botUserId: string,
+  request: TurnActionRequest,
+): boolean => {
+  const isBotActive = state.turnState.turn === botUserId
+  if (request.target === "ACTIVE_PLAYER") return isBotActive
+  if (request.target === "INACTIVE_PLAYER") return !isBotActive
+  return isBotActive
+}
+
 /**
  * Émet le coup choisi par l'IA (SimulateAction → events socket serveur).
  */
@@ -161,6 +173,15 @@ const playBestMove = (
   const best = pickMoveSoftmax(moves, temperature)
 
   if (!best) {
+    if (state.turnState.turn !== userId) {
+      logDiagnostic(state, {
+        handler: "bot.turn-skip-rejected",
+        level: "warn",
+        message: `[BOT ${botLabel}] skip refusé — bot non actif`,
+        output: { botUserId: userId, activePlayerId: state.turnState.turn },
+      })
+      return false
+    }
     logGameEvent(state, {
       handler: "bot-play",
       category: "bot",
@@ -200,6 +221,22 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
     const request = deferredTurnActionRequest
     deferredTurnActionRequest = null
     const currentRoomId = roomId
+    const state = getRoomState(currentRoomId)
+    if (!state || !isTurnRequestForBot(state, bot.userId, request)) {
+      if (state) {
+        logDiagnostic(state, {
+          handler: "bot.deferred-turn-request-stale",
+          level: "warn",
+          message: `[BOT ${bot.userId}] requête différée périmée — ignorée`,
+          output: {
+            requestTarget: request.target,
+            currentTurn: state.turnState.turn,
+            botUserId: bot.userId,
+          },
+        })
+      }
+      return
+    }
     enqueue(() => {
       playBestMove(socket, currentRoomId, bot.userId, bot.userId, request)
     })
@@ -267,30 +304,31 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
     if (!roomId) return
     const currentRoomId = roomId
     enqueue(() => {
+      const state = getRoomState(currentRoomId)
+      if (!state) return
+
+      if (!isTurnRequestForBot(state, bot.userId, request)) {
+        return
+      }
+
       if (pendingAdditionalRequests > 0) {
         deferredTurnActionRequest = request
-        const state = getRoomState(currentRoomId)
-        if (state) {
-          logDiagnostic(state, {
-            handler: "bot.skip-turn-request",
-            level: "warn",
-            message: `[BOT ${bot.userId}] turn-action-request ignorée — additional en cours`,
-            output: { pendingAdditionalRequests, botUserId: bot.userId },
-          })
-        }
+        logDiagnostic(state, {
+          handler: "bot.skip-turn-request",
+          level: "warn",
+          message: `[BOT ${bot.userId}] turn-action-request ignorée — additional en cours`,
+          output: { pendingAdditionalRequests, botUserId: bot.userId },
+        })
         return
       }
       const played = playBestMove(socket, currentRoomId, bot.userId, bot.userId, request)
       if (!played) {
-        const state = getRoomState(currentRoomId)
-        if (state) {
-          logDiagnostic(state, {
-            handler: "bot.play-failed",
-            level: "warn",
-            message: `[BOT ${bot.userId}] playBestMove n'a rien émis`,
-            output: { botUserId: bot.userId, requestTarget: request.target },
-          })
-        }
+        logDiagnostic(state, {
+          handler: "bot.play-failed",
+          level: "warn",
+          message: `[BOT ${bot.userId}] playBestMove n'a rien émis`,
+          output: { botUserId: bot.userId, requestTarget: request.target },
+        })
       }
     })
   })

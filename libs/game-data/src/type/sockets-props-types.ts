@@ -2,7 +2,15 @@ import type { slots_id } from "./room-types.js"
 import type { bakuganToMoveType } from './game-data-types.js'
 import { Server } from "socket.io"
 
-export type activeGateCardProps = { roomId: string, gateId: string, slot: slots_id, userId: string, io?: Server }
+export type activeGateCardProps = {
+    roomId: string
+    gateId: string
+    slot: slots_id
+    userId: string
+    io?: Server
+    /** Évite un double décrément de battleState.turns lors d'une ouverture auto en fin de tour */
+    skipBattleTurnDecrement?: boolean
+}
 export type setBakuganProps = { roomId: string, bakuganKey: string, slot: string, userId: string }
 export type setGateCardProps = { roomId: string, gateId: string, slot?: string, userId: string }
 export type useAbilityCardProps = { roomId: string, abilityId: string, slot: slots_id, userId: string, bakuganKey: string }

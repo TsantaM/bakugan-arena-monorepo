@@ -14,7 +14,7 @@ import { resumeRoomFlowWithAutoSkip } from "./resume-room-flow-defaults"
  */
 export type ActiveGateCardResult = false | "opened" | "additional" | "turn_advanced"
 
-export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateCardProps): ActiveGateCardResult => {
+export const ActiveGateCard = ({ roomId, gateId, slot, userId, io, skipBattleTurnDecrement = false }: activeGateCardProps): ActiveGateCardResult => {
     const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
 
     if (!roomData) return false
@@ -84,6 +84,7 @@ export const ActiveGateCard = ({ roomId, gateId, slot, userId, io }: activeGateC
             io: io,
             roomId: roomId,
             userId: userId,
+            updateBattleState: !skipBattleTurnDecrement,
         })
         return "turn_advanced"
     }
