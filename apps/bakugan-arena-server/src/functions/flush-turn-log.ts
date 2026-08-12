@@ -1,5 +1,5 @@
 import type { stateType, TurnLogBundle } from "@bakugan-arena/game-data"
-import { attachActionRequestsToLastTurn, finalizeTurnLog } from "@bakugan-arena/game-data"
+import { GAME_LOGS_ENABLED, attachActionRequestsToLastTurn, finalizeTurnLog } from "@bakugan-arena/game-data"
 import { schema } from "@bakugan-arena/drizzle-orm"
 import { db } from "../lib/db"
 
@@ -41,6 +41,7 @@ function prepareGameLogsForPersistence(roomState: stateType): TurnLogBundle[] {
  * Appelé à la fin de partie ou lors du cleanup de la room.
  */
 export async function persistAllGameLogs(roomState: stateType): Promise<void> {
+    if (!GAME_LOGS_ENABLED) return
     if (!roomState.gameLog || roomState.gameLog.persisted) return
 
     const bundles = prepareGameLogsForPersistence(roomState)

@@ -6,8 +6,9 @@ import type { stateType } from "@bakugan-arena/game-data"
  * (sauf contenu non sérialisable volontairement réinitialisé).
  */
 export function cloneRoomState(state: stateType): stateType {
+  const { gameLog: _gameLog, ...stateWithoutLog } = state
   const cloned = structuredClone({
-    ...state,
+    ...stateWithoutLog,
     connectedsUsers: Object.fromEntries(state.connectedsUsers),
     spectators: Object.fromEntries(state.spectators),
   }) as unknown as stateType

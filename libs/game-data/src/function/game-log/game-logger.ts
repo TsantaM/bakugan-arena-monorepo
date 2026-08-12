@@ -8,6 +8,9 @@ import type {
     TurnLogSummary,
 } from "../../type/game-log-types.js"
 
+/** Feature désactivée : trop coûteuse (RAM, clones IA, sérialisation socket). */
+export const GAME_LOGS_ENABLED = false
+
 const MAX_STRING_LENGTH = 500
 const MAX_ARRAY_LENGTH = 20
 const MAX_OBJECT_KEYS = 30
@@ -85,6 +88,8 @@ type LogGameEventInput = {
 }
 
 export function logGameEvent(state: stateType, event: LogGameEventInput): void {
+    if (!GAME_LOGS_ENABLED) return
+
     if (!state.gameLog) {
         state.gameLog = createEmptyGameLogState()
     }
@@ -107,6 +112,8 @@ export function logGameEvent(state: stateType, event: LogGameEventInput): void {
 }
 
 export function finalizeTurnLog(state: stateType): TurnLogBundle | null {
+    if (!GAME_LOGS_ENABLED) return null
+
     if (!state.gameLog) {
         state.gameLog = createEmptyGameLogState()
     }
@@ -140,6 +147,7 @@ export function finalizeTurnLog(state: stateType): TurnLogBundle | null {
 }
 
 export function attachActionRequestsToLastTurn(state: stateType): void {
+    if (!GAME_LOGS_ENABLED) return
     if (!state.gameLog || state.gameLog.turnLogs.length === 0) return
 
     const lastTurn = state.gameLog.turnLogs[state.gameLog.turnLogs.length - 1]
@@ -150,6 +158,7 @@ export function attachActionRequestsToLastTurn(state: stateType): void {
 }
 
 export function getLastTurnLog(state: stateType): TurnLogBundle | null {
+    if (!GAME_LOGS_ENABLED) return null
     if (!state.gameLog || state.gameLog.turnLogs.length === 0) return null
     return state.gameLog.turnLogs[state.gameLog.turnLogs.length - 1]
 }
@@ -159,6 +168,8 @@ export async function runWithGameLog<T>(
     meta: Omit<LogGameEventInput, "output" | "durationMs">,
     fn: () => T | Promise<T>,
 ): Promise<T> {
+    if (!GAME_LOGS_ENABLED) return fn()
+
     const startedAt = Date.now()
     try {
         const output = await fn()

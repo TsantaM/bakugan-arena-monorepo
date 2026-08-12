@@ -1,4 +1,4 @@
-import { AbilityCards, AbilityCardsList, BakuganList, Bakugans, ExclusiveAbilities, ExclusiveAbilitiesList, GateCards, GateCardsList, captureReplaySnapshot, createEmptyGameLogState, logGameEvent, portalSlotsType, SelectableGateCardAction, stateType, turnStateType } from "@bakugan-arena/game-data"
+import { AbilityCards, AbilityCardsList, BakuganList, Bakugans, ExclusiveAbilities, ExclusiveAbilitiesList, GateCards, GateCardsList, portalSlotsType, SelectableGateCardAction, stateType, turnStateType } from "@bakugan-arena/game-data"
 import { getDecksData, getRoomPlayers } from "./get-room-data"
 import { TIMER_INITIAL_SECONDS } from "./start-player-timer"
 
@@ -268,7 +268,6 @@ export const createGameState = async ({ roomId, ranked }: { roomId: string; rank
             }
         },
         AbilityAditionalRequest: [],
-        gameLog: createEmptyGameLogState(),
         initialReplaySnapshot: {
             decksState,
             battleState: battleState,
@@ -286,18 +285,6 @@ export const createGameState = async ({ roomId, ranked }: { roomId: string; rank
             }))
         }
     } as stateType
-
-    logGameEvent(state, {
-        handler: "createGameState",
-        category: "system",
-        message: "Partie initialisée",
-        output: {
-            roomId,
-            ranked,
-            player1Id: player1.id,
-            player2Id: player2.id,
-        },
-    })
 
     return state
 

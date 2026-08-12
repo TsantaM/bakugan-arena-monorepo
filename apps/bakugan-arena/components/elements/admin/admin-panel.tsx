@@ -6,7 +6,7 @@ import { cleanupStaleRooms } from "@/src/actions/admin/cleanup-stale-rooms"
 import { getStaleRoomsCount } from "@/src/actions/admin/get-stale-rooms-count"
 import { resetLadder } from "@/src/actions/admin/reset-ladder"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { Brain, FlaskConical, Loader2, RotateCcw, ScrollText, Trash2 } from "lucide-react"
+import { Brain, FlaskConical, Loader2, RotateCcw, Trash2 } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
 import {
@@ -89,23 +89,6 @@ export default function AdminPanel() {
                             <Link href="/dashboard/admin/bot-training">
                                 <Brain />
                                 {t('botTraining.open')}
-                            </Link>
-                        </Button>
-                    </CardFooter>
-                </Card>
-
-                <Card>
-                    <CardHeader>
-                        <CardTitle>{t('gameLogs.cardTitle')}</CardTitle>
-                        <CardDescription>
-                            {t('gameLogs.cardDesc')}
-                        </CardDescription>
-                    </CardHeader>
-                    <CardFooter>
-                        <Button asChild variant="secondary">
-                            <Link href="/dashboard/admin/game-logs">
-                                <ScrollText />
-                                {t('gameLogs.open')}
                             </Link>
                         </Button>
                     </CardFooter>
