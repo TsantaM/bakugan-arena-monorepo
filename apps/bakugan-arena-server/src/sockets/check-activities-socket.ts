@@ -8,11 +8,14 @@ export function CheckActivitiesSocket(io: Server, socket: Socket) {
 
         if (!roomData || roomData.status.finished) return
 
+        // Ne pas renvoyer les turn-actions à l'adversaire : le bot poll souvent
+        // via check-activities et chaque re-emit resettait l'UI du joueur humain.
         resumeRoomFlowWithAutoSkip({
             roomState: roomData,
             io,
             userId,
             source: "check-activities",
+            onlyUserId: userId,
         })
     })
 }

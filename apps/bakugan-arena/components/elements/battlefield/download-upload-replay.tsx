@@ -8,7 +8,7 @@ import { useSocketStore } from "@/src/store/socket-id-store"
 import { playerDataType, replayEntryType, replaySnapshotType } from "@bakugan-arena/game-data"
 import { Download, Loader2, Upload } from "lucide-react"
 import { useCallback, useEffect, useState } from "react"
-import { toast, Toaster } from "sonner"
+import { toast } from "sonner"
 import { useTranslations } from "next-intl"
 
 export default function DownloadAndUploadReplay({ roomId, userId, player1, player2 }: {
@@ -140,7 +140,7 @@ export default function DownloadAndUploadReplay({ roomId, userId, player1, playe
 
     if (!room) return null
     if (!room.finished) return null
-    if (!room.replayAvailable) return null
+    // if (!room.replayAvailable) return null
     if (!player1 || !player2) return null
 
     return (
@@ -161,7 +161,7 @@ export default function DownloadAndUploadReplay({ roomId, userId, player1, playe
             >
                 {isUploading ? <Loader2 className="animate-spin" /> : <Upload />}
             </Button>
-            <Toaster />
+            {/* <Toaster /> */}
         </>
     )
 }

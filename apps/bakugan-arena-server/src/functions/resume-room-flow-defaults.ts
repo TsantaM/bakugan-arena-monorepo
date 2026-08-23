@@ -9,11 +9,14 @@ export function resumeRoomFlowWithAutoSkip({
     io,
     userId,
     source,
+    onlyUserId,
 }: {
     roomState: stateType
     io: Server
     userId: string
     source: string
+    /** Si défini, ne réémet les turn-actions qu'à ce joueur. */
+    onlyUserId?: string
 }) {
     resumeRoomFlow({
         roomState,
@@ -22,5 +25,6 @@ export function resumeRoomFlowWithAutoSkip({
         source,
         autoSkipGateAdditional,
         autoSkipAbilityAdditional,
+        onlyUserId,
     })
 }

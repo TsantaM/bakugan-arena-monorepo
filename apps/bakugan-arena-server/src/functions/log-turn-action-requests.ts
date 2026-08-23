@@ -30,11 +30,14 @@ export function emitTurnActionRequestsWithDiagnostics({
     io,
     userId,
     source,
+    onlyUserId,
 }: {
     roomState: stateType
     io: Server
     userId: string
     source: string
+    /** Si défini, n'émet qu'au joueur ciblé (évite de reset l'UI adversaire). */
+    onlyUserId?: string
 }): void {
     const blockers = describeBlockers(roomState)
     const results: EmitResult[] = []
@@ -49,7 +52,11 @@ export function emitTurnActionRequestsWithDiagnostics({
     const additionalBlocking =
         blockers.gateAdditionalPending > 0 || blockers.abilityAdditionalPending > 0
 
+    const shouldEmitActive = !onlyUserId || onlyUserId === activeUserId
+    const shouldEmitInactive = !onlyUserId || onlyUserId === inactiveUserId
+
     if (
+        shouldEmitActive &&
         activeSocket &&
         !roomState.status.finished &&
         !additionalBlocking
@@ -84,7 +91,8 @@ export function emitTurnActionRequestsWithDiagnostics({
         }
     } else {
         let reason = "non émis"
-        if (!activeSocket) reason = "socket actif absent"
+        if (onlyUserId && onlyUserId !== activeUserId) reason = "filtré (onlyUserId)"
+        else if (!activeSocket) reason = "socket actif absent"
         else if (roomState.status.finished) reason = "partie terminée"
         else if (additionalBlocking) reason = "additional request en attente"
 
@@ -101,6 +109,7 @@ export function emitTurnActionRequestsWithDiagnostics({
     }
 
     if (
+        shouldEmitInactive &&
         inactiveSocket &&
         !roomState.status.finished &&
         !additionalBlocking
@@ -145,7 +154,8 @@ export function emitTurnActionRequestsWithDiagnostics({
         }
     } else if (inactiveUserId) {
         let reason = "non émis"
-        if (!inactiveSocket) reason = "socket inactif absent"
+        if (onlyUserId && onlyUserId !== inactiveUserId) reason = "filtré (onlyUserId)"
+        else if (!inactiveSocket) reason = "socket inactif absent"
         else if (roomState.status.finished) reason = "partie terminée"
         else if (additionalBlocking) reason = "additional request en attente"
 
@@ -166,7 +176,8 @@ export function emitTurnActionRequestsWithDiagnostics({
             !result.emitted &&
             (result.actionCounts?.total ?? 0) > 0 &&
             !additionalBlocking &&
-            !roomState.status.finished,
+            !roomState.status.finished &&
+            result.reason !== "filtré (onlyUserId)",
     )
 
     logDiagnostic(roomState, {
@@ -175,6 +186,7 @@ export function emitTurnActionRequestsWithDiagnostics({
         level: hasWarning ? "warn" : "info",
         output: {
             source,
+            onlyUserId: onlyUserId ?? null,
             blockers,
             actionRequests: buildActionRequestsSummary(roomState),
             connectedUsers: buildConnectedUsersSummary(roomState),

@@ -98,12 +98,15 @@ export function continueRoomFlowAfterAdditional({
     userId,
     source,
     forceTurnActionUpdater = false,
+    onlyUserId,
 }: {
     roomState: stateType
     io: Server
     userId: string
     source: string
     forceTurnActionUpdater?: boolean
+    /** Si défini, ne réémet les turn-actions qu'à ce joueur. */
+    onlyUserId?: string
 }) {
     if (roomState.status.finished) return
 
@@ -134,6 +137,7 @@ export function continueRoomFlowAfterAdditional({
         io,
         userId,
         source,
+        onlyUserId,
     })
 }
 
@@ -145,6 +149,7 @@ export function resumeRoomFlow({
     autoSkipAdditional = true,
     autoSkipGateAdditional,
     autoSkipAbilityAdditional,
+    onlyUserId,
 }: {
     roomState: stateType
     io: Server
@@ -153,6 +158,8 @@ export function resumeRoomFlow({
     autoSkipAdditional?: boolean
     autoSkipGateAdditional?: (args: { roomState: stateType; io: Server }) => boolean
     autoSkipAbilityAdditional?: (args: { roomState: stateType; io: Server }) => boolean
+    /** Si défini, ne réémet les turn-actions qu'à ce joueur. */
+    onlyUserId?: string
 }) {
     if (roomState.status.finished) return
 
@@ -209,6 +216,7 @@ export function resumeRoomFlow({
         io,
         userId,
         source,
+        onlyUserId,
     })
     syncClocks({ roomState, io })
 }
