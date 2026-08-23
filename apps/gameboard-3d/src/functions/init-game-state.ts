@@ -4,6 +4,7 @@ import { createSprite } from "../meshes/bakugan.mesh"
 import { createSlotMesh } from "../meshes/slot.mesh"
 import { OnBattleStartFunctionAnimation } from "../scene-modifications-functions/on-battle-start-function-animation"
 import { clearTurnInterface } from "../turn-action-management/turn-actions-resolution/action-scope"
+import { syncTurnCountFromState } from "../turn-action-management/turn-action-bridge"
 import { setEliminatedCircles } from "./set-eliminated-circle"
 import * as THREE from 'three'
 import { applyTimerSnapshots, setLocalTimerUserId } from "./player-timer-ui"
@@ -82,6 +83,7 @@ export function InitGameState({ state, plane, scene, userId, bakugansMeshs, gate
 
     const data = turnState.battleTurn !== undefined ? `${turnState.turnCount}T (${turnState.battleTurn})` : `${turnState.turnCount}T`
     turnCounter.textContent = data
+    syncTurnCountFromState(turnState.turnCount)
 
     setLocalTimerUserId(userId)
     applyTimerSnapshots(state.timers)

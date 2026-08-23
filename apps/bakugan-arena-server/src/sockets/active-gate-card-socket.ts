@@ -2,7 +2,7 @@ import { Server, Socket } from "socket.io";
 import { ActiveGateCard } from "../functions/active-gate-card";
 import { activeGateCardProps, ActivePlayerActionRequestType, InactivePlayerActionRequestType, removeActionByType } from "@bakugan-arena/game-data";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
-import { turnActionUpdater } from "./turn-action";
+import { tryAutoAdvanceTurn } from "../functions/try-auto-advance-turn";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { EmitMessage } from "../functions/emit-messages";
 import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
@@ -86,8 +86,7 @@ export const socketActiveGateCard = (io: Server, socket: Socket) => {
                 )
                 syncClocks({ roomState: state, io })
             } else {
-                clearAnimationsInRoom(roomId)
-                turnActionUpdater({ roomId, userId, io })
+                tryAutoAdvanceTurn({ roomState: state, io, userId, source: "active-gate-card.active" })
             }
             return
         }
@@ -109,8 +108,7 @@ export const socketActiveGateCard = (io: Server, socket: Socket) => {
             )
             syncClocks({ roomState: state, io })
         } else {
-            clearAnimationsInRoom(roomId)
-            turnActionUpdater({ roomId, userId, io })
+            tryAutoAdvanceTurn({ roomState: state, io, userId, source: "active-gate-card.inactive" })
         }
     })
 }

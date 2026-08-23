@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 import { initRoomState } from "../functions/init-game-room"
-import { CreateActionRequestFunction, Message, replayEntryType, replaySnapshotType } from "@bakugan-arena/game-data"
+import { CreateActionRequestFunction, Message, replayEntryType, replaySnapshotType, stripStateForSocket } from "@bakugan-arena/game-data"
 import { SendAllMessages } from "../functions/emit-messages"
 import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions"
 import { resumeRoomFlowWithAutoSkip } from "../functions/resume-room-flow-defaults"
@@ -38,7 +38,7 @@ export const socketGetRoomState = (io: Server, socket: Socket) => {
              * 1️⃣ Etat global de la room
              * -> UNIQUEMENT pour le demandeur
              */
-            socket.emit('room-state', state)
+            socket.emit('room-state', stripStateForSocket(state))
             SendAllMessages({ roomState: state, io: io, socketNext: parentSocket })
 
             /**

@@ -64,6 +64,13 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuga
 
     if (!bakuganFromDeck || !bakuganToAdd) return
 
+    if (bakuganFromDeck.onDomain || bakuganFromDeck.elimined) return
+
+    const alreadyOnBoard = roomData.protalSlots.some((s) =>
+        s.bakugans.some((b) => b.key === bakuganKey && b.userId === userId)
+    )
+    if (alreadyOnBoard) return
+
     // FR: Récupération des Bakugan de l'adversaire
     // ENG Get the opponent's Bakugan
     const opponentsBakugans = roomData?.decksState.find((d) => d.userId !== userId)?.bakugans

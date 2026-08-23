@@ -1,5 +1,6 @@
 import type { replayEntryType, replaySnapshotType } from "../../type/replay-snapshot-types.js"
 import type { replayDataType } from "../../type/battlefield-and-replay-types.js"
+import { getReplayStateBeforeAt } from "./replay-snapshot-access.js"
 
 /** Indices d'entrée qui marquent le début d'un tour (après chaque `turn_end`). */
 export function getTurnStarts(replay: replayEntryType[]): number[] {
@@ -44,10 +45,7 @@ export function getSnapshotAtEntryIndex(
     data: Pick<replayDataType, "initialSnapshot" | "replay">,
     entryIndex: number,
 ): replaySnapshotType {
-    if (entryIndex <= 0) return structuredClone(data.initialSnapshot)
-    const entry = data.replay[entryIndex]
-    if (!entry) return structuredClone(data.initialSnapshot)
-    return structuredClone(entry.stateBefore)
+    return structuredClone(getReplayStateBeforeAt(data, entryIndex))
 }
 
 export type ReplayTurnOption = {

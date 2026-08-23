@@ -9,6 +9,10 @@ import { setImageWithFallback } from './functions/set-image-with-fallback'
 import { hideTooltip, initTooltip, showTooltip, tooltip } from './functions/tooltips-functions'
 import { normalizeReplayData } from '@bakugan-arena/game-data'
 import type { replayDataType, replayEntryType } from "@bakugan-arena/game-data"
+import {
+  getReplayStateAfterAt,
+  getReplayStateBeforeAt,
+} from "@bakugan-arena/game-data"
 import { playAnimation } from './sockets/sockets-handlers'
 import { applyReplaySnapshotUi } from './functions/apply-replay-snapshot-ui'
 import { applyReplayBoardState } from './functions/apply-replay-board-state'
@@ -349,10 +353,10 @@ async function initReplay(replayPayload: replayDataType) {
       }
       activePlayback = playback
 
+      const replayTimeline = { initialSnapshot, replay }
+
       const seekToIndex = (targetIndex: number) => {
-        const snapshot = targetIndex <= 0
-          ? initialSnapshot
-          : replay[targetIndex].stateBefore
+        const snapshot = getReplayStateBeforeAt(replayTimeline, targetIndex)
 
         applyReplayBoardState({
           snapshot,
@@ -384,7 +388,10 @@ async function initReplay(replayPayload: replayDataType) {
         if (peekSeekTarget() !== null) continue
 
         const entry = replay[playback.currentIndex]
-        applyReplaySnapshotUi(entry.stateBefore, perspectiveUserId)
+        applyReplaySnapshotUi(
+          getReplayStateBeforeAt(replayTimeline, playback.currentIndex),
+          perspectiveUserId,
+        )
 
         if (entry.animation) {
           await waitWhilePaused()
@@ -405,7 +412,10 @@ async function initReplay(replayPayload: replayDataType) {
           if (generation !== playbackGeneration) return
           if (peekSeekTarget() !== null) continue
 
-          applyReplaySnapshotUi(replay[endIndex].stateAfter, perspectiveUserId)
+          applyReplaySnapshotUi(
+            getReplayStateAfterAt(replayTimeline, endIndex),
+            perspectiveUserId,
+          )
 
           for (let j = playback.currentIndex; j <= endIndex; j++) {
             if (replay[j].marker === 'turn_end') {
@@ -417,7 +427,10 @@ async function initReplay(replayPayload: replayDataType) {
           continue
         }
 
-        applyReplaySnapshotUi(entry.stateAfter, perspectiveUserId)
+        applyReplaySnapshotUi(
+          getReplayStateAfterAt(replayTimeline, playback.currentIndex),
+          perspectiveUserId,
+        )
 
         if (entry.marker === 'turn_end') {
           notifyParentTurnEnd()

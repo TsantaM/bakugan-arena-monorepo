@@ -28,6 +28,7 @@ export type replayMarkerType = "turn_end" | "turn_start"
 export type replayEntryType = {
     animation: AnimationDirectivesTypes | null
     marker?: replayMarkerType
-    stateBefore: replaySnapshotType
+    /** @deprecated Dérivé via getReplayStateBeforeAt — conservé pour les replays existants */
+    stateBefore?: replaySnapshotType
     stateAfter: replaySnapshotType
 }

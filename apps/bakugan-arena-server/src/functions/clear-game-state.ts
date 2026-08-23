@@ -1,6 +1,7 @@
 import { Battle_Brawlers_Game_State, intervalIds } from "../game-state/battle-brawlers-game-state"
 import { clearRoomTimers } from "./start-player-timer"
 import { persistAllGameLogs } from "./flush-turn-log"
+import { clearTurnAdvanceGuard } from "./turn-advance-guard"
 
 const MAX_ROOM_AGE = 30 * 60 * 1000 // 30 min
 const FINISHED_ROOM_LIFETIME = 5 * 60 * 1000 // 5 min après fin
@@ -23,6 +24,7 @@ export function cleanGameStates() {
 
         if (isTooOld || isFinishedTooLong) {
             clearRoomTimers(room.roomId)
+            clearTurnAdvanceGuard(room.roomId)
             void persistAllGameLogs(room)
             Battle_Brawlers_Game_State.splice(i, 1)
         }

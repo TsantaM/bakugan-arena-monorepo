@@ -1,4 +1,5 @@
 import { Server, Socket } from "socket.io";
+import { stripStateForSocket } from "@bakugan-arena/game-data";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { onBattleEnd } from "../functions/on-battle-end";
 import { CheckGameFinished } from "../functions/CheckGameFinished";
@@ -18,7 +19,7 @@ export const socketOnBattleEnd = (io: Server, socket: Socket) => {
         const state = Battle_Brawlers_Game_State[roomIndex]
 
         if (state) {
-            io.to(roomId).emit('update-room-state', state)
+            io.to(roomId).emit('update-room-state', stripStateForSocket(state))
             io.to(roomId).emit('animations', state.animations)
             state.animations.forEach((animation) => EmitMessage({ roomState: state, animation, io }))
 

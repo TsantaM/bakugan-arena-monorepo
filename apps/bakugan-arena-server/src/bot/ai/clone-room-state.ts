@@ -6,9 +6,14 @@ import type { stateType } from "@bakugan-arena/game-data"
  * (sauf contenu non sérialisable volontairement réinitialisé).
  */
 export function cloneRoomState(state: stateType): stateType {
-  const { gameLog: _gameLog, ...stateWithoutLog } = state
+  const {
+    gameLog: _gameLog,
+    animationsForReplay: _animationsForReplay,
+    initialReplaySnapshot: _initialReplaySnapshot,
+    ...stateWithoutReplayBuffer
+  } = state
   const cloned = structuredClone({
-    ...stateWithoutLog,
+    ...stateWithoutReplayBuffer,
     connectedsUsers: Object.fromEntries(state.connectedsUsers),
     spectators: Object.fromEntries(state.spectators),
   }) as unknown as stateType
@@ -16,7 +21,8 @@ export function cloneRoomState(state: stateType): stateType {
   cloned.connectedsUsers = new Map()
   cloned.spectators = new Map()
   cloned.animations = []
-  cloned.animationsForReplay = structuredClone(state.animationsForReplay ?? [])
+  cloned.animationsForReplay = []
+  cloned.initialReplaySnapshot = state.initialReplaySnapshot
 
   return cloned
 }

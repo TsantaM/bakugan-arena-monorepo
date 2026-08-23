@@ -1,6 +1,7 @@
 import type { ActionType, ActivePlayerActionRequestType, InactivePlayerActionRequestType } from "@bakugan-arena/game-data";
 import type { Socket } from "socket.io-client";
 import { clearTurnInterface } from "./action-scope";
+import { emitPassTurnFromBridge } from "../turn-action-bridge";
 
 export function NextTurnButtonAction({ request, socket, userId, roomId, globalCleanUp }: {
     socket: Socket,
@@ -31,8 +32,7 @@ export function NextTurnButtonAction({ request, socket, userId, roomId, globalCl
 
         if(globalCleanUp) globalCleanUp()
 
-        socket.emit('clean-animation-table', ({ roomId }))
-        socket.emit('turn-action', ({ roomId, userId }))
+        if (!emitPassTurnFromBridge(socket, roomId, userId)) return
 
         clearTurnInterface()
         cleanup()

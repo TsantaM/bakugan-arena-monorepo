@@ -59,6 +59,17 @@ export function applySetBakugan({
     return { ok: false, reason: "bakugan_not_found" }
   }
 
+  if (bakuganFromDeck.onDomain || bakuganFromDeck.elimined) {
+    return { ok: false, reason: "bakugan_not_available" }
+  }
+
+  const alreadyOnBoard = state.protalSlots.some((s) =>
+    s.bakugans.some((b) => b.key === bakuganKey && b.userId === userId)
+  )
+  if (alreadyOnBoard) {
+    return { ok: false, reason: "bakugan_already_on_board" }
+  }
+
   const opponentsBakugans = state.decksState.find((d) => d.userId !== userId)?.bakugans
   const opponentsUsableBakugans =
     opponentsBakugans?.filter(

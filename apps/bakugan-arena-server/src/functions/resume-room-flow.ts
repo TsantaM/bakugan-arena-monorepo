@@ -7,7 +7,7 @@ import { Server } from "socket.io"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 import { emitTurnActionRequestsWithDiagnostics } from "./log-turn-action-requests"
 import { ensureRoomTimerRegistry, syncClocks } from "./start-player-timer"
-import { clearAnimationsInRoom } from "../sockets/clear-animations-socket"
+import { tryAutoAdvanceTurn } from "./try-auto-advance-turn"
 
 export const ADDITIONAL_REQUEST_TIMEOUT_MS = 60_000
 
@@ -120,8 +120,12 @@ export function continueRoomFlowAfterAdditional({
             inactiveCounts.total === 0 &&
             roomState.turnState.turnCount > 0)
     ) {
-        clearAnimationsInRoom(roomState.roomId)
-        invokeTurnActionUpdater({ roomId: roomState.roomId, userId, io })
+        tryAutoAdvanceTurn({
+            roomState,
+            io,
+            userId: roomState.turnState.turn,
+            source: `${source}.continue-after-additional`,
+        })
         return
     }
 
@@ -131,19 +135,6 @@ export function continueRoomFlowAfterAdditional({
         userId,
         source,
     })
-}
-
-function invokeTurnActionUpdater({
-    roomId,
-    userId,
-    io,
-}: {
-    roomId: string
-    userId: string
-    io: Server
-}) {
-    const { turnActionUpdater } = require("../sockets/turn-action") as typeof import("../sockets/turn-action")
-    turnActionUpdater({ roomId, userId, io })
 }
 
 export function resumeRoomFlow({

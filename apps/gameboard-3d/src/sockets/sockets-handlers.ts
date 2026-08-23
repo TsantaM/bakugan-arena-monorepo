@@ -5,7 +5,7 @@ import type {
 import { type AnimationDirectivesTypes } from "@bakugan-arena/game-data"
 import * as THREE from "three"
 import { TurnActionBuilder } from "../turn-action-management"
-import { configureTurnActionBridge } from "../turn-action-management/turn-action-bridge"
+import { configureTurnActionBridge, syncTurnCountFromState } from "../turn-action-management/turn-action-bridge"
 import type { Socket } from "socket.io-client"
 import { OnBattleStartFunctionAnimation } from "../scene-modifications-functions/on-battle-start-function-animation"
 import { AddRenfortToBattleAnimationFunction, SetBakuganAndAddRenfortAnimationAndFunction } from "../scene-modifications-functions/add-renfort-function-animation"
@@ -89,6 +89,7 @@ let localTurnUserId: string | null = null
 
 const syncLocalTurnFromState = (state: roomStateType) => {
     localTurnUserId = state.turnState.turn
+    syncTurnCountFromState(state.turnState.turnCount)
 }
 
 export async function playAnimation(
@@ -713,6 +714,7 @@ export function registerSocketHandlers(
 
         const data = turnState.battleTurn !== undefined ? `${turnState.turnCount}T (${turnState.battleTurn})` : `${turnState.turnCount}T`
         turnCounter.textContent = data
+        syncTurnCountFromState(turnState.turnCount)
         notifyParentTurnEnd()
     })
 
@@ -830,6 +832,7 @@ export function registerSocketHandlersViewers(socket: Socket,
 
         const data = turnState.battleTurn !== undefined ? `${turnState.turnCount}T (${turnState.battleTurn})` : `${turnState.turnCount}T`
         turnCounter.textContent = data
+        syncTurnCountFromState(turnState.turnCount)
         notifyParentTurnEnd()
     })
 

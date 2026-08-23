@@ -2,10 +2,9 @@ import { io, Socket } from "socket.io-client"
 import {
   AbilityCardsActionsRequestsType,
   ActivePlayerActionRequestType,
+  canSkipTurn,
   gateCardActionRequestsType,
   InactivePlayerActionRequestType,
-  logGameEvent,
-  logDiagnostic,
   resolutionType,
   stateType,
 } from "@bakugan-arena/game-data"
@@ -18,57 +17,23 @@ import {
 } from "./ai"
 import type { SimulateAction } from "./ai"
 
-const ACTION_DELAY_MS = 450
-const STALL_WATCHDOG_INTERVAL_MS = 2_000
-const STALL_THRESHOLD_MS = 4_000
-const ADDITIONAL_STUCK_TIMEOUT_MS = 30_000
-const CHECK_ACTIVITIES_INTERVAL_MS = 8_000
+const ACTION_DELAY_MIN_MS = 5_000
+const ACTION_DELAY_MAX_MS = 10_000
+const BOT_WATCHDOG_MS = 15_000
+const ADDITIONAL_STALE_MS = 15_000
 
 type TurnActionRequest = ActivePlayerActionRequestType | InactivePlayerActionRequestType
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
+const randomActionDelayMs = () =>
+  ACTION_DELAY_MIN_MS +
+  Math.floor(Math.random() * (ACTION_DELAY_MAX_MS - ACTION_DELAY_MIN_MS + 1))
+
 const getRoomState = (roomId: string): stateType | undefined =>
   Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
 
-const countTurnActions = (
-  request: ActivePlayerActionRequestType | InactivePlayerActionRequestType,
-): number =>
-  request.actions.mustDo.length +
-  request.actions.mustDoOne.length +
-  request.actions.optional.length
-
-/** Même logique que le gameboard : ignorer les requests destinées à l'autre rôle. */
-const isTurnRequestForBot = (
-  state: stateType,
-  botUserId: string,
-  request: TurnActionRequest,
-): boolean => {
-  const isBotActive = state.turnState.turn === botUserId
-  if (request.target === "ACTIVE_PLAYER") return isBotActive
-  if (request.target === "INACTIVE_PLAYER") return !isBotActive
-  return isBotActive
-}
-
-const isBotTargetOfPendingAdditional = (
-  state: stateType,
-  botUserId: string,
-): boolean => {
-  const ability = state.AbilityAditionalRequest[0]
-  if (ability) {
-    const target = ability.data.target ?? ability.userId
-    return target === botUserId
-  }
-
-  const gate = state.gateCardActionRequest[0]
-  if (gate && gate.data.type !== "TURN_ACTION_LAUNCHER") {
-    const target = gate.data.target ?? gate.userId
-    return target === botUserId
-  }
-
-  return false
-}
-
+/** Request de tour courante lue depuis l'état serveur (jamais une request socket périmée). */
 const resolveTurnRequestFromState = (
   state: stateType,
   botUserId: string,
@@ -80,23 +45,6 @@ const resolveTurnRequestFromState = (
     return state.InactivePlayerActionRequest
   }
   return undefined
-}
-
-const shouldBotActFromState = (
-  state: stateType,
-  botUserId: string,
-  pendingAdditionalRequests: number,
-): boolean => {
-  if (state.status.finished || pendingAdditionalRequests > 0) return false
-
-  if (isBotTargetOfPendingAdditional(state, botUserId)) {
-    return true
-  }
-
-  const request = resolveTurnRequestFromState(state, botUserId)
-  if (!request) return false
-
-  return countTurnActions(request) > 0
 }
 
 /**
@@ -155,7 +103,11 @@ const emitSimulateAction = (
       return true
 
     case "TURN_SKIP":
-      socket.emit("turn-action", { roomId, userId: action.userId })
+      socket.emit("turn-action", {
+        roomId,
+        userId: action.userId,
+        turnCount: getRoomState(roomId)?.turnState.turnCount,
+      })
       return true
 
     case "ABILITY_ADDITIONAL": {
@@ -213,18 +165,9 @@ const playBestMove = (
     if (gateMoves.length > 0) {
       const pick = pickMoveSoftmax(gateMoves, Math.max(temperature, 0.45))
       if (pick) {
-        logGameEvent(state, {
-          handler: "bot-play",
-          category: "bot",
-          input: { botLabel, phase: "turn0-gate" },
-          output: {
-            label: pick.label,
-            score: pick.score,
-            options: gateMoves.length,
-            adaptation: adaptation?.reason,
-          },
-          message: `[BOT ${botLabel}] gate tour 0 : ${pick.label}`,
-        })
+        console.log(
+          `[BOT ${botLabel}] turn0 gate ${pick.label} (score=${pick.score.toFixed(2)}, options=${gateMoves.length}, adapt=${adaptation?.reason.join(",") ?? "-"})`
+        )
         return emitSimulateAction(socket, roomId, pick.action)
       }
     }
@@ -233,249 +176,94 @@ const playBestMove = (
   const best = pickMoveSoftmax(moves, temperature)
 
   if (!best) {
-    if (state.turnState.turn !== userId) {
-      logDiagnostic(state, {
-        handler: "bot.turn-skip-rejected",
-        level: "warn",
-        message: `[BOT ${botLabel}] skip refusé — bot non actif`,
-        output: { botUserId: userId, activePlayerId: state.turnState.turn },
-      })
-      return false
+    if (canSkipTurn(state, userId)) {
+      console.log(`[BOT ${botLabel}] no scored move → TURN_SKIP`)
+      socket.emit("turn-action", { roomId, userId, turnCount: state.turnState.turnCount })
+      return true
     }
-    logGameEvent(state, {
-      handler: "bot-play",
-      category: "bot",
-      input: { botLabel, legalMoves: moves.length },
-      output: { action: "TURN_SKIP", adaptation: adaptation?.reason },
-      message: `[BOT ${botLabel}] aucun coup → skip`,
-    })
-    socket.emit("turn-action", { roomId, userId })
-    return true
+    console.warn(`[BOT ${botLabel}] no move and skip not legal — requesting resync`)
+    socket.emit("check-activities", { roomId, userId })
+    return false
   }
 
-  logGameEvent(state, {
-    handler: "bot-play",
-    category: "bot",
-    input: { botLabel },
-    output: {
-      label: best.label,
-      score: best.score,
-      options: moves.length,
-      pressure: adaptation?.pressure,
-      adaptation: adaptation?.reason,
-    },
-    message: `[BOT ${botLabel}] joue ${best.label}`,
-  })
+  console.log(
+    `[BOT ${botLabel}] play ${best.label} (score=${best.score.toFixed(2)}, options=${moves.length}, pressure=${adaptation?.pressure ?? "n/a"}, adapt=${adaptation?.reason.join(",") ?? "-"})`
+  )
   return emitSimulateAction(socket, roomId, best.action)
 }
 
 const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
   let roomId: string | null = null
   let actionQueue: Promise<void> = Promise.resolve()
-  let queueDepth = 0
-  /** Empêche un turn-action de passer pendant qu'une additional request est en cours */
   let pendingAdditionalRequests = 0
-  let additionalStartedAt: number | null = null
-  let deferredTurnActionRequest: TurnActionRequest | null = null
-  let lastBotActionAt = 0
-  let lastCheckActivitiesAt = 0
-  let stallWatchdogInterval: ReturnType<typeof setInterval> | null = null
+  let watchdogTimer: ReturnType<typeof setTimeout> | null = null
+  let additionalStaleTimer: ReturnType<typeof setTimeout> | null = null
 
-  const markBotAction = () => {
-    lastBotActionAt = Date.now()
+  const clearWatchdog = () => {
+    if (watchdogTimer) clearTimeout(watchdogTimer)
+    watchdogTimer = null
   }
 
-  const resyncRoomSocket = (targetRoomId: string) => {
-    socket.emit("init-room-state", {
-      roomId: targetRoomId,
-      userId: bot.userId,
-      parentSocket: socket.id,
-      isSpectator: false,
-    })
-  }
+  const enqueuePlayFromLiveState = (currentRoomId: string, source: string) => {
+    enqueue(() => {
+      if (pendingAdditionalRequests > 0) return
 
-  const stopStallWatchdog = () => {
-    if (stallWatchdogInterval !== null) {
-      clearInterval(stallWatchdogInterval)
-      stallWatchdogInterval = null
-    }
-  }
+      socket.emit("check-activities", { roomId: currentRoomId, userId: bot.userId })
 
-  const startStallWatchdog = () => {
-    stopStallWatchdog()
-    stallWatchdogInterval = setInterval(() => {
-      if (!roomId) return
-
-      const currentRoomId = roomId
       const state = getRoomState(currentRoomId)
       if (!state || state.status.finished) return
-
-      const now = Date.now()
-
-      if (
-        pendingAdditionalRequests > 0 &&
-        additionalStartedAt !== null &&
-        now - additionalStartedAt >= ADDITIONAL_STUCK_TIMEOUT_MS
-      ) {
-        logDiagnostic(state, {
-          handler: "bot.additional-stuck-reset",
-          level: "warn",
-          message: `[BOT ${bot.userId}] compteur additional bloqué — reset`,
-          output: {
-            pendingAdditionalRequests,
-            stuckMs: now - additionalStartedAt,
-          },
-        })
-        pendingAdditionalRequests = 0
-        additionalStartedAt = null
-        deferredTurnActionRequest = null
-      }
-
-      if (
-        now - lastCheckActivitiesAt >= CHECK_ACTIVITIES_INTERVAL_MS &&
-        shouldBotActFromState(state, bot.userId, pendingAdditionalRequests)
-      ) {
-        lastCheckActivitiesAt = now
-        socket.emit("check-activities", {
-          roomId: currentRoomId,
-          userId: bot.userId,
-        })
-      }
-
-      if (queueDepth > 0 || pendingAdditionalRequests > 0) return
-      if (!shouldBotActFromState(state, bot.userId, 0)) return
-      if (now - lastBotActionAt < STALL_THRESHOLD_MS) return
 
       const request = resolveTurnRequestFromState(state, bot.userId)
-      logDiagnostic(state, {
-        handler: "bot.stall-recovery",
-        level: "warn",
-        message: `[BOT ${bot.userId}] reprise depuis l'état serveur (watchdog)`,
-        output: {
-          turnCount: state.turnState.turnCount,
-          activePlayerId: state.turnState.turn,
-          requestTarget: request?.target,
-          idleMs: now - lastBotActionAt,
-        },
-      })
-
-      enqueuePlayFromState(currentRoomId, request, "watchdog")
-    }, STALL_WATCHDOG_INTERVAL_MS)
-  }
-
-  const enqueue = (task: () => void | Promise<void>) => {
-    queueDepth++
-    actionQueue = actionQueue
-      .then(async () => {
-        await delay(ACTION_DELAY_MS)
-        await task()
-      })
-      .catch((error) => {
-        console.error(`[BOT ${bot.userId}] action error:`, error)
-      })
-      .finally(() => {
-        queueDepth = Math.max(0, queueDepth - 1)
-      })
-  }
-
-  const enqueuePlayFromState = (
-    currentRoomId: string,
-    request?: TurnActionRequest,
-    source = "state-resync",
-  ) => {
-    enqueue(() => {
-      const state = getRoomState(currentRoomId)
-      if (!state || state.status.finished) return
-
-      const resolvedRequest =
-        request ?? resolveTurnRequestFromState(state, bot.userId)
-
-      if (
-        resolvedRequest &&
-        !isTurnRequestForBot(state, bot.userId, resolvedRequest)
-      ) {
-        return
-      }
-
       const played = playBestMove(
         socket,
         currentRoomId,
         bot.userId,
         bot.userId,
-        resolvedRequest,
+        request,
       )
-      if (played) {
-        markBotAction()
-        return
+      if (!played) {
+        console.warn(`[BOT ${bot.userId}] playBestMove n'a rien émis (${source})`)
       }
-
-      logDiagnostic(state, {
-        handler: "bot.play-failed",
-        level: "warn",
-        message: `[BOT ${bot.userId}] playBestMove n'a rien émis (${source})`,
-        output: {
-          botUserId: bot.userId,
-          requestTarget: resolvedRequest?.target,
-          source,
-        },
-      })
     })
   }
 
-  const replayDeferredTurnRequest = () => {
-    if (pendingAdditionalRequests > 0 || !deferredTurnActionRequest || !roomId) {
-      return
-    }
+  const scheduleWatchdog = () => {
+    clearWatchdog()
+    watchdogTimer = setTimeout(() => {
+      if (!roomId) return
+      if (pendingAdditionalRequests > 0) return
+      const state = getRoomState(roomId)
+      if (!state || state.status.finished) return
 
-    const request = deferredTurnActionRequest
-    deferredTurnActionRequest = null
-    const currentRoomId = roomId
-    const state = getRoomState(currentRoomId)
+      console.warn(`[BOT ${bot.userId}] watchdog — reprise depuis l'état live`)
+      enqueuePlayFromLiveState(roomId, "watchdog")
+    }, BOT_WATCHDOG_MS)
+  }
 
-    if (!state) return
+  const resetAdditionalStaleGuard = () => {
+    if (additionalStaleTimer) clearTimeout(additionalStaleTimer)
+    if (pendingAdditionalRequests <= 0) return
 
-    if (!isTurnRequestForBot(state, bot.userId, request)) {
-      logDiagnostic(state, {
-        handler: "bot.deferred-turn-request-stale",
-        level: "warn",
-        message: `[BOT ${bot.userId}] requête différée périmée — reprise depuis l'état`,
-        output: {
-          requestTarget: request.target,
-          currentTurn: state.turnState.turn,
-          botUserId: bot.userId,
-        },
+    additionalStaleTimer = setTimeout(() => {
+      if (pendingAdditionalRequests > 0) {
+        console.warn(`[BOT ${bot.userId}] resetting stale pendingAdditionalRequests`)
+        pendingAdditionalRequests = 0
+        if (roomId) {
+          socket.emit("check-activities", { roomId, userId: bot.userId })
+        }
+      }
+    }, ADDITIONAL_STALE_MS)
+  }
+
+  const enqueue = (task: () => void | Promise<void>) => {
+    actionQueue = actionQueue
+      .then(async () => {
+        await delay(randomActionDelayMs())
+        await task()
       })
-      enqueuePlayFromState(currentRoomId, undefined, "deferred-stale")
-      return
-    }
-
-    enqueuePlayFromState(currentRoomId, request, "deferred-replay")
-  }
-
-  const beginAdditionalHandling = () => {
-    pendingAdditionalRequests++
-    if (additionalStartedAt === null) {
-      additionalStartedAt = Date.now()
-    }
-  }
-
-  const endAdditionalHandling = () => {
-    pendingAdditionalRequests = Math.max(0, pendingAdditionalRequests - 1)
-    if (pendingAdditionalRequests === 0) {
-      additionalStartedAt = null
-    }
-    replayDeferredTurnRequest()
-  }
-
-  const resetBotSession = (clearRoom: boolean) => {
-    if (clearRoom && roomId) clearMatchMemory(roomId, bot.userId)
-    if (clearRoom) roomId = null
-    pendingAdditionalRequests = 0
-    additionalStartedAt = null
-    deferredTurnActionRequest = null
-    lastBotActionAt = 0
-    lastCheckActivitiesAt = 0
-    stopStallWatchdog()
+      .catch((error) => {
+        console.error(`[BOT ${bot.userId}] action error:`, error)
+      })
   }
 
   const socket: Socket = io(serverUrl, {
@@ -487,31 +275,28 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
 
   socket.on("connect", () => {
     console.log(`[BOT ${bot.userId}] connected (${socket.id})`)
-    if (roomId) {
-      resyncRoomSocket(roomId)
-      startStallWatchdog()
-    }
   })
 
   socket.on("disconnect", (reason) => {
     console.log(`[BOT ${bot.userId}] disconnected:`, reason)
-    stopStallWatchdog()
+    clearWatchdog()
+    if (additionalStaleTimer) clearTimeout(additionalStaleTimer)
+    if (roomId) clearMatchMemory(roomId, bot.userId)
+    roomId = null
     pendingAdditionalRequests = 0
-    additionalStartedAt = null
-    deferredTurnActionRequest = null
   })
 
   const joinRoom = (matchedRoomId: string) => {
     if (roomId) clearMatchMemory(roomId, bot.userId)
     roomId = matchedRoomId
     pendingAdditionalRequests = 0
-    additionalStartedAt = null
-    deferredTurnActionRequest = null
-    lastBotActionAt = Date.now()
-    lastCheckActivitiesAt = 0
     clearMatchMemory(matchedRoomId, bot.userId)
-    resyncRoomSocket(matchedRoomId)
-    startStallWatchdog()
+    socket.emit("init-room-state", {
+      roomId: matchedRoomId,
+      userId: bot.userId,
+      parentSocket: socket.id,
+      isSpectator: false,
+    })
   }
 
   socket.on("match-found", (matchedRoomId: string) => {
@@ -521,49 +306,27 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
 
   socket.on("game-finished", () => {
     console.log(`[BOT ${bot.userId}] game finished`)
-    resetBotSession(true)
+    clearWatchdog()
+    if (roomId) clearMatchMemory(roomId, bot.userId)
+    roomId = null
+    pendingAdditionalRequests = 0
+  })
+
+  socket.on("bot-resync-request", ({ roomId: reqRoomId, userId }: { roomId: string; userId: string }) => {
+    if (!roomId || roomId !== reqRoomId || userId !== bot.userId) return
+    enqueuePlayFromLiveState(reqRoomId, "bot-resync")
   })
 
   socket.on("turn-action-request", (request: TurnActionRequest) => {
     if (!roomId) return
     const currentRoomId = roomId
+    scheduleWatchdog()
     enqueue(() => {
-      const state = getRoomState(currentRoomId)
-      if (!state) return
-
-      if (!isTurnRequestForBot(state, bot.userId, request)) {
-        return
-      }
-
       if (pendingAdditionalRequests > 0) {
-        deferredTurnActionRequest = request
-        logDiagnostic(state, {
-          handler: "bot.skip-turn-request",
-          level: "warn",
-          message: `[BOT ${bot.userId}] turn-action-request ignorée — additional en cours`,
-          output: { pendingAdditionalRequests, botUserId: bot.userId },
-        })
+        console.log(`[BOT ${bot.userId}] skip turn-action-request (pending additional)`)
         return
       }
-
-      const played = playBestMove(
-        socket,
-        currentRoomId,
-        bot.userId,
-        bot.userId,
-        request,
-      )
-      if (played) {
-        markBotAction()
-        return
-      }
-
-      logDiagnostic(state, {
-        handler: "bot.play-failed",
-        level: "warn",
-        message: `[BOT ${bot.userId}] playBestMove n'a rien émis`,
-        output: { botUserId: bot.userId, requestTarget: request.target },
-      })
+      playBestMove(socket, currentRoomId, bot.userId, bot.userId, request)
     })
   })
 
@@ -576,13 +339,12 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
       request.data.target === bot.userId
     if (!targetsBot) return
 
-    beginAdditionalHandling()
+    pendingAdditionalRequests++
+    resetAdditionalStaleGuard()
     enqueue(() => {
       try {
         const ok = playBestMove(socket, roomId!, bot.userId, bot.userId)
-        if (ok) {
-          markBotAction()
-        } else {
+        if (!ok) {
           console.warn(`[BOT ${bot.userId}] gate additional fallback SKIP`)
           socket.emit("gate-card-additional-request", {
             roomId: request.roomId,
@@ -591,10 +353,9 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
             slot: request.slot,
             data: { type: "SKIP_ACTION" },
           })
-          markBotAction()
         }
       } finally {
-        endAdditionalHandling()
+        pendingAdditionalRequests = Math.max(0, pendingAdditionalRequests - 1)
       }
     })
   })
@@ -607,13 +368,12 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
       request.data.target === bot.userId
     if (!targetsBot) return
 
-    beginAdditionalHandling()
+    pendingAdditionalRequests++
+    resetAdditionalStaleGuard()
     enqueue(() => {
       try {
         const ok = playBestMove(socket, roomId!, bot.userId, bot.userId)
-        if (ok) {
-          markBotAction()
-        } else {
+        if (!ok) {
           console.warn(`[BOT ${bot.userId}] ability additional fallback SKIP`)
           socket.emit("ability-additional-request", {
             roomId: request.roomId,
@@ -623,10 +383,9 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
             slot: request.slot,
             data: { type: "SKIP_ACTION" },
           } satisfies resolutionType)
-          markBotAction()
         }
       } finally {
-        endAdditionalHandling()
+        pendingAdditionalRequests = Math.max(0, pendingAdditionalRequests - 1)
       }
     })
   })

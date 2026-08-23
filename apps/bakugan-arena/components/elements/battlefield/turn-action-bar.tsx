@@ -377,6 +377,7 @@ export default function TurnActionBar({
     const [count, setCount] = useState(0)
     const [isDesktop, setIsDesktop] = useState(false)
     const lastSyncedRef = useRef<string | null>(null)
+    const passTurnPendingRef = useRef(false)
 
     const activeCarouselTab = carouselTabs.find((tab) => tab.type === activeTab)
 
@@ -390,6 +391,7 @@ export default function TurnActionBar({
 
     // Init / reset tab quand le request change
     useEffect(() => {
+        passTurnPendingRef.current = false
         lastSyncedRef.current = null
         if (carouselTabs.length === 0) {
             setActiveTab('')
@@ -598,7 +600,8 @@ export default function TurnActionBar({
     }
 
     const passTurn = () => {
-        if (!canPass) return
+        if (!canPass || passTurnPendingRef.current) return
+        passTurnPendingRef.current = true
         postToGameboard(iframeRef.current, { type: 'CANCEL_TARGETING' }, gameboardOrigin)
         postToGameboard(iframeRef.current, { type: 'PASS_TURN' }, gameboardOrigin)
         useTurnActionStore.getState().clear()

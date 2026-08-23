@@ -2,8 +2,7 @@ import { ActivePlayerActionRequestType, attribut, bakuganOnSlot, Bakugans, Chang
 import { Server, Socket } from "socket.io";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
-import { clearAnimationsInRoom } from "./clear-animations-socket";
-import { turnActionUpdater } from "./turn-action";
+import { tryAutoAdvanceTurn } from "../functions/try-auto-advance-turn";
 import { EmitMessage } from "../functions/emit-messages";
 import { AddAbilities } from "./update-bakugans-state";
 import { grantActionIncrement, syncClocks } from "../functions/start-player-timer";
@@ -92,8 +91,7 @@ export function ChangeAttributSocket(io: Server, socket: Socket) {
                     io.to(activeSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].ActivePlayerActionRequest)
                     syncClocks({ roomState, io })
                 } else {
-                    clearAnimationsInRoom(roomId)
-                    turnActionUpdater({ roomId, userId, io })
+                    tryAutoAdvanceTurn({ roomState, io, userId, source: "change-attribut.active" })
                 }
             } else {
                 syncClocks({ roomState, io })
@@ -118,8 +116,7 @@ export function ChangeAttributSocket(io: Server, socket: Socket) {
                     io.to(inactiveSocket.gameboardSocket).emit('turn-action-request', Battle_Brawlers_Game_State[roomIndex].InactivePlayerActionRequest)
                     syncClocks({ roomState, io })
                 } else {
-                    clearAnimationsInRoom(roomId)
-                    turnActionUpdater({ roomId, userId, io })
+                    tryAutoAdvanceTurn({ roomState, io, userId, source: "change-attribut.inactive" })
                 }
             } else {
                 syncClocks({ roomState, io })

@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { UpdateGate } from "../functions/set-gate-server";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
-import { ActivePlayerActionRequestType, addSlotToSetBakugan, InactivePlayerActionRequestType, removeActionByType, SetBakuganActionRequest, setGateCardProps, slots_id } from "@bakugan-arena/game-data";
+import { ActivePlayerActionRequestType, addSlotToSetBakugan, InactivePlayerActionRequestType, removeActionByType, SetBakuganActionRequest, setGateCardProps, slots_id, stripStateForSocket } from "@bakugan-arena/game-data";
 import { turnActionUpdater } from "./turn-action";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { EmitMessage } from "../functions/emit-messages";
@@ -49,7 +49,7 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
             const animation = UpdateGate({ roomId, gateId, slot, userId })
             state = Battle_Brawlers_Game_State[roomIndex]
             if (!state) return
-            io.to(roomId).emit('update-room-state', state)
+            io.to(roomId).emit('update-room-state', stripStateForSocket(state))
             if (!animation) return
             io.to(roomId).emit('animations', animation)
             animation.forEach((a) => EmitMessage({ roomState: state, animation: a, io }))
@@ -58,7 +58,7 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
             const animation = UpdateGate({ roomId, gateId, slot, userId })
             state = Battle_Brawlers_Game_State[roomIndex]
             if (!state) return
-            io.to(roomId).emit('update-room-state', state)
+            io.to(roomId).emit('update-room-state', stripStateForSocket(state))
             if (!animation) return
             io.to(roomId).emit('animations', animation)
             animation.forEach((a) => EmitMessage({ roomState: state, animation: a, io }))

@@ -3,6 +3,8 @@ import {
   GateCardsList,
   boardFromReplaySnapshot,
   collectLearnableSignalObservations,
+  getReplayStateAfterAt,
+  getReplayStateBeforeAt,
   isPhaseWeightKey,
   isPrefWeightKey,
   phaseWeightKey,
@@ -12,7 +14,6 @@ import {
   type bakuganOnSlot,
   type BotTrainingPhase,
   type replayDataType,
-  type replayEntryType,
   type replaySnapshotType,
 } from "@bakugan-arena/game-data"
 import {
@@ -103,8 +104,11 @@ function findBakuganFamily(key: string): string | undefined {
   return BakuganList.find((b) => b.key === key)?.family
 }
 
-function actorFromEntry(entry: replayEntryType): string | undefined {
-  return entry.stateBefore.turnState.turn || undefined
+function actorFromTimeline(
+  timeline: Pick<replayDataType, "initialSnapshot" | "replay">,
+  index: number,
+): string | undefined {
+  return getReplayStateBeforeAt(timeline, index).turnState.turn || undefined
 }
 
 function isBattle(snapshot: replaySnapshotType): boolean {
@@ -178,13 +182,14 @@ function observeActionPreferences(
 
 function analyzeDecision(
   stats: FeatureStats,
-  entry: replayEntryType,
+  timeline: Pick<replayDataType, "initialSnapshot" | "replay">,
+  entryIndex: number,
   userId: string,
   animation: AnimationDirectivesTypes,
   weight: number
 ) {
-  const before = entry.stateBefore
-  const after = entry.stateAfter
+  const before = getReplayStateBeforeAt(timeline, entryIndex)
+  const after = getReplayStateAfterAt(timeline, entryIndex)
   const opponentId = getOpponentId(after, userId)
   const phase = trainingPhaseOf(before)
 
@@ -344,12 +349,13 @@ export function collectTrainingStats(
     if (outcome === "loss") lossesUsed += 1
     const weight = outcomeWeight(outcome)
 
-    for (const entry of replayData.replay) {
+    for (let i = 0; i < replayData.replay.length; i++) {
+      const entry = replayData.replay[i]
       if (!entry.animation) continue
       if (!DECISION_ANIMATION_TYPE_SET.has(entry.animation.type)) continue
-      const actor = actorFromEntry(entry)
+      const actor = actorFromTimeline(replayData, i)
       if (!actor || actor !== learnFromUserId) continue
-      analyzeDecision(stats, entry, learnFromUserId, entry.animation, weight)
+      analyzeDecision(stats, replayData, i, learnFromUserId, entry.animation, weight)
       decisionsAnalyzed += 1
     }
   }

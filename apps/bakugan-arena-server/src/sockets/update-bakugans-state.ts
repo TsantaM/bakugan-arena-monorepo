@@ -1,8 +1,8 @@
 import { Server, Socket } from "socket.io";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { SetBakuganOnGate } from "../functions/set-bakugan-server";
-import { AbilityCardsList, ActivePlayerActionRequestType, attribut, BakuganList, bakuganOnSlot, ChangeAttributActionRequest, ExclusiveAbilitiesList, InactivePlayerActionRequestType, onBoardBakugans, removeActionByType, SelectAbilityCardFilters, SelectAbilityCardInNeutralFilters, setBakuganProps, Slots, slots_id, stateType } from "@bakugan-arena/game-data";
-import { turnActionUpdater } from "./turn-action";
+import { AbilityCardsList, ActivePlayerActionRequestType, attribut, BakuganList, bakuganOnSlot, ChangeAttributActionRequest, ExclusiveAbilitiesList, InactivePlayerActionRequestType, onBoardBakugans, removeActionByType, SelectAbilityCardFilters, SelectAbilityCardInNeutralFilters, setBakuganProps, Slots, slots_id, stateType, stripStateForSocket } from "@bakugan-arena/game-data";
+import { tryAutoAdvanceTurn } from "../functions/try-auto-advance-turn";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { EmitMessage } from "../functions/emit-messages";
 import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
@@ -139,7 +139,7 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
         const updatedState = Battle_Brawlers_Game_State[roomIndex]
         if (!updatedState) return
 
-        io.to(roomId).emit('update-room-state', updatedState)
+        io.to(roomId).emit('update-room-state', stripStateForSocket(updatedState))
         if (!animation) return
         io.to(roomId).emit('animations', animation)
         animation.forEach((a) => EmitMessage({ roomState: updatedState, animation: a, io }))
@@ -184,8 +184,7 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
                 syncClocks({ roomState: updatedState, io })
                 return
             } else {
-                clearAnimationsInRoom(roomId)
-                turnActionUpdater({ roomId, userId, io })
+                tryAutoAdvanceTurn({ roomState: updatedState, io, userId, source: "update-bakugans.active" })
             }
         }
 

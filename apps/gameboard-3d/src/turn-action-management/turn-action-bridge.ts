@@ -29,6 +29,35 @@ type BridgeContext = {
 
 let ctx: BridgeContext | null = null
 let messageListenerAttached = false
+let localTurnCount: number | null = null
+let passTurnInFlight = false
+
+export function syncTurnCountFromState(turnCount: number) {
+    localTurnCount = turnCount
+    passTurnInFlight = false
+}
+
+function emitPassTurn(socket: Socket, roomId: string, userId: string): boolean {
+    if (passTurnInFlight) return false
+    if (localTurnCount === null) return false
+
+    passTurnInFlight = true
+    socket.emit('clean-animation-table', { roomId })
+    socket.emit('turn-action', {
+        roomId,
+        userId,
+        turnCount: localTurnCount,
+    })
+    return true
+}
+
+export function emitPassTurnFromBridge(
+    socket: Socket,
+    roomId: string,
+    userId: string,
+): boolean {
+    return emitPassTurn(socket, roomId, userId)
+}
 
 function getCtx(): BridgeContext | null {
     return ctx
@@ -146,11 +175,7 @@ function onParentMessage(event: MessageEvent) {
         case 'PASS_TURN':
             cancelTurnTargeting(targetingCtx, false)
             clearTurnInterface()
-            current.socket.emit('clean-animation-table', { roomId: current.roomId })
-            current.socket.emit('turn-action', {
-                roomId: current.roomId,
-                userId: current.userId,
-            })
+            emitPassTurn(current.socket, current.roomId, current.userId)
             break
         case 'CLEAR_TURN_UI':
             cancelTurnTargeting(targetingCtx, false)
