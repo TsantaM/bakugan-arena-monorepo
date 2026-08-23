@@ -2,6 +2,7 @@ import { AbilityCardsList, BakuganList, ExclusiveAbilitiesList } from "../../bat
 import { pushReplayAnimation } from "../replay/push-replay-animation.js";
 import { AnimationDirectivesTypes } from "../../type/animations-directives.js"
 import { activateAbilities, portalSlotsTypeElement, stateType } from "../../type/room-types.js"
+import { refreshGateCardOpenEligibility } from "../refresh-gate-card-open-eligibility.js"
 
 type CancelAbilityCardEffectProps = {
     roomState: stateType,
@@ -47,4 +48,6 @@ export function CancelAbilityCardEffect({ roomState, slotOfGate, ability }: Canc
 
     const persistantAbility = roomState.persistantAbilities.find((a) => a.key === ability.key && a.bakuganKey === ability.bakuganKey && a.userId === ability.userId && !a.canceled)
     if (persistantAbility) persistantAbility.canceled = true
+
+    refreshGateCardOpenEligibility(roomState)
 }

@@ -2,6 +2,7 @@ import { AbilityCardsList, Bakugans, ExclusiveAbilitiesList } from "../../battle
 import { pushReplayAnimation } from "../replay/push-replay-animation.js";
 import { Slots } from "../../store/slots.js";
 import { AbilityCardsActions, AnimationDirectivesTypes, slots_id, stateType } from "../../type/type-index.js";
+import { refreshGateCardOpenEligibility } from "../refresh-gate-card-open-eligibility.js";
 import { CancelAbilityCardEffect } from "./cancel-ability-card-effect.js";
 
 export function ElementaryCardCancelerEffect({ roomState, userId, slot, cardToCancel }: {
@@ -77,6 +78,9 @@ export function ElementaryCardCancelerEffect({ roomState, userId, slot, cardToCa
             })
         })
     }
+
+    // cardToCancel path cancels outside CancelAbilityCardEffect — still refresh open eligibility
+    refreshGateCardOpenEligibility(roomState)
 
     return null
 }

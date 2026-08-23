@@ -18,6 +18,7 @@ import {
     markAdditionalPending,
     tryEmitPendingAdditionalRequest,
 } from "./resume-room-flow"
+import { processAutoOpenableGates } from "./process-auto-openable-gates"
 
 function invokeTurnActionUpdater({
     roomId,
@@ -115,14 +116,25 @@ export function processAbilityAdditionalResolution(
         },
     })
 
+    const autoOpenResult = processAutoOpenableGates({
+        roomState,
+        roomId: roomData.roomId,
+        io,
+        source: "ability-additional-resolution",
+    })
+
+    const actingUserId = request.data.target ?? request.userId
+    grantActionIncrement({ roomState: roomData, userId: actingUserId, io })
+
+    if (autoOpenResult === "additional" || autoOpenResult === "turn_advanced") {
+        return true
+    }
+
     io.to(roomData.roomId).emit("animations", roomState.animations)
     roomState.animations.forEach((animation) =>
         EmitMessage({ roomState, animation, io }),
     )
     roomState.animations = []
-
-    const actingUserId = request.data.target ?? request.userId
-    grantActionIncrement({ roomState: roomData, userId: actingUserId, io })
 
     if (roomState.AbilityAditionalRequest.length > 0) {
         markAdditionalPending(roomData.roomId)

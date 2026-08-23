@@ -9,6 +9,7 @@ import { CheckGameFinished } from "./CheckGameFinished";
 import { syncClocks } from "./start-player-timer";
 import { markAdditionalPending } from "./resume-room-flow";
 import { resumeRoomFlowWithAutoSkip } from "./resume-room-flow-defaults";
+import { processAutoOpenableGates } from "./process-auto-openable-gates";
 
 export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganKey, io }: useAbilityCardProps & { io: Server }) => {
     // FR: On récupère les données de la salle en cours avec son roomId
@@ -292,6 +293,20 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
             }
 
         } else {
+            const autoOpenResult = processAutoOpenableGates({
+                roomState: state,
+                roomId,
+                io,
+                source: "use-ability-card",
+            })
+
+            if (autoOpenResult === "additional" || autoOpenResult === "turn_advanced") {
+                if (autoOpenResult === "turn_advanced") {
+                    io.to(roomId).emit('update-room-state', stripStateForSocket(state))
+                }
+                return
+            }
+
             const activeSocket = state.connectedsUsers.get(state.turnState.turn)
             const inactiveSocket = state.connectedsUsers.get(state.turnState.previous_turn || '')
 
@@ -300,6 +315,7 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
             if (!animations) return
             io.to(roomId).emit('animations', animations)
             animations.forEach((animation) => EmitMessage({ roomState: state, animation, io }))
+            Battle_Brawlers_Game_State[roomIndex].animations = []
 
 
             if (state.turnState.turn === userId) {
