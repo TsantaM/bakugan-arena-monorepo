@@ -4,10 +4,10 @@ import { resolutionType } from "../../type/actions-serveur-requests.js";
 import { Message } from "../../type/animations-directives.js";
 import { bakuganOnSlot, slots_id, stateType } from "../../type/room-types.js";
 import { OpenGateCardActionRequest } from "../action-request-functions/open-gate-card-action-request.js";
-import { AddRenfortAnimationDirective } from "../create-animation-directives/add-renfort-directive.js";
 import { CustomAnimationDirective } from "../create-animation-directives/custom-animation.js";
 import { MoveToAnotherSlotDirectiveAnimation } from "../create-animation-directives/move-to-another-slot.js";
 import { NewAdditionnalMessage } from "../new-additional-message.js";
+import { checkRenfortOnMove } from "./check-renfort-on-move.js";
 import { isProtectedAgainst, type EffectOrigin } from "./protection-status.js";
 
 type DragCustomAnimation = {
@@ -23,13 +23,15 @@ export function dragBakuganToUserSlot({
     resolution,
     roomState,
     trapped,
-    origin = 'ABILITY',  // Certaines cartes (ex: AntiMuse) ne veulent PAS les renforts
+    origin = 'ABILITY',
+    enableRenfort = true,
     customAnimations,
 }: {
     resolution: resolutionType,
     roomState: stateType,
     trapped?: boolean,
     origin?: EffectOrigin
+    enableRenfort?: boolean
     customAnimations?: DragCustomAnimation[]
 }) {
     if (!roomState) return;
@@ -73,6 +75,14 @@ export function dragBakuganToUserSlot({
         })
     }
 
+
+    checkRenfortOnMove({
+        roomState,
+        bakugan: bakuganToDrag,
+        slot: slotTarget,
+        direction: 'leave',
+        enabled: enableRenfort,
+    })
 
     // --- Déplacement du bakugan ---
     const newState: bakuganOnSlot = {
@@ -134,26 +144,13 @@ export function dragBakuganToUserSlot({
     // CheckBattleStillInProcess(roomState);
     // CheckBattle({ roomState });
 
-    // --- Gestion du renfort ---
-    if (
-        roomState.battleState.battleInProcess &&
-        roomState.battleState.slot === slotOfGate.id
-    ) {
-        const sameTeam = slotOfGate.bakugans.some(
-            b => b.userId === bakuganToDrag.userId
-        );
-
-        if (sameTeam) {
-            AddRenfortAnimationDirective({
-                animations: roomState.animations,
-                roomState: roomState,
-                bakugan: bakuganToDrag,
-                slot: slotOfGate,
-                turn: roomState.turnState.turnCount
-
-            });
-        }
-    }
+    checkRenfortOnMove({
+        roomState,
+        bakugan: newState,
+        slot: slotOfGate,
+        direction: 'enter',
+        enabled: enableRenfort,
+    })
 
     OpenGateCardActionRequest({ roomState });
 

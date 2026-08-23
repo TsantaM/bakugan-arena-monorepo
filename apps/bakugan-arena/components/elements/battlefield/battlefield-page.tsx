@@ -203,6 +203,7 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
                         />
                         <DownloadAndUploadReplay
                             roomId={roomId}
+                            userId={userId}
                             player1={playerData}
                             player2={opponentData}
                         />

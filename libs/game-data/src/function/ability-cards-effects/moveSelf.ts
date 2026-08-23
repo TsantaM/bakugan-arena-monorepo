@@ -4,8 +4,8 @@ import { Message } from "../../type/animations-directives.js";
 import { activateAbilities, bakuganOnSlot, slots_id, stateType } from "../../type/room-types.js";
 import { OpenGateCardActionRequest } from "../action-request-functions/index.js";
 import { CheckBattleStillInProcess } from "../check-battle-still-in-process.js";
-import { AbilityCardFailed, AddRenfortAnimationDirective, CustomAnimationDirective, MoveToAnotherSlotDirectiveAnimation } from "../create-animation-directives/index.js";
-import RemoveRenfortAnimationDirective from "../create-animation-directives/remove-renfort-animation-directive.js";
+import { AbilityCardFailed, CustomAnimationDirective, MoveToAnotherSlotDirectiveAnimation } from "../create-animation-directives/index.js";
+import { checkRenfortOnMove } from "./check-renfort-on-move.js";
 
 type MoveSelfCustomAnimation = {
     animationKey: string
@@ -119,21 +119,12 @@ export function moveBakuganToSelectedSlot({
         (ba) => ba.key === user.key && ba.userId === user.userId
     );
 
-    if (roomData.battleState.battleInProcess && !roomData.battleState.paused && roomData.battleState.slot === slotOfGate.id) {
-        const sameTeam = slotOfGate.bakugans.filter((b) => b.key !== user.key && b.userId === user.userId).some(
-            b => b.userId === user.userId
-        );
-
-        if (sameTeam) {
-            RemoveRenfortAnimationDirective({
-                animations: roomData.animations,
-                bakugan: structuredClone(user),
-                turnCount: roomData.turnState.turnCount,
-                    roomState: roomData
-
-            })
-        }
-    }
+    checkRenfortOnMove({
+        roomState: roomData,
+        bakugan: user,
+        slot: slotOfGate,
+        direction: 'leave',
+    })
 
 
     // --- Move the bakugan ---
@@ -215,24 +206,12 @@ export function moveBakuganToSelectedSlot({
     // --- Battles + Gate open ---
     CheckBattleStillInProcess(roomData);
 
-    if (
-        roomData.battleState.battleInProcess &&
-        roomData.battleState.slot === slotTarget.id
-    ) {
-        const sameTeam = slotTarget.bakugans.some(
-            b => b.userId === user.userId
-        );
-
-        if (sameTeam) {
-            AddRenfortAnimationDirective({
-                animations: roomData.animations,
-                roomState: roomData,
-                bakugan: user,
-                slot: slotTarget,
-                turn: roomData.turnState.turnCount
-            });
-        }
-    }
+    checkRenfortOnMove({
+        roomState: roomData,
+        bakugan: newUserState,
+        slot: slotTarget,
+        direction: 'enter',
+    })
 
     const newAbilityToPush: activateAbilities = {
         id: newId, // FR: Toujours supérieur au précédent / ENG: Always greater than the last one

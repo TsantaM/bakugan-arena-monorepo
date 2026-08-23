@@ -6,7 +6,7 @@ import type {
 } from "@bakugan-arena/game-data"
 import { getBotByUserId, type personalities } from "../../functions/bot-data"
 import { simulateAction } from "./simulate-action"
-import { scoreAction } from "./score-action"
+import { isActiveBattle, scoreAction } from "./score-action"
 import {
   expandAbilityAdditional,
   expandGateAdditional,
@@ -73,6 +73,13 @@ const flattenTurnActions = (request: TurnRequest): ActionType[] => {
     ...request.actions.optional,
   ]
 }
+
+/** Actions de setup interdites pendant une bataille active. */
+const isSetupActionBlockedInBattle = (type: ActionType["type"]): boolean =>
+  type === "SET_BAKUGAN" ||
+  type === "SELECT_BAKUGAN" ||
+  type === "SET_GATE_CARD_ACTION" ||
+  type === "SELECT_GATE_CARD"
 
 const labelForAction = (action: SimulateAction): string => {
   switch (action.type) {
@@ -160,7 +167,9 @@ function scoreAllMoves(
   const moves: SimulateAction[] = []
 
   if (request) {
+    const inBattle = isActiveBattle(state)
     for (const action of flattenTurnActions(request)) {
+      if (inBattle && isSetupActionBlockedInBattle(action.type)) continue
       moves.push(...expandTurnAction(action, userId))
     }
 

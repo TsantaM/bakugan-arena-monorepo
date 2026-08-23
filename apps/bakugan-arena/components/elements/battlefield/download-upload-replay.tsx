@@ -2,16 +2,18 @@
 
 import { Button } from "@/components/ui/button"
 import { saveReplayToServer, serializeReplayReference } from "@/src/lib/replay/replay-api-client"
+import { fetchRoomReplayViaSocket } from "@/src/lib/replay/replay-socket-client"
 import { Room, useRoomsStore } from "@/src/store/rooms-store"
 import { useSocketStore } from "@/src/store/socket-id-store"
 import { playerDataType, replayEntryType, replaySnapshotType } from "@bakugan-arena/game-data"
 import { Download, Loader2, Upload } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { toast, Toaster } from "sonner"
 import { useTranslations } from "next-intl"
 
-export default function DownloadAndUploadReplay({ roomId, player1, player2 }: {
+export default function DownloadAndUploadReplay({ roomId, userId, player1, player2 }: {
     roomId: string
+    userId: string
     player1: playerDataType | undefined
     player2: playerDataType | undefined
 }) {
@@ -27,13 +29,15 @@ export default function DownloadAndUploadReplay({ roomId, player1, player2 }: {
     useEffect(() => {
         if (!socket) return
 
-        socket.on('final-room-state', (room: Room) => {
-            updateRoom(room)
-            if (!room.replay) return
-            setReplay(room.replay)
-            setInitialSnapshot(room.initialSnapshot)
-        })
+        const handleFinalRoomState = (nextRoom: Room) => {
+            updateRoom(nextRoom)
+        }
 
+        socket.on('final-room-state', handleFinalRoomState)
+
+        return () => {
+            socket.off('final-room-state', handleFinalRoomState)
+        }
     }, [socket, updateRoom])
 
     const getOrderedPlayers = () => {
@@ -46,10 +50,22 @@ export default function DownloadAndUploadReplay({ roomId, player1, player2 }: {
         }
     }
 
+    const ensureReplayLoaded = useCallback(async () => {
+        if (replay && initialSnapshot) {
+            return { replay, initialSnapshot }
+        }
+        if (!socket) {
+            throw new Error("Socket unavailable")
+        }
+
+        const payload = await fetchRoomReplayViaSocket(socket, { roomId, userId })
+        setReplay(payload.replay)
+        setInitialSnapshot(payload.initialSnapshot)
+        return payload
+    }, [replay, initialSnapshot, socket, roomId, userId])
+
     async function handleDownload() {
         if (!room) return
-        if (!replay) return
-        if (!initialSnapshot) return
 
         const ordered = getOrderedPlayers()
         if (!ordered) return
@@ -59,9 +75,11 @@ export default function DownloadAndUploadReplay({ roomId, player1, player2 }: {
         setIsDownloading(true)
 
         try {
+            const { replay: loadedReplay, initialSnapshot: loadedSnapshot } = await ensureReplayLoaded()
+
             const savedReplay = await saveReplayToServer({
-                replay,
-                initialSnapshot,
+                replay: loadedReplay,
+                initialSnapshot: loadedSnapshot,
                 player1: orderedPlayer1,
                 player2: orderedPlayer2,
                 roomId,
@@ -94,7 +112,7 @@ export default function DownloadAndUploadReplay({ roomId, player1, player2 }: {
     }
 
     async function handleUpload() {
-        if (!room || !player1 || !player2 || !replay || !initialSnapshot) return
+        if (!room || !player1 || !player2) return
 
         const ordered = getOrderedPlayers()
         if (!ordered) return
@@ -102,12 +120,14 @@ export default function DownloadAndUploadReplay({ roomId, player1, player2 }: {
         setIsUploading(true)
 
         try {
+            const { replay: loadedReplay, initialSnapshot: loadedSnapshot } = await ensureReplayLoaded()
+
             await saveReplayToServer({
                 roomId,
                 player1: ordered.orderedPlayer1,
                 player2: ordered.orderedPlayer2,
-                replay,
-                initialSnapshot,
+                replay: loadedReplay,
+                initialSnapshot: loadedSnapshot,
             }, { ifExists: "reject" })
 
             toast.success(t('toasts.uploadSuccess'))
@@ -119,7 +139,8 @@ export default function DownloadAndUploadReplay({ roomId, player1, player2 }: {
     }
 
     if (!room) return null
-    if (!room.finished && !room.replay) return null
+    if (!room.finished) return null
+    if (!room.replayAvailable) return null
     if (!player1 || !player2) return null
 
     return (

@@ -23,7 +23,6 @@ export function SelectAbilityCardFilters({ slotOfBattle, userId, bakuganKey, pla
 
     const attribut = bakuganAttribut ? bakuganAttribut : currentBakugan?.attribut
     const secondAttribut = currentBakugan?.secondAttribut
-    console.log('bakugan', currentBakugan?.key, 'attribut', attribut, 'secondAttribut', secondAttribut)
 
     const attributLessAbilities = playersDeck.abilities.filter((a) => !a.attribut && a.used === false && a.dead === false)
     const usableAbilitiesBeforeFilter = [playersDeck?.abilities.filter((a) => a.used === false && a.dead === false).filter((a) => a.attribut === attribut || a.attribut === secondAttribut).filter(

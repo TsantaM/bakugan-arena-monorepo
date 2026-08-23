@@ -44,8 +44,16 @@ export function applySetBakugan({
   const canPlayerSetBakugan = state.turnState.set_new_bakugan
   const isNotPreviousTurn = state.turnState.previous_turn !== userId
   const hasNoBakuganOnSlot = usersBakuganOnGate < 1
+  const battleBlocksSet =
+    state.battleState.battleInProcess === true && state.battleState.paused !== true
 
-  if (!isSlotUsable || !canPlayerSetBakugan || !isNotPreviousTurn || !hasNoBakuganOnSlot) {
+  if (
+    !isSlotUsable ||
+    !canPlayerSetBakugan ||
+    !isNotPreviousTurn ||
+    !hasNoBakuganOnSlot ||
+    battleBlocksSet
+  ) {
     return { ok: false, reason: "cannot_place_bakugan" }
   }
 

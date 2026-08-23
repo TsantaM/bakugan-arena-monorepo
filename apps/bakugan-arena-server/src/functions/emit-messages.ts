@@ -14,11 +14,9 @@ export function EmitMessage({ roomState, animation, io }: { roomState: stateType
     messages.forEach((message) => {
         roomState.messages.push(message)
         connectedUsersSockets.forEach((s) => {
-            console.log('parent-socket', s.nextjsSocket)
             io.to(s.nextjsSocket).emit('game-messages', message)
         })
         spectatorsSockets.forEach((s) => {
-            console.log('parent-socket', s.nextjsSocket)
             io.to(s.nextjsSocket).emit('game-messages', message)
         })
     })
@@ -31,7 +29,6 @@ export function SendAllMessages({ roomState, io, socketNext }: { roomState: stat
     const messages = roomState.messages
     const connectedUsersSockets = roomState.connectedsUsers
     const spectatorsSockets = roomState.spectators
-    console.log('parent socket', socketNext)
     if (messages.length > 0) {
         connectedUsersSockets.forEach((s) => io.to(socketNext).emit('init-game-messages', messages))
         spectatorsSockets.forEach((s) => io.to(socketNext).emit('init-game-messages', messages))

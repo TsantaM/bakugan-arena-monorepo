@@ -38,6 +38,7 @@ import { GateCardAdditionalEffectSocket } from "./sockets/gate-card-additional-e
 import { ChangeAttributSocket } from "./sockets/change-attribut-socket";
 import { applyEloDecayToAllUsers } from "./functions/ladder-functions/elo-decay";
 import { startRoomFlowWatchdog } from "./functions/room-flow-watchdog";
+import { fetchRoomReplaySocket } from "./sockets/fetch-room-replay-socket";
 
 
 
@@ -51,7 +52,10 @@ const io = new Server(httpServer, {
     cors: {
         origin: corsOrigins,
         methods: ["GET", "POST"]
-    }
+    },
+    perMessageDeflate: {
+        threshold: 1024,
+    },
 });
 
 const ELO_DECAY_INTERVAL_MS = 24 * 60 * 60 * 1000
@@ -83,7 +87,6 @@ const startServer = async () => {
 
     io.on('connection', (socket) => {
         const { userId, roomId, socketType } = socket.handshake.auth
-        console.log('A user connected:', 'socketId : ', socket.id, 'userId : ', userId);
         if (!roomId && (!socketType || socketType === 'game')) {
             addOrUpdateConnectedUser(userId, socket.id, io);
         }
@@ -114,9 +117,9 @@ const startServer = async () => {
         ChangeAttributSocket(io, socket)
         socketTurn(io, socket)
         forfeitSocket(io, socket)
+        fetchRoomReplaySocket(io, socket)
 
-        socket.on('disconnect', (reason) => {
-            console.log('A user disconnected:', 'socketId : ', socket.id, 'userId : ', userId, reason);
+        socket.on('disconnect', () => {
             // clean auto
             for (const [waitingUserId, p] of waitingMap.entries()) {
                 if (p.socketId === socket.id) {

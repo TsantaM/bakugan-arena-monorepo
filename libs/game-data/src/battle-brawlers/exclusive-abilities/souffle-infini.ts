@@ -4,6 +4,7 @@ import {
     CheckBattleStillInProcess,
     MoveToAnotherSlotDirectiveAnimation,
     PowerChange,
+    checkRenfortOnMove,
     isProtectedAgainstAbility,
 } from "../../function/index.js"
 import { NewAdditionnalMessage } from "../../function/new-additional-message.js"
@@ -96,6 +97,13 @@ export const SouffleInfini: exclusiveAbilitiesType = {
             origin: 'ABILITY',
         })
 
+        checkRenfortOnMove({
+            roomState,
+            bakugan: bakuganToDrag,
+            slot: slotTarget,
+            direction: 'leave',
+        })
+
         const newState: bakuganOnSlot = {
             ...bakuganToDrag,
             slot_id: slotOfGate.id
@@ -110,6 +118,12 @@ export const SouffleInfini: exclusiveAbilitiesType = {
             newSlot: slotOfGate,
             turn: roomState.turnState.turnCount,
             roomState: roomState
+        })
+        checkRenfortOnMove({
+            roomState,
+            bakugan: newState,
+            slot: slotOfGate,
+            direction: 'enter',
         })
         CheckBattle({ roomState })
         CheckBattleStillInProcess(roomState)

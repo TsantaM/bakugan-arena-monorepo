@@ -1,4 +1,4 @@
-import { AddRenfortAnimationDirective, MoveToAnotherSlotDirectiveAnimation, SetBakuganAndAddRenfortAnimationDirective } from "../../function/index.js"
+import { MoveToAnotherSlotDirectiveAnimation, SetBakuganAndAddRenfortAnimationDirective, checkRenfortOnMove } from "../../function/index.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 import { bakuganOnSlot } from "../../type/room-types.js"
 import { TigrerraHaos } from "../bakugans/tigrerra.js"
@@ -67,21 +67,17 @@ export const SabreDeLaMort: exclusiveAbilitiesType = {
                     } else {
 
                         if(!tigrerraSlot) return null
-                        // console.log('tigrerra eh')
                         const tigrerraOnSlot = tigrerraSlot.bakugans.find((b) => b.key === tigrerra.bakuganData.key && b.userId === userId)
 
                         if (!tigrerraOnSlot) return null
                         const tigrerraOnSlotIndex = tigrerraSlot.bakugans.findIndex((b) => b.key === tigrerra.bakuganData.key && b.userId === userId)
-                        // console.log('tigrerra eh2', tigrerraOnSlotIndex)
 
                         if (tigrerraOnSlotIndex === -1) return null
-                        // console.log('tigrerra eh4')
 
 
                         const slotOfBattle = roomState.battleState.slot
                         const battleSlot = roomState.protalSlots.find((s) => s.id === slotOfBattle)
                         if (!battleSlot) return null
-                        // console.log('tigrerra eh5')
 
                         const newBakuganState: bakuganOnSlot = {
                             key: tigrerraOnSlot.key,
@@ -98,6 +94,13 @@ export const SabreDeLaMort: exclusiveAbilitiesType = {
                             family: tigrerraOnSlot.family
                         }
 
+                        checkRenfortOnMove({
+                            roomState,
+                            bakugan: tigrerraOnSlot,
+                            slot: tigrerraSlot,
+                            direction: 'leave',
+                        })
+
                         battleSlot.bakugans.push(newBakuganState)
                         slotOfGate.bakugans.splice(tigrerraOnSlotIndex, 1)
 
@@ -111,22 +114,12 @@ export const SabreDeLaMort: exclusiveAbilitiesType = {
 
                         });
 
-                        const sameTeam = battleSlot.bakugans.some(
-                            b => b.userId === userId
-                        );
-
-                        // console.log('tigrerra eh6', sameTeam)
-
-                        if (sameTeam) {
-                        // console.log('tigrerra eh7', sameTeam)
-                            AddRenfortAnimationDirective({
-                                animations: roomState.animations,
-                roomState: roomState,
-                                bakugan: newBakuganState,
-                                slot: battleSlot,
-                                turn: roomState.turnState.turnCount
-                            });
-                        }
+                        checkRenfortOnMove({
+                            roomState,
+                            bakugan: newBakuganState,
+                            slot: battleSlot,
+                            direction: 'enter',
+                        })
 
                     }
 

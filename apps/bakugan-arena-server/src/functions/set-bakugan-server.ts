@@ -11,6 +11,8 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuga
     // ENG Index of the room in the global state for updating
     const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
 
+    if (!roomData) return
+
     // FR: Nombre de Bakugan du joueur disponibles pour être posés (pas sur le domaine, pas éliminés)
     // ENG Number of the player's Bakugan available to be placed (not on the domain, not eliminated)
     const usable_bakugan = roomData?.decksState
@@ -44,9 +46,18 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuga
     // ENG Check if the player has no Bakugan on this slot
     const hasNoBakuganOnSlot = usersBakuganOnGate < 1
 
+    const battleBlocksSet =
+        roomData.battleState.battleInProcess === true &&
+        roomData.battleState.paused !== true
+
     // FR: Vérifie si toutes les conditions pour poser un Bakugan sont remplies
     // ENG Check if all conditions to place a Bakugan are met
-    const canPlaceBakugan = isSlotUsable && canPlayerSetBakugan && isNotPreviousTurn && hasNoBakuganOnSlot
+    const canPlaceBakugan =
+        isSlotUsable &&
+        canPlayerSetBakugan &&
+        isNotPreviousTurn &&
+        hasNoBakuganOnSlot &&
+        !battleBlocksSet
 
     if (!canPlaceBakugan) return
 
@@ -150,8 +161,6 @@ export const SetBakuganOnGate = ({ roomId, bakuganKey, slot, userId }: setBakuga
 
     const persistantAbilities = Battle_Brawlers_Game_State[roomIndex]?.persistantAbilities.filter((a) => a.bakuganKey === bakuganKey && a.userId === userId && !a.canceled)
     if(!persistantAbilities) return [animation]
-    console.log('persistants', Battle_Brawlers_Game_State[roomIndex]?.persistantAbilities)
-    console.log('filtered persistants', persistantAbilities)
 
     persistantAbilities.forEach((ability) => {
         const card = [...AbilityCardsList, ...ExclusiveAbilitiesList].find((c) => c.key === ability.key)

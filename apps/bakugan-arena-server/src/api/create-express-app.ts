@@ -1,4 +1,5 @@
 import express from "express"
+import compression from "compression"
 import { GetReplay } from "./replay/get-replay"
 import { GetReplayMeta } from "./replay/get-replay-meta"
 import { PostReplay } from "./replay/post-replay"
@@ -27,6 +28,7 @@ function applyCors(req: express.Request, res: express.Response, next: express.Ne
 export function createExpressApp() {
     const app = express()
 
+    app.use(compression())
     app.use(applyCors)
     app.use(express.json({ limit: "50mb" }))
 

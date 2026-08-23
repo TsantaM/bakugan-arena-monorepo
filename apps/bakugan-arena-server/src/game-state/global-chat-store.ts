@@ -37,10 +37,6 @@ export function cleanupOldMessages() {
 
     GlobalChatStore.length = 0
     GlobalChatStore.push(...filteredMessages)
-
-    console.log(
-        `[GLOBAL CHAT] Cleanup complete : ${GlobalChatStore.length} messages remaining`
-    )
 }
 
 /*

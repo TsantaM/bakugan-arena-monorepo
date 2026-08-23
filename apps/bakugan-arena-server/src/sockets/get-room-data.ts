@@ -1,10 +1,11 @@
 import { Server, Socket } from "socket.io"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 import { initRoomState } from "../functions/init-game-room"
-import { CreateActionRequestFunction, Message, replayEntryType, replaySnapshotType, stripStateForSocket } from "@bakugan-arena/game-data"
+import { CreateActionRequestFunction, Message, stripStateForSocket } from "@bakugan-arena/game-data"
 import { SendAllMessages } from "../functions/emit-messages"
 import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions"
 import { resumeRoomFlowWithAutoSkip } from "../functions/resume-room-flow-defaults"
+import { buildFinalRoomStatePayload } from "../functions/replay/final-room-state"
 
 
 const roomState = ({ roomId }: { roomId: string }) => {
@@ -16,7 +17,6 @@ export const socketGetRoomState = (io: Server, socket: Socket) => {
     socket.on(
         'get-room-state',
         ({ roomId, userId, parentSocket, isSpectator }: { roomId: string; userId: string, parentSocket: string, isSpectator?: boolean }) => {
-            console.log('get-room parent socket', parentSocket)
             const state = roomState({ roomId })
             if (!state) return
 
@@ -113,7 +113,6 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
     socket.on(
         'init-room-state',
         ({ roomId, userId, parentSocket, isSpectator = false }: { roomId: string; userId: string, parentSocket: string, isSpectator?: boolean }) => {
-            console.log('init-room parent socket', parentSocket)
             socket.join(roomId)
 
             const roomData = Battle_Brawlers_Game_State.find(
@@ -133,8 +132,6 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
                     nextjsSocket: parentSocket
                 })
             }
-
-            console.log('parent', parentSocket)
 
             // Init state UNIQUEMENT pour le demandeur
             const state = initRoomState({ roomId, userId: userId })
@@ -312,22 +309,14 @@ export const socketInitiRoomState = (io: Server, socket: Socket) => {
 
                 socket.emit('game-finished', message)
 
-                // ENVOI DES ANIMATIONS AUX JOUEURS POUR LE DOWNLOAD OU L'UPLOAD
-                const room: { p1: string, p2: string, roomId: string, finished: boolean, replay: replayEntryType[], initialSnapshot: replaySnapshotType } = {
-                    roomId: roomData.roomId,
-                    p1: roomData.players[0].userId,
-                    p2: roomData.players[1].userId,
-                    replay: roomData.animationsForReplay, initialSnapshot: roomData.initialReplaySnapshot,
-                    finished: roomData.status.finished
-                }
-
                 const player = roomData.connectedsUsers.get(userId)
 
-                if(player) {
-                    io.to(player.nextjsSocket).emit('final-room-state', room)
+                if (player) {
+                    io.to(player.nextjsSocket).emit(
+                        'final-room-state',
+                        buildFinalRoomStatePayload(roomData),
+                    )
                 }
-
-                // ENVOI DES ANIMATIONS AUX JOUEURS POUR LE DOWNLOAD OU L'UPLOAD
 
                 const sockets = roomData.connectedsUsers
                 sockets.forEach((s) => {

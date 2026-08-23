@@ -15,6 +15,7 @@ import {
   evaluateLegalMovesDetailed,
   pickMoveSoftmax,
 } from "./ai"
+import { isAdditionalRequestForUser } from "./ai/expand-legal-moves"
 import type { SimulateAction } from "./ai"
 
 const ACTION_DELAY_MIN_MS = 5_000
@@ -46,6 +47,10 @@ const resolveTurnRequestFromState = (
   }
   return undefined
 }
+
+/** Le bot peut encore agir (joueur actif ou inactif du tour courant). */
+const isBotEligibleToPlay = (state: stateType, botUserId: string): boolean =>
+  state.turnState.turn === botUserId || state.turnState.previous_turn === botUserId
 
 /**
  * Émet le coup choisi par l'IA (SimulateAction → events socket serveur).
@@ -147,12 +152,10 @@ const playBestMove = (
   socket: Socket,
   roomId: string,
   userId: string,
-  botLabel: string,
   request?: TurnActionRequest
 ): boolean => {
   const state = getRoomState(roomId)
   if (!state) {
-    console.warn(`[BOT ${botLabel}] no room state for`, roomId)
     return false
   }
 
@@ -165,9 +168,6 @@ const playBestMove = (
     if (gateMoves.length > 0) {
       const pick = pickMoveSoftmax(gateMoves, Math.max(temperature, 0.45))
       if (pick) {
-        console.log(
-          `[BOT ${botLabel}] turn0 gate ${pick.label} (score=${pick.score.toFixed(2)}, options=${gateMoves.length}, adapt=${adaptation?.reason.join(",") ?? "-"})`
-        )
         return emitSimulateAction(socket, roomId, pick.action)
       }
     }
@@ -177,18 +177,13 @@ const playBestMove = (
 
   if (!best) {
     if (canSkipTurn(state, userId)) {
-      console.log(`[BOT ${botLabel}] no scored move → TURN_SKIP`)
       socket.emit("turn-action", { roomId, userId, turnCount: state.turnState.turnCount })
       return true
     }
-    console.warn(`[BOT ${botLabel}] no move and skip not legal — requesting resync`)
     socket.emit("check-activities", { roomId, userId })
     return false
   }
 
-  console.log(
-    `[BOT ${botLabel}] play ${best.label} (score=${best.score.toFixed(2)}, options=${moves.length}, pressure=${adaptation?.pressure ?? "n/a"}, adapt=${adaptation?.reason.join(",") ?? "-"})`
-  )
   return emitSimulateAction(socket, roomId, best.action)
 }
 
@@ -204,7 +199,7 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
     watchdogTimer = null
   }
 
-  const enqueuePlayFromLiveState = (currentRoomId: string, source: string) => {
+  const enqueuePlayFromLiveState = (currentRoomId: string) => {
     enqueue(() => {
       if (pendingAdditionalRequests > 0) return
 
@@ -212,18 +207,10 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
 
       const state = getRoomState(currentRoomId)
       if (!state || state.status.finished) return
+      if (!isBotEligibleToPlay(state, bot.userId)) return
 
       const request = resolveTurnRequestFromState(state, bot.userId)
-      const played = playBestMove(
-        socket,
-        currentRoomId,
-        bot.userId,
-        bot.userId,
-        request,
-      )
-      if (!played) {
-        console.warn(`[BOT ${bot.userId}] playBestMove n'a rien émis (${source})`)
-      }
+      playBestMove(socket, currentRoomId, bot.userId, request)
     })
   }
 
@@ -235,8 +222,7 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
       const state = getRoomState(roomId)
       if (!state || state.status.finished) return
 
-      console.warn(`[BOT ${bot.userId}] watchdog — reprise depuis l'état live`)
-      enqueuePlayFromLiveState(roomId, "watchdog")
+      enqueuePlayFromLiveState(roomId)
     }, BOT_WATCHDOG_MS)
   }
 
@@ -246,7 +232,6 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
 
     additionalStaleTimer = setTimeout(() => {
       if (pendingAdditionalRequests > 0) {
-        console.warn(`[BOT ${bot.userId}] resetting stale pendingAdditionalRequests`)
         pendingAdditionalRequests = 0
         if (roomId) {
           socket.emit("check-activities", { roomId, userId: bot.userId })
@@ -273,12 +258,7 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
     reconnectionDelay: 2000,
   })
 
-  socket.on("connect", () => {
-    console.log(`[BOT ${bot.userId}] connected (${socket.id})`)
-  })
-
-  socket.on("disconnect", (reason) => {
-    console.log(`[BOT ${bot.userId}] disconnected:`, reason)
+  socket.on("disconnect", () => {
     clearWatchdog()
     if (additionalStaleTimer) clearTimeout(additionalStaleTimer)
     if (roomId) clearMatchMemory(roomId, bot.userId)
@@ -300,12 +280,10 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
   }
 
   socket.on("match-found", (matchedRoomId: string) => {
-    console.log(`[BOT ${bot.userId}] match found:`, matchedRoomId)
     joinRoom(matchedRoomId)
   })
 
   socket.on("game-finished", () => {
-    console.log(`[BOT ${bot.userId}] game finished`)
     clearWatchdog()
     if (roomId) clearMatchMemory(roomId, bot.userId)
     roomId = null
@@ -314,20 +292,13 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
 
   socket.on("bot-resync-request", ({ roomId: reqRoomId, userId }: { roomId: string; userId: string }) => {
     if (!roomId || roomId !== reqRoomId || userId !== bot.userId) return
-    enqueuePlayFromLiveState(reqRoomId, "bot-resync")
+    enqueuePlayFromLiveState(reqRoomId)
   })
 
-  socket.on("turn-action-request", (request: TurnActionRequest) => {
+  socket.on("turn-action-request", () => {
     if (!roomId) return
-    const currentRoomId = roomId
     scheduleWatchdog()
-    enqueue(() => {
-      if (pendingAdditionalRequests > 0) {
-        console.log(`[BOT ${bot.userId}] skip turn-action-request (pending additional)`)
-        return
-      }
-      playBestMove(socket, currentRoomId, bot.userId, bot.userId, request)
-    })
+    enqueuePlayFromLiveState(roomId)
   })
 
   socket.on("gate-card-additional-request", (request: gateCardActionRequestsType) => {
@@ -343,14 +314,25 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
     resetAdditionalStaleGuard()
     enqueue(() => {
       try {
-        const ok = playBestMove(socket, roomId!, bot.userId, bot.userId)
+        const state = getRoomState(roomId!)
+        if (!state || state.status.finished) return
+
+        const pending = state.gateCardActionRequest[0]
+        if (
+          !pending ||
+          !isAdditionalRequestForUser(pending, bot.userId) ||
+          pending.data.type === "TURN_ACTION_LAUNCHER"
+        ) {
+          return
+        }
+
+        const ok = playBestMove(socket, roomId!, bot.userId)
         if (!ok) {
-          console.warn(`[BOT ${bot.userId}] gate additional fallback SKIP`)
           socket.emit("gate-card-additional-request", {
-            roomId: request.roomId,
-            userId: request.userId,
-            cardKey: request.cardKey,
-            slot: request.slot,
+            roomId: pending.roomId,
+            userId: pending.userId,
+            cardKey: pending.cardKey,
+            slot: pending.slot,
             data: { type: "SKIP_ACTION" },
           })
         }
@@ -372,15 +354,22 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
     resetAdditionalStaleGuard()
     enqueue(() => {
       try {
-        const ok = playBestMove(socket, roomId!, bot.userId, bot.userId)
+        const state = getRoomState(roomId!)
+        if (!state || state.status.finished) return
+
+        const pending = state.AbilityAditionalRequest[0]
+        if (!pending || !isAdditionalRequestForUser(pending, bot.userId)) {
+          return
+        }
+
+        const ok = playBestMove(socket, roomId!, bot.userId)
         if (!ok) {
-          console.warn(`[BOT ${bot.userId}] ability additional fallback SKIP`)
           socket.emit("ability-additional-request", {
-            roomId: request.roomId,
-            userId: request.userId,
-            cardKey: request.cardKey,
-            bakuganKey: request.bakuganKey,
-            slot: request.slot,
+            roomId: pending.roomId,
+            userId: pending.userId,
+            cardKey: pending.cardKey,
+            bakuganKey: pending.bakuganKey,
+            slot: pending.slot,
             data: { type: "SKIP_ACTION" },
           } satisfies resolutionType)
         }
@@ -399,6 +388,4 @@ export const startBotPlayers = (port: number) => {
   for (const bot of BOT_ACCOUNTS) {
     createBotPlayer(bot, serverUrl)
   }
-
-  console.log(`[BOT] Started ${BOT_ACCOUNTS.length} bot player(s) → ${serverUrl}`)
 }

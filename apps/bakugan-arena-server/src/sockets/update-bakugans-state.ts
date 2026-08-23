@@ -6,8 +6,9 @@ import { tryAutoAdvanceTurn } from "../functions/try-auto-advance-turn";
 import { clearAnimationsInRoom } from "./clear-animations-socket";
 import { EmitMessage } from "../functions/emit-messages";
 import { CheckTurnActionRequest } from "../functions/check-turn-action-request-permissions";
+import { CheckTurnPermissions } from "../functions/ckeck-turn-permissions";
 import { grantActionIncrement, syncClocks } from "../functions/start-player-timer";
-import { logSocketEvent } from "../functions/log-socket-event";
+import { logPermissionDenied, logSocketEvent } from "../functions/log-socket-event";
 
 
 export function AddAbilities({ roomState, request, bakugan, slot, userId, attribut, bakuganAttribut }: { roomState: stateType, request: ActivePlayerActionRequestType | InactivePlayerActionRequestType, bakugan: string, slot: slots_id, userId: string, attribut: attribut, bakuganAttribut?: attribut }) {
@@ -92,8 +93,6 @@ export function AddAbilities({ roomState, request, bakugan, slot, userId, attrib
         attribut: attribut
     }
 
-    console.log(abilitieRequest.abilities.map((a) => a.key))
-
     const abilitiesList = abilitieRequest.abilities.map((a) => a)
     if (abilitiesList.length === 0) return
 
@@ -117,6 +116,21 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
         const state = Battle_Brawlers_Game_State.find((s) => s?.roomId === roomId)
         if (!state) return
         if (state.status.finished === true) return
+
+        const checker = CheckTurnPermissions({
+            roomState: state,
+            userId,
+            response: {
+                type: "SET_BAKUGAN",
+                bakuganKey,
+                slot: slot as slots_id,
+            },
+        })
+
+        if (!checker) {
+            logPermissionDenied(state, "set-bakugan", userId)
+            return
+        }
 
         clearAnimationsInRoom(roomId)
 

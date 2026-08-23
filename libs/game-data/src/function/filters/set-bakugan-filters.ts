@@ -39,14 +39,6 @@ export function SetBakuganFilters({ playersDeck, opponentDeck, slots, slot, user
                 filter((s) => s.bakugans.some((b) => b.userId != userId)).
                 filter((s) => s.bakugans.every((b) => b.userId != userId))
 
-    console.log( 'Set Bakugan Filter : ', {
-        usableBakugans: usableBakugans.map((b) => b?.name),
-        usableSlots: usableSlots.map((s) => s.id),
-        usableBakugansCount: usableBakugansCount,
-        opponentsUsableBakugans: opponentsOneBakuganLeft,
-        oneLeftAndOpponentsOnDomain: oneLeftAndOpponentsOnDomain
-    })
-
     const selectedSlot = !oneLeftAndOpponentsOnDomainAddNoGate || noGateOnDomain ? slots?.find((s) => s.id === slot) : undefined
 
     return {

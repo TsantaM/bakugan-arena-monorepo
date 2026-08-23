@@ -25,7 +25,12 @@ export function updateTurnState(roomData: stateType) {
 
     // Règles selon le nombre de tours
     if (turnState.turnCount > 0) {
-        turnState.set_new_bakugan = true
+        const inBattle =
+            roomData.battleState.battleInProcess === true &&
+            roomData.battleState.paused !== true
+        if (!inBattle) {
+            turnState.set_new_bakugan = true
+        }
         turnState.use_ability_card = true
         protalSlots.forEach(p => {
             if (!p.can_set && !p.portalCard) {
@@ -69,8 +74,6 @@ export function updateTurnState(roomData: stateType) {
 
             }
         }
-
-        console.log('block', blocked, turn, reason?.key)
 
         logGameEvent(roomData, {
             handler: "ability_card_block",

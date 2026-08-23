@@ -9,8 +9,6 @@ const FINISHED_ROOM_LIFETIME = 5 * 60 * 1000 // 5 min après fin
 export function cleanGameStates() {
     const now = Date.now()
 
-    let initialLength = Battle_Brawlers_Game_State.length
-
     for (let i = Battle_Brawlers_Game_State.length - 1; i >= 0; i--) {
         const room = Battle_Brawlers_Game_State[i]
 
@@ -39,9 +37,4 @@ export function cleanGameStates() {
         }
     }
 
-    const removed = initialLength - Battle_Brawlers_Game_State.length
-
-    if (removed > 0) {
-        console.log(`[CLEANUP] Removed ${removed} rooms`)
-    }
 }

@@ -15,9 +15,6 @@ export function addOrUpdateConnectedUser(userId: string, socketId: string, io: S
 
     const users = connectedUsers.map((u) => u.userId)
     io.emit('update-connected-users', users)
-
-    console.log(connectedUsers)
-
 }
 
 export function removeConnectedUserBySocket(socketId: string, io: Server) {
@@ -29,8 +26,6 @@ export function removeConnectedUserBySocket(socketId: string, io: Server) {
 
     const users = connectedUsers.map((u) => u.userId)
     io.emit('update-connected-users', users)
-
-    // console.log(connectedUsers)
 }
 
 export function addRoomSocket(userId: string, socketId: string, roomId: string) {
@@ -43,9 +38,6 @@ export function addRoomSocket(userId: string, socketId: string, roomId: string) 
         // Nouvel utilisateur
         roomsSockets.push({ userId, socketId, roomId });
     }
-
-    // console.log(roomsSockets)
-
 }
 
 export function removeRoomSocket(socketId: string, userId: string) {
@@ -54,6 +46,4 @@ export function removeRoomSocket(socketId: string, userId: string) {
     if (index !== -1) {
         roomsSockets.splice(index, 1);
     }
-
-    console.log(roomsSockets)
 }

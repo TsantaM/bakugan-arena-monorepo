@@ -1,5 +1,4 @@
 // src/store/roomsStore.ts
-import { replayEntryType, replaySnapshotType } from '@bakugan-arena/game-data'
 import { create } from 'zustand'
 
 export type Room = {
@@ -7,8 +6,7 @@ export type Room = {
     p2: string
     roomId: string
     finished: boolean
-    replay?: replayEntryType[]
-    initialSnapshot?: replaySnapshotType
+    replayAvailable?: boolean
 }
 
 interface RoomsStore {

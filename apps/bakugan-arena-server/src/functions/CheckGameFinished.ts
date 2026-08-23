@@ -1,4 +1,5 @@
-import { logGameEvent, Message, replayEntryType, replaySnapshotType, stateType } from "@bakugan-arena/game-data"
+import { logGameEvent, Message, stateType } from "@bakugan-arena/game-data"
+import { emitFinalRoomState } from "./replay/final-room-state"
 import { db } from "../lib/db"
 import { eq } from "drizzle-orm"
 import { schema } from "@bakugan-arena/drizzle-orm"
@@ -178,18 +179,7 @@ export const CheckGameFinished = async ({
 
       io.to(roomId).emit('game-finished', message)
 
-      // ENVOI DES ANIMATIONS AUX JOUEURS POUR LE DOWNLOAD OU L'UPLOAD
-      const roomData: { p1: string, p2: string, roomId: string, finished: boolean, replay: replayEntryType[], initialSnapshot: replaySnapshotType } = {
-        roomId: roomState.roomId,
-        p1: roomState.players[0].userId,
-        p2: roomState.players[1].userId,
-        replay: roomState.animationsForReplay, initialSnapshot: roomState.initialReplaySnapshot,
-        finished: roomState.status.finished
-      }
-      roomState.connectedsUsers.forEach((player) => {
-        io.to(player.nextjsSocket).emit('final-room-state', roomData)
-      })
-      // ENVOI DES ANIMATIONS AUX JOUEURS POUR LE DOWNLOAD OU L'UPLOAD
+      emitFinalRoomState(roomState, io)
 
       for (const user of roomState.connectedsUsers.values()) {
         io.to(user.nextjsSocket).emit('game-messages', [message])
