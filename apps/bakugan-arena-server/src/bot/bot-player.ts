@@ -18,18 +18,13 @@ import {
 import { isAdditionalRequestForUser } from "./ai/expand-legal-moves"
 import type { SimulateAction } from "./ai"
 
-const ACTION_DELAY_MIN_MS = 5_000
-const ACTION_DELAY_MAX_MS = 10_000
+const ACTION_DELAY_MS = 5_000
 const BOT_WATCHDOG_MS = 15_000
 const ADDITIONAL_STALE_MS = 15_000
 
 type TurnActionRequest = ActivePlayerActionRequestType | InactivePlayerActionRequestType
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
-
-const randomActionDelayMs = () =>
-  ACTION_DELAY_MIN_MS +
-  Math.floor(Math.random() * (ACTION_DELAY_MAX_MS - ACTION_DELAY_MIN_MS + 1))
 
 const getRoomState = (roomId: string): stateType | undefined =>
   Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
@@ -243,7 +238,7 @@ const createBotPlayer = (bot: BotAccount, serverUrl: string) => {
   const enqueue = (task: () => void | Promise<void>) => {
     actionQueue = actionQueue
       .then(async () => {
-        await delay(randomActionDelayMs())
+        await delay(ACTION_DELAY_MS)
         await task()
       })
       .catch((error) => {
