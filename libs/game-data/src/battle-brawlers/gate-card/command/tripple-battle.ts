@@ -70,7 +70,9 @@ export const TripleCombat: gateCardType = {
                             protectedAgainstGate: false,
                             protectedAgainstAbility: false,
                             protected: false,
-                            absorbPowerBoost: false
+                            absorbPowerBoost: false,
+                            reanimated: false,
+                            toSave: false
                         },
                         family: userStrongest.bakuganData.family
                     }

@@ -65,6 +65,10 @@ export type onSlotStatutType = false | {
     check: true,
     origin: 'GATE' | 'ABILITY'
     key: string,
+    ability?: {
+        key: string,
+        user: bakuganOnSlot
+    }
 }
 
 export type bakuganOnSlot = {
@@ -91,7 +95,9 @@ export type bakuganOnSlot = {
         protectedAgainstGate: onSlotStatutType,
         protectedAgainstAbility: onSlotStatutType,
         protected: onSlotStatutType,
-        absorbPowerBoost: onSlotStatutType
+        absorbPowerBoost: onSlotStatutType,
+        toSave: onSlotStatutType,
+        reanimated: onSlotStatutType,
     },
     family: string
 }

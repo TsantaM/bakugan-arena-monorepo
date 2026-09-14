@@ -124,7 +124,9 @@ export const EclatSoudain: abilityCardsType = {
                     protectedAgainstGate: false,
                     protectedAgainstAbility: false,
                     protected: false,
-                    absorbPowerBoost: false
+                    absorbPowerBoost: false,
+                    toSave: false,
+                    reanimated: false
                 },
                 family: bakugan.bakuganData.family
             }

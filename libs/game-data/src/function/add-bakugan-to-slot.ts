@@ -56,7 +56,9 @@ export function addBakuganToSlot({ bakuganFromDeck, bakuganToAdd, roomData, slot
             protectedAgainstGate: false,
             protectedAgainstAbility: false,
             protected: false,
-            absorbPowerBoost: false
+            absorbPowerBoost: false,
+            toSave: false,
+            reanimated: false
         }
     }
 
