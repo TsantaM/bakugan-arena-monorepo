@@ -1,6 +1,6 @@
 import { type abilityCardsType } from "../../type/type-index.js";
 import { Slots, StandardCardsImages } from '../../store/store-index.js'
-import { AbilityCardFailed, BlockAbilityCardsEffect, CancelGateCardDirectiveAnimation, CustomAnimationDirective, moveBakuganToSelectedSlot, PowerChange, RemoveAbilityCardsBlockEffect, requestMoveSelfSlotSelection } from "../../function/index.js";
+import { AbilityCardFailed, BlockAbilityCardsEffect, CancelGateCardDirectiveAnimation, CustomAnimationDirective, moveBakuganToSelectedSlot, PowerChange, RemoveAbilityCardsBlockEffect, requestMoveSelfSlotSelection, canMoveBakugan} from "../../function/index.js";
 import { AbilityCardsList } from "../ability-cards.js";
 import { ExclusiveAbilitiesList } from "../exclusive-abilities.js";
 import { GateCardsList } from "../gate-gards.js";
@@ -68,7 +68,7 @@ export const MirageAquatique: abilityCardsType = {
         const slots = roomState.protalSlots.filter((slot) => slot.id !== bakugan.slot_id && slot.portalCard !== null)
 
         if (slots.length === 0) return false
-        if (bakugan.statut.trapped) return false
+        if (!canMoveBakugan(bakugan, 'ABILITY')) return false
 
         return true
 

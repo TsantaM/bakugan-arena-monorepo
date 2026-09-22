@@ -1,3 +1,4 @@
+import { assertActor } from "./assert-actor"
 import { Server, Socket } from "socket.io";
 import { CreateRoom } from "../functions/create-room";
 import { createGameState } from "../functions/create-game-state";
@@ -263,6 +264,9 @@ const findBestOpponent = (
 export const setupSearchOpponentSocket = (io: Server, socket: Socket) => {
 
     socket.on('search-opponent', async ({ userId, deckId, ranked }) => {
+        // Sans ce garde, on peut mettre un autre joueur en file avec SA propre socket
+        if (!assertActor(socket, userId, 'search-opponent')) return
+
         await addToQueue({ userId, deckId, socketId: socket.id, ranked })
         // processMatchmaking(io)
     })

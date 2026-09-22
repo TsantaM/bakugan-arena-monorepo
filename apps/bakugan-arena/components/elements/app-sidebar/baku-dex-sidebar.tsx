@@ -32,22 +32,22 @@ export default function BakuDexSidebar({ user }: { user: UserType | undefined })
         {
             icone: <SwatchBook />,
             label: t('bakuDexLinks.bakugans'),
-            href: '/dashboard/baku-dex'
+            href: '/baku-dex'
         },
         {
             icone: <SwatchBook />,
             label: t('bakuDexLinks.abilityCards'),
-            href: '/dashboard/baku-dex/ability-cards'
+            href: '/baku-dex/ability-cards'
         },
         {
             icone: <SwatchBook />,
             label: t('bakuDexLinks.exclusiveAbilityCards'),
-            href: '/dashboard/baku-dex/exclusive-ability-cards'
+            href: '/baku-dex/exclusive-ability-cards'
         },
         {
             icone: <SwatchBook />,
             label: t('bakuDexLinks.gateCards'),
-            href: '/dashboard/baku-dex/gate-cards'
+            href: '/baku-dex/gate-cards'
         }
     ], [t])
 

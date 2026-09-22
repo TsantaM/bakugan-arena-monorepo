@@ -134,7 +134,7 @@ export function inferReplayOutcome(
 ): ReplayOutcome {
   const last =
     replayData.replay.length > 0
-      ? replayData.replay[replayData.replay.length - 1]!.stateAfter
+      ? getReplayStateAfterAt(replayData, replayData.replay.length - 1)
       : replayData.initialSnapshot
 
   if (!last) return "unknown"

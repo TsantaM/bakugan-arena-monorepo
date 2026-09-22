@@ -3,6 +3,7 @@ import compression from "compression"
 import { GetReplay } from "./replay/get-replay"
 import { GetReplayMeta } from "./replay/get-replay-meta"
 import { PostReplay } from "./replay/post-replay"
+import { REPLAY_ENABLED } from "../lib/replay-flag"
 
 function applyCors(req: express.Request, res: express.Response, next: express.NextFunction) {
     const configuredOrigins = process.env.SOCKET_CORS_ORIGIN?.split(",").map((o) => o.trim()) ?? ["*"]
@@ -35,9 +36,15 @@ export function createExpressApp() {
     app.get("/health", (_req, res) => {
         res.json({ ok: true })
     })
-    app.post("/api/replay", PostReplay)
-    app.get("/api/replay/:replayId/meta", GetReplayMeta)
-    app.get("/api/replay/:replayId", GetReplay)
+    if (REPLAY_ENABLED) {
+        app.post("/api/replay", PostReplay)
+        app.get("/api/replay/:replayId/meta", GetReplayMeta)
+        app.get("/api/replay/:replayId", GetReplay)
+    } else {
+        app.all("/api/replay{/*path}", (_req, res) => {
+            res.status(503).json({ error: "Replay feature is disabled" })
+        })
+    }
 
     return app
 }

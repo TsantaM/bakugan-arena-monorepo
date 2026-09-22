@@ -1,24 +1,18 @@
-import { Bakugans } from "../../battle-brawlers/bakugans.js";
-import { GateCardsList } from "../../battle-brawlers/gate-gards.js";
 import { resolutionType } from "../../type/actions-serveur-requests.js";
-import { Message } from "../../type/animations-directives.js";
-import { bakuganOnSlot, slots_id, stateType } from "../../type/room-types.js";
-import { OpenGateCardActionRequest } from "../action-request-functions/open-gate-card-action-request.js";
-import { CustomAnimationDirective } from "../create-animation-directives/custom-animation.js";
-import { MoveToAnotherSlotDirectiveAnimation } from "../create-animation-directives/move-to-another-slot.js";
-import { NewAdditionnalMessage } from "../new-additional-message.js";
-import { checkRenfortOnMove } from "./check-renfort-on-move.js";
-import { isProtectedAgainst, type EffectOrigin } from "./protection-status.js";
+import { stateType } from "../../type/room-types.js";
+import { applyBakuganMove, type BakuganMoveCustomAnimation } from "./apply-bakugan-move.js";
+import { type EffectOrigin } from "./protection-status.js";
 
-type DragCustomAnimation = {
-    animationKey: string
-    sourceBakugan?: bakuganOnSlot
-    targetBakugans?: bakuganOnSlot[]
-    slotId?: slots_id
-    payload?: Record<string, unknown>
-    message?: Message[]
-}
+type DragCustomAnimation = BakuganMoveCustomAnimation
 
+/**
+ * Attire un bakugan adverse sur le slot du lanceur (Force d'Attraction,
+ * Trappe de Sable, Dual Gazer…).
+ *
+ * Toutes les cibles/destinations sont revalidées ici : la liste construite par
+ * `onActivate` n'est qu'une proposition, l'état a pu changer depuis et la
+ * résolution vient du client.
+ */
 export function dragBakuganToUserSlot({
     resolution,
     roomState,
@@ -46,113 +40,35 @@ export function dragBakuganToUserSlot({
 
     if (!slotOfGate || !slotTarget || !targetBakuganKey) return;
 
-    const targetIndex = slotTarget.bakugans.findIndex(b => b.key === targetBakuganKey && b.userId === targetUserId);
-    const bakuganToDrag = slotTarget.bakugans.find(b => b.key === targetBakuganKey && b.userId === targetUserId);
+    const bakuganToDrag = slotTarget.bakugans.find(
+        b => b.key === targetBakuganKey && b.userId === targetUserId
+    );
+    if (!bakuganToDrag) return;
 
-    if (!bakuganToDrag || targetIndex < 0) return;
-    if (isProtectedAgainst(bakuganToDrag, origin)) {
-        NewAdditionnalMessage({
-            roomState: roomState,
-            key: 'bakugan_protected',
-            params: { name: Bakugans[bakuganToDrag.key].name },
-        })
-        return
-    }
-    // Vérifier que la carte utilisateur contient bien le bakugan lanceur
+    // Le slot d'arrivée doit bien porter le bakugan lanceur
     const user = slotOfGate.bakugans.find(
         b => b.key === resolution.bakuganKey && b.userId === resolution.userId
     );
     if (!user) return;
 
-    // Check Gate Card on Move Bakugan Function
-    const gate = GateCardsList.find((card) => card.key === slotTarget.portalCard?.key)
+    const casterSnapshot = structuredClone(user)
 
-    if (gate && gate.onRemoveBakugan) {
-        gate.onRemoveBakugan({
-            bakugan: bakuganToDrag,
-            roomState: roomState,
-            slot: slotTarget
-        })
-    }
-
-
-    checkRenfortOnMove({
+    const outcome = applyBakuganMove({
         roomState,
         bakugan: bakuganToDrag,
-        slot: slotTarget,
-        direction: 'leave',
-        enabled: enableRenfort,
+        fromSlot: slotTarget,
+        toSlot: slotOfGate,
+        origin,
+        trapWith: trapped ? { key: resolution.cardKey, origin } : undefined,
+        enableRenfort,
+        customAnimations: customAnimations?.map((animation) => ({
+            ...animation,
+            sourceBakugan: animation.sourceBakugan ?? casterSnapshot,
+            slotId: animation.slotId ?? slotOfGate.id,
+        })),
     })
 
-    // --- Déplacement du bakugan ---
-    const newState: bakuganOnSlot = {
-        ...bakuganToDrag,
-        slot_id: slotOfGate.id,
-        statut: {
-            ...bakuganToDrag.statut,
-            trapped: trapped ? {
-                check: true,
-                key: resolution.cardKey,
-                origin: origin ? origin : 'ABILITY'
-            } : false
-        }
-    };
-
-    slotOfGate.bakugans.push(newState);
-    slotTarget.bakugans.splice(targetIndex, 1);
-
-    // --- Animation ---
-    if (customAnimations && customAnimations.length > 0) {
-        customAnimations.forEach((animation) => {
-            CustomAnimationDirective({
-                roomState,
-                animationKey: animation.animationKey,
-                sourceBakugan: animation.sourceBakugan ?? structuredClone(user),
-                targetBakugans: animation.targetBakugans ?? [structuredClone(bakuganToDrag)],
-                slotId: animation.slotId ?? slotOfGate.id,
-                payload: animation.payload ?? {
-                    bakugan: structuredClone(bakuganToDrag),
-                    initialSlot: structuredClone(slotTarget),
-                    newSlot: structuredClone(slotOfGate),
-                },
-                message: animation.message,
-            })
-        })
-    } else {
-        MoveToAnotherSlotDirectiveAnimation({
-            animations: roomState.animations,
-            bakugan: structuredClone(bakuganToDrag),
-            initialSlot: structuredClone(slotTarget),
-            newSlot: structuredClone(slotOfGate),
-            turn: roomState.turnState.turnCount,
-            roomState: roomState
-        });
-    }
-
-    // --- Gate Card Effect on Set bakugan
-    const landingGate = GateCardsList.find((card) => card.key === slotOfGate.portalCard?.key)
-    if (landingGate && landingGate.onSetBakuganOnSlot) {
-        landingGate.onSetBakuganOnSlot({
-            bakugan: bakuganToDrag,
-            roomState: roomState,
-            slot: slotOfGate
-        })
-    }
-
-
-    // --- Combat + Gate ---
-    // CheckBattleStillInProcess(roomState);
-    // CheckBattle({ roomState });
-
-    checkRenfortOnMove({
-        roomState,
-        bakugan: newState,
-        slot: slotOfGate,
-        direction: 'enter',
-        enabled: enableRenfort,
-    })
-
-    OpenGateCardActionRequest({ roomState });
+    if (!outcome.moved) return;
 
     return { turnActionLaucher: true };
 }

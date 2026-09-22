@@ -12,7 +12,6 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { EditDeckNameAction } from "@/src/actions/deck-builder/edit-deck-action"
 import { toast } from "sonner"
-import { Toaster } from "@/components/ui/sonner"
 import ManageBakugansInDeck from "./edit-deck/manage-bakugans-in-deck"
 import ManageAbilityCardsInDeck from "./edit-deck/manage-ability-cards-in-deck"
 import ManageExclusiveAbilityCardsInDeck from "./edit-deck/manage-exclusive-ability-cards-in-deck"
@@ -145,7 +144,6 @@ export default function EditDeck({ id }: { id: string }) {
 
             </Card>
 
-            <Toaster/>
         </>
 
     )

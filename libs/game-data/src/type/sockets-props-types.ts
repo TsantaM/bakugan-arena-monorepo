@@ -50,6 +50,19 @@ export type RejectChalengeSocketPropsType = {
     chalengerId: string
 }
 
+/** Défi retiré sans action d'un joueur (délai dépassé, déconnexion). */
+export type ChalengeEndedSocketProps = {
+    chalengerId: string
+    targetId: string
+    reason: 'EXPIRED' | 'DISCONNECTED'
+}
+
+/** Envoi de défi refusé par le serveur — le challenger doit sortir de l'attente. */
+export type ChalengeFailedSocketProps = {
+    targetId: string
+    reason: 'ALREADY_PENDING' | 'TARGET_OFFLINE' | 'SELF'
+}
+
 export type forfeitSocketProps = {
     roomId: string,
     userId: string

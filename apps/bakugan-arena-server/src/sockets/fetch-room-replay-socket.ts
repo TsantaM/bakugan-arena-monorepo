@@ -1,6 +1,7 @@
 import { Server, Socket } from "socket.io"
 import {
     getRoomReplayFromState,
+    ReplayDisabledError,
     RoomReplayForbiddenError,
     RoomReplayNotFinishedError,
     RoomReplayNotFoundError,
@@ -39,6 +40,7 @@ export function fetchRoomReplaySocket(_io: Server, socket: Socket) {
             socket.emit("room-replay-data", replay)
         } catch (error) {
             if (
+                error instanceof ReplayDisabledError ||
                 error instanceof RoomReplayNotFoundError ||
                 error instanceof RoomReplayForbiddenError ||
                 error instanceof RoomReplayNotFinishedError

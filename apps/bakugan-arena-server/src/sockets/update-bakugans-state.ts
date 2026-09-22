@@ -1,3 +1,4 @@
+import { assertActor } from "./assert-actor"
 import { Server, Socket } from "socket.io";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
 import { SetBakuganOnGate } from "../functions/set-bakugan-server";
@@ -112,6 +113,7 @@ export function AddAbilities({ roomState, request, bakugan, slot, userId, attrib
 
 export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
     socket.on('set-bakugan', ({ roomId, bakuganKey, slot, userId }: setBakuganProps) => {
+        if (!assertActor(socket, userId, "set-bakugan")) return
 
         const state = Battle_Brawlers_Game_State.find((s) => s?.roomId === roomId)
         if (!state) return

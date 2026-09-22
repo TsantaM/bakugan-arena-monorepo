@@ -117,6 +117,7 @@ export default function ChatsCard() {
     const clearChallenge = useChatStore((state) => state.clearChallenge)
     const removeChat = useChatStore((state) => state.removeChat)
     const setFocused = useChatStore((state) => state.setFocused)
+    const clearFocused = useChatStore((state) => state.clearFocused)
  
     function closeTab(chat: ChatWindowType) {
 
@@ -147,8 +148,15 @@ export default function ChatsCard() {
         }
 
         removeChat(chat.targetId)
-        setFocused(chats[0].targetId)
 
+        // `chats` est l'état d'avant suppression : viser chats[0] pouvait
+        // redonner le focus à l'onglet fermé.
+        const remaining = chats.filter((c) => c.targetId !== chat.targetId)
+        if (remaining.length > 0) {
+            setFocused(remaining[0].targetId)
+        } else {
+            clearFocused()
+        }
     }
 
     if (chats.length > 0) return (

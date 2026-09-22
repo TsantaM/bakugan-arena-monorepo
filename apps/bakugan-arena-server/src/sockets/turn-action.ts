@@ -1,3 +1,4 @@
+import { assertActor } from "./assert-actor"
 import { Server, Socket } from "socket.io";
 import { attachActionRequestsToLastTurn, canSkipTurn, CheckBattleStillInProcess, CreateActionRequestFunction, handleBattle, handleGateCards, logDiagnostic, logGameEvent, stripStateForSocket, summarizeStateForLog, turnCountSocketProps, updateTurnState } from "@bakugan-arena/game-data";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
@@ -188,6 +189,7 @@ export function turnActionUpdater({ roomId, userId, io, updateBattleState = true
 export const socketTurn = (io: Server, socket: Socket) => {
 
     socket.on('turn-action', ({ roomId, userId, turnCount }: { roomId: string, userId: string, turnCount?: number }) => {
+        if (!assertActor(socket, userId, "turn-action")) return
         const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
         if (!roomData || roomData.status.finished) return
 

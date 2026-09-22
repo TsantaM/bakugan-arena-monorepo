@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { saveReplayToServer, serializeReplayReference } from "@/src/lib/replay/replay-api-client"
+import { REPLAY_ENABLED } from "@/src/lib/replay/replay-flag"
 import { fetchRoomReplayViaSocket } from "@/src/lib/replay/replay-socket-client"
 import { Room, useRoomsStore } from "@/src/store/rooms-store"
 import { useSocketStore } from "@/src/store/socket-id-store"
@@ -138,6 +139,7 @@ export default function DownloadAndUploadReplay({ roomId, userId, player1, playe
         }
     }
 
+    if (!REPLAY_ENABLED) return null
     if (!room) return null
     if (!room.finished) return null
     // if (!room.replayAvailable) return null

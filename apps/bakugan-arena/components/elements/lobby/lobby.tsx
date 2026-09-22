@@ -1,10 +1,6 @@
 'use client'
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { useEffect } from "react"
-import { Toaster } from "@/components/ui/sonner"
-import { useSocket } from "@/src/providers/socket-provider"
-import { redirect } from "next/navigation"
 import LauchRanckedGate from "./launch-rancked-game"
 import Section from "@/components/ui/section"
 import { Button } from "@/components/ui/button"
@@ -18,15 +14,9 @@ import { useTranslations } from "next-intl"
 export default function Lobby() {
     const t = useTranslations('lobby')
     const tNav = useTranslations('nav')
-    const socket = useSocket()
 
-    useEffect(() => {
-        if (!socket) return
-
-        socket.on('chalenge-accept-redirect', (roomId) => {
-            redirect(`/dashboard/battlefield?id=${roomId}`)
-        })
-    }, [socket])
+    // La redirection de début de partie est gérée globalement par
+    // GameEventsListener (event `match-found`), pas ici.
 
     return (
         <>
@@ -50,7 +40,6 @@ export default function Lobby() {
                 </Card>
             </Section>
 
-            <Toaster />
         </>
     )
 }

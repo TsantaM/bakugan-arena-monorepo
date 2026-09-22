@@ -8,11 +8,16 @@ import { forfeitSocketProps, logGameEvent } from "@bakugan-arena/game-data";
 import { SendUserRooms } from "../functions/send-user-rooms";
 import { stopAllRoomClocks } from "../functions/start-player-timer";
 import { persistAllGameLogs } from "../functions/flush-turn-log";
+import { assertActor } from "./assert-actor";
 
 export function forfeitSocket(io: Server, socket: Socket) {
     const rooms = schema.rooms
 
     async function onForfait({ roomId, userId }: forfeitSocketProps) {
+        // Sans ce garde, n'importe quelle socket peut faire abandonner l'adversaire
+        // (défaite + perte d'ELO).
+        if (!assertActor(socket, userId, "forfait")) return
+
         const roomData = Battle_Brawlers_Game_State.find((room) => room?.roomId === roomId)
         if (!roomData) return
         if (roomData.status.finished) return

@@ -43,7 +43,16 @@
     "waitingResponse": "En attente de réponse...",
     "choseDeck": "Choisir un deck",
     "popupTitle": "Sélectionnez un deck pour le défi",
-    "popupDescription": "{name} vous défie !"
+    "popupDescription": "{name} vous défie !",
+    "received": "Défi reçu !",
+    "accepted": "Défi accepté !",
+    "rejected": "Défi refusé",
+    "canceled": "Défi annulé",
+    "expired": "Défi expiré, sans réponse à temps",
+    "disconnected": "Joueur déconnecté — défi annulé",
+    "alreadyPending": "Un défi est déjà en cours avec ce joueur",
+    "targetOffline": "Ce joueur n'est pas en ligne",
+    "self": "Vous ne pouvez pas vous défier vous-même"
   },
   "removeRoom": {
     "ariaRemove": "Supprimer la salle",

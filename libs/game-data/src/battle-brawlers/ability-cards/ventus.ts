@@ -1,5 +1,5 @@
 import { ElementaryCardCancelerEffect } from "../../function/ability-cards-effects/elementary-card-canceler-effect.js";
-import { AbilityCardFailed, CancelGateCardDirectiveAnimation, CheckBattleStillInProcess, ComeBackBakuganDirectiveAnimation, CustomAnimationDirective, dragBakuganToUserSlot, moveBakuganToSelectedSlot, moveSelectedBakugan, requestMoveSelfSlotSelection } from "../../function/index.js";
+import { AbilityCardFailed, CancelGateCardDirectiveAnimation, CheckBattleStillInProcess, ComeBackBakuganDirectiveAnimation, CustomAnimationDirective, dragBakuganToUserSlot, moveBakuganToSelectedSlot, moveSelectedBakugan, requestMoveSelfSlotSelection, canMoveBakugan} from "../../function/index.js";
 import { StandardCardsImages } from "../../store/ability-cards-images.js";
 import { Slots } from "../../store/slots.js";
 import type { AbilityCardsActions, abilityCardsType, bakuganOnSlot, bakuganToMoveType2 as bakuganToMoveType, slots_id } from "../../type/type-index.js";
@@ -54,7 +54,7 @@ export const CombatAerien: abilityCardsType = {
         const slots = roomState.protalSlots.filter((slot) => slot.id !== bakugan.slot_id && slot.portalCard !== null)
 
         if (slots.length === 0) return false
-        if (bakugan.statut.trapped) return false
+        if (!canMoveBakugan(bakugan, 'ABILITY')) return false
 
         return true
     },
@@ -155,7 +155,7 @@ export const SouffleTout: abilityCardsType = {
         if (!slotOfGate) return animation
         if (slotOfGate.bakugans.length < 2) return animation
         const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot).map((slot) => slot.id)
-        const bakugans: bakuganToMoveType[] = slotOfGate.bakugans.filter((b) => b.userId !== userId).filter((bakugan) => !bakugan.statut.trapped && !bakugan.statut.protectedAgainstAbility && !bakugan.statut.protected).map((b) => ({
+        const bakugans: bakuganToMoveType[] = slotOfGate.bakugans.filter((b) => b.userId !== userId).filter((bakugan) => canMoveBakugan(bakugan, 'ABILITY')).map((b) => ({
             key: b.key,
             userId: b.userId,
             slot: slotOfGate.id
@@ -199,7 +199,7 @@ export const SouffleTout: abilityCardsType = {
         if (!slotOfBakugan) return false
         if (slotOfBakugan.id !== roomState.battleState.slot) return false
         if (slotOfBakugan.bakugans.length < 2) return false
-        const otherBakugans = slotOfBakugan.bakugans.filter((b) => b.key !== bakugan.key && b.userId !== bakugan.userId).filter((bakugan) => !bakugan.statut.trapped && !bakugan.statut.protectedAgainstAbility && !bakugan.statut.protected)
+        const otherBakugans = slotOfBakugan.bakugans.filter((b) => b.key !== bakugan.key && b.userId !== bakugan.userId).filter((bakugan) => canMoveBakugan(bakugan, 'ABILITY'))
         if (otherBakugans.length < 1) return false
         return true
     }
@@ -308,7 +308,7 @@ export const TornadeExtreme: abilityCardsType = {
 
         if (!slotOfGate && !deck && !userData) return animation
 
-        const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot && s.bakugans.length > 0).map((slot) => slot.bakugans).flat().filter((bakugan) => !bakugan.statut.trapped && !bakugan.statut.protectedAgainstAbility && !bakugan.statut.protected)
+        const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot && s.bakugans.length > 0).map((slot) => slot.bakugans).flat().filter((bakugan) => canMoveBakugan(bakugan, 'ABILITY'))
 
         const bakugans: bakuganToMoveType[] = slots.map((bakugan) => ({
             key: bakugan.key,
@@ -349,7 +349,7 @@ export const TornadeExtreme: abilityCardsType = {
     canUse({ bakugan, roomState }) {
 
         if (!roomState) return false
-        const bakugansOnOtherSlots = roomState.protalSlots.filter((slot) => slot.id !== bakugan.slot_id).map((slot) => slot.bakugans).flat().filter((b) => !b.statut.trapped && !b.statut.protected && !b.statut.protectedAgainstAbility).length
+        const bakugansOnOtherSlots = roomState.protalSlots.filter((slot) => slot.id !== bakugan.slot_id).map((slot) => slot.bakugans).flat().filter((b) => canMoveBakugan(b, 'ABILITY')).length
         if (bakugansOnOtherSlots < 1) return false
 
         return true

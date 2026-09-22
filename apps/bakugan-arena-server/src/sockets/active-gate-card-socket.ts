@@ -1,3 +1,4 @@
+import { assertActor } from "./assert-actor"
 import { Server, Socket } from "socket.io";
 import { ActiveGateCard } from "../functions/active-gate-card";
 import { activeGateCardProps, ActivePlayerActionRequestType, InactivePlayerActionRequestType, removeActionByType } from "@bakugan-arena/game-data";
@@ -10,6 +11,7 @@ import { grantActionIncrement, syncClocks } from "../functions/start-player-time
 
 export const socketActiveGateCard = (io: Server, socket: Socket) => {
     socket.on('active-gate-card', ({ roomId, gateId, slot, userId }: activeGateCardProps) => {
+        if (!assertActor(socket, userId, "active-gate-card")) return
         const state = Battle_Brawlers_Game_State.find((s) => s?.roomId === roomId)
         if (!state) return
         if (state.status.finished === true) return

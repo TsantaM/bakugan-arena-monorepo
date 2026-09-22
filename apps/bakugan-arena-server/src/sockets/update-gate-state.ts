@@ -1,3 +1,4 @@
+import { assertActor } from "./assert-actor"
 import { Server, Socket } from "socket.io";
 import { UpdateGate } from "../functions/set-gate-server";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
@@ -12,6 +13,7 @@ import { logPermissionDenied, logSocketEvent } from "../functions/log-socket-eve
 
 export const socketUpdateGateState = (io: Server, socket: Socket) => {
     socket.on('set-gate', ({ roomId, gateId, slot, userId }: setGateCardProps) => {
+        if (!assertActor(socket, userId, "set-gate")) return
         const roomIndex = Battle_Brawlers_Game_State.findIndex((s) => s?.roomId === roomId)
         if (roomIndex === -1) return
 

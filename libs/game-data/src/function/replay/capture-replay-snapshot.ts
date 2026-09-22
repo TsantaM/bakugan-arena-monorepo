@@ -55,21 +55,65 @@ function buildFinishedMessage(state: stateType): Message | undefined {
     }
 }
 
-export function captureReplaySnapshot(
+/**
+ * Vue *non clonée* de l'état, à la forme d'un snapshot de replay.
+ *
+ * À n'utiliser que comme source de comparaison immédiate (diff) : les sous-objets
+ * sont les objets vivants de la room et continueront de muter.
+ */
+export function readReplaySnapshotView(
     state: stateType,
     perspectiveUserId: string
 ): replaySnapshotType {
     return {
-        turnState: structuredClone(state.turnState),
-        battleState: structuredClone(state.battleState),
-        portalSlots: structuredClone(state.protalSlots),
-        decksState: structuredClone(state.decksState),
+        turnState: state.turnState,
+        battleState: state.battleState,
+        portalSlots: state.protalSlots,
+        decksState: state.decksState,
         eliminated: resolveEliminatedForPerspective(state.decksState, perspectiveUserId),
         timers: state.players.map((player) => ({
             userId: player.userId,
             timer: player.timer,
         })),
-        messages: structuredClone(state.messages),
+        messages: state.messages,
         finished: buildFinishedMessage(state),
+    }
+}
+
+export function captureReplaySnapshot(
+    state: stateType,
+    perspectiveUserId: string
+): replaySnapshotType {
+    return structuredClone(readReplaySnapshotView(state, perspectiveUserId))
+}
+
+export function createEmptyReplaySnapshot(): replaySnapshotType {
+    return {
+        turnState: {
+            can_change_player_turn: true,
+            turn: "",
+            previous_turn: undefined,
+            turnCount: 0,
+            set_new_gate: true,
+            set_new_bakugan: true,
+            use_ability_card: true,
+            ability_card_block: {
+                blocked: false,
+                turn: 0,
+                reason: null,
+            },
+        },
+        battleState: {
+            battleInProcess: false,
+            slot: null,
+            turns: 0,
+            paused: false,
+        },
+        portalSlots: [],
+        decksState: [],
+        eliminated: { user: 0, opponnent: 0 },
+        timers: [],
+        messages: [],
+        finished: undefined,
     }
 }

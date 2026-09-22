@@ -1,18 +1,12 @@
 import {
     AbilityCardFailed,
-    CheckBattle,
-    CheckBattleStillInProcess,
-    MoveToAnotherSlotDirectiveAnimation,
     PowerChange,
-    checkRenfortOnMove,
-    isProtectedAgainstAbility,
+    applyBakuganMove,
+    canMoveBakugan,
 } from "../../function/index.js"
-import { NewAdditionnalMessage } from "../../function/new-additional-message.js"
 import { AbilityCardsActions } from "../../type/actions-serveur-requests.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
-import { bakuganOnSlot } from "../../type/room-types.js"
 import type { bakuganToMoveType2 as bakuganToMoveType } from "../../type/type-index.js"
-import { Bakugans } from "../bakugans.js"
 
 export const SouffleInfini: exclusiveAbilitiesType = {
     key: 'souffle-infini',
@@ -34,13 +28,13 @@ export const SouffleInfini: exclusiveAbilitiesType = {
         const deck = roomState.decksState.find((d) => d.userId === userId)
         const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
 
-        if (!slotOfGate && !deck && !userData) return animation
+        if (!slotOfGate || !deck || !userData) return animation
 
         const targets = roomState.protalSlots
             .filter((s) => s.portalCard !== null && s.id !== slot && s.bakugans.length > 0)
             .map((s) => s.bakugans)
             .flat()
-            .filter((bakugan) => !bakugan.statut.trapped && !isProtectedAgainstAbility(bakugan))
+            .filter((bakugan) => canMoveBakugan(bakugan, 'ABILITY'))
 
         const bakugans: bakuganToMoveType[] = targets.map((bakugan) => ({
             key: bakugan.key,
@@ -68,9 +62,6 @@ export const SouffleInfini: exclusiveAbilitiesType = {
 
         if (!slotOfGate || !slotTarget || !target) return
 
-        const bakuganIndex = slotTarget.bakugans.findIndex(
-            (b) => b.key === target && b.userId === targetUserId
-        )
         const bakuganToDrag = slotTarget.bakugans.find(
             (b) => b.key === target && b.userId === targetUserId
         )
@@ -78,55 +69,26 @@ export const SouffleInfini: exclusiveAbilitiesType = {
             (b) => b.key === resolution.bakuganKey && b.userId === resolution.userId
         )
 
-        if (!user || !bakuganToDrag || bakuganIndex < 0) return
+        if (!user || !bakuganToDrag) return
 
-        if (isProtectedAgainstAbility(bakuganToDrag)) {
-            NewAdditionnalMessage({
-                roomState,
-                key: 'bakugan_protected',
-                params: { name: Bakugans[bakuganToDrag.key].name },
-            })
-            return
-        }
-
-        PowerChange({
+        const outcome = applyBakuganMove({
             roomState,
             bakugan: bakuganToDrag,
+            fromSlot: slotTarget,
+            toSlot: slotOfGate,
+            origin: 'ABILITY',
+        })
+
+        if (!outcome.moved) return
+
+        // Le malus ne s'applique que si l'attraction a réellement eu lieu
+        PowerChange({
+            roomState,
+            bakugan: outcome.bakugan,
             G: 50,
             malus: true,
             origin: 'ABILITY',
         })
-
-        checkRenfortOnMove({
-            roomState,
-            bakugan: bakuganToDrag,
-            slot: slotTarget,
-            direction: 'leave',
-        })
-
-        const newState: bakuganOnSlot = {
-            ...bakuganToDrag,
-            slot_id: slotOfGate.id
-        }
-
-        slotOfGate.bakugans.push(newState)
-        slotTarget.bakugans.splice(bakuganIndex, 1)
-        MoveToAnotherSlotDirectiveAnimation({
-            animations: roomState.animations,
-            bakugan: bakuganToDrag,
-            initialSlot: slotTarget,
-            newSlot: slotOfGate,
-            turn: roomState.turnState.turnCount,
-            roomState: roomState
-        })
-        checkRenfortOnMove({
-            roomState,
-            bakugan: newState,
-            slot: slotOfGate,
-            direction: 'enter',
-        })
-        CheckBattle({ roomState })
-        CheckBattleStillInProcess(roomState)
     },
     activationConditions: ({ roomState }) => {
         if (!roomState) return false
@@ -140,7 +102,7 @@ export const SouffleInfini: exclusiveAbilitiesType = {
             .filter((slot) => slot.id !== bakugan.slot_id)
             .map((slot) => slot.bakugans)
             .flat()
-            .filter((b) => !b.statut.trapped && !isProtectedAgainstAbility(b))
+            .filter((b) => canMoveBakugan(b, 'ABILITY'))
             .length
         if (bakugansOnOtherSlots < 1) return false
 

@@ -1,3 +1,5 @@
+import { REPLAY_ENABLED } from "./lib/replay-flag"
+
 process.on("unhandledRejection", (reason) => {
     console.error("UNHANDLED REJECTION", reason)
 })
@@ -41,6 +43,8 @@ import { startRoomFlowWatchdog } from "./functions/room-flow-watchdog";
 import { fetchRoomReplaySocket } from "./sockets/fetch-room-replay-socket";
 
 
+
+console.log(`[replay] ${REPLAY_ENABLED ? "activé" : "désactivé"} (REPLAY_ENABLED)`)
 
 const PORT = Number(process.env.PORT) || 3005
 const corsOrigins = process.env.SOCKET_CORS_ORIGIN?.split(",") ?? "*"

@@ -20,6 +20,8 @@
   "bakugan_move_to_slot": "{name} se déplace vers {slot}",
   "bakugan_revived": "{name} est ressuscité",
   "bakugan_protected": "{name} est protégé.",
+  "bakugan_trapped_cannot_move": "{name} est piégé et ne peut pas être déplacé.",
+  "bakugan_cannot_retreat": "{name} ne peut pas battre en retraite.",
   "bakugan_protection_ended": "{name} n'est plus protégé",
 
   "gate_nullified": "Carte portail annulée",

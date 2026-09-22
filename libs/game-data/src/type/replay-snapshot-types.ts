@@ -1,4 +1,5 @@
 import type { AnimationDirectivesTypes, Message } from "./animations-directives.js"
+import type { replayPatchType } from "../function/replay/replay-patch.js"
 import type {
     battleState,
     deckType,
@@ -30,5 +31,12 @@ export type replayEntryType = {
     marker?: replayMarkerType
     /** @deprecated Dérivé via getReplayStateBeforeAt — conservé pour les replays existants */
     stateBefore?: replaySnapshotType
-    stateAfter: replaySnapshotType
+    /**
+     * Snapshot complet. Présent uniquement sur les keyframes (et sur les replays
+     * enregistrés avant l'encodage delta). Sinon, l'état est reconstruit à partir
+     * de `patch` — voir `getReplayStateAfterAt`.
+     */
+    stateAfter?: replaySnapshotType
+    /** Différence avec le snapshot de l'entrée précédente. */
+    patch?: replayPatchType
 }

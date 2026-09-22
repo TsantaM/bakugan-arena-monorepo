@@ -1,5 +1,6 @@
 import type { stateType } from "@bakugan-arena/game-data"
 import { Server } from "socket.io"
+import { REPLAY_ENABLED } from "../../lib/replay-flag"
 
 export type FinalRoomStatePayload = {
     p1: string
@@ -15,7 +16,7 @@ export function buildFinalRoomStatePayload(roomState: stateType): FinalRoomState
         p1: roomState.players[0]?.userId ?? "",
         p2: roomState.players[1]?.userId ?? "",
         finished: roomState.status.finished,
-        replayAvailable: roomState.animationsForReplay.length > 0,
+        replayAvailable: REPLAY_ENABLED && roomState.animationsForReplay.length > 0,
     }
 }
 

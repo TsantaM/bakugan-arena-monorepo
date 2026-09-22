@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Toaster } from "@/components/ui/sonner"
 import { DeleteDeck } from "@/src/actions/deck-builder/delete-deck"
 import { GetUserDeckType } from "@/src/actions/deck-builder/get-deck-data"
 import { BakuganList } from "@bakugan-arena/game-data"
@@ -76,7 +75,6 @@ export default function DeckPreview( {data} : {data: GetUserDeckType}) {
                     />
                 )) : t('preview.noBakugan')}
             </CardContent>
-            <Toaster/>
         </Card>
     )
 }

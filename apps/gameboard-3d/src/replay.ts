@@ -31,6 +31,7 @@ import {
 import { initGameboardLocaleFromUrl } from './i18n/locale'
 import { buildBakuganTooltipContent, buildSlotTooltipContent } from './functions/mesh-tooltip-content'
 import type { SlotMeshUsersData } from './meshes/slot.mesh'
+import { REPLAY_ENABLED } from './replay-flag'
 
 initGameboardLocaleFromUrl()
 
@@ -444,11 +445,17 @@ async function initReplay(replayPayload: replayDataType) {
 }
 
 function startReplay(rawReplay: unknown) {
+  if (!REPLAY_ENABLED) return
   const replayPayload = normalizeReplayData(rawReplay)
   void initReplay(replayPayload)
 }
 
 async function bootstrapReplayFromUrl() {
+  if (!REPLAY_ENABLED) {
+    console.warn('[replay] désactivé (VITE_REPLAY_ENABLED)')
+    return
+  }
+
   if (replayId) {
     const replayPayload = await fetchReplayData(replayId, replayApiOrigin)
     void initReplay(replayPayload)
@@ -469,6 +476,7 @@ void bootstrapReplayFromUrl().catch((error) => {
 })
 
 window.addEventListener('message', (event) => {
+  if (!REPLAY_ENABLED) return
   if (!event.data?.type) return
 
   if (event.data.type === 'LOAD_REPLAY') {

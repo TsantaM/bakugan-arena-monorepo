@@ -60,7 +60,6 @@ export default function ImportReplay({ setReplay }: { setReplay: (replay: replay
                 )}
                 {t('importJson')}
             </Button>
-            <Toaster />
         </>
     )
 }

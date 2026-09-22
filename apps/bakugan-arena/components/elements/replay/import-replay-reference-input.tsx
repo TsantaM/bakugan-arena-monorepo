@@ -66,7 +66,6 @@ export default function ImportReplayReference({
                 )}
                 {t('importJson')}
             </Button>
-            <Toaster />
         </>
     )
 }

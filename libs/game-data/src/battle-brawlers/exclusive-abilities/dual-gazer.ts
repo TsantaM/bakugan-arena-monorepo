@@ -1,4 +1,4 @@
-import { CancelAbilityCardEffect, CustomAnimationDirective, ElimineBakuganEffect, PowerChange } from "../../function/index.js";
+import { CancelAbilityCardEffect, CustomAnimationDirective, ElimineBakuganEffect, PowerChange, canMoveBakugan} from "../../function/index.js";
 import { Slots } from "../../store/slots.js";
 import { AbilityCardsActions, bakuganToMoveType2 as bakuganToMoveType } from "../../type/actions-serveur-requests.js";
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js";
@@ -56,7 +56,7 @@ export const DualGazer: exclusiveAbilitiesType = {
                     })
                 })
 
-                const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot && s.bakugans.length > 0).map((slot) => slot.bakugans).flat().filter((bakugan) => !bakugan.statut.trapped && !bakugan.statut.protectedAgainstAbility && !bakugan.statut.protected)
+                const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot && s.bakugans.length > 0).map((slot) => slot.bakugans).flat().filter((bakugan) => canMoveBakugan(bakugan, 'ABILITY'))
 
                 const bakugans: bakuganToMoveType[] = slots.map((bakugan) => ({
                     key: bakugan.key,

@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/popover"
 import { useState } from "react"
 import Image from "next/image"
-import { Toaster } from "@/components/ui/sonner"
 import { BakuganList } from "@bakugan-arena/game-data"
 import BakuganPreviewDeckEditor from "./bakugan-preview-deck-editor"
 import { AddBakuganToDeckAction } from "@/src/actions/deck-builder/edit-deck-action"
@@ -144,7 +143,6 @@ export default function ManageBakugansInDeck({ deckId, bakugans, problemCardKeys
 
             </Card>
 
-            <Toaster />
         </>
 
 

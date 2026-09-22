@@ -1,3 +1,4 @@
+import { assertActor } from "./assert-actor"
 import { ActivePlayerActionRequestType, attribut, bakuganOnSlot, Bakugans, ChangeAttributAnimationDirective, GateCards, InactivePlayerActionRequestType, Message, removeActionByType, Slots } from "@bakugan-arena/game-data";
 import { Server, Socket } from "socket.io";
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state";
@@ -9,6 +10,7 @@ import { grantActionIncrement, syncClocks } from "../functions/start-player-time
 
 export function ChangeAttributSocket(io: Server, socket: Socket) {
     socket.on('change-attribut', ({ roomId, attribut, bakugan, userId }: { roomId: string, bakugan: bakuganOnSlot, attribut: attribut, userId: string }) => {
+        if (!assertActor(socket, userId, "change-attribut")) return
 
         const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
         if (roomIndex === -1) return

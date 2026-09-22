@@ -49,8 +49,6 @@ export default function CardPreviewDeckEditor({ id, deckId, nom, attribut, descr
                     {description}
                 </CardContent>
 
-                <Toaster />
-
             </Card>
 
         </>
@@ -94,8 +92,6 @@ export function ExclusiveAbilityCardPreviewDeckEditor({ id, deckId, nom, descrip
                     {description}
                 </CardContent>
 
-                <Toaster />
-
             </Card>
 
         </>
@@ -135,8 +131,6 @@ export function GateCardPreviewDeckEditor({ id, deckId, nom, description, flagge
                 <CardContent>
                     {description}
                 </CardContent>
-
-                <Toaster />
 
             </Card>
 

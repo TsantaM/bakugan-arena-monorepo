@@ -1,43 +1,13 @@
 import type { AnimationDirectivesTypes } from "../../type/animations-directives.js"
 import type { replayDataType } from "../../type/battlefield-and-replay-types.js"
 import type { replayEntryType, replaySnapshotType } from "../../type/replay-snapshot-types.js"
+import { createEmptyReplaySnapshot } from "./capture-replay-snapshot.js"
 
 type LegacyReplayDataType = {
     roomId: string
     player1: replayDataType["player1"]
     player2: replayDataType["player2"]
     replay: AnimationDirectivesTypes[]
-}
-
-function createEmptySnapshot(): replaySnapshotType {
-    return {
-        turnState: {
-            can_change_player_turn: true,
-            turn: "",
-            previous_turn: undefined,
-            turnCount: 0,
-            set_new_gate: true,
-            set_new_bakugan: true,
-            use_ability_card: true,
-            ability_card_block: {
-                blocked: false,
-                turn: 0,
-                reason: null,
-            },
-        },
-        battleState: {
-            battleInProcess: false,
-            slot: null,
-            turns: 0,
-            paused: false,
-        },
-        portalSlots: [],
-        decksState: [],
-        eliminated: { user: 0, opponnent: 0 },
-        timers: [],
-        messages: [],
-        finished: undefined,
-    }
 }
 
 function wrapLegacyAnimation(animation: AnimationDirectivesTypes, snapshot: replaySnapshotType): replayEntryType {
@@ -68,7 +38,7 @@ export function normalizeReplayData(data: unknown): replayDataType {
         Array.isArray(candidate.replay)
     ) {
         if (isLegacyReplayData(candidate)) {
-            const emptySnapshot = createEmptySnapshot()
+            const emptySnapshot = createEmptyReplaySnapshot()
             const legacyReplay = candidate.replay as AnimationDirectivesTypes[]
             return {
                 roomId: candidate.roomId,

@@ -1,10 +1,18 @@
 import type { replayEntryType, replaySnapshotType, stateType } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../../game-state/battle-brawlers-game-state"
+import { REPLAY_ENABLED } from "../../lib/replay-flag"
 
 export type RoomReplayPayload = {
     roomId: string
     replay: replayEntryType[]
     initialSnapshot: replaySnapshotType
+}
+
+export class ReplayDisabledError extends Error {
+    constructor() {
+        super("Replay feature is disabled")
+        this.name = "ReplayDisabledError"
+    }
 }
 
 export class RoomReplayNotFoundError extends Error {
@@ -39,6 +47,10 @@ export function getRoomReplayFromState({
     roomId: string
     userId: string
 }): RoomReplayPayload {
+    if (!REPLAY_ENABLED) {
+        throw new ReplayDisabledError()
+    }
+
     const roomState = getRoomState(roomId)
 
     if (!roomState) {

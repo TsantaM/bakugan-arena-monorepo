@@ -1,4 +1,4 @@
-import { CheckBattle, CheckBattleStillInProcess, dragBakuganToUserSlot, MoveToAnotherSlotDirectiveAnimation, PowerChange, PowerChangeDirectiveAnumation } from "../../function/index.js"
+import { canMoveBakugan, dragBakuganToUserSlot, PowerChange } from "../../function/index.js"
 import { AbilityCardsActions } from "../../type/actions-serveur-requests.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 import { bakuganOnSlot, slots_id } from "../../type/room-types.js"
@@ -17,9 +17,9 @@ export const TrappeDeSable: exclusiveAbilitiesType = {
         const deck = roomState?.decksState.find((d) => d.userId === userId)
         const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
 
-        if (!slotOfGate && !deck && !userData) return null
+        if (!slotOfGate || !deck || !userData) return null
 
-        const movableBakugans = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot && s.bakugans.length > 0).map((slot) => slot.bakugans).flat().filter((b) => !b.statut.trapped && !b.statut.protected && !b.statut.protectedAgainstAbility)
+        const movableBakugans = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot && s.bakugans.length > 0).map((slot) => slot.bakugans).flat().filter((b) => canMoveBakugan(b, 'ABILITY'))
 
         const bakugans: bakuganToMoveType[] = movableBakugans.map((bakugan) => ({
             key: bakugan.key,
@@ -43,29 +43,45 @@ export const TrappeDeSable: exclusiveAbilitiesType = {
 
         const slotToDrag: slots_id = resolution.data.slot
         const target: string = resolution.data.bakugan
-        const slotTarget = roomState?.protalSlots.find((s) => s.id === slotToDrag)
-        const slotOfGate = roomState?.protalSlots.find((s) => s.id === resolution.slot);
+        const targetUserId: string = resolution.data.userId
+        const slotTarget = roomState.protalSlots.find((s) => s.id === slotToDrag)
+        const slotOfGate = roomState.protalSlots.find((s) => s.id === resolution.slot)
 
-        // const targetToDrag = slotTarget?.bakugans.find((b) => b.key === target)
-        if (slotOfGate && slotTarget && target !== '') {
-            const BakuganTargetIndex = slotTarget.bakugans.findIndex((b) => b.key === target)
-            const bakuganToDrag = slotTarget?.bakugans.find((b) => b.key === target)
-            const condition = slotOfGate && slotTarget && bakuganToDrag && BakuganTargetIndex ? true : false
+        if (!slotOfGate || !slotTarget || target === '') return
 
-            const user = slotOfGate?.bakugans.find((b) => b.key === resolution.bakuganKey && b.userId === resolution.userId)
+        // Le userId est indispensable : les deux joueurs peuvent avoir le même
+        // bakugan sur le slot.
+        const bakuganToDrag = slotTarget.bakugans.find(
+            (b) => b.key === target && b.userId === targetUserId
+        )
+        const user = slotOfGate.bakugans.find(
+            (b) => b.key === resolution.bakuganKey && b.userId === resolution.userId
+        )
 
-            if (user && bakuganToDrag) {
+        if (!user || !bakuganToDrag) return
 
-                PowerChange({
-                    bakugan: bakuganToDrag,
-                    G: 50,
-                    malus: true,
-                    roomState: roomState
-                })
+        const dragged = dragBakuganToUserSlot({
+            resolution,
+            roomState,
+            origin: 'ABILITY',
+            trapped: true,
+        })
 
-                dragBakuganToUserSlot({ resolution: resolution, roomState: roomState, origin: 'ABILITY', trapped: true })
-            }
-        }
+        if (!dragged) return
+
+        // Le malus ne s'applique que si l'attraction a réellement eu lieu
+        const movedBakugan = slotOfGate.bakugans.find(
+            (b) => b.key === target && b.userId === targetUserId
+        )
+        if (!movedBakugan) return
+
+        PowerChange({
+            bakugan: movedBakugan,
+            G: 50,
+            malus: true,
+            roomState,
+            origin: 'ABILITY',
+        })
     },
     activationConditions: ({ roomState, userId }) => {
         if (!roomState) return false
@@ -76,7 +92,7 @@ export const TrappeDeSable: exclusiveAbilitiesType = {
     canUse({ bakugan, roomState }) {
 
         if (!roomState) return false
-        const bakugansOnOtherSlots = roomState.protalSlots.filter((slot) => slot.id !== bakugan.slot_id).map((slot) => slot.bakugans).flat().filter((b) => !b.statut.trapped && !b.statut.protected && !b.statut.protectedAgainstAbility).length
+        const bakugansOnOtherSlots = roomState.protalSlots.filter((slot) => slot.id !== bakugan.slot_id).map((slot) => slot.bakugans).flat().filter((b) => canMoveBakugan(b, 'ABILITY')).length
         if (bakugansOnOtherSlots < 1) return false
 
         return true

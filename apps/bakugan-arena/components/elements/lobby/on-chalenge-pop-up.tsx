@@ -45,12 +45,18 @@ export default function OnChalengePopUp() {
     useEffect(() => {
         if (!socket) return
 
-        socket.on('chalenge', (chalengeData: {
+        const onChalenge = (chalengeData: {
             chalengerName: string;
             chalengerId: string;
         }) => {
             setChalenge(chalengeData)
-        })
+        }
+
+        socket.on('chalenge', onChalenge)
+
+        return () => {
+            socket.off('chalenge', onChalenge)
+        }
     }, [socket])
 
 

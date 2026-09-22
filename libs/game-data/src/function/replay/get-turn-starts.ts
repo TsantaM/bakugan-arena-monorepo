@@ -45,7 +45,7 @@ export function getSnapshotAtEntryIndex(
     data: Pick<replayDataType, "initialSnapshot" | "replay">,
     entryIndex: number,
 ): replaySnapshotType {
-    return structuredClone(getReplayStateBeforeAt(data, entryIndex))
+    return getReplayStateBeforeAt(data, entryIndex)
 }
 
 export type ReplayTurnOption = {

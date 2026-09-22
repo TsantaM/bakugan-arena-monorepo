@@ -103,6 +103,7 @@ NEXT_PUBLIC_BETTER_AUTH_URL=http://localhost:3000
 NEXT_PUBLIC_SOCKET_URL=http://localhost:3005
 NEXT_PUBLIC_3D_GAMEBOARD_URL=http://localhost:4173
 BLOB_READ_WRITE_TOKEN=your_blob_token_if_needed
+NEXT_PUBLIC_REPLAY_ENABLED=false
 ```
 
 #### `apps/bakugan-arena-server/.env`
@@ -111,7 +112,32 @@ BLOB_READ_WRITE_TOKEN=your_blob_token_if_needed
 DATABASE_URL=postgresql://...your db url...
 SOCKET_CORS_ORIGIN=http://localhost:3000
 PORT=3005
+REPLAY_ENABLED=false
 ```
+
+#### `apps/gameboard-3d/.env`
+
+```env
+VITE_SOCKET_URL=http://localhost:3005
+VITE_ALLOWED_PARENT_URL=http://localhost:3000
+VITE_REPLAY_ENABLED=false
+```
+
+#### Replay feature flag
+
+The replay system is **off by default**. Each app reads its own variable, and any
+value other than `true` / `1` / `yes` / `on` (or an undefined variable) disables it:
+
+| App | Variable |
+| --- | --- |
+| `apps/bakugan-arena-server` | `REPLAY_ENABLED` |
+| `apps/bakugan-arena` | `NEXT_PUBLIC_REPLAY_ENABLED` |
+| `apps/gameboard-3d` | `VITE_REPLAY_ENABLED` |
+
+Set all three to `true` together. When disabled, the game engine records nothing,
+the `/api/replay` routes answer `503`, the `fetch-room-replay` socket answers
+`ReplayDisabledError`, and the replay UI (sidebar entry, `/dashboard/replay`,
+download/upload buttons, 3D replay player) is hidden.
 
 > `NEXT_PUBLIC_BETTER_AUTH_URL` is used by `apps/bakugan-arena/src/lib/auth-client.ts`.
 > `NEXT_PUBLIC_SOCKET_URL` is used by the web client socket provider.
@@ -162,6 +188,10 @@ pnpm --filter ./apps/bakugan-arena-server build
 - `apps/gameboard-3d`: dedicated 3D viewer for the gameboard experience
 - `libs/drizzle-orm`: shared schema, auth tables, game tables and database model definitions
 - `libs/game-data`: shared game rules, Bakugan card definitions, ability logic, and replay logic
+
+> Adding a new game action (socket event, card, effect)? Read
+> [`docs/SECURITY-ACTIONS.md`](docs/SECURITY-ACTIONS.md) first — it lists the
+> mandatory guards for each action family.
 
 ## Notes
 

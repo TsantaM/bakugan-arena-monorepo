@@ -68,7 +68,6 @@ export default function ForgetPassword() {
                     <Button type="submit">{t('forgetPassword.submit')}</Button>
                 </form>
             </Form >
-            <Toaster />
         </>
 
     )

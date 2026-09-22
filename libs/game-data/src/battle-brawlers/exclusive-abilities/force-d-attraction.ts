@@ -1,4 +1,4 @@
-import { AbilityCardFailed, dragBakuganToUserSlot } from "../../function/index.js"
+import { AbilityCardFailed, canMoveBakugan, dragBakuganToUserSlot } from "../../function/index.js"
 import { AbilityCardsActions } from "../../type/actions-serveur-requests.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 import type { bakuganToMoveType2 as bakuganToMoveType } from "../../type/type-index.js"
@@ -25,9 +25,9 @@ export const ForceDattraction: exclusiveAbilitiesType = {
         const deck = roomState?.decksState.find((d) => d.userId === userId)
         const userData = slotOfGate?.bakugans.find((bakugan) => bakugan.key === bakuganKey && bakugan.userId === userId)
 
-        if (!slotOfGate && !deck && !userData) return animation
+        if (!slotOfGate || !deck || !userData) return animation
 
-        const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot && s.bakugans.length > 0).map((slot) => slot.bakugans).flat().filter((bakugan) => !bakugan.statut.trapped && !bakugan.statut.protectedAgainstAbility && !bakugan.statut.protected)
+        const slots = roomState.protalSlots.filter((s) => s.portalCard !== null && s.id !== slot && s.bakugans.length > 0).map((slot) => slot.bakugans).flat().filter((bakugan) => canMoveBakugan(bakugan, 'ABILITY'))
         const bakugans: bakuganToMoveType[] = slots.map((bakugan) => ({
             key: bakugan.key,
             userId: bakugan.userId,
@@ -56,7 +56,7 @@ export const ForceDattraction: exclusiveAbilitiesType = {
     canUse({ bakugan, roomState }) {
 
         if (!roomState) return false
-        const bakugansOnOtherSlots = roomState.protalSlots.filter((slot) => slot.id !== bakugan.slot_id).map((slot) => slot.bakugans).flat().filter((b) => !b.statut.trapped && !b.statut.protected && !b.statut.protectedAgainstAbility).length
+        const bakugansOnOtherSlots = roomState.protalSlots.filter((slot) => slot.id !== bakugan.slot_id).map((slot) => slot.bakugans).flat().filter((b) => canMoveBakugan(b, 'ABILITY')).length
         if (bakugansOnOtherSlots < 1) return false
 
         return true

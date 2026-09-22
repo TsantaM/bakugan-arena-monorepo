@@ -20,6 +20,8 @@
   "bakugan_move_to_slot": "{name} move to {slot}",
   "bakugan_revived": "{name} revived",
   "bakugan_protected": "{name} is protected.",
+  "bakugan_trapped_cannot_move": "{name} is trapped and cannot be moved.",
+  "bakugan_cannot_retreat": "{name} cannot retreat.",
   "bakugan_protection_ended": "{name} is not protected anymore",
 
   "gate_nullified": "Gate Card nullified",

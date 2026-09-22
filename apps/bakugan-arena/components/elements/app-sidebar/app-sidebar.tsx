@@ -16,6 +16,7 @@ import RemoveRoomButton from "@/components/elements/lobby/remove-room-button"
 import { RoleType } from "@/src/actions/getUserSession"
 import { authClient } from "@/src/lib/auth-client"
 import { useSocket } from "@/src/providers/socket-provider"
+import { REPLAY_ENABLED } from "@/src/lib/replay/replay-flag"
 import { useRoomsStore } from "@/src/store/rooms-store"
 import { BookOpenText, ChartSpline, Clapperboard, Home, KeyRound, SwatchBook } from "lucide-react"
 import { useTranslations } from "next-intl"
@@ -52,7 +53,7 @@ export default function AppSidebar({ role }: { role: RoleType | undefined }) {
         {
             icone: <BookOpenText />,
             label: t('bakuDex'),
-            href: '/dashboard/baku-dex'
+            href: '/baku-dex'
         },
         {
             icone: <BookOpenText />,
@@ -64,11 +65,11 @@ export default function AppSidebar({ role }: { role: RoleType | undefined }) {
             label: t('ladder'),
             href: '/dashboard/ladder'
         },
-        {
+        ...(REPLAY_ENABLED ? [{
             icone: <Clapperboard />,
             label: t('replay'),
             href: '/dashboard/replay'
-        }
+        }] : [])
     ], [t])
 
     useEffect(() => {
@@ -81,11 +82,19 @@ export default function AppSidebar({ role }: { role: RoleType | undefined }) {
 
     useEffect(() => {
         if (!socket) return
-        socket.on('get-rooms-user-id', (rooms: { p1: string, p2: string, roomId: string, finished: boolean }[]) => {
-            if (rooms === Rooms) return
+
+        const onRooms = (rooms: { p1: string, p2: string, roomId: string, finished: boolean }[]) => {
             setRooms(rooms)
-        })
-    }, [socket, Rooms, setRooms])
+        }
+
+        socket.on('get-rooms-user-id', onRooms)
+
+        return () => {
+            socket.off('get-rooms-user-id', onRooms)
+        }
+        // `Rooms` volontairement hors des deps : l'y mettre réenregistrait un
+        // listener supplémentaire à chaque mise à jour, sans jamais en retirer.
+    }, [socket, setRooms])
 
     return (
         <Sidebar variant="inset">

@@ -1,5 +1,7 @@
 import { AbilityCards, AbilityCardsList, BakuganList, Bakugans, ExclusiveAbilities, ExclusiveAbilitiesList, GateCards, GateCardsList, portalSlotsType, SelectableGateCardAction, stateType, turnStateType } from "@bakugan-arena/game-data"
+import { createEmptyReplaySnapshot } from "@bakugan-arena/game-data"
 import { getDecksData, getRoomPlayers } from "./get-room-data"
+import { REPLAY_ENABLED } from "../lib/replay-flag"
 import { TIMER_INITIAL_SECONDS } from "./start-player-timer"
 
 export const createGameState = async ({ roomId, ranked }: { roomId: string; ranked: boolean }) => {
@@ -268,22 +270,26 @@ export const createGameState = async ({ roomId, ranked }: { roomId: string; rank
             }
         },
         AbilityAditionalRequest: [],
-        initialReplaySnapshot: {
-            decksState,
-            battleState: battleState,
-            turnState: turnState,
-            eliminated: {
-                opponnent: 0,
-                user: 0
-            },
-            finished: undefined,
-            messages: [],
-            portalSlots: protalSlots,
-            timers: playersState.map((p) => ({
-                userId: p.userId,
-                timer: p.timer
-            }))
-        }
+        // Snapshot figé (clone) : sans replay, on garde une coquille vide pour ne
+        // rien dupliquer en mémoire.
+        initialReplaySnapshot: REPLAY_ENABLED
+            ? {
+                decksState: structuredClone(decksState),
+                battleState: structuredClone(battleState),
+                turnState: structuredClone(turnState),
+                eliminated: {
+                    opponnent: 0,
+                    user: 0
+                },
+                finished: undefined,
+                messages: [],
+                portalSlots: structuredClone(protalSlots),
+                timers: playersState.map((p) => ({
+                    userId: p.userId,
+                    timer: p.timer
+                }))
+            }
+            : createEmptyReplaySnapshot()
     } as stateType
 
     return state

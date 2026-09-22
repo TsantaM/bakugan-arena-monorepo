@@ -43,7 +43,16 @@
     "waitingResponse": "Waiting response...",
     "choseDeck": "Choose a deck",
     "popupTitle": "Select a deck for challenge",
-    "popupDescription": "{name} challenges you !"
+    "popupDescription": "{name} challenges you !",
+    "received": "Challenge received!",
+    "accepted": "Challenge accepted!",
+    "rejected": "Challenge rejected",
+    "canceled": "Challenge canceled",
+    "expired": "Challenge expired, no answer in time",
+    "disconnected": "Player disconnected — challenge canceled",
+    "alreadyPending": "A challenge is already pending with this player",
+    "targetOffline": "This player is not online",
+    "self": "You cannot challenge yourself"
   },
   "removeRoom": {
     "ariaRemove": "Remove room",

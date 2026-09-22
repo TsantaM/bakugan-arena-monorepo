@@ -7,7 +7,6 @@ import MessagesModal from "./messages-modal";
 import { redirect } from "next/navigation";
 import { useAudioStore } from "@/src/store/sounds-store";
 import { OSTLists } from "@/src/variables/OST";
-import { Toaster } from "@/components/ui/sonner"
 import DownloadAndUploadReplay from "./download-upload-replay";
 import { BattleFieldPageProps } from "@bakugan-arena/game-data";
 import { useBattlefieldBattleLogStore } from "@/src/store/battlefield-battle-log-store";
@@ -235,7 +234,6 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
                     </div>
                 )}
             </div>
-            <Toaster />
         </>
     )
 }

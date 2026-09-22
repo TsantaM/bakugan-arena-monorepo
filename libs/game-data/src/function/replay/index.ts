@@ -1,4 +1,6 @@
 export * from "./capture-replay-snapshot.js"
+export * from "./replay-config.js"
+export * from "./replay-patch.js"
 export * from "./push-replay-animation.js"
 export * from "./replay-snapshot-to-room-state.js"
 export * from "./replay-snapshot-access.js"

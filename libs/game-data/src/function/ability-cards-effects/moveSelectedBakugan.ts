@@ -1,25 +1,10 @@
-import { Bakugans } from "../../battle-brawlers/bakugans.js";
-import { GateCardsList } from "../../battle-brawlers/gate-gards.js";
 import { resolutionType } from "../../type/actions-serveur-requests.js";
-import { Message } from "../../type/animations-directives.js";
-import { bakuganOnSlot, slots_id, stateType } from "../../type/room-types.js";
-import { OpenGateCardActionRequest } from "../action-request-functions/open-gate-card-action-request.js";
-import { CheckBattleStillInProcess } from "../check-battle-still-in-process.js";
-import { CustomAnimationDirective } from "../create-animation-directives/custom-animation.js";
-import { MoveToAnotherSlotDirectiveAnimation } from "../create-animation-directives/move-to-another-slot.js";
-import { NewAdditionnalMessage } from "../new-additional-message.js";
-import { checkRenfortOnMove } from "./check-renfort-on-move.js";
-import { isProtectedAgainstAbility } from "./protection-status.js";
+import { stateType } from "../../type/room-types.js";
+import { applyBakuganMove, type BakuganMoveCustomAnimation } from "./apply-bakugan-move.js";
 
-type MoveCustomAnimation = {
-    animationKey: string
-    sourceBakugan?: bakuganOnSlot
-    targetBakugans?: bakuganOnSlot[]
-    slotId?: slots_id
-    payload?: Record<string, unknown>
-    message?: Message[]
-}
+type MoveCustomAnimation = BakuganMoveCustomAnimation
 
+/** Déplace un bakugan choisi vers un slot choisi (Sling Blazer, Marionnette…). */
 export function moveSelectedBakugan({
     resolution,
     roomState,
@@ -28,7 +13,7 @@ export function moveSelectedBakugan({
 }: {
     resolution: resolutionType,
     roomState: stateType,
-    requireUserOnSlot?: boolean       // Sert pour Sling Blazer
+    requireUserOnSlot?: boolean,      // Sert pour Sling Blazer
     customAnimations?: MoveCustomAnimation[]
 }) {
     if (!roomState) return;
@@ -36,33 +21,16 @@ export function moveSelectedBakugan({
 
     const { data } = resolution;
 
-    // Le bakugan à déplacer
-    const bakugansOnField = roomState.protalSlots.flatMap(slot => slot.bakugans);
-
-    const bakugan = bakugansOnField.find(
-        b => b.key === data.bakugan.key && b.userId === data.bakugan.userId
-    );
+    const bakugan = roomState.protalSlots
+        .flatMap(slot => slot.bakugans)
+        .find(b => b.key === data.bakugan.key && b.userId === data.bakugan.userId);
 
     if (!bakugan) return;
-    if (isProtectedAgainstAbility(bakugan)) {
-        NewAdditionnalMessage({
-            roomState: roomState,
-            key: 'bakugan_protected',
-            params: { name: Bakugans[bakugan.key].name },
-        })
-        return
-    }
 
     const initialSlot = roomState.protalSlots.find(s => s.id === bakugan.slot_id);
-    if (!initialSlot) return;
-
-    const index = initialSlot.bakugans.findIndex(
-        b => b.key === bakugan.key && b.userId === bakugan.userId
-    );
-    if (index < 0) return;
-
     const slotTarget = roomState.protalSlots.find(s => s.id === data.slot);
-    if (!slotTarget || slotTarget.portalCard === null) return;
+
+    if (!initialSlot || !slotTarget) return;
 
     // Cas Sling Blazer : vérifier que le lanceur est présent sur le slot
     if (requireUserOnSlot) {
@@ -72,88 +40,11 @@ export function moveSelectedBakugan({
         if (!userPresent) return;   // Sécurité
     }
 
-    // Check Gate Card on Move Bakugan Function
-    const gate = GateCardsList.find((card) => card.key === initialSlot.portalCard?.key)
-
-    if (gate && gate.onRemoveBakugan) {
-        gate.onRemoveBakugan({
-            bakugan: bakugan,
-            roomState: roomState,
-            slot: initialSlot
-        })
-    }
-
-
-
-    checkRenfortOnMove({
+    applyBakuganMove({
         roomState,
         bakugan,
-        slot: initialSlot,
-        direction: 'leave',
+        fromSlot: initialSlot,
+        toSlot: slotTarget,
+        customAnimations,
     })
-
-
-    // Déplacement
-    const lastId = slotTarget && slotTarget?.bakugans.length > 0 ? slotTarget.bakugans[slotTarget.bakugans.length - 1].id : 0
-    const newId = lastId + 1
-    const newBakuganState: bakuganOnSlot = {
-        ...bakugan,
-        slot_id: data.slot,
-        id: newId
-    };
-
-    slotTarget.bakugans.push(newBakuganState);
-    initialSlot.bakugans.splice(index, 1);
-
-    // Animation
-    if (customAnimations && customAnimations.length > 0) {
-        customAnimations.forEach((animation) => {
-            CustomAnimationDirective({
-                roomState,
-                animationKey: animation.animationKey,
-                sourceBakugan: animation.sourceBakugan,
-                targetBakugans: animation.targetBakugans ?? [structuredClone(bakugan)],
-                slotId: animation.slotId ?? data.slot,
-                payload: animation.payload ?? {
-                    bakugan: structuredClone(bakugan),
-                    initialSlot: structuredClone(initialSlot),
-                    newSlot: structuredClone(slotTarget),
-                },
-                message: animation.message,
-            })
-        })
-    } else {
-        MoveToAnotherSlotDirectiveAnimation({
-            animations: roomState.animations,
-            bakugan: structuredClone(bakugan),
-            initialSlot: structuredClone(initialSlot),
-            newSlot: structuredClone(slotTarget),
-            turn: roomState.turnState.turnCount,
-                        roomState: roomState
-
-        });
-    }
-
-    // --- Gate Card Effect on Set bakugan
-    const landingGate = GateCardsList.find((card) => card.key === slotTarget.portalCard?.key)
-    if (landingGate && landingGate.onSetBakuganOnSlot) {
-        landingGate.onSetBakuganOnSlot({
-            bakugan: bakugan,
-            roomState: roomState,
-            slot: initialSlot
-        })
-    }
-
-    // Check combats
-    CheckBattleStillInProcess(roomState);
-
-    checkRenfortOnMove({
-        roomState,
-        bakugan: newBakuganState,
-        slot: slotTarget,
-        direction: 'enter',
-    })
-
-    OpenGateCardActionRequest({ roomState });
-
 }

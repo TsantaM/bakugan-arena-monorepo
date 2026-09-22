@@ -1,3 +1,4 @@
+import { assertActor } from "./assert-actor"
 import type { useAbilityCardProps } from "@bakugan-arena/game-data";
 import { stripStateForSocket } from "@bakugan-arena/game-data";
 import { Server, Socket } from "socket.io";
@@ -10,6 +11,7 @@ import { logPermissionDenied, logSocketEvent } from "../functions/log-socket-eve
 
 export const socketUseAbilityCard = (io: Server, socket: Socket) => {
     socket.on('use-ability-card', ({ roomId, abilityId, slot, userId, bakuganKey }: useAbilityCardProps) => {
+        if (!assertActor(socket, userId, "use-ability-card")) return
         const state = Battle_Brawlers_Game_State.find((s) => s?.roomId === roomId)
         if (!state) return
         if (state.status.finished === true) return

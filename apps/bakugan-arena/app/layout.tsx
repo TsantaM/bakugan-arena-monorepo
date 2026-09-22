@@ -8,6 +8,7 @@ import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import LocaleStorageSync from "@/components/elements/language-switcher/locale-storage-sync";
 import TextDirectionScope from "@/components/elements/language-switcher/text-direction-scope";
 import { parseLocale } from "@/src/i18n/config";
+import GameSessionProvider from "@/src/providers/game-session-provider";
 import type { Metadata } from "next";
 
 const geistSans = Geist({
@@ -47,7 +48,9 @@ export default async function RootLayout({
               <TouchProvider>
                 <LocaleStorageSync />
                 <TextDirectionScope />
-                {children}
+                <GameSessionProvider>
+                  {children}
+                </GameSessionProvider>
               </TouchProvider>
             </TanstackProvider>
           </ThemeProvider>

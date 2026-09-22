@@ -25,7 +25,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import z from "zod"
 import { SignInSchema } from "./Sign-in-Zod"
 import { toast } from "sonner"
-import { Toaster } from "@/components/ui/sonner"
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { useMutation } from "@tanstack/react-query"
 import { Loader } from "lucide-react"
@@ -81,8 +80,7 @@ export default function SignIn({ className }: { className?: string }) {
         //     <CardContent>
 
         //     </CardContent>
-        //     <Toaster />
-        // </Card>
+        //        // </Card>
 
         <Form {...signInForm}>
             <form onSubmit={signInForm.handleSubmit(onSignIn)} className="flex flex-col space-y-5">
@@ -220,8 +218,6 @@ export function SignInModal({ triggerContent }: { triggerContent?: string }) {
                     </form>
                 </Form>
             </DialogContent>
-            <Toaster />
-
         </Dialog>
 
 
