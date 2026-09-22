@@ -13,18 +13,21 @@ function cloneOnSlotStatut(statut: onSlotStatutType): onSlotStatutType {
     return statut ? { ...statut } : false
 }
 
+/**
+ * Copie tous les statuts, sans les énumérer : ajouter un statut côté
+ * `@bakugan-arena/game-data` ne doit pas casser le build du gameboard.
+ */
 export function cloneBakuganStatut(
     statut: bakuganOnSlot['statut'],
 ): bakuganOnSlot['statut'] {
-    return {
-        trapped: cloneOnSlotStatut(statut.trapped),
-        notRetreat: cloneOnSlotStatut(statut.notRetreat),
-        poisoned: cloneOnSlotStatut(statut.poisoned),
-        protectedAgainstGate: cloneOnSlotStatut(statut.protectedAgainstGate),
-        protectedAgainstAbility: cloneOnSlotStatut(statut.protectedAgainstAbility),
-        protected: cloneOnSlotStatut(statut.protected),
-        absorbPowerBoost: cloneOnSlotStatut(statut.absorbPowerBoost),
-    }
+    const entries = Object.entries(statut) as [
+        keyof bakuganOnSlot['statut'],
+        onSlotStatutType,
+    ][]
+
+    return Object.fromEntries(
+        entries.map(([key, value]) => [key, cloneOnSlotStatut(value)]),
+    ) as bakuganOnSlot['statut']
 }
 
 export function cloneBlockedState(blocked: blockedCardSlotType): blockedCardSlotType {

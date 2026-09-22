@@ -39,6 +39,8 @@ function emptyStatut(): SpriteUserData['statut'] {
         protectedAgainstAbility: false,
         protected: false,
         absorbPowerBoost: false,
+        toSave: false,
+        reanimated: false,
     }
 }
 
