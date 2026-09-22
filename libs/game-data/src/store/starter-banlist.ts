@@ -1,1 +1,3 @@
 export const StarterBanList: string[] = ['dragonoid-pyrus', 'dragonoid-delta-pyrus', 'ultimate-dragonoid-pyrus', 'cycloid-subterra', 'fourtress-pyrus', 'gorem-subterra', 'hammer-gorem-subterra', 'harpus-ventus', 'hydranoid-darkus', 'delta-hydranoid-darkus', 'alpha-hydranoid-darkus', 'preyas-aquos', 'reaper-darkus', 'sirenoid-aquos', 'skyress-ventus', 'skyress-storm-ventus', 'tentaclear-haos', 'tigrerra-haos', 'blade-tigrerra-haos']
+
+export const LegendarySoldiersBanList: string [] = ["apollonir-pyrus", "clayf-subterra", "exedra-darkus", "frosch-aquos", "lars-lion-haos", "oberus-ventus" ]

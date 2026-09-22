@@ -474,6 +474,30 @@
     "harpus-gate-card": {
       "name": "Charachter: Gorem",
       "description": "When this card is activated, it doubles the level of all Harpus on it."
+    },
+    "apollonir-gate-card": {
+      "name": "البطاقة الشخصية Apollonir :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع Apollonir عليها"
+    },
+    "clayf-gate-card": {
+      "name": "البطاقة الشخصية Clayf :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع Clayf عليها"
+    },
+    "exedra-gate-card": {
+      "name": "البطاقة الشخصية Exedra :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع Exedra عليها"
+    },
+    "frosch-gate-card": {
+      "name": "البطاقة الشخصية Frosch :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع Frosch عليها"
+    },
+    "lars-lion-gate-card": {
+      "name": "البطاقة الشخصية Lars Lion :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع Lars Lion عليها"
+    },
+    "oberus-gate-card": {
+      "name": "البطاقة الشخصية Oberus :",
+      "description": "عندما تفعل هذه البطاقة، فإنها تضاعف مستوى جميع Oberus عليها"
     }
   },
   "exclusiveAbilities": {

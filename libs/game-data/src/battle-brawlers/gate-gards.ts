@@ -33,6 +33,12 @@ import { BeeStrikerGateCard } from "./bakugans/bee-striker.js";
 import { TuskorGateCard } from "./bakugans/tuskor.js";
 import { LasermanGateCard } from "./bakugans/laserman.js";
 import { ManionGateCard } from "./bakugans/manion.js";
+import { ApollonirPyrusGateCard } from "./bakugans/apollonir.js";
+import { OberusGateCard } from "./bakugans/oberus.js";
+import { FroschGateCard } from "./bakugans/frosch.js";
+import { ClayfGateCard } from "./bakugans/clayf.js";
+import { LarsLionGateCard } from "./bakugans/lars-lion.js";
+import { ExedraGateCard } from "./bakugans/exedra.js";
 
 export const GateCards: Record<string, gateCardType> = {
 
@@ -124,7 +130,14 @@ export const GateCards: Record<string, gateCardType> = {
     [Cadenas.key]: Cadenas,
     
     [AngeloGateCard.key]: AngeloGateCard,
-    [DiabloGateCard.key]: DiabloGateCard
+    [DiabloGateCard.key]: DiabloGateCard,
+
+    [ApollonirPyrusGateCard.key]: ApollonirPyrusGateCard,
+    [OberusGateCard.key]: OberusGateCard,
+    [FroschGateCard.key]: FroschGateCard,
+    [ClayfGateCard.key]: ClayfGateCard,
+    [LarsLionGateCard.key]: LarsLionGateCard,
+    [ExedraGateCard.key]: ExedraGateCard,
     
 }
 
