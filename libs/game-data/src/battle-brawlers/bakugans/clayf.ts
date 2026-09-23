@@ -11,7 +11,7 @@ export const ClayfSubterra: bakuganType = {
     attribut: "Subterra",
     banList: LegendarySoldiersBanList,
     canChangeAttribut: false,
-    exclusiveAbilities: [],
+    exclusiveAbilities: ['atomic-brave'],
     family,
     image: "clayf",
     powerLevel: 500

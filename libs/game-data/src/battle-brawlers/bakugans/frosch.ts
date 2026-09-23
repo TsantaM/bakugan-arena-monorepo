@@ -11,7 +11,7 @@ export const FroschAquos: bakuganType = {
     attribut: "Aquos",
     banList: LegendarySoldiersBanList,
     canChangeAttribut: false,
-    exclusiveAbilities: [],
+    exclusiveAbilities: ["aquos-cyclone"],
     family,
     image: "frosch",
     powerLevel: 500

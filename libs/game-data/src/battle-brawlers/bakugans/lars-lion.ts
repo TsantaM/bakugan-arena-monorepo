@@ -11,7 +11,7 @@ export const LarsLionHaos: bakuganType = {
     banList: LegendarySoldiersBanList,
     attribut: "Haos",
     canChangeAttribut: false,
-    exclusiveAbilities: [],
+    exclusiveAbilities: ['sagittarius-arrow'],
     family,
     image: "lars-lion",
     powerLevel: 500,

@@ -97,6 +97,11 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
         p2Id
     )
 
+    // FR: Bakugans du perdant épargnés par un effet "toSave" (ex: Maelstrom) - ne doivent pas être éliminés ===
+    // ENG: Loser's bakugans spared by a "toSave" effect (e.g. Maelstrom) - must not be eliminated ===
+    const savedBakugans = slot.bakugans.filter((bakugan) => bakugan.userId === loser && bakugan.statut.toSave && bakugan.statut.toSave.check)
+    const keysToEliminate = keys.filter((k) => !savedBakugans.some((b) => b.key === k.key && b.userId === k.userId))
+
     // FR: Construction des tableaux winners et loosers
     // ENG: Build winners and losers arrays
     const winners: { key: string, userId: string }[] = []
@@ -129,13 +134,25 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
 
             slot.bakugans.forEach((bakugan) => {
                 if (bakugan.userId === loser) {
-                    ElimineBakuganDirectiveAnimation({
-                        animations: roomData.animations,
-                        bakugan: bakugan,
-                        slot: slot,
-                        turn: roomData.turnState.turnCount,
-                        roomState: roomData
-                    })
+                    if (savedBakugans.includes(bakugan)) {
+                        // FR: Bakugan épargné - il revient comme un bakugan gagnant au lieu d'être éliminé ===
+                        // ENG: Spared bakugan - comes back like a winner's bakugan instead of being eliminated ===
+                        ComeBackBakuganDirectiveAnimation({
+                            animations: roomData.animations,
+                            bakugan: bakugan,
+                            slot: slot,
+                            roomState: roomData
+                        })
+                        bakugan.statut.toSave = false
+                    } else {
+                        ElimineBakuganDirectiveAnimation({
+                            animations: roomData.animations,
+                            bakugan: bakugan,
+                            slot: slot,
+                            turn: roomData.turnState.turnCount,
+                            roomState: roomData
+                        })
+                    }
                 }
             })
 
@@ -156,7 +173,7 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
 
             // FR Mettre à jour les bakugans : éliminer ceux du perdant et désactiver la présence sur le terrain ===
             // ENG: Update decks: eliminate loser's bakugans and remove onDomain flag from all involved bakugans ===
-            updateDeckBakugans({ deck: deckToUpdate, bakugans: keys, eliminate: true })
+            updateDeckBakugans({ deck: deckToUpdate, bakugans: keysToEliminate, eliminate: true })
             updateDeckBakugans({ deck: p1Deck, bakugans: keys })
             updateDeckBakugans({ deck: p2Deck, bakugans: keys })
 

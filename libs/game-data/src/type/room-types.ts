@@ -98,6 +98,7 @@ export type bakuganOnSlot = {
         absorbPowerBoost: onSlotStatutType,
         toSave: onSlotStatutType,
         reanimated: onSlotStatutType,
+        lifeLess: onSlotStatutType
     },
     family: string
 }

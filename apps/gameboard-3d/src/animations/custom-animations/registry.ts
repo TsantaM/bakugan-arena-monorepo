@@ -1,7 +1,10 @@
 import type { CustomAnimFn } from "./types"
+import { AquosCycloneAnimation } from "./aquos-cyclone-animation"
+import { AtomicBraveAnimation } from "./atomic-brave-animation"
 import { BarrageDeauAnimation } from "./barrage-deau-animation"
 import { CoupDeGraceAnimation } from "./coup-de-grace-animation"
 import { DarkusPowerAuraAnimation } from "./darkus-power-aura-animation"
+import { DemonWizardAnimation } from "./demon-wizard-animation"
 import { DepthDiveAnimation } from "./depth-dive-animation"
 import { DestructionMeteorStormAnimation } from "./destruction-meteor-storm-animation"
 import { DualGazerAnimation } from "./dual-gazer-animation"
@@ -13,10 +16,13 @@ import { FlareBlinderAnimation } from "./flare-blinder-animation"
 import { HaosImmobilisationAnimation } from "./haos-immobilisation-animation"
 import { HolographDivideAnimation } from "./holograph-divide-animation"
 import { JetEnflammeAnimation } from "./jet-enflamme-animation"
+import { MaelstromAnimation } from "./maelstrom-animation"
+import { MaximumPyrusAnimation } from "./maximum-pyrus-animation"
 import { MirageAquatiqueAnimation } from "./mirage-aquatique-animation"
 import { MurDeFeuAnimation } from "./mur-de-feu-animation"
 import { PlongeeEnEauProfondeAnimation } from "./plongee-en-eau-profonde-animation"
 import { RetroActionAnimation } from "./retro-action-animation"
+import { SagittariusArrowAnimation } from "./sagittarius-arrow-animation"
 import { SupportLightAnimation } from "./support-light-animation"
 import { TectonicSwipeAnimation } from "./tectonic-swipe-animation"
 import { TornadeChaosTotalAnimation } from "./tornade-chaos-total-animation"
@@ -34,6 +40,7 @@ export const CustomAnimationsRegistry: Partial<Record<string, CustomAnimFn>> = {
     "visage-de-la-fureur": VisageDeLaFureurAnimation,
     "dual-gazer": DualGazerAnimation,
     "coup-de-grace": CoupDeGraceAnimation,
+    "demon-wizard": DemonWizardAnimation,
     "epices-mortelles": DarkusPowerAuraAnimation,
     "vengeance-a-l'italienne": DarkusPowerAuraAnimation,
     "poivre-des-cayenne": DarkusPowerAuraAnimation,
@@ -58,6 +65,11 @@ export const CustomAnimationsRegistry: Partial<Record<string, CustomAnimFn>> = {
     "earth-power": EarthPowerAnimation,
     "earth-shatter": EarthShatterAnimation,
     "tornade-chaos-total": TornadeChaosTotalAnimation,
+    "aquos-cyclone": AquosCycloneAnimation,
+    "atomic-brave": AtomicBraveAnimation,
+    "maelstrom": MaelstromAnimation,
+    "maximum-pyrus": MaximumPyrusAnimation,
+    "sagittarius-arrow": SagittariusArrowAnimation,
     "souffle-tout": VentusTornadoMoveAnimation,
     "tornade-extreme": VentusTornadoMoveAnimation,
 }

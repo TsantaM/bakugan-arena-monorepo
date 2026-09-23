@@ -126,6 +126,7 @@ export const EclatSoudain: abilityCardsType = {
                     protected: false,
                     absorbPowerBoost: false,
                     toSave: false,
+                    lifeLess: false,
                     reanimated: false
                 },
                 family: bakugan.bakuganData.family

@@ -3,6 +3,8 @@ import { exclusiveAbilitiesType } from "../index.js";
 import { AileEnflamee } from "./exclusive-abilities/aile-enflammee.js";
 import { AmunRa } from "./exclusive-abilities/amun-ra.js";
 import { AntiMuse } from "./exclusive-abilities/anti-muse.js";
+import { AquosCyclone } from "./exclusive-abilities/aquos-cyclone.js";
+import { AtomicBrave } from "./exclusive-abilities/atomic-brave.js";
 import { BouclierFusion } from "./exclusive-abilities/bouclier-fusion.js";
 import { ChaosOfDarkness } from "./exclusive-abilities/chaos-of-darkness.js";
 import { DStrikeAttack } from "./exclusive-abilities/d-strike-attack.js";
@@ -31,9 +33,11 @@ import { LanceEclair } from "./exclusive-abilities/lance-eclair.js";
 import { LeapSting } from "./exclusive-abilities/leap-sting.js";
 import { LifeDrew } from "./exclusive-abilities/life-drew.js";
 import { MachettesJumelles } from "./exclusive-abilities/machettes-jumelles.js";
+import { Maelstrom } from "./exclusive-abilities/maelstrom.js";
 import { MaitreDesProfondeurs } from "./exclusive-abilities/maitre-des-profondeurs.js";
 import { Marionnette } from "./exclusive-abilities/marionnette.js";
 import { MassueGigantesque } from "./exclusive-abilities/massue-gigantesque.js";
+import { MaximumPyrus } from "./exclusive-abilities/maximum-pyrus.js";
 import { MegaFlareBlinder } from "./exclusive-abilities/mega-flare-blinder.js";
 import { MeltFlare } from "./exclusive-abilities/melt-flare.js";
 import { NoiseSlap } from "./exclusive-abilities/noise-slap.js";
@@ -44,6 +48,7 @@ import { RayonGamma } from "./exclusive-abilities/rayon-gamma.js";
 import { ReaperOfTheChaos } from "./exclusive-abilities/reaper-of-the-chaos.js";
 import { RobotallionExecution } from "./exclusive-abilities/robotallion-execution.js";
 import { SabreDeLaMort } from "./exclusive-abilities/sabre-de-la-mort.js";
+import { SagittariusArrow } from "./exclusive-abilities/sagittarius-arrow.js";
 import { SlashZero } from "./exclusive-abilities/slash-zero.js";
 import { SolarRay } from "./exclusive-abilities/solar-ray.js";
 import { SpiritHole } from "./exclusive-abilities/spirit-hole.js";
@@ -120,7 +125,13 @@ export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [DestructionImpact.key]: DestructionImpact,
     [GustOfWindBlow.key]: GustOfWindBlow,
     [GrandImpact.key]: GrandImpact,
-    [VelocityFang.key]: VelocityFang
+    [VelocityFang.key]: VelocityFang,
+
+    [MaximumPyrus.key]: MaximumPyrus,
+    [Maelstrom.key]: Maelstrom,
+    [AtomicBrave.key]: AtomicBrave,
+    [SagittariusArrow.key]: SagittariusArrow,
+    [AquosCyclone.key]: AquosCyclone
 
 }
 
