@@ -72,6 +72,7 @@ export const TripleCombat: gateCardType = {
                             protected: false,
                             absorbPowerBoost: false,
                             reanimated: false,
+                            lifeLess: false,
                             toSave: false
                         },
                         family: userStrongest.bakuganData.family

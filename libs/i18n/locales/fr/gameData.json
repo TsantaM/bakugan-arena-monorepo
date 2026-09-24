@@ -740,6 +740,30 @@
     "regain-subit": {
       "name": "Regain Subit",
       "description": "Retire 100 G à tous les bakugans adverse et ajoute 100 G à l'utilisateur"
+    },
+    "maximum-pyrus": {
+      "name": "Maximum Pyrus",
+      "description": "Ajoute 200 G à l'utilisateur"
+    },
+    "maelstrom": {
+      "name": "Chaos Majeur",
+      "description": "Ajoute 200 G à l'utilisateur. Si l'adversaire a plus de deux Bakugan sur la Carte Portail, l'un d'eux est épargné et ne sera pas éliminé à la fin du combat"
+    },
+    "aquos-cyclone": {
+      "name": "Cyclone Aquatique",
+      "description": "Ajoute 200 G à l'utilisateur et retire 100 G à chaque Bakugan adverse présent sur la Carte Portail"
+    },
+    "sagittarius-arrow": {
+      "name": "Flèche du Sagittaire",
+      "description": "Ramène en renfort sur la Carte Portail tous les Bakugan Haos éliminés du deck de l'utilisateur"
+    },
+    "atomic-brave": {
+      "name": "Guerrier Invincible",
+      "description": "L'utilisateur change de forme pour encaisser les attaques : il absorbe les gains de puissance des Bakugan adverses présents sur la Carte Portail"
+    },
+    "demon-wizard": {
+      "name": "Sorcier Infernal",
+      "description": "Transfère toute la puissance d'un Bakugan allié à Exedra et annule la Carte Portail de l'adversaire. L'allié vidé reste sur le terrain mais ne peut plus rien faire et ne peut plus être protégé ; s'il est détruit, la puissance transférée est perdue"
     }
   }
 }

@@ -3,6 +3,7 @@ import { bakuganOnSlot, stateType } from "../../type/room-types.js"
 import { ElimineBakuganDirectiveAnimation } from "../create-animation-directives/index.js"
 import { NewAdditionnalMessage } from "../new-additional-message.js"
 import { type EffectOrigin, isProtectedAgainst } from "./protection-status.js"
+import { TriggerOnTargetDie } from "./trigger-on-target-die.js"
 
 export function ElimineBakuganEffect({
     bakugan,
@@ -24,7 +25,9 @@ export function ElimineBakuganEffect({
     const effectOrigin: EffectOrigin =
         gateCardProtection === true ? 'GATE' : origin
 
-    if (isProtectedAgainst(bakugan, effectOrigin)) {
+    // Un bakugan vidé de sa puissance (lifeLess) ne peut plus être protégé :
+    // il est éliminé quoi qu'il arrive.
+    if (!bakugan.statut.lifeLess && isProtectedAgainst(bakugan, effectOrigin)) {
         NewAdditionnalMessage({
             roomState: roomState,
             key: 'bakugan_protected',
@@ -61,4 +64,6 @@ export function ElimineBakuganEffect({
 
     bakuganOnSlotDeckState.bakuganData.onDomain = false
     bakuganOnSlotDeckState.bakuganData.elimined = true
+
+    TriggerOnTargetDie({ roomState: roomState, bakugan: bakugan })
 }

@@ -61,15 +61,20 @@ export type activateAbilities = {
     fusion?: string[]
 }
 
-export type onSlotStatutType = false | {
+/** Statut actif posé sur un bakugan par une carte. */
+export type onSlotStatutEffect = {
     check: true,
     origin: 'GATE' | 'ABILITY'
     key: string,
+    /** Montant associé à l'effet (ex: puissance drainée à rendre si la cible meurt). */
+    value?: number,
     ability?: {
         key: string,
         user: bakuganOnSlot
     }
 }
+
+export type onSlotStatutType = false | onSlotStatutEffect
 
 export type bakuganOnSlot = {
     slot_id: slots_id

@@ -1,4 +1,4 @@
-import { AnimationDirectivesTypes, applyWinAbilitiesEffects, CheckBattle, ComeBackBakuganDirectiveAnimation, determineWinner, ElimineBakuganDirectiveAnimation, finalizeBattle, GateCards, GateCardsList, getPlayerDecksAndBakugans, GetUserName, pushReplayAnimation, updateDeckBakugans } from "@bakugan-arena/game-data"
+import { AnimationDirectivesTypes, applyWinAbilitiesEffects, CheckBattle, ComeBackBakuganDirectiveAnimation, determineWinner, ElimineBakuganDirectiveAnimation, finalizeBattle, GateCards, GateCardsList, getPlayerDecksAndBakugans, GetUserName, pushReplayAnimation, TriggerOnTargetDie, updateDeckBakugans } from "@bakugan-arena/game-data"
 import { Battle_Brawlers_Game_State } from "../game-state/battle-brawlers-game-state"
 
 
@@ -152,6 +152,8 @@ export const onBattleEnd = ({ roomId }: { roomId: string }) => {
                             turn: roomData.turnState.turnCount,
                             roomState: roomData
                         })
+
+                        TriggerOnTargetDie({ roomState: roomData, bakugan: bakugan })
                     }
                 }
             })

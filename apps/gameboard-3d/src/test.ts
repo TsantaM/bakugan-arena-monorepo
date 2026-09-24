@@ -54,7 +54,8 @@ const Slot2: portalSlotsTypeElement = {
                 protected: false,
                 absorbPowerBoost: false,
                 toSave: false,
-                reanimated: false
+                reanimated: false,
+                lifeLess: false
             }
         },
         {
@@ -78,7 +79,8 @@ const Slot2: portalSlotsTypeElement = {
                 protected: false,
                 absorbPowerBoost: false,
                 toSave: false,
-                reanimated: false
+                reanimated: false,
+                lifeLess: false
             }
         }
     ],
@@ -118,7 +120,8 @@ const slot3: portalSlotsTypeElement = ({
             protected: false,
             absorbPowerBoost: false,
             toSave: false,
-            reanimated: false
+            reanimated: false,
+            lifeLess: false
         }
     }],
     can_set: false,
@@ -348,7 +351,8 @@ const request: ActivePlayerActionRequestType = {
                         protected: false,
                         absorbPowerBoost: false,
                         toSave: false,
-                        reanimated: false
+                        reanimated: false,
+                        lifeLess: false
                     }   
                 }
             }]

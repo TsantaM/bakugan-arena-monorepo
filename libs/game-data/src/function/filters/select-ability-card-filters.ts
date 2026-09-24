@@ -2,6 +2,7 @@ import { type portalSlotsTypeElement, type deckType, stateType, attribut } from 
 import { BakuganList } from '../../battle-brawlers/bakugans.js'
 import { AbilityCardsList } from '../../battle-brawlers/ability-cards.js'
 import { ExclusiveAbilitiesList } from '../../battle-brawlers/exclusive-abilities.js'
+import { isLifeLess } from '../ability-cards-effects/protection-status.js'
 
 export function SelectAbilityCardFilters({ slotOfBattle, userId, bakuganKey, playersDeck, roomState, bakuganAttribut }: { slotOfBattle?: portalSlotsTypeElement | undefined, userId: string, bakuganKey: string, playersDeck: deckType | undefined, roomState: stateType, bakuganAttribut?: attribut }) {
 
@@ -20,6 +21,9 @@ export function SelectAbilityCardFilters({ slotOfBattle, userId, bakuganKey, pla
     ) ?? roomState.protalSlots.flatMap((slot) => slot.bakugans).find(
         (b) => b.key === bakuganKey && b.userId === userId
     )
+
+    // Un bakugan lifeLess ne peut plus rien faire : aucune capacité proposée.
+    if (currentBakugan && isLifeLess(currentBakugan)) return
 
     const attribut = bakuganAttribut ? bakuganAttribut : currentBakugan?.attribut
     const secondAttribut = currentBakugan?.secondAttribut

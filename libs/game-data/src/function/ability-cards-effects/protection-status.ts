@@ -20,3 +20,11 @@ export function isProtectedAgainst(
         ? isProtectedAgainstGate(bakugan)
         : isProtectedAgainstAbility(bakugan)
 }
+
+/**
+ * Bakugan vidé de sa puissance : il reste sur le terrain mais ne peut plus rien faire
+ * (aucune action possible) et ne peut plus être protégé d'une élimination.
+ */
+export function isLifeLess(bakugan: bakuganOnSlot): boolean {
+    return !!bakugan.statut.lifeLess
+}

@@ -41,6 +41,7 @@ function emptyStatut(): SpriteUserData['statut'] {
         absorbPowerBoost: false,
         toSave: false,
         reanimated: false,
+        lifeLess: false
     }
 }
 

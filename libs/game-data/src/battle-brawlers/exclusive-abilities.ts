@@ -9,6 +9,7 @@ import { BouclierFusion } from "./exclusive-abilities/bouclier-fusion.js";
 import { ChaosOfDarkness } from "./exclusive-abilities/chaos-of-darkness.js";
 import { DStrikeAttack } from "./exclusive-abilities/d-strike-attack.js";
 import { DStrikeExtreme } from "./exclusive-abilities/d-strike-extreme.js";
+import { DemonWizard } from "./exclusive-abilities/demon-wizard.js";
 import { DepthTornado } from "./exclusive-abilities/depht-tornado.js";
 import { DestructionBuster } from "./exclusive-abilities/destruction-buster.js";
 import { DestructionImpact } from "./exclusive-abilities/destruction-impact.js";
@@ -131,7 +132,8 @@ export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [Maelstrom.key]: Maelstrom,
     [AtomicBrave.key]: AtomicBrave,
     [SagittariusArrow.key]: SagittariusArrow,
-    [AquosCyclone.key]: AquosCyclone
+    [AquosCyclone.key]: AquosCyclone,
+    [DemonWizard.key]: DemonWizard,
 
 }
 

@@ -1,5 +1,5 @@
 import type { AbilityCardsActions, gateCardAdditionalRequest, resolutionGateCardType, resolutionType } from "./actions-serveur-requests.js"
-import type { bakuganOnSlot, portalSlotsTypeElement, slots_id, stateType } from "./room-types.js"
+import type { bakuganOnSlot, onSlotStatutEffect, portalSlotsTypeElement, slots_id, stateType } from "./room-types.js"
 
 export type attribut = 'Pyrus' | 'Subterra' | 'Haos' | 'Darkus' | 'Aquos' | 'Ventus'
 
@@ -55,7 +55,20 @@ export type abilityCardsType = {
     }) => { turnActionLaucher: boolean }),
     onCanceled?: ({ roomState, userId, bakuganKey, slot }: { roomState: stateType, userId: string, bakuganKey: string, slot: slots_id }) => void
     onWin?: ({ roomState, userId, slot }: { roomState: stateType, userId: string, slot: portalSlotsTypeElement }) => void,
-    canUse?: ({ roomState, bakugan }: { roomState: stateType, bakugan: bakuganOnSlot }) => boolean
+    canUse?: ({ roomState, bakugan }: { roomState: stateType, bakugan: bakuganOnSlot }) => boolean,
+    /**
+     * Déclenché quand un bakugan portant un statut posé par cette carte est éliminé,
+     * quelle que soit la source de l'élimination (capacité, gate card, fin de bataille).
+     */
+    onTargetDie?: ({ roomState, target, status, source }: {
+        roomState: stateType,
+        /** Le bakugan qui vient d'être éliminé. */
+        target: bakuganOnSlot,
+        /** Le statut posé par cette carte qui a déclenché le hook. */
+        status: onSlotStatutEffect,
+        /** Le bakugan à l'origine de l'effet, s'il est encore sur le terrain. */
+        source?: bakuganOnSlot
+    }) => void,
 }
 
 export type exclusiveAbilitiesType = {
@@ -82,6 +95,19 @@ export type exclusiveAbilitiesType = {
     }) => { turnActionLaucher: boolean }), onCanceled?: ({ roomState, userId, bakuganKey, slot }: { roomState: stateType, userId: string, bakuganKey: string, slot: slots_id }) => void
     canUse?: ({ roomState, bakugan }: { roomState: stateType, bakugan: bakuganOnSlot }) => boolean
     onWin?: ({ roomState, userId, slot }: { roomState: stateType, userId: string, slot: portalSlotsTypeElement }) => void,
+    /**
+     * Déclenché quand un bakugan portant un statut posé par cette carte est éliminé,
+     * quelle que soit la source de l'élimination (capacité, gate card, fin de bataille).
+     */
+    onTargetDie?: ({ roomState, target, status, source }: {
+        roomState: stateType,
+        /** Le bakugan qui vient d'être éliminé. */
+        target: bakuganOnSlot,
+        /** Le statut posé par cette carte qui a déclenché le hook. */
+        status: onSlotStatutEffect,
+        /** Le bakugan à l'origine de l'effet, s'il est encore sur le terrain. */
+        source?: bakuganOnSlot
+    }) => void,
 }
 
 export type turnActionLauncher = {
@@ -137,5 +163,18 @@ export type gateCardType = {
         bakuganKey?: string;
         userId: string;
     }) => void,
-    autoActivationCheck?: ({ roomState, portalSlot }: { roomState: stateType, portalSlot: portalSlotsTypeElement, winner?: string, looser?: string }) => boolean
+    autoActivationCheck?: ({ roomState, portalSlot }: { roomState: stateType, portalSlot: portalSlotsTypeElement, winner?: string, looser?: string }) => boolean,
+    /**
+     * Déclenché quand un bakugan portant un statut posé par cette carte est éliminé,
+     * quelle que soit la source de l'élimination (capacité, gate card, fin de bataille).
+     */
+    onTargetDie?: ({ roomState, target, status, source }: {
+        roomState: stateType,
+        /** Le bakugan qui vient d'être éliminé. */
+        target: bakuganOnSlot,
+        /** Le statut posé par cette carte qui a déclenché le hook. */
+        status: onSlotStatutEffect,
+        /** Le bakugan à l'origine de l'effet, s'il est encore sur le terrain. */
+        source?: bakuganOnSlot
+    }) => void,
 }

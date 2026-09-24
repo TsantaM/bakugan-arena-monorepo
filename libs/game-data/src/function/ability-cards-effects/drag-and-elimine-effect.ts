@@ -3,11 +3,13 @@ import { bakuganOnSlot, portalSlotsTypeElement, stateType } from "../../type/roo
 import { DragAndElimineDirectiveAnimation } from "../create-animation-directives/index.js"
 import { NewAdditionnalMessage } from "../new-additional-message.js"
 import { isProtectedAgainstAbility } from "./protection-status.js"
+import { TriggerOnTargetDie } from "./trigger-on-target-die.js"
 
 export function DragAndElimineBakuganEffect({ bakugan, roomState, cardUser, initialSlot }: { roomState: stateType, bakugan: bakuganOnSlot, cardUser: bakuganOnSlot, initialSlot: portalSlotsTypeElement }) {
     if (!roomState) return
 
-    if (bakugan.statut.trapped || isProtectedAgainstAbility(bakugan)) {
+    // lifeLess : ni piège ni protection ne peuvent sauver la cible.
+    if (!bakugan.statut.lifeLess && (bakugan.statut.trapped || isProtectedAgainstAbility(bakugan))) {
         NewAdditionnalMessage({
             roomState: roomState,
             key: 'bakugan_protected',
@@ -47,5 +49,5 @@ export function DragAndElimineBakuganEffect({ bakugan, roomState, cardUser, init
     bakuganOnSlotDeckState.bakuganData.onDomain = false
     bakuganOnSlotDeckState.bakuganData.elimined = true
 
-
+    TriggerOnTargetDie({ roomState: roomState, bakugan: bakugan })
 }

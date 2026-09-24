@@ -5,6 +5,7 @@ import { Slots } from '../../store/store-index.js'
 import { AbilityCardsList } from '../../battle-brawlers/ability-cards.js'
 import { ExclusiveAbilitiesList } from '../../battle-brawlers/exclusive-abilities.js'
 import { SelectAbilityCardInNeutralFilters } from '../filters/select-ability-card-in-neutral.js'
+import { isLifeLess } from '../ability-cards-effects/protection-status.js'
 
 export function UseAbilityCardActionRequest({ roomState }: { roomState: stateType }) {
 
@@ -25,7 +26,8 @@ export function UseAbilityCardActionRequest({ roomState }: { roomState: stateTyp
 
     if (usableAbilitiesCount === 0) return
 
-    const activePlayerBakugansOnSlot = roomState.protalSlots.filter((slot) => slot.bakugans.some((bakugan) => bakugan.userId === activePlayer.userId)).map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === activePlayer.userId)
+    // Un bakugan lifeLess ne peut plus rien faire : il est exclu de la création d'actions.
+    const activePlayerBakugansOnSlot = roomState.protalSlots.filter((slot) => slot.bakugans.some((bakugan) => bakugan.userId === activePlayer.userId)).map((slot) => slot.bakugans).flat().filter((bakugan) => bakugan.userId === activePlayer.userId && !isLifeLess(bakugan))
 
     // Bakugans on board abilities
     let onBoardAbilities: onBoardBakugans[] = []

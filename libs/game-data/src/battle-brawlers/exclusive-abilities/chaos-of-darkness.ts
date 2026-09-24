@@ -74,7 +74,13 @@ export const ChaosOfDarkness: exclusiveAbilitiesType = {
         const deck = roomData.decksState.find((d) => d.userId === resolution.userId)
         const aliveCount = deck?.bakugans.filter((b) => !b.bakuganData.elimined).length || 0
 
-        if (!deck || aliveCount > 1) {
+        // Une cible vidée de sa puissance (lifeLess) est éliminée quoi qu'il arrive.
+        if (target.statut.lifeLess) {
+            ElimineBakuganEffect({
+                bakugan: target,
+                roomState: roomData
+            })
+        } else if (!deck || aliveCount > 1) {
             PowerChange({
                 bakugan: target,
                 G: 100,

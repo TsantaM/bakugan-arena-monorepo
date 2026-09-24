@@ -109,7 +109,8 @@ export const DualGazer: exclusiveAbilitiesType = {
         const userAliveCount = userDeck?.bakugans.filter((b) => !b.bakuganData.elimined).length || 0
         const opponentAliveCount = opponentDeck?.bakugans.filter((b) => !b.bakuganData.elimined).length || 0
 
-        const shouldEliminate = userAliveCount === 1 || opponentAliveCount > userAliveCount
+        // Une cible vidée de sa puissance (lifeLess) est éliminée quoi qu'il arrive.
+        const shouldEliminate = !!target.statut.lifeLess || userAliveCount === 1 || opponentAliveCount > userAliveCount
 
         if (shouldEliminate) {
             ElimineBakuganEffect({

@@ -31,6 +31,16 @@ function EchangeMainEffect({ roomState, slotOfGate, userId }: { roomState: state
     } else {
 
         usersBakugan.forEach((b) => {
+            // Une cible vidée de sa puissance (lifeLess) ne repart pas : elle est éliminée.
+            if (b.statut.lifeLess) {
+                ElimineBakuganEffect({
+                    bakugan: b,
+                    roomState: roomState,
+                    origin: 'GATE',
+                })
+                return
+            }
+
             ComeBackBakuganEffect({
                 bakugan: b,
                 roomState: roomState
@@ -56,6 +66,16 @@ function EchangeMainEffect({ roomState, slotOfGate, userId }: { roomState: state
     } else {
 
         opponentsBakugan.forEach((b) => {
+            // Une cible vidée de sa puissance (lifeLess) ne repart pas : elle est éliminée.
+            if (b.statut.lifeLess) {
+                ElimineBakuganEffect({
+                    bakugan: b,
+                    roomState: roomState,
+                    origin: 'GATE',
+                })
+                return
+            }
+
             ComeBackBakuganEffect({
                 bakugan: b,
                 roomState: roomState

@@ -740,6 +740,30 @@
     "regain-subit": {
       "name": "Regain Subit",
       "description": "Retire 100 G à tous les bakugans adverse et ajoute 100 G à l'utilisateur"
+    },
+    "maximum-pyrus": {
+      "name": "Maximum Pyrus",
+      "description": "Adds 200 Gs to the user"
+    },
+    "maelstrom": {
+      "name": "Maelstrom",
+      "description": "Adds 200 Gs to the user. If the opponent has more than two Bakugan on the Gate Card, one of them is spared and will not be eliminated at the end of the battle"
+    },
+    "aquos-cyclone": {
+      "name": "Aquos Cyclone",
+      "description": "Adds 200 Gs to the user and subtracts 100 Gs from every opposing Bakugan on the Gate Card"
+    },
+    "sagittarius-arrow": {
+      "name": "Sagittarius Arrow",
+      "description": "Brings every eliminated Haos Bakugan from the user's deck back onto the Gate Card as reinforcements"
+    },
+    "atomic-brave": {
+      "name": "Atomic Brave",
+      "description": "The user shifts into a guarding form: it absorbs the power boosts of the opposing Bakugan on the Gate Card"
+    },
+    "demon-wizard": {
+      "name": "Demon Wizard",
+      "description": "Transfers all the G Power of an allied Bakugan to Exedra and nullifies the opponent's Gate Card. The drained ally stays on the field but can no longer act and can no longer be protected; if it is defeated, the transferred G Power is lost"
     }
   }
 }

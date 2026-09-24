@@ -10,7 +10,7 @@ export const ExedraDarkus: bakuganType = {
     attribut: "Darkus",
     banList: LegendarySoldiersBanList,
     canChangeAttribut: false,
-    exclusiveAbilities: [],
+    exclusiveAbilities: ["demon-wizard"],
     family: family,
     image: "exedra",
     name: "Exedra",

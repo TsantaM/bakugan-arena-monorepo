@@ -167,7 +167,8 @@ export const JetEnflamme: abilityCardsType = {
                     protected: false,
                     absorbPowerBoost: false,
                     toSave: false,
-                    reanimated: false
+                    reanimated: false,
+                    lifeLess: false
                 },
                 family: bakugan.bakuganData.family
             }

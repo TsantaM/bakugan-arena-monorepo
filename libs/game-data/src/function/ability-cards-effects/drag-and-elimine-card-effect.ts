@@ -26,7 +26,8 @@ const getDragAndElimineTargets = (roomState: stateType, user: bakuganOnSlot) => 
 
 const eliminateDragAndElimineTargets = ({ roomState, user, bakugans }: { roomState: stateType, user: bakuganOnSlot, bakugans: bakuganOnSlot[] }) => {
     bakugans.forEach((b) => {
-        if (b.currentPower < user.currentPower) {
+        // Une cible vidée de sa puissance (lifeLess) est éliminée quoi qu'il arrive.
+        if (b.statut.lifeLess || b.currentPower < user.currentPower) {
             const targetSlot = roomState.protalSlots[Slots.indexOf(b.slot_id)]
             DragAndElimineBakuganEffect({
                 roomState: roomState,

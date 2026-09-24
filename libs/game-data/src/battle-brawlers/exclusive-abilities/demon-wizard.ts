@@ -1,8 +1,10 @@
 import { CancelGateCardDirectiveAnimation, CustomAnimationDirective, PowerChange } from "../../function/index.js"
+import { NewAdditionnalMessage } from "../../function/new-additional-message.js"
 import { LegendarySoldiersImage } from "../../store/gate-card-images.js"
 import { Slots } from "../../store/slots.js"
 import type { AbilityCardsActions, bakuganToMoveType2 } from "../../type/actions-serveur-requests.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
+import { Bakugans } from "../bakugans.js"
 import { GateCardsList } from "../gate-gards.js"
 
 export const DemonWizard: exclusiveAbilitiesType = {
@@ -112,6 +114,8 @@ export const DemonWizard: exclusiveAbilitiesType = {
             check: true,
             origin: 'ABILITY',
             key: DemonWizard.key,
+            // Puissance transférée : elle est perdue si l'allié vidé est détruit.
+            value: transferedPower,
             ability: {
                 key: DemonWizard.key,
                 user: user
@@ -149,5 +153,31 @@ export const DemonWizard: exclusiveAbilitiesType = {
 
             slotOfGate.state.canceled = true
         }
+    },
+    /**
+     * Si l'allié vidé de sa puissance est détruit, la puissance transférée
+     * à Exedra est perdue.
+     */
+    onTargetDie({ roomState, status, source }) {
+        if (!roomState) return
+        if (status.key !== DemonWizard.key) return
+
+        const transferedPower = status.value ?? 0
+        if (transferedPower <= 0) return
+        if (!source) return
+
+        PowerChange({
+            bakugan: source,
+            G: transferedPower,
+            malus: true,
+            roomState: roomState,
+            ignoreProtection: true
+        })
+
+        NewAdditionnalMessage({
+            roomState: roomState,
+            key: 'drained_power_lost',
+            params: { name: Bakugans[source.key].name },
+        })
     }
 }

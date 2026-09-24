@@ -1,4 +1,4 @@
-import { AbilityCardFailed, PowerChange, canMoveBakugan} from "../../function/index.js";
+import { AbilityCardFailed, ElimineBakuganEffect, PowerChange, canMoveBakugan} from "../../function/index.js";
 import { Slots } from "../../store/slots.js";
 import { AbilityCardsActions, bakuganToMoveType2 as bakuganToMoveType } from "../../type/actions-serveur-requests.js";
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js";
@@ -51,6 +51,15 @@ export const NoiseSlap: exclusiveAbilitiesType = {
         const slotTarget = roomData.protalSlots[Slots.indexOf(slot)]
         const target = slotTarget.bakugans.find((b) => b.key === bakugan && b.userId === userId)
         if(!target) return
+
+        // Une cible vidée de sa puissance (lifeLess) est éliminée quoi qu'il arrive.
+        if (target.statut.lifeLess) {
+            ElimineBakuganEffect({
+                bakugan: target,
+                roomState: roomData
+            })
+            return
+        }
 
         PowerChange({
             bakugan: target,

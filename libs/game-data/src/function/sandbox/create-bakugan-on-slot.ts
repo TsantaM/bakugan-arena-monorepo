@@ -21,6 +21,7 @@ const defaultStatut = (): bakuganOnSlot["statut"] => ({
     protected: false,
     absorbPowerBoost: false,
     reanimated: false,
+    lifeLess: false,
     toSave: false
 })
 
