@@ -1,11 +1,24 @@
 import { stateType, type portalSlotsTypeElement } from "../../type/type-index.js";
-import { PowerChangeDirectiveAnumation } from "../create-animation-directives/index.js";
+import { GateCustomAnimationDirective, PowerChangeDirectiveAnumation } from "../create-animation-directives/index.js";
 import { PowerChange } from "../ability-cards-effects/power-change.js";
 
 export function CaracterGateCardEffect({ roomState, slotOfGate, family }: { roomState: stateType, slotOfGate: portalSlotsTypeElement | undefined, family: string }) {
     if (!roomState) return
     if (slotOfGate && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
         const bakugansTarget = slotOfGate.bakugans.filter((b) => b.family === family)
+
+        if (bakugansTarget.length > 0) {
+            // Énergie relâchée par la carte + aura sur les bakugans concernés,
+            // avant les POWER_CHANGE.
+            GateCustomAnimationDirective({
+                roomState,
+                gateKey: 'character',
+                slotId: slotOfGate.id,
+                targetBakugans: structuredClone(bakugansTarget),
+                payload: { attribut: bakugansTarget[0].attribut },
+            })
+        }
+
         bakugansTarget.forEach((b) => {
             const basePower = structuredClone(b.currentPower)
             if (!basePower) return

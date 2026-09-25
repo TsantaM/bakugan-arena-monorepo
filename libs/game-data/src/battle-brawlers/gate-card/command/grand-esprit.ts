@@ -1,4 +1,4 @@
-import { PowerChange } from "../../../function/index.js"
+import { GateCustomAnimationDirective, PowerChange } from "../../../function/index.js"
 import { GateCardImages } from "../../../store/gate-card-images.js"
 import { gateCardType } from "../../../type/game-data-types.js"
 
@@ -15,6 +15,16 @@ export const GrandEsprit: gateCardType = {
         if (slotOfGate && bakuganUser && gateCount && !slotOfGate.state.open && !slotOfGate.state.canceled && !slotOfGate.state.blocked) {
             const bonus = 50 * gateCount.length
             slotOfGate.state.open = true
+
+            // La puissance vient des gate cards posées, pas des bakugans.
+            GateCustomAnimationDirective({
+                roomState,
+                gateKey: 'grand-esprit',
+                slotId: slotOfGate.id,
+                sourceBakugan: structuredClone(bakuganUser),
+                payload: { gateSlots: gateCount.map((s) => s.id) },
+            })
+
             PowerChange({
                 bakugan: bakuganUser,
                 G: bonus,

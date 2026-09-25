@@ -58,3 +58,14 @@ export {
     type AttributeEnvironmentShiftHandle,
     type AttributeEnvironmentShiftOptions,
 } from "./attribute-environment-shift"
+export {
+    playPowerDrainStream,
+    type PowerDrainColors,
+    type PowerDrainStreamHandle,
+    type PowerDrainStreamOptions,
+} from "./power-drain-stream"
+export {
+    playShockwaveRing,
+    type ShockwaveRingHandle,
+    type ShockwaveRingOptions,
+} from "./shockwave-ring"

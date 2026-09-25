@@ -1,5 +1,6 @@
 import { CancelGateCardAbilities, CheckBattle, CheckBattleStillInProcess, ElimineBakuganEffect, gateCardAdditionalRequest, portalSlotsTypeElement, RemoveGateCardDirectiveAnimation, ResetSlot, ResolveTrapCardAdditionalRequest, ResolveTrapCardOnOpen, Slots, stateType, type gateCardType } from "../../../index.js";
 import { GateCardImages } from "../../../store/gate-card-images.js";
+import { GateCustomAnimationDirective } from "../../../function/create-animation-directives/custom-animation.js";
 
 type MineGhostEffectParams = {
     roomState: stateType
@@ -19,6 +20,14 @@ function MineGhostMainEffect({
             type: 'TURN_ACTION_LAUNCHER'
         }
     }
+
+    // La mine explose avant d'éliminer ce qui se tient dessus.
+    GateCustomAnimationDirective({
+        roomState,
+        gateKey: 'mine-fantome',
+        slotId: slotOfGate.id,
+        targetBakugans: structuredClone(slotOfGate.bakugans),
+    })
 
     slotOfGate.bakugans.forEach((bakugan) => {
         ElimineBakuganEffect({

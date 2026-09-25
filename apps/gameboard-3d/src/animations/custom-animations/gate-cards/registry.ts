@@ -5,6 +5,13 @@ import { ElementaryHaosAnimation } from "./elementary/elementary-haos-animation"
 import { ElementaryPyrusAnimation } from "./elementary/elementary-pyrus-animation"
 import { ElementarySubterraAnimation } from "./elementary/elementary-subterra-animation"
 import { ElementaryVentusAnimation } from "./elementary/elementary-ventus-animation"
+import { CharacterGateAnimation } from "./character-gate-animation"
+import { MineGhostAnimation } from "./mine-ghost-animation"
+import {
+    AspirateurDePuissanceAnimation,
+    GrandEspritAnimation,
+    RechargementAnimation,
+} from "./power-drain-gate-animation"
 
 /**
  * Gate cards → custom 3D animation.
@@ -31,4 +38,14 @@ export const GateCustomAnimations: Partial<Record<string, CustomAnimFn>> = {
     "gate:elementary-subterra": ElementarySubterraAnimation,
     "gate:elementary-haos": ElementaryHaosAnimation,
     "gate:elementary-darkus": ElementaryDarkusAnimation,
+
+    // Character gates: energy released by the card, aura on its family.
+    "gate:character": CharacterGateAnimation,
+
+    "gate:mine-fantome": MineGhostAnimation,
+
+    // Power siphons: same drain, different sources.
+    "gate:aspirateur-de-puissance": AspirateurDePuissanceAnimation,
+    "gate:grand-esprit": GrandEspritAnimation,
+    "gate:rechargement": RechargementAnimation,
 }

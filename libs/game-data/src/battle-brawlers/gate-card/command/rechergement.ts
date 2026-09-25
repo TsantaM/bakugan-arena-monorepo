@@ -1,4 +1,4 @@
-import { type gateCardType, PowerChange } from "../../../index.js";
+import { GateCustomAnimationDirective, type gateCardType, PowerChange } from "../../../index.js";
 import { GateCardImages } from "../../../store/gate-card-images.js";
 
 export const Rechargement: gateCardType = {
@@ -17,6 +17,21 @@ export const Rechargement: gateCardType = {
                 slotOfGate.state.open = true
                 const merged = sameAttributOnDomain.flat()
                 const bonus = 100 * merged.length
+
+                // Ce sont les bakugans du même attribut qui cèdent leur puissance.
+                const donors = roomState.protalSlots
+                    .flatMap((s) => s.bakugans)
+                    .filter((b) => b.attribut === bakuganAttribut && b !== bakuganUser)
+
+                GateCustomAnimationDirective({
+                    roomState,
+                    gateKey: 'rechargement',
+                    slotId: slotOfGate.id,
+                    sourceBakugan: structuredClone(bakuganUser),
+                    targetBakugans: structuredClone(donors),
+                    payload: { attribut: bakuganAttribut },
+                })
+
                 PowerChange({
                     bakugan: bakuganUser,
                     G: bonus,

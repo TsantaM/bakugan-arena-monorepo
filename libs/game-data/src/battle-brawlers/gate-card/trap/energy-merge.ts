@@ -1,5 +1,6 @@
 import { AutoActivationDuringBattle, PowerChange, isProtectedAgainstGate, type gateCardType } from "../../../index.js";
 import { GateCardImages } from "../../../store/gate-card-images.js";
+import { GateCustomAnimationDirective } from "../../../function/create-animation-directives/custom-animation.js";
 
 export const AspirateurDePuissance: gateCardType = {
     key: 'aspirateur-de-puissance',
@@ -14,6 +15,15 @@ export const AspirateurDePuissance: gateCardType = {
             const lastBakugan = slotOfGate.bakugans[slotOfGate.bakugans.length - 1]
 
             if (isProtectedAgainstGate(lastBakugan)) return null
+
+            // La puissance est aspirée d'un bakugan vers l'autre.
+            GateCustomAnimationDirective({
+                roomState,
+                gateKey: 'aspirateur-de-puissance',
+                slotId: slotOfGate.id,
+                sourceBakugan: structuredClone(firstBakugan),
+                targetBakugans: structuredClone([lastBakugan]),
+            })
 
             PowerChange({
                 roomState,
