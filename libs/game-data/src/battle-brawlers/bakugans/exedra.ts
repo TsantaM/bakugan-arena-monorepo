@@ -19,7 +19,7 @@ export const ExedraDarkus: bakuganType = {
 
 export const ExedraGateCard: gateCardType = {
     key: 'exedra-gate-card',
-    image: GateCardImages.command,
+    image: 'caracter-gate-cards/exedra.jpeg',
     maxInDeck: 1,
     family,
     onOpen({ roomState, slot }) {

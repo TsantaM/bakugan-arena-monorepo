@@ -19,7 +19,7 @@ export const ClayfSubterra: bakuganType = {
 
 export const ClayfGateCard: gateCardType = {
     key: "clayf-gate-card",
-    image: GateCardImages.caracter,
+    image: 'caracter-gate-cards/clayf.jpeg',
     maxInDeck: 1,
     family,
     onOpen({ roomState, slot }) {

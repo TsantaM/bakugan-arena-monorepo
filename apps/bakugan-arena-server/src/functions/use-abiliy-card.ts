@@ -63,7 +63,11 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
             type: 'ACTIVE_ABILITY_CARD',
             data: {
                 card: abilityToUse.key,
-                attribut: abilityUser.attribut
+                attribut: abilityUser.attribut,
+                bakugan: {
+                    key: abilityUser.key,
+                    userId: abilityUser.userId
+                }
             },
             resolve: false,
             message: [{

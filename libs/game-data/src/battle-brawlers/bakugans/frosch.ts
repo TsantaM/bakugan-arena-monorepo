@@ -19,7 +19,7 @@ export const FroschAquos: bakuganType = {
 
 export const FroschGateCard: gateCardType = {
     key: 'frosch-gate-card',
-    image: GateCardImages.caracter,
+    image: 'caracter-gate-cards/frosch.jpeg',
     maxInDeck: 1,
     family,
     onOpen({ roomState, slot }) {

@@ -143,7 +143,11 @@ export function DragAndElimineOnAdditional({ resolution, roomData, cardData }: {
         type: 'ACTIVE_ABILITY_CARD',
         data: {
             card: ability.key,
-            attribut: ability.attribut ? ability.attribut : 'Pyrus'
+            attribut: ability.attribut ? ability.attribut : 'Pyrus',
+            bakugan: {
+                key: resolution.bakuganKey,
+                userId: resolution.userId
+            }
         },
         resolve: false,
         message: [{

@@ -360,7 +360,13 @@ export async function playAnimation(
 
             if (current.type === 'ACTIVE_ABILITY_CARD') {
                 sendMessageToParent(current.message)
-                await ActiveAbilityCardAnimation(current.data.card, current.data.attribut)
+                await ActiveAbilityCardAnimation({
+                    scene,
+                    camera,
+                    card: current.data.card,
+                    attribut: current.data.attribut,
+                    bakugan: current.data.bakugan,
+                })
             }
 
             if (current.type === 'ABILITY_CARD_FAILED') {

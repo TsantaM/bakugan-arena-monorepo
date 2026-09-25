@@ -104,6 +104,10 @@ export function previewSandboxAbilityAnimations({
         data: {
             card: ability.key,
             attribut: bakugan.attribut,
+            bakugan: {
+                key: bakugan.key,
+                userId: bakugan.userId,
+            },
         },
         message: [],
     }

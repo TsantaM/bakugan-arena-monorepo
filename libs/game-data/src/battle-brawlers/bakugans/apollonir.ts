@@ -18,7 +18,7 @@ export const ApollonirPyrus: bakuganType = {
 
 export const ApollonirPyrusGateCard: gateCardType = {
     key: 'apollonir-gate-card',
-    image: GateCardImages.command,
+    image: 'caracter-gate-cards/apollonir.jpeg',
     maxInDeck: 1,
     family,
     onOpen({ roomState, slot }) {

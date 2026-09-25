@@ -25,7 +25,11 @@ export function AdditionalEffectActiveCard({ resolution, roomState, opponentsBak
         data: {
             card: card.key,
             attribut:
-                cardData?.attribut || opponentsBakugan.attribut
+                cardData?.attribut || opponentsBakugan.attribut,
+            bakugan: {
+                key: opponentsBakugan.key,
+                userId: opponentsBakugan.userId
+            }
         },
         resolve: false,
         message: [

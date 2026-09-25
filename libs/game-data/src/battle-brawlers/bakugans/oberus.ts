@@ -19,7 +19,7 @@ export const OberusVentus: bakuganType = {
 
 export const OberusGateCard: gateCardType = {
     key: "oberus-gate-card",
-    image: GateCardImages.command,
+    image: 'caracter-gate-cards/oberus.jpeg',
     maxInDeck: 1,
     family: family,
     onOpen({ roomState, slot }) {

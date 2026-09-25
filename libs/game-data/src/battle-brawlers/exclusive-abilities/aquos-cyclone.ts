@@ -1,4 +1,5 @@
 import { CustomAnimationDirective, PowerChange } from "../../function/index.js"
+import { LegendarySoldiersImage } from "../../store/gate-card-images.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 
 export const AquosCyclone: exclusiveAbilitiesType = {
@@ -6,6 +7,7 @@ export const AquosCyclone: exclusiveAbilitiesType = {
     maxInDeck: 1,
     usable_in_neutral: false,
     usable_if_user_not_on_domain: false,
+    image: LegendarySoldiersImage.aquos,
     onActivate: ({ roomState, userId, bakuganKey, slot }) => {
         if (!roomState) return null
         const slotOfGate = roomState?.protalSlots.find((s) => s.id === slot)

@@ -132,7 +132,12 @@ export type AnimationDirectivesTypes =
         resolve: false,
         data: {
             card: string,
-            attribut: attribut
+            attribut: attribut,
+            /** Bakugan qui active la carte : la carte vole jusqu'à lui. */
+            bakugan?: {
+                key: string,
+                userId: string
+            }
         },
         message: Message[]
     } | {

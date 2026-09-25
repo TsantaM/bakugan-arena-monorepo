@@ -19,7 +19,7 @@ export const LarsLionHaos: bakuganType = {
 
 export const LarsLionGateCard: gateCardType = {
     key: "lars-lion-gate-card",
-    image: GateCardImages.command,
+    image: 'caracter-gate-cards/lars-lion.jpeg',
     maxInDeck: 1,
     family,
     onOpen({ roomState, slot }) {
