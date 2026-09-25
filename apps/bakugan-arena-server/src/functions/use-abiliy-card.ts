@@ -220,9 +220,22 @@ export const useAbilityCardServer = ({ roomId, abilityId, slot, userId, bakuganK
             syncClocks({ roomState: roomData, io })
 
         } else if (abilityReturn !== null && abilityReturn.type === 'CARD_FAILED') {
+            // Le client rejoue la carte à l'écran : il lui faut de quoi
+            // l'afficher, comme pour une activation ou une annulation.
+            const failedUser = state.protalSlots
+                .find((s) => s.id === slot)
+                ?.bakugans.find((b) => b.key === bakuganKey && b.userId === userId)
+
             const animation: AnimationDirectivesTypes = {
                 type: 'ABILITY_CARD_FAILED',
                 resolve: false,
+                data: failedUser
+                    ? {
+                        card: abilityId,
+                        attribut: failedUser.attribut,
+                        bakugan: { key: failedUser.key, userId: failedUser.userId },
+                    }
+                    : undefined,
                 message: [{
                     ...(typeof abilityReturn.message === 'string'
                         ? { text: abilityReturn.message }

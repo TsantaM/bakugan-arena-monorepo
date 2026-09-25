@@ -32,7 +32,10 @@ export function ElementaryCardCancelerEffect({ roomState, userId, slot, cardToCa
                 type: 'CANCEL_ABILITY_CARD',
                 data: {
                     card: ability.key,
-                    attribut: cardUser.attribut
+                    attribut: cardUser.attribut,
+                    // `cardUser` vient de la liste statique : l'identité du
+                    // porteur est celle de la carte à annuler.
+                    bakugan: { key: cardToCancel.bakuganKey, userId: cardToCancel.userId }
                 },
                 message: [{
                     key: 'ability_nullified',

@@ -27,6 +27,7 @@ import { RemoveRenforAnimation } from "../animations/remove-renfort-animation"
 import { MoveGateCard } from "../animations/move-gate-card-animation"
 import { SwipeGateCards } from "../animations/swipe-gate-cards"
 import { CancelAbilityCardAnimation } from "../animations/cancel-ability-card-animation"
+import { AbilityCardFailedAnimation } from "../animations/ability-card-failed-animation"
 import { DragAndElimineAnimation } from "../animations/drag-and-elimine-animation"
 import { ReviveBakuganAnimation } from "../animations/revive-animation"
 import { sendMessageToParent, notifyParentTurnEnd, notifyParentAnimationsDone, notifyParentAnimationsStart, notifyParentAbilityAdditionalRequest, notifyParentGateAdditionalRequest } from "../functions/send-message-to-parent"
@@ -377,6 +378,15 @@ export async function playAnimation(
 
                 sendMessageToParent(current.message)
 
+                if (current.data) {
+                    await AbilityCardFailedAnimation({
+                        scene,
+                        camera,
+                        card: current.data.card,
+                        attribut: current.data.attribut,
+                    })
+                }
+
             }
 
             if (current.type === 'REMOVE_RENFORT') {
@@ -421,10 +431,13 @@ export async function playAnimation(
 
                 sendMessageToParent(current.message)
 
-                await CancelAbilityCardAnimation(
-                    current.data.card,
-                    current.data.attribut
-                )
+                await CancelAbilityCardAnimation({
+                    scene,
+                    camera,
+                    card: current.data.card,
+                    attribut: current.data.attribut,
+                    bakugan: current.data.bakugan,
+                })
 
             }
 

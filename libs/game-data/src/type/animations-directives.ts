@@ -142,6 +142,12 @@ export type AnimationDirectivesTypes =
         message: Message[]
     } | {
         type: 'ABILITY_CARD_FAILED';
+        /** Absent des anciens replays : l'animation se contente du message. */
+        data?: {
+            card: string,
+            attribut: attribut,
+            bakugan?: { key: string, userId: string }
+        };
         resolve: boolean;
         message: Message[];
     } | {
@@ -172,7 +178,9 @@ export type AnimationDirectivesTypes =
         resolve: false,
         data: {
             card: string,
-            attribut: attribut
+            attribut: attribut,
+            /** Bakugan dont la capacité est annulée, quand il est connu. */
+            bakugan?: { key: string, userId: string }
         },
         message: Message[]
     } | {

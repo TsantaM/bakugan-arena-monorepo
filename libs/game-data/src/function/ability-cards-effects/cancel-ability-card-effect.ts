@@ -24,7 +24,8 @@ export function CancelAbilityCardEffect({ roomState, slotOfGate, ability }: Canc
         type: 'CANCEL_ABILITY_CARD',
         data: {
             card: ability.key,
-            attribut: user.attribut
+            attribut: user.attribut,
+            bakugan: { key: user.key, userId: user.userId }
         },
         message: [{
             key: 'ability_nullified',
