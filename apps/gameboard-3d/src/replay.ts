@@ -32,6 +32,8 @@ import { initGameboardLocaleFromUrl } from './i18n/locale'
 import { buildBakuganTooltipContent, buildSlotTooltipContent } from './functions/mesh-tooltip-content'
 import type { SlotMeshUsersData } from './meshes/slot.mesh'
 import { REPLAY_ENABLED } from './replay-flag'
+import { createBattlefieldBackground } from './scene/battlefield-background'
+import { applyBoardCameraLimits } from './scene/board-camera-limits'
 
 initGameboardLocaleFromUrl()
 
@@ -127,6 +129,7 @@ async function initReplay(replayPayload: replayDataType) {
       renderer.setSize(window.innerWidth, window.innerHeight)
       renderer.setPixelRatio(window.devicePixelRatio)
       const controls = new OrbitControls(camera, renderer.domElement)
+      applyBoardCameraLimits(controls)
 
       controls.mouseButtons = {
         LEFT: THREE.MOUSE.PAN,
@@ -170,7 +173,7 @@ async function initReplay(replayPayload: replayDataType) {
       scene.add(camera)
 
       // const bgTexture = new THREE.TextureLoader().load(`./../images/attributs-background/VENTUS.png`)
-      const bgColor = new THREE.Color(0x808080)
+      const bgColor = new THREE.Color(0x000000)
       // scene.background = bgTexture
       scene.background = bgColor
 
@@ -274,45 +277,8 @@ async function initReplay(replayPayload: replayDataType) {
 
       // 👉 ton code existant ici (sans socket.on)
 
-      const texture = new THREE.TextureLoader().load('/images/cards/empty-gate-slot.jpg', () => console.log('texture chargée'), undefined, (err) => console.log(err))
-
-      texture.wrapS = THREE.RepeatWrapping
-      texture.wrapT = THREE.RepeatWrapping
-
-      const planeSize = 500
-
-      texture.repeat.set(
-        planeSize / 4,
-        planeSize / 6
-      )
-
-      // ajustement fin pour alignement parfait
-      texture.offset.set(
-        0,
-        0
-      )
-
-      const color = new THREE.Color(0x226D80)
-
-      const bgPlane = new THREE.Mesh(
-        new THREE.PlaneGeometry(planeSize, planeSize),
-        new THREE.MeshBasicMaterial({
-          map: texture,
-          side: THREE.DoubleSide
-        })
-      )
-
-      bgPlane.rotation.x = -Math.PI / 2
-      bgPlane.position.y = -0.01
-      bgPlane.position.z = 2
-      bgPlane.position.x = 4
-      bgPlane.material.color = color
-      // bgPlane.material.transparent = true
-      // bgPlane.material.opacity = 0.75
-
       plane.clear()
       scene.clear()
-      scene.add(bgPlane)
       scene.add(plane)
       scene.add(light)
       scene.add(camera)
@@ -322,7 +288,10 @@ async function initReplay(replayPayload: replayDataType) {
 
       camera.position.set(3, 5, 8)
 
-      const keepObjects = [bgPlane, plane, light, camera]
+      // After the camera is framed: the galaxies are laid out in its opening view.
+      const background = createBattlefieldBackground(scene, { camera })
+
+      const keepObjects = [background.group, plane, light, camera]
 
       applyReplayBoardState({
         snapshot: initialSnapshot,

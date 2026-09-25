@@ -1,6 +1,6 @@
 import { BakuganList } from "../../battle-brawlers/bakugans.js"
 import type { attribut, portalSlotsTypeElement, slots_id, stateType } from "../../type/type-index.js"
-import { PowerChangeDirectiveAnumation } from "../create-animation-directives/index.js"
+import { GateCustomAnimationDirective, PowerChangeDirectiveAnumation } from "../create-animation-directives/index.js"
 import { PowerChange } from "../ability-cards-effects/power-change.js"
 import { isProtectedAgainstGate } from "../ability-cards-effects/protection-status.js"
 
@@ -13,6 +13,17 @@ export function ElementaryGateCardOnOpen({ roomState, slot, attribut }: { roomSt
         const secondAttributs = BakuganList.filter((b) => keys.includes(b.key) && b.seconaryAttribut === attribut).map((b) => b.key)
         const bakuganWithAttribut = [slotOfGate.bakugans.filter((b) => b.attribut === attribut), slotOfGate.bakugans.filter((b) => secondAttributs.includes(b.key))].flat()
         slotOfGate.state.open = true
+
+        // Environnement de l'attribut + aura de boost, joués avant les POWER_CHANGE.
+        GateCustomAnimationDirective({
+            roomState,
+            gateKey: `elementary-${attribut.toLowerCase()}`,
+            slotId: slot,
+            // Snapshot : les PowerChange suivants ne doivent pas réécrire cette directive.
+            targetBakugans: structuredClone(bakuganWithAttribut),
+            payload: { attribut },
+        })
+
         bakuganWithAttribut.forEach((b) => {
             PowerChange({
                 roomState,

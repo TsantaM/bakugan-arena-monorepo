@@ -18,10 +18,12 @@ import { hideTooltip, initTooltip, showTooltip, tooltip } from './functions/tool
 import { initGameboardLocaleFromUrl } from './i18n/locale'
 import { playAnimation } from './sockets/sockets-handlers'
 import { CUSTOM_ANIMATION_KEYS } from './animations/custom-animations/registry'
+import { createBattlefieldBackground } from './scene/battlefield-background'
 import gsap from 'gsap'
 import { buildBakuganTooltipContent, buildSlotTooltipContent } from './functions/mesh-tooltip-content'
 import type { SpriteUserData } from './meshes/bakugan.mesh'
 import type { SlotMeshUsersData } from './meshes/slot.mesh'
+import { applyBoardCameraLimits } from './scene/board-camera-limits'
 
 initGameboardLocaleFromUrl()
 
@@ -131,6 +133,7 @@ function initScene() {
   renderer.setPixelRatio(window.devicePixelRatio)
 
   controls = new OrbitControls(camera, renderer.domElement)
+  applyBoardCameraLimits(controls)
   controls.mouseButtons = {
     LEFT: THREE.MOUSE.PAN,
     MIDDLE: THREE.MOUSE.DOLLY,
@@ -142,30 +145,14 @@ function initScene() {
   }
 
   const light = new THREE.AmbientLight('white', 3)
-  const texture = new THREE.TextureLoader().load('./images/cards/empty-gate-slot.jpg')
-  texture.wrapS = THREE.RepeatWrapping
-  texture.wrapT = THREE.RepeatWrapping
-  const planeSize = 500
-  texture.repeat.set(planeSize / 4, planeSize / 6)
 
-  const bgPlane = new THREE.Mesh(
-    new THREE.PlaneGeometry(planeSize, planeSize),
-    new THREE.MeshBasicMaterial({
-      map: texture,
-      side: THREE.DoubleSide,
-      color: new THREE.Color(0x226d80),
-    }),
-  )
-  bgPlane.rotation.x = -Math.PI / 2
-  bgPlane.position.set(4, -0.01, 2)
+  const background = createBattlefieldBackground(scene, { camera })
 
-  scene.background = new THREE.Color(0x808080)
-  scene.add(bgPlane)
   scene.add(plane)
   scene.add(light)
   scene.add(camera)
 
-  keepObjects.push(bgPlane, plane, light, camera)
+  keepObjects.push(background.group, plane, light, camera)
 
   const raycaster = new THREE.Raycaster()
   const mouse = new THREE.Vector2()

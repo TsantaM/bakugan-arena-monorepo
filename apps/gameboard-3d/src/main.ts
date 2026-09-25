@@ -11,6 +11,7 @@ import { requestSkipAnimations } from './functions/skip-animations'
 import { initGameboardLocaleFromUrl } from './i18n/locale'
 import { buildBakuganTooltipContent, buildSlotTooltipContent } from './functions/mesh-tooltip-content'
 import type { SlotMeshUsersData } from './meshes/slot.mesh'
+import { applyBoardCameraLimits } from './scene/board-camera-limits'
 
 initGameboardLocaleFromUrl()
 
@@ -78,6 +79,7 @@ if (roomId !== null && userId !== null) {
     renderer.setSize(window.innerWidth, window.innerHeight)
     renderer.setPixelRatio(window.devicePixelRatio)
     const controls = new OrbitControls(camera, renderer.domElement)
+    applyBoardCameraLimits(controls)
 
     controls.mouseButtons = {
       LEFT: THREE.MOUSE.PAN,
@@ -121,7 +123,7 @@ if (roomId !== null && userId !== null) {
     scene.add(camera)
 
     // const bgTexture = new THREE.TextureLoader().load(`./../images/attributs-background/VENTUS.png`)
-    const bgColor = new THREE.Color(0x808080)
+    const bgColor = new THREE.Color(0x000000)
     // scene.background = bgTexture
     scene.background = bgColor
 

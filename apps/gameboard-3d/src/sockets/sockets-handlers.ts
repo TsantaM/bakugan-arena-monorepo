@@ -33,6 +33,7 @@ import { sendMessageToParent, notifyParentTurnEnd, notifyParentAnimationsDone, n
 import { applySkipTimeScaleIfNeeded, clearAnimationSkip, setAnimationsActive } from "../functions/skip-animations"
 import { ChangeAttributAnimation } from "../animations/change-attribut-animation"
 import { CustomAnimationsRegistry } from "../animations/custom-animations/registry"
+import { createBattlefieldBackground } from "../scene/battlefield-background"
 import {
     getPortalSlotsFromState,
     syncBakuganMeshUserData,
@@ -580,48 +581,14 @@ export function registerSocketHandlers(
         scene.add(light)
         scene.add(camera)
 
-        const texture = new THREE.TextureLoader().load('./images/cards/empty-gate-slot.jpg')
-
-        texture.wrapS = THREE.RepeatWrapping
-        texture.wrapT = THREE.RepeatWrapping
-        //Dans ce cas si c'est plus interessant fait les deux corrige le bot et corrige également le flux d'animation pour qu'il soit plus performant.
-        const planeSize = 500
-
-        texture.repeat.set(
-            planeSize / 4,
-            planeSize / 6
-        )
-
-        // ajustement fin pour alignement parfait
-        texture.offset.set(
-            0,
-            0
-        )
-
-        const color = new THREE.Color(0x226D80)
-
-        const bgPlane = new THREE.Mesh(
-            new THREE.PlaneGeometry(planeSize, planeSize),
-            new THREE.MeshBasicMaterial({
-                map: texture,
-                side: THREE.DoubleSide
-            })
-        )
-
-        bgPlane.rotation.x = -Math.PI / 2
-        bgPlane.position.y = -0.01
-        bgPlane.position.z = 2
-        bgPlane.position.x = 4
-        bgPlane.material.color = color
-        // bgPlane.material.transparent = true
-        // bgPlane.material.opacity = 0.75
-
-        scene.add(bgPlane)
-
         document.getElementById('left-bakugan-previews-container')?.remove()
         document.getElementById('right-bakugan-previews-container')?.remove()
 
         camera.position.set(3, 5, 8)
+
+        // After the camera is framed: the galaxies are laid out in its opening view.
+        createBattlefieldBackground(scene, { camera })
+
         syncLocalTurnFromState(state)
         InitGameState({ state: state, bakugansMeshs, isSpectator: false, gateCardMeshs, plane, scene, userId })
 
@@ -756,45 +723,8 @@ export function registerSocketHandlersViewers(socket: Socket,
     socket.on("init-room-state", (state: roomStateType) => {
         // 👉 ton code existant ici (sans socket.on)
 
-        const texture = new THREE.TextureLoader().load('/images/cards/empty-gate-slot.jpg', () => console.log('texture chargée'), undefined, (err) => console.log(err))
-
-        texture.wrapS = THREE.RepeatWrapping
-        texture.wrapT = THREE.RepeatWrapping
-
-        const planeSize = 500
-
-        texture.repeat.set(
-            planeSize / 4,
-            planeSize / 6
-        )
-
-        // ajustement fin pour alignement parfait
-        texture.offset.set(
-            0,
-            0
-        )
-
-        const color = new THREE.Color(0x226D80)
-
-        const bgPlane = new THREE.Mesh(
-            new THREE.PlaneGeometry(planeSize, planeSize),
-            new THREE.MeshBasicMaterial({
-                map: texture,
-                side: THREE.DoubleSide
-            })
-        )
-
-        bgPlane.rotation.x = -Math.PI / 2
-        bgPlane.position.y = -0.01
-        bgPlane.position.z = 2
-        bgPlane.position.x = 4
-        bgPlane.material.color = color
-        // bgPlane.material.transparent = true
-        // bgPlane.material.opacity = 0.75
-
         plane.clear()
         scene.clear()
-        scene.add(bgPlane)
         scene.add(plane)
         scene.add(light)
         scene.add(camera)
@@ -803,9 +733,12 @@ export function registerSocketHandlersViewers(socket: Socket,
         document.getElementById('right-bakugan-previews-container')?.remove()
 
         camera.position.set(3, 5, 8)
+
+        // After the camera is framed: the galaxies are laid out in its opening view.
+        createBattlefieldBackground(scene, { camera })
+
         InitGameState({ state: state, bakugansMeshs, gateCardMeshs, plane, scene, userId: player1, isSpectator: true })
 
-        console.log(texture)
     })
 
     socket.on("animations", (animations: AnimationDirectivesTypes[]) => {

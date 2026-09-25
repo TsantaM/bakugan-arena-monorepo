@@ -5,6 +5,7 @@
 dist
 .next
 .env
+.claude
 
 # Env files
 .env

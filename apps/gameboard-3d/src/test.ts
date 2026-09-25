@@ -12,6 +12,8 @@ import { initGameboardLocaleFromUrl } from './i18n/locale'
 import { buildBakuganTooltipContent, buildSlotTooltipContent } from './functions/mesh-tooltip-content'
 import type { SpriteUserData } from './meshes/bakugan.mesh'
 import type { SlotMeshUsersData } from './meshes/slot.mesh'
+import { createBattlefieldBackground } from './scene/battlefield-background'
+import { applyBoardCameraLimits } from './scene/board-camera-limits'
 
 initGameboardLocaleFromUrl()
 
@@ -368,6 +370,7 @@ if (canvas) {
     renderer.setSize(window.innerWidth, window.innerHeight)
     renderer.setPixelRatio(window.devicePixelRatio)
     const controls = new OrbitControls(camera, renderer.domElement)
+    applyBoardCameraLimits(controls)
 
     controls.mouseButtons = {
         LEFT: THREE.MOUSE.PAN,
@@ -406,50 +409,14 @@ if (canvas) {
 
     })
 
-    const texture = new THREE.TextureLoader().load('./images/cards/empty-gate-slot.jpg')
-
-    texture.wrapS = THREE.RepeatWrapping
-    texture.wrapT = THREE.RepeatWrapping
-
-    const planeSize = 500
-
-    texture.repeat.set(
-        planeSize / 4,
-        planeSize / 6
-    )
-
-    // ajustement fin pour alignement parfait
-    texture.offset.set(
-        0,
-        0
-    )
-
-    const color = new THREE.Color(0x226D80)
-
-    const bgPlane = new THREE.Mesh(
-        new THREE.PlaneGeometry(planeSize, planeSize),
-        new THREE.MeshBasicMaterial({
-            map: texture,
-            side: THREE.DoubleSide
-        })
-    )
-
-    bgPlane.rotation.x = -Math.PI / 2
-    bgPlane.position.y = -0.01
-    bgPlane.position.z = 2
-    bgPlane.position.x = 4
-    bgPlane.material.color = color
-    // bgPlane.material.transparent = true
-    // bgPlane.material.opacity = 0.75
-
-    scene.add(bgPlane)
+    createBattlefieldBackground(scene, { camera })
 
     scene.add(plane)
     scene.add(light)
     scene.add(camera)
 
     // const bgTexture = new THREE.TextureLoader().load(`./../images/attributs-background/VENTUS.png`)
-    const bgColor = new THREE.Color(0x808080)
+    const bgColor = new THREE.Color(0x000000)
     // scene.background = bgTexture
     scene.background = bgColor
 

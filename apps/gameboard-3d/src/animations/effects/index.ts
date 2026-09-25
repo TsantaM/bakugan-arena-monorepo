@@ -53,3 +53,8 @@ export {
     type SceneIlluminateHandle,
     type SceneIlluminateOptions,
 } from "./scene-illuminate"
+export {
+    playAttributeEnvironmentShift,
+    type AttributeEnvironmentShiftHandle,
+    type AttributeEnvironmentShiftOptions,
+} from "./attribute-environment-shift"
