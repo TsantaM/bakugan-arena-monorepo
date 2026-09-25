@@ -12,6 +12,8 @@ import { initGameboardLocaleFromUrl } from './i18n/locale'
 import { buildBakuganTooltipContent, buildSlotTooltipContent } from './functions/mesh-tooltip-content'
 import type { SlotMeshUsersData } from './meshes/slot.mesh'
 import { applyBoardCameraLimits } from './scene/board-camera-limits'
+import { initGameHud, renderGameHud, setHudProfileImage } from './hud/game-hud'
+import { ENABLE_V4_GALAXY_BACKGROUND } from './config/feature-flags'
 
 initGameboardLocaleFromUrl()
 
@@ -51,6 +53,7 @@ const socket = createSocket(userId, roomId)
 
 // Pour l'utilisateur
 if (player1Image) {
+  setHudProfileImage('left', player1Image)
   const left_profile_picture = document.getElementById('left-profile-picture-img');
   setImageWithFallback(
     left_profile_picture as HTMLImageElement,
@@ -62,6 +65,7 @@ if (player1Image) {
 
 // Pour l’adversaire
 if (player2Image) {
+  setHudProfileImage('right', player2Image)
   const right_profile_picture = document.getElementById('right-profile-picture-img');
   setImageWithFallback(
     right_profile_picture as HTMLImageElement,
@@ -79,6 +83,7 @@ if (roomId !== null && userId !== null && player1Id !== null) {
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
     renderer.setSize(window.innerWidth, window.innerHeight)
     renderer.setPixelRatio(window.devicePixelRatio)
+    initGameHud()
     const controls = new OrbitControls(camera, renderer.domElement)
     applyBoardCameraLimits(controls)
 
@@ -124,7 +129,7 @@ if (roomId !== null && userId !== null && player1Id !== null) {
     scene.add(camera)
 
     // const bgTexture = new THREE.TextureLoader().load(`./../images/attributs-background/VENTUS.png`)
-    const bgColor = new THREE.Color(0x000000)
+    const bgColor = new THREE.Color(ENABLE_V4_GALAXY_BACKGROUND ? 0x000000 : 0x808080)
     // scene.background = bgTexture
     scene.background = bgColor
 
@@ -244,6 +249,7 @@ if (roomId !== null && userId !== null && player1Id !== null) {
       requestAnimationFrame(loop)
       controls.update()
       renderer.render(scene, camera)
+      renderGameHud(renderer)
     }
 
     reload?.addEventListener("click", () => {

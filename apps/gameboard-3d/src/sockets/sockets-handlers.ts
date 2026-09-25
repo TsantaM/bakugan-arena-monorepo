@@ -33,7 +33,8 @@ import { sendMessageToParent, notifyParentTurnEnd, notifyParentAnimationsDone, n
 import { applySkipTimeScaleIfNeeded, clearAnimationSkip, setAnimationsActive } from "../functions/skip-animations"
 import { ChangeAttributAnimation } from "../animations/change-attribut-animation"
 import { CustomAnimationsRegistry } from "../animations/custom-animations/registry"
-import { createBattlefieldBackground } from "../scene/battlefield-background"
+import { createBoardEnvironment } from "../scene/board-environment"
+import { setHudTurnCount } from "../hud/game-hud"
 import {
     getPortalSlotsFromState,
     syncBakuganMeshUserData,
@@ -587,7 +588,7 @@ export function registerSocketHandlers(
         camera.position.set(3, 5, 8)
 
         // After the camera is framed: the galaxies are laid out in its opening view.
-        createBattlefieldBackground(scene, { camera })
+        createBoardEnvironment(scene, { camera })
 
         syncLocalTurnFromState(state)
         InitGameState({ state: state, bakugansMeshs, isSpectator: false, gateCardMeshs, plane, scene, userId })
@@ -682,11 +683,12 @@ export function registerSocketHandlers(
     })
 
     socket.on('turn-count-updater', (turnState: turnCountSocketProps) => {
-        const turnCounter = document.getElementById('turn-counter')
-        if (!turnCounter) return
-
         const data = turnState.battleTurn !== undefined ? `${turnState.turnCount}T (${turnState.battleTurn})` : `${turnState.turnCount}T`
-        turnCounter.textContent = data
+        setHudTurnCount(data)
+
+        const turnCounter = document.getElementById('turn-counter')
+        if (turnCounter) turnCounter.textContent = data
+
         syncTurnCountFromState(turnState.turnCount)
         notifyParentTurnEnd()
     })
@@ -735,7 +737,7 @@ export function registerSocketHandlersViewers(socket: Socket,
         camera.position.set(3, 5, 8)
 
         // After the camera is framed: the galaxies are laid out in its opening view.
-        createBattlefieldBackground(scene, { camera })
+        createBoardEnvironment(scene, { camera })
 
         InitGameState({ state: state, bakugansMeshs, gateCardMeshs, plane, scene, userId: player1, isSpectator: true })
 
@@ -766,11 +768,12 @@ export function registerSocketHandlersViewers(socket: Socket,
     })
 
     socket.on('turn-count-updater', (turnState: turnCountSocketProps) => {
-        const turnCounter = document.getElementById('turn-counter')
-        if (!turnCounter) return
-
         const data = turnState.battleTurn !== undefined ? `${turnState.turnCount}T (${turnState.battleTurn})` : `${turnState.turnCount}T`
-        turnCounter.textContent = data
+        setHudTurnCount(data)
+
+        const turnCounter = document.getElementById('turn-counter')
+        if (turnCounter) turnCounter.textContent = data
+
         syncTurnCountFromState(turnState.turnCount)
         notifyParentTurnEnd()
     })

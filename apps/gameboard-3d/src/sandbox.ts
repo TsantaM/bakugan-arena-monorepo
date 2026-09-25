@@ -18,12 +18,13 @@ import { hideTooltip, initTooltip, showTooltip, tooltip } from './functions/tool
 import { initGameboardLocaleFromUrl } from './i18n/locale'
 import { playAnimation } from './sockets/sockets-handlers'
 import { CUSTOM_ANIMATION_KEYS } from './animations/custom-animations/registry'
-import { createBattlefieldBackground } from './scene/battlefield-background'
+import { createBoardEnvironment } from './scene/board-environment'
 import gsap from 'gsap'
 import { buildBakuganTooltipContent, buildSlotTooltipContent } from './functions/mesh-tooltip-content'
 import type { SpriteUserData } from './meshes/bakugan.mesh'
 import type { SlotMeshUsersData } from './meshes/slot.mesh'
 import { applyBoardCameraLimits } from './scene/board-camera-limits'
+import { initGameHud, renderGameHud } from './hud/game-hud'
 
 initGameboardLocaleFromUrl()
 
@@ -132,6 +133,7 @@ function initScene() {
   renderer.setSize(window.innerWidth, window.innerHeight)
   renderer.setPixelRatio(window.devicePixelRatio)
 
+  initGameHud()
   controls = new OrbitControls(camera, renderer.domElement)
   applyBoardCameraLimits(controls)
   controls.mouseButtons = {
@@ -146,7 +148,7 @@ function initScene() {
 
   const light = new THREE.AmbientLight('white', 3)
 
-  const background = createBattlefieldBackground(scene, { camera })
+  const background = createBoardEnvironment(scene, { camera })
 
   scene.add(plane)
   scene.add(light)
@@ -240,6 +242,7 @@ function initScene() {
     requestAnimationFrame(animate)
     controls?.update()
     renderer?.render(scene, camera)
+    if (renderer) renderGameHud(renderer)
   }
   animate()
 

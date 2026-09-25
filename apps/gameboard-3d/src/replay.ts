@@ -32,8 +32,10 @@ import { initGameboardLocaleFromUrl } from './i18n/locale'
 import { buildBakuganTooltipContent, buildSlotTooltipContent } from './functions/mesh-tooltip-content'
 import type { SlotMeshUsersData } from './meshes/slot.mesh'
 import { REPLAY_ENABLED } from './replay-flag'
-import { createBattlefieldBackground } from './scene/battlefield-background'
+import { createBoardEnvironment } from './scene/board-environment'
 import { applyBoardCameraLimits } from './scene/board-camera-limits'
+import { initGameHud, renderGameHud, setHudProfileImage } from './hud/game-hud'
+import { ENABLE_V4_GALAXY_BACKGROUND } from './config/feature-flags'
 
 initGameboardLocaleFromUrl()
 
@@ -90,6 +92,7 @@ async function fetchReplayData(id: string, apiOrigin: string | null): Promise<re
 
 // Pour l'utilisateur
 if (player1Image) {
+  setHudProfileImage('left', player1Image)
   const left_profile_picture = document.getElementById('left-profile-picture-img');
   setImageWithFallback(
     left_profile_picture as HTMLImageElement,
@@ -101,6 +104,7 @@ if (player1Image) {
 
 // Pour l’adversaire
 if (player2Image) {
+  setHudProfileImage('right', player2Image)
   const right_profile_picture = document.getElementById('right-profile-picture-img');
   setImageWithFallback(
     right_profile_picture as HTMLImageElement,
@@ -128,6 +132,7 @@ async function initReplay(replayPayload: replayDataType) {
       const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
       renderer.setSize(window.innerWidth, window.innerHeight)
       renderer.setPixelRatio(window.devicePixelRatio)
+      initGameHud()
       const controls = new OrbitControls(camera, renderer.domElement)
       applyBoardCameraLimits(controls)
 
@@ -173,7 +178,7 @@ async function initReplay(replayPayload: replayDataType) {
       scene.add(camera)
 
       // const bgTexture = new THREE.TextureLoader().load(`./../images/attributs-background/VENTUS.png`)
-      const bgColor = new THREE.Color(0x000000)
+      const bgColor = new THREE.Color(ENABLE_V4_GALAXY_BACKGROUND ? 0x000000 : 0x808080)
       // scene.background = bgTexture
       scene.background = bgColor
 
@@ -289,7 +294,7 @@ async function initReplay(replayPayload: replayDataType) {
       camera.position.set(3, 5, 8)
 
       // After the camera is framed: the galaxies are laid out in its opening view.
-      const background = createBattlefieldBackground(scene, { camera })
+      const background = createBoardEnvironment(scene, { camera })
 
       const keepObjects = [background.group, plane, light, camera]
 
@@ -308,6 +313,7 @@ async function initReplay(replayPayload: replayDataType) {
         requestAnimationFrame(loop)
         controls.update()
         renderer.render(scene, camera)
+        renderGameHud(renderer)
       }
 
       window.addEventListener('resize', () => {

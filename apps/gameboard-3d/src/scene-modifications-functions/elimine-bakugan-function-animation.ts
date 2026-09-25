@@ -2,7 +2,12 @@ import * as THREE from 'three'
 import { MoveBakugan } from '../animations/move-bakugan-animation'
 import type { bakuganOnSlot, portalSlotsTypeElement } from '@bakugan-arena/game-data'
 import { ElimineBakuganAnimation } from '../animations/elimine-bakugan-animation'
+import { addEliminatedCircle } from '../functions/set-eliminated-circle'
 
+/**
+ * One more KO for that player. Delegates to `setEliminatedCircles` so the HTML
+ * circles and the in-scene HUD can never drift apart.
+ */
 function updateEliminatedUI({
     currentUserId,
     bakuganUserId,
@@ -10,30 +15,7 @@ function updateEliminatedUI({
     currentUserId: string
     bakuganUserId: string
 }) {
-
-
-    const isLocalPlayer = currentUserId === bakuganUserId
-
-    const selector = isLocalPlayer
-        ? '.left-eliminated .circle.left-circle'
-        : '.right-eliminated .circle.right-circle'
-
-    const circles = Array.from(
-        document.querySelectorAll<HTMLDivElement>(selector)
-    )
-
-    const targetCircle = isLocalPlayer
-        // gauche → on part du dernier vivant
-        ? [...circles].reverse().find(c => !c.classList.contains('dead'))
-        // droite → on part du premier vivant
-        : circles.find(c => !c.classList.contains('dead'))
-
-    if (!targetCircle) {
-        console.warn('Aucun cercle disponible à éliminer')
-        return
-    }
-
-    targetCircle.classList.add('dead')
+    addEliminatedCircle({ isLeft: currentUserId === bakuganUserId })
 }
 
 async function ElimineBakuganFunctionAnimation({ bakugan, scene, slot, userId, bakugansMeshs }: {

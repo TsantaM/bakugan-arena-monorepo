@@ -12,8 +12,9 @@ import { initGameboardLocaleFromUrl } from './i18n/locale'
 import { buildBakuganTooltipContent, buildSlotTooltipContent } from './functions/mesh-tooltip-content'
 import type { SpriteUserData } from './meshes/bakugan.mesh'
 import type { SlotMeshUsersData } from './meshes/slot.mesh'
-import { createBattlefieldBackground } from './scene/battlefield-background'
+import { createBoardEnvironment } from './scene/board-environment'
 import { applyBoardCameraLimits } from './scene/board-camera-limits'
+import { initGameHud, renderGameHud } from './hud/game-hud'
 
 initGameboardLocaleFromUrl()
 
@@ -369,6 +370,7 @@ if (canvas) {
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
     renderer.setSize(window.innerWidth, window.innerHeight)
     renderer.setPixelRatio(window.devicePixelRatio)
+    initGameHud()
     const controls = new OrbitControls(camera, renderer.domElement)
     applyBoardCameraLimits(controls)
 
@@ -409,16 +411,12 @@ if (canvas) {
 
     })
 
-    createBattlefieldBackground(scene, { camera })
+    createBoardEnvironment(scene, { camera })
 
     scene.add(plane)
     scene.add(light)
     scene.add(camera)
 
-    // const bgTexture = new THREE.TextureLoader().load(`./../images/attributs-background/VENTUS.png`)
-    const bgColor = new THREE.Color(0x000000)
-    // scene.background = bgTexture
-    scene.background = bgColor
 
     // Show bakugan and gate cards data
     const bakugansMeshs: THREE.Sprite<THREE.Object3DEventMap>[] = []
@@ -661,6 +659,7 @@ if (canvas) {
         requestAnimationFrame(loop)
         controls.update()
         renderer.render(scene, camera)
+        renderGameHud(renderer)
     }
 
     window.addEventListener('resize', () => {

@@ -118,3 +118,17 @@
   }
 
 }
+/*
+ * V4 design (VITE_ENABLE_V4_DESIGN_GAMEBOARD): the player HUD is rendered in
+ * the 3D scene instead. The markup is kept as-is so turning the flag off
+ * restores the HTML HUD with no other change.
+ */
+/*
+ * `visibility` and not `display`: the bakugan previews are appended inside
+ * `.data-container`, so the layout must stay exactly as it was — only the
+ * elements the in-scene HUD now draws are hidden.
+ */
+body.in-scene-hud .profile-picture,
+body.in-scene-hud .turn-and-eliminated {
+  visibility: hidden;
+}

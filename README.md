@@ -121,7 +121,27 @@ REPLAY_ENABLED=false
 VITE_SOCKET_URL=http://localhost:3005
 VITE_ALLOWED_PARENT_URL=http://localhost:3000
 VITE_REPLAY_ENABLED=false
+VITE_ENABLE_V4_GALAXY_BACKGROUND=true
+VITE_ENABLE_V4_GAMEBOARD_HUD=true
+VITE_ENABLE_V4_STARFIELD=true
+VITE_ENABLE_V4_BOARD_ANCHOR=true
 ```
+
+#### V4 gameboard design flags
+
+The parts of the V4 board design are **independent** and all **on by default**
+(an undefined variable means enabled). Set any of them to `false` / `0` / `off`
+to roll that part back without any code change:
+
+| Variable | `true` (default) | `false` |
+| --- | --- | --- |
+| `VITE_ENABLE_V4_GALAXY_BACKGROUND` | 6 attribute galaxies drifting on black, camera limited above the board with capped zoom and pan | tiled floor plane on gray, free camera |
+| `VITE_ENABLE_V4_GAMEBOARD_HUD` | player pictures, timers, turn counter and KO markers rendered in the 3D scene | HTML overlay |
+| `VITE_ENABLE_V4_STARFIELD` | star shell filling the sky around the board | empty sky |
+| `VITE_ENABLE_V4_BOARD_ANCHOR` | soft glow under the board | board floating on the bare background |
+
+The HTML HUD markup is kept in every entry point either way, so a rollback is a
+rebuild with the variable set — nothing else to revert.
 
 #### Replay feature flag
 

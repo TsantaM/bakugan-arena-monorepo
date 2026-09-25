@@ -8,6 +8,7 @@ import { syncTurnCountFromState } from "../turn-action-management/turn-action-br
 import { setEliminatedCircles } from "./set-eliminated-circle"
 import * as THREE from 'three'
 import { applyTimerSnapshots, setLocalTimerUserId } from "./player-timer-ui"
+import { setHudTurnCount } from "../hud/game-hud"
 
 export function InitGameState({ state, plane, scene, userId, bakugansMeshs, gateCardMeshs, isSpectator }: {
     state: roomStateType, scene: THREE.Scene,
@@ -78,11 +79,12 @@ export function InitGameState({ state, plane, scene, userId, bakugansMeshs, gate
         turnCount: state.turnState.turnCount,
         battleTurn: state.battleState.battleInProcess ? state.battleState.turns : undefined
     }
-    const turnCounter = document.getElementById('turn-counter')
-    if (!turnCounter) return
-
     const data = turnState.battleTurn !== undefined ? `${turnState.turnCount}T (${turnState.battleTurn})` : `${turnState.turnCount}T`
-    turnCounter.textContent = data
+    setHudTurnCount(data)
+
+    const turnCounter = document.getElementById('turn-counter')
+    if (turnCounter) turnCounter.textContent = data
+
     syncTurnCountFromState(turnState.turnCount)
 
     setLocalTimerUserId(userId)

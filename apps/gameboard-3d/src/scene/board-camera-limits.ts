@@ -1,5 +1,6 @@
 import * as THREE from "three"
 import type { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
+import { ENABLE_V4_GALAXY_BACKGROUND } from "../config/feature-flags"
 
 /**
  * Highest polar angle the camera may reach: just short of the board plane, so
@@ -26,6 +27,9 @@ export const MAX_BOARD_PAN_OFFSET = 8
  * the board and the drifting galaxies.
  */
 export function applyBoardCameraLimits(controls: OrbitControls) {
+    // Part of the V4 design: the previous one had no camera restriction.
+    if (!ENABLE_V4_GALAXY_BACKGROUND) return
+
     controls.maxPolarAngle = MAX_BOARD_POLAR_ANGLE
     controls.minDistance = MIN_BOARD_CAMERA_DISTANCE
     controls.maxDistance = MAX_BOARD_CAMERA_DISTANCE

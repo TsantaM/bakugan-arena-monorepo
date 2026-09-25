@@ -1,4 +1,5 @@
 import dayjs from "dayjs"
+import { setHudTimer } from "../hud/game-hud"
 import duration from "dayjs/plugin/duration"
 import relativeTime from "dayjs/plugin/relativeTime"
 
@@ -40,9 +41,14 @@ function remainingFor(clock: ClockState, now = Date.now()) {
 
 function paint(userId: string, seconds: number) {
     if (!localUserId) return
-    const el = document.getElementById(userId === localUserId ? "left-timer" : "right-timer")
+    const side = userId === localUserId ? "left" : "right"
+    const text = formatSeconds(seconds)
+
+    setHudTimer(side, text)
+
+    const el = document.getElementById(`${side}-timer`)
     if (!el) return
-    el.textContent = formatSeconds(seconds)
+    el.textContent = text
 }
 
 function tick() {
