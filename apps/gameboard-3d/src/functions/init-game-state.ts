@@ -52,7 +52,8 @@ export function InitGameState({ state, plane, scene, userId, bakugansMeshs, gate
         if (!slotOfBattle) return
         OnBattleStartFunctionAnimation({
             slot: slotOfBattle,
-            userId: userId
+            userId: userId,
+            scene,
         })
     }
 

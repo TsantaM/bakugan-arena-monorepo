@@ -25,6 +25,7 @@ import type { SpriteUserData } from './meshes/bakugan.mesh'
 import type { SlotMeshUsersData } from './meshes/slot.mesh'
 import { applyBoardCameraLimits } from './scene/board-camera-limits'
 import { initGameHud, renderGameHud } from './hud/game-hud'
+import { setActiveCamera } from './scene/active-camera'
 
 initGameboardLocaleFromUrl()
 
@@ -133,6 +134,7 @@ function initScene() {
   renderer.setSize(window.innerWidth, window.innerHeight)
   renderer.setPixelRatio(window.devicePixelRatio)
 
+  setActiveCamera(camera)
   initGameHud()
   controls = new OrbitControls(camera, renderer.domElement)
   applyBoardCameraLimits(controls)

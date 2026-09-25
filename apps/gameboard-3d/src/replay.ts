@@ -36,6 +36,7 @@ import { createBoardEnvironment } from './scene/board-environment'
 import { applyBoardCameraLimits } from './scene/board-camera-limits'
 import { initGameHud, renderGameHud, setHudProfileImage } from './hud/game-hud'
 import { ENABLE_V4_GALAXY_BACKGROUND } from './config/feature-flags'
+import { setActiveCamera } from './scene/active-camera'
 
 initGameboardLocaleFromUrl()
 
@@ -132,6 +133,7 @@ async function initReplay(replayPayload: replayDataType) {
       const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
       renderer.setSize(window.innerWidth, window.innerHeight)
       renderer.setPixelRatio(window.devicePixelRatio)
+      setActiveCamera(camera)
       initGameHud()
       const controls = new OrbitControls(camera, renderer.domElement)
       applyBoardCameraLimits(controls)

@@ -1,5 +1,5 @@
 import type * as THREE from "three"
-import { createHudLayer, type HudLayer, type HudSize } from "./hud-layer"
+import { createHudLayer, type HudLayer } from "./hud-layer"
 import { createHudPanel, type HudPanel } from "./hud-panel"
 
 export type HudSide = "left" | "right"
@@ -13,58 +13,60 @@ export type PlayerHud = {
     dispose: () => void
 }
 
-/** Same values as the CSS the HUD replaces (ui.css + media.css breakpoints). */
+/**
+ * Colors of the HTML HUD this layer replaces (ui.css). Only the ones that
+ * cannot be read back from the DOM: the rest (positions, sizes, fonts, KO
+ * state) comes straight from the elements themselves.
+ */
 const COLORS = {
     profileGradientTop: "#7b3306",
     profileGradientBottom: "#fbbf24",
     circle: "#c2410c",
     circleDead: "#0f172a",
-    timer: "whitesmoke",
-    turnCount: "#f97316",
     shadow: "#0f172a",
 }
 
 const DEFAULT_PROFILE_IMAGE = "/images/default-profil-picture.png"
-const ELIMINATED_SLOTS = 3
 
-type Metrics = {
-    vw: number
-    padX: number
-    padY: number
-    profileWidth: number
-    profileHeight: number
-    circleSize: number
-    circleGap: number
-    timerFontSize: number
-    turnFontSize: number
+/** DOM element each panel mirrors — the single source of layout truth. */
+const SOURCES = {
+    profileLeft: "#left-profile-picture",
+    profileRight: "#right-profile-picture",
+    eliminatedLeft: ".left-eliminated",
+    eliminatedRight: ".right-eliminated",
+    timerLeft: "#left-timer",
+    timerRight: "#right-timer",
+    turnCount: "#turn-counter",
+} as const
+
+type PanelName = keyof typeof SOURCES
+
+type TextStyle = {
+    font: string
+    /** Resolved font size in pixels, used to size the panel. */
+    fontSize: number
+    color: string
+    align: CanvasTextAlign
 }
 
-function metricsFor({ width }: HudSize): Metrics {
-    const vw = width / 100
-    // Breakpoints mirrored from media.css (48rem / 64rem).
-    const large = width >= 1024
-    const medium = width >= 768
+type CircleSpec = { x: number; y: number; radius: number; dead: boolean }
 
-    const profileVw = large ? 15 : medium ? 20 : 25
-    const profileWidth = profileVw * vw
+/** Shared context used only to measure text before sizing a panel. */
+const measuringContext = document.createElement("canvas").getContext("2d")
 
-    return {
-        vw,
-        padX: vw,
-        padY: 0.5 * vw,
-        profileWidth,
-        profileHeight: (profileWidth * 3) / 4,
-        circleSize: large ? 28 : 12,
-        circleGap: (large ? 2 : medium ? 1 : 0.5) * vw,
-        timerFontSize: large ? 30 : 20,
-        turnFontSize: large ? 72 : medium ? 56 : 16,
-    }
+/**
+ * Panels holding text are sized from the text itself, not from the rectangle of
+ * the DOM element: the element may lag behind by a frame (the value reaches the
+ * HUD and the DOM in no guaranteed order), and a panel too small would clip or
+ * distort what it draws.
+ */
+function measureText(text: string, font: string): number {
+    if (!measuringContext) return 0
+    measuringContext.font = font
+    return measuringContext.measureText(text).width
 }
 
-function roundedPath(
-    context: CanvasRenderingContext2D,
-    points: Array<[number, number]>,
-) {
+function shape(points: Array<[number, number]>, context: CanvasRenderingContext2D) {
     context.beginPath()
     points.forEach(([x, y], index) => {
         if (index === 0) context.moveTo(x, y)
@@ -97,210 +99,249 @@ function rightProfileShape(width: number, height: number): Array<[number, number
     ]
 }
 
-function drawText(
-    context: CanvasRenderingContext2D,
-    text: string,
-    x: number,
-    y: number,
-    {
-        font,
-        color,
-        align,
-    }: { font: string; color: string; align: CanvasTextAlign },
-) {
-    context.save()
-    context.font = font
-    context.fillStyle = color
-    context.textAlign = align
-    context.textBaseline = "middle"
-    // Same idea as the CSS text-shadow: keep the HUD readable on any background.
-    context.shadowColor = COLORS.shadow
-    context.shadowBlur = 8
-    context.shadowOffsetX = 1
-    context.shadowOffsetY = 1
-    context.fillText(text, x, y)
-    context.restore()
+/** Reads the font the DOM element actually uses, breakpoints included. */
+function readTextStyle(element: Element): TextStyle {
+    const computed = getComputedStyle(element)
+    const style = computed.fontStyle === "normal" ? "" : `${computed.fontStyle} `
+    const weight = computed.fontWeight === "400" ? "" : `${computed.fontWeight} `
+
+    return {
+        font: `${style}${weight}${computed.fontSize} ${computed.fontFamily}`,
+        fontSize: parseFloat(computed.fontSize) || 16,
+        color: computed.color,
+        align:
+            computed.textAlign === "right" || computed.textAlign === "end"
+                ? "right"
+                : computed.textAlign === "center"
+                  ? "center"
+                  : "left",
+    }
 }
 
 /**
  * In-scene replacement of the HTML HUD: player pictures, timers, turn counter
- * and eliminated markers, drawn in the orthographic HUD layer.
+ * and KO markers, drawn in the orthographic HUD layer.
  *
- * Same layout, colors and breakpoints as the CSS it replaces — only crisper
- * (canvases drawn at device resolution) and immune to camera moves.
+ * Every panel is placed and sized from the rectangle of the DOM element it
+ * replaces (kept in the page, hidden). The HUD can therefore never drift from
+ * the elements that stay in the DOM — the bakugan preview cards in particular,
+ * which sit right under the player pictures.
  */
 export function createPlayerHud(layer: HudLayer = createHudLayer()): PlayerHud {
-    let metrics = metricsFor(layer.size)
-
     const state = {
         profile: { left: DEFAULT_PROFILE_IMAGE, right: DEFAULT_PROFILE_IMAGE },
         image: {
             left: null as HTMLImageElement | null,
             right: null as HTMLImageElement | null,
         },
-        timer: { left: "05:00", right: "05:00" },
+        timer: { left: "", right: "" },
         turnCount: "",
-        eliminated: { left: 0, right: 0 },
+        style: {
+            timerLeft: null as TextStyle | null,
+            timerRight: null as TextStyle | null,
+            turnCount: null as TextStyle | null,
+        },
+        circles: { left: [] as CircleSpec[], right: [] as CircleSpec[] },
     }
 
-    const drawProfile = (side: HudSide) => (context: CanvasRenderingContext2D, size: HudSize) => {
-        const shape =
-            side === "left"
-                ? leftProfileShape(size.width, size.height)
-                : rightProfileShape(size.width, size.height)
+    const source = (name: PanelName) => document.querySelector(SOURCES[name])
 
-        context.save()
-        roundedPath(context, shape)
-        context.clip()
-
-        const gradient = context.createLinearGradient(0, 0, 0, size.height)
-        gradient.addColorStop(0, COLORS.profileGradientTop)
-        gradient.addColorStop(1, COLORS.profileGradientBottom)
-        context.fillStyle = gradient
-        context.fillRect(0, 0, size.width, size.height)
-
-        // `.image-container` is 85% of the panel height, `.profile-image` fills it.
-        const image = state.image[side]
-        if (image?.complete && image.naturalWidth > 0) {
-            const inset = size.width * 0.01
-            context.drawImage(
-                image,
-                inset,
-                inset,
-                size.width - inset * 2,
-                size.height * 0.85 - inset,
-            )
-        }
-        context.restore()
-
-        // Crisper than the CSS version: a thin rim following the same shape.
-        context.save()
-        roundedPath(context, shape)
-        context.lineWidth = Math.max(2, size.width * 0.008)
-        context.strokeStyle = COLORS.profileGradientBottom
-        context.stroke()
-        context.restore()
+    /** Panels that draw text, and where their text comes from. */
+    const TEXT_PANELS: Partial<Record<PanelName, () => string>> = {
+        timerLeft: () => state.timer.left,
+        timerRight: () => state.timer.right,
+        turnCount: () => state.turnCount,
     }
 
-    const drawEliminated =
-        (side: HudSide) => (context: CanvasRenderingContext2D, size: HudSize) => {
-            const { circleSize, circleGap } = metrics
-            const radius = circleSize / 2
-            const dead = Math.max(0, Math.min(state.eliminated[side], ELIMINATED_SLOTS))
+    const drawProfile =
+        (side: HudSide) =>
+        (context: CanvasRenderingContext2D, size: { width: number; height: number }) => {
+            const outline =
+                side === "left"
+                    ? leftProfileShape(size.width, size.height)
+                    : rightProfileShape(size.width, size.height)
 
-            for (let index = 0; index < ELIMINATED_SLOTS; index++) {
-                // Left side fills from the end, right side from the start — as in
-                // `setEliminatedCircles`.
-                const isDead =
-                    side === "left"
-                        ? index >= ELIMINATED_SLOTS - dead
-                        : index < dead
+            context.save()
+            shape(outline, context)
+            context.clip()
 
-                context.beginPath()
-                context.arc(
-                    index * (circleSize + circleGap) + radius,
-                    size.height / 2,
-                    radius,
-                    0,
-                    Math.PI * 2,
+            const gradient = context.createLinearGradient(0, 0, 0, size.height)
+            gradient.addColorStop(0, COLORS.profileGradientTop)
+            gradient.addColorStop(1, COLORS.profileGradientBottom)
+            context.fillStyle = gradient
+            context.fillRect(0, 0, size.width, size.height)
+
+            // `.image-container` is 85% of the panel height, `.profile-image` fills it.
+            const image = state.image[side]
+            if (image?.complete && image.naturalWidth > 0) {
+                const inset = size.width * 0.01
+                context.drawImage(
+                    image,
+                    inset,
+                    inset,
+                    size.width - inset * 2,
+                    size.height * 0.85 - inset,
                 )
-                context.fillStyle = isDead ? COLORS.circleDead : COLORS.circle
-                context.fill()
             }
+            context.restore()
+
+            // Crisper than the CSS version: a thin rim following the same shape.
+            context.save()
+            shape(outline, context)
+            context.lineWidth = Math.max(2, size.width * 0.008)
+            context.strokeStyle = COLORS.profileGradientBottom
+            context.stroke()
+            context.restore()
         }
 
-    const drawTimer = (side: HudSide) => (context: CanvasRenderingContext2D, size: HudSize) => {
-        drawText(context, state.timer[side], side === "left" ? 0 : size.width, size.height / 2, {
-            font: `${metrics.timerFontSize}px metal, sans-serif`,
-            color: COLORS.timer,
-            align: side === "left" ? "left" : "right",
-        })
+    const drawEliminated = (side: HudSide) => (context: CanvasRenderingContext2D) => {
+        for (const circle of state.circles[side]) {
+            context.beginPath()
+            context.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2)
+            context.fillStyle = circle.dead ? COLORS.circleDead : COLORS.circle
+            context.fill()
+        }
     }
 
-    const drawTurnCount = (context: CanvasRenderingContext2D, size: HudSize) => {
-        drawText(context, state.turnCount, size.width / 2, size.height / 2, {
-            font: `italic bold ${metrics.turnFontSize}px metal, sans-serif`,
-            color: COLORS.turnCount,
-            align: "center",
-        })
-    }
+    const drawText =
+        (text: () => string, style: () => TextStyle | null) =>
+        (context: CanvasRenderingContext2D, size: { width: number; height: number }) => {
+            const value = text()
+            const textStyle = style()
+            if (!value || !textStyle) return
 
-    const panels = {
+            const x = size.width / 2
+            const y = size.height / 2
+
+            context.save()
+            context.font = textStyle.font
+            // The panel is sized to the text, so centering in it reproduces the
+            // DOM alignment exactly — the panel itself is anchored by `layout`.
+            context.textAlign = "center"
+            context.textBaseline = "middle"
+
+            // Dark outline then glow: the sky behind is now black in places and
+            // a bright galaxy in others, and the CSS text-shadow alone left the
+            // small text unreadable over a galaxy.
+            context.strokeStyle = COLORS.shadow
+            context.lineWidth = Math.max(2, textStyle.fontSize * 0.14)
+            context.lineJoin = "round"
+            context.miterLimit = 2
+            context.strokeText(value, x, y)
+
+            context.fillStyle = textStyle.color
+            context.shadowColor = COLORS.shadow
+            context.shadowBlur = 6
+            context.fillText(value, x, y)
+            context.restore()
+        }
+
+    const panels: Record<PanelName, HudPanel> = {
         profileLeft: createHudPanel(1, 1, drawProfile("left")),
         profileRight: createHudPanel(1, 1, drawProfile("right")),
         eliminatedLeft: createHudPanel(1, 1, drawEliminated("left")),
         eliminatedRight: createHudPanel(1, 1, drawEliminated("right")),
-        timerLeft: createHudPanel(1, 1, drawTimer("left")),
-        timerRight: createHudPanel(1, 1, drawTimer("right")),
-        turnCount: createHudPanel(1, 1, drawTurnCount),
+        timerLeft: createHudPanel(
+            1,
+            1,
+            drawText(() => state.timer.left, () => state.style.timerLeft),
+        ),
+        timerRight: createHudPanel(
+            1,
+            1,
+            drawText(() => state.timer.right, () => state.style.timerRight),
+        ),
+        turnCount: createHudPanel(
+            1,
+            1,
+            drawText(() => state.turnCount, () => state.style.turnCount),
+        ),
     }
 
-    Object.values(panels).forEach((panel: HudPanel) => layer.add(panel.mesh))
+    Object.values(panels).forEach((panel) => layer.add(panel.mesh))
+
+    /** Circle positions and KO state, read from the DOM circles themselves. */
+    const readCircles = (side: HudSide, groupRect: DOMRect): CircleSpec[] => {
+        const group = source(side === "left" ? "eliminatedLeft" : "eliminatedRight")
+        if (!group) return []
+
+        return Array.from(group.querySelectorAll<HTMLElement>(".circle")).map((circle) => {
+            const rect = circle.getBoundingClientRect()
+            return {
+                x: rect.left - groupRect.left + rect.width / 2,
+                y: rect.top - groupRect.top + rect.height / 2,
+                radius: rect.width / 2,
+                dead: circle.classList.contains("dead"),
+            }
+        })
+    }
 
     const layout = () => {
-        metrics = metricsFor(layer.size)
-        const { padX, padY, profileWidth, profileHeight, circleSize, circleGap, vw } = metrics
-        const { width } = layer.size
+        for (const name of Object.keys(panels) as PanelName[]) {
+            const panel = panels[name]
+            const element = source(name)
 
-        panels.profileLeft.resize(profileWidth, profileHeight)
-        panels.profileRight.resize(profileWidth, profileHeight)
-        layer.place(panels.profileLeft.mesh, padX + profileWidth / 2, padY + profileHeight / 2)
-        layer.place(
-            panels.profileRight.mesh,
-            width - padX - profileWidth / 2,
-            padY + profileHeight / 2,
-        )
+            if (!element) {
+                panel.mesh.visible = false
+                continue
+            }
 
-        // `.turn-and-eliminated`: flex:1 between the two profiles, padding 0 2vw.
-        const areaLeft = padX + profileWidth + 2 * vw
-        const areaRight = width - padX - profileWidth - 2 * vw
+            const rect = element.getBoundingClientRect()
+            if (rect.width < 1 || rect.height < 1) {
+                panel.mesh.visible = false
+                continue
+            }
 
-        const circlesWidth = ELIMINATED_SLOTS * circleSize + (ELIMINATED_SLOTS - 1) * circleGap
-        const circlesHeight = circleSize
-        const timerHeight = metrics.timerFontSize * 1.4
-        const timerWidth = metrics.timerFontSize * 4
+            panel.mesh.visible = true
 
-        panels.eliminatedLeft.resize(circlesWidth, circlesHeight)
-        panels.eliminatedRight.resize(circlesWidth, circlesHeight)
-        panels.timerLeft.resize(timerWidth, timerHeight)
-        panels.timerRight.resize(timerWidth, timerHeight)
-        panels.turnCount.resize(areaRight - areaLeft, metrics.turnFontSize * 1.4)
+            if (name === "eliminatedLeft") state.circles.left = readCircles("left", rect)
+            if (name === "eliminatedRight") state.circles.right = readCircles("right", rect)
 
-        const groupTop = padY
-        layer.place(panels.eliminatedLeft.mesh, areaLeft + circlesWidth / 2, groupTop + circlesHeight / 2)
-        layer.place(
-            panels.timerLeft.mesh,
-            areaLeft + timerWidth / 2,
-            groupTop + circlesHeight + timerHeight / 2,
-        )
+            const text = TEXT_PANELS[name]
+            if (text) {
+                const style = readTextStyle(element)
+                state.style[name as keyof typeof state.style] = style
 
-        layer.place(
-            panels.eliminatedRight.mesh,
-            areaRight - circlesWidth / 2,
-            groupTop + circlesHeight / 2,
-        )
-        layer.place(
-            panels.timerRight.mesh,
-            areaRight - timerWidth / 2,
-            groupTop + circlesHeight + timerHeight / 2,
-        )
+                const value = text()
+                // Room for the outline on both sides.
+                const padding = Math.max(4, style.fontSize * 0.3)
+                const width = Math.ceil(measureText(value, style.font) + padding)
+                const height = Math.max(rect.height, style.fontSize * 1.5)
 
-        layer.place(
-            panels.turnCount.mesh,
-            (areaLeft + areaRight) / 2,
-            groupTop + metrics.turnFontSize * 0.7,
-        )
+                panel.resize(width, height)
+
+                // Anchor the panel the way the DOM aligns its text.
+                const anchorX =
+                    style.align === "right"
+                        ? rect.right - panel.size.width / 2
+                        : style.align === "center"
+                          ? rect.left + rect.width / 2
+                          : rect.left + panel.size.width / 2
+
+                layer.place(panel.mesh, anchorX, rect.top + rect.height / 2)
+                continue
+            }
+
+            panel.resize(rect.width, rect.height)
+            layer.place(panel.mesh, rect.left + rect.width / 2, rect.top + rect.height / 2)
+        }
+    }
+
+    // Values reach the DOM and the HUD in no guaranteed order, and text width
+    // changes the layout: re-read the rectangles on the next frame, once.
+    let pendingLayout = 0
+    const scheduleLayout = () => {
+        if (pendingLayout) return
+        pendingLayout = requestAnimationFrame(() => {
+            pendingLayout = 0
+            layout()
+        })
     }
 
     layout()
     layer.onResize(layout)
-
-    // The HUD font is the same webfont as the DOM: redraw once it is ready.
-    void document.fonts?.ready.then(() => {
-        panels.timerLeft.redraw()
-        panels.timerRight.redraw()
-        panels.turnCount.redraw()
-    })
+    // The HUD font is the same webfont as the DOM: re-read once it is ready.
+    void document.fonts?.ready.then(scheduleLayout)
 
     const loadProfile = (side: HudSide, url: string) => {
         const image = new Image()
@@ -329,21 +370,24 @@ export function createPlayerHud(layer: HudLayer = createHudLayer()): PlayerHud {
         setTimer: (side, text) => {
             if (state.timer[side] === text) return
             state.timer[side] = text
+            // Draw now so the value can never be stale, re-measure next frame.
             panels[side === "left" ? "timerLeft" : "timerRight"].redraw()
+            scheduleLayout()
         },
         setTurnCount: (text) => {
             if (state.turnCount === text) return
             state.turnCount = text
             panels.turnCount.redraw()
+            scheduleLayout()
         },
-        setEliminated: (side, count) => {
-            if (state.eliminated[side] === count) return
-            state.eliminated[side] = count
-            panels[side === "left" ? "eliminatedLeft" : "eliminatedRight"].redraw()
+        setEliminated: () => {
+            // KO state is read back from the DOM circles.
+            scheduleLayout()
         },
         render: (renderer) => layer.render(renderer),
         dispose: () => {
-            Object.values(panels).forEach((panel: HudPanel) => panel.dispose())
+            cancelAnimationFrame(pendingLayout)
+            Object.values(panels).forEach((panel) => panel.dispose())
             layer.dispose()
         },
     }

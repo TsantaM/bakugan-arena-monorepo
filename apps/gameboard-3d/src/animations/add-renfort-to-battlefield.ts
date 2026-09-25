@@ -1,13 +1,26 @@
 import type { bakuganOnSlot } from '@bakugan-arena/game-data';
 import gsap from 'gsap'
+import type * as THREE from 'three'
 import { getAttributColor } from '../functions/get-attrubut-color';
+import { projectBakuganToScreen } from '../functions/project-to-screen';
 import { PowerChangeNumberAnimation } from './power-change-animation';
 import { CreateSpritePreviewContainer } from '../functions/create-bakugan-preview-container';
 
-async function AddRenfortToBattleField({ bakugan, userId }: { bakugan: bakuganOnSlot, userId: string, final_power: number }): Promise<void> {
+/**
+ * A reinforcement joins the battle: its card springs from the bakugan on the
+ * board, comes forward to be read, then fuses into the player's battle card.
+ */
+async function AddRenfortToBattleField({ bakugan, userId, scene }: {
+    bakugan: bakuganOnSlot,
+    userId: string,
+    final_power: number,
+    /** Needed to make the card start from the bakugan itself. */
+    scene?: THREE.Scene
+}): Promise<void> {
 
     return new Promise((resolve) => {
-        const containerId = bakugan.userId === userId ? 'left-bakugan-previews-container' : 'right-bakugan-previews-container'
+        const isLocal = bakugan.userId === userId
+        const containerId = isLocal ? 'left-bakugan-previews-container' : 'right-bakugan-previews-container'
         const container = document.getElementById(containerId)
 
         if (!container) return resolve()
@@ -23,9 +36,7 @@ async function AddRenfortToBattleField({ bakugan, userId }: { bakugan: bakuganOn
         const containerPosition = container.getBoundingClientRect()
         newContainer.style.position = 'absolute'
         newContainer.style.top = containerPosition.top + 'px'
-        newContainer.style.bottom = containerPosition.bottom + 'px'
         newContainer.style.left = containerPosition.left + 'px'
-        newContainer.style.right = containerPosition.right + 'px'
         newContainer.style.width = containerPosition.width + 'px'
         newContainer.style.height = containerPosition.height + 'px'
         newContainer.style.zIndex = '1'
@@ -40,13 +51,28 @@ async function AddRenfortToBattleField({ bakugan, userId }: { bakugan: bakuganOn
         const component = document.getElementById(newContainer.id)
         const bakuganAttributColor = getAttributColor(bakugan.attribut)
 
-        const globlal_sprite_container = document.getElementById(bakugan.userId === userId ? 'left-sprites-preview' : 'right-sprites-preview')
+        const globlal_sprite_container = document.getElementById(isLocal ? 'left-sprites-preview' : 'right-sprites-preview')
         const powerContainer = document.getElementById(`${bakugan.userId}-${bakugan.slot_id}`)
 
         if (!component || !globlal_sprite_container || !powerContainer) {
             newContainer.remove()
             overlay.remove()
             return resolve()
+        }
+
+        // Where the card comes from: the bakugan it represents, on the board.
+        const origin = scene ? projectBakuganToScreen(scene, bakugan) : null
+        const from = origin
+            ? {
+                x: origin.x - (containerPosition.left + containerPosition.width / 2),
+                y: origin.y - (containerPosition.top + containerPosition.height / 2),
+            }
+            : { x: isLocal ? window.innerWidth / 3 : -window.innerWidth / 3, y: 0 }
+
+        // Where it pauses to be read, just inside the board from its card.
+        const presented = {
+            x: isLocal ? containerPosition.width * 0.9 : -containerPosition.width * 0.9,
+            y: -20,
         }
 
         const newPower = parseInt(powerContainer.textContent || '0') + bakugan.currentPower
@@ -60,28 +86,42 @@ async function AddRenfortToBattleField({ bakugan, userId }: { bakugan: bakuganOn
                 resolve()
             }
         })
+
+        // 1. From the bakugan to the reading spot, growing on the way.
         timeline.fromTo(component, {
-            x: bakugan.userId === userId ? window.innerWidth / 3 : -window.innerWidth / 3,
-            scale: 0
+            x: from.x,
+            y: from.y,
+            scale: 0.12,
+            opacity: 0.35,
         }, {
-            x: bakugan.userId === userId ? window.innerWidth / 4 : -window.innerWidth / 4,
-            y: -20,
+            x: presented.x,
+            y: presented.y,
             scale: 1,
-            duration: 1
+            opacity: 1,
+            duration: 0.6,
+            ease: 'back.out(1.1)',
         })
+
+        // 2. Then onto the battle card, where it fuses.
         timeline.to(component, {
-            delay: 0.15,
-            x: bakugan.userId === userId ? containerPosition.left : containerPosition.left - containerPosition.right + containerPosition.width,
+            delay: 0.12,
+            x: 0,
             y: 0,
+            scale: 0.85,
             opacity: 0,
+            duration: 0.35,
+            ease: 'power2.in',
             onComplete: () => {
                 component.remove()
             }
         })
+
+        // 3. The battle card flashes as it takes the reinforcement in.
         timeline.fromTo(overlay, {
             background: 'none'
         }, {
             background: bakuganAttributColor,
+            duration: 0.25,
             yoyo: true,
             repeat: 1,
             onStart: () => {
@@ -90,7 +130,7 @@ async function AddRenfortToBattleField({ bakugan, userId }: { bakugan: bakuganOn
             onComplete: () => {
                 overlay.remove()
             }
-        })
+        }, '-=0.12')
     })
 
 }

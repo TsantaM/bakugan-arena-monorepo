@@ -39,12 +39,17 @@ export function createHudPanel(width: number, height: number, draw: HudPanelDraw
     const context = canvas.getContext("2d")
     const size = { width: alignSize(width), height: alignSize(height) }
 
-    const texture = new THREE.CanvasTexture(canvas)
-    texture.colorSpace = THREE.SRGBColorSpace
-    texture.minFilter = THREE.LinearFilter
-    texture.generateMipmaps = false
+    const createTexture = () => {
+        const created = new THREE.CanvasTexture(canvas)
+        created.colorSpace = THREE.SRGBColorSpace
+        created.minFilter = THREE.LinearFilter
+        created.generateMipmaps = false
+        return created
+    }
 
-    const mesh = new THREE.Mesh(
+    let texture = createTexture()
+
+    const mesh: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial> = new THREE.Mesh(
         new THREE.PlaneGeometry(size.width, size.height),
         new THREE.MeshBasicMaterial({
             map: texture,
@@ -56,13 +61,24 @@ export function createHudPanel(width: number, height: number, draw: HudPanelDraw
     )
 
     const redraw = () => {
-        const ratio = Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO)
+        // Never below 1: zooming the browser out drops devicePixelRatio under
+        // 1, which would draw the canvas smaller than the panel and stretch it
+        // — the text then looks oversized and blurry.
+        const ratio = Math.max(1, Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO))
         const pixelWidth = Math.max(1, Math.round(size.width * ratio))
         const pixelHeight = Math.max(1, Math.round(size.height * ratio))
 
         if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
             canvas.width = pixelWidth
             canvas.height = pixelHeight
+
+            // A canvas that changed dimensions needs a brand new texture: the
+            // GPU allocation of the old one still has the old size, and reusing
+            // it stretches the previous content over the new panel.
+            texture.dispose()
+            texture = createTexture()
+            mesh.material.map = texture
+            mesh.material.needsUpdate = true
         }
 
         if (!context) return

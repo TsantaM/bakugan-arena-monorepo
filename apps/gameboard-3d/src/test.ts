@@ -15,6 +15,7 @@ import type { SlotMeshUsersData } from './meshes/slot.mesh'
 import { createBoardEnvironment } from './scene/board-environment'
 import { applyBoardCameraLimits } from './scene/board-camera-limits'
 import { initGameHud, renderGameHud } from './hud/game-hud'
+import { setActiveCamera } from './scene/active-camera'
 
 initGameboardLocaleFromUrl()
 
@@ -370,6 +371,7 @@ if (canvas) {
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
     renderer.setSize(window.innerWidth, window.innerHeight)
     renderer.setPixelRatio(window.devicePixelRatio)
+    setActiveCamera(camera)
     initGameHud()
     const controls = new OrbitControls(camera, renderer.domElement)
     applyBoardCameraLimits(controls)

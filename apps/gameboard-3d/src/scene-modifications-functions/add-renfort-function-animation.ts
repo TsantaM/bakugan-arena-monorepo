@@ -26,12 +26,13 @@ export async function SetBakuganAndAddRenfortAnimationAndFunction({ bakugan, sce
     await AddRenfortToBattleField({
         bakugan: bakugan,
         final_power: final_power,
-        userId: userId
+        userId: userId,
+        scene,
     })
 
 }
 
-export async function AddRenfortToBattleAnimationFunction({ bakugan, userId }: { bakugan: bakuganOnSlot, userId: string}) {
+export async function AddRenfortToBattleAnimationFunction({ bakugan, userId, scene }: { bakugan: bakuganOnSlot, userId: string, scene?: THREE.Scene }) {
     const powerContainer = document.getElementById(`${bakugan.userId}-${bakugan.slot_id}`)
 
     if (!powerContainer) return
@@ -40,6 +41,7 @@ export async function AddRenfortToBattleAnimationFunction({ bakugan, userId }: {
     await AddRenfortToBattleField({
         bakugan: bakugan,
         final_power: final_power,
-        userId: userId
+        userId: userId,
+        scene,
     })
 }

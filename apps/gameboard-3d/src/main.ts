@@ -14,6 +14,7 @@ import type { SlotMeshUsersData } from './meshes/slot.mesh'
 import { applyBoardCameraLimits } from './scene/board-camera-limits'
 import { initGameHud, renderGameHud, setHudProfileImage } from './hud/game-hud'
 import { ENABLE_V4_GALAXY_BACKGROUND } from './config/feature-flags'
+import { setActiveCamera } from './scene/active-camera'
 
 initGameboardLocaleFromUrl()
 
@@ -82,6 +83,7 @@ if (roomId !== null && userId !== null) {
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
     renderer.setSize(window.innerWidth, window.innerHeight)
     renderer.setPixelRatio(window.devicePixelRatio)
+    setActiveCamera(camera)
     initGameHud()
     const controls = new OrbitControls(camera, renderer.domElement)
     applyBoardCameraLimits(controls)

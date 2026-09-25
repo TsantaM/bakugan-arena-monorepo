@@ -1,31 +1,31 @@
 import gsap from "gsap"
 
+/**
+ * Exit of the bakugan preview cards when a battle ends: they sink and fade out
+ * before being removed.
+ */
 export async function OnBattleEndAnimation(): Promise<void> {
-    const left_container = document.getElementById('left-bakugan-previews-container')
-    const right_container = document.getElementById('right-bakugan-previews-container')
+    const containers = [
+        document.getElementById('left-bakugan-previews-container'),
+        document.getElementById('right-bakugan-previews-container'),
+    ].filter((container): container is HTMLElement => container !== null)
 
-    if (!left_container && !right_container) return
+    if (containers.length === 0) return
 
-    const fadeOut = (container: HTMLElement) =>
+    const fadeDown = (container: HTMLElement) =>
         new Promise<void>((resolve) => {
-            const timeline = gsap.timeline({
+            gsap.to(container, {
+                y: 40,
+                scale: 0.88,
+                opacity: 0,
+                duration: 0.45,
+                ease: 'power2.in',
                 onComplete: () => {
                     container.remove()
                     resolve()
-                }
-            })
-            timeline.fromTo(container, {
-                opacity: 1,
-                y: 0
-            }, {
-                opacity: 0,
-                y: 5,
-                duration: 0.5
+                },
             })
         })
 
-    await Promise.all([
-        left_container ? fadeOut(left_container) : Promise.resolve(),
-        right_container ? fadeOut(right_container) : Promise.resolve(),
-    ])
+    await Promise.all(containers.map(fadeDown))
 }

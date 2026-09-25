@@ -1,8 +1,15 @@
 import type { portalSlotsTypeElement } from "@bakugan-arena/game-data";
+import type * as THREE from "three";
 import { CreateBakuganPreviewContainer } from "../functions/create-bakugan-preview-container";
 import { AddRenfortToBattleField } from "../animations/add-renfort-to-battlefield";
+import { BakuganPreviewOnBattleStartAnimation } from "../animations/bakugan-preview-battle-start";
 
-async function OnBattleStartFunctionAnimation({ slot, userId }: { slot: portalSlotsTypeElement, userId: string }) {
+async function OnBattleStartFunctionAnimation({ slot, userId, scene }: {
+    slot: portalSlotsTypeElement,
+    userId: string,
+    /** Needed to make each card spring from the bakugan it represents. */
+    scene?: THREE.Scene
+}) {
 
     document.getElementById('left-bakugan-previews-container')?.remove()
     document.getElementById('right-bakugan-previews-container')?.remove()
@@ -25,6 +32,28 @@ async function OnBattleStartFunctionAnimation({ slot, userId }: { slot: portalSl
     })
     right_data_container?.appendChild(opponentContainer)
 
+    // Both cards fly in together, each from its own bakugan on the board.
+    if (scene) {
+        await Promise.all([
+            userBakugan[0]
+                ? BakuganPreviewOnBattleStartAnimation({
+                    container,
+                    bakugan: userBakugan[0],
+                    scene,
+                    isLeft: true,
+                })
+                : Promise.resolve(),
+            opponentsBakugan[0]
+                ? BakuganPreviewOnBattleStartAnimation({
+                    container: opponentContainer,
+                    bakugan: opponentsBakugan[0],
+                    scene,
+                    isLeft: false,
+                })
+                : Promise.resolve(),
+        ])
+    }
+
     const remaining = bakugans.filter(
         (b) => b !== userBakugan[0] && b !== opponentsBakugan[0]
     )
@@ -39,7 +68,8 @@ async function OnBattleStartFunctionAnimation({ slot, userId }: { slot: portalSl
             return AddRenfortToBattleField({
                 bakugan: bakugan,
                 userId: userId,
-                final_power: final_power
+                final_power: final_power,
+                scene,
             })
         })
     )

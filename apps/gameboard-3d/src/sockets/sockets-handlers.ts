@@ -323,7 +323,8 @@ export async function playAnimation(
 
                 await OnBattleStartFunctionAnimation({
                     slot: current.data.slot,
-                    userId: userId
+                    userId: userId,
+                    scene,
                 })
 
             }
@@ -355,7 +356,8 @@ export async function playAnimation(
 
                 await AddRenfortToBattleAnimationFunction({
                     bakugan: current.data.bakugan,
-                    userId: userId
+                    userId: userId,
+                    scene,
                 })
 
             }
