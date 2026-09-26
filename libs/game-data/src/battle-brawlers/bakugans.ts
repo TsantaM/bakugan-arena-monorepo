@@ -37,6 +37,8 @@ import { FroschAquos } from "./bakugans/frosch.js";
 import { ClayfSubterra } from "./bakugans/clayf.js";
 import { LarsLionHaos } from "./bakugans/lars-lion.js";
 import { ExedraDarkus } from "./bakugans/exedra.js";
+import { GaraganoidAquos, GarganoidPyrus } from "./bakugans/garganoid.js";
+import { WariusAquos, WariusDarkus, WariusPyrus } from "./bakugans/warius.js";
 
 export const Bakugans: Record<string, bakuganType> = {
     [DragonoidPyrus.key]: DragonoidPyrus,
@@ -154,6 +156,12 @@ export const Bakugans: Record<string, bakuganType> = {
     [ClayfSubterra.key]: ClayfSubterra,
     [LarsLionHaos.key]: LarsLionHaos,
     [ExedraDarkus.key]: ExedraDarkus,
+
+    [GarganoidPyrus.key]: GarganoidPyrus,
+    [GaraganoidAquos.key]: GaraganoidAquos,
+    [WariusPyrus.key]: WariusPyrus,
+    [WariusAquos.key]: WariusAquos,
+    [WariusDarkus.key]: WariusDarkus
 }
 
 export const BakuganList: bakuganType[] = Object.values(Bakugans) 

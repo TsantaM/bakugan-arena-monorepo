@@ -6,6 +6,7 @@ import { AntiMuse } from "./exclusive-abilities/anti-muse.js";
 import { AquosCyclone } from "./exclusive-abilities/aquos-cyclone.js";
 import { AtomicBrave } from "./exclusive-abilities/atomic-brave.js";
 import { BouclierFusion } from "./exclusive-abilities/bouclier-fusion.js";
+import { CapeDeFeu } from "./exclusive-abilities/cape-de-feu.js";
 import { ChaosOfDarkness } from "./exclusive-abilities/chaos-of-darkness.js";
 import { DStrikeAttack } from "./exclusive-abilities/d-strike-attack.js";
 import { DStrikeExtreme } from "./exclusive-abilities/d-strike-extreme.js";
@@ -134,6 +135,8 @@ export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [SagittariusArrow.key]: SagittariusArrow,
     [AquosCyclone.key]: AquosCyclone,
     [DemonWizard.key]: DemonWizard,
+
+    [CapeDeFeu.key]: CapeDeFeu
 
 }
 

@@ -39,6 +39,7 @@ import { FroschGateCard } from "./bakugans/frosch.js";
 import { ClayfGateCard } from "./bakugans/clayf.js";
 import { LarsLionGateCard } from "./bakugans/lars-lion.js";
 import { ExedraGateCard } from "./bakugans/exedra.js";
+import { WariusGateCard } from "./bakugans/warius.js";
 
 export const GateCards: Record<string, gateCardType> = {
 
@@ -138,6 +139,9 @@ export const GateCards: Record<string, gateCardType> = {
     [ClayfGateCard.key]: ClayfGateCard,
     [LarsLionGateCard.key]: LarsLionGateCard,
     [ExedraGateCard.key]: ExedraGateCard,
+
+    [GarganoidGateCard.key]: GarganoidGateCard,
+    [WariusGateCard.key]: WariusGateCard
     
 }
 
