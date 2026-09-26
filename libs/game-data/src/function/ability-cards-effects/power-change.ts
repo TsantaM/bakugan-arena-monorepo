@@ -44,6 +44,25 @@ export function ApplyAbsorbPowerBoost({ roomState, bakugan, G }: {
     })
 }
 
+/**
+ * Cherche le garde du slot : un allie porteur du statut `guardian` qui encaisse
+ * a la place de ses allies les malus qui les visent (Serment du Gardien).
+ */
+function findGuardianFor(roomState: stateType, bakugan: bakuganOnSlot): bakuganOnSlot | undefined {
+    // Un garde encaisse ses propres malus : pas de renvoi entre deux gardes.
+    if (bakugan.statut.guardian) return undefined
+
+    const slot = roomState.protalSlots.find((s) => s.id === bakugan.slot_id)
+    if (!slot) return undefined
+
+    return slot.bakugans.find((b) =>
+        b !== bakugan &&
+        b.userId === bakugan.userId &&
+        !!b.statut.guardian &&
+        !b.statut.powerLocked
+    )
+}
+
 export function PowerChange({
     roomState,
     bakugan,
@@ -52,7 +71,47 @@ export function PowerChange({
     origin = 'ABILITY',
     ignoreProtection = false,
 }: PowerChangeType) {
+    // Puissance verrouillee (Carapace Tetue) : ni gain ni perte ne passent.
+    if (bakugan.statut.powerLocked) {
+        NewAdditionnalMessage({
+            roomState: roomState,
+            key: 'bakugan_power_locked',
+            params: { name: Bakugans[bakugan.key].name },
+        })
+        return
+    }
+
     if (malus) {
+        // Carapace Reflechissante : le malus est converti en bonus, une seule fois.
+        if (bakugan.statut.reflectMalus) {
+            bakugan.statut.reflectMalus = false
+
+            NewAdditionnalMessage({
+                roomState: roomState,
+                key: 'bakugan_malus_reflected',
+                params: { name: Bakugans[bakugan.key].name, power: G },
+            })
+
+            PowerChange({ roomState, bakugan, G, malus: false, origin, ignoreProtection })
+            return
+        }
+
+        // Serment du Gardien : un allie prend le malus a sa place.
+        const guardian = findGuardianFor(roomState, bakugan)
+        if (guardian) {
+            NewAdditionnalMessage({
+                roomState: roomState,
+                key: 'bakugan_malus_redirected',
+                params: {
+                    name: Bakugans[bakugan.key].name,
+                    guardian: Bakugans[guardian.key].name,
+                },
+            })
+
+            PowerChange({ roomState, bakugan: guardian, G, malus: true, origin, ignoreProtection })
+            return
+        }
+
         if (!ignoreProtection && isProtectedAgainst(bakugan, origin)) {
             NewAdditionnalMessage({
                 roomState: roomState,

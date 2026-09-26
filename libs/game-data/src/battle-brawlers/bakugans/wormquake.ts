@@ -20,7 +20,7 @@ export const WormquakeDarkus: bakuganType = {
     key: 'wormquake-darkus',
     name: 'Wormquake',
     attribut: 'Darkus',
-    exclusiveAbilities: [],
+    exclusiveAbilities: ['galerie-d-ombre'],
     family: 'Wormquake',
     image: 'wormquake',
     powerLevel: 350,

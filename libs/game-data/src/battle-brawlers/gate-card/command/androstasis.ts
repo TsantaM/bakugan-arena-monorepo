@@ -3,6 +3,7 @@ import { pushReplayAnimation } from "../../../function/replay/push-replay-animat
 import { Slots } from "../../../store/slots.js"
 import { AnimationDirectivesTypes } from "../../../type/animations-directives.js"
 import { gateCardType } from "../../../type/game-data-types.js"
+import { canBeRevived } from "../../../function/ability-cards-effects/revive-status.js"
 
 export const Androstasis: gateCardType = {
     key: 'androstasis',
@@ -29,6 +30,7 @@ export const Androstasis: gateCardType = {
                 const bakugan = deckToUpdate.bakugans.find((b) => b?.bakuganData.key === l.key)
                 if (!bakugan) return
                 if (!bakugan.bakuganData.elimined) return
+                if (!canBeRevived(bakugan)) return
 
                 bakugan.bakuganData.elimined = false
 

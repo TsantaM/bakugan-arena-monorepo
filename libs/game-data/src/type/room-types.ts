@@ -103,7 +103,17 @@ export type bakuganOnSlot = {
         absorbPowerBoost: onSlotStatutType,
         toSave: onSlotStatutType,
         reanimated: onSlotStatutType,
-        lifeLess: onSlotStatutType
+        lifeLess: onSlotStatutType,
+        /** Puissance verrouillee : le bakugan ignore tout gain et toute perte de puissance. */
+        powerLocked?: onSlotStatutType,
+        /** Garde du slot : encaisse a la place de ses allies les malus qui les visent. */
+        guardian?: onSlotStatutType,
+        /** Le prochain malus subi est converti en bonus de puissance equivalent. */
+        reflectMalus?: onSlotStatutType,
+        /** Retire definitivement du jeu : aucun effet de reanimation ne peut le ramener. */
+        banished?: onSlotStatutType,
+        /** Condamne : sera elimine si l'auteur de la marque remporte son combat. */
+        markedForDeath?: onSlotStatutType
     },
     family: string
 }
@@ -114,9 +124,21 @@ export type blockedCardSlotType = false | {
     key: string
 }
 
+/** Interdiction temporaire de poser une carte portail sur un emplacement (Brise-Muraille). */
+export type slotSetLockType = false | {
+    locked: true,
+    key: string,
+    /** Joueur a l'origine du verrou. */
+    userId: string,
+    /** Tours restants avant liberation de l'emplacement. */
+    turns: number
+}
+
 export type portalSlotsTypeElement = {
     id: slots_id,
     can_set: boolean,
+    /** Pose de carte portail interdite sur cet emplacement pendant quelques tours. */
+    setLock?: slotSetLockType,
     portalCard: {
         key: string,
         userId: string
@@ -145,7 +167,9 @@ export type bakuganInDeck = {
         elimined: boolean;
         onDomain: boolean;
         gateCard: null;
-        family: string
+        family: string;
+        /** Retire definitivement du jeu (Pacte Sanglant) : aucune reanimation possible. */
+        banished?: boolean;
     };
     excluAbilitiesState: {
         key: string;

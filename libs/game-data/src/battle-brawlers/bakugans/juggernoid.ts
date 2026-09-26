@@ -10,7 +10,7 @@ export const JuggernoidAquos: bakuganType = {
     banList: [],
     powerLevel: 400,
     canChangeAttribut: false,
-    exclusiveAbilities: ['depth-tornado'],
+    exclusiveAbilities: ['depth-tornado', 'carapace-reflechissante'],
     family: family,
     image: 'juggernoid',
     name: 'Juggernoid'

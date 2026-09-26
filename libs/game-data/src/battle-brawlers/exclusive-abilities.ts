@@ -42,11 +42,14 @@ import { MassueGigantesque } from "./exclusive-abilities/massue-gigantesque.js";
 import { MaximumPyrus } from "./exclusive-abilities/maximum-pyrus.js";
 import { MegaFlareBlinder } from "./exclusive-abilities/mega-flare-blinder.js";
 import { MeltFlare } from "./exclusive-abilities/melt-flare.js";
+import { MoissonDesAmes } from "./exclusive-abilities/moisson-des-ames.js";
 import { NoiseSlap } from "./exclusive-abilities/noise-slap.js";
 import { Obstruction } from "./exclusive-abilities/obstruction.js";
 import { OmbreBleue } from "./exclusive-abilities/ombre-bleue.js";
 import { PlexusSolaire } from "./exclusive-abilities/plexus-solaire.js";
 import { RayonGamma } from "./exclusive-abilities/rayon-gamma.js";
+import { RegainSubit } from "./exclusive-abilities/regain-subit.js";
+import { SouffleInfini } from "./exclusive-abilities/souffle-infini.js";
 import { ReaperOfTheChaos } from "./exclusive-abilities/reaper-of-the-chaos.js";
 import { RobotallionExecution } from "./exclusive-abilities/robotallion-execution.js";
 import { SabreDeLaMort } from "./exclusive-abilities/sabre-de-la-mort.js";
@@ -64,6 +67,32 @@ import { VentViolentDeNobelesseVerte } from "./exclusive-abilities/vent-violent.
 import { VisageDeJoie } from "./exclusive-abilities/visage-de-joie.js";
 import { VisageDeLaFureur } from "./exclusive-abilities/visage-de-la-fureur.js";
 import { VisageDuChagrin } from "./exclusive-abilities/visage-du-chagrin.js";
+import { AncreAbyssale } from "./exclusive-abilities/ancre-abyssale.js";
+import { BrasierDeSiege } from "./exclusive-abilities/brasier-de-siege.js";
+import { BriseMuraille } from "./exclusive-abilities/brise-muraille.js";
+import { CarapaceReflechissante } from "./exclusive-abilities/carapace-reflechissante.js";
+import { CarapaceTetue } from "./exclusive-abilities/carapace-tetue.js";
+import { ContreCourant } from "./exclusive-abilities/contre-courant.js";
+import { CriDeRalliement } from "./exclusive-abilities/cri-de-ralliement.js";
+import { EnigmeDuSphinx } from "./exclusive-abilities/enigme-du-sphinx.js";
+import { EtreinteDePierre } from "./exclusive-abilities/etreinte-de-pierre.js";
+import { GalerieDOmbre } from "./exclusive-abilities/galerie-d-ombre.js";
+import { GraceSalvatrice } from "./exclusive-abilities/grace-salvatrice.js";
+import { GriffesAffamees } from "./exclusive-abilities/griffes-affamees.js";
+import { JugementDuLegendaire } from "./exclusive-abilities/jugement-du-legendaire.js";
+import { LameUsurpatrice } from "./exclusive-abilities/lame-usurpatrice.js";
+import { MareeCorrosive } from "./exclusive-abilities/maree-corrosive.js";
+import { OeilDuCyclone } from "./exclusive-abilities/oeil-du-cyclone.js";
+import { PacteSanglant } from "./exclusive-abilities/pacte-sanglant.js";
+import { PiqueIncendiaire } from "./exclusive-abilities/pique-incendiaire.js";
+import { ProtocoleDEscorte } from "./exclusive-abilities/protocole-d-escorte.js";
+import { RafaleAscendante } from "./exclusive-abilities/rafale-ascendante.js";
+import { RageSismique } from "./exclusive-abilities/rage-sismique.js";
+import { RapaceEclaireur } from "./exclusive-abilities/rapace-eclaireur.js";
+import { SermentDuGardien } from "./exclusive-abilities/serment-du-gardien.js";
+import { SouffleDeLaVieVerte } from "./exclusive-abilities/souffle-de-la-vie-verte.js";
+import { VeninRampant } from "./exclusive-abilities/venin-rampant.js";
+import { VerdictDuBourreau } from "./exclusive-abilities/verdict-du-bourreau.js";
 
 export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [OmbreBleue.key]: OmbreBleue,
@@ -89,7 +118,6 @@ export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [Marionnette.key]: Marionnette,
     [LanceEclair.key]: LanceEclair,
     [MachettesJumelles.key]: MachettesJumelles,
-    [RobotallionExecution.key]: RobotallionExecution,
     [PlexusSolaire.key]: PlexusSolaire,
     [EffecteurdOmbre.key]: EffecteurdOmbre,
     [LanceDeFeu.key]: LanceDeFeu,
@@ -98,9 +126,10 @@ export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [TrappeDeSable.key]: TrappeDeSable,
     [MaitreDesProfondeurs.key]: MaitreDesProfondeurs,
     [DivisionHolographique.key]: DivisionHolographique,
-    // [RegainSubit.key]: RegainSubit,
-    // [CapeDeFeu.key]: CapeDeFeu,
-    // [SouffleInfini.key]: SouffleInfini
+    // Reference par Darkus Centipod et Ventus El Condor : sans cette entree,
+    // ces bakugans pointaient vers une cle morte.
+    [RegainSubit.key]: RegainSubit,
+    [SouffleInfini.key]: SouffleInfini,
     [ForceDattraction.key]: ForceDattraction,
     [FurryOfWind.key]: FurryOfWind,
     [FlareBlinder.key]: FlareBlinder,
@@ -136,7 +165,38 @@ export const ExclusiveAbilities: Record<string, exclusiveAbilitiesType> = {
     [AquosCyclone.key]: AquosCyclone,
     [DemonWizard.key]: DemonWizard,
 
-    [CapeDeFeu.key]: CapeDeFeu
+    [CapeDeFeu.key]: CapeDeFeu,
+
+    // --- Profondeur strategique : bakugans jusqu'ici sans capacite exclusive ---
+    [SouffleDeLaVieVerte.key]: SouffleDeLaVieVerte,
+    [PiqueIncendiaire.key]: PiqueIncendiaire,
+    [RapaceEclaireur.key]: RapaceEclaireur,
+    [RageSismique.key]: RageSismique,
+    [CarapaceTetue.key]: CarapaceTetue,
+    [CriDeRalliement.key]: CriDeRalliement,
+    [SermentDuGardien.key]: SermentDuGardien,
+    [LameUsurpatrice.key]: LameUsurpatrice,
+    [VeninRampant.key]: VeninRampant,
+    [EtreinteDePierre.key]: EtreinteDePierre,
+    [GalerieDOmbre.key]: GalerieDOmbre,
+    [ContreCourant.key]: ContreCourant,
+    [PacteSanglant.key]: PacteSanglant,
+    [GraceSalvatrice.key]: GraceSalvatrice,
+    [BriseMuraille.key]: BriseMuraille,
+    [AncreAbyssale.key]: AncreAbyssale,
+    [VerdictDuBourreau.key]: VerdictDuBourreau,
+    [MoissonDesAmes.key]: MoissonDesAmes,
+
+    // --- Cartes utilitaires pour les bakugans qui n'avaient qu'un bonus de puissance ---
+    [JugementDuLegendaire.key]: JugementDuLegendaire,
+    [OeilDuCyclone.key]: OeilDuCyclone,
+    [RafaleAscendante.key]: RafaleAscendante,
+    [BrasierDeSiege.key]: BrasierDeSiege,
+    [CarapaceReflechissante.key]: CarapaceReflechissante,
+    [EnigmeDuSphinx.key]: EnigmeDuSphinx,
+    [MareeCorrosive.key]: MareeCorrosive,
+    [ProtocoleDEscorte.key]: ProtocoleDEscorte,
+    [GriffesAffamees.key]: GriffesAffamees
 
 }
 

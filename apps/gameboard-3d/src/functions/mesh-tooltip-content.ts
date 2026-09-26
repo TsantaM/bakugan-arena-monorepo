@@ -41,7 +41,12 @@ function emptyStatut(): SpriteUserData['statut'] {
         absorbPowerBoost: false,
         toSave: false,
         reanimated: false,
-        lifeLess: false
+        lifeLess: false,
+        powerLocked: false,
+        guardian: false,
+        reflectMalus: false,
+        banished: false,
+        markedForDeath: false
     }
 }
 
@@ -57,6 +62,11 @@ function formatBakuganStatusLines(data: SpriteUserData): string[] {
         { key: 'tooltip_status_protected_against_gate', value: statut.protectedAgainstGate },
         { key: 'tooltip_status_protected_against_ability', value: statut.protectedAgainstAbility },
         { key: 'tooltip_status_absorb', value: statut.absorbPowerBoost },
+        { key: 'tooltip_status_power_locked', value: statut.powerLocked ?? false },
+        { key: 'tooltip_status_guardian', value: statut.guardian ?? false },
+        { key: 'tooltip_status_reflect', value: statut.reflectMalus ?? false },
+        { key: 'tooltip_status_banished', value: statut.banished ?? false },
+        { key: 'tooltip_status_marked', value: statut.markedForDeath ?? false },
     ]
 
     for (const candidate of candidates) {

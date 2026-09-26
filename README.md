@@ -209,9 +209,18 @@ pnpm --filter ./apps/bakugan-arena-server build
 - `libs/drizzle-orm`: shared schema, auth tables, game tables and database model definitions
 - `libs/game-data`: shared game rules, Bakugan card definitions, ability logic, and replay logic
 
-> Adding a new game action (socket event, card, effect)? Read
-> [`docs/SECURITY-ACTIONS.md`](docs/SECURITY-ACTIONS.md) first — it lists the
-> mandatory guards for each action family.
+## Documentation
+
+Engineering docs live in `docs/` and are written in French, like the code
+comments.
+
+| Document | Read it when |
+| --- | --- |
+| [`docs/SECURITY-ACTIONS.md`](docs/SECURITY-ACTIONS.md) | Adding any game action (socket event, card, effect). Lists the mandatory guards per action family. **Read this one first.** |
+| [`docs/EXCLUSIVE-ABILITIES.md`](docs/EXCLUSIVE-ABILITIES.md) | Writing an ability card: the card contract, the activation lifecycle, the two-phase request pattern, registration, i18n, verification. |
+| [`docs/BAKUGAN-STATUSES.md`](docs/BAKUGAN-STATUSES.md) | Working with Bakugan statuses, power resolution order, turn-based effects (poison, slot locks) or revival. |
+| [`apps/gameboard-3d/.../custom-animations/README.md`](apps/gameboard-3d/src/animations/custom-animations/README.md) | Writing a card's 3D animation: the directive flow, the registry, the shared animation kit. |
+| [`docs/CARDS-STRATEGIC-DEPTH.md`](docs/CARDS-STRATEGIC-DEPTH.md) | Design note for the 27 exclusive abilities that gave every Bakugan a card — archetype diagnosis, balance intent, known limits. |
 
 ## Notes
 

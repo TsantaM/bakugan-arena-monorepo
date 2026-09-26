@@ -764,6 +764,114 @@
     "demon-wizard": {
       "name": "Demon Wizard",
       "description": "Transfers all the G Power of an allied Bakugan to Exedra and nullifies the opponent's Gate Card. The drained ally stays on the field but can no longer act and can no longer be protected; if it is defeated, the transferred G Power is lost"
+    },
+    "souffle-de-la-vie-verte": {
+      "name": "Breath of Green Life",
+      "description": "Makes every exclusive ability already spent by your Bakugan still in play usable once more"
+    },
+    "pique-incendiaire": {
+      "name": "Blazing Dive",
+      "description": "The user moves to another Gate Card; the weakest opposing Bakugan there loses 100 Gs"
+    },
+    "rapace-eclaireur": {
+      "name": "Scouting Raptor",
+      "description": "Reveals how many exclusive abilities the targeted opposing Bakugan has left, then prevents it from using any ability"
+    },
+    "rage-sismique": {
+      "name": "Seismic Rage",
+      "description": "Adds 50 Gs to the user, plus 50 Gs for each eliminated allied Bakugan (up to +200 Gs)"
+    },
+    "carapace-tetue": {
+      "name": "Stubborn Hide",
+      "description": "The user's power is locked: it no longer takes any penalty, but no longer receives any bonus either"
+    },
+    "cri-de-ralliement": {
+      "name": "Rallying Roar",
+      "description": "Calls an allied Bakugan to the Gate Card with 100 extra Gs, or 200 Gs if it belongs to the same family"
+    },
+    "serment-du-gardien": {
+      "name": "Guardian's Oath",
+      "description": "The user absorbs, in place of its allies on the Gate Card, every power loss aimed at them"
+    },
+    "lame-usurpatrice": {
+      "name": "Usurper's Blade",
+      "description": "Replays for the user the last ability the opponent activated in this battle (Fusion abilities excluded)"
+    },
+    "venin-rampant": {
+      "name": "Creeping Venom",
+      "description": "Poisons an opposing Bakugan: it loses 50 Gs on every turn change while it stays on the field"
+    },
+    "etreinte-de-pierre": {
+      "name": "Stone Clasp",
+      "description": "The target can no longer leave its Gate Card, and that Gate Card can no longer be nullified or swapped"
+    },
+    "galerie-d-ombre": {
+      "name": "Shadow Burrow",
+      "description": "The user leaves the battle without being eliminated and resurfaces on an adjacent Gate Card; the Gate Card left behind is nullified"
+    },
+    "contre-courant": {
+      "name": "Undertow",
+      "description": "Each opponent on the Gate Card loses twice the power it had gained above its base level"
+    },
+    "pacte-sanglant": {
+      "name": "Blood Pact",
+      "description": "Adds 200 Gs to the user, but if it loses this battle it is removed from the game for good and can never be revived"
+    },
+    "grace-salvatrice": {
+      "name": "Saving Grace",
+      "description": "Marks an allied Bakugan in the battle: if defeated, it returns to its owner's hand instead of being eliminated"
+    },
+    "brise-muraille": {
+      "name": "Wall Breaker",
+      "description": "Nullifies the opposing Gate Card and forbids setting a new one on that slot for 2 turns"
+    },
+    "ancre-abyssale": {
+      "name": "Abyssal Anchor",
+      "description": "Drains 50 Gs from every opposing Bakugan on the field and transfers the total to the user"
+    },
+    "verdict-du-bourreau": {
+      "name": "Executioner's Verdict",
+      "description": "Condemns an opposing Bakugan anywhere on the field: if the user wins this battle, the target is eliminated"
+    },
+    "jugement-du-legendaire": {
+      "name": "Legendary Judgement",
+      "description": "Nullifies every ability active on the Gate Card, on both sides: bonuses and penalties alike vanish"
+    },
+    "oeil-du-cyclone": {
+      "name": "Eye of the Cyclone",
+      "description": "Sends every Bakugan on the Gate Card, allies included, back to its owner's hand; the Gate Card is removed and the battle is cancelled"
+    },
+    "rafale-ascendante": {
+      "name": "Rising Gust",
+      "description": "Sends the weakest opposing Bakugan on the Gate Card back to its owner's hand, without eliminating it"
+    },
+    "brasier-de-siege": {
+      "name": "Siege Blaze",
+      "description": "Removes 50 Gs from every Bakugan on the Gate Card, allies included; only the user is spared"
+    },
+    "carapace-reflechissante": {
+      "name": "Reflecting Shell",
+      "description": "The next power loss aimed at the user is converted into an equivalent power bonus"
+    },
+    "enigme-du-sphinx": {
+      "name": "Sphinx's Riddle",
+      "description": "The opponent cannot set any new Bakugan on the field during their next turn"
+    },
+    "maree-corrosive": {
+      "name": "Corrosive Tide",
+      "description": "Removes 50 Gs from every opponent on the Gate Card and poisons the strongest of them"
+    },
+    "protocole-d-escorte": {
+      "name": "Escort Protocol",
+      "description": "The user takes on the base power level of the strongest allied Bakugan on the field"
+    },
+    "griffes-affamees": {
+      "name": "Hungering Claws",
+      "description": "Adds 50 Gs to the user, plus 100 Gs for each opposing Bakugan already eliminated in the game"
+    },
+    "moisson-des-ames": {
+      "name": "Soul Harvest",
+      "description": "Adds 100 Gs for each eliminated allied Bakugan and 50 Gs for each eliminated opposing Bakugan. While the card is active, the share drawn from allies is given back to Reaper every time it returns to the field; the share taken from opponents does not come back"
     }
   }
 }

@@ -1,5 +1,6 @@
 import RemoveRenfortAnimationDirective from "../../function/create-animation-directives/remove-renfort-animation-directive.js"
 import { AddRenfortAnimationDirective, ComeBackBakuganDirectiveAnimation, CustomAnimationDirective } from "../../function/index.js"
+import { canBeRevived } from "../../function/ability-cards-effects/revive-status.js"
 import { LegendarySoldiersImage } from "../../store/gate-card-images.js"
 import { exclusiveAbilitiesType } from "../../type/game-data-types.js"
 import type { bakuganOnSlot } from "../../type/room-types.js"
@@ -20,7 +21,7 @@ export const SagittariusArrow: exclusiveAbilitiesType = {
         const userDeck = roomState.decksState.find((d) => d.userId === user.userId)
         if (!userDeck) return null
 
-        const haosBakugans = userDeck.bakugans.filter((b) => b.bakuganData.attribut === "Haos" && b.bakuganData.key !== user.key && b.bakuganData.elimined)
+        const haosBakugans = userDeck.bakugans.filter((b) => b.bakuganData.attribut === "Haos" && b.bakuganData.key !== user.key && b.bakuganData.elimined && canBeRevived(b))
 
         if (haosBakugans.length === 0) return null
 

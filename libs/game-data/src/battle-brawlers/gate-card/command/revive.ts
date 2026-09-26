@@ -3,6 +3,7 @@ import { pushReplayAnimation } from "../../../function/replay/push-replay-animat
 import { Slots } from "../../../store/slots.js"
 import { AnimationDirectivesTypes } from "../../../type/animations-directives.js"
 import { gateCardType } from "../../../type/game-data-types.js"
+import { canBeRevived } from "../../../function/ability-cards-effects/revive-status.js"
 
 export const Revive: gateCardType = {
     key: 'revive',
@@ -35,7 +36,7 @@ export const Revive: gateCardType = {
         const deckToUpdate = roomState?.decksState.find((d) => d.userId === userId)
 
         if (deckToUpdate) {
-            deckToUpdate.bakugans.filter((b) => b && b.bakuganData.elimined === true).forEach((b) => {
+            deckToUpdate.bakugans.filter((b) => b && b.bakuganData.elimined === true && canBeRevived(b)).forEach((b) => {
                 if (!b) return null
                 b?.bakuganData.elimined ? b.bakuganData.elimined = false : b?.bakuganData.elimined
 

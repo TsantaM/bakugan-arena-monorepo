@@ -9,7 +9,7 @@ export const ReaperDarkus: bakuganType = {
     family: 'Reaper',
     powerLevel: 420,
     image: 'reaper',
-    exclusiveAbilities: ['dimmension-four', 'reaper-of-the-chaos'],
+    exclusiveAbilities: ['dimmension-four', 'reaper-of-the-chaos', 'moisson-des-ames'],
     banList: StarterBanList,
     canChangeAttribut: false
 }

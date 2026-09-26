@@ -12,7 +12,7 @@ export const ManionSubterra: bakuganType = {
     canChangeAttribut: false,
     image: 'manion',
     powerLevel: 400,
-    exclusiveAbilities: ['amun-ra']
+    exclusiveAbilities: ['amun-ra', 'enigme-du-sphinx']
 }
 
 export const ManionPyrus: bakuganType = {
@@ -24,7 +24,7 @@ export const ManionPyrus: bakuganType = {
     canChangeAttribut: false,
     image: 'manion',
     powerLevel: 400,
-    exclusiveAbilities: ['amun-ra']
+    exclusiveAbilities: ['amun-ra', 'enigme-du-sphinx']
 }
 
 export const ManionVentus: bakuganType = {
@@ -36,7 +36,7 @@ export const ManionVentus: bakuganType = {
     canChangeAttribut: false,
     image: 'manion',
     powerLevel: 400,
-    exclusiveAbilities: ['amun-ra']
+    exclusiveAbilities: ['amun-ra', 'enigme-du-sphinx']
 }
 
 export const ManionGateCard: gateCardType = {

@@ -22,7 +22,7 @@ export const SkyressStormVentus: bakuganType = {
     key: 'skyress-storm-ventus',
     powerLevel: 450,
     family: 'Skyress',
-    exclusiveAbilities: ["gust-of-wind-blow-destruction-meteor-storm"],
+    exclusiveAbilities: ["gust-of-wind-blow-destruction-meteor-storm", "oeil-du-cyclone"],
     banList: StarterBanList,
     canChangeAttribut: false
 }

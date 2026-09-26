@@ -17,7 +17,7 @@ export const GaraganoidAquos: bakuganType = {
     key: 'garganoid-aquos',
     name: 'Garganoid',
     attribut: 'Aquos',
-    exclusiveAbilities: [],
+    exclusiveAbilities: ['contre-courant'],
     family: 'Garganoid',
     image: 'garganoid',
     powerLevel: 380,

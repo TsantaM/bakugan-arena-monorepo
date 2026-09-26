@@ -764,6 +764,114 @@
     "demon-wizard": {
       "name": "Sorcier Infernal",
       "description": "Transfère toute la puissance d'un Bakugan allié à Exedra et annule la Carte Portail de l'adversaire. L'allié vidé reste sur le terrain mais ne peut plus rien faire et ne peut plus être protégé ; s'il est détruit, la puissance transférée est perdue"
+    },
+    "souffle-de-la-vie-verte": {
+      "name": "Souffle de la Vie Verte",
+      "description": "Rend utilisable une nouvelle fois toutes les capacités exclusives déjà consommées par vos Bakugan encore en jeu"
+    },
+    "pique-incendiaire": {
+      "name": "Piqué Incendiaire",
+      "description": "L'utilisateur se déplace vers une autre Carte Portail ; le Bakugan adverse le plus faible qui s'y trouve perd 100 Gs"
+    },
+    "rapace-eclaireur": {
+      "name": "Rapace Éclaireur",
+      "description": "Révèle le nombre de capacités exclusives encore disponibles chez le Bakugan adverse ciblé, puis l'empêche d'utiliser la moindre capacité"
+    },
+    "rage-sismique": {
+      "name": "Rage Sismique",
+      "description": "Ajoute 50 Gs à l'utilisateur, plus 50 Gs par Bakugan allié éliminé (maximum +200 Gs)"
+    },
+    "carapace-tetue": {
+      "name": "Carapace Têtue",
+      "description": "La puissance de l'utilisateur est verrouillée : il n'encaisse plus aucun malus, mais ne reçoit plus aucun bonus"
+    },
+    "cri-de-ralliement": {
+      "name": "Cri de Ralliement",
+      "description": "Appelle un Bakugan allié en renfort sur la Carte Portail avec 100 Gs supplémentaires, ou 200 Gs s'il est de la même famille"
+    },
+    "serment-du-gardien": {
+      "name": "Serment du Gardien",
+      "description": "L'utilisateur encaisse à la place de ses alliés de la Carte Portail tous les retraits de puissance qui les visent"
+    },
+    "lame-usurpatrice": {
+      "name": "Lame Usurpatrice",
+      "description": "Rejoue au profit de l'utilisateur la dernière capacité activée par l'adversaire durant ce combat (capacités Fusion exclues)"
+    },
+    "venin-rampant": {
+      "name": "Venin Rampant",
+      "description": "Empoisonne un Bakugan adverse : il perd 50 Gs à chaque changement de tour tant qu'il reste sur le terrain"
+    },
+    "etreinte-de-pierre": {
+      "name": "Étreinte de Pierre",
+      "description": "La cible ne peut plus quitter sa Carte Portail, et cette Carte Portail ne peut plus être annulée ni échangée"
+    },
+    "galerie-d-ombre": {
+      "name": "Galerie d'Ombre",
+      "description": "L'utilisateur quitte le combat sans être éliminé et ressort sur une Carte Portail adjacente ; la Carte Portail quittée est annulée"
+    },
+    "contre-courant": {
+      "name": "Contre-Courant",
+      "description": "Chaque adversaire de la Carte Portail perd le double de la puissance qu'il avait gagnée au-delà de son niveau de base"
+    },
+    "pacte-sanglant": {
+      "name": "Pacte Sanglant",
+      "description": "Ajoute 200 Gs à l'utilisateur, mais s'il perd ce combat il est retiré définitivement du jeu et ne peut plus être ranimé"
+    },
+    "grace-salvatrice": {
+      "name": "Grâce Salvatrice",
+      "description": "Désigne un Bakugan allié du combat : s'il est vaincu, il retourne dans la main de son propriétaire au lieu d'être éliminé"
+    },
+    "brise-muraille": {
+      "name": "Brise-Muraille",
+      "description": "Annule la Carte Portail adverse et interdit d'en poser une nouvelle sur cet emplacement pendant 2 tours"
+    },
+    "ancre-abyssale": {
+      "name": "Ancre Abyssale",
+      "description": "Draine 50 Gs à chaque Bakugan adverse du terrain et transfère le total à l'utilisateur"
+    },
+    "verdict-du-bourreau": {
+      "name": "Verdict du Bourreau",
+      "description": "Condamne un Bakugan adverse n'importe où sur le terrain : si l'utilisateur gagne ce combat, la cible est éliminée"
+    },
+    "jugement-du-legendaire": {
+      "name": "Jugement du Légendaire",
+      "description": "Annule toutes les capacités actives sur la Carte Portail, des deux camps : bonus comme malus disparaissent"
+    },
+    "oeil-du-cyclone": {
+      "name": "Œil du Cyclone",
+      "description": "Renvoie tous les Bakugan de la Carte Portail, alliés compris, dans la main de leur propriétaire ; la Carte Portail est retirée et le combat s'annule"
+    },
+    "rafale-ascendante": {
+      "name": "Rafale Ascendante",
+      "description": "Renvoie le Bakugan adverse le plus faible de la Carte Portail dans la main de son propriétaire, sans l'éliminer"
+    },
+    "brasier-de-siege": {
+      "name": "Brasier de Siège",
+      "description": "Retire 50 Gs à tous les Bakugan de la Carte Portail, alliés compris ; seul l'utilisateur est épargné"
+    },
+    "carapace-reflechissante": {
+      "name": "Carapace Réfléchissante",
+      "description": "Le prochain retrait de puissance visant l'utilisateur est converti en bonus de puissance équivalent"
+    },
+    "enigme-du-sphinx": {
+      "name": "Énigme du Sphinx",
+      "description": "L'adversaire ne peut poser aucun nouveau Bakugan sur le terrain pendant son prochain tour"
+    },
+    "maree-corrosive": {
+      "name": "Marée Corrosive",
+      "description": "Retire 50 Gs à tous les adversaires de la Carte Portail et empoisonne le plus puissant d'entre eux"
+    },
+    "protocole-d-escorte": {
+      "name": "Protocole d'Escorte",
+      "description": "L'utilisateur adopte le niveau de puissance de base du Bakugan allié le plus puissant du terrain"
+    },
+    "griffes-affamees": {
+      "name": "Griffes Affamées",
+      "description": "Ajoute 50 Gs à l'utilisateur, plus 100 Gs par Bakugan adverse déjà éliminé dans la partie"
+    },
+    "moisson-des-ames": {
+      "name": "Moisson des Âmes",
+      "description": "Ajoute 100 Gs par Bakugan allié éliminé et 50 Gs par Bakugan adverse éliminé. Tant que la carte est active, la part venant des alliés est rendue à Reaper chaque fois qu'il revient sur le terrain ; celle venant des adversaires ne revient pas"
     }
   }
 }

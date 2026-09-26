@@ -9,7 +9,7 @@ export const WariusPyrus: bakuganType = {
     attribut: "Pyrus",
     banList: [],
     canChangeAttribut: false,
-    exclusiveAbilities: [],
+    exclusiveAbilities: ['brise-muraille'],
     family: family,
     image: "warius",
     powerLevel: 430
@@ -21,7 +21,7 @@ export const WariusDarkus: bakuganType = {
     attribut: "Darkus",
     banList: [],
     canChangeAttribut: false,
-    exclusiveAbilities: [],
+    exclusiveAbilities: ['verdict-du-bourreau'],
     family: family,
     image: "warius",
     powerLevel: 430
@@ -33,7 +33,7 @@ export const WariusAquos: bakuganType = {
     attribut: "Aquos",
     banList: [],
     canChangeAttribut: false,
-    exclusiveAbilities: [],
+    exclusiveAbilities: ['ancre-abyssale'],
     family: family,
     image: "warius",
     powerLevel: 430

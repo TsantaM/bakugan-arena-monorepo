@@ -84,7 +84,7 @@ export const DiabloAquos: bakuganType = {
     image: 'diablo',
     powerLevel: 420,
     family: 'Diablo',
-    exclusiveAbilities: [],
+    exclusiveAbilities: ['pacte-sanglant'],
     banList: [],
     canChangeAttribut: false,
     seconaryAttribut: 'Pyrus'
@@ -165,7 +165,7 @@ export const AngeloAquos: bakuganType = {
     image: 'angelo',
     powerLevel: 420,
     family: 'Angelo',
-    exclusiveAbilities: [],
+    exclusiveAbilities: ['grace-salvatrice'],
     banList: [],
     canChangeAttribut: false,
     seconaryAttribut: 'Haos'

@@ -9,7 +9,7 @@ export const FearReaperPyrus: bakuganType = {
     attribut: 'Pyrus',
     family: 'Fear Reaper',
     powerLevel: 380,
-    exclusiveAbilities: ['slash-zero'],
+    exclusiveAbilities: ['slash-zero', 'griffes-affamees'],
     banList: [],
     canChangeAttribut: false
 }
@@ -21,7 +21,7 @@ export const FearReaperHaos: bakuganType = {
     attribut: 'Haos',
     family: 'Fear Reaper',
     powerLevel: 380,
-    exclusiveAbilities: ['slash-zero'],
+    exclusiveAbilities: ['slash-zero', 'griffes-affamees'],
     banList: [],
     canChangeAttribut: false
 }
@@ -33,7 +33,7 @@ export const FearReaperDarkus: bakuganType = {
     attribut: 'Darkus',
     family: 'Fear Reaper',
     powerLevel: 380,
-    exclusiveAbilities: ['slash-zero'],
+    exclusiveAbilities: ['slash-zero', 'griffes-affamees'],
     banList: [],
     canChangeAttribut: false
 }
@@ -45,7 +45,7 @@ export const FearReaperAquos: bakuganType = {
     attribut: 'Aquos',
     family: 'Fear Reaper',
     powerLevel: 380,
-    exclusiveAbilities: ['slash-zero'],
+    exclusiveAbilities: ['slash-zero', 'griffes-affamees'],
     banList: [],
     canChangeAttribut: false
 }

@@ -9,7 +9,7 @@ export const StinglashAquos: bakuganType = {
     attribut: 'Aquos',
     image: 'stinglash',
     family: 'Stinglash',
-    exclusiveAbilities: ['maitre-des-profondeurs'],
+    exclusiveAbilities: ['maitre-des-profondeurs', 'maree-corrosive'],
     powerLevel: 350,
     banList: [],
     canChangeAttribut: false
@@ -21,7 +21,7 @@ export const StinglashDarkus: bakuganType = {
     attribut: 'Darkus',
     image: 'stinglash',
     family: 'Stinglash',
-    exclusiveAbilities: [],
+    exclusiveAbilities: ['venin-rampant'],
     powerLevel: 350,
     banList: [],
     canChangeAttribut: false
@@ -34,7 +34,7 @@ export const StinglashSubterra: bakuganType = {
     attribut: 'Subterra',
     image: 'stinglash',
     family: 'Stinglash',
-    exclusiveAbilities: [],
+    exclusiveAbilities: ['etreinte-de-pierre'],
     powerLevel: 350,
     banList: [],
     canChangeAttribut: false

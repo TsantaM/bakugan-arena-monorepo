@@ -3,6 +3,7 @@ import { ExclusiveAbilitiesList } from "../battle-brawlers/exclusive-abilities.j
 import { AnimationDirectivesTypes, type stateType } from "../type/type-index.js";
 import { finalizeTurnLog, logGameEvent } from "./game-log/game-logger.js";
 import { pushReplayAnimation, pushReplayMarker } from "./replay/push-replay-animation.js";
+import { ApplyTurnStatusEffects } from "./turn-status-effects.js";
 
 export function updateTurnState(roomData: stateType) {
     if (!roomData) return
@@ -23,6 +24,9 @@ export function updateTurnState(roomData: stateType) {
 
     turnState.can_change_player_turn = true
 
+    // Poison, verrous d'emplacement… : effets de statut lies au changement de tour
+    ApplyTurnStatusEffects(roomData)
+
     // Règles selon le nombre de tours
     if (turnState.turnCount > 0) {
         const inBattle =
@@ -33,7 +37,7 @@ export function updateTurnState(roomData: stateType) {
         }
         turnState.use_ability_card = true
         protalSlots.forEach(p => {
-            if (!p.can_set && !p.portalCard) {
+            if (!p.can_set && !p.portalCard && !p.setLock) {
                 p.can_set = true
                 // Slot vide recyclé : garantir un state propre avant le prochain set
                 p.state.open = false

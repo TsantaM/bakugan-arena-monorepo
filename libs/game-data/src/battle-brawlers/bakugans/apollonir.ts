@@ -9,7 +9,7 @@ export const ApollonirPyrus: bakuganType = {
     attribut: "Pyrus",
     banList: LegendarySoldiersBanList,
     canChangeAttribut: false,
-    exclusiveAbilities: ['maximum-pyrus'],
+    exclusiveAbilities: ['maximum-pyrus', 'jugement-du-legendaire'],
     family: family,
     image: "apollonir",
     name: "Apollonir",

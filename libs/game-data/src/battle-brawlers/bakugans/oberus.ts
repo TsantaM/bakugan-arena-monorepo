@@ -11,7 +11,7 @@ export const OberusVentus: bakuganType = {
     attribut: "Ventus",
     banList: LegendarySoldiersBanList,
     canChangeAttribut: false,
-    exclusiveAbilities: [],
+    exclusiveAbilities: ['souffle-de-la-vie-verte', 'maelstrom'],
     family: family,
     image: "oberus",
     powerLevel: 500,

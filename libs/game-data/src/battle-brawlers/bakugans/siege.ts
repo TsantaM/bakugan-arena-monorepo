@@ -8,7 +8,7 @@ export const SiegePyrus: bakuganType = {
     family: 'Siege',
     attribut: 'Pyrus',
     image: 'siege',
-    exclusiveAbilities: ['lance-de-feu'],
+    exclusiveAbilities: ['lance-de-feu', 'brasier-de-siege'],
     powerLevel: 380,
     banList: [],
     canChangeAttribut: false
@@ -32,7 +32,7 @@ export const SiegeHaos: bakuganType = {
     family: 'Siege',
     attribut: 'Haos',
     image: 'siege',
-    exclusiveAbilities: [],
+    exclusiveAbilities: ['serment-du-gardien'],
     powerLevel: 380,
     banList: [],
     canChangeAttribut: false
@@ -44,7 +44,7 @@ export const SiegeDarkus: bakuganType = {
     family: 'Siege',
     attribut: 'Darkus',
     image: 'siege',
-    exclusiveAbilities: [],
+    exclusiveAbilities: ['lame-usurpatrice'],
     powerLevel: 380,
     banList: [],
     canChangeAttribut: false
