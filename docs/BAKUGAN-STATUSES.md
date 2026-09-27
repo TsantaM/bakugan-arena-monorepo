@@ -28,7 +28,7 @@ surtout de **ce qui les fait réellement agir**.
 | `reanimated` | Marque un Bakugan ramené en jeu | informatif |
 | `lifeLess` | Vidé de sa puissance : ne peut plus rien faire, ne peut plus être protégé | filtres de capacité, `ElimineBakuganEffect` |
 | `powerLocked` | **Ignore tout gain et toute perte de puissance** | `PowerChange` |
-| `guardian` | **Encaisse les malus visant ses alliés du même emplacement** | `PowerChange` |
+| `guardian` | **Encaisse les malus visant ses alliés des _autres_ emplacements** | `PowerChange` |
 | `reflectMalus` | **Convertit le prochain malus en bonus, puis se consomme** | `PowerChange` |
 | `banished` | **Aucune réanimation possible** | `canBeRevived` |
 | `markedForDeath` | **Condamné : éliminé si l'auteur de la marque gagne** | `onWin` de la carte qui l'a posé |
@@ -88,9 +88,15 @@ Trois conséquences à connaître :
 1. **`powerLocked` prime sur tout**, y compris sur les bonus du porteur. C'est
    le compromis assumé de Carapace Têtue : immunité totale contre neutralité
    totale.
-2. **Le gardien encaisse ses propres malus.** `findGuardianFor` refuse de
-   chercher un gardien pour un Bakugan qui est lui-même gardien — sans quoi deux
-   gardiens sur un même emplacement se renverraient le malus indéfiniment.
+2. **Le gardien ne couvre que les _autres_ cartes portail.** `findGuardianFor`
+   exclut délibérément l'emplacement de la cible : la résolution d'un combat
+   somme la puissance des Bakugan présents, donc déplacer une perte entre deux
+   alliés d'un même combat laisse le total identique — l'effet serait nul. La
+   redirection n'a de valeur que lorsqu'elle sort la perte du combat où elle a
+   été infligée.
+   Le gardien encaisse par ailleurs ses propres malus : la fonction refuse de
+   chercher un gardien pour un Bakugan qui l'est déjà, sans quoi deux gardiens
+   se renverraient le malus indéfiniment.
 3. **`ignoreProtection: true`** est fait pour les annulations : reprendre un
    bonus qu'on a soi-même donné ne doit pas être bloqué par une protection
    acquise entre-temps.

@@ -45,22 +45,29 @@ export function ApplyAbsorbPowerBoost({ roomState, bakugan, G }: {
 }
 
 /**
- * Cherche le garde du slot : un allie porteur du statut `guardian` qui encaisse
- * a la place de ses allies les malus qui les visent (Serment du Gardien).
+ * Cherche le garde d'un bakugan : un allie porteur du statut `guardian` qui
+ * encaisse a sa place les retraits de puissance qui le visent (Serment du
+ * Gardien).
+ *
+ * **Le garde doit se trouver sur une AUTRE carte portail.** Rediriger un malus
+ * entre deux allies d'un meme emplacement ne change rien : la resolution du
+ * combat somme la puissance des bakugans presents, donc deplacer une perte de
+ * l'un vers l'autre laisse le total identique. La redirection n'a de sens que
+ * lorsqu'elle sort la perte du combat ou elle a ete infligee.
  */
 function findGuardianFor(roomState: stateType, bakugan: bakuganOnSlot): bakuganOnSlot | undefined {
     // Un garde encaisse ses propres malus : pas de renvoi entre deux gardes.
     if (bakugan.statut.guardian) return undefined
 
-    const slot = roomState.protalSlots.find((s) => s.id === bakugan.slot_id)
-    if (!slot) return undefined
-
-    return slot.bakugans.find((b) =>
-        b !== bakugan &&
-        b.userId === bakugan.userId &&
-        !!b.statut.guardian &&
-        !b.statut.powerLocked
-    )
+    return roomState.protalSlots
+        .filter((s) => s.id !== bakugan.slot_id)
+        .map((s) => s.bakugans)
+        .flat()
+        .find((b) =>
+            b.userId === bakugan.userId &&
+            !!b.statut.guardian &&
+            !b.statut.powerLocked
+        )
 }
 
 export function PowerChange({

@@ -255,5 +255,41 @@
     "activateFailed": "Échec de l'activation des poids",
     "defaultsActivated": "Poids par défaut activés",
     "defaultsFailed": "Échec de l'activation des valeurs par défaut"
+  },
+  "games": {
+    "title": "Parties",
+    "desc": "Toutes les parties enregistrées, de la plus récente à la plus ancienne.",
+    "loading": "Chargement…",
+    "empty": "Aucune partie ne correspond à ces filtres.",
+    "error": "Impossible de charger les parties.",
+    "none": "—",
+    "invalidRange": "La date de début est postérieure à la date de fin.",
+    "resultsCount": "{n} partie(s)",
+    "resultsCapped": "{n} partie(s) — limite atteinte, affinez les filtres pour voir les plus anciennes",
+    "fields": {
+      "from": "Du",
+      "to": "Au",
+      "player": "Joueur"
+    },
+    "placeholders": {
+      "player": "Pseudo d'un des deux joueurs"
+    },
+    "actions": {
+      "search": "Filtrer",
+      "reset": "Réinitialiser les filtres"
+    },
+    "table": {
+      "game": "Partie",
+      "players": "Joueurs",
+      "status": "Statut",
+      "winner": "Vainqueur",
+      "loser": "Perdant",
+      "date": "Date"
+    },
+    "status": {
+      "finished": "Terminée",
+      "ongoing": "En cours",
+      "ranked": "Classée"
+    }
   }
 }

@@ -73,7 +73,7 @@
   "bakugan_malus_reflected": "{name} reflects the attack: {power} Gs are converted into a bonus",
   "bakugan_malus_redirected": "{guardian} takes the power loss in place of {name}",
   "bakugan_reflect_ready": "{name} closes up: the next attack will be reflected",
-  "bakugan_guardian_active": "{name} stands guard over its allies on the Gate Card",
+  "bakugan_guardian_active": "{name} stands guard over its allies on the other Gate Cards",
   "bakugan_guardian_ended": "{name} no longer shields its allies",
   "bakugan_banished_pact": "{name} seals the pact: if defeated, it will be removed from the game for good",
   "bakugan_pact_honored": "{name} honours its pact and escapes banishment",

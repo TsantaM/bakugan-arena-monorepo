@@ -21,6 +21,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import Section from "@/components/ui/section"
+import GamesListPanel from "./games-list-panel"
 import { useTranslations } from "next-intl"
 
 export default function AdminPanel() {
@@ -186,6 +187,10 @@ export default function AdminPanel() {
                         </AlertDialog>
                     </CardFooter>
                 </Card>
+            </Section>
+
+            <Section>
+                <GamesListPanel />
             </Section>
         </>
 

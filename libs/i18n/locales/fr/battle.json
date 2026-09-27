@@ -73,7 +73,7 @@
   "bakugan_malus_reflected": "{name} réfléchit l'attaque : {power} Gs sont convertis en bonus",
   "bakugan_malus_redirected": "{guardian} encaisse le retrait de puissance à la place de {name}",
   "bakugan_reflect_ready": "{name} se referme : la prochaine attaque sera réfléchie",
-  "bakugan_guardian_active": "{name} se porte garant de ses alliés sur la Carte Portail",
+  "bakugan_guardian_active": "{name} se porte garant de ses alliés sur les autres Cartes Portail",
   "bakugan_guardian_ended": "{name} ne protège plus ses alliés",
   "bakugan_banished_pact": "{name} scelle le pacte : vaincu, il sera retiré définitivement du jeu",
   "bakugan_pact_honored": "{name} honore son pacte et échappe au bannissement",

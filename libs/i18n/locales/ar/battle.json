@@ -73,7 +73,7 @@
   "bakugan_malus_reflected": "{name} يعكس الهجوم: تتحول {power} وحدة قوة إلى زيادة",
   "bakugan_malus_redirected": "يتحمل {guardian} خسارة القوة بدلًا من {name}",
   "bakugan_reflect_ready": "ينغلق {name}: سيُعكس الهجوم التالي",
-  "bakugan_guardian_active": "يتولى {name} حماية حلفائه على بطاقة البوابة",
+  "bakugan_guardian_active": "يتولى {name} حماية حلفائه على بطاقات البوابة الأخرى",
   "bakugan_guardian_ended": "لم يعد {name} يحمي حلفاءه",
   "bakugan_banished_pact": "يختم {name} العهد: إن هُزم يُزال نهائيًا من اللعبة",
   "bakugan_pact_honored": "يوفي {name} بعهده وينجو من النفي",

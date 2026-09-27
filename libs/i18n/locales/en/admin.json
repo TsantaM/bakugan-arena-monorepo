@@ -255,5 +255,41 @@
     "activateFailed": "Failed to activate weights",
     "defaultsActivated": "Default weights activated",
     "defaultsFailed": "Failed to activate defaults"
+  },
+  "games": {
+    "title": "Games",
+    "desc": "Every recorded game, newest first.",
+    "loading": "Loading…",
+    "empty": "No game matches these filters.",
+    "error": "Could not load the games.",
+    "none": "—",
+    "invalidRange": "The start date is later than the end date.",
+    "resultsCount": "{n} game(s)",
+    "resultsCapped": "{n} game(s) — limit reached, narrow the filters to see older ones",
+    "fields": {
+      "from": "From",
+      "to": "To",
+      "player": "Player"
+    },
+    "placeholders": {
+      "player": "Username of either player"
+    },
+    "actions": {
+      "search": "Filter",
+      "reset": "Reset filters"
+    },
+    "table": {
+      "game": "Game",
+      "players": "Players",
+      "status": "Status",
+      "winner": "Winner",
+      "loser": "Loser",
+      "date": "Date"
+    },
+    "status": {
+      "finished": "Finished",
+      "ongoing": "Ongoing",
+      "ranked": "Ranked"
+    }
   }
 }

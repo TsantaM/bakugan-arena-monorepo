@@ -791,7 +791,7 @@
     },
     "serment-du-gardien": {
       "name": "Serment du Gardien",
-      "description": "L'utilisateur encaisse à la place de ses alliés de la Carte Portail tous les retraits de puissance qui les visent"
+      "description": "Tant que la carte est active, Siege encaisse à la place de ses alliés présents sur les AUTRES Cartes Portail tous les retraits de puissance qui les visent. L'effet lui est rendu s'il quitte puis regagne le terrain"
     },
     "lame-usurpatrice": {
       "name": "Lame Usurpatrice",

@@ -62,7 +62,7 @@ est dans [`BAKUGAN-STATUSES.md`](./BAKUGAN-STATUSES.md).
 | **Pyrus Saurus** (370) | Rage Sismique | +50 Gs, +50 par allié éliminé (max +200) | Remontada |
 | **Subterra Saurus** (370) | Carapace Têtue | Puissance verrouillée : aucun malus, mais aucun bonus | Contre-méta *(inédit)* |
 | **Haos Saurus** (370) | Cri de Ralliement | Appelle un renfort avec +100 Gs, +200 si même famille | Renfort |
-| **Haos Siege** (380) | Serment du Gardien | Encaisse à la place de ses alliés du même emplacement | Redirection *(inédit)* |
+| **Haos Siege** (380) | Serment du Gardien | Encaisse à la place de ses alliés des autres cartes portail ; persistant | Redirection *(inédit)* |
 | **Darkus Siege** (380) | Lame Usurpatrice | Rejoue à son profit la dernière capacité adverse du combat | Réactif |
 | **Darkus Stinglash** (350) | Venin Rampant | Empoisonne : −50 Gs à chaque changement de tour | Usure *(inédit)* |
 | **Subterra Stinglash** (350) | Étreinte de Pierre | La cible ne peut plus bouger, son emplacement ne peut plus être annulé | Verrouillage |
@@ -99,9 +99,38 @@ cassé les decks déjà construits.
 Rage Sismique et Griffes Affamées sont symétriques : l'une récompense celui qui
 encaisse, l'autre celui qui a déjà frappé.
 
-## La carte persistante : Moisson des Âmes
+## Les cartes persistantes
 
-| Bakugan | Carte existantes | Carte ajoutée | Effet |
+Deux cartes posent un effet qui **survit au départ du terrain**. Un Bakugan
+reposé revient toujours à sa puissance de base et sans aucun statut
+(`bakuganData.currentPowerLevel` est figé à la création de la partie), donc
+quitter le terrain efface normalement tout. Ces deux-là s'enregistrent dans
+`persistantAbilities` et se rendent leur effet via `onUserSet`.
+
+### Serment du Gardien
+
+| Bakugan | Carte | Effet |
+| --- | --- | --- |
+| **Haos Siege** | Serment du Gardien | Encaisse les retraits de puissance visant ses alliés des **autres** cartes portail |
+
+La première version de cette carte redirigeait les malus des alliés **du même
+emplacement** — un effet strictement nul : la résolution d'un combat somme la
+puissance des Bakugan présents, donc déplacer une perte de Tigrerra vers Siege
+quand les deux combattent ensemble laisse le total inchangé.
+
+La redirection n'a de sens que lorsqu'elle **sort la perte du combat où elle a
+été infligée**. Siege sur le portail 1, Tigrerra attaquée sur le portail 5 :
+Tigrerra garde sa puissance pour son combat, et c'est Siege, ailleurs, qui paie.
+La couverture vaut pour tous les alliés du terrain, pas seulement ceux du combat
+en cours.
+
+Contreparties : Siege encaisse aussi ses propres malus, et il devient une cible
+concentrée — tout ce que l'adversaire inflige au reste de l'équipe s'accumule
+sur lui. C'est la carte qui rend le placement multi-portails réellement jouable.
+
+### Moisson des Âmes
+
+| Bakugan | Cartes existantes | Carte ajoutée | Effet |
 | --- | --- | --- | --- |
 | **Darkus Reaper** | Dimension Quatre, Faucheur du Chaos | Moisson des Âmes | +100 Gs par allié éliminé, +50 Gs par adversaire éliminé |
 
@@ -109,14 +138,10 @@ Elle appartient à la même famille que Griffes Affamées — se nourrir du
 cimetière — mais avec une propriété qu'aucune autre carte du jeu n'a : **la part
 venant des alliés est persistante**.
 
-Un Bakugan reposé sur le terrain revient toujours à sa puissance de base
-(`bakuganData.currentPowerLevel` est figé à la création de la partie). Pour la
-plupart des cartes, quitter le terrain efface donc tout. Moisson des Âmes
-s'enregistre dans `persistantAbilities` et, via `onUserSet`, rend à Reaper la
-moisson de ses propres morts à chaque retour — **recalculée** sur le cimetière
-du moment, donc plus grosse si des alliés sont tombés pendant son absence. La
-part arrachée à l'adversaire, elle, ne revient pas : c'était le butin d'une
-seule fauche.
+À chaque retour sur le terrain, `onUserSet` rend à Reaper la moisson de ses
+propres morts — **recalculée** sur le cimetière du moment, donc plus grosse si
+des alliés sont tombés pendant son absence. La part arrachée à l'adversaire, en
+revanche, ne revient pas : c'était le butin d'une seule fauche.
 
 Conséquence de conception : c'est la seule carte dont le bonus se reconstruit
 tout seul, et elle transforme les pertes du joueur en ressource. Un Reaper qui
@@ -168,12 +193,18 @@ cartes Personnage qui doublent la puissance, et elle est limitée à un exemplai
 
 ## État de vérification
 
-Typecheck vert sur les cinq paquets. **55 assertions de comportement** passées
-sur un `stateType` réel : verrouillage bidirectionnel, redirection du gardien,
-conversion puis consommation du reflet, double retrait du Contre-Courant, deux
-ticks de poison successifs, expiration du verrou de Brise-Muraille au bon tour,
-exécution du Verdict, levée du bannissement à la victoire, et pour Moisson des
-Âmes le cycle complet activation → retrait → repose → annulation.
+Typecheck vert sur les cinq paquets. **75 assertions de comportement** passées
+sur un `stateType` réel : verrouillage bidirectionnel, conversion puis
+consommation du reflet, double retrait du Contre-Courant, deux ticks de poison
+successifs, expiration du verrou de Brise-Muraille au bon tour, exécution du
+Verdict, levée du bannissement à la victoire.
+
+Les deux cartes persistantes sont couvertes de bout en bout — activation →
+départ du terrain → repose → annulation — y compris leurs cas limites : deux
+gardiens qui ne se renvoient pas le malus à l'infini, une cible protégée qui ne
+déclenche aucune redirection, un allié du même emplacement délibérément non
+couvert, et une annulation qui retrouve son porteur même après un changement
+d'emplacement.
 
 Trois régressions d'annulation ont été trouvées **par ces tests et par elles
 seules** — le typage ne les voyait pas : Souffle de la Vie Verte reconsommait

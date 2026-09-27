@@ -791,7 +791,7 @@
     },
     "serment-du-gardien": {
       "name": "Guardian's Oath",
-      "description": "The user absorbs, in place of its allies on the Gate Card, every power loss aimed at them"
+      "description": "While the card is active, Siege absorbs, in place of its allies standing on OTHER Gate Cards, every power loss aimed at them. The effect is given back to it if it leaves and returns to the field"
     },
     "lame-usurpatrice": {
       "name": "Usurper's Blade",
