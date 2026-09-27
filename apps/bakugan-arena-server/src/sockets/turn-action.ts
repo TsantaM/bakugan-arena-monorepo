@@ -239,7 +239,7 @@ export const socketTurn = (io: Server, socket: Socket) => {
             message: "Le joueur termine son tour",
         })
 
-        grantActionIncrement({ roomState: roomData, userId, io })
+        grantActionIncrement({ roomState: roomData, userId, io, action: "pass-turn" })
         turnActionUpdater({ roomId, userId, io })
     })
 

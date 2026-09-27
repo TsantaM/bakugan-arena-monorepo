@@ -2,6 +2,7 @@
 
 import MatchmakingBanner from "@/components/elements/dashboard/matchmaking-banner"
 import { Toaster } from "@/components/ui/sonner"
+import BattleNotificationListener from "../global-listener/battle-notification-listener"
 import ChalengeSomeoneListener from "../global-listener/chalenge-someone-listener"
 import ChatListener from "../global-listener/chat-global-listener"
 import GameEventsListener from "../global-listener/game-events-listener"
@@ -31,6 +32,7 @@ export default function GameSessionProvider({ children }: { children: React.Reac
             <ChatListener />
             <GameEventsListener />
             <ChalengeSomeoneListener />
+            <BattleNotificationListener />
             {children}
             <MatchmakingBanner />
             <Toaster />

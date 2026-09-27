@@ -112,7 +112,7 @@ export function processGateAdditionalResolution(
     roomState.animations = []
 
     const actingUserId = request.data.target ?? request.userId
-    grantActionIncrement({ roomState: roomData, userId: actingUserId, io })
+    grantActionIncrement({ roomState: roomData, userId: actingUserId, io, action: "resolve-gate" })
 
     if (roomState.gateCardActionRequest.length > 0) {
         markAdditionalPending(roomData.roomId)

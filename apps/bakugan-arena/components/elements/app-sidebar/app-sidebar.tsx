@@ -17,8 +17,10 @@ import { RoleType } from "@/src/actions/getUserSession"
 import { authClient } from "@/src/lib/auth-client"
 import { useSocket } from "@/src/providers/socket-provider"
 import { REPLAY_ENABLED } from "@/src/lib/replay/replay-flag"
-import { useRoomsStore } from "@/src/store/rooms-store"
-import { BookOpenText, ChartSpline, Clapperboard, Home, KeyRound, SwatchBook } from "lucide-react"
+import { useBattleNotificationsStore } from "@/src/store/battle-notifications-store"
+import { useRoomsStore, type Room } from "@/src/store/rooms-store"
+import { cn } from "@/lib/utils"
+import { Bell, BookOpenText, ChartSpline, Clapperboard, Home, KeyRound, SwatchBook } from "lucide-react"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -157,12 +159,11 @@ export default function AppSidebar({ role }: { role: RoleType | undefined }) {
                             Rooms.length > 0 && Rooms.map((room) =>
                                 <SidebarMenu key={room.roomId}>
                                     <SidebarMenuItem>
-                                        <SidebarMenuButton asChild>
-                                            <Link href={`/dashboard/battlefield?id=${room.roomId}`} className="min-w-0">
-                                                <KeyRound />
-                                                <span className="truncate">{tCommon('labels.vs', { p1: room.p1, p2: room.p2 })}</span>
-                                            </Link>
-                                        </SidebarMenuButton>
+                                        <RoomMenuButton
+                                            room={room}
+                                            label={tCommon('labels.vs', { p1: room.p1, p2: room.p2 })}
+                                            pendingLabel={t('notifications.pending')}
+                                        />
                                         <RemoveRoomButton
                                             roomId={room.roomId}
                                             finished={room.finished}
@@ -176,5 +177,45 @@ export default function AppSidebar({ role }: { role: RoleType | undefined }) {
                 </SidebarGroup>
             </SidebarContent>
         </Sidebar >
+    )
+}
+
+/**
+ * Entrée « combat » de la sidebar. Isolée dans son propre composant pour que
+ * l'abonnement au store de notifications soit par room : sans ça, chaque
+ * notification rerendrait toute la sidebar.
+ */
+function RoomMenuButton({
+    room,
+    label,
+    pendingLabel,
+}: {
+    room: Room
+    label: string
+    pendingLabel: string
+}) {
+    const pending = useBattleNotificationsStore((state) => state.byRoom[room.roomId])
+    const clearNotification = useBattleNotificationsStore((state) => state.clear)
+    const isPending = Boolean(pending)
+    // La cloche vibre seulement quand le joueur est attendu. Une action de
+    // l'adversaire clignote sans s'agiter : sinon tout vibre en permanence et
+    // plus rien ne ressort.
+    const isWaitingForMe = pending?.kind === 'action-required'
+
+    return (
+        <SidebarMenuButton asChild>
+            <Link
+                href={`/dashboard/battlefield?id=${room.roomId}`}
+                className={cn("min-w-0", isPending && "text-sidebar-primary font-semibold")}
+                onClick={() => clearNotification(room.roomId)}
+            >
+                {
+                    isPending
+                        ? <Bell className={cn(isWaitingForMe && "animate-bell-shake")} aria-label={pendingLabel} />
+                        : <KeyRound />
+                }
+                <span className={cn("truncate", isPending && "animate-battle-pending")}>{label}</span>
+            </Link>
+        </SidebarMenuButton>
     )
 }

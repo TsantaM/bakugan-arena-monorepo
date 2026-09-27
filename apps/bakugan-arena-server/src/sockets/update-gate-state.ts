@@ -85,7 +85,7 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
 
             const gateCardOnFieldCount = state.protalSlots.filter((portalSlot) => portalSlot.portalCard !== null).length
 
-            grantActionIncrement({ roomState: state, userId, io })
+            grantActionIncrement({ roomState: state, userId, io, action: "select-gate" })
             syncClocks({ roomState: state, io })
 
             if (gateCardOnFieldCount === 2) {
@@ -97,7 +97,7 @@ export const socketUpdateGateState = (io: Server, socket: Socket) => {
             }
 
         } else {
-            grantActionIncrement({ roomState: state, userId, io })
+            grantActionIncrement({ roomState: state, userId, io, action: "set-gate" })
             if (state.turnState.turn === userId) {
                 const roomIndex = Battle_Brawlers_Game_State.findIndex((room) => room?.roomId === roomId)
                 if (roomIndex === -1) return

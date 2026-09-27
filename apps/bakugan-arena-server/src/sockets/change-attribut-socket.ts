@@ -55,7 +55,7 @@ export function ChangeAttributSocket(io: Server, socket: Socket) {
             })
         }
 
-        grantActionIncrement({ roomState, userId, io })
+        grantActionIncrement({ roomState, userId, io, action: "change-attribute" })
 
         io.to(roomId).emit('animations', Battle_Brawlers_Game_State[roomIndex].animations)
         Battle_Brawlers_Game_State[roomIndex].animations.forEach((animation) => EmitMessage({ roomState: Battle_Brawlers_Game_State[roomIndex], animation, io }))

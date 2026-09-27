@@ -160,7 +160,7 @@ export const socketUpdateBakuganState = (io: Server, socket: Socket) => {
         io.to(roomId).emit('animations', animation)
         animation.forEach((a) => EmitMessage({ roomState: updatedState, animation: a, io }))
 
-        grantActionIncrement({ roomState: updatedState, userId, io })
+        grantActionIncrement({ roomState: updatedState, userId, io, action: "set-bakugan" })
 
         const activeSocket = updatedState.connectedsUsers.get(updatedState.turnState.turn)
         const inactiveSocket = updatedState.connectedsUsers.get(updatedState.turnState.previous_turn || '')

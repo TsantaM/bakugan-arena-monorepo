@@ -20,5 +20,32 @@
     "abilityCards": "Ability Cards",
     "exclusiveAbilityCards": "Exclusives Ability Cards",
     "gateCards": "Gate Cards"
+  },
+  "notifications": {
+    "yourTurn": {
+      "title": "Your turn",
+      "description": "Battle against {name}: an action is waiting for you."
+    },
+    "finished": {
+      "title": "Battle over",
+      "description": "Your battle against {name} has ended."
+    },
+    "join": "Join the battle",
+    "pending": "Action pending",
+    "opponentAction": {
+      "title": "{name} played",
+      "fallback": "Action played",
+      "actions": {
+        "set-bakugan": "Bakugan thrown",
+        "select-gate": "Gate card selected",
+        "set-gate": "Gate card set",
+        "activate-gate": "Gate card opened",
+        "use-ability": "Ability card used",
+        "change-attribute": "Attribute changed",
+        "pass-turn": "Turn ended",
+        "resolve-ability": "Ability effect resolved",
+        "resolve-gate": "Gate card effect resolved"
+      }
+    }
   }
 }

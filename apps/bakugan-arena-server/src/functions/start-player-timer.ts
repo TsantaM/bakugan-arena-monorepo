@@ -6,6 +6,7 @@ import { schema } from "@bakugan-arena/drizzle-orm"
 import { intervalIds } from "../game-state/battle-brawlers-game-state";
 import { CalculateAndUpdateElo } from "./ladder-functions/calculate-elo";
 import { SendUserRooms } from "./send-user-rooms";
+import { clearBattleNotificationState, notifyBattle, notifyBattleFinished, notifyOpponentAction, type OpponentActionType } from "./notify-battle";
 
 const rooms = schema.rooms
 
@@ -328,6 +329,13 @@ export function syncClocks({ roomState, io }: { roomState: stateType; io: Server
         }
         const entry = getPlayerTimerEntry(roomState.roomId, player.userId)
         const isRunning = entry?.deadlineAt != null
+        // Le chrono d'un joueur ne démarre que lorsqu'il doit agir
+        // (`getRunningUserIds`). La transition arrêté -> lancé est donc le
+        // signal « c'est à toi de jouer », et c'est le seul point de passage
+        // commun à tous les chemins (turn action, ability/gate additional).
+        if (!wasRunning && isRunning && io) {
+            notifyBattle({ io, roomState, userId: player.userId, kind: "action-required" })
+        }
         timerTransitions.push({
             userId: player.userId,
             before: wasRunning,
@@ -378,13 +386,26 @@ export function grantActionIncrement({
     userId,
     io,
     seconds = TIMER_ACTION_INCREMENT_SECONDS,
+    action,
 }: {
     roomState: stateType
     userId: string
     io?: Server
     seconds?: number
+    /**
+     * Action que le joueur vient de valider. Renseignée, elle déclenche la
+     * notification « l'adversaire a joué ». Cette fonction est appelée une fois
+     * et une seule par action validée, sur tous les chemins de jeu : c'est le
+     * point de passage naturel pour ça.
+     */
+    action?: OpponentActionType
 }) {
     if (!roomState || roomState.status.finished) return
+
+    // Avant les gardes timer : l'absence d'entrée dans le registre des chronos
+    // ne doit pas empêcher la notification.
+    if (io && action) notifyOpponentAction({ io, roomState, actorUserId: userId, action })
+
     const player = roomState.players.find((p) => p.userId === userId)
     const entry = getPlayerTimerEntry(roomState.roomId, userId)
     if (!player || !entry) return
@@ -407,6 +428,7 @@ export function grantActionIncrement({
 
 /** Nettoie timeouts + entrée intervalIds pour une room (cleanup / fin). */
 export function clearRoomTimers(roomId: string) {
+    clearBattleNotificationState(roomId)
     const index = intervalIds.findIndex((i) => i.roomId === roomId)
     if (index === -1) return
     const entry = intervalIds[index]
@@ -431,4 +453,6 @@ export function stopAllRoomClocks({
     for (const player of roomState.players) {
         stopPlayerClock({ roomState, userId: player.userId, io, now, emit: Boolean(io) })
     }
+
+    if (io) notifyBattleFinished({ io, roomState })
 }

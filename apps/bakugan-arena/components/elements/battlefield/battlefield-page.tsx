@@ -17,6 +17,7 @@ import TurnActionBar, { commitValidatedTarget } from "./turn-action-bar";
 import AdditionalActionBar, { commitAdditionalTarget } from "./additional-action-bar";
 import { useTurnActionStore } from "@/src/store/turn-action-store";
 import { useAdditionalActionStore } from "@/src/store/additional-action-store";
+import { useBattleNotificationsStore } from "@/src/store/battle-notifications-store";
 import type { MessageFromIframe } from "@bakugan-arena/game-data";
 
 export default function BattleFieldPage({ player, opponent, roomId, userId, isPlayer }: BattleFieldPageProps) {
@@ -38,6 +39,13 @@ export default function BattleFieldPage({ player, opponent, roomId, userId, isPl
         const randomIndex = Math.floor(Math.random() * OSTLists.length)
         useAudioStore.getState().setTrack(OSTLists[randomIndex].src)
     }, [])
+
+    // Ouvrir le combat vaut lecture de sa notification. Nécessaire en plus du
+    // `visibilitychange` du listener global : passer d'un combat à l'autre ne
+    // change que la query string, pas le pathname.
+    useEffect(() => {
+        useBattleNotificationsStore.getState().clear(roomId)
+    }, [roomId])
 
     const GAMEBOARD_URL = process.env.NEXT_PUBLIC_3D_GAMEBOARD_URL
     const gameboardOrigin = GAMEBOARD_URL ?? "*"

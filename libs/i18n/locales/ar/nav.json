@@ -20,5 +20,32 @@
     "abilityCards": "بطاقات القدرة",
     "exclusiveAbilityCards": "بطاقات القدرة الحصرية",
     "gateCards": "بطاقات البوابة"
+  },
+  "notifications": {
+    "yourTurn": {
+      "title": "حان دورك",
+      "description": "معركة ضد {name}: هناك إجراء بانتظارك."
+    },
+    "finished": {
+      "title": "انتهت المعركة",
+      "description": "انتهت معركتك ضد {name}."
+    },
+    "join": "انضم إلى المعركة",
+    "pending": "إجراء قيد الانتظار",
+    "opponentAction": {
+      "title": "لعب {name}",
+      "fallback": "تم تنفيذ إجراء",
+      "actions": {
+        "set-bakugan": "تم وضع باكوغان",
+        "select-gate": "تم اختيار بطاقة البوابة",
+        "set-gate": "تم وضع بطاقة البوابة",
+        "activate-gate": "تم تفعيل بطاقة البوابة",
+        "use-ability": "تم استخدام بطاقة القدرة",
+        "change-attribute": "تغيير العنصر",
+        "pass-turn": "انتهى الدور",
+        "resolve-ability": "تمت تسوية تأثير القدرة",
+        "resolve-gate": "تمت تسوية تأثير بطاقة البوابة"
+      }
+    }
   }
 }

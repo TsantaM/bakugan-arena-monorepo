@@ -124,7 +124,7 @@ export function processAbilityAdditionalResolution(
     })
 
     const actingUserId = request.data.target ?? request.userId
-    grantActionIncrement({ roomState: roomData, userId: actingUserId, io })
+    grantActionIncrement({ roomState: roomData, userId: actingUserId, io, action: "resolve-ability" })
 
     if (autoOpenResult === "additional" || autoOpenResult === "turn_advanced") {
         return true

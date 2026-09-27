@@ -25,7 +25,7 @@ export const socketActiveGateCard = (io: Server, socket: Socket) => {
         if (!Battle_Brawlers_Game_State[roomIndex]) return
 
         if (result !== false) {
-            grantActionIncrement({ roomState: state, userId, io })
+            grantActionIncrement({ roomState: state, userId, io, action: "activate-gate" })
         }
 
         const activeSocket = state.connectedsUsers.get(state.turnState.turn)

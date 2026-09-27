@@ -41,7 +41,7 @@ export const socketUseAbilityCard = (io: Server, socket: Socket) => {
             message: "Utilisation d'une carte ability",
         })
 
-        grantActionIncrement({ roomState: state, userId, io })
+        grantActionIncrement({ roomState: state, userId, io, action: "use-ability" })
         useAbilityCardServer({ abilityId: abilityId, bakuganKey: bakuganKey, roomId: roomId, slot: slot, userId: userId, io: io })
 
         if (state) {

@@ -140,3 +140,38 @@ body {
     @apply bg-background text-foreground;
   }
 }
+/*
+ * Cloche des combats en attente (sidebar). La « vibration » est purement
+ * visuelle : `navigator.vibrate` n'existe que sur une partie des mobiles et est
+ * ignoré silencieusement ailleurs, il ne peut pas porter l'information seul.
+ */
+@keyframes bell-shake {
+  0%, 60%, 100% { transform: rotate(0deg); }
+  5%  { transform: rotate(14deg); }
+  15% { transform: rotate(-12deg); }
+  25% { transform: rotate(10deg); }
+  35% { transform: rotate(-8deg); }
+  45% { transform: rotate(5deg); }
+  55% { transform: rotate(-3deg); }
+}
+
+.animate-bell-shake {
+  transform-origin: top center;
+  animation: bell-shake 1.6s ease-in-out infinite;
+}
+
+@keyframes battle-pending-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+.animate-battle-pending {
+  animation: battle-pending-blink 1.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-bell-shake,
+  .animate-battle-pending {
+    animation: none;
+  }
+}

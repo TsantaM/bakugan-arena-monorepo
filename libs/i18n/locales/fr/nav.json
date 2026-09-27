@@ -20,5 +20,32 @@
     "abilityCards": "Cartes capacité",
     "exclusiveAbilityCards": "Cartes capacité exclusives",
     "gateCards": "Cartes portail"
+  },
+  "notifications": {
+    "yourTurn": {
+      "title": "À toi de jouer",
+      "description": "Combat contre {name} : une action t'attend."
+    },
+    "finished": {
+      "title": "Combat terminé",
+      "description": "Ton combat contre {name} est terminé."
+    },
+    "join": "Rejoindre le combat",
+    "pending": "Action en attente",
+    "opponentAction": {
+      "title": "{name} a joué",
+      "fallback": "Action jouée",
+      "actions": {
+        "set-bakugan": "Bakugan posé",
+        "select-gate": "Carte portail sélectionnée",
+        "set-gate": "Carte portail posée",
+        "activate-gate": "Carte portail activée",
+        "use-ability": "Carte capacité utilisée",
+        "change-attribute": "Changement d'attribut",
+        "pass-turn": "Tour terminé",
+        "resolve-ability": "Effet de capacité résolu",
+        "resolve-gate": "Effet de carte portail résolu"
+      }
+    }
   }
 }
