@@ -4,6 +4,65 @@
   "selectPlaceholder": "Choose a patch note",
   "releases": [
     {
+      "id": "2026-09-27",
+      "date": "27/09/2026",
+      "title": "Legendary Bakugans & notifications",
+      "items": [
+        {
+          "title": "Legendary Bakugans",
+          "body": "Apollonir, Oberus, Frosch, Clayf, Lars Lion and Exedra join the roster, along with Warius. Each ships with its own gate card, attributes and starter banlist entries."
+        },
+        {
+          "title": "Exclusive ability wave",
+          "body": "Over twenty new exclusive abilities: Cri de ralliement, Moisson des âmes, Étreinte de pierre, Lame usurpatrice, Verdict du bourreau, Pacte sanglant, Œil du cyclone, Souffle de la vie verte, Rapace éclaireur, Protocole d'escorte, Marée corrosive, Venin rampant, Galerie d'ombre, Grâce salvatrice, Énigme du Sphinx, Rage sismique, Rafale ascendante, Serment du gardien, Contre-courant, Griffes affamées, Pique incendiaire and Jugement du légendaire."
+        },
+        {
+          "title": "lifeLess status & on-death effects",
+          "body": "New lifeLess status and effects that trigger when a target is eliminated: abilities and traps (Chaos of Darkness, Demon Wizard, Noise Slap, Dual Gazer, Trad Off, Quartet/Triple Battle…) can now react when a Bakugan falls."
+        },
+        {
+          "title": "Per-turn status effects",
+          "body": "Statuses now persist over time: recurring end-of-turn effects, revive statuses, and reworked power changes for more reliable calculations."
+        },
+        {
+          "title": "Battle notifications",
+          "body": "New notification system: \"your turn\", opponent actions, and battle-finished alerts, with a pending-action counter in the sidebar and a shortcut to jump back into the fight."
+        },
+        {
+          "title": "Turn actions & targeting",
+          "body": "New turn-action management and targeting system, with additional board actions and per-player emission when an action only concerns one side."
+        },
+        {
+          "title": "Gate card animations",
+          "body": "Gate cards are animated at last: Character Gate, Mine Ghost, power drain, elemental sequences (Pyrus, Aquos, Haos, Subterra, Ventus, Darkus), attribute boost aura and environment shift. A failed-ability animation was added too."
+        },
+        {
+          "title": "3D board scenery & HUD",
+          "body": "Reworked battlefield background and environment: starfield, board anchor, camera limits, and a new player HUD (panels, timer, elimination circle) shared across matches, replays and sandbox."
+        },
+        {
+          "title": "Replays",
+          "body": "Rebuilt replay import and selection, correctly replayed Bakugan movement, and a return to simplified replay storage after the Blob experiment."
+        },
+        {
+          "title": "Bots & matchmaking",
+          "body": "Automatic recovery when a bot stalls, standardized action delays, and shorter waits before a bot joins the queue."
+        },
+        {
+          "title": "Timer & match flow",
+          "body": "Initial timer raised to 5 minutes and synced over sockets, room-flow watchdog, automatic processing of auto-openable gates, and eligibility refresh after an ability is cancelled."
+        },
+        {
+          "title": "UI & comfort",
+          "body": "Sheet panels instead of dialogs, profile avatars, loading skeletons on the dashboard and deck builder, and accessibility improvements."
+        },
+        {
+          "title": "Admin & stability",
+          "body": "Game list for admins, stronger diagnostic logging, database connection cleanup, and deployment build fixes."
+        }
+      ]
+    },
+    {
       "id": "2026-07-25",
       "date": "25/07/2026",
       "title": "Version 4",

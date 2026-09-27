@@ -4,6 +4,65 @@
   "selectPlaceholder": "Sélectionner une note de patch",
   "releases": [
     {
+      "id": "2026-09-27",
+      "date": "27/09/2026",
+      "title": "Bakugans légendaires et notifications",
+      "items": [
+        {
+          "title": "Bakugans légendaires",
+          "body": "Arrivée d'Apollonir, Oberus, Frosch, Clayf, Lars Lion et Exedra, rejoints par Warius. Chacun apporte sa carte portail dédiée, ses attributs et ses entrées de banlist de départ."
+        },
+        {
+          "title": "Vague de capacités exclusives",
+          "body": "Plus de vingt nouvelles capacités exclusives : Cri de ralliement, Moisson des âmes, Étreinte de pierre, Lame usurpatrice, Verdict du bourreau, Pacte sanglant, Œil du cyclone, Souffle de la vie verte, Rapace éclaireur, Protocole d'escorte, Marée corrosive, Venin rampant, Galerie d'ombre, Grâce salvatrice, Énigme du Sphinx, Rage sismique, Rafale ascendante, Serment du gardien, Contre-courant, Griffes affamées, Pique incendiaire et Jugement du légendaire."
+        },
+        {
+          "title": "Statut lifeLess et effets de mort",
+          "body": "Nouveau statut lifeLess et effets déclenchés à l'élimination d'une cible : les capacités et pièges (Chaos of Darkness, Demon Wizard, Noise Slap, Dual Gazer, Trad Off, Quartet/Triple Battle…) peuvent désormais réagir quand un Bakugan tombe."
+        },
+        {
+          "title": "Effets de statut par tour",
+          "body": "Gestion des statuts sur la durée : effets récurrents en fin de tour, statuts de résurrection, et refonte des changements de puissance pour des calculs plus fiables."
+        },
+        {
+          "title": "Notifications de combat",
+          "body": "Nouveau système de notifications : « À toi de jouer », actions jouées par l'adversaire, fin de combat, avec compteur d'actions en attente dans la barre latérale et raccourci pour rejoindre le combat."
+        },
+        {
+          "title": "Actions de tour et ciblage",
+          "body": "Nouveau système de gestion des actions de tour et de ciblage, avec actions additionnelles sur le plateau et émission ciblée à un seul joueur quand c'est nécessaire."
+        },
+        {
+          "title": "Animations de cartes portail",
+          "body": "Les cartes portail s'animent enfin : Character Gate, Mine Ghost, drain de puissance, séquences élémentaires (Pyrus, Aquos, Haos, Subterra, Ventus, Darkus), aura de boost d'attribut et changement d'environnement. Ajout aussi d'une animation d'échec de capacité."
+        },
+        {
+          "title": "Décor et HUD du plateau 3D",
+          "body": "Refonte du fond de champ de bataille et de l'environnement : starfield, ancrage de plateau, limites de caméra, et nouveau HUD joueur (panneaux, timer, cercle d'élimination) réutilisé en partie, replay et sandbox."
+        },
+        {
+          "title": "Replays",
+          "body": "Import et sélection de replays refondus, déplacements de Bakugan correctement rejoués, et retour au stockage de replay simplifié après la parenthèse Blob."
+        },
+        {
+          "title": "Bots et matchmaking",
+          "body": "Récupération automatique en cas de blocage d'un bot, délais d'action standardisés et temps d'attente réduits avant qu'un bot ne rejoigne la file."
+        },
+        {
+          "title": "Timer et flux de partie",
+          "body": "Timer initial porté à 5 minutes et synchronisé via les sockets, watchdog de flux de salle, traitement automatique des portes ouvrables et réévaluation de l'éligibilité après annulation d'une capacité."
+        },
+        {
+          "title": "Interface et confort",
+          "body": "Panneaux Sheet à la place des Dialog, avatars de profil, squelettes de chargement sur le tableau de bord et le deck builder, et améliorations d'accessibilité."
+        },
+        {
+          "title": "Administration et stabilité",
+          "body": "Liste des parties côté administration, journalisation de diagnostic renforcée, nettoyage de la connexion base de données et corrections de build pour les déploiements."
+        }
+      ]
+    },
+    {
       "id": "2026-07-25",
       "date": "25/07/2026",
       "title": "Version 4",
